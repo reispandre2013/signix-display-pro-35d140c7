@@ -16,6 +16,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppTelasRouteImport } from './routes/app.telas'
+import { Route as AppMonitoramentoRouteImport } from './routes/app.monitoramento'
+import { Route as AppCampanhasRouteImport } from './routes/app.campanhas'
 
 const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
   id: '/recuperar-senha',
@@ -52,6 +55,21 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
+const AppTelasRoute = AppTelasRouteImport.update({
+  id: '/telas',
+  path: '/telas',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMonitoramentoRoute = AppMonitoramentoRouteImport.update({
+  id: '/monitoramento',
+  path: '/monitoramento',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCampanhasRoute = AppCampanhasRouteImport.update({
+  id: '/campanhas',
+  path: '/campanhas',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +78,9 @@ export interface FileRoutesByFullPath {
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/app/campanhas': typeof AppCampanhasRoute
+  '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/telas': typeof AppTelasRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -68,6 +89,9 @@ export interface FileRoutesByTo {
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/app/campanhas': typeof AppCampanhasRoute
+  '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/telas': typeof AppTelasRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
@@ -78,6 +102,9 @@ export interface FileRoutesById {
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/app/campanhas': typeof AppCampanhasRoute
+  '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/telas': typeof AppTelasRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
@@ -89,9 +116,21 @@ export interface FileRouteTypes {
     | '/pareamento'
     | '/player'
     | '/recuperar-senha'
+    | '/app/campanhas'
+    | '/app/monitoramento'
+    | '/app/telas'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/pareamento' | '/player' | '/recuperar-senha' | '/app'
+  to:
+    | '/'
+    | '/login'
+    | '/pareamento'
+    | '/player'
+    | '/recuperar-senha'
+    | '/app/campanhas'
+    | '/app/monitoramento'
+    | '/app/telas'
+    | '/app'
   id:
     | '__root__'
     | '/'
@@ -100,6 +139,9 @@ export interface FileRouteTypes {
     | '/pareamento'
     | '/player'
     | '/recuperar-senha'
+    | '/app/campanhas'
+    | '/app/monitoramento'
+    | '/app/telas'
     | '/app/'
   fileRoutesById: FileRoutesById
 }
@@ -163,14 +205,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/telas': {
+      id: '/app/telas'
+      path: '/telas'
+      fullPath: '/app/telas'
+      preLoaderRoute: typeof AppTelasRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/monitoramento': {
+      id: '/app/monitoramento'
+      path: '/monitoramento'
+      fullPath: '/app/monitoramento'
+      preLoaderRoute: typeof AppMonitoramentoRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/campanhas': {
+      id: '/app/campanhas'
+      path: '/campanhas'
+      fullPath: '/app/campanhas'
+      preLoaderRoute: typeof AppCampanhasRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
 interface AppRouteChildren {
+  AppCampanhasRoute: typeof AppCampanhasRoute
+  AppMonitoramentoRoute: typeof AppMonitoramentoRoute
+  AppTelasRoute: typeof AppTelasRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppCampanhasRoute: AppCampanhasRoute,
+  AppMonitoramentoRoute: AppMonitoramentoRoute,
+  AppTelasRoute: AppTelasRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
