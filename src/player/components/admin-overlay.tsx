@@ -1,4 +1,6 @@
-import { RotateCcw, RefreshCw, Trash2, Bug, Power } from "lucide-react";
+import { RotateCcw, RefreshCw, Trash2, Bug, Power, Lock, Unlock } from "lucide-react";
+import { isAndroidNative } from "@/player/capacitor/android-shell";
+import { SignixTv } from "@/player/capacitor/signix-tv";
 import { idbStore } from "@/player/storage/idb";
 import type { PlayerSettings } from "@/player/types";
 
@@ -109,6 +111,27 @@ export function AdminOverlay({
           Reset pareamento
         </button>
       </div>
+
+      {isAndroidNative() && (
+        <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/15 pt-3">
+          <button
+            type="button"
+            onClick={() => void SignixTv.startLockTask().catch(() => window.alert("Lock task indisponível neste dispositivo."))}
+            className="inline-flex items-center justify-center gap-1 rounded border border-amber-400/40 px-2 py-2 text-xs text-amber-100 hover:bg-amber-500/15"
+          >
+            <Lock className="h-3.5 w-3.5" />
+            Lock task
+          </button>
+          <button
+            type="button"
+            onClick={() => void SignixTv.stopLockTask().catch(() => undefined)}
+            className="inline-flex items-center justify-center gap-1 rounded border border-white/30 px-2 py-2 text-xs hover:bg-white/10"
+          >
+            <Unlock className="h-3.5 w-3.5" />
+            Sair lock
+          </button>
+        </div>
+      )}
     </div>
   );
 }
