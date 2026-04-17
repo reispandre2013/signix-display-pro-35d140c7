@@ -59,17 +59,24 @@ function MediaPage() {
   const iconFor = (t: string) =>
     t.includes("video") ? Video : t.includes("html") ? FileCode : ImageIcon;
 
-  // Converte URLs de visualização (Google Drive, Dropbox) em links diretos de imagem
+  // Converte links de visualização em URLs realmente incorporáveis em <img>
   const toDirectUrl = (url?: string | null) => {
     if (!url) return "";
-    // Google Drive: .../file/d/{ID}/view  ->  uc?export=view&id={ID}
-    const gdrive = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
-    if (gdrive) return `https://drive.google.com/uc?export=view&id=${gdrive[1]}`;
-    // Google Drive open?id=
-    const gdriveOpen = url.match(/drive\.google\.com\/open\?id=([^&]+)/);
-    if (gdriveOpen) return `https://drive.google.com/uc?export=view&id=${gdriveOpen[1]}`;
-    // Dropbox: ?dl=0 -> ?raw=1
-    if (url.includes("dropbox.com")) return url.replace(/[?&]dl=\d/, "").concat(url.includes("?") ? "&raw=1" : "?raw=1");
+
+    const driveId =
+      url.match(/drive\.google\.com\/file\/d\/([^/?]+)/)?.[1] ||
+      url.match(/[?&]id=([^&]+)/)?.[1] ||
+      url.match(/drive\.google\.com\/thumbnail\?id=([^&]+)/)?.[1] ||
+      url.match(/lh3\.googleusercontent\.com\/d\/([^=/?]+)/)?.[1];
+
+    if (driveId) return `https://lh3.googleusercontent.com/d/${driveId}=w1600`;
+
+    // Dropbox: força conteúdo bruto em vez de página de preview
+    if (url.includes("dropbox.com")) {
+      const cleanUrl = url.replace(/[?&](dl|raw)=\d/g, "");
+      return cleanUrl.concat(cleanUrl.includes("?") ? "&raw=1" : "?raw=1");
+    }
+
     return url;
   };
 
@@ -133,15 +140,24 @@ function MediaPage() {
                   className="group rounded-lg border border-border bg-card overflow-hidden hover:border-primary/40 hover:shadow-glow transition-smooth"
                 >
                   <div className="relative aspect-video bg-surface overflow-hidden">
-                    {m.thumbnail_url ? (
+                    {m.thumbnail_url || m.public_url ? (
                       <img
-                        src={toDirectUrl(m.thumbnail_url)}
+                        src={toDirectUrl(m.thumbnail_url || m.public_url)}
                         alt={m.name}
                         className="w-full h-full object-cover"
                         loading="lazy"
                         referrerPolicy="no-referrer"
                         onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).style.display = "none";
+                          const img = e.currentTarget as HTMLImageElement;
+                          const fallbackUrl = toDirectUrl(m.public_url);
+
+                          if (img.dataset.fallbackApplied === "true" || !fallbackUrl || img.src === fallbackUrl) {
+                            img.style.display = "none";
+                            return;
+                          }
+
+                          img.dataset.fallbackApplied = "true";
+                          img.src = fallbackUrl;
                         }}
                       />
                     ) : (
