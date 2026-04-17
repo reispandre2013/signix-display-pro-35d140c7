@@ -11,12 +11,12 @@ serve(async (req) => {
 
   try {
     const body = await readJson<ResolvePayload>(req);
-    const { data, error } = await adminClient.rpc("resolve_screen_campaign", {
+    const { data, error } = await adminClient.rpc("resolve_screen_payload", {
       p_screen_id: body.screenId,
     });
 
     if (error) return jsonResponse({ error: error.message }, 400);
-    return jsonResponse({ campaign: data?.[0] ?? null });
+    return jsonResponse({ payload: data ?? null });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     return jsonResponse({ error: message }, 400);
