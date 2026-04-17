@@ -1,6 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Tv, Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
 import { useState, FormEvent } from "react";
+import { signInWithPassword } from "@/services/auth-service";
+import { hasSupabaseEnv } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -14,10 +16,29 @@ export const Route = createFileRoute("/login")({
 
 function LoginPage() {
   const [show, setShow] = useState(false);
+  const [email, setEmail] = useState("ana@signix.com");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    navigate({ to: "/app" });
+    setErrorMessage(null);
+
+    if (!hasSupabaseEnv) {
+      navigate({ to: "/app" });
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await signInWithPassword({ email, password });
+      navigate({ to: "/app" });
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : "Falha ao autenticar.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -84,7 +105,9 @@ function LoginPage() {
               label="E-mail"
               type="email"
               placeholder="voce@empresa.com"
-              defaultValue="ana@signix.com"
+              value={email}
+              onChange={(e) => setEmail(e.currentTarget.value)}
+              required
             />
             <div>
               <div className="flex items-center justify-between mb-1.5">
@@ -97,7 +120,9 @@ function LoginPage() {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input
                   type={show ? "text" : "password"}
-                  defaultValue="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.currentTarget.value)}
+                  required
                   className="w-full rounded-lg border border-input bg-surface pl-9 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-smooth"
                 />
                 <button
@@ -120,10 +145,17 @@ function LoginPage() {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95 transition-smooth"
             >
-              Entrar no painel <ArrowRight className="h-4 w-4" />
+              {isLoading ? "Entrando..." : "Entrar no painel"} <ArrowRight className="h-4 w-4" />
             </button>
+
+            {errorMessage && (
+              <p className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
+                {errorMessage}
+              </p>
+            )}
 
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">

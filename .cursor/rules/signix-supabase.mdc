@@ -1,0 +1,14 @@
+---
+description: Padrões de backend Supabase para Signix
+alwaysApply: true
+---
+
+# Signix Supabase Standards
+
+- Nunca usar `service_role` no frontend.
+- Toda tabela sensível deve ter isolamento por `organization_id`.
+- Toda query em tabela sensível deve respeitar RLS.
+- Toda ação crítica (create/update/delete/pair/publish/upload) deve gerar trilha de auditoria.
+- Priorizar `rpc` e Edge Functions para operações críticas.
+- Manter fallback para dados mock quando `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` não estiverem configuradas.
+- Não alterar estrutura visual das rotas sem necessidade funcional explícita.
