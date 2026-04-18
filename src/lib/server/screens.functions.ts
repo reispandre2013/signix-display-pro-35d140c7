@@ -141,10 +141,45 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
     return { code: normalizeCode(code) };
   })
   .handler(async ({ data }) => {
+    try {
+      const { data: pairing, error } = await supabaseAdmin
+        .from("pairing_codes")
+        .select("used_at, screen_id, expires_at")
+        .eq("code", data.code)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) {
+        console.error("[checkPairingStatus] supabase error:", error.message);
+        return { paired: false, expired: false, found: false, error: error.message };
+      }
+      if (!pairing) return { paired: false, expired: false, found: false };
+      const expired = pairing.expires_at
+        ? new Date(pairing.expires_at).getTime() < Date.now()
+        : false;
+      return {
+        paired: Boolean(pairing.used_at && pairing.screen_id),
+        expired: expired && !pairing.used_at,
+        found: true,
+      };
+    } catch (e) {
+      console.error("[checkPairingStatus] exception:", e instanceof Error ? e.message : String(e));
+      console.error("[checkPairingStatus] env keys present:", {
+        SUPABASE_URL: Boolean(process.env.SUPABASE_URL),
+        VITE_SUPABASE_URL: Boolean(process.env.VITE_SUPABASE_URL),
+        SUPABASE_SERVICE_ROLE_KEY: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
+        SUPABASE_PUBLISHABLE_KEY: Boolean(process.env.SUPABASE_PUBLISHABLE_KEY),
+      });
+      return { paired: false, expired: false, found: false, error: "internal" };
+    }
+  });
+
+// (legacy block removed below)
+const _legacyRemoved = async () => {
     const { data: pairing } = await supabaseAdmin
       .from("pairing_codes")
       .select("used_at, screen_id, expires_at")
-      .eq("code", data.code)
+      .eq("code", "")
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
