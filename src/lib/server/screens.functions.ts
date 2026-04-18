@@ -127,3 +127,34 @@ export const claimPairingCode = createServerFn({ method: "POST" })
 
     return { ok: true, screen_id: screen.id, screen_name: screen.name };
   });
+
+/**
+ * Endpoint público (sem auth) usado pelo player anônimo em /pareamento
+ * para verificar se seu código já foi vinculado por um admin.
+ * Usa supabaseAdmin para contornar RLS — retorna apenas o estado, sem dados sensíveis.
+ */
+export const checkPairingStatus = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => {
+    if (typeof input !== "object" || input === null) throw new Error("Payload inválido.");
+    const { code } = input as Record<string, unknown>;
+    if (typeof code !== "string" || code.trim().length < 4) throw new Error("Código inválido.");
+    return { code: normalizeCode(code) };
+  })
+  .handler(async ({ data }) => {
+    const { data: pairing } = await supabaseAdmin
+      .from("pairing_codes")
+      .select("used_at, screen_id, expires_at")
+      .eq("code", data.code)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (!pairing) return { paired: false, expired: false, found: false };
+    const expired = pairing.expires_at
+      ? new Date(pairing.expires_at).getTime() < Date.now()
+      : false;
+    return {
+      paired: Boolean(pairing.used_at && pairing.screen_id),
+      expired: expired && !pairing.used_at,
+      found: true,
+    };
+  });

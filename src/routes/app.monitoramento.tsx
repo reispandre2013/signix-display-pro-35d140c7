@@ -1,10 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
 import { useScreens, useUnits, useCampaigns } from "@/lib/hooks/use-supabase-data";
+import { useAuth } from "@/lib/auth-context";
 import {
   RefreshCw,
   MonitorSmartphone,
@@ -13,6 +16,7 @@ import {
   LayoutGrid,
   List,
   Tv,
+  Loader2,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -23,10 +27,27 @@ export const Route = createFileRoute("/app/monitoramento")({
 });
 
 function MonitorPage() {
-  const { data: screens = [], isLoading, error, refetch } = useScreens();
+  const { data: screens = [], isLoading, error, refetch, isFetching } = useScreens();
   const { data: units = [] } = useUnits();
   const { data: campaigns = [] } = useCampaigns();
   const [view, setView] = useState<"grid" | "table">("grid");
+  const qc = useQueryClient();
+  const { profile } = useAuth();
+  const orgId = profile?.organization_id ?? null;
+
+  const handleSync = async () => {
+    try {
+      await Promise.all([
+        qc.invalidateQueries({ queryKey: ["screens", orgId] }),
+        qc.invalidateQueries({ queryKey: ["units", orgId] }),
+        qc.invalidateQueries({ queryKey: ["campaigns", orgId] }),
+      ]);
+      await refetch();
+      toast.success("Dados sincronizados.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao sincronizar.");
+    }
+  };
 
   const unitName = (id: string | null) => units.find((u) => u.id === id)?.name ?? "Sem unidade";
   const campaignName = (id: string | null) =>
@@ -51,10 +72,16 @@ function MonitorPage() {
               </button>
             </div>
             <button
-              onClick={() => refetch()}
-              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
+              onClick={handleSync}
+              disabled={isFetching}
+              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60"
             >
-              <RefreshCw className="h-3.5 w-3.5" /> Sincronizar
+              {isFetching ? (
+                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <RefreshCw className="h-3.5 w-3.5" />
+              )}
+              Sincronizar
             </button>
           </>
         }

@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { checkPairingStatus } from "@/lib/server/screens.functions";
 
 export const Route = createFileRoute("/pareamento")({
   head: () => ({ meta: [{ title: "Pareamento de Player — Signix" }] }),
@@ -44,21 +45,27 @@ function PairingPage() {
     }
   }, []);
 
-  // Polling: checa se o código foi associado a uma tela
+  // Polling: checa via server function (admin) se código foi vinculado.
+  // Não depende de RLS — funciona mesmo após organization_id ser preenchido.
   useEffect(() => {
     if (!code || paired) return;
-    const interval = setInterval(async () => {
-      const { data } = await supabase
-        .from("pairing_codes")
-        .select("used_at, screen_id")
-        .eq("code", code)
-        .maybeSingle();
-      if (data?.used_at) {
-        setPaired(true);
-        clearInterval(interval);
+    let cancelled = false;
+    const check = async () => {
+      try {
+        const res = await checkPairingStatus({ data: { code } });
+        if (!cancelled && res?.paired) {
+          setPaired(true);
+        }
+      } catch {
+        // silencia erros transitórios de rede
       }
-    }, 4000);
-    return () => clearInterval(interval);
+    };
+    check();
+    const interval = setInterval(check, 4000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, [code, paired]);
 
   return (
