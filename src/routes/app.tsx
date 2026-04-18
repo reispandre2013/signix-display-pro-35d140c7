@@ -1,7 +1,7 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AppShell } from "@/components/layout/AppShell";
-import { getCurrentSession } from "@/services/auth-service";
-import { hasSupabaseEnv } from "@/lib/supabase-client";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/app")({
   head: () => ({ meta: [{ title: "Painel — Signix" }] }),
@@ -17,6 +17,25 @@ export const Route = createFileRoute("/app")({
 });
 
 function AppLayout() {
+  const { session, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading && !session) {
+      navigate({ to: "/login", replace: true });
+    }
+  }, [loading, session, navigate]);
+
+  if (loading) {
+    return (
+      <div className="grid min-h-screen place-items-center bg-background">
+        <div className="text-sm text-muted-foreground">Carregando…</div>
+      </div>
+    );
+  }
+
+  if (!session) return null;
+
   return (
     <AppShell>
       <Outlet />

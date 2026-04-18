@@ -16,9 +16,10 @@ dist-ssr
 .nitro
 *.local
 .env
-.env.*
-!.env.example
-!.env.capacitor.example
+.env.capacitor
+
+# Build / deploy artefactos locais
+www/
 
 # Wrangler / Cloudflare
 .wrangler/

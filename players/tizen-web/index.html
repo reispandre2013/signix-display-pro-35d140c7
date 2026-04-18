@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Signix — Tizen Player</title>
+    <link rel="stylesheet" href="css/player.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="top">
+        <span class="logo">Signix</span>
+        <span id="net" class="pill">…</span>
+      </header>
+      <main class="main">
+        <section id="pair" class="panel">
+          <h1>Pareamento</h1>
+          <p class="hint">Use o código no painel Signix › Telas.</p>
+          <div id="code" class="code">—</div>
+          <p id="status" class="status"></p>
+        </section>
+        <section id="done" class="panel hidden">
+          <h1>Pronto</h1>
+          <p class="hint">Dispositivo vinculado. Aguarde configuração remota.</p>
+        </section>
+      </main>
+    </div>
+    <script>
+      window.SIGNIX_API_BASE = window.SIGNIX_API_BASE || "";
+    </script>
+    <script src="js/player.js" defer></script>
+  </body>
+</html>

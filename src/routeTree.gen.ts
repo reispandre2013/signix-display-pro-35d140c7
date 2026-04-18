@@ -9,7 +9,10 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
+import { Route as PlayerScreenRouteImport } from './routes/player-screen'
 import { Route as PlayerRouteImport } from './routes/player'
 import { Route as PareamentoRouteImport } from './routes/pareamento'
 import { Route as LoginRouteImport } from './routes/login'
@@ -32,9 +35,24 @@ import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
 import { Route as AppAlertasRouteImport } from './routes/app.alertas'
 import { Route as AppAgendamentosRouteImport } from './routes/app.agendamentos'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
   id: '/recuperar-senha',
   path: '/recuperar-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlayerScreenRoute = PlayerScreenRouteImport.update({
+  id: '/player-screen',
+  path: '/player-screen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayerRoute = PlayerRouteImport.update({
@@ -149,7 +167,10 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
+  '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -172,7 +193,10 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
+  '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -197,7 +221,10 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
+  '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/signup': typeof SignupRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -223,7 +250,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/pareamento'
     | '/player'
+    | '/player-screen'
     | '/recuperar-senha'
+    | '/reset-password'
+    | '/signup'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/auditoria'
@@ -246,7 +276,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/pareamento'
     | '/player'
+    | '/player-screen'
     | '/recuperar-senha'
+    | '/reset-password'
+    | '/signup'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/auditoria'
@@ -270,7 +303,10 @@ export interface FileRouteTypes {
     | '/login'
     | '/pareamento'
     | '/player'
+    | '/player-screen'
     | '/recuperar-senha'
+    | '/reset-password'
+    | '/signup'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/auditoria'
@@ -295,16 +331,40 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PareamentoRoute: typeof PareamentoRoute
   PlayerRoute: typeof PlayerRoute
+  PlayerScreenRoute: typeof PlayerScreenRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/recuperar-senha': {
       id: '/recuperar-senha'
       path: '/recuperar-senha'
       fullPath: '/recuperar-senha'
       preLoaderRoute: typeof RecuperarSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/player-screen': {
+      id: '/player-screen'
+      path: '/player-screen'
+      fullPath: '/player-screen'
+      preLoaderRoute: typeof PlayerScreenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/player': {
@@ -503,7 +563,10 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PareamentoRoute: PareamentoRoute,
   PlayerRoute: PlayerRoute,
+  PlayerScreenRoute: PlayerScreenRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

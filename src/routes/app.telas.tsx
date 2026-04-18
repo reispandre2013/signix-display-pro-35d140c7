@@ -1,34 +1,31 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
-import {
-  EmptyPanel,
-  ErrorPanel,
-  LoadingPanel,
-  PreviewModeBanner,
-} from "@/components/ui-kit/data-states";
-import {
-  useProfileQuery,
-  useScreensQuery,
-  useScreenMutations,
-  useSignageEnabled,
-  useUnitsQuery,
-} from "@/hooks/use-signage";
-import { screenHealthPercent } from "@/lib/signage-ui-helpers";
+import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
+import { useScreens, useUnits, useDeleteScreen } from "@/lib/hooks/use-supabase-data";
 import {
   Plus,
   Search,
-  Filter,
-  MoreHorizontal,
   MonitorSmartphone,
   MapPin,
   Cpu,
-  KeyRound,
+  Trash2,
+  MonitorOff,
+  Loader2,
+  Tv,
+  X,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { useState, useMemo } from "react";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { claimPairingCode } from "@/lib/server/screens.functions";
+import type { PlayerPlatform } from "@/lib/platform-capabilities";
+import { useAuth } from "@/lib/auth-context";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/app/telas")({
   head: () => ({ meta: [{ title: "Telas e Players — Signix" }] }),
@@ -51,159 +48,63 @@ type ScreenRow = {
 };
 
 function ScreensPage() {
-  const hasBackend = useSignageEnabled();
-  const {
-    data: profile,
-    isLoading: loadingProfile,
-    error: profileError,
-    refetch: refetchProfile,
-  } = useProfileQuery();
-  const orgId = profile?.organization_id;
-  const {
-    data: screens = [],
-    isLoading: loadingScreens,
-    error: screensError,
-    refetch: refetchScreens,
-  } = useScreensQuery(orgId);
-  const { data: units = [] } = useUnitsQuery(orgId);
-  const { create, remove, preparePairing } = useScreenMutations(orgId);
+  const screensQ = useScreens();
+  const unitsQ = useUnits();
+  const del = useDeleteScreen();
+  const [q, setQ] = useState("");
+  const [platformFilter, setPlatformFilter] = useState<"all" | "android" | "tizen">("all");
+  const [pairOpen, setPairOpen] = useState(false);
 
-  const list = screens as ScreenRow[];
+  const screens = screensQ.data ?? [];
+  const units = unitsQ.data ?? [];
+  const unitName = (id: string | null) => units.find((u) => u.id === id)?.name ?? "—";
 
-  const stats = useMemo(() => {
-    const total = list.length;
-    const online = list.filter((s) => s.is_online).length;
-    const offline = list.filter((s) => !s.is_online).length;
-    const warning = list.filter((s) => s.device_status === "warning").length;
-    return { total, online, offline, warning };
-  }, [list]);
+  const filtered = useMemo(
+    () =>
+      screens.filter((s) => {
+        const plat = (s.platform ?? "android").toLowerCase();
+        if (platformFilter === "android" && plat !== "android") return false;
+        if (platformFilter === "tizen" && plat !== "tizen") return false;
+        if (!q) return true;
+        return (
+          s.name.toLowerCase().includes(q.toLowerCase()) ||
+          Boolean(s.pairing_code?.toLowerCase().includes(q.toLowerCase()))
+        );
+      }),
+    [screens, q, platformFilter],
+  );
 
-  const onAddScreen = () => {
-    const name = window.prompt("Nome da nova tela?");
-    if (!name?.trim()) return;
-    let unitId: string | null | undefined;
-    if (units.length) {
-      const pick = window.prompt(
-        `ID da unidade (opcional). Unidades: ${units
-          .map((u: { id: string; name: string }) => `${u.name}=${u.id}`)
-          .join(" | ")}`,
-      );
-      unitId = pick?.trim() || null;
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Excluir tela "${name}"?`)) return;
+    try {
+      await del.mutateAsync(id);
+      toast.success("Tela excluída.");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Erro ao excluir.");
     }
-    create.mutate(
-      { name: name.trim(), unit_id: unitId },
-      {
-        onError: (e) => {
-          console.error("[Signix] Erro ao criar tela", e);
-          window.alert(e instanceof Error ? e.message : "Falha ao criar tela");
-        },
-      },
-    );
   };
-
-  const onRemoveScreen = (id: string) => {
-    if (!window.confirm("Excluir esta tela?")) return;
-    remove.mutate(id, {
-      onError: (e) => {
-        console.error("[Signix] Erro ao excluir tela", e);
-        window.alert(e instanceof Error ? e.message : "Falha ao excluir");
-      },
-    });
-  };
-
-  if (!hasBackend) {
-    return (
-      <div className="space-y-6">
-        <PreviewModeBanner />
-        <PageHeader
-          title="Telas / Players"
-          subtitle="Gerencie todos os dispositivos físicos conectados ao Signix."
-          actions={
-            <>
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium hover:bg-accent transition-smooth"
-              >
-                <Filter className="h-3.5 w-3.5" /> Filtros
-              </button>
-              <Link
-                to="/pareamento"
-                className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
-              >
-                <Plus className="h-3.5 w-3.5" /> Adicionar tela
-              </Link>
-            </>
-          }
-        />
-        <EmptyPanel
-          title="Modo preview"
-          hint="Configure as variáveis do Supabase para listar telas reais."
-        />
-      </div>
-    );
-  }
-
-  if (loadingProfile || loadingScreens) {
-    return (
-      <div className="space-y-6">
-        <PageHeader title="Telas / Players" subtitle="Carregando…" />
-        <LoadingPanel />
-      </div>
-    );
-  }
-
-  if (profileError || screensError) {
-    return (
-      <div className="space-y-6">
-        <PageHeader title="Telas / Players" subtitle="Erro ao carregar dados." />
-        <ErrorPanel
-          message={(profileError ?? screensError)?.message ?? "Erro desconhecido"}
-          onRetry={() => {
-            void refetchProfile();
-            void refetchScreens();
-          }}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
       <PageHeader
         title="Telas / Players"
-        subtitle="Gerencie todos os dispositivos físicos conectados ao Signix."
+        subtitle="Gerencie dispositivos conectados ao Signix. Em Adicionar tela › Parear nova tela, escolha a plataforma do player: Android TV ou Samsung Tizen."
         actions={
-          <>
-            <button
-              type="button"
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium hover:bg-accent transition-smooth"
-            >
-              <Filter className="h-3.5 w-3.5" /> Filtros
-            </button>
-            <button
-              type="button"
-              onClick={onAddScreen}
-              disabled={create.isPending}
-              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60"
-            >
-              <Plus className="h-3.5 w-3.5" /> Adicionar tela
-            </button>
-            <Link
-              to="/pareamento"
-              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium hover:bg-accent"
-            >
-              Pareamento
-            </Link>
-          </>
+          <button
+            onClick={() => setPairOpen(true)}
+            className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
+          >
+            <Plus className="h-3.5 w-3.5" /> Adicionar tela
+          </button>
         }
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { l: "Total", v: stats.total },
-          { l: "Online", v: stats.online },
-          { l: "Offline", v: stats.offline },
-          { l: "Atenção", v: stats.warning },
+          { l: "Total", v: screens.length },
+          { l: "Online", v: screens.filter((s) => s.is_online).length },
+          { l: "Offline", v: screens.filter((s) => s.device_status === "offline").length },
+          { l: "Atenção", v: screens.filter((s) => s.device_status === "warning").length },
         ].map((s) => (
           <div key={s.l} className="rounded-lg border border-border bg-card p-3">
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{s.l}</p>
@@ -213,13 +114,25 @@ function ScreensPage() {
       </div>
 
       <Panel
-        title={`${list.length} dispositivos`}
+        title={`${filtered.length} dispositivos`}
         description="Lista completa com filtros e busca."
         actions={
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <select
+              value={platformFilter}
+              onChange={(e) => setPlatformFilter(e.target.value as "all" | "android" | "tizen")}
+              className="rounded-md border border-input bg-surface px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+              aria-label="Filtrar por plataforma"
+            >
+              <option value="all">Todas as plataformas</option>
+              <option value="android">Android TV</option>
+              <option value="tizen">Tizen TV</option>
+            </select>
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
               <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
                 placeholder="Buscar por nome, código…"
                 className="rounded-md border border-input bg-surface pl-7 pr-3 py-1.5 text-xs w-56 focus:outline-none focus:ring-2 focus:ring-ring"
               />
@@ -228,10 +141,35 @@ function ScreensPage() {
         }
         bodyClassName="p-0"
       >
-        {list.length === 0 ? (
-          <div className="p-6">
-            <EmptyPanel title="Nenhuma tela" hint="Crie uma tela ou use o fluxo de pareamento." />
+        {screensQ.isLoading ? (
+          <LoadingState />
+        ) : screensQ.error ? (
+          <div className="p-4">
+            <ErrorState error={screensQ.error} />
           </div>
+        ) : filtered.length === 0 ? (
+          <EmptyState
+            title="Nenhuma tela cadastrada"
+            description="Abra a tela /pareamento na TV/player e use o código exibido para vincular o dispositivo."
+            icon={MonitorOff}
+            action={
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <button
+                  onClick={() => setPairOpen(true)}
+                  className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
+                >
+                  <Plus className="h-3.5 w-3.5" /> Parear novo player
+                </button>
+                <Link
+                  to="/pareamento"
+                  target="_blank"
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs hover:bg-accent transition-smooth"
+                >
+                  <Tv className="h-3.5 w-3.5" /> Abrir modo player
+                </Link>
+              </div>
+            }
+          />
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -242,147 +180,283 @@ function ScreensPage() {
                   <Th>Status</Th>
                   <Th>Plataforma</Th>
                   <Th>Resolução</Th>
-                  <Th>Campanha atual</Th>
                   <Th>Último ping</Th>
-                  <Th>Saúde</Th>
-                  <th className="px-4 py-2.5 w-[4.5rem]" />
+                  <th className="px-4 py-2.5 w-10" />
                 </tr>
               </thead>
               <tbody>
-                {list.map((s) => {
-                  const health = screenHealthPercent(s);
-                  const lastPing = s.last_seen_at ?? new Date().toISOString();
-                  return (
-                    <tr
-                      key={s.id}
-                      className="border-b border-border/50 hover:bg-surface/40 transition-colors"
-                    >
-                      <Td>
-                        <div className="flex items-center gap-2.5">
-                          <div className="h-8 w-8 rounded-md bg-primary/10 grid place-items-center">
-                            <MonitorSmartphone className="h-4 w-4 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-medium">{s.name}</p>
-                            <p className="text-[11px] text-muted-foreground font-mono">
-                              {s.pairing_code ?? "—"}
-                            </p>
-                          </div>
+                {filtered.map((s) => (
+                  <tr key={s.id} className="border-b border-border/50 hover:bg-surface/40">
+                    <Td>
+                      <div className="flex items-center gap-2.5">
+                        <div className="h-8 w-8 rounded-md bg-primary/10 grid place-items-center">
+                          <MonitorSmartphone className="h-4 w-4 text-primary" />
                         </div>
-                      </Td>
-                      <Td>
-                        <span className="inline-flex items-center gap-1 text-xs">
-                          <MapPin className="h-3 w-3 text-muted-foreground" />
-                          {s.units?.name ?? "—"}
-                        </span>
-                      </Td>
-                      <Td>
-                        <StatusBadge status={s.device_status} />
-                      </Td>
-                      <Td>
-                        <span className="inline-flex items-center gap-1 text-xs">
-                          <Cpu className="h-3 w-3 text-muted-foreground" />
-                          {s.platform ?? "—"}
-                        </span>
-                        <p className="text-[10px] text-muted-foreground font-mono">
-                          {s.player_version ?? ""}
-                        </p>
-                      </Td>
-                      <Td>
-                        <span className="text-xs font-mono">{s.resolution ?? "—"}</span>
-                        <p className="text-[10px] text-muted-foreground">{s.orientation}</p>
-                      </Td>
-                      <Td>
-                        <span className="text-xs">{s.campaigns?.name ?? "—"}</span>
-                      </Td>
-                      <Td>
-                        <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(lastPing), {
-                            locale: ptBR,
-                            addSuffix: true,
-                          })}
-                        </span>
-                      </Td>
-                      <Td>
-                        <div className="flex items-center gap-2 w-24">
-                          <div className="flex-1 h-1.5 rounded-full bg-muted overflow-hidden">
-                            <div
-                              className={`h-full ${health > 80 ? "bg-success" : health > 50 ? "bg-warning" : "bg-destructive"}`}
-                              style={{ width: `${health}%` }}
-                            />
-                          </div>
-                          <span className="text-[11px] font-mono text-muted-foreground w-7 text-right">
-                            {health}%
-                          </span>
+                        <div>
+                          <p className="font-medium">{s.name}</p>
+                          <p className="text-[11px] text-muted-foreground font-mono">
+                            {s.pairing_code ?? "—"}
+                          </p>
                         </div>
-                      </Td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center justify-end gap-1">
-                          <button
-                            type="button"
-                            title="Gerar ou renovar código de pareamento para a TV"
-                            onClick={() =>
-                              preparePairing.mutate(s.id, {
-                                onError: (e) => {
-                                  console.error("[Signix] prepare_screen_pairing", e);
-                                  window.alert(
-                                    e instanceof Error
-                                      ? e.message
-                                      : "Falha ao gerar código de pareamento",
-                                  );
-                                },
-                              })
-                            }
-                            disabled={preparePairing.isPending}
-                            className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent transition-colors disabled:opacity-50"
-                          >
-                            <KeyRound className="h-4 w-4 text-primary" />
-                          </button>
-                          <button
-                            type="button"
-                            title="Excluir"
-                            onClick={() => onRemoveScreen(s.id)}
-                            disabled={remove.isPending}
-                            className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent transition-colors disabled:opacity-50"
-                          >
-                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                      </div>
+                    </Td>
+                    <Td>
+                      <span className="inline-flex items-center gap-1 text-xs">
+                        <MapPin className="h-3 w-3 text-muted-foreground" />
+                        {unitName(s.unit_id)}
+                      </span>
+                    </Td>
+                    <Td>
+                      <StatusBadge
+                        tone={
+                          s.is_online
+                            ? "success"
+                            : s.device_status === "warning"
+                              ? "warning"
+                              : "destructive"
+                        }
+                        label={s.device_status}
+                      />
+                    </Td>
+                    <Td>
+                      <span className="inline-flex flex-col gap-1">
+                        <span
+                          className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                            (s.platform ?? "android").toLowerCase() === "tizen"
+                              ? "bg-sky-500/15 text-sky-600 dark:text-sky-400"
+                              : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
+                          }`}
+                        >
+                          {(s.platform ?? "android").toLowerCase() === "tizen" ? "Tizen" : "Android"}
+                        </span>
+                        <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                          <Cpu className="h-3 w-3" />
+                          {s.store_type ?? "—"}
+                        </span>
+                      </span>
+                      <p className="text-[10px] text-muted-foreground font-mono">
+                        {s.player_version ?? ""}
+                      </p>
+                    </Td>
+                    <Td>
+                      <span className="text-xs font-mono">{s.resolution ?? "—"}</span>
+                      <p className="text-[10px] text-muted-foreground">{s.orientation}</p>
+                    </Td>
+                    <Td>
+                      <span className="text-xs text-muted-foreground">
+                        {s.last_seen_at
+                          ? formatDistanceToNow(new Date(s.last_seen_at), {
+                              locale: ptBR,
+                              addSuffix: true,
+                            })
+                          : "nunca"}
+                      </span>
+                    </Td>
+                    <td className="px-4 py-3">
+                      <button
+                        onClick={() => handleDelete(s.id, s.name)}
+                        className="h-7 w-7 grid place-items-center rounded-md hover:bg-destructive/10 text-destructive"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
         )}
+      </Panel>
 
-        <div className="flex items-center justify-between px-4 py-3 border-t border-border text-xs text-muted-foreground">
-          <span>
-            Mostrando {list.length} de {list.length} dispositivos
-          </span>
-          <div className="flex items-center gap-1">
+      {pairOpen && <PairScreenModal onClose={() => setPairOpen(false)} units={units} />}
+    </div>
+  );
+}
+
+function PairScreenModal({
+  onClose,
+  units,
+}: {
+  onClose: () => void;
+  units: Array<{ id: string; name: string }>;
+}) {
+  const qc = useQueryClient();
+  const claimPairingCodeFn = useServerFn(claimPairingCode);
+  const { profile } = useAuth();
+  const [code, setCode] = useState("");
+  const [name, setName] = useState("");
+  const [unitId, setUnitId] = useState<string>("");
+  const [orientation, setOrientation] = useState<"landscape" | "portrait">("landscape");
+  const [platform, setPlatform] = useState<PlayerPlatform>("android");
+  const [submitting, setSubmitting] = useState(false);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      if (!token) throw new Error("Sessão expirada. Entre novamente.");
+
+      const res = await claimPairingCodeFn({
+        data: {
+          code: code.trim(),
+          name,
+          unit_id: unitId || null,
+          orientation,
+          platform,
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res?.ok || !res.screen_id) throw new Error("Falha ao concluir o pareamento.");
+      const screenName = res?.screen_name ?? name;
+      toast.success(`Tela "${screenName}" pareada com sucesso!`);
+      qc.invalidateQueries({ queryKey: ["screens", profile?.organization_id] });
+      onClose();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao parear.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <div
+        className="flex max-h-[min(90vh,720px)] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
+          <div className="flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg bg-primary/10 grid place-items-center">
+              <Tv className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <h2 className="font-display text-base font-bold">Parear nova tela</h2>
+              <p className="text-[11px] text-muted-foreground">
+                Informe o código exibido no player.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <form onSubmit={onSubmit} className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5">
+          <div>
+            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Código de pareamento
+            </label>
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder="ABCD-1234"
+              required
+              autoFocus
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2.5 font-mono text-lg tracking-widest text-center uppercase focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Abra <code className="text-foreground">/pareamento</code> na TV para ver o código.
+            </p>
+          </div>
+
+          <div>
+            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Plataforma do player
+            </label>
+            <select
+              value={platform}
+              onChange={(e) => setPlatform(e.target.value as PlayerPlatform)}
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="android">Android TV (WebView / Capacitor)</option>
+              <option value="tizen">Samsung Tizen TV</option>
+            </select>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Deve coincidir com o player em pareamento (ex.: URL <code className="text-foreground">?platform=tizen</code>).
+            </p>
+          </div>
+
+          <div>
+            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Nome da tela
+            </label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ex.: Recepção / Vitrine principal"
+              required
+              minLength={2}
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+                Unidade
+              </label>
+              <select
+                value={unitId}
+                onChange={(e) => setUnitId(e.target.value)}
+                className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="">Sem unidade</option>
+                {units.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+                Orientação
+              </label>
+              <select
+                value={orientation}
+                onChange={(e) => setOrientation(e.target.value as "landscape" | "portrait")}
+                className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="landscape">Paisagem</option>
+                <option value="portrait">Retrato</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 pt-2">
             <button
               type="button"
-              className="rounded-md border border-border px-2.5 py-1 hover:bg-accent"
+              onClick={onClose}
+              className="rounded-md border border-border bg-surface px-3 py-1.5 text-xs hover:bg-accent transition-smooth"
             >
-              Anterior
+              Cancelar
             </button>
             <button
-              type="button"
-              className="rounded-md border border-border px-2.5 py-1 bg-primary/10 text-primary"
+              type="submit"
+              disabled={submitting}
+              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60"
             >
-              1
-            </button>
-            <button
-              type="button"
-              className="rounded-md border border-border px-2.5 py-1 hover:bg-accent"
-            >
-              Próxima
+              {submitting ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> Pareando…
+                </>
+              ) : (
+                <>
+                  <Plus className="h-3.5 w-3.5" /> Parear tela
+                </>
+              )}
             </button>
           </div>
-        </div>
-      </Panel>
+        </form>
+      </div>
     </div>
   );
 }

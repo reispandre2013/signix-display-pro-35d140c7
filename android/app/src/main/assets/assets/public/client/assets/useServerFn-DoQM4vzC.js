@@ -1,0 +1,1 @@
+import{b as a,r as i,l as e}from"./index-DUcMANMA.js";function c(o){const t=a();return i.useCallback(async(...s)=>{try{const r=await o(...s);if(e(r))throw r;return r}catch(r){if(e(r))return r.options._fromLocation=t.stores.location.get(),t.navigate(t.resolveRedirect(r).options);throw r}},[t,o])}export{c as u};

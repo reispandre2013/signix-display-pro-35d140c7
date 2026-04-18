@@ -1,13 +1,102 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
+import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
 
 export const Route = createFileRoute("/pareamento")({
   head: () => ({ meta: [{ title: "Pareamento de Player — Signix" }] }),
+  validateSearch: (raw: Record<string, unknown>) => {
+    const p = raw.platform;
+    const platform = p === "tizen" || p === "android" ? p : undefined;
+    return { platform } as { platform?: "android" | "tizen" };
+  },
   component: PairingPage,
 });
 
+const STORAGE_KEY = "signix_pairing_code";
+const STORAGE_EXP_KEY = "signix_pairing_code_exp";
+/** Gravado após pareamento — usado por `/player-screen` para sync. */
+export const STORAGE_SCREEN_ID = "signix_screen_id";
+
 function PairingPage() {
-  const code = "K7X2-9MQ4";
+  const { platform: platformSearch } = Route.useSearch();
+  const playerPlatform = platformSearch === "tizen" ? "tizen" : "android";
+
+  const [code, setCode] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [paired, setPaired] = useState(false);
+  const [codeError, setCodeError] = useState<string | null>(null);
+
+  // Gera código de pareamento via server function (bypass RLS, sem auth necessária)
+  const generateCode = async () => {
+    setLoading(true);
+    setCodeError(null);
+    try {
+      const res = await createPairingCode({ data: { platform: playerPlatform } });
+      if (res?.code) {
+        localStorage.setItem(STORAGE_KEY, res.code);
+        if (res.expires_at) localStorage.setItem(STORAGE_EXP_KEY, res.expires_at);
+        setCode(res.code);
+      } else {
+        throw new Error("Resposta inválida do servidor.");
+      }
+    } catch (e) {
+      console.error("[pareamento] generateCode failed:", e);
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_EXP_KEY);
+      localStorage.removeItem(STORAGE_SCREEN_ID);
+      setCode(null);
+      const msg = e instanceof Error ? e.message : String(e);
+      setCodeError(
+        msg && msg !== "HTTPError"
+          ? msg
+          : "Não foi possível registrar o código de pareamento. Verifique a conexão e tente novamente.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const storedExp = localStorage.getItem(STORAGE_EXP_KEY);
+    const stillValid =
+      stored && storedExp && new Date(storedExp).getTime() > Date.now() + 30_000;
+    if (stillValid) {
+      setCode(stored);
+      setLoading(false);
+    } else {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_EXP_KEY);
+      localStorage.removeItem(STORAGE_SCREEN_ID);
+      generateCode();
+    }
+  }, [playerPlatform]);
+
+  // Polling: checa via server function (admin) se código foi vinculado.
+  // Não depende de RLS — funciona mesmo após organization_id ser preenchido.
+  useEffect(() => {
+    if (!code || paired) return;
+    let cancelled = false;
+    const check = async () => {
+      try {
+        const res = await checkPairingStatus({ data: { code } });
+        if (!cancelled && res?.paired) {
+          if (res.screen_id) localStorage.setItem(STORAGE_SCREEN_ID, res.screen_id);
+          setPaired(true);
+        }
+      } catch {
+        // silencia erros transitórios de rede
+      }
+    };
+    check();
+    const interval = setInterval(check, 4000);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [code, paired]);
+
   return (
     <div className="min-h-screen flex flex-col bg-background bg-mesh">
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
@@ -27,51 +116,88 @@ function PairingPage() {
 
       <div className="flex-1 grid place-items-center p-6">
         <div className="w-full max-w-xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs">
-            <span className="h-1.5 w-1.5 rounded-full bg-success pulse-dot" /> Aguardando
-            confirmação no painel
-          </div>
-          <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
-            Use o código abaixo para parear
-            <br />
-            este dispositivo à sua conta
-          </h1>
-          <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">
-            Acesse <span className="text-foreground font-medium">Telas › Adicionar tela</span> no
-            painel Signix e informe o código exibido.
-          </p>
-
-          <div className="mt-10 inline-flex items-center gap-3 rounded-2xl border border-border bg-card px-8 py-6 shadow-glow">
-            {code.split("").map((c, i) =>
-              c === "-" ? (
-                <span key={i} className="font-display text-4xl text-muted-foreground">
-                  ·
-                </span>
-              ) : (
-                <span
-                  key={i}
-                  className="font-mono text-5xl font-bold text-gradient w-10 text-center"
+          {paired ? (
+            <>
+              <div className="inline-flex items-center gap-2 rounded-full border border-success/40 bg-success/10 text-success px-3 py-1 text-xs">
+                ✓ Dispositivo pareado com sucesso
+              </div>
+              <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
+                Tudo pronto!
+                <br />Abra o modo exibição para sincronizar a playlist.
+              </h1>
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link
+                  to="/player-screen"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow"
                 >
-                  {c}
+                  <Tv className="h-4 w-4" /> Abrir player (sync)
+                </Link>
+                <span className="text-xs text-muted-foreground max-w-xs">
+                  Android TV, Tizen ou browser: mesma URL. Tizen: use{" "}
+                  <code className="text-foreground">?platform=tizen</code> no pareamento.
                 </span>
-              ),
-            )}
-          </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs">
+                <span className="h-1.5 w-1.5 rounded-full bg-success pulse-dot" /> Aguardando confirmação no painel
+              </div>
+              <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
+                Use o código abaixo para parear<br />este dispositivo à sua conta
+              </h1>
+              <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">
+                Acesse <span className="text-foreground font-medium">Telas › Adicionar tela</span> no painel Signix e informe o código exibido.
+              </p>
 
-          <div className="mt-8 grid sm:grid-cols-3 gap-3 max-w-md mx-auto text-left">
-            <Info icon={Monitor} label="Resolução" value="1920 × 1080" />
-            <Info icon={Cpu} label="Plataforma" value="Android TV 12" />
-            <Info icon={Wifi} label="Conexão" value="Wi-Fi · 87 Mbps" />
-          </div>
+              <div className="mt-10 inline-flex items-center gap-3 rounded-2xl border border-border bg-card px-8 py-6 shadow-glow min-h-[120px]">
+                {loading ? (
+                  <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                ) : codeError ? (
+                  <p className="max-w-sm text-sm text-destructive">{codeError}</p>
+                ) : code ? (
+                  code.split("").map((c, i) =>
+                    c === "-" ? (
+                      <span key={i} className="font-display text-4xl text-muted-foreground">·</span>
+                    ) : (
+                      <span key={i} className="font-mono text-5xl font-bold text-gradient w-10 text-center">
+                        {c}
+                      </span>
+                    )
+                  )
+                ) : null}
+              </div>
 
-          <button className="mt-8 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm hover:bg-accent transition-smooth">
-            <RefreshCw className="h-3.5 w-3.5" /> Gerar novo código
-          </button>
+              <div className="mt-8 grid sm:grid-cols-3 gap-3 max-w-md mx-auto text-left">
+                <Info icon={Monitor} label="Resolução" value={`${window.screen.width} × ${window.screen.height}`} />
+                <Info
+                  icon={Cpu}
+                  label="Plataforma"
+                  value={playerPlatform === "tizen" ? "Tizen TV" : "Android / Web"}
+                />
+                <Info icon={Wifi} label="Conexão" value={navigator.onLine ? "Online" : "Offline"} />
+              </div>
+
+              <button
+                onClick={() => {
+                  localStorage.removeItem(STORAGE_KEY);
+                  localStorage.removeItem(STORAGE_EXP_KEY);
+                  localStorage.removeItem(STORAGE_SCREEN_ID);
+                  generateCode();
+                }}
+                disabled={loading}
+                className="mt-8 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm hover:bg-accent transition-smooth disabled:opacity-60"
+              >
+                <RefreshCw className="h-3.5 w-3.5" /> Gerar novo código
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
 
 function Info({ icon: Icon, label, value }: { icon: typeof Wifi; label: string; value: string }) {
   return (
@@ -79,7 +205,7 @@ function Info({ icon: Icon, label, value }: { icon: typeof Wifi; label: string; 
       <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground">
         <Icon className="h-3.5 w-3.5" /> {label}
       </div>
-      <div className="mt-1 text-sm font-medium">{value}</div>
+      <div className="mt-1 text-sm font-medium truncate">{value}</div>
     </div>
   );
 }
