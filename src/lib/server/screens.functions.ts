@@ -139,6 +139,26 @@ export const claimPairingCode = createServerFn({ method: "POST" })
   });
 
 /**
+ * Cria um novo código de pareamento anônimo (sem org).
+ * Roda no servidor com supabaseAdmin para contornar RLS — o player /pareamento
+ * é público e não tem sessão autenticada.
+ */
+export const createPairingCode = createServerFn({ method: "POST" })
+  .handler(async () => {
+    const chunk = () => Math.random().toString(36).slice(2, 6).toUpperCase();
+    const code = `${chunk()}-${chunk()}`;
+    const expires_at = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    const { error } = await supabaseAdmin
+      .from("pairing_codes")
+      .insert({ code, expires_at });
+    if (error) {
+      console.error("[createPairingCode] insert error:", error.message);
+      throw new Error("Não foi possível registrar o código de pareamento.");
+    }
+    return { code, expires_at };
+  });
+
+/**
  * Endpoint público (sem auth) usado pelo player anônimo em /pareamento
  * para verificar se seu código já foi vinculado por um admin.
  * Usa supabaseAdmin para contornar RLS — retorna apenas o estado, sem dados sensíveis.
