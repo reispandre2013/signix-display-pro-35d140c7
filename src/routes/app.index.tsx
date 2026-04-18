@@ -1,5 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Monitor, Wifi, WifiOff, AlertTriangle, Megaphone, ImageIcon, ListVideo, Activity, ArrowRight, Clock, Zap } from "lucide-react";
+import { Monitor, Wifi, WifiOff, AlertTriangle, Megaphone, ImageIcon, ListVideo, Activity, ArrowRight, Clock, Zap, Loader2 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useAuth } from "@/lib/auth-context";
 import { KpiCard } from "@/components/ui-kit/KpiCard";
 import { Panel } from "@/components/ui-kit/Panel";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
