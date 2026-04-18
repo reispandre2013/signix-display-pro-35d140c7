@@ -96,8 +96,13 @@ function Dashboard() {
         actions={
           <>
             <button className="rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium hover:bg-accent transition-smooth">Últimos 7 dias</button>
-            <button onClick={() => { screensQ.refetch(); campaignsQ.refetch(); }} className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">
-              <Zap className="h-3.5 w-3.5" /> Sincronizar tudo
+            <button
+              onClick={handleSyncAll}
+              disabled={isSyncing}
+              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60"
+            >
+              {isSyncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Zap className="h-3.5 w-3.5" />}
+              Sincronizar tudo
             </button>
           </>
         }
