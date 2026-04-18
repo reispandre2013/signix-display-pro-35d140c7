@@ -151,7 +151,7 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
         .maybeSingle();
       if (error) {
         console.error("[checkPairingStatus] supabase error:", error.message);
-        return { paired: false, expired: false, found: false, error: error.message };
+        return { paired: false, expired: false, found: false };
       }
       if (!pairing) return { paired: false, expired: false, found: false };
       const expired = pairing.expires_at
@@ -164,13 +164,7 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
       };
     } catch (e) {
       console.error("[checkPairingStatus] exception:", e instanceof Error ? e.message : String(e));
-      console.error("[checkPairingStatus] env keys present:", {
-        SUPABASE_URL: Boolean(process.env.SUPABASE_URL),
-        VITE_SUPABASE_URL: Boolean(process.env.VITE_SUPABASE_URL),
-        SUPABASE_SERVICE_ROLE_KEY: Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY),
-        SUPABASE_PUBLISHABLE_KEY: Boolean(process.env.SUPABASE_PUBLISHABLE_KEY),
-      });
-      return { paired: false, expired: false, found: false, error: "internal" };
+      return { paired: false, expired: false, found: false };
     }
   });
 
