@@ -146,6 +146,7 @@ function PairingPage() {
               <button
                 onClick={() => {
                   localStorage.removeItem(STORAGE_KEY);
+                  localStorage.removeItem(STORAGE_EXP_KEY);
                   generateCode();
                 }}
                 disabled={loading}
@@ -161,9 +162,6 @@ function PairingPage() {
   );
 }
 
-function randomChunk() {
-  return Math.random().toString(36).slice(2, 6).toUpperCase();
-}
 
 function Info({ icon: Icon, label, value }: { icon: typeof Wifi; label: string; value: string }) {
   return (
