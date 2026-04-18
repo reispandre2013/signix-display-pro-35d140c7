@@ -2,6 +2,14 @@
 
 Guia passo a passo para **gerar o APK**, **instalar na TV Box**, **fullscreen**, **autostart**, **kiosk** e **teste offline**. Complementa `docs/android-tv-player.md` com foco operacional.
 
+### Signix Player TV — APK sem URL do servidor
+
+Se o APK foi instalado **sem** `CAPACITOR_SERVER_URL` definida no momento do `npx cap sync`, o WebView fica no placeholder local.
+
+**No PC:** crie **`.env.capacitor`** (copie de **`.env.capacitor.example`**) com `CAPACITOR_SERVER_URL=https://.../player`, rode **`npx cap sync android`**, gere um **novo APK** e **instale de novo** na TV.
+
+Passo a passo completo: **secção 1.2** abaixo. Arquitetura e variáveis: **`docs/android-tv-player.md`**.
+
 ---
 
 ## Pré-requisitos
