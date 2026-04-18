@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { getPlayerCapabilities, normalizePlayerPlatform, type PlayerPlatform } from "@/lib/platform-capabilities";
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL ?? "";
 const ANON_KEY =
@@ -18,6 +19,8 @@ interface ClaimInput {
   name: string;
   unit_id: string | null;
   orientation: Orientation;
+  /** Default `android` se omitido — compatível com clientes antigos. */
+  platform: PlayerPlatform;
 }
 
 function normalizeCode(raw: string) {
@@ -30,18 +33,23 @@ function toScreenOrientation(orientation: Orientation) {
 
 function validate(input: unknown): ClaimInput {
   if (typeof input !== "object" || input === null) throw new Error("Payload inválido.");
-  const { code, name, unit_id, orientation } = input as Record<string, unknown>;
+  const { code, name, unit_id, orientation, platform } = input as Record<string, unknown>;
   if (typeof code !== "string" || normalizeCode(code).length < 6)
     throw new Error("Código de pareamento inválido.");
   if (typeof name !== "string" || name.trim().length < 2)
     throw new Error("Informe um nome para a tela.");
   if (orientation !== "landscape" && orientation !== "portrait")
     throw new Error("Orientação inválida.");
+  const plat =
+    typeof platform === "string" && (platform === "tizen" || platform === "android")
+      ? (platform as PlayerPlatform)
+      : "android";
   return {
     code: normalizeCode(code),
     name: name.trim(),
     unit_id: typeof unit_id === "string" && unit_id.length > 0 ? unit_id : null,
     orientation,
+    platform: plat,
   };
 }
 
@@ -104,18 +112,23 @@ export const claimPairingCode = createServerFn({ method: "POST" })
     if (pairing.expires_at && new Date(pairing.expires_at).getTime() < Date.now())
       throw new Error("Código expirado. Gere um novo na TV.");
 
+    const caps = getPlayerCapabilities(data.platform);
+    const insertRow: Record<string, unknown> = {
+      organization_id: orgId,
+      unit_id: data.unit_id,
+      name: data.name,
+      orientation: toScreenOrientation(data.orientation),
+      pairing_code: data.code,
+      device_status: "offline",
+      is_online: false,
+      platform: caps.platform,
+      store_type: caps.storeTypeHint,
+    };
+
     // Cria a screen
     const { data: screen, error: screenErr } = await supabaseAdmin
       .from("screens")
-      .insert({
-        organization_id: orgId,
-        unit_id: data.unit_id,
-        name: data.name,
-        orientation: toScreenOrientation(data.orientation),
-        pairing_code: data.code,
-        device_status: "offline",
-        is_online: false,
-      })
+      .insert(insertRow)
       .select("id, name")
       .single();
     if (screenErr) throw new Error(screenErr.message);
@@ -143,8 +156,17 @@ export const claimPairingCode = createServerFn({ method: "POST" })
  * Roda no servidor com supabaseAdmin para contornar RLS — o player /pareamento
  * é público e não tem sessão autenticada.
  */
+function validateCreatePairingInput(input: unknown): { platform: PlayerPlatform } {
+  if (input == null || typeof input !== "object") return { platform: "android" };
+  const p = (input as Record<string, unknown>).platform;
+  if (p === "tizen" || p === "android") return { platform: p };
+  if (typeof p === "string") return { platform: normalizePlayerPlatform(p) };
+  return { platform: "android" };
+}
+
 export const createPairingCode = createServerFn({ method: "POST" })
-  .handler(async () => {
+  .inputValidator(validateCreatePairingInput)
+  .handler(async ({ data }) => {
     const hasUrl = Boolean(process.env.SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL);
     const hasKey = Boolean(
       process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -160,11 +182,12 @@ export const createPairingCode = createServerFn({ method: "POST" })
     const chunk = () => Math.random().toString(36).slice(2, 6).toUpperCase();
     const code = `${chunk()}-${chunk()}`;
     const expires_at = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+    const platform = data.platform;
 
     try {
       const { data: inserted, error } = await supabaseAdmin
         .from("pairing_codes")
-        .insert({ code, expires_at })
+        .insert({ code, expires_at, player_platform: platform })
         .select("id, code, expires_at")
         .single();
       if (error) {
@@ -203,20 +226,23 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
         .maybeSingle();
       if (error) {
         console.error("[checkPairingStatus] supabase error:", error.message);
-        return { paired: false, expired: false, found: false };
+        return { paired: false, expired: false, found: false, screen_id: null };
       }
-      if (!pairing) return { paired: false, expired: false, found: false };
+      if (!pairing) return { paired: false, expired: false, found: false, screen_id: null };
       const expired = pairing.expires_at
         ? new Date(pairing.expires_at).getTime() < Date.now()
         : false;
+      const paired = Boolean(pairing.used_at && pairing.screen_id);
       return {
-        paired: Boolean(pairing.used_at && pairing.screen_id),
+        paired,
         expired: expired && !pairing.used_at,
         found: true,
+        /** Presente quando `paired` — permite ao player gravar credenciais para sync. */
+        screen_id: paired ? (pairing.screen_id as string) : null,
       };
     } catch (e) {
       console.error("[checkPairingStatus] exception:", e instanceof Error ? e.message : String(e));
-      return { paired: false, expired: false, found: false };
+      return { paired: false, expired: false, found: false, screen_id: null };
     }
   });
 

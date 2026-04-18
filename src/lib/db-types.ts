@@ -74,6 +74,8 @@ export interface Screen {
   orientation: ScreenOrientation;
   resolution: string | null;
   platform: string | null;
+  /** playstore | tizen | sideload | internal */
+  store_type?: string | null;
   os_name: string | null;
   player_version: string | null;
   device_fingerprint: string | null;
@@ -127,6 +129,15 @@ export interface Playlist {
   created_by: string | null;
   created_at: string;
   updated_at: string;
+}
+
+/** Linha em `playlist_items` (migration `20260418210000_playlist_items.sql`). */
+export interface PlaylistItem {
+  id: string;
+  playlist_id: string;
+  media_asset_id: string;
+  position: number;
+  created_at: string;
 }
 
 export interface Campaign {
@@ -198,4 +209,6 @@ export interface PairingCode {
   expires_at: string;
   used_at: string | null;
   created_at: string;
+  /** android | tizen | web */
+  player_platform?: string | null;
 }

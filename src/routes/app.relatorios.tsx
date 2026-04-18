@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
@@ -24,19 +25,29 @@ function ReportsPage() {
   const { data: screens = [] } = useScreens();
   const { data: units = [] } = useUnits();
   const { data: alerts = [] } = useAlerts();
+  const [platformFilter, setPlatformFilter] = useState<"all" | "android" | "tizen">("all");
+
+  const screensFiltered = useMemo(() => {
+    return screens.filter((s) => {
+      const plat = (s.platform ?? "android").toLowerCase();
+      if (platformFilter === "android" && plat !== "android") return false;
+      if (platformFilter === "tizen" && plat !== "tizen") return false;
+      return true;
+    });
+  }, [screens, platformFilter]);
 
   // Sintetiza séries a partir dos dados reais (placeholder até playback_logs)
   const exhibitionsByDay = Array.from({ length: 14 }).map((_, i) => {
     const date = subDays(new Date(), 13 - i);
     return {
       date: format(date, "dd/MM"),
-      exibicoes: Math.max(0, screens.length * 30 + ((i * 17) % 80)),
+      exibicoes: Math.max(0, screensFiltered.length * 30 + ((i * 17) % 80)),
       falhas: alerts.length > 0 ? (i % 5) : 0,
     };
   });
 
   const statusByUnit = units.slice(0, 6).map((u) => {
-    const us = screens.filter((s) => s.unit_id === u.id);
+    const us = screensFiltered.filter((s) => s.unit_id === u.id);
     return {
       name: u.name.slice(0, 12),
       online: us.filter((s) => s.is_online).length,
@@ -51,9 +62,20 @@ function ReportsPage() {
         subtitle="Indicadores de exibição, falhas e performance da rede."
         actions={
           <>
-            <button className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium hover:bg-accent">
-              <Filter className="h-3.5 w-3.5" /> Filtros
-            </button>
+            <label className="inline-flex items-center gap-2 rounded-md border border-border bg-surface px-2 py-1.5 text-xs font-medium">
+              <Filter className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+              <span className="sr-only">Plataforma</span>
+              <select
+                value={platformFilter}
+                onChange={(e) => setPlatformFilter(e.target.value as "all" | "android" | "tizen")}
+                className="bg-transparent text-xs outline-none min-w-[10rem]"
+                aria-label="Filtrar relatórios por plataforma do player"
+              >
+                <option value="all">Todas as plataformas</option>
+                <option value="android">Android</option>
+                <option value="tizen">Tizen</option>
+              </select>
+            </label>
             <button className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">
               <Download className="h-3.5 w-3.5" /> Exportar PDF
             </button>
@@ -63,7 +85,11 @@ function ReportsPage() {
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { l: "Telas ativas", v: screens.filter((s) => s.is_online).length, d: `de ${screens.length} totais` },
+          {
+            l: "Telas ativas",
+            v: screensFiltered.filter((s) => s.is_online).length,
+            d: `de ${screensFiltered.length} no filtro`,
+          },
           { l: "Campanhas ativas", v: campaigns.filter((c) => c.status === "active").length, d: `de ${campaigns.length} totais` },
           { l: "Alertas pendentes", v: alerts.filter((a) => !a.resolved_at).length, d: "necessitam atenção" },
           { l: "Unidades", v: units.length, d: "no total" },

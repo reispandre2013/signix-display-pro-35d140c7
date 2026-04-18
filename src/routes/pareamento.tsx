@@ -5,13 +5,23 @@ import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.func
 
 export const Route = createFileRoute("/pareamento")({
   head: () => ({ meta: [{ title: "Pareamento de Player — Signix" }] }),
+  validateSearch: (raw: Record<string, unknown>) => {
+    const p = raw.platform;
+    const platform = p === "tizen" || p === "android" ? p : undefined;
+    return { platform } as { platform?: "android" | "tizen" };
+  },
   component: PairingPage,
 });
 
 const STORAGE_KEY = "signix_pairing_code";
 const STORAGE_EXP_KEY = "signix_pairing_code_exp";
+/** Gravado após pareamento — usado por `/player-screen` para sync. */
+export const STORAGE_SCREEN_ID = "signix_screen_id";
 
 function PairingPage() {
+  const { platform: platformSearch } = Route.useSearch();
+  const playerPlatform = platformSearch === "tizen" ? "tizen" : "android";
+
   const [code, setCode] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [paired, setPaired] = useState(false);
@@ -22,7 +32,7 @@ function PairingPage() {
     setLoading(true);
     setCodeError(null);
     try {
-      const res = await createPairingCode();
+      const res = await createPairingCode({ data: { platform: playerPlatform } });
       if (res?.code) {
         localStorage.setItem(STORAGE_KEY, res.code);
         if (res.expires_at) localStorage.setItem(STORAGE_EXP_KEY, res.expires_at);
@@ -34,6 +44,7 @@ function PairingPage() {
       console.error("[pareamento] generateCode failed:", e);
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_EXP_KEY);
+      localStorage.removeItem(STORAGE_SCREEN_ID);
       setCode(null);
       const msg = e instanceof Error ? e.message : String(e);
       setCodeError(
@@ -57,9 +68,10 @@ function PairingPage() {
     } else {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_EXP_KEY);
+      localStorage.removeItem(STORAGE_SCREEN_ID);
       generateCode();
     }
-  }, []);
+  }, [playerPlatform]);
 
   // Polling: checa via server function (admin) se código foi vinculado.
   // Não depende de RLS — funciona mesmo após organization_id ser preenchido.
@@ -70,6 +82,7 @@ function PairingPage() {
       try {
         const res = await checkPairingStatus({ data: { code } });
         if (!cancelled && res?.paired) {
+          if (res.screen_id) localStorage.setItem(STORAGE_SCREEN_ID, res.screen_id);
           setPaired(true);
         }
       } catch {
@@ -107,8 +120,20 @@ function PairingPage() {
               </div>
               <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
                 Tudo pronto!
-                <br />Aguardando primeira campanha…
+                <br />Abra o modo exibição para sincronizar a playlist.
               </h1>
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <Link
+                  to="/player-screen"
+                  className="inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow"
+                >
+                  <Tv className="h-4 w-4" /> Abrir player (sync)
+                </Link>
+                <span className="text-xs text-muted-foreground max-w-xs">
+                  Android TV, Tizen ou browser: mesma URL. Tizen: use{" "}
+                  <code className="text-foreground">?platform=tizen</code> no pareamento.
+                </span>
+              </div>
             </>
           ) : (
             <>
@@ -142,7 +167,11 @@ function PairingPage() {
 
               <div className="mt-8 grid sm:grid-cols-3 gap-3 max-w-md mx-auto text-left">
                 <Info icon={Monitor} label="Resolução" value={`${window.screen.width} × ${window.screen.height}`} />
-                <Info icon={Cpu} label="Plataforma" value={navigator.platform || "Web"} />
+                <Info
+                  icon={Cpu}
+                  label="Plataforma"
+                  value={playerPlatform === "tizen" ? "Tizen TV" : "Android / Web"}
+                />
                 <Info icon={Wifi} label="Conexão" value={navigator.onLine ? "Online" : "Offline"} />
               </div>
 
@@ -150,6 +179,7 @@ function PairingPage() {
                 onClick={() => {
                   localStorage.removeItem(STORAGE_KEY);
                   localStorage.removeItem(STORAGE_EXP_KEY);
+                  localStorage.removeItem(STORAGE_SCREEN_ID);
                   generateCode();
                 }}
                 disabled={loading}

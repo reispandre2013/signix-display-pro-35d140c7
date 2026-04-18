@@ -8,6 +8,7 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "sonner";
 import { AuthProvider } from "@/lib/auth-context";
+import "@/lib/server/player.functions";
 
 import appCss from "../styles.css?url";
 

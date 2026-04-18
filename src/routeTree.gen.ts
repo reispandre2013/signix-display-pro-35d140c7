@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
+import { Route as PlayerScreenRouteImport } from './routes/player-screen'
 import { Route as PlayerRouteImport } from './routes/player'
 import { Route as PareamentoRouteImport } from './routes/pareamento'
 import { Route as LoginRouteImport } from './routes/login'
@@ -47,6 +48,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
 const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
   id: '/recuperar-senha',
   path: '/recuperar-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlayerScreenRoute = PlayerScreenRouteImport.update({
+  id: '/player-screen',
+  path: '/player-screen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlayerRoute = PlayerRouteImport.update({
@@ -161,6 +167,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
+  '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
+  '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
@@ -213,6 +221,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
+  '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
@@ -241,6 +250,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/pareamento'
     | '/player'
+    | '/player-screen'
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/pareamento'
     | '/player'
+    | '/player-screen'
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/pareamento'
     | '/player'
+    | '/player-screen'
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PareamentoRoute: typeof PareamentoRoute
   PlayerRoute: typeof PlayerRoute
+  PlayerScreenRoute: typeof PlayerScreenRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
@@ -345,6 +358,13 @@ declare module '@tanstack/react-router' {
       path: '/recuperar-senha'
       fullPath: '/recuperar-senha'
       preLoaderRoute: typeof RecuperarSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/player-screen': {
+      id: '/player-screen'
+      path: '/player-screen'
+      fullPath: '/player-screen'
+      preLoaderRoute: typeof PlayerScreenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/player': {
@@ -543,6 +563,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PareamentoRoute: PareamentoRoute,
   PlayerRoute: PlayerRoute,
+  PlayerScreenRoute: PlayerScreenRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
@@ -550,3 +571,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

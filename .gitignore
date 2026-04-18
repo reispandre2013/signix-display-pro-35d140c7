@@ -15,6 +15,10 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+.env.capacitor
+
+# Build / deploy artefactos locais
+www/
 
 # Wrangler / Cloudflare
 .wrangler/
