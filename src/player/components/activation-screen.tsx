@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { QrCode, Tv, Wifi, AlertCircle } from "lucide-react";
+import { normalizePairingCode } from "@/player/services/player-api";
 
 interface ActivationScreenProps {
   onActivate: (code: string) => Promise<void>;
@@ -15,7 +16,7 @@ export function ActivationScreen({
   errorMessage,
 }: ActivationScreenProps) {
   const [code, setCode] = useState("");
-  const normalizedCode = useMemo(() => code.trim().toUpperCase(), [code]);
+  const normalizedCode = useMemo(() => normalizePairingCode(code), [code]);
   const qrValue = normalizedCode || "PAREAMENTO-SIGNIX";
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(qrValue)}`;
 

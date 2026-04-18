@@ -3,7 +3,12 @@ import { useMemo } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
-import { EmptyPanel, ErrorPanel, LoadingPanel, PreviewModeBanner } from "@/components/ui-kit/data-states";
+import {
+  EmptyPanel,
+  ErrorPanel,
+  LoadingPanel,
+  PreviewModeBanner,
+} from "@/components/ui-kit/data-states";
 import {
   useProfileQuery,
   useScreensQuery,
@@ -12,7 +17,16 @@ import {
   useUnitsQuery,
 } from "@/hooks/use-signage";
 import { screenHealthPercent } from "@/lib/signage-ui-helpers";
-import { Plus, Search, Filter, MoreHorizontal, MonitorSmartphone, MapPin, Cpu } from "lucide-react";
+import {
+  Plus,
+  Search,
+  Filter,
+  MoreHorizontal,
+  MonitorSmartphone,
+  MapPin,
+  Cpu,
+  KeyRound,
+} from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -38,13 +52,21 @@ type ScreenRow = {
 
 function ScreensPage() {
   const hasBackend = useSignageEnabled();
-  const { data: profile, isLoading: loadingProfile, error: profileError, refetch: refetchProfile } =
-    useProfileQuery();
+  const {
+    data: profile,
+    isLoading: loadingProfile,
+    error: profileError,
+    refetch: refetchProfile,
+  } = useProfileQuery();
   const orgId = profile?.organization_id;
-  const { data: screens = [], isLoading: loadingScreens, error: screensError, refetch: refetchScreens } =
-    useScreensQuery(orgId);
+  const {
+    data: screens = [],
+    isLoading: loadingScreens,
+    error: screensError,
+    refetch: refetchScreens,
+  } = useScreensQuery(orgId);
   const { data: units = [] } = useUnitsQuery(orgId);
-  const { create, remove } = useScreenMutations(orgId);
+  const { create, remove, preparePairing } = useScreenMutations(orgId);
 
   const list = screens as ScreenRow[];
 
@@ -113,7 +135,10 @@ function ScreensPage() {
             </>
           }
         />
-        <EmptyPanel title="Modo preview" hint="Configure as variáveis do Supabase para listar telas reais." />
+        <EmptyPanel
+          title="Modo preview"
+          hint="Configure as variáveis do Supabase para listar telas reais."
+        />
       </div>
     );
   }
@@ -220,7 +245,7 @@ function ScreensPage() {
                   <Th>Campanha atual</Th>
                   <Th>Último ping</Th>
                   <Th>Saúde</Th>
-                  <th className="px-4 py-2.5 w-10" />
+                  <th className="px-4 py-2.5 w-[4.5rem]" />
                 </tr>
               </thead>
               <tbody>
@@ -259,7 +284,9 @@ function ScreensPage() {
                           <Cpu className="h-3 w-3 text-muted-foreground" />
                           {s.platform ?? "—"}
                         </span>
-                        <p className="text-[10px] text-muted-foreground font-mono">{s.player_version ?? ""}</p>
+                        <p className="text-[10px] text-muted-foreground font-mono">
+                          {s.player_version ?? ""}
+                        </p>
                       </Td>
                       <Td>
                         <span className="text-xs font-mono">{s.resolution ?? "—"}</span>
@@ -270,7 +297,10 @@ function ScreensPage() {
                       </Td>
                       <Td>
                         <span className="text-xs text-muted-foreground">
-                          {formatDistanceToNow(new Date(lastPing), { locale: ptBR, addSuffix: true })}
+                          {formatDistanceToNow(new Date(lastPing), {
+                            locale: ptBR,
+                            addSuffix: true,
+                          })}
                         </span>
                       </Td>
                       <Td>
@@ -287,15 +317,37 @@ function ScreensPage() {
                         </div>
                       </Td>
                       <td className="px-4 py-3">
-                        <button
-                          type="button"
-                          title="Excluir"
-                          onClick={() => onRemoveScreen(s.id)}
-                          disabled={remove.isPending}
-                          className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent transition-colors disabled:opacity-50"
-                        >
-                          <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-                        </button>
+                        <div className="flex items-center justify-end gap-1">
+                          <button
+                            type="button"
+                            title="Gerar ou renovar código de pareamento para a TV"
+                            onClick={() =>
+                              preparePairing.mutate(s.id, {
+                                onError: (e) => {
+                                  console.error("[Signix] prepare_screen_pairing", e);
+                                  window.alert(
+                                    e instanceof Error
+                                      ? e.message
+                                      : "Falha ao gerar código de pareamento",
+                                  );
+                                },
+                              })
+                            }
+                            disabled={preparePairing.isPending}
+                            className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent transition-colors disabled:opacity-50"
+                          >
+                            <KeyRound className="h-4 w-4 text-primary" />
+                          </button>
+                          <button
+                            type="button"
+                            title="Excluir"
+                            onClick={() => onRemoveScreen(s.id)}
+                            disabled={remove.isPending}
+                            className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent transition-colors disabled:opacity-50"
+                          >
+                            <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

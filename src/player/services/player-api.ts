@@ -21,6 +21,19 @@ function buildFunctionUrl(name: string): string {
   return `${supabaseUrl}/functions/v1/${name}`;
 }
 
+/** Normaliza o código introduzido na TV (espaços, hífens alternativos, maiúsculas). */
+export function normalizePairingCode(raw: string): string {
+  return raw.trim().toUpperCase().replace(/\s+/g, "").replace(/[·•‧]/g, "-").replace(/_/g, "-");
+}
+
+function mapPairingRpcError(raw: string): string {
+  const m = raw.toLowerCase();
+  if (m.includes("invalid or expired pairing")) {
+    return "Código não encontrado ou expirado. Verifique se a TV mostra o mesmo código que em Telas › ícone da chave (pareamento) no painel; se necessário, gere um código novo.";
+  }
+  return raw.length > 0 ? raw : "Falha no pareamento.";
+}
+
 async function postFunction<TReq, TRes>(name: string, payload: TReq): Promise<TRes> {
   const supabaseUrl = getSupabaseUrl();
   const supabaseAnonKey = getSupabasePublishableKey();
@@ -46,27 +59,37 @@ async function postFunction<TReq, TRes>(name: string, payload: TReq): Promise<TR
 }
 
 export async function pairScreen(code: string, fingerprint: string): Promise<PairingResult> {
-  const result = await postFunction<
-    {
-      pairingCode: string;
-      deviceFingerprint: string;
-      platform: string;
-      osName: string;
-      playerVersion: string;
-    },
-    { paired: boolean; screen: PairingResult | null }
-  >("pair-screen", {
-    pairingCode: code,
-    deviceFingerprint: fingerprint,
-    platform: navigator.platform,
-    osName: navigator.userAgent,
-    playerVersion: PLAYER_VERSION_LABEL,
-  });
-
-  if (!result.screen) {
-    throw new Error("Código inválido ou expirado.");
+  const pairingCode = normalizePairingCode(code);
+  if (pairingCode.length < 8) {
+    throw new Error("Introduza o código completo (formato ABCD-EFGH).");
   }
-  return result.screen;
+
+  try {
+    const result = await postFunction<
+      {
+        pairingCode: string;
+        deviceFingerprint: string;
+        platform: string;
+        osName: string;
+        playerVersion: string;
+      },
+      { paired: boolean; screen: PairingResult | null }
+    >("pair-screen", {
+      pairingCode,
+      deviceFingerprint: fingerprint,
+      platform: navigator.platform,
+      osName: navigator.userAgent,
+      playerVersion: PLAYER_VERSION_LABEL,
+    });
+
+    if (!result.screen) {
+      throw new Error(mapPairingRpcError("invalid or expired pairing code"));
+    }
+    return result.screen;
+  } catch (e) {
+    const raw = e instanceof Error ? e.message : "";
+    throw new Error(mapPairingRpcError(raw));
+  }
 }
 
 export async function resolveScreenPayload(screenId: string): Promise<PlayerPayload> {

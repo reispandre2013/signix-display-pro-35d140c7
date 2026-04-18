@@ -11,7 +11,10 @@ export type ProfileRow = {
   unit_id: string | null;
 };
 
-export async function fetchProfile(client: SupabaseClient, userId: string): Promise<ProfileRow | null> {
+export async function fetchProfile(
+  client: SupabaseClient,
+  userId: string,
+): Promise<ProfileRow | null> {
   const { data, error } = await client
     .from("profiles")
     .select("*")
@@ -32,7 +35,12 @@ export async function updateOrganization(
   orgId: string,
   patch: Record<string, unknown>,
 ) {
-  const { data, error } = await client.from("organizations").update(patch).eq("id", orgId).select().single();
+  const { data, error } = await client
+    .from("organizations")
+    .update(patch)
+    .eq("id", orgId)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 }
@@ -50,7 +58,14 @@ export async function fetchUnits(client: SupabaseClient, orgId: string) {
 export async function insertUnit(
   client: SupabaseClient,
   orgId: string,
-  row: { name: string; address?: string; city?: string; state?: string; manager_name?: string; manager_phone?: string },
+  row: {
+    name: string;
+    address?: string;
+    city?: string;
+    state?: string;
+    manager_name?: string;
+    manager_phone?: string;
+  },
 ) {
   const { data, error } = await client
     .from("units")
@@ -61,8 +76,17 @@ export async function insertUnit(
   return data;
 }
 
-export async function updateUnit(client: SupabaseClient, unitId: string, patch: Record<string, unknown>) {
-  const { data, error } = await client.from("units").update(patch).eq("id", unitId).select().single();
+export async function updateUnit(
+  client: SupabaseClient,
+  unitId: string,
+  patch: Record<string, unknown>,
+) {
+  const { data, error } = await client
+    .from("units")
+    .update(patch)
+    .eq("id", unitId)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 }
@@ -98,11 +122,49 @@ export async function insertScreen(
     .select()
     .single();
   if (error) throw error;
+
+  const { error: prepError } = await client.rpc("prepare_screen_pairing", {
+    p_screen_id: data.id,
+    p_expires_in_minutes: 60,
+  });
+  if (prepError) {
+    console.error("[Signix] prepare_screen_pairing após criar tela:", prepError.message);
+    /* A tela já existe; o painel pode gerar código com o botão «Gerar código» na linha. */
+  }
+
   return data;
 }
 
-export async function updateScreen(client: SupabaseClient, screenId: string, patch: Record<string, unknown>) {
-  const { data, error } = await client.from("screens").update(patch).eq("id", screenId).select().single();
+export type PreparePairingRow = { pairing_code: string; pairing_expires_at: string };
+
+export async function prepareScreenPairing(
+  client: SupabaseClient,
+  screenId: string,
+  expiresInMinutes = 60,
+): Promise<PreparePairingRow> {
+  const { data, error } = await client.rpc("prepare_screen_pairing", {
+    p_screen_id: screenId,
+    p_expires_in_minutes: Math.min(120, Math.max(1, expiresInMinutes)),
+  });
+  if (error) throw error;
+  const row = Array.isArray(data) ? data[0] : data;
+  if (!row || typeof row !== "object" || !("pairing_code" in row)) {
+    throw new Error("Resposta inválida de prepare_screen_pairing");
+  }
+  return row as PreparePairingRow;
+}
+
+export async function updateScreen(
+  client: SupabaseClient,
+  screenId: string,
+  patch: Record<string, unknown>,
+) {
+  const { data, error } = await client
+    .from("screens")
+    .update(patch)
+    .eq("id", screenId)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 }
@@ -169,7 +231,12 @@ export async function fetchPlaylists(client: SupabaseClient, orgId: string) {
   return data ?? [];
 }
 
-export async function insertPlaylist(client: SupabaseClient, orgId: string, name: string, description?: string) {
+export async function insertPlaylist(
+  client: SupabaseClient,
+  orgId: string,
+  name: string,
+  description?: string,
+) {
   const { data, error } = await client
     .from("playlists")
     .insert({ organization_id: orgId, name, description: description ?? "", status: "draft" })
@@ -184,8 +251,17 @@ export async function deletePlaylist(client: SupabaseClient, id: string) {
   if (error) throw error;
 }
 
-export async function updatePlaylist(client: SupabaseClient, id: string, patch: Record<string, unknown>) {
-  const { data, error } = await client.from("playlists").update(patch).eq("id", id).select().single();
+export async function updatePlaylist(
+  client: SupabaseClient,
+  id: string,
+  patch: Record<string, unknown>,
+) {
+  const { data, error } = await client
+    .from("playlists")
+    .update(patch)
+    .eq("id", id)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 }
@@ -232,8 +308,17 @@ export async function insertCampaign(
   return data;
 }
 
-export async function updateCampaign(client: SupabaseClient, id: string, patch: Record<string, unknown>) {
-  const { data, error } = await client.from("campaigns").update(patch).eq("id", id).select().single();
+export async function updateCampaign(
+  client: SupabaseClient,
+  id: string,
+  patch: Record<string, unknown>,
+) {
+  const { data, error } = await client
+    .from("campaigns")
+    .update(patch)
+    .eq("id", id)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 }
@@ -254,7 +339,11 @@ export async function fetchAlerts(client: SupabaseClient, orgId: string) {
   return data ?? [];
 }
 
-export async function updateAlert(client: SupabaseClient, id: string, patch: Record<string, unknown>) {
+export async function updateAlert(
+  client: SupabaseClient,
+  id: string,
+  patch: Record<string, unknown>,
+) {
   const { data, error } = await client.from("alerts").update(patch).eq("id", id).select().single();
   if (error) throw error;
   return data;
@@ -314,7 +403,12 @@ export async function fetchScreenGroups(client: SupabaseClient, orgId: string) {
   return data ?? [];
 }
 
-export async function insertScreenGroup(client: SupabaseClient, orgId: string, name: string, description?: string) {
+export async function insertScreenGroup(
+  client: SupabaseClient,
+  orgId: string,
+  name: string,
+  description?: string,
+) {
   const { data, error } = await client
     .from("screen_groups")
     .insert({ organization_id: orgId, name, description: description ?? "", status: "active" })
@@ -352,8 +446,17 @@ export async function fetchProfilesDirectory(client: SupabaseClient, orgId: stri
   return data ?? [];
 }
 
-export async function updateProfile(client: SupabaseClient, profileId: string, patch: Record<string, unknown>) {
-  const { data, error } = await client.from("profiles").update(patch).eq("id", profileId).select().single();
+export async function updateProfile(
+  client: SupabaseClient,
+  profileId: string,
+  patch: Record<string, unknown>,
+) {
+  const { data, error } = await client
+    .from("profiles")
+    .update(patch)
+    .eq("id", profileId)
+    .select()
+    .single();
   if (error) throw error;
   return data;
 }

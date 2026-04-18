@@ -235,6 +235,13 @@ export function useScreenMutations(orgId: string | undefined) {
       },
       onSuccess: invalidate,
     }),
+    preparePairing: useMutation({
+      mutationFn: async (screenId: string) => {
+        if (!client) throw new Error("Supabase indisponível");
+        return api.prepareScreenPairing(client, screenId, 60);
+      },
+      onSuccess: invalidate,
+    }),
     update: useMutation({
       mutationFn: async ({ id, patch }: { id: string; patch: Record<string, unknown> }) => {
         if (!client) throw new Error("Supabase indisponível");
