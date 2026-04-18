@@ -141,20 +141,30 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
     return { code: normalizeCode(code) };
   })
   .handler(async ({ data }) => {
-    const { data: pairing } = await supabaseAdmin
-      .from("pairing_codes")
-      .select("used_at, screen_id, expires_at")
-      .eq("code", data.code)
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    if (!pairing) return { paired: false, expired: false, found: false };
-    const expired = pairing.expires_at
-      ? new Date(pairing.expires_at).getTime() < Date.now()
-      : false;
-    return {
-      paired: Boolean(pairing.used_at && pairing.screen_id),
-      expired: expired && !pairing.used_at,
-      found: true,
-    };
+    try {
+      const { data: pairing, error } = await supabaseAdmin
+        .from("pairing_codes")
+        .select("used_at, screen_id, expires_at")
+        .eq("code", data.code)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) {
+        console.error("[checkPairingStatus] supabase error:", error.message);
+        return { paired: false, expired: false, found: false };
+      }
+      if (!pairing) return { paired: false, expired: false, found: false };
+      const expired = pairing.expires_at
+        ? new Date(pairing.expires_at).getTime() < Date.now()
+        : false;
+      return {
+        paired: Boolean(pairing.used_at && pairing.screen_id),
+        expired: expired && !pairing.used_at,
+        found: true,
+      };
+    } catch (e) {
+      console.error("[checkPairingStatus] exception:", e instanceof Error ? e.message : String(e));
+      return { paired: false, expired: false, found: false };
+    }
   });
+
