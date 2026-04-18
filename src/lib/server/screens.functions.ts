@@ -148,7 +148,13 @@ export const claimPairingCode = createServerFn({ method: "POST" })
       throw new Error(updErr.message);
     }
 
-    return { ok: true, screen_id: screen.id, screen_name: screen.name };
+    return {
+      ok: true,
+      screen_id: screen.id,
+      screen_name: screen.name,
+      /** Plataforma persistida (android | tizen) — útil para o painel sem novo SELECT. */
+      platform: caps.platform,
+    };
   });
 
 /**

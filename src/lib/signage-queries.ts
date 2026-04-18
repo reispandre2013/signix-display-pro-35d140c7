@@ -109,8 +109,12 @@ export async function fetchScreens(client: SupabaseClient, orgId: string) {
 export async function insertScreen(
   client: SupabaseClient,
   orgId: string,
-  row: { name: string; unit_id?: string | null; resolution?: string },
+  row: { name: string; unit_id?: string | null; resolution?: string; platform?: string | null },
 ) {
+  const plat =
+    row.platform && ["android", "tizen"].includes(String(row.platform).toLowerCase().trim())
+      ? String(row.platform).toLowerCase().trim()
+      : "android";
   const { data, error } = await client
     .from("screens")
     .insert({
@@ -118,6 +122,7 @@ export async function insertScreen(
       name: row.name,
       unit_id: row.unit_id ?? null,
       resolution: row.resolution ?? "1920x1080",
+      platform: plat,
     })
     .select()
     .single();

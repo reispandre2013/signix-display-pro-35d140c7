@@ -219,7 +219,7 @@ export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
 
     const { data: screenRow, error: sErr } = await supabaseAdmin
       .from("screens")
-      .select("id, name, organization_id, unit_id")
+      .select("id, name, organization_id, unit_id, platform, store_type")
       .eq("id", data.screen_id)
       .maybeSingle();
     if (sErr || !screenRow) throw new Error("Tela não encontrada.");
@@ -350,7 +350,13 @@ export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
       unchanged: false as const,
       etag,
       server_time: new Date().toISOString(),
-      screen: { id: screenRow.id as string, name: screenRow.name as string, organization_id: orgId },
+      screen: {
+        id: screenRow.id as string,
+        name: screenRow.name as string,
+        organization_id: orgId,
+        platform: (screenRow.platform as string | null) ?? "android",
+        store_type: (screenRow.store_type as string | null) ?? null,
+      },
       campaign: campaign
         ? {
             id: campaign.id,

@@ -31,6 +31,8 @@ export interface PairingResult {
   unit_id: string | null;
   screen_name: string;
   paired: boolean;
+  /** android | tizen — devolvido pela RPC após migration 20260419120000. */
+  platform?: string;
 }
 
 export interface LocalScreenCredentials {
