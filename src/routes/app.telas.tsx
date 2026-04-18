@@ -73,7 +73,7 @@ function ScreensPage() {
     <div className="space-y-6">
       <PageHeader
         title="Telas / Players"
-        subtitle="Gerencie todos os dispositivos físicos conectados ao Signix."
+        subtitle="Gerencie dispositivos conectados ao Signix. Em Adicionar tela › Parear nova tela, escolha a plataforma do player: Android TV ou Samsung Tizen."
         actions={
           <button
             onClick={() => setPairOpen(true)}
@@ -311,10 +311,10 @@ function PairScreenModal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-2xl border border-border bg-card shadow-2xl overflow-hidden"
+        className="flex max-h-[min(90vh,720px)] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between border-b border-border px-5 py-3.5">
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-primary/10 grid place-items-center">
               <Tv className="h-4 w-4 text-primary" />
@@ -334,7 +334,7 @@ function PairScreenModal({
           </button>
         </div>
 
-        <form onSubmit={onSubmit} className="p-5 space-y-4">
+        <form onSubmit={onSubmit} className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5">
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
               Código de pareamento
@@ -354,20 +354,6 @@ function PairScreenModal({
 
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-              Nome da tela
-            </label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Ex.: Recepção / Vitrine principal"
-              required
-              minLength={2}
-              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
-
-          <div>
-            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
               Plataforma do player
             </label>
             <select
@@ -381,6 +367,20 @@ function PairScreenModal({
             <p className="mt-1 text-[11px] text-muted-foreground">
               Deve coincidir com o player em pareamento (ex.: URL <code className="text-foreground">?platform=tizen</code>).
             </p>
+          </div>
+
+          <div>
+            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Nome da tela
+            </label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ex.: Recepção / Vitrine principal"
+              required
+              minLength={2}
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
