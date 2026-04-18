@@ -3,13 +3,13 @@
 import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL;
-const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SERVICE_ROLE_KEY =
+  process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
-  // Falha cedo no servidor — mensagem visível nos logs.
   // eslint-disable-next-line no-console
   console.error(
-    "[supabaseAdmin] SUPABASE_URL ou SUPABASE_SERVICE_ROLE_KEY ausentes no ambiente do servidor.",
+    "[supabaseAdmin] SUPABASE_URL ou SERVICE_ROLE_KEY ausentes no ambiente do servidor.",
   );
 }
 
