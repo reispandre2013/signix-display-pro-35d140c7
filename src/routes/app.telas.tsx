@@ -3,7 +3,8 @@ import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
-import { useScreens, useUnits, useDeleteScreen } from "@/lib/hooks/use-supabase-data";
+import { useScreens, useUnits, useDeleteScreen, useUpdateScreen } from "@/lib/hooks/use-supabase-data";
+import type { Screen } from "@/lib/db-types";
 import {
   Plus,
   Search,
@@ -15,10 +16,12 @@ import {
   Loader2,
   Tv,
   X,
+  Eye,
+  Pencil,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -32,20 +35,28 @@ export const Route = createFileRoute("/app/telas")({
   component: ScreensPage,
 });
 
-type ScreenRow = {
-  id: string;
-  name: string;
-  pairing_code: string | null;
-  resolution: string | null;
-  orientation: string;
-  platform: string | null;
-  player_version: string | null;
-  last_seen_at: string | null;
-  is_online: boolean;
-  device_status: string;
-  units: { name: string } | null;
-  campaigns: { name: string } | null;
-};
+/** UI do painel ↔ valores `screen_orientation` no Postgres. */
+function dbToUiOrientation(o: string): "landscape" | "portrait" {
+  return o === "vertical" ? "portrait" : "landscape";
+}
+
+function uiToDbOrientation(o: "landscape" | "portrait"): "horizontal" | "vertical" {
+  return o === "portrait" ? "vertical" : "horizontal";
+}
+
+function platformDisplayLabel(platform: string | null | undefined): string {
+  const p = (platform ?? "android").toLowerCase();
+  if (p === "tizen") return "Samsung Tizen TV";
+  if (p === "web") return "Web / browser";
+  return "Android TV";
+}
+
+function platformBadgeClass(platform: string | null | undefined): string {
+  const p = (platform ?? "android").toLowerCase();
+  if (p === "tizen") return "bg-sky-500/15 text-sky-600 dark:text-sky-400";
+  if (p === "web") return "bg-violet-500/15 text-violet-700 dark:text-violet-300";
+  return "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400";
+}
 
 function ScreensPage() {
   const screensQ = useScreens();
@@ -54,6 +65,8 @@ function ScreensPage() {
   const [q, setQ] = useState("");
   const [platformFilter, setPlatformFilter] = useState<"all" | "android" | "tizen">("all");
   const [pairOpen, setPairOpen] = useState(false);
+  const [detailScreen, setDetailScreen] = useState<Screen | null>(null);
+  const [editScreen, setEditScreen] = useState<Screen | null>(null);
 
   const screens = screensQ.data ?? [];
   const units = unitsQ.data ?? [];
@@ -88,13 +101,14 @@ function ScreensPage() {
     <div className="space-y-6">
       <PageHeader
         title="Telas / Players"
-        subtitle="Gerencie dispositivos conectados ao Signix. Em Adicionar tela › Parear nova tela, escolha a plataforma do player: Android TV ou Samsung Tizen."
+        subtitle="Cadastre dispositivos (Android TV ou Samsung Tizen) com código de pareamento. A plataforma deve ser a mesma configurada no player."
         actions={
           <button
+            type="button"
             onClick={() => setPairOpen(true)}
             className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
           >
-            <Plus className="h-3.5 w-3.5" /> Adicionar tela
+            <Plus className="h-3.5 w-3.5" /> Novo dispositivo
           </button>
         }
       />
@@ -155,10 +169,11 @@ function ScreensPage() {
             action={
               <div className="flex flex-wrap items-center justify-center gap-2">
                 <button
+                  type="button"
                   onClick={() => setPairOpen(true)}
                   className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
                 >
-                  <Plus className="h-3.5 w-3.5" /> Parear novo player
+                  <Plus className="h-3.5 w-3.5" /> Novo dispositivo
                 </button>
                 <Link
                   to="/pareamento"
@@ -181,7 +196,7 @@ function ScreensPage() {
                   <Th>Plataforma</Th>
                   <Th>Resolução</Th>
                   <Th>Último ping</Th>
-                  <th className="px-4 py-2.5 w-10" />
+                  <th className="px-4 py-2.5 text-right font-semibold">Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -221,13 +236,9 @@ function ScreensPage() {
                     <Td>
                       <span className="inline-flex flex-col gap-1">
                         <span
-                          className={`inline-flex w-fit items-center rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-                            (s.platform ?? "android").toLowerCase() === "tizen"
-                              ? "bg-sky-500/15 text-sky-600 dark:text-sky-400"
-                              : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
-                          }`}
+                          className={`inline-flex w-fit max-w-[11rem] items-center rounded-full px-2 py-0.5 text-[10px] font-semibold leading-tight ${platformBadgeClass(s.platform)}`}
                         >
-                          {(s.platform ?? "android").toLowerCase() === "tizen" ? "Tizen" : "Android"}
+                          {platformDisplayLabel(s.platform)}
                         </span>
                         <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                           <Cpu className="h-3 w-3" />
@@ -253,12 +264,32 @@ function ScreensPage() {
                       </span>
                     </Td>
                     <td className="px-4 py-3">
-                      <button
-                        onClick={() => handleDelete(s.id, s.name)}
-                        className="h-7 w-7 grid place-items-center rounded-md hover:bg-destructive/10 text-destructive"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
+                      <div className="flex items-center justify-end gap-0.5">
+                        <button
+                          type="button"
+                          title="Detalhes do dispositivo"
+                          onClick={() => setDetailScreen(s)}
+                          className="h-8 w-8 grid place-items-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground"
+                        >
+                          <Eye className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Editar dispositivo"
+                          onClick={() => setEditScreen(s)}
+                          className="h-8 w-8 grid place-items-center rounded-md hover:bg-accent text-muted-foreground hover:text-foreground"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          title="Excluir dispositivo"
+                          onClick={() => handleDelete(s.id, s.name)}
+                          className="h-8 w-8 grid place-items-center rounded-md hover:bg-destructive/10 text-destructive"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -269,6 +300,21 @@ function ScreensPage() {
       </Panel>
 
       {pairOpen && <PairScreenModal onClose={() => setPairOpen(false)} units={units} />}
+      {detailScreen && (
+        <ScreenDetailModal
+          screen={detailScreen}
+          unitLabel={unitName(detailScreen.unit_id)}
+          onClose={() => setDetailScreen(null)}
+        />
+      )}
+      {editScreen && (
+        <EditScreenModal
+          screen={editScreen}
+          units={units}
+          onClose={() => setEditScreen(null)}
+          onSaved={() => setEditScreen(null)}
+        />
+      )}
     </div>
   );
 }
@@ -335,9 +381,9 @@ function PairScreenModal({
               <Tv className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <h2 className="font-display text-base font-bold">Parear nova tela</h2>
+              <h2 className="font-display text-base font-bold">Novo dispositivo</h2>
               <p className="text-[11px] text-muted-foreground">
-                Informe o código exibido no player.
+                Cadastro com código de ativação exibido na TV.
               </p>
             </div>
           </div>
@@ -352,46 +398,315 @@ function PairScreenModal({
         <form onSubmit={onSubmit} className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5">
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-              Código de pareamento
+              Nome do dispositivo <span className="text-destructive">*</span>
+            </label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ex.: Recepção / Vitrine principal"
+              required
+              minLength={2}
+              autoFocus
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+
+          <div>
+            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Código de ativação <span className="text-destructive">*</span>
             </label>
             <input
               value={code}
               onChange={(e) => setCode(e.target.value.toUpperCase())}
               placeholder="ABCD-1234"
               required
-              autoFocus
               className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2.5 font-mono text-lg tracking-widest text-center uppercase focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
-              Abra <code className="text-foreground">/pareamento</code> na TV para ver o código.
+              Abra <code className="text-foreground">/pareamento</code> na TV (com a mesma plataforma escolhida abaixo, ex.{" "}
+              <code className="text-foreground">?platform=tizen</code>).
             </p>
           </div>
 
-          <div>
-            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-              Plataforma do player
-            </label>
-            <select
-              value={platform}
-              onChange={(e) => setPlatform(e.target.value as PlayerPlatform)}
-              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          <fieldset className="space-y-0">
+            <legend className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Plataforma do dispositivo <span className="text-destructive">*</span>
+            </legend>
+            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Plataforma do dispositivo">
+              {(["android", "tizen"] as const).map((value) => (
+                <label
+                  key={value}
+                  className={`flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
+                    platform === value
+                      ? "border-primary bg-primary/5 ring-1 ring-primary/30"
+                      : "border-input hover:bg-accent/50"
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="device-platform"
+                    value={value}
+                    checked={platform === value}
+                    onChange={() => setPlatform(value)}
+                    className="h-4 w-4 shrink-0 border-input text-primary focus:ring-ring"
+                  />
+                  <span className="font-medium leading-tight">
+                    {value === "android" ? "Android TV" : "Samsung Tizen TV"}
+                  </span>
+                </label>
+              ))}
+            </div>
+            <p className="mt-1.5 text-[11px] text-muted-foreground">
+              Obrigatório: deve coincidir com o tipo de player em pareamento.
+            </p>
+          </fieldset>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+                Unidade
+              </label>
+              <select
+                value={unitId}
+                onChange={(e) => setUnitId(e.target.value)}
+                className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="">Sem unidade</option>
+                {units.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+                Orientação
+              </label>
+              <select
+                value={orientation}
+                onChange={(e) => setOrientation(e.target.value as "landscape" | "portrait")}
+                className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="landscape">Paisagem</option>
+                <option value="portrait">Retrato</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-2 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-md border border-border bg-surface px-3 py-1.5 text-xs hover:bg-accent transition-smooth"
             >
-              <option value="android">Android TV (WebView / Capacitor)</option>
-              <option value="tizen">Samsung Tizen TV</option>
-            </select>
-            <p className="mt-1 text-[11px] text-muted-foreground">
-              Deve coincidir com o player em pareamento (ex.: URL <code className="text-foreground">?platform=tizen</code>).
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60"
+            >
+              {submitting ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> Pareando…
+                </>
+              ) : (
+                <>
+                  <Plus className="h-3.5 w-3.5" /> Salvar dispositivo
+                </>
+              )}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function ScreenDetailModal({
+  screen,
+  unitLabel,
+  onClose,
+}: {
+  screen: Screen;
+  unitLabel: string;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        className="flex max-h-[min(90vh,720px)] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
+          <div>
+            <h2 className="font-display text-base font-bold">Detalhe do dispositivo</h2>
+            <p className="text-[11px] text-muted-foreground">{screen.name}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent"
+            aria-label="Fechar"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5 text-sm">
+          <div>
+            <p className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Plataforma cadastrada
             </p>
+            <span
+              className={`mt-2 inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${platformBadgeClass(screen.platform)}`}
+            >
+              {platformDisplayLabel(screen.platform)}
+            </span>
+            {screen.store_type ? (
+              <p className="mt-1 text-[11px] text-muted-foreground">Canal: {screen.store_type}</p>
+            ) : null}
+          </div>
+          <div className="grid gap-3 rounded-lg border border-border bg-surface/40 p-3 text-xs">
+            <div className="flex justify-between gap-2">
+              <span className="text-muted-foreground">Código de pareamento</span>
+              <span className="font-mono text-right">{screen.pairing_code ?? "—"}</span>
+            </div>
+            <div className="flex justify-between gap-2">
+              <span className="text-muted-foreground">Unidade</span>
+              <span className="text-right">{unitLabel}</span>
+            </div>
+            <div className="flex justify-between gap-2">
+              <span className="text-muted-foreground">Orientação</span>
+              <span className="text-right">{screen.orientation}</span>
+            </div>
+            <div className="flex justify-between gap-2">
+              <span className="text-muted-foreground">Resolução</span>
+              <span className="text-right font-mono">{screen.resolution ?? "—"}</span>
+            </div>
+            <div className="flex justify-between gap-2">
+              <span className="text-muted-foreground">Estado</span>
+              <span className="text-right">{screen.device_status}</span>
+            </div>
+            <div className="flex justify-between gap-2">
+              <span className="text-muted-foreground">Online</span>
+              <span className="text-right">{screen.is_online ? "Sim" : "Não"}</span>
+            </div>
+            <div className="flex justify-between gap-2">
+              <span className="text-muted-foreground">Último ping</span>
+              <span className="text-right text-[11px]">
+                {screen.last_seen_at
+                  ? formatDistanceToNow(new Date(screen.last_seen_at), { locale: ptBR, addSuffix: true })
+                  : "nunca"}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-border px-5 py-3 flex justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-md bg-gradient-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground"
+          >
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Edição de metadados do dispositivo. A plataforma não é editável aqui: mudar depois do pareamento
+ * quebraria a correspondência com o binário/URL do player (risco operacional).
+ */
+function EditScreenModal({
+  screen,
+  units,
+  onClose,
+  onSaved,
+}: {
+  screen: Screen;
+  units: Array<{ id: string; name: string }>;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const update = useUpdateScreen();
+  const [name, setName] = useState(screen.name);
+  const [unitId, setUnitId] = useState<string>(screen.unit_id ?? "");
+  const [orientation, setOrientation] = useState<"landscape" | "portrait">(dbToUiOrientation(screen.orientation));
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    setName(screen.name);
+    setUnitId(screen.unit_id ?? "");
+    setOrientation(dbToUiOrientation(screen.orientation));
+  }, [screen]);
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await update.mutateAsync({
+        id: screen.id,
+        name: name.trim(),
+        unit_id: unitId || null,
+        orientation: uiToDbOrientation(orientation),
+      });
+      toast.success("Dispositivo atualizado.");
+      onSaved();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro ao salvar.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div
+      className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}
+      role="presentation"
+    >
+      <div
+        className="flex max-h-[min(90vh,720px)] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-5 py-3.5">
+          <div>
+            <h2 className="font-display text-base font-bold">Editar dispositivo</h2>
+            <p className="text-[11px] text-muted-foreground">{screen.name}</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="h-7 w-7 grid place-items-center rounded-md hover:bg-accent"
+            aria-label="Fechar"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <form onSubmit={onSubmit} className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5">
+          <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-[11px] text-muted-foreground">
+            <strong className="text-foreground">Plataforma:</strong>{" "}
+            <span className={`inline-flex items-center rounded px-1.5 py-0.5 font-medium ${platformBadgeClass(screen.platform)}`}>
+              {platformDisplayLabel(screen.platform)}
+            </span>
+            . Não pode ser alterada após o cadastro (o player já está vinculado a Android ou Tizen). Para trocar de
+            plataforma, exclua o dispositivo e cadastre novamente com o código gerado no player correcto.
           </div>
 
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
-              Nome da tela
+              Nome do dispositivo <span className="text-destructive">*</span>
             </label>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ex.: Recepção / Vitrine principal"
               required
               minLength={2}
               className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -446,12 +761,10 @@ function PairScreenModal({
             >
               {submitting ? (
                 <>
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> Pareando…
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" /> Salvando…
                 </>
               ) : (
-                <>
-                  <Plus className="h-3.5 w-3.5" /> Parear tela
-                </>
+                "Guardar alterações"
               )}
             </button>
           </div>
