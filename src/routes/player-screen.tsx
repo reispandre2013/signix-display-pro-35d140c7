@@ -8,6 +8,7 @@ import {
   type ScreenPlaylistItem,
 } from "@/lib/server/player.functions";
 import { getMediaUrlCandidates, applyMediaFallback } from "@/lib/media-url";
+import { initAndroidTvShell } from "@/player/capacitor/android-shell";
 import { Tv, Wifi, AlertCircle, Loader2 } from "lucide-react";
 
 const LS_CODE = "signix_pairing_code";
@@ -42,6 +43,10 @@ function PlayerScreenPage() {
   const getPayloadFn = useServerFn(getScreenPlaylistPayload);
   const heartbeatFn = useServerFn(postPlayerHeartbeat);
   const syncAckFn = useServerFn(postPlayerSyncAck);
+
+  useEffect(() => {
+    void initAndroidTvShell();
+  }, []);
 
   const [screenId, setScreenId] = useState<string | null>(null);
   const [pairingCode, setPairingCode] = useState<string | null>(null);

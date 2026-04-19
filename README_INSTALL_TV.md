@@ -6,7 +6,7 @@ Guia passo a passo para **gerar o APK**, **instalar na TV Box**, **fullscreen**,
 
 Se o APK foi instalado **sem** `CAPACITOR_SERVER_URL` definida no momento do `npx cap sync`, o WebView fica no placeholder local.
 
-**No PC:** crie **`.env.capacitor`** (copie de **`.env.capacitor.example`**) com `CAPACITOR_SERVER_URL=https://.../player`, rode **`npx cap sync android`**, gere um **novo APK** e **instale de novo** na TV.
+**No PC:** crie **`.env.capacitor`** (copie de **`.env.capacitor.example`**) com `CAPACITOR_SERVER_URL=https://.../pareamento?platform=android` (ou `tizen`), rode **`npx cap sync android`**, gere um **novo APK** e **instale de novo** na TV.
 
 Passo a passo completo: **secção 1.2** abaixo. Arquitetura e variáveis: **`docs/android-tv-player.md`**.
 
@@ -18,7 +18,7 @@ Passo a passo completo: **secção 1.2** abaixo. Arquitetura e variáveis: **`do
 |------|-----------|
 | Computador | Windows, macOS ou Linux com Node.js 20+ e npm |
 | Android Studio | Instalado com **Android SDK** (API 35), **JDK 17+** e emulador opcional |
-| Projeto Signix publicado em **HTTPS** | O app Android carrega o player pela URL do site (TanStack Start). Ex.: `https://seu-app.exemplo.com/player` |
+| Projeto Signix publicado em **HTTPS** | O APK abre o **pareamento** no WebView (TanStack Start). Ex.: `https://seu-app.exemplo.com/pareamento?platform=android` |
 | Variáveis do player no deploy | `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` (ou `ANON`) configurados no build do site |
 
 ---
@@ -46,11 +46,13 @@ Se isto **não** for feito antes do `cap sync`, o APK abre só o **placeholder**
 
    (Linux/macOS: `cp .env.capacitor.example .env.capacitor`)
 
-2. Edite **`.env.capacitor`** e defina a URL **HTTPS** onde o player funciona no browser (com `/player` no fim, se for esse o caminho):
+2. Edite **`.env.capacitor`** e defina a URL **HTTPS** do **pareamento** (código na TV), com a plataforma certa:
 
    ```env
-   CAPACITOR_SERVER_URL=https://SEU-DOMINIO/player
+   CAPACITOR_SERVER_URL=https://SEU-DOMINIO/pareamento?platform=android
    ```
+
+   Para fluxo alinhado ao Samsung Tizen (código gerado na TV), use `?platform=tizen`. Depois do pareamento no painel, pode usar `/player-screen` na mesma origem.
 
 3. O ficheiro `.env.capacitor` está no **`.gitignore`** — não vai para o git.
 
@@ -63,18 +65,18 @@ Ao correr `npx cap sync android`, se a URL **não** for lida, aparece no termina
 **Windows (PowerShell):**
 
 ```powershell
-$env:CAPACITOR_SERVER_URL="https://SEU-DOMINIO/player"
+$env:CAPACITOR_SERVER_URL="https://SEU-DOMINIO/pareamento?platform=android"
 ```
 
 **Linux / macOS:**
 
 ```bash
-export CAPACITOR_SERVER_URL="https://SEU-DOMINIO/player"
+export CAPACITOR_SERVER_URL="https://SEU-DOMINIO/pareamento?platform=android"
 ```
 
 Também pode existir uma linha `CAPACITOR_SERVER_URL=...` no `.env` da raiz; o `capacitor.config.ts` lê essa chave se não houver valor nos passos acima.
 
-Use sempre a URL **exata** que abre o player no Chrome (inclua `/player` se aplicável).
+Use sempre a URL **exata** que abre o pareamento no Chrome (inclua `?platform=` se aplicável).
 
 ### 1.3 Build web + sincronizar Android
 
@@ -163,7 +165,7 @@ No launcher, procure **Signix Player TV** (ícone do app). Em Android TV, també
 
 O app já tenta deixar a experiência **tela cheia** de duas formas:
 
-1. **Nativo (Android):** ao carregar `/player`, o código chama o plugin **SignixTv** (imersivo + barra de status sobre o WebView + manter tela ligada). Isso é feito em `initAndroidTvShell()` na rota do player.
+1. **Nativo (Android):** em rotas de ecrã cheio (ex.: `/pareamento`, `/player-screen`), o código pode chamar o plugin **SignixTv** via `initAndroidTvShell()` quando integrado nessa rota.
 2. **Web:** `requestFullscreen()` no documento da página do player.
 
 **Se ainda aparecer barra de navegação do sistema:**
@@ -253,7 +255,7 @@ Com a rede off, os logs de reprodução podem **ficar na fila** local; ao restau
 
 ```powershell
 # PowerShell — definir URL e preparar Android
-$env:CAPACITOR_SERVER_URL="https://SEU-DOMINIO/player"
+$env:CAPACITOR_SERVER_URL="https://SEU-DOMINIO/pareamento?platform=android"
 npm run android:release
 npx cap open android
 ```

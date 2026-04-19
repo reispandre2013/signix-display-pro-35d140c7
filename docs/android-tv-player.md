@@ -26,28 +26,30 @@ Este documento descreve como o **player web atual** (`/player`, `src/player/**`)
 
 O projeto usa **TanStack Start** (SSR / worker Cloudflare). O build **não gera** um `index.html` estático único em `dist/client/` consumível offline pelo WebView como SPA clássica.
 
-**Modo suportado para produção:** o APK carrega a **URL HTTPS** do app já publicado (ex.: Lovable / Cloudflare), apontando para a rota do player:
+**Modo suportado para produção:** o APK carrega a **URL HTTPS** do app já publicado (ex.: Lovable / Cloudflare), apontando para o **pareamento** (código na TV), por exemplo:
 
 ```text
-https://SEU-DOMINIO/player
+https://SEU-DOMINIO/pareamento?platform=android
 ```
+
+Use `?platform=tizen` quando o fluxo for o mesmo do Samsung Tizen. Depois do pareamento, `/player-screen` na mesma origem faz o sync da playlist.
 
 **Antes de `npx cap sync`**, defina a URL de uma destas formas (por ordem o `capacitor.config.ts` usa: env → `.env.capacitor` → `.env`). Os ficheiros `.env*` são resolvidos a partir da pasta do projeto onde está `capacitor.config.ts` (o CLI procura essa pasta subindo a partir do diretório de trabalho atual, para não depender só de `process.cwd()`).
 
 1. **Recomendado:** ficheiro **`.env.capacitor`** na raiz (copie de `.env.capacitor.example`):
 
    ```env
-   CAPACITOR_SERVER_URL=https://seu-app.exemplo.com/player
+   CAPACITOR_SERVER_URL=https://seu-app.exemplo.com/pareamento?platform=android
    ```
 
 2. Variável de ambiente na sessão:
 
 ```bash
 # Linux/macOS
-export CAPACITOR_SERVER_URL="https://seu-app.exemplo.com/player"
+export CAPACITOR_SERVER_URL="https://seu-app.exemplo.com/pareamento?platform=android"
 
 # Windows PowerShell
-$env:CAPACITOR_SERVER_URL="https://seu-app.exemplo.com/player"
+$env:CAPACITOR_SERVER_URL="https://seu-app.exemplo.com/pareamento?platform=android"
 ```
 
 Depois:

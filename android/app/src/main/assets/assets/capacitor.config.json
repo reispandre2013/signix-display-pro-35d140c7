@@ -3,7 +3,7 @@
 	"appName": "Signix Player TV",
 	"webDir": "dist",
 	"server": {
-		"url": "https://signix-stream.lovable.app/player",
+		"url": "https://signix-stream.lovable.app/pareamento",
 		"cleartext": false
 	},
 	"android": {

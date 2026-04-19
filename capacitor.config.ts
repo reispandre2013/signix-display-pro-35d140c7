@@ -41,10 +41,11 @@ function sanitizeServerUrl(raw: string): string {
 
 const envFile = resolve(process.cwd(), ".env.capacitor");
 const fileEnv = loadDotEnvFile(envFile);
+/** Sem .env: abre pareamento (TV mostra código). Use ?platform=tizen|android conforme o dispositivo. */
 const serverUrl = sanitizeServerUrl(
   process.env.CAPACITOR_SERVER_URL ??
     fileEnv.CAPACITOR_SERVER_URL ??
-    "https://signix-stream.lovable.app/player",
+    "https://signix-stream.lovable.app/pareamento",
 );
 
 const config: CapacitorConfig = {

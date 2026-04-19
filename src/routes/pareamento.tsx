@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
 import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
+import { initAndroidTvShell } from "@/player/capacitor/android-shell";
 
 export const Route = createFileRoute("/pareamento")({
   head: () => ({ meta: [{ title: "Pareamento de Player — Signix" }] }),
@@ -26,6 +27,10 @@ function PairingPage() {
   const [loading, setLoading] = useState(true);
   const [paired, setPaired] = useState(false);
   const [codeError, setCodeError] = useState<string | null>(null);
+
+  useEffect(() => {
+    void initAndroidTvShell();
+  }, []);
 
   // Gera código de pareamento via server function (bypass RLS, sem auth necessária)
   const generateCode = async () => {
