@@ -1,0 +1,8 @@
+# Artefactos locais do Tizen Studio / CLI
+*.wgt
+.buildResult/
+.sign/
+crash-info/
+
+# VS Code local (não faz parte do pacote Tizen)
+.vscode/

@@ -1,0 +1,25 @@
+Signix — player-tizen (Samsung Tizen Studio)
+============================================
+
+Este diretorio e um projeto Web Tizen importavel no Tizen Studio (ficheiros .project, .tproject, .settings e config.xml com perfil tv-samsung).
+
+Importar no Tizen Studio
+------------------------
+1. Abra o Tizen Studio.
+2. File > Import > Tizen > Tizen Project > Next.
+3. Escolha "Root directory" e Browse para esta pasta: .../signix-display-pro/player-tizen
+4. Next > na lista, marque o projeto "SignixPlayerTizen".
+5. Se aparecer aviso de perfil, escolha o perfil Samsung TV (ex.: tv-samsung) e a versao desejada.
+6. Finish.
+
+Antes de empacotar
+------------------
+- Edite index.html e preencha window.SIGNIX_CONFIG (supabaseUrl e supabaseAnonKey).
+- Ajuste em config.xml, se necessario: tizen:application id/package (deve coincidir com o certificado de assinatura Samsung) e required_version.
+
+Build e execucao
+----------------
+- Clique com o botao direito no projeto > Tizen Web Widget / Web Application > Build Signed Package (conforme o menu da sua versao do Studio).
+- Run on TV / Emulator: ligue a TV em modo desenvolvedor e use o Device Manager / Run.
+
+Nota: o nome do projeto no Explorador e "SignixPlayerTizen" (definido em .project). Pode renomear no Studio; mantenha package/id alinhados ao certificado.

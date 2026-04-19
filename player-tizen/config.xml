@@ -4,6 +4,9 @@
         id="https://signix.local/player-tizen"
         version="1.0.0"
         viewmodes="maximized">
+
+    <tizen:profile name="tv-samsung"/>
+
     <name>Signix Player (Tizen)</name>
     <description>Player isolado para Samsung Tizen — consome Supabase Functions do Signix.</description>
     <author href="https://signix.local" email="dev@signix.local">Signix</author>
@@ -12,10 +15,12 @@
 
     <tizen:application id="orgSIGNIXplayerTizen.SignixPlayer"
                        package="orgSIGNIXplayerTizen"
-                       required_version="6.0"/>
+                       required_version="2.4"/>
 
     <tizen:metadata key="http://samsung.com/tv/metadata/prelaunch.support" value="true"/>
     <tizen:metadata key="http://samsung.com/tv/metadata/use.preview" value="endpoint"/>
+
+    <icon src="icon.png"/>
 
     <access origin="*" subdomains="true"/>
 
