@@ -225,6 +225,11 @@ button:disabled {
   color: #ffc896;
 }
 
+.badge.is-warning {
+  border-color: rgba(255, 120, 120, 0.5);
+  color: #ffb4b4;
+}
+
 .media-layer {
   position: absolute;
   inset: 0;

@@ -88,6 +88,7 @@
     var iframeEl = $("media-html");
     var barCounter = $("bar-counter");
     var offlineBanner = $("offline-banner");
+    var heartbeatBadgeEl = $("heartbeat-badge");
     var fallbackMessageEl = $("fallback-message");
     var debugPanel = $("debug-panel");
     var debugPre = $("debug-pre");
@@ -173,6 +174,13 @@
         null,
         2,
       );
+    }
+
+    function setHeartbeatStatus(ok, message) {
+      if (!heartbeatBadgeEl) return;
+      var text = message || (ok ? "Heartbeat: OK" : "Heartbeat: falhou");
+      heartbeatBadgeEl.textContent = text;
+      heartbeatBadgeEl.classList.toggle("is-warning", !ok);
     }
 
     function updateFallbackOverlay(stage, status) {
@@ -262,8 +270,15 @@
           errorMessage: st.lastError || null,
           networkStatus: online ? "online" : "offline",
         })
+        .then(function () {
+          setHeartbeatStatus(true, "Heartbeat: OK");
+        })
         .catch(function (e) {
+          var errMsg = e instanceof Error ? e.message : String(e || "");
+          setHeartbeatStatus(false, "Heartbeat: falhou");
           logger.warn("[heartbeat]", e);
+          if (debugVisible && debugPre) updateDebug();
+          if (errMsg) logger.warn("[heartbeat] detalhe:", errMsg);
         });
     }
 
