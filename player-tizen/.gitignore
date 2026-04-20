@@ -6,3 +6,6 @@ crash-info/
 
 # VS Code local (não faz parte do pacote Tizen)
 .vscode/
+
+# Credenciais Supabase só na tua máquina / build local (não enviar ao git)
+js/signix-config.local.js

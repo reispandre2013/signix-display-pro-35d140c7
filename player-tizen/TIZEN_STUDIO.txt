@@ -14,7 +14,8 @@ Importar no Tizen Studio
 
 Antes de empacotar
 ------------------
-- Edite index.html e preencha window.SIGNIX_CONFIG (supabaseUrl e supabaseAnonKey).
+- Copie js/signix-config.local.example.js para js/signix-config.local.js e preencha supabaseUrl e supabaseAnonKey
+  (este ficheiro nao e commitado no git). O index.html faz merge com os valores por defeito.
 - Ajuste em config.xml, se necessario: tizen:application id/package (deve coincidir com o certificado de assinatura Samsung) e required_version.
 
 Build e execucao

@@ -8,16 +8,21 @@
   <title>Signix Player — Tizen</title>
   <link rel="stylesheet" href="styles.css" />
   <!--
-    OBRIGATÓRIO: substitua supabaseUrl e supabaseAnonKey pelos valores reais (Supabase → Project Settings → API).
-    Se deixar «SEU_PROJETO» ou «COLE_AQUI…», a TV mostra erro de rede / «Failed to fetch».
-    Publique também as funções: create-pairing-code e check-pairing-status (supabase functions deploy …).
+    Credenciais: copie js/signix-config.local.example.js → js/signix-config.local.js e preencha
+    (ficheiro local não vai para o git). Valores por defeito abaixo só para desenvolvimento.
+    Publique as Edge Functions: create-pairing-code e check-pairing-status.
   -->
+  <script src="js/signix-config.local.js"></script>
   <script>
-    window.SIGNIX_CONFIG = {
-      supabaseUrl: "https://SEU_PROJETO.supabase.co",
-      supabaseAnonKey: "COLE_AQUI_A_CHAVE_ANON_PUBLICAVEL",
-      debugMode: false,
-    };
+    window.SIGNIX_CONFIG = Object.assign(
+      {},
+      {
+        supabaseUrl: "https://SEU_PROJETO.supabase.co",
+        supabaseAnonKey: "COLE_AQUI_A_CHAVE_ANON_PUBLICAVEL",
+        debugMode: false,
+      },
+      window.SIGNIX_CONFIG || {},
+    );
   </script>
 </head>
 
