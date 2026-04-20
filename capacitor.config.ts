@@ -57,7 +57,7 @@ const config: CapacitorConfig = {
     cleartext: false,
   },
   android: {
-    appendUserAgent: " SignixPlayerTV/1.0.3",
+    appendUserAgent: " SignixPlayerTV/1.0.4",
     allowMixedContent: false,
   },
   plugins: {
