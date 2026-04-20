@@ -32,6 +32,22 @@
       return err instanceof Error ? err : new Error(msg);
     }
 
+    function formatFunctionFailure(name, status, data) {
+      if (status === 404) {
+        return (
+          "A função Edge «" +
+          name +
+          "» não está publicada neste projeto Supabase (HTTP 404). " +
+          "Na máquina de desenvolvimento, na pasta do repo com supabase/functions/: ligue o projeto (supabase link) e execute: supabase functions deploy " +
+          name +
+          ". No Dashboard Supabase (Edge Functions) deve aparecer com esse nome exacto. " +
+          "Confirme também que o supabaseUrl na TV é o do mesmo projecto onde fez o deploy."
+        );
+      }
+      if (data && data.error) return data.error;
+      return "Falha na função " + name + " (HTTP " + status + ")";
+    }
+
     function postFunction(name, payload) {
       var url = buildFunctionUrl(supabaseUrl, name);
       return fetch(url, {
@@ -66,7 +82,7 @@
               data = {};
             }
             if (!res.ok || (data && data.error)) {
-              throw new Error((data && data.error) || "Falha na função " + name + " (HTTP " + res.status + ")");
+              throw new Error(formatFunctionFailure(name, res.status, data));
             }
             return data;
           });

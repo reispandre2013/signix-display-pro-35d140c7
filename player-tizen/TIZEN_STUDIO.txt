@@ -32,8 +32,13 @@ O player Tizen nativo chama as Edge Functions Supabase publicas (anon key):
 - check-pairing-status (POST) — polling ate o painel concluir o claim
 
 Deploy no projeto Supabase (CLI ou Dashboard), por exemplo:
+  supabase link --project-ref <REF_DO_PROJECTO>
   supabase functions deploy create-pairing-code
   supabase functions deploy check-pairing-status
+
+Se na TV aparecer «HTTP 404» em create-pairing-code ou check-pairing-status, o URL da TV aponta para um projecto
+onde essas funções ainda não foram publicadas (ou o nome não coincide). Resolva com deploy nesse projecto
+ou corrija supabaseUrl / anon key em signix-config.local.js para o projecto onde as funções existem.
 
 No painel, o fluxo continua a ser Dispositivos > Novo dispositivo (claimPairingCode), igual ao da pagina /pareamento no browser.
 
