@@ -94,10 +94,18 @@
     var debugPre = $("debug-pre");
     var syncBtn = $("btn-sync");
     var btnReset = $("btn-reset");
+    var adminMenu = $("admin-menu");
+    var adminTvName = $("admin-tv-name");
+    var adminDeviceStatus = $("admin-device-status");
+    var adminPlaylist = $("admin-playlist");
+    var btnAdminClose = $("btn-admin-close");
+    var btnAdminRepair = $("btn-admin-repair");
+    var btnAdminUnlink = $("btn-admin-unlink");
 
     var debugVisible = false;
     var pollTimer = null;
     var autoRenewTimer = null;
+    var enterHoldTimer = null;
     var currentPairingCode = null;
 
     function clearPoll() {
@@ -183,6 +191,33 @@
       heartbeatBadgeEl.classList.toggle("is-warning", !ok);
     }
 
+    function getDeviceStatusLabel() {
+      var creds = Storage.getCredentials();
+      if (!creds) return "Aguardando pareamento";
+      var st = player.getRuntimeStatus();
+      if (typeof navigator !== "undefined" && navigator.onLine === false) return "Offline";
+      if (st.lastSyncOk === false || st.lastError) return "Conectado com alerta";
+      return "Conectado";
+    }
+
+    function refreshAdminMenu() {
+      var creds = Storage.getCredentials();
+      var st = player.getRuntimeStatus();
+      if (adminTvName) adminTvName.textContent = (creds && creds.screenName) || (creds && creds.screenId) || "Não pareada";
+      if (adminDeviceStatus) adminDeviceStatus.textContent = getDeviceStatusLabel();
+      if (adminPlaylist) adminPlaylist.textContent = st.playlistId || "Nenhuma playlist carregada";
+    }
+
+    function openAdminMenu() {
+      if (!adminMenu) return;
+      refreshAdminMenu();
+      adminMenu.hidden = false;
+    }
+
+    function closeAdminMenu() {
+      if (adminMenu) adminMenu.hidden = true;
+    }
+
     function updateFallbackOverlay(stage, status) {
       if (!fallbackMessageEl) return;
       var total = status && typeof status.total === "number" ? status.total : 0;
@@ -237,6 +272,7 @@
           showStage("player");
         }
         updateFallbackOverlay(stage, status);
+        if (adminMenu && !adminMenu.hidden) refreshAdminMenu();
         updateDebug();
       },
       onIndexChange: function (idx, total) {
@@ -301,6 +337,7 @@
       clearAutoRenew();
       Storage.setCredentials(creds);
       runPairingError("");
+      closeAdminMenu();
       showStage("player");
       player.syncPlaylist().catch(function (e) {
         logger.error(e);
@@ -326,6 +363,7 @@
             afterPairSuccess({
               screenId: res.screen_id,
               pairingCode: normalized,
+              authToken: res.auth_token || res.token || normalized,
               screenName: res.screen_name || "",
               deviceId: res.screen_id,
               organizationId: "",
@@ -338,7 +376,7 @@
         });
     }
 
-    function startPairingFlow() {
+    function requestNewPairingCode() {
       clearPoll();
       clearAutoRenew();
       currentPairingCode = null;
@@ -376,22 +414,56 @@
         });
     }
 
-    function onReset() {
-      if (!global.confirm("Repor pareamento neste dispositivo?")) return;
+    function startPairingFlow() {
+      requestNewPairingCode();
+    }
+
+    function resetPairing(options) {
+      var opts = options || {};
       clearPoll();
       clearAutoRenew();
+      closeAdminMenu();
       player.reset();
       Storage.clearCredentials();
-      Storage.clearCachedPayload();
-      startPairingFlow();
+      if (opts.clearCache !== false) Storage.clearCachedPayload();
+      requestNewPairingCode();
+    }
+
+    function autoConnect() {
+      var creds = Storage.getCredentials();
+      if (hasPlaybackCredentials(creds)) {
+        showStage("player");
+        player.syncPlaylist().catch(function (e) {
+          logger.error(e);
+          startPairingFlow();
+        });
+      } else {
+        startPairingFlow();
+      }
+    }
+
+    function onReset() {
+      if (!global.confirm("Repor pareamento neste dispositivo?")) return;
+      resetPairing();
     }
 
     if (btnNewPairingCode) {
       btnNewPairingCode.addEventListener("click", function () {
-        startPairingFlow();
+        requestNewPairingCode();
       });
     }
     if (btnReset) btnReset.addEventListener("click", onReset);
+    if (btnAdminClose) btnAdminClose.addEventListener("click", closeAdminMenu);
+    if (btnAdminRepair) {
+      btnAdminRepair.addEventListener("click", function () {
+        resetPairing({ clearCache: false });
+      });
+    }
+    if (btnAdminUnlink) {
+      btnAdminUnlink.addEventListener("click", function () {
+        resetPairing();
+      });
+    }
     if (syncBtn) {
       syncBtn.addEventListener("click", function () {
         player.syncPlaylist().catch(function (e) {
@@ -438,6 +510,19 @@
         if (!Storage.getCredentials()) return;
         player.syncPlaylist().catch(function () {});
       },
+      onEnterDown: function () {
+        if (enterHoldTimer != null) return;
+        enterHoldTimer = setTimeout(function () {
+          enterHoldTimer = null;
+          openAdminMenu();
+        }, 5000);
+      },
+      onEnterUp: function () {
+        if (enterHoldTimer != null) {
+          clearTimeout(enterHoldTimer);
+          enterHoldTimer = null;
+        }
+      },
       onUp: function () {
         debugVisible = true;
         if (debugPanel) debugPanel.hidden = false;
@@ -449,6 +534,10 @@
         if (debugPanel) debugPanel.hidden = true;
       },
       onBack: function () {
+        if (adminMenu && !adminMenu.hidden) {
+          closeAdminMenu();
+          return;
+        }
         if (debugVisible) {
           debugVisible = false;
           if (debugPanel) debugPanel.hidden = true;
@@ -458,15 +547,14 @@
       },
     });
 
-    var creds0 = Storage.getCredentials();
-    if (hasPlaybackCredentials(creds0)) {
-      showStage("player");
-      player.syncPlaylist().catch(function (e) {
-        logger.error(e);
-      });
-    } else {
-      startPairingFlow();
-    }
+    global.signixTizenAdmin = {
+      autoConnect: autoConnect,
+      openAdminMenu: openAdminMenu,
+      resetPairing: resetPairing,
+      requestNewPairingCode: requestNewPairingCode,
+    };
+
+    autoConnect();
 
     flushLogQueue().catch(function () {});
     sendHeartbeat();

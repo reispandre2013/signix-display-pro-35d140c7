@@ -4,6 +4,8 @@
   global.SIGNIX_TIZEN_CONSTANTS = {
     PLAYER_VERSION_LABEL: "signix-tizen-player@1.0.15",
     STORAGE_CREDENTIALS: "signix_tizen_credentials",
+    STORAGE_DEVICE_ID: "device_id",
+    STORAGE_AUTH_TOKEN: "auth_token",
     STORAGE_PAYLOAD_CACHE: "signix_tizen_payload_cache",
     STORAGE_LOG_QUEUE: "signix_tizen_log_queue",
     STORAGE_LOGGER_BUFFER: "signix_tizen_logger_buffer",

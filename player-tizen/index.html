@@ -71,6 +71,26 @@
     <div id="debug-panel" hidden>
       <pre id="debug-pre"></pre>
     </div>
+    <div id="admin-menu" class="admin-menu" hidden>
+      <div class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+        <div class="admin-header">
+          <div>
+            <p class="label">Configuração</p>
+            <h2 id="admin-title">Administração da TV</h2>
+          </div>
+          <button type="button" id="btn-admin-close" class="ghost">Fechar</button>
+        </div>
+        <dl class="admin-facts">
+          <div><dt>Nome da TV</dt><dd id="admin-tv-name">—</dd></div>
+          <div><dt>Status</dt><dd id="admin-device-status">—</dd></div>
+          <div><dt>Playlist atual</dt><dd id="admin-playlist">—</dd></div>
+        </dl>
+        <div class="admin-actions">
+          <button type="button" id="btn-admin-repair" class="primary">Trocar código</button>
+          <button type="button" id="btn-admin-unlink">Desvincular dispositivo</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="js/constants.js"></script>
