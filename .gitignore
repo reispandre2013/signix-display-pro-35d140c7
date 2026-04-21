@@ -17,6 +17,7 @@ dist-ssr
 *.local
 .env
 .env.capacitor
+scripts/supabase.credentials.ps1
 
 # Build / deploy artefactos locais
 www/
