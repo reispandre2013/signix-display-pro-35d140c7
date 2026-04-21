@@ -82,6 +82,14 @@ function parseNullableInt(raw: string): number | null {
   return Number(text);
 }
 
+function sameNullableText(a: string | null | undefined, b: string | null | undefined): boolean {
+  return (a ?? "") === (b ?? "");
+}
+
+function sameNullableValue<T>(a: T | null | undefined, b: T | null | undefined): boolean {
+  return (a ?? null) === (b ?? null);
+}
+
 function platformDisplayLabel(platform: string | null | undefined): string {
   const p = (platform ?? "android").toLowerCase();
   if (p === "tizen") return "Samsung Tizen TV";
@@ -723,6 +731,8 @@ function EditScreenModal({
     try {
       const width = parseNullableInt(screenWidth);
       const height = parseNullableInt(screenHeight);
+      let savedWithLegacyDisplayFallback = false;
+      let skippedPrimaryPlaylistByLegacySchema = false;
       const basePatch = {
         id: screen.id,
         name: name.trim(),
@@ -757,6 +767,24 @@ function EditScreenModal({
 
         if (!missingDisplayColumns) throw err;
         await update.mutateAsync(basePatch);
+        savedWithLegacyDisplayFallback = true;
+      }
+
+      const { data: persistedBase, error: persistedBaseErr } = await supabase
+        .from("screens")
+        .select("id, name, unit_id, orientation, resolution")
+        .eq("id", screen.id)
+        .maybeSingle();
+      if (persistedBaseErr) throw persistedBaseErr;
+      if (!persistedBase) throw new Error("Não foi possível confirmar os dados gravados da tela.");
+
+      const baseSaved =
+        sameNullableText(persistedBase.name, basePatch.name) &&
+        sameNullableValue(persistedBase.unit_id, basePatch.unit_id) &&
+        sameNullableText(persistedBase.orientation, basePatch.orientation) &&
+        sameNullableText(persistedBase.resolution, basePatch.resolution);
+      if (!baseSaved) {
+        throw new Error("As alterações básicas não foram persistidas. Verifique permissões e tente novamente.");
       }
 
       try {
@@ -768,12 +796,22 @@ function EditScreenModal({
         const msg = getErrorMessage(err);
         if (msg.toLowerCase().includes("migração pendente")) {
           // Ambiente com schema antigo: mantém atualização básica da tela sem bloquear o usuário.
+          skippedPrimaryPlaylistByLegacySchema = true;
         } else {
           throw err;
         }
       }
 
-      toast.success("Dispositivo actualizado.");
+      if (savedWithLegacyDisplayFallback || skippedPrimaryPlaylistByLegacySchema) {
+        const limits: string[] = [];
+        if (savedWithLegacyDisplayFallback) limits.push("configurações avançadas de exibição");
+        if (skippedPrimaryPlaylistByLegacySchema) limits.push("playlist direta");
+        toast.success(
+          `Dispositivo atualizado. Não foi possível gravar: ${limits.join(" e ")} (migração pendente neste ambiente).`,
+        );
+      } else {
+        toast.success("Dispositivo actualizado.");
+      }
       onSaved();
     } catch (err) {
       toast.error(getErrorMessage(err));
