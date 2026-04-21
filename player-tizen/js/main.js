@@ -272,6 +272,7 @@
           showStage("player");
         }
         updateFallbackOverlay(stage, status);
+        if (adminMenu && !adminMenu.hidden) refreshAdminMenu();
         updateDebug();
       },
       onIndexChange: function (idx, total) {
@@ -336,6 +337,7 @@
       clearAutoRenew();
       Storage.setCredentials(creds);
       runPairingError("");
+      closeAdminMenu();
       showStage("player");
       player.syncPlaylist().catch(function (e) {
         logger.error(e);
@@ -361,6 +363,7 @@
             afterPairSuccess({
               screenId: res.screen_id,
               pairingCode: normalized,
+              authToken: res.auth_token || res.token || normalized,
               screenName: res.screen_name || "",
               deviceId: res.screen_id,
               organizationId: "",
@@ -373,7 +376,7 @@
         });
     }
 
-    function startPairingFlow() {
+    function requestNewPairingCode() {
       clearPoll();
       clearAutoRenew();
       currentPairingCode = null;
@@ -411,14 +414,37 @@
         });
     }
 
-    function onReset() {
-      if (!global.confirm("Repor pareamento neste dispositivo?")) return;
+    function startPairingFlow() {
+      requestNewPairingCode();
+    }
+
+    function resetPairing(options) {
+      var opts = options || {};
       clearPoll();
       clearAutoRenew();
+      closeAdminMenu();
       player.reset();
       Storage.clearCredentials();
-      Storage.clearCachedPayload();
-      startPairingFlow();
+      if (opts.clearCache !== false) Storage.clearCachedPayload();
+      requestNewPairingCode();
+    }
+
+    function autoConnect() {
+      var creds = Storage.getCredentials();
+      if (hasPlaybackCredentials(creds)) {
+        showStage("player");
+        player.syncPlaylist().catch(function (e) {
+          logger.error(e);
+          startPairingFlow();
+        });
+      } else {
+        startPairingFlow();
+      }
+    }
+
+    function onReset() {
+      if (!global.confirm("Repor pareamento neste dispositivo?")) return;
+      resetPairing();
     }
 
     if (btnNewPairingCode) {
