@@ -52,6 +52,29 @@ function uiToDbOrientation(o: "landscape" | "portrait"): "horizontal" | "vertica
   return o === "portrait" ? "vertical" : "horizontal";
 }
 
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error && err.message) return err.message;
+  if (typeof err === "object" && err !== null) {
+    const msg = (err as { message?: unknown }).message;
+    if (typeof msg === "string" && msg.trim().length > 0) return msg;
+  }
+  return "Erro ao salvar.";
+}
+
+function isMissingColumnInScreensError(err: unknown, column: string): boolean {
+  const msg = getErrorMessage(err).toLowerCase();
+  return msg.includes(`column ${column.toLowerCase()}`) || msg.includes(`"${column.toLowerCase()}"`);
+}
+
+function parseNullableInt(raw: string): number | null {
+  const text = raw.trim();
+  if (!text) return null;
+  if (!/^\d+$/.test(text)) {
+    throw new Error("Largura e altura devem conter apenas números inteiros.");
+  }
+  return Number(text);
+}
+
 function platformDisplayLabel(platform: string | null | undefined): string {
   const p = (platform ?? "android").toLowerCase();
   if (p === "tizen") return "Samsung Tizen TV";
@@ -691,29 +714,63 @@ function EditScreenModal({
     e.preventDefault();
     setSubmitting(true);
     try {
-      await update.mutateAsync({
+      const width = parseNullableInt(screenWidth);
+      const height = parseNullableInt(screenHeight);
+      const basePatch = {
         id: screen.id,
         name: name.trim(),
         unit_id: unitId || null,
         orientation: uiToDbOrientation(orientation),
         resolution: resolution.trim() || null,
-        screen_width: screenWidth.trim() === "" ? null : Number(screenWidth),
-        screen_height: screenHeight.trim() === "" ? null : Number(screenHeight),
+      };
+      const displayPatch = {
+        ...basePatch,
+        screen_width: width,
+        screen_height: height,
         aspect_ratio: aspectRatio.trim() || null,
         default_fit_mode: defaultFit,
         auto_scale_video: autoScaleVideo,
         auto_scale_image: autoScaleImage,
         hide_overlay: hideOverlay,
         hide_controls: hideControls,
-      });
-      await setPrimaryPlaylist.mutateAsync({
-        screenId: screen.id,
-        playlistId: primaryPlaylistId || null,
-      });
+      };
+
+      try {
+        await update.mutateAsync(displayPatch);
+      } catch (err) {
+        const missingDisplayColumns =
+          isMissingColumnInScreensError(err, "screen_width") ||
+          isMissingColumnInScreensError(err, "screen_height") ||
+          isMissingColumnInScreensError(err, "aspect_ratio") ||
+          isMissingColumnInScreensError(err, "default_fit_mode") ||
+          isMissingColumnInScreensError(err, "auto_scale_video") ||
+          isMissingColumnInScreensError(err, "auto_scale_image") ||
+          isMissingColumnInScreensError(err, "hide_overlay") ||
+          isMissingColumnInScreensError(err, "hide_controls");
+
+        if (!missingDisplayColumns) throw err;
+        await update.mutateAsync(basePatch);
+        toast.warning("Configurações avançadas de exibição não disponíveis neste ambiente (migração pendente).");
+      }
+
+      try {
+        await setPrimaryPlaylist.mutateAsync({
+          screenId: screen.id,
+          playlistId: primaryPlaylistId || null,
+        });
+      } catch (err) {
+        const msg = getErrorMessage(err);
+        if (msg.toLowerCase().includes("migração pendente")) {
+          toast.warning("Playlist direta não salva porque a tabela de atribuição ainda não existe neste ambiente.");
+        } else {
+          throw err;
+        }
+      }
+
       toast.success("Dispositivo actualizado.");
       onSaved();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Erro ao salvar.");
+      toast.error(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
