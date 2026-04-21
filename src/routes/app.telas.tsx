@@ -63,7 +63,14 @@ function getErrorMessage(err: unknown): string {
 
 function isMissingColumnInScreensError(err: unknown, column: string): boolean {
   const msg = getErrorMessage(err).toLowerCase();
-  return msg.includes(`column ${column.toLowerCase()}`) || msg.includes(`"${column.toLowerCase()}"`);
+  const col = column.toLowerCase();
+  return (
+    msg.includes(`column ${col}`) ||
+    msg.includes(`"${col}"`) ||
+    msg.includes(`'${col}'`) ||
+    msg.includes(`${col} column`) ||
+    msg.includes(`column of 'screens'`)
+  );
 }
 
 function parseNullableInt(raw: string): number | null {
