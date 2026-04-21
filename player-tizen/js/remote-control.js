@@ -33,6 +33,7 @@
         return;
       }
       if (key === "Enter" || code === 13) {
+        if (h.onEnterDown) h.onEnterDown(ev);
         if (h.onEnter) h.onEnter(ev);
         ev.preventDefault();
         return;
@@ -57,6 +58,14 @@
     }
 
     global.addEventListener("keydown", onKeyDown, true);
+    global.addEventListener("keyup", function onKeyUp(ev) {
+      var key = ev.key;
+      var code = ev.keyCode;
+      if (key === "Enter" || code === 13) {
+        if (h.onEnterUp) h.onEnterUp(ev);
+        ev.preventDefault();
+      }
+    }, true);
 
     return function uninstall() {
       global.removeEventListener("keydown", onKeyDown, true);
