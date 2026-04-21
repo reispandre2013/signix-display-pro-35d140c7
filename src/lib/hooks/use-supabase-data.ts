@@ -38,6 +38,15 @@ function isMissingFunctionError(error: unknown, fnName: string): boolean {
   return msg.includes(`function ${fnName.toLowerCase()}`) || msg.includes("could not find the function");
 }
 
+function isMissingRelationError(error: unknown, relation: string): boolean {
+  const msg = String((error as { message?: string } | null)?.message ?? "").toLowerCase();
+  return (
+    msg.includes(`relation "${relation.toLowerCase()}" does not exist`) ||
+    msg.includes(`relation ${relation.toLowerCase()} does not exist`) ||
+    msg.includes(`could not find the table '${relation.toLowerCase()}'`)
+  );
+}
+
 async function safeReindexPlaylist(playlistId: string): Promise<void> {
   const timeoutMs = 2500;
   const rpcPromise = supabase.rpc("reindex_playlist_items", { p_playlist_id: playlistId });
@@ -429,7 +438,13 @@ export function useScreenPrimaryPlaylistAssignment(screenId: string | null) {
         .eq("assignment_type", "primary")
         .eq("is_active", true)
         .maybeSingle();
-      if (error) throw error;
+      if (error) {
+        if (isMissingRelationError(error, "screen_playlist_assignments")) {
+          console.warn("[screen] tabela screen_playlist_assignments ausente; usando fallback de campanha.");
+          return null;
+        }
+        throw error;
+      }
       return data as (ScreenPlaylistAssignment & { playlists?: { id: string; name: string } | null }) | null;
     },
   });
@@ -447,7 +462,12 @@ export function useSetScreenPrimaryPlaylist() {
         .eq("organization_id", orgId)
         .eq("screen_id", vars.screenId)
         .eq("assignment_type", "primary");
-      if (offErr) throw offErr;
+      if (offErr) {
+        if (isMissingRelationError(offErr, "screen_playlist_assignments")) {
+          throw new Error("Migração pendente: tabela de atribuição de playlist por tela não encontrada.");
+        }
+        throw offErr;
+      }
       if (!vars.playlistId) return;
       const { error } = await supabase.from("screen_playlist_assignments").insert({
         organization_id: orgId,
@@ -457,7 +477,12 @@ export function useSetScreenPrimaryPlaylist() {
         priority: 90,
         is_active: true,
       });
-      if (error) throw error;
+      if (error) {
+        if (isMissingRelationError(error, "screen_playlist_assignments")) {
+          throw new Error("Migração pendente: tabela de atribuição de playlist por tela não encontrada.");
+        }
+        throw error;
+      }
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["screen_primary_playlist", orgId, vars.screenId] });
@@ -481,7 +506,13 @@ export function useScreenGroupPrimaryPlaylistAssignment(screenGroupId: string | 
         .order("priority", { ascending: false })
         .limit(1)
         .maybeSingle();
-      if (error) throw error;
+      if (error) {
+        if (isMissingRelationError(error, "screen_group_playlist_assignments")) {
+          console.warn("[group] tabela screen_group_playlist_assignments ausente; usando fallback de campanha.");
+          return null;
+        }
+        throw error;
+      }
       return data as (ScreenGroupPlaylistAssignment & { playlists?: { id: string; name: string } | null }) | null;
     },
   });
@@ -498,7 +529,12 @@ export function useSetScreenGroupPrimaryPlaylist() {
         .update({ is_active: false, updated_at: new Date().toISOString() })
         .eq("organization_id", orgId)
         .eq("screen_group_id", vars.screenGroupId);
-      if (offErr) throw offErr;
+      if (offErr) {
+        if (isMissingRelationError(offErr, "screen_group_playlist_assignments")) {
+          throw new Error("Migração pendente: tabela de atribuição de playlist por grupo não encontrada.");
+        }
+        throw offErr;
+      }
       if (!vars.playlistId) return;
       const { error } = await supabase.from("screen_group_playlist_assignments").insert({
         organization_id: orgId,
@@ -507,7 +543,12 @@ export function useSetScreenGroupPrimaryPlaylist() {
         priority: 65,
         is_active: true,
       });
-      if (error) throw error;
+      if (error) {
+        if (isMissingRelationError(error, "screen_group_playlist_assignments")) {
+          throw new Error("Migração pendente: tabela de atribuição de playlist por grupo não encontrada.");
+        }
+        throw error;
+      }
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["screen_group_primary_playlist", orgId, vars.screenGroupId] });

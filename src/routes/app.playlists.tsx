@@ -90,6 +90,7 @@ function PlaylistsPage() {
     if (!current?.id || mediaToAdd.length === 0 || isAdding) return;
     const n = mediaToAdd.length;
     setIsAdding(true);
+    let timeoutRef: ReturnType<typeof setTimeout> | null = null;
     try {
       const op =
         n === 1
@@ -99,20 +100,18 @@ function PlaylistsPage() {
       await Promise.race([
         op,
         new Promise<never>((_, reject) => {
-          setTimeout(() => reject(new Error("Tempo excedido ao adicionar mídias. Tente novamente.")), 12000);
+          timeoutRef = setTimeout(
+            () => reject(new Error("Tempo excedido ao adicionar mídias. Tente novamente.")),
+            12000,
+          );
         }),
       ]);
-
-      if (n === 1) {
-        // no-op: mantemos estrutura para clareza dos caminhos.
-      } else {
-        // no-op
-      }
       setMediaToAdd([]);
       toast.success(n === 1 ? "Mídia adicionada." : `${n} mídias adicionadas.`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao adicionar mídias.");
     } finally {
+      if (timeoutRef) clearTimeout(timeoutRef);
       setIsAdding(false);
     }
   };
