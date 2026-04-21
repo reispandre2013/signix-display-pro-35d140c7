@@ -44,6 +44,7 @@ function PlaylistsPage() {
   const [selected, setSelected] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", description: "" });
   const [mediaToAdd, setMediaToAdd] = useState<string[]>([]);
+  const [isAdding, setIsAdding] = useState(false);
   const [editMeta, setEditMeta] = useState(false);
   const [metaForm, setMetaForm] = useState({ name: "", description: "", status: "draft" as string });
 
@@ -86,18 +87,33 @@ function PlaylistsPage() {
   const mediaOptions = useMemo(() => media.filter((m) => m.status === "active"), [media]);
 
   const handleAddItem = async () => {
-    if (!current?.id || mediaToAdd.length === 0) return;
+    if (!current?.id || mediaToAdd.length === 0 || isAdding) return;
     const n = mediaToAdd.length;
+    setIsAdding(true);
     try {
+      const op =
+        n === 1
+          ? addItem.mutateAsync({ playlistId: current.id, mediaAssetId: mediaToAdd[0]! })
+          : addBulk.mutateAsync({ playlistId: current.id, mediaAssetIds: mediaToAdd });
+
+      await Promise.race([
+        op,
+        new Promise<never>((_, reject) => {
+          setTimeout(() => reject(new Error("Tempo excedido ao adicionar mídias. Tente novamente.")), 12000);
+        }),
+      ]);
+
       if (n === 1) {
-        await addItem.mutateAsync({ playlistId: current.id, mediaAssetId: mediaToAdd[0]! });
+        // no-op: mantemos estrutura para clareza dos caminhos.
       } else {
-        await addBulk.mutateAsync({ playlistId: current.id, mediaAssetIds: mediaToAdd });
+        // no-op
       }
       setMediaToAdd([]);
       toast.success(n === 1 ? "Mídia adicionada." : `${n} mídias adicionadas.`);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao adicionar mídias.");
+    } finally {
+      setIsAdding(false);
     }
   };
 
@@ -264,10 +280,10 @@ function PlaylistsPage() {
                       </select>
                       <PrimaryButton
                         type="button"
-                        disabled={mediaToAdd.length === 0 || addItem.isPending || addBulk.isPending}
+                        disabled={mediaToAdd.length === 0 || isAdding}
                         onClick={() => void handleAddItem()}
                       >
-                        {addItem.isPending || addBulk.isPending ? "A adicionar…" : "Adicionar à sequência"}
+                        {isAdding ? "A adicionar…" : "Adicionar à sequência"}
                       </PrimaryButton>
                     </div>
                     {mediaOptions.length === 0 && (

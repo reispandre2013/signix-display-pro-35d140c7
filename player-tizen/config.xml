@@ -13,9 +13,9 @@
     <content src="index.html"/>
     <feature name="http://tizen.org/feature/screen.size.all"/>
 
-    <tizen:application id="orgSIGNIXplayerTizen.SignixPlayer"
-                       package="orgSIGNIXplayerTizen"
-                       required_version="2.4"/>
+    <tizen:application id="signixplr1.player"
+                       package="signixplr1"
+                       required_version="5.5"/>
 
     <tizen:metadata key="http://samsung.com/tv/metadata/prelaunch.support" value="true"/>
     <tizen:metadata key="http://samsung.com/tv/metadata/use.preview" value="endpoint"/>
