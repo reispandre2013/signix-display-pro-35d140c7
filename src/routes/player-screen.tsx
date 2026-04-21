@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   getScreenPlaylistPayload,
@@ -29,12 +29,39 @@ type PayloadOk = {
   unchanged?: boolean;
   etag: string;
   server_time: string;
-  screen?: { id: string; name: string; organization_id: string };
+  screen?: {
+    id: string;
+    name: string;
+    organization_id: string;
+    hide_overlay?: boolean;
+    hide_controls?: boolean;
+    default_fit_mode?: string;
+    orientation?: string;
+    resolution?: string | null;
+  };
   campaign?: { id: string; name: string; playlist_id: string; priority: number } | null;
-  playlist?: { id: string; name: string } | null;
+  playlist?: { id: string; name: string; version?: number } | null;
+  playlist_version?: number | null;
   items?: ScreenPlaylistItem[];
   source?: string;
+  resolution_source?: string;
 };
+
+function tailwindObjectFit(fit: string | undefined): string {
+  const f = (fit ?? "cover").toLowerCase();
+  if (f === "contain") return "object-contain";
+  if (f === "stretch") return "object-fill";
+  if (f === "center") return "object-center";
+  if (f === "fit-width" || f === "fit-height") return "object-contain";
+  return "object-cover";
+}
+
+function inlineFitStyle(fit: string | undefined): CSSProperties | undefined {
+  const f = (fit ?? "cover").toLowerCase();
+  if (f === "fit-width") return { width: "100%", height: "auto", maxHeight: "100%" };
+  if (f === "fit-height") return { height: "100%", width: "auto", maxWidth: "100%" };
+  return undefined;
+}
 
 function PlayerScreenPage() {
   const { platform: platformSearch } = Route.useSearch();
@@ -57,6 +84,8 @@ function PlayerScreenPage() {
   const [error, setError] = useState<string | null>(null);
   const [initialSyncDone, setInitialSyncDone] = useState(false);
   const etagRef = useRef<string | null>(null);
+  const [hideOverlay, setHideOverlay] = useState(true);
+  const [hideControls, setHideControls] = useState(true);
 
   useEffect(() => {
     const sid = localStorage.getItem(LS_SCREEN);
@@ -88,6 +117,10 @@ function PlayerScreenPage() {
       setItems(nextItems);
       setCampaignLabel(res.campaign?.name ?? "");
       setSource(res.source ?? "");
+      if (res.screen) {
+        setHideOverlay(res.screen.hide_overlay !== false);
+        setHideControls(res.screen.hide_controls !== false);
+      }
       setIdx((i) => (nextItems.length === 0 ? 0 : Math.min(i, nextItems.length - 1)));
 
       await syncAckFn({
@@ -134,7 +167,8 @@ function PlayerScreenPage() {
     if (!screenId || !pairingCode || items.length === 0) return;
     const cur = items[idx];
     const mime = (cur?.mime_type ?? "").toLowerCase();
-    if (mime.includes("video")) return;
+    const isVid = cur?.media_type === "video" || mime.includes("video");
+    if (isVid) return;
     const dur = Math.max(5, (cur?.duration_seconds ?? 8) as number);
     const timer = setInterval(() => setIdx((i) => (i + 1) % items.length), dur * 1000);
     return () => clearInterval(timer);
@@ -167,7 +201,11 @@ function PlayerScreenPage() {
         current.thumbnail_url,
       )
     : [];
-  const isVideo = (current?.mime_type ?? "").toLowerCase().includes("video");
+  const isVideo =
+    current?.media_type === "video" || (current?.mime_type ?? "").toLowerCase().includes("video");
+  const effectiveFit = (current?.fit_mode_effective ?? current?.fit_mode ?? "cover") as string;
+  const ofit = tailwindObjectFit(effectiveFit);
+  const fitStyle = inlineFitStyle(effectiveFit);
 
   if (screenId && pairingCode && !initialSyncDone) {
     return (
@@ -219,7 +257,7 @@ function PlayerScreenPage() {
             com itens, ou adicione mídias na organização — enquanto não houver itens, usamos mídias activas como
             fallback.
           </p>
-          <p className="mt-3 text-xs text-white/40">Origem: {source || "—"}</p>
+          {!hideControls && <p className="mt-3 text-xs text-white/40">Origem: {source || "—"}</p>}
         </div>
       </div>
     );
@@ -231,7 +269,8 @@ function PlayerScreenPage() {
         {isVideo && urls[0] ? (
           <video
             key={current!.id}
-            className="w-full h-full object-cover"
+            className={`w-full h-full ${ofit}`}
+            style={fitStyle}
             src={urls[0]}
             autoPlay
             muted
@@ -244,37 +283,44 @@ function PlayerScreenPage() {
             data-sources={JSON.stringify(urls)}
             data-source-index="0"
             alt={current?.name}
-            className="w-full h-full object-cover"
+            className={`w-full h-full ${ofit}`}
+            style={fitStyle}
             referrerPolicy="no-referrer"
             onError={(e) => applyMediaFallback(e.currentTarget)}
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+        {!hideOverlay && (
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
+        )}
       </div>
 
-      <div className="relative flex items-center justify-between p-4 md:p-6">
-        <div className="flex items-center gap-2 rounded-full bg-black/50 backdrop-blur px-3 py-1.5 text-xs">
-          <Tv className="h-4 w-4" />
-          <span className="font-medium">Signix</span>
-          <span className="text-white/50">·</span>
-          <span className="truncate max-w-[40vw]">{campaignLabel || "Campanha"}</span>
+      {!hideControls && (
+        <div className="relative flex items-center justify-between p-4 md:p-6">
+          <div className="flex items-center gap-2 rounded-full bg-black/50 backdrop-blur px-3 py-1.5 text-xs">
+            <Tv className="h-4 w-4" />
+            <span className="font-medium">Signix</span>
+            <span className="text-white/50">·</span>
+            <span className="truncate max-w-[40vw]">{campaignLabel || "Conteúdo"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-[11px] text-white/80">
+            <Wifi className="h-3.5 w-3.5" />
+            {navigator.onLine ? "Online" : "Offline"}
+            <span className="text-white/40">·</span>
+            <span className="uppercase">{platform}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2 text-[11px] text-white/80">
-          <Wifi className="h-3.5 w-3.5" />
-          {navigator.onLine ? "Online" : "Offline"}
-          <span className="text-white/40">·</span>
-          <span className="uppercase">{platform}</span>
-        </div>
-      </div>
+      )}
 
-      <div className="relative mt-auto p-4 flex items-center justify-between text-[11px] text-white/50">
-        <span>
-          {idx + 1}/{items.length} · {source}
-        </span>
-        <Link to="/pareamento" search={{ platform: platform === "tizen" ? "tizen" : undefined }} className="hover:text-white">
-          Re-parear
-        </Link>
-      </div>
+      {!hideControls && (
+        <div className="relative mt-auto p-4 flex items-center justify-between text-[11px] text-white/50">
+          <span>
+            {idx + 1}/{items.length} · {source}
+          </span>
+          <Link to="/pareamento" search={{ platform: platform === "tizen" ? "tizen" : undefined }} className="hover:text-white">
+            Re-parear
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

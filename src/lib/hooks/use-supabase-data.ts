@@ -13,6 +13,8 @@ import type {
   PlaylistItem,
   Profile,
   Screen,
+  ScreenPlaylistAssignment,
+  ScreenGroupPlaylistAssignment,
   ScreenGroup,
   Unit,
 } from "@/lib/db-types";
@@ -150,12 +152,12 @@ export function usePlaylistItems(playlistId: string | null) {
       const { data, error } = await supabase
         .from("playlist_items")
         .select(
-          "id, playlist_id, media_asset_id, position, duration_override_seconds, transition_type, created_at, media_assets(id, name, file_type, public_url, thumbnail_url, mime_type, duration_seconds)",
+          "id, playlist_id, media_asset_id, position, duration_override_seconds, transition_type, fit_mode, is_active, notes, created_at, updated_at, media_assets(id, name, file_type, public_url, thumbnail_url, mime_type, duration_seconds)",
         )
         .eq("playlist_id", playlistId!)
         .order("position", { ascending: true });
       if (error) throw error;
-      return (data ?? []) as PlaylistItemWithMedia[];
+      return (data ?? []) as unknown as PlaylistItemWithMedia[];
     },
   });
 }
@@ -166,6 +168,8 @@ export function useAddPlaylistItem() {
   return useMutation({
     mutationFn: async ({ playlistId, mediaAssetId }: { playlistId: string; mediaAssetId: string }) => {
       if (!orgId) throw new Error("Sem organização ativa.");
+      const { error: rErr } = await supabase.rpc("reindex_playlist_items", { p_playlist_id: playlistId });
+      if (rErr) console.warn("[useAddPlaylistItem] reindex:", rErr.message);
       const { data: existing, error: selErr } = await supabase
         .from("playlist_items")
         .select("position")
@@ -225,9 +229,184 @@ export function useSwapPlaylistItemPositions() {
       if (error) throw error;
       ({ error } = await tbl.update({ position: posB }).eq("id", itemIdA));
       if (error) throw error;
+      const { error: rErr } = await supabase.rpc("reindex_playlist_items", { p_playlist_id: vars.playlistId });
+      if (rErr) console.warn("[useSwapPlaylistItemPositions] reindex:", rErr.message);
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
+    },
+  });
+}
+
+export function useReorderPlaylistItems() {
+  const qc = useQueryClient();
+  const orgId = useOrgId();
+  return useMutation({
+    mutationFn: async (vars: { playlistId: string; orderedItemIds: string[] }) => {
+      const { error } = await supabase.rpc("reorder_playlist_items", {
+        p_playlist_id: vars.playlistId,
+        p_ordered_ids: vars.orderedItemIds,
+      });
+      if (error) throw error;
+    },
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
+      qc.invalidateQueries({ queryKey: ["playlists", orgId] });
+    },
+  });
+}
+
+export function useUpdatePlaylistItem() {
+  const qc = useQueryClient();
+  const orgId = useOrgId();
+  return useMutation({
+    mutationFn: async (vars: {
+      id: string;
+      playlistId: string;
+      patch: Partial<
+        Pick<PlaylistItem, "duration_override_seconds" | "fit_mode" | "is_active" | "notes" | "transition_type">
+      >;
+    }) => {
+      const { error } = await supabase.from("playlist_items").update(vars.patch).eq("id", vars.id);
+      if (error) throw error;
+    },
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
+      qc.invalidateQueries({ queryKey: ["playlists", orgId] });
+    },
+  });
+}
+
+export function useAddPlaylistItemsBulk() {
+  const qc = useQueryClient();
+  const orgId = useOrgId();
+  return useMutation({
+    mutationFn: async (vars: { playlistId: string; mediaAssetIds: string[] }) => {
+      if (!orgId) throw new Error("Sem organização ativa.");
+      const { error: rErr } = await supabase.rpc("reindex_playlist_items", { p_playlist_id: vars.playlistId });
+      if (rErr) console.warn("[useAddPlaylistItemsBulk] reindex:", rErr.message);
+      const { data: existing, error: selErr } = await supabase
+        .from("playlist_items")
+        .select("position")
+        .eq("playlist_id", vars.playlistId)
+        .order("position", { ascending: false })
+        .limit(1);
+      if (selErr) throw selErr;
+      let next = typeof existing?.[0]?.position === "number" ? (existing![0].position as number) + 1 : 1;
+      for (const mediaAssetId of vars.mediaAssetIds) {
+        const { error } = await supabase.from("playlist_items").insert({
+          playlist_id: vars.playlistId,
+          media_asset_id: mediaAssetId,
+          position: next,
+        });
+        if (error) throw error;
+        next += 1;
+      }
+    },
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
+      qc.invalidateQueries({ queryKey: ["playlists", orgId] });
+    },
+  });
+}
+
+export function useScreenPrimaryPlaylistAssignment(screenId: string | null) {
+  const orgId = useOrgId();
+  return useQuery({
+    queryKey: ["screen_primary_playlist", orgId, screenId],
+    enabled: !!orgId && !!screenId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("screen_playlist_assignments")
+        .select("*, playlists(id, name)")
+        .eq("organization_id", orgId!)
+        .eq("screen_id", screenId!)
+        .eq("assignment_type", "primary")
+        .eq("is_active", true)
+        .maybeSingle();
+      if (error) throw error;
+      return data as (ScreenPlaylistAssignment & { playlists?: { id: string; name: string } | null }) | null;
+    },
+  });
+}
+
+export function useSetScreenPrimaryPlaylist() {
+  const qc = useQueryClient();
+  const orgId = useOrgId();
+  return useMutation({
+    mutationFn: async (vars: { screenId: string; playlistId: string | null }) => {
+      if (!orgId) throw new Error("Sem organização ativa.");
+      const { error: offErr } = await supabase
+        .from("screen_playlist_assignments")
+        .update({ is_active: false, updated_at: new Date().toISOString() })
+        .eq("organization_id", orgId)
+        .eq("screen_id", vars.screenId)
+        .eq("assignment_type", "primary");
+      if (offErr) throw offErr;
+      if (!vars.playlistId) return;
+      const { error } = await supabase.from("screen_playlist_assignments").insert({
+        organization_id: orgId,
+        screen_id: vars.screenId,
+        playlist_id: vars.playlistId,
+        assignment_type: "primary",
+        priority: 90,
+        is_active: true,
+      });
+      if (error) throw error;
+    },
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["screen_primary_playlist", orgId, vars.screenId] });
+      qc.invalidateQueries({ queryKey: ["screens", orgId] });
+    },
+  });
+}
+
+export function useScreenGroupPrimaryPlaylistAssignment(screenGroupId: string | null) {
+  const orgId = useOrgId();
+  return useQuery({
+    queryKey: ["screen_group_primary_playlist", orgId, screenGroupId],
+    enabled: !!orgId && !!screenGroupId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("screen_group_playlist_assignments")
+        .select("*, playlists(id, name)")
+        .eq("organization_id", orgId!)
+        .eq("screen_group_id", screenGroupId!)
+        .eq("is_active", true)
+        .order("priority", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (error) throw error;
+      return data as (ScreenGroupPlaylistAssignment & { playlists?: { id: string; name: string } | null }) | null;
+    },
+  });
+}
+
+export function useSetScreenGroupPrimaryPlaylist() {
+  const qc = useQueryClient();
+  const orgId = useOrgId();
+  return useMutation({
+    mutationFn: async (vars: { screenGroupId: string; playlistId: string | null }) => {
+      if (!orgId) throw new Error("Sem organização ativa.");
+      const { error: offErr } = await supabase
+        .from("screen_group_playlist_assignments")
+        .update({ is_active: false, updated_at: new Date().toISOString() })
+        .eq("organization_id", orgId)
+        .eq("screen_group_id", vars.screenGroupId);
+      if (offErr) throw offErr;
+      if (!vars.playlistId) return;
+      const { error } = await supabase.from("screen_group_playlist_assignments").insert({
+        organization_id: orgId,
+        screen_group_id: vars.screenGroupId,
+        playlist_id: vars.playlistId,
+        priority: 65,
+        is_active: true,
+      });
+      if (error) throw error;
+    },
+    onSuccess: (_, vars) => {
+      qc.invalidateQueries({ queryKey: ["screen_group_primary_playlist", orgId, vars.screenGroupId] });
+      qc.invalidateQueries({ queryKey: ["screen_groups", orgId] });
     },
   });
 }

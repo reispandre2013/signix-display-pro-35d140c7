@@ -1,6 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { normalizePlayerPlatform, type PlayerPlatform } from "@/lib/platform-capabilities";
+import {
+  buildPlaylistEtagFromSeed,
+  resolveScreenPlaylistPayload,
+  type PlaylistResolutionSource,
+  type ScreenPlaylistItemPayload,
+} from "@/lib/server/screen-playlist-payload";
 
 function normalizeCode(raw: string) {
   return raw.trim().toUpperCase().replace(/\s+/g, "");
@@ -156,54 +162,6 @@ export const postPlayerLog = createServerFn({ method: "POST" })
 /* Sync + playlist por screen_id (players Android / Tizen / Web)              */
 /* -------------------------------------------------------------------------- */
 
-type CampaignRow = {
-  id: string;
-  organization_id: string;
-  name: string;
-  playlist_id: string;
-  priority: number;
-  start_at: string;
-  end_at: string;
-  status: string;
-};
-
-function campaignActiveNow(c: CampaignRow): boolean {
-  if (c.status !== "active") return false;
-  const now = Date.now();
-  return new Date(c.start_at).getTime() <= now && now <= new Date(c.end_at).getTime();
-}
-
-function buildPlaylistEtag(campaignId: string | null, itemIds: string[]): string {
-  return `${campaignId ?? "none"}:${itemIds.join(",")}`;
-}
-
-const storageMediaBuckets = new Set(["media-images", "media-videos", "thumbnails"]);
-
-function parseStorageObjectPath(rawPath: string | null | undefined): { bucket: string; objectPath: string } | null {
-  const path = String(rawPath ?? "").trim();
-  if (!path || /^https?:\/\//i.test(path)) return null;
-  const slash = path.indexOf("/");
-  if (slash <= 0) return null;
-  const bucket = path.slice(0, slash);
-  const objectPath = path.slice(slash + 1);
-  if (!storageMediaBuckets.has(bucket) || !objectPath) return null;
-  return { bucket, objectPath };
-}
-
-async function resolvePlayableMediaUrl(
-  filePath: string | null | undefined,
-  publicUrl: string | null | undefined,
-): Promise<string | null> {
-  const objectRef = parseStorageObjectPath(filePath);
-  if (objectRef) {
-    const { data, error } = await supabaseAdmin.storage
-      .from(objectRef.bucket)
-      .createSignedUrl(objectRef.objectPath, 60 * 60);
-    if (!error && data?.signedUrl) return data.signedUrl;
-  }
-  return publicUrl ?? filePath ?? null;
-}
-
 type GetPlaylistInput = {
   screen_id: string;
   pairing_code: string;
@@ -224,15 +182,14 @@ function validateGetPlaylist(input: unknown): GetPlaylistInput {
   };
 }
 
-export type ScreenPlaylistItem = {
-  id: string;
-  name: string;
-  public_url: string | null;
-  thumbnail_url: string | null;
-  mime_type: string | null;
-  duration_seconds: number | null;
-  position: number;
-};
+/** Item normalizado para players (web / Android / Tizen). */
+export type ScreenPlaylistItem = ScreenPlaylistItemPayload;
+
+function mapResolutionSourceForPlayer(s: PlaylistResolutionSource): "playlist_items" | "org_media_fallback" | "empty" {
+  if (s === "org_media_fallback") return "org_media_fallback";
+  if (s === "empty") return "empty";
+  return "playlist_items";
+}
 
 /**
  * Devolve campanha activa + itens de playlist (ou fallback para mídias da org).
@@ -241,143 +198,13 @@ export type ScreenPlaylistItem = {
 export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
   .inputValidator(validateGetPlaylist)
   .handler(async ({ data }) => {
-    const screen = await assertScreenCredentials(data.screen_id, data.pairing_code);
-    const orgId = screen.organization_id as string;
+    await assertScreenCredentials(data.screen_id, data.pairing_code);
 
-    const { data: screenRow, error: sErr } = await supabaseAdmin
-      .from("screens")
-      .select("id, name, organization_id, unit_id, platform, store_type")
-      .eq("id", data.screen_id)
-      .maybeSingle();
-    if (sErr || !screenRow) throw new Error("Tela não encontrada.");
+    const resolved = await resolveScreenPlaylistPayload(supabaseAdmin, data.screen_id);
+    if (!resolved.organization_id) throw new Error("Tela não encontrada.");
 
-    const screenId = screenRow.id as string;
-    const unitId = screenRow.unit_id as string | null;
-
-    const orFilters = [`and(target_type.eq.screen,target_id.eq.${screenId})`];
-    if (unitId) orFilters.push(`and(target_type.eq.unit,target_id.eq.${unitId})`);
-
-    const { data: targets, error: tErr } = await supabaseAdmin
-      .from("campaign_targets")
-      .select("campaign_id")
-      .or(orFilters.join(","));
-    if (tErr) {
-      console.error("[getScreenPlaylistPayload] targets", tErr.message);
-    }
-    const campaignIds = [...new Set((targets ?? []).map((t) => t.campaign_id as string))];
-
-    let campaigns: CampaignRow[] = [];
-    if (campaignIds.length > 0) {
-      const { data: cRows, error: cErr } = await supabaseAdmin
-        .from("campaigns")
-        .select("id, organization_id, name, playlist_id, priority, start_at, end_at, status")
-        .eq("organization_id", orgId)
-        .in("id", campaignIds);
-      if (cErr) throw new Error(cErr.message);
-      campaigns = (cRows ?? []) as CampaignRow[];
-    }
-
-    const active = campaigns.filter(campaignActiveNow).sort((a, b) => b.priority - a.priority);
-    const campaign = active[0] ?? null;
-
-    let playlist: { id: string; name: string } | null = null;
-    let items: ScreenPlaylistItem[] = [];
-    let source: "playlist_items" | "org_media_fallback" | "empty" = "empty";
-
-    if (campaign) {
-      const { data: pRow } = await supabaseAdmin
-        .from("playlists")
-        .select("id, name")
-        .eq("id", campaign.playlist_id)
-        .eq("organization_id", orgId)
-        .maybeSingle();
-      if (pRow) playlist = { id: pRow.id as string, name: pRow.name as string };
-
-      const { data: links, error: liErr } = await supabaseAdmin
-        .from("playlist_items")
-        .select("media_asset_id, position")
-        .eq("playlist_id", campaign.playlist_id)
-        .order("position", { ascending: true });
-
-      if (liErr) {
-        console.warn("[getScreenPlaylistPayload] playlist_items:", liErr.message);
-      }
-
-      if (!liErr && links && links.length > 0) {
-        const ids = links.map((l) => l.media_asset_id as string);
-        const { data: medias, error: mErr } = await supabaseAdmin
-          .from("media_assets")
-          .select("id, name, file_path, public_url, thumbnail_url, mime_type, duration_seconds, status")
-          .in("id", ids)
-          .eq("organization_id", orgId);
-        if (mErr) throw new Error(mErr.message);
-        const byId = new Map((medias ?? []).map((m) => [m.id as string, m]));
-        const playlistEntries = await Promise.all(
-          links.map(async (l) => {
-            const m = byId.get(l.media_asset_id as string);
-            if (!m || m.status !== "active") return null;
-            const mediaUrl = await resolvePlayableMediaUrl(
-              m.file_path as string | null,
-              m.public_url as string | null,
-            );
-            if (!mediaUrl) return null;
-            return {
-              id: m.id as string,
-              name: (m.name as string) ?? "",
-              public_url: mediaUrl,
-              thumbnail_url: m.thumbnail_url as string | null,
-              mime_type: m.mime_type as string | null,
-              duration_seconds: m.duration_seconds as number | null,
-              position: Number(l.position ?? 0),
-            } satisfies ScreenPlaylistItem;
-          }),
-        );
-        items = playlistEntries.filter((entry) => entry != null) as ScreenPlaylistItem[];
-        items.sort((a, b) => a.position - b.position);
-        source = items.length > 0 ? "playlist_items" : "empty";
-      }
-
-      if (items.length === 0) {
-        const { data: fallback, error: fErr } = await supabaseAdmin
-          .from("media_assets")
-          .select("id, name, file_path, public_url, thumbnail_url, mime_type, duration_seconds, status")
-          .eq("organization_id", orgId)
-          .eq("status", "active")
-          .order("created_at", { ascending: false })
-          .limit(80);
-        if (fErr) throw new Error(fErr.message);
-        const fallbackEntries = await Promise.all(
-          (fallback ?? []).map(async (m, idx) => {
-            const mediaUrl = await resolvePlayableMediaUrl(
-              m.file_path as string | null,
-              m.public_url as string | null,
-            );
-            if (!mediaUrl) return null;
-            return {
-              id: m.id as string,
-              name: (m.name as string) ?? "",
-              public_url: mediaUrl,
-              thumbnail_url: m.thumbnail_url as string | null,
-              mime_type: m.mime_type as string | null,
-              duration_seconds: m.duration_seconds as number | null,
-              position: idx,
-            } satisfies ScreenPlaylistItem;
-          }),
-        );
-        items = fallbackEntries.filter((entry) => entry != null) as ScreenPlaylistItem[];
-        source = items.length > 0 ? "org_media_fallback" : "empty";
-      }
-
-      await supabaseAdmin
-        .from("screens")
-        .update({ current_campaign_id: campaign.id })
-        .eq("id", screenId);
-    }
-
-    const etag = buildPlaylistEtag(
-      campaign?.id ?? null,
-      items.map((i) => i.id),
-    );
+    const items = resolved.items;
+    const etag = buildPlaylistEtagFromSeed(resolved.etagSeed + `:${items.length}`);
     if (data.etag && data.etag === etag) {
       return {
         ok: true as const,
@@ -387,29 +214,29 @@ export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
       };
     }
 
+    const source = mapResolutionSourceForPlayer(resolved.source);
+
     return {
       ok: true as const,
       unchanged: false as const,
       etag,
       server_time: new Date().toISOString(),
       screen: {
-        id: screenRow.id as string,
-        name: screenRow.name as string,
-        organization_id: orgId,
-        platform: (screenRow.platform as string | null) ?? "android",
-        store_type: (screenRow.store_type as string | null) ?? null,
+        id: resolved.screen.id,
+        name: resolved.screen.name,
+        organization_id: resolved.organization_id,
+        platform: resolved.screen.platform ?? "android",
+        store_type: resolved.screen.store_type ?? null,
+        ...resolved.display,
       },
-      campaign: campaign
-        ? {
-            id: campaign.id,
-            name: campaign.name,
-            playlist_id: campaign.playlist_id,
-            priority: campaign.priority,
-          }
+      campaign: resolved.campaign,
+      playlist: resolved.playlist
+        ? { id: resolved.playlist.id, name: resolved.playlist.name, version: resolved.playlist.version }
         : null,
-      playlist,
+      playlist_version: resolved.playlist?.version ?? null,
       items,
       source,
+      resolution_source: resolved.source,
     };
   });
 

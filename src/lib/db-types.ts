@@ -64,6 +64,8 @@ export interface Unit {
   updated_at: string;
 }
 
+export type PlaylistFitMode = "contain" | "cover" | "stretch" | "center" | "fit-width" | "fit-height";
+
 export interface Screen {
   id: string;
   organization_id: string;
@@ -73,6 +75,14 @@ export interface Screen {
   pairing_expires_at: string | null;
   orientation: ScreenOrientation;
   resolution: string | null;
+  screen_width?: number | null;
+  screen_height?: number | null;
+  aspect_ratio?: string | null;
+  default_fit_mode?: PlaylistFitMode | string;
+  auto_scale_video?: boolean;
+  auto_scale_image?: boolean;
+  hide_overlay?: boolean;
+  hide_controls?: boolean;
   platform: string | null;
   /** playstore | tizen | sideload | internal */
   store_type?: string | null;
@@ -95,6 +105,20 @@ export interface ScreenGroup {
   name: string;
   description: string | null;
   status: RecordStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Playlist atribuída a um grupo de telas (prioridade intermédia no resolver). */
+export interface ScreenGroupPlaylistAssignment {
+  id: string;
+  organization_id: string;
+  screen_group_id: string;
+  playlist_id: string;
+  priority: number;
+  start_at: string | null;
+  end_at: string | null;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -126,6 +150,7 @@ export interface Playlist {
   name: string;
   description: string | null;
   status: RecordStatus;
+  version?: number;
   created_by: string | null;
   created_at: string;
   updated_at: string;
@@ -139,7 +164,26 @@ export interface PlaylistItem {
   position: number;
   duration_override_seconds?: number | null;
   transition_type?: string | null;
+  fit_mode?: PlaylistFitMode | string | null;
+  is_active?: boolean;
+  notes?: string | null;
   created_at: string;
+  updated_at?: string;
+}
+
+/** Atribuição directa de playlist a uma tela (prioridade sobre campanha no resolver). */
+export interface ScreenPlaylistAssignment {
+  id: string;
+  organization_id: string;
+  screen_id: string;
+  playlist_id: string;
+  assignment_type: string;
+  priority: number;
+  start_at: string | null;
+  end_at: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Campaign {

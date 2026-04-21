@@ -3,7 +3,15 @@ import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
-import { useScreens, useUnits, useDeleteScreen, useUpdateScreen } from "@/lib/hooks/use-supabase-data";
+import {
+  useScreens,
+  useUnits,
+  useDeleteScreen,
+  useUpdateScreen,
+  usePlaylists,
+  useScreenPrimaryPlaylistAssignment,
+  useSetScreenPrimaryPlaylist,
+} from "@/lib/hooks/use-supabase-data";
 import type { Screen } from "@/lib/db-types";
 import {
   Plus,
@@ -462,8 +470,8 @@ function PairScreenModal({
           </fieldset>
 
           <p className="text-[11px] text-muted-foreground rounded-md border border-border/60 bg-muted/25 p-2.5 leading-relaxed">
-            A <strong>playlist</strong> não é escolhida aqui: associe uma <strong>campanha activa</strong> com alvo
-            nesta tela (ou na unidade) e uma playlist, em <strong>Campanhas</strong>.
+            Depois do pareamento pode definir uma <strong>playlist directa</strong> em <strong>Dispositivos → Editar</strong>{" "}
+            (prioridade sobre campanha) ou usar só <strong>Campanhas</strong> com alvo nesta tela ou unidade.
           </p>
 
           <div className="grid grid-cols-2 gap-3">
@@ -641,16 +649,43 @@ function EditScreenModal({
   onSaved: () => void;
 }) {
   const update = useUpdateScreen();
+  const playlistsQ = usePlaylists();
+  const primaryAssign = useScreenPrimaryPlaylistAssignment(screen.id);
+  const setPrimaryPlaylist = useSetScreenPrimaryPlaylist();
   const [name, setName] = useState(screen.name);
   const [unitId, setUnitId] = useState<string>(screen.unit_id ?? "");
   const [orientation, setOrientation] = useState<"landscape" | "portrait">(dbToUiOrientation(screen.orientation));
+  const [resolution, setResolution] = useState(screen.resolution ?? "1920x1080");
+  const [screenWidth, setScreenWidth] = useState(screen.screen_width != null ? String(screen.screen_width) : "");
+  const [screenHeight, setScreenHeight] = useState(screen.screen_height != null ? String(screen.screen_height) : "");
+  const [aspectRatio, setAspectRatio] = useState(screen.aspect_ratio ?? "");
+  const [defaultFit, setDefaultFit] = useState(screen.default_fit_mode ?? "cover");
+  const [autoScaleVideo, setAutoScaleVideo] = useState(screen.auto_scale_video !== false);
+  const [autoScaleImage, setAutoScaleImage] = useState(screen.auto_scale_image !== false);
+  const [hideOverlay, setHideOverlay] = useState(screen.hide_overlay !== false);
+  const [hideControls, setHideControls] = useState(screen.hide_controls !== false);
+  const [primaryPlaylistId, setPrimaryPlaylistId] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     setName(screen.name);
     setUnitId(screen.unit_id ?? "");
     setOrientation(dbToUiOrientation(screen.orientation));
+    setResolution(screen.resolution ?? "1920x1080");
+    setScreenWidth(screen.screen_width != null ? String(screen.screen_width) : "");
+    setScreenHeight(screen.screen_height != null ? String(screen.screen_height) : "");
+    setAspectRatio(screen.aspect_ratio ?? "");
+    setDefaultFit(screen.default_fit_mode ?? "cover");
+    setAutoScaleVideo(screen.auto_scale_video !== false);
+    setAutoScaleImage(screen.auto_scale_image !== false);
+    setHideOverlay(screen.hide_overlay !== false);
+    setHideControls(screen.hide_controls !== false);
   }, [screen]);
+
+  useEffect(() => {
+    const pid = primaryAssign.data?.playlist_id;
+    setPrimaryPlaylistId(pid ?? "");
+  }, [primaryAssign.data?.playlist_id]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -661,8 +696,21 @@ function EditScreenModal({
         name: name.trim(),
         unit_id: unitId || null,
         orientation: uiToDbOrientation(orientation),
+        resolution: resolution.trim() || null,
+        screen_width: screenWidth.trim() === "" ? null : Number(screenWidth),
+        screen_height: screenHeight.trim() === "" ? null : Number(screenHeight),
+        aspect_ratio: aspectRatio.trim() || null,
+        default_fit_mode: defaultFit,
+        auto_scale_video: autoScaleVideo,
+        auto_scale_image: autoScaleImage,
+        hide_overlay: hideOverlay,
+        hide_controls: hideControls,
       });
-      toast.success("Dispositivo atualizado.");
+      await setPrimaryPlaylist.mutateAsync({
+        screenId: screen.id,
+        playlistId: primaryPlaylistId || null,
+      });
+      toast.success("Dispositivo actualizado.");
       onSaved();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Erro ao salvar.");
@@ -749,6 +797,102 @@ function EditScreenModal({
                 <option value="portrait">Retrato</option>
               </select>
             </div>
+          </div>
+
+          <div className="rounded-lg border border-border/60 bg-muted/20 p-3 space-y-2 text-[11px]">
+            <p className="font-semibold text-foreground text-xs">Exibição no player</p>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-[10px] text-muted-foreground">Resolução (texto)</label>
+                <input
+                  value={resolution}
+                  onChange={(e) => setResolution(e.target.value)}
+                  className="mt-0.5 w-full rounded border border-input bg-surface px-2 py-1 text-xs"
+                  placeholder="1920x1080"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-muted-foreground">Aspect ratio</label>
+                <input
+                  value={aspectRatio}
+                  onChange={(e) => setAspectRatio(e.target.value)}
+                  className="mt-0.5 w-full rounded border border-input bg-surface px-2 py-1 text-xs"
+                  placeholder="16:9"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-muted-foreground">Largura (px)</label>
+                <input
+                  value={screenWidth}
+                  onChange={(e) => setScreenWidth(e.target.value)}
+                  className="mt-0.5 w-full rounded border border-input bg-surface px-2 py-1 text-xs"
+                  inputMode="numeric"
+                />
+              </div>
+              <div>
+                <label className="text-[10px] text-muted-foreground">Altura (px)</label>
+                <input
+                  value={screenHeight}
+                  onChange={(e) => setScreenHeight(e.target.value)}
+                  className="mt-0.5 w-full rounded border border-input bg-surface px-2 py-1 text-xs"
+                  inputMode="numeric"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="text-[10px] text-muted-foreground">Fit por defeito</label>
+              <select
+                value={defaultFit}
+                onChange={(e) => setDefaultFit(e.target.value)}
+                className="mt-0.5 w-full rounded border border-input bg-surface px-2 py-1 text-xs"
+              >
+                {["contain", "cover", "stretch", "center", "fit-width", "fit-height"].map((f) => (
+                  <option key={f} value={f}>
+                    {f}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="flex flex-wrap gap-3 text-[10px] text-muted-foreground">
+              <label className="flex items-center gap-1">
+                <input type="checkbox" checked={autoScaleVideo} onChange={(e) => setAutoScaleVideo(e.target.checked)} />
+                Auto escala vídeo
+              </label>
+              <label className="flex items-center gap-1">
+                <input type="checkbox" checked={autoScaleImage} onChange={(e) => setAutoScaleImage(e.target.checked)} />
+                Auto escala imagem
+              </label>
+              <label className="flex items-center gap-1">
+                <input type="checkbox" checked={hideOverlay} onChange={(e) => setHideOverlay(e.target.checked)} />
+                Esconder overlay
+              </label>
+              <label className="flex items-center gap-1">
+                <input type="checkbox" checked={hideControls} onChange={(e) => setHideControls(e.target.checked)} />
+                Esconder barra / info
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
+              Playlist directa (opcional)
+            </label>
+            <p className="text-[10px] text-muted-foreground mt-0.5 mb-1">
+              Se escolher uma playlist, ela tem prioridade sobre a campanha nesta TV. Deixe vazio para usar só
+              campanhas.
+            </p>
+            <select
+              value={primaryPlaylistId}
+              onChange={(e) => setPrimaryPlaylistId(e.target.value)}
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="">— Nenhuma (campanhas) —</option>
+              {(playlistsQ.data ?? []).map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="flex items-center justify-end gap-2 pt-2">
