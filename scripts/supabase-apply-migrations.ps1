@@ -99,6 +99,31 @@ if ($ProjectRef -match "^(COLE_|SEU_)") {
   throw "ProjectRef invalido (`"$ProjectRef`"). Edite scripts/supabase.credentials.ps1 com o project ref real do Supabase (20 letras)."
 }
 
+# Aceita URL completa por engano: https://XXXX.supabase.co -> XXXX
+if ($ProjectRef -match 'https?://([a-z0-9]{20})\.supabase\.co') {
+  $ProjectRef = $Matches[1]
+  Write-Host "ProjectRef normalizado a partir da URL: $ProjectRef" -ForegroundColor DarkCyan
+}
+
+$AccessToken = $AccessToken.Trim()
+if (-not [string]::IsNullOrWhiteSpace($AccessToken)) {
+  if ($AccessToken -like "eyJ*") {
+    throw @"
+Token incorreto: parece ser a chave anon/JWT do projeto (começa com eyJ...).
+A CLI do Supabase precisa de um Personal Access Token da CONTA, no formato sbp_...
+Crie em: https://supabase.com/dashboard/account/tokens
+"@
+  }
+  if ($AccessToken -notmatch '^sbp_') {
+    throw @"
+Token incorreto para SUPABASE_ACCESS_TOKEN.
+Formato esperado: sbp_... (Personal Access Token da conta Supabase).
+Nao use VITE_SUPABASE_ANON_KEY nem service_role.
+Crie em: https://supabase.com/dashboard/account/tokens
+"@
+  }
+}
+
 Run-Step -Title "Validando Supabase CLI" -Action {
   Invoke-SupabaseCli --version
 }
@@ -106,7 +131,7 @@ Run-Step -Title "Validando Supabase CLI" -Action {
 if (-not [string]::IsNullOrWhiteSpace($AccessToken)) {
   Run-Step -Title "Configurando token de acesso (nao interativo)" -Action {
     $env:SUPABASE_ACCESS_TOKEN = $AccessToken
-    Write-Host "SUPABASE_ACCESS_TOKEN carregado a partir das credenciais."
+    Write-Host "SUPABASE_ACCESS_TOKEN carregado (formato sbp_...)."
   }
 } elseif (-not $SkipLogin) {
   Run-Step -Title "Login no Supabase (interativo)" -Action { Invoke-SupabaseCli login }
