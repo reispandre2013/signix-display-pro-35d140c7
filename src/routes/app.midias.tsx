@@ -108,9 +108,14 @@ function detectMediaFromFile(file: File): UploadDetectedMedia | null {
     };
   }
 
-  const imageExtensions = new Set(["png", "jpg", "jpeg", "webp", "gif", "bmp", "svg"]);
+  // Alinhado às buckets/policies do projeto: media-images aceita png/jpeg/webp.
+  const imageExtensions = new Set(["png", "jpg", "jpeg", "webp"]);
   if (mime.startsWith("image/") || imageExtensions.has(ext)) {
-    const normalizedExtension = ext || (mime.startsWith("image/") ? mime.replace("image/", "") : "jpg");
+    const inferredFromMime = mime.startsWith("image/") ? mime.replace("image/", "") : "";
+    const normalizedExtension = ext || inferredFromMime || "jpg";
+    if (!imageExtensions.has(normalizedExtension)) {
+      return null;
+    }
     const normalizedMime =
       mime && mime.startsWith("image/")
         ? mime
@@ -165,7 +170,7 @@ function MediaPage() {
 
       const detectedFile = detectMediaFromFile(uploadFile);
       if (!detectedFile) {
-        setFormError("Formato inválido. Envie imagem ou vídeo MP4.");
+        setFormError("Formato inválido. Envie PNG/JPG/WEBP ou vídeo MP4.");
         return;
       }
       if (detectedFile.fileType === "video" && detectedFile.mimeType !== "video/mp4") {
@@ -201,13 +206,17 @@ function MediaPage() {
       const { data: signedData } = await supabase.storage
         .from(detectedFile.bucket)
         .createSignedUrl(objectPath, 60 * 60 * 24 * 30);
+      if (!signedData?.signedUrl) {
+        setFormError("Upload concluído, mas não foi possível gerar URL assinada.");
+        return;
+      }
 
         await create.mutateAsync({
           name: form.name,
           file_type: detectedFile.fileType,
           file_path: fullStoragePath,
-          public_url: signedData?.signedUrl ?? null,
-          thumbnail_url: detectedFile.fileType === "video" ? null : signedData?.signedUrl ?? null,
+          public_url: signedData.signedUrl,
+          thumbnail_url: detectedFile.fileType === "video" ? null : signedData.signedUrl,
           duration_seconds: detectedFile.fileType === "video" ? null : form.duration_seconds,
           mime_type: detectedFile.mimeType,
           file_size: uploadFile.size,
@@ -456,7 +465,7 @@ function MediaPage() {
               <input
                 type="file"
                 required
-                accept={form.file_type === "video" ? "video/mp4" : "image/*,video/mp4"}
+                accept={form.file_type === "video" ? "video/mp4" : "image/png,image/jpeg,image/webp,video/mp4"}
                 onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
                 className="w-full rounded-lg border border-input bg-surface px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary"
               />

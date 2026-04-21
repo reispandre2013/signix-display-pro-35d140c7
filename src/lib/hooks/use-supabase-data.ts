@@ -28,6 +28,131 @@ function useOrgId() {
   return profile?.organization_id ?? null;
 }
 
+function isMissingColumnError(error: unknown, column: string): boolean {
+  const msg = String((error as { message?: string } | null)?.message ?? "").toLowerCase();
+  return msg.includes(`column ${column.toLowerCase()}`) || msg.includes(`"${column.toLowerCase()}"`);
+}
+
+function isMissingFunctionError(error: unknown, fnName: string): boolean {
+  const msg = String((error as { message?: string } | null)?.message ?? "").toLowerCase();
+  return msg.includes(`function ${fnName.toLowerCase()}`) || msg.includes("could not find the function");
+}
+
+async function safeReindexPlaylist(playlistId: string): Promise<void> {
+  const timeoutMs = 2500;
+  const rpcPromise = supabase.rpc("reindex_playlist_items", { p_playlist_id: playlistId });
+  const timed = (await Promise.race([
+    rpcPromise,
+    new Promise<{ timeout: true }>((resolve) => {
+      setTimeout(() => resolve({ timeout: true }), timeoutMs);
+    }),
+  ])) as Awaited<ReturnType<typeof supabase.rpc>> | { timeout: true };
+
+  if ("timeout" in timed) {
+    console.warn("[playlist] reindex timeout, seguindo sem bloquear UI.");
+    return;
+  }
+  if (timed.error) {
+    if (isMissingFunctionError(timed.error, "reindex_playlist_items")) {
+      console.warn("[playlist] RPC reindex_playlist_items indisponível neste ambiente.");
+      return;
+    }
+    console.warn("[playlist] reindex error:", timed.error.message);
+  }
+}
+
+async function fetchPlaylistItemsCompat(playlistId: string): Promise<PlaylistItemWithMedia[]> {
+  const fullSelect =
+    "id, playlist_id, media_asset_id, position, duration_override_seconds, transition_type, fit_mode, is_active, notes, created_at, updated_at, media_assets(id, name, file_type, public_url, thumbnail_url, mime_type, duration_seconds)";
+  const legacySelect =
+    "id, playlist_id, media_asset_id, position, duration_override_seconds, transition_type, created_at, media_assets(id, name, file_type, public_url, thumbnail_url, mime_type, duration_seconds)";
+
+  const first = await supabase
+    .from("playlist_items")
+    .select(fullSelect)
+    .eq("playlist_id", playlistId)
+    .order("position", { ascending: true });
+
+  if (!first.error) {
+    return (first.data ?? []).map((row) => {
+      const media = Array.isArray(row.media_assets) ? (row.media_assets[0] ?? null) : row.media_assets;
+      return { ...(row as PlaylistItemWithMedia), media_assets: media as PlaylistItemWithMedia["media_assets"] };
+    });
+  }
+
+  if (
+    !isMissingColumnError(first.error, "fit_mode") &&
+    !isMissingColumnError(first.error, "is_active") &&
+    !isMissingColumnError(first.error, "notes") &&
+    !isMissingColumnError(first.error, "updated_at")
+  ) {
+    throw first.error;
+  }
+
+  const legacy = await supabase
+    .from("playlist_items")
+    .select(legacySelect)
+    .eq("playlist_id", playlistId)
+    .order("position", { ascending: true });
+  if (legacy.error) throw legacy.error;
+
+  return (legacy.data ?? []).map((row) => {
+    const media = Array.isArray(row.media_assets) ? (row.media_assets[0] ?? null) : row.media_assets;
+    return {
+      ...(row as PlaylistItemWithMedia),
+      fit_mode: "cover",
+      is_active: true,
+      notes: null,
+      updated_at: (row as { created_at?: string }).created_at ?? null,
+      media_assets: media as PlaylistItemWithMedia["media_assets"],
+    } as PlaylistItemWithMedia;
+  });
+}
+
+async function insertPlaylistMediaItems(opts: {
+  playlistId: string;
+  mediaAssetIds: string[];
+}): Promise<{ inserted: number; skippedAsDuplicate: number }> {
+  const mediaAssetIds = Array.from(new Set(opts.mediaAssetIds.map((x) => x.trim()).filter(Boolean)));
+  if (mediaAssetIds.length === 0) return { inserted: 0, skippedAsDuplicate: 0 };
+
+  await safeReindexPlaylist(opts.playlistId);
+
+  const existingRes = await supabase
+    .from("playlist_items")
+    .select("media_asset_id, position")
+    .eq("playlist_id", opts.playlistId)
+    .order("position", { ascending: false });
+  if (existingRes.error) throw existingRes.error;
+
+  const existing = existingRes.data ?? [];
+  const existingMediaIds = new Set(existing.map((r) => String(r.media_asset_id)));
+  const toInsert = mediaAssetIds.filter((id) => !existingMediaIds.has(id));
+  if (toInsert.length === 0) {
+    return { inserted: 0, skippedAsDuplicate: mediaAssetIds.length };
+  }
+
+  let nextPosition = 1;
+  const maxPos = existing.find((r) => typeof r.position === "number")?.position;
+  if (typeof maxPos === "number") nextPosition = maxPos + 1;
+
+  const rows = toInsert.map((mediaAssetId, idx) => ({
+    playlist_id: opts.playlistId,
+    media_asset_id: mediaAssetId,
+    position: nextPosition + idx,
+  }));
+
+  const { error } = await supabase.from("playlist_items").insert(rows);
+  if (error) throw error;
+
+  await safeReindexPlaylist(opts.playlistId);
+
+  return {
+    inserted: rows.length,
+    skippedAsDuplicate: mediaAssetIds.length - rows.length,
+  };
+}
+
 /* -------------------------------------------------------------------------- */
 /* QUERIES                                                                     */
 /* -------------------------------------------------------------------------- */
@@ -148,17 +273,7 @@ export function usePlaylistItems(playlistId: string | null) {
   return useQuery({
     queryKey: ["playlist_items", orgId, playlistId],
     enabled: !!orgId && !!playlistId,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("playlist_items")
-        .select(
-          "id, playlist_id, media_asset_id, position, duration_override_seconds, transition_type, fit_mode, is_active, notes, created_at, updated_at, media_assets(id, name, file_type, public_url, thumbnail_url, mime_type, duration_seconds)",
-        )
-        .eq("playlist_id", playlistId!)
-        .order("position", { ascending: true });
-      if (error) throw error;
-      return (data ?? []) as unknown as PlaylistItemWithMedia[];
-    },
+    queryFn: async () => fetchPlaylistItemsCompat(playlistId!),
   });
 }
 
@@ -168,23 +283,8 @@ export function useAddPlaylistItem() {
   return useMutation({
     mutationFn: async ({ playlistId, mediaAssetId }: { playlistId: string; mediaAssetId: string }) => {
       if (!orgId) throw new Error("Sem organização ativa.");
-      const { error: rErr } = await supabase.rpc("reindex_playlist_items", { p_playlist_id: playlistId });
-      if (rErr) console.warn("[useAddPlaylistItem] reindex:", rErr.message);
-      const { data: existing, error: selErr } = await supabase
-        .from("playlist_items")
-        .select("position")
-        .eq("playlist_id", playlistId)
-        .order("position", { ascending: false })
-        .limit(1);
-      if (selErr) throw selErr;
-      const maxPos = existing?.[0]?.position;
-      const nextPosition = typeof maxPos === "number" ? maxPos + 1 : 1;
-      const { error } = await supabase.from("playlist_items").insert({
-        playlist_id: playlistId,
-        media_asset_id: mediaAssetId,
-        position: nextPosition,
-      });
-      if (error) throw error;
+      const r = await insertPlaylistMediaItems({ playlistId, mediaAssetIds: [mediaAssetId] });
+      if (r.inserted === 0) throw new Error("Esta mídia já está na playlist.");
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
@@ -229,8 +329,7 @@ export function useSwapPlaylistItemPositions() {
       if (error) throw error;
       ({ error } = await tbl.update({ position: posB }).eq("id", itemIdA));
       if (error) throw error;
-      const { error: rErr } = await supabase.rpc("reindex_playlist_items", { p_playlist_id: vars.playlistId });
-      if (rErr) console.warn("[useSwapPlaylistItemPositions] reindex:", rErr.message);
+      await safeReindexPlaylist(vars.playlistId);
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
@@ -247,7 +346,29 @@ export function useReorderPlaylistItems() {
         p_playlist_id: vars.playlistId,
         p_ordered_ids: vars.orderedItemIds,
       });
-      if (error) throw error;
+      if (error) {
+        if (!isMissingFunctionError(error, "reorder_playlist_items")) throw error;
+        // fallback compatível com ambientes antigos sem a RPC.
+        for (let i = 0; i < vars.orderedItemIds.length; i += 1) {
+          const id = vars.orderedItemIds[i]!;
+          const { error: upErr } = await supabase
+            .from("playlist_items")
+            .update({ position: -(i + 1) })
+            .eq("id", id)
+            .eq("playlist_id", vars.playlistId);
+          if (upErr) throw upErr;
+        }
+        for (let i = 0; i < vars.orderedItemIds.length; i += 1) {
+          const id = vars.orderedItemIds[i]!;
+          const { error: upErr } = await supabase
+            .from("playlist_items")
+            .update({ position: i + 1 })
+            .eq("id", id)
+            .eq("playlist_id", vars.playlistId);
+          if (upErr) throw upErr;
+        }
+      }
+      await safeReindexPlaylist(vars.playlistId);
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
@@ -283,25 +404,9 @@ export function useAddPlaylistItemsBulk() {
   return useMutation({
     mutationFn: async (vars: { playlistId: string; mediaAssetIds: string[] }) => {
       if (!orgId) throw new Error("Sem organização ativa.");
-      const { error: rErr } = await supabase.rpc("reindex_playlist_items", { p_playlist_id: vars.playlistId });
-      if (rErr) console.warn("[useAddPlaylistItemsBulk] reindex:", rErr.message);
-      const { data: existing, error: selErr } = await supabase
-        .from("playlist_items")
-        .select("position")
-        .eq("playlist_id", vars.playlistId)
-        .order("position", { ascending: false })
-        .limit(1);
-      if (selErr) throw selErr;
-      let next = typeof existing?.[0]?.position === "number" ? (existing![0].position as number) + 1 : 1;
-      for (const mediaAssetId of vars.mediaAssetIds) {
-        const { error } = await supabase.from("playlist_items").insert({
-          playlist_id: vars.playlistId,
-          media_asset_id: mediaAssetId,
-          position: next,
-        });
-        if (error) throw error;
-        next += 1;
-      }
+      const r = await insertPlaylistMediaItems(vars);
+      if (r.inserted === 0) throw new Error("Todas as mídias selecionadas já estão na playlist.");
+      return r;
     },
     onSuccess: (_, vars) => {
       qc.invalidateQueries({ queryKey: ["playlist_items", orgId, vars.playlistId] });
