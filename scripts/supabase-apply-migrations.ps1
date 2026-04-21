@@ -32,6 +32,23 @@ function Run-Step {
   & $Action
 }
 
+function Read-TomlTextNoBom {
+  param([Parameter(Mandatory = $true)][string]$Path)
+  $bytes = [System.IO.File]::ReadAllBytes($Path)
+  if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+    $bytes = $bytes[3..($bytes.Length - 1)]
+  }
+  return [System.Text.Encoding]::UTF8.GetString($bytes)
+}
+
+function Write-Utf8NoBom {
+  param(
+    [Parameter(Mandatory = $true)][string]$Path,
+    [Parameter(Mandatory = $true)][string]$Text
+  )
+  [System.IO.File]::WriteAllText($Path, $Text, [System.Text.UTF8Encoding]::new($false))
+}
+
 function Invoke-SupabaseCli {
   [CmdletBinding()]
   param(
@@ -100,12 +117,13 @@ Run-Step -Title "Atualizando supabase/config.toml com project_id" -Action {
     throw "Arquivo nao encontrado: $configPath"
   }
 
-  $configRaw = Get-Content -Path $configPath -Raw
+  # Set-Content -Encoding UTF8 no Windows costuma gravar BOM; o parser TOML do Supabase falha com BOM.
+  $configRaw = Read-TomlTextNoBom -Path $configPath
   $newRaw = [regex]::Replace($configRaw, 'project_id\s*=\s*".*?"', "project_id = `"$ProjectRef`"")
   if ($newRaw -eq $configRaw) {
     Write-Host "project_id nao encontrado no config.toml; nenhum ajuste automatico aplicado." -ForegroundColor Yellow
   } else {
-    Set-Content -Path $configPath -Value $newRaw -Encoding UTF8
+    Write-Utf8NoBom -Path $configPath -Text $newRaw
     Write-Host "project_id atualizado para $ProjectRef"
   }
 }
