@@ -32,7 +32,6 @@ const roleLabel: Record<string, string> = {
 
 export function Header() {
   const { pathname } = useLocation();
-  const router = useRouter();
   const title = breadcrumbs[pathname] ?? "Signix";
   const { profile, user, signOut } = useAuth();
   const navigate = useNavigate();

@@ -1,7 +1,9 @@
-import { createFileRoute, Outlet, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { useAuth } from "@/lib/auth-context";
+import { hasSupabaseEnv } from "@/lib/supabase-client";
+import { getCurrentSession } from "@/services/auth-service";
 
 export const Route = createFileRoute("/app")({
   head: () => ({ meta: [{ title: "Painel — Signix" }] }),

@@ -28,11 +28,11 @@ function useOrgId() {
   return profile?.organization_id ?? null;
 }
 
-async function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string): Promise<T> {
+async function withTimeout<T>(promise: PromiseLike<T>, timeoutMs: number, message: string): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | null = null;
   try {
     return await Promise.race([
-      promise,
+      Promise.resolve(promise),
       new Promise<T>((_, reject) => {
         timer = setTimeout(() => reject(new Error(message)), timeoutMs);
       }),
@@ -103,7 +103,10 @@ async function fetchPlaylistItemsCompat(playlistId: string): Promise<PlaylistIte
   if (!first.error) {
     return (first.data ?? []).map((row) => {
       const media = Array.isArray(row.media_assets) ? (row.media_assets[0] ?? null) : row.media_assets;
-      return { ...(row as PlaylistItemWithMedia), media_assets: media as PlaylistItemWithMedia["media_assets"] };
+      return {
+        ...(row as unknown as PlaylistItemWithMedia),
+        media_assets: media as PlaylistItemWithMedia["media_assets"],
+      };
     });
   }
 
@@ -126,7 +129,7 @@ async function fetchPlaylistItemsCompat(playlistId: string): Promise<PlaylistIte
   return (legacy.data ?? []).map((row) => {
     const media = Array.isArray(row.media_assets) ? (row.media_assets[0] ?? null) : row.media_assets;
     return {
-      ...(row as PlaylistItemWithMedia),
+      ...(row as unknown as PlaylistItemWithMedia),
       fit_mode: "cover",
       is_active: true,
       notes: null,

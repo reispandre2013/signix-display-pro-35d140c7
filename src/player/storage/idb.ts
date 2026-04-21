@@ -69,7 +69,7 @@ export const idbStore = {
     await withStore(STORE_MEDIA, "readwrite", (store) => store.clear());
   },
   async listMediaKeys(): Promise<string[]> {
-    const keys = await withStore<unknown[]>(STORE_MEDIA, "readonly", (store) => store.getAllKeys());
+    const keys = await withStore<IDBValidKey[]>(STORE_MEDIA, "readonly", (store) => store.getAllKeys());
     return (keys ?? []).map((k) => String(k));
   },
   async setLog<T extends { id: string }>(log: T): Promise<void> {

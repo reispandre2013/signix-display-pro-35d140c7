@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tv, Maximize2, Volume2, Wifi, Image as ImageIcon } from "lucide-react";
 import { useMedia, useCampaigns } from "@/lib/hooks/use-supabase-data";

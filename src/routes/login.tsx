@@ -153,12 +153,6 @@ function LoginPage() {
               {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Entrar no painel <ArrowRight className="h-4 w-4" /></>}
             </button>
 
-            {errorMessage && (
-              <p className="rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
-                {errorMessage}
-              </p>
-            )}
-
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-border" />

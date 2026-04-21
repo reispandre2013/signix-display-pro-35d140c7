@@ -2,7 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
+import { PreviewModeBanner } from "@/components/ui-kit/data-states";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
+import { hasSupabaseEnv } from "@/lib/supabase-client";
 import { useMedia, useCampaigns } from "@/lib/hooks/use-supabase-data";
 import { applyMediaFallback, getMediaUrlCandidates } from "@/lib/media-url";
 import {
@@ -32,6 +34,7 @@ type MediaRow = {
 };
 
 function PreviewPage() {
+  const hasBackend = hasSupabaseEnv;
   const { data: media = [], isLoading, error } = useMedia();
   const { data: campaigns = [] } = useCampaigns();
   const items = media.slice(0, 6);
