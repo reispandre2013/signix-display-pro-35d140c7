@@ -3,6 +3,7 @@ import { Tv, Mail, Lock, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState, FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
+import { hasSupabaseConfig } from "@/lib/supabase-client";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -101,6 +102,22 @@ function LoginPage() {
           <h2 className="font-display text-2xl font-bold">Bem-vindo de volta</h2>
           <p className="text-sm text-muted-foreground mt-1">Acesse seu painel administrativo.</p>
 
+          {!hasSupabaseConfig() && (
+            <div className="mt-6 rounded-lg border border-destructive/30 bg-destructive/10 p-3 text-xs">
+              <p className="font-semibold text-destructive">Supabase não configurado</p>
+              <p className="text-muted-foreground mt-1">
+                Defina <code>VITE_SUPABASE_URL</code> e <code>VITE_SUPABASE_ANON_KEY</code> para
+                habilitar o login.
+              </p>
+              <Link
+                to="/configurar"
+                className="inline-block mt-2 text-primary font-medium hover:underline"
+              >
+                Configurar agora →
+              </Link>
+            </div>
+          )}
+
           <form onSubmit={onSubmit} className="mt-8 space-y-4">
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1.5 block">E-mail</label>
@@ -169,6 +186,9 @@ function LoginPage() {
             </Link>
             <Link to="/pareamento" className="block w-full text-center text-xs text-muted-foreground hover:text-foreground transition-smooth">
               Parear um novo player →
+            </Link>
+            <Link to="/configurar" className="block w-full text-center text-xs text-muted-foreground hover:text-foreground transition-smooth">
+              Configurar Supabase ⚙
             </Link>
           </form>
         </div>

@@ -16,6 +16,7 @@ import { Route as PlayerScreenRouteImport } from './routes/player-screen'
 import { Route as PlayerRouteImport } from './routes/player'
 import { Route as PareamentoRouteImport } from './routes/pareamento'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ConfigurarRouteImport } from './routes/configurar'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
@@ -68,6 +69,11 @@ const PareamentoRoute = PareamentoRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfigurarRoute = ConfigurarRouteImport.update({
+  id: '/configurar',
+  path: '/configurar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -164,6 +170,7 @@ const AppAgendamentosRoute = AppAgendamentosRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
@@ -190,6 +197,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
@@ -218,6 +226,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
   '/player': typeof PlayerRoute
@@ -247,6 +256,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/configurar'
     | '/login'
     | '/pareamento'
     | '/player'
@@ -273,6 +283,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/configurar'
     | '/login'
     | '/pareamento'
     | '/player'
@@ -300,6 +311,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/configurar'
     | '/login'
     | '/pareamento'
     | '/player'
@@ -328,6 +340,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  ConfigurarRoute: typeof ConfigurarRoute
   LoginRoute: typeof LoginRoute
   PareamentoRoute: typeof PareamentoRoute
   PlayerRoute: typeof PlayerRoute
@@ -386,6 +399,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configurar': {
+      id: '/configurar'
+      path: '/configurar'
+      fullPath: '/configurar'
+      preLoaderRoute: typeof ConfigurarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -560,6 +580,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  ConfigurarRoute: ConfigurarRoute,
   LoginRoute: LoginRoute,
   PareamentoRoute: PareamentoRoute,
   PlayerRoute: PlayerRoute,
