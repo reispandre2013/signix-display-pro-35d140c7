@@ -449,10 +449,21 @@
 
     if (btnNewPairingCode) {
       btnNewPairingCode.addEventListener("click", function () {
-        startPairingFlow();
+        requestNewPairingCode();
       });
     }
     if (btnReset) btnReset.addEventListener("click", onReset);
+    if (btnAdminClose) btnAdminClose.addEventListener("click", closeAdminMenu);
+    if (btnAdminRepair) {
+      btnAdminRepair.addEventListener("click", function () {
+        resetPairing({ clearCache: false });
+      });
+    }
+    if (btnAdminUnlink) {
+      btnAdminUnlink.addEventListener("click", function () {
+        resetPairing();
+      });
+    }
     if (syncBtn) {
       syncBtn.addEventListener("click", function () {
         player.syncPlaylist().catch(function (e) {
@@ -499,6 +510,19 @@
         if (!Storage.getCredentials()) return;
         player.syncPlaylist().catch(function () {});
       },
+      onEnterDown: function () {
+        if (enterHoldTimer != null) return;
+        enterHoldTimer = setTimeout(function () {
+          enterHoldTimer = null;
+          openAdminMenu();
+        }, 5000);
+      },
+      onEnterUp: function () {
+        if (enterHoldTimer != null) {
+          clearTimeout(enterHoldTimer);
+          enterHoldTimer = null;
+        }
+      },
       onUp: function () {
         debugVisible = true;
         if (debugPanel) debugPanel.hidden = false;
@@ -510,6 +534,10 @@
         if (debugPanel) debugPanel.hidden = true;
       },
       onBack: function () {
+        if (adminMenu && !adminMenu.hidden) {
+          closeAdminMenu();
+          return;
+        }
         if (debugVisible) {
           debugVisible = false;
           if (debugPanel) debugPanel.hidden = true;
@@ -519,15 +547,14 @@
       },
     });
 
-    var creds0 = Storage.getCredentials();
-    if (hasPlaybackCredentials(creds0)) {
-      showStage("player");
-      player.syncPlaylist().catch(function (e) {
-        logger.error(e);
-      });
-    } else {
-      startPairingFlow();
-    }
+    global.signixTizenAdmin = {
+      autoConnect: autoConnect,
+      openAdminMenu: openAdminMenu,
+      resetPairing: resetPairing,
+      requestNewPairingCode: requestNewPairingCode,
+    };
+
+    autoConnect();
 
     flushLogQueue().catch(function () {});
     sendHeartbeat();
