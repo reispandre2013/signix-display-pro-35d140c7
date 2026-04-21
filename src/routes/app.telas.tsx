@@ -757,7 +757,6 @@ function EditScreenModal({
 
         if (!missingDisplayColumns) throw err;
         await update.mutateAsync(basePatch);
-        toast.warning("Configurações avançadas de exibição não disponíveis neste ambiente (migração pendente).");
       }
 
       try {
@@ -768,7 +767,7 @@ function EditScreenModal({
       } catch (err) {
         const msg = getErrorMessage(err);
         if (msg.toLowerCase().includes("migração pendente")) {
-          toast.warning("Playlist direta não salva porque a tabela de atribuição ainda não existe neste ambiente.");
+          // Ambiente com schema antigo: mantém atualização básica da tela sem bloquear o usuário.
         } else {
           throw err;
         }
