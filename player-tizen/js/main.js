@@ -94,10 +94,18 @@
     var debugPre = $("debug-pre");
     var syncBtn = $("btn-sync");
     var btnReset = $("btn-reset");
+    var adminMenu = $("admin-menu");
+    var adminTvName = $("admin-tv-name");
+    var adminDeviceStatus = $("admin-device-status");
+    var adminPlaylist = $("admin-playlist");
+    var btnAdminClose = $("btn-admin-close");
+    var btnAdminRepair = $("btn-admin-repair");
+    var btnAdminUnlink = $("btn-admin-unlink");
 
     var debugVisible = false;
     var pollTimer = null;
     var autoRenewTimer = null;
+    var enterHoldTimer = null;
     var currentPairingCode = null;
 
     function clearPoll() {
@@ -181,6 +189,33 @@
       var text = message || (ok ? "Heartbeat: OK" : "Heartbeat: falhou");
       heartbeatBadgeEl.textContent = text;
       heartbeatBadgeEl.classList.toggle("is-warning", !ok);
+    }
+
+    function getDeviceStatusLabel() {
+      var creds = Storage.getCredentials();
+      if (!creds) return "Aguardando pareamento";
+      var st = player.getRuntimeStatus();
+      if (typeof navigator !== "undefined" && navigator.onLine === false) return "Offline";
+      if (st.lastSyncOk === false || st.lastError) return "Conectado com alerta";
+      return "Conectado";
+    }
+
+    function refreshAdminMenu() {
+      var creds = Storage.getCredentials();
+      var st = player.getRuntimeStatus();
+      if (adminTvName) adminTvName.textContent = (creds && creds.screenName) || (creds && creds.screenId) || "Não pareada";
+      if (adminDeviceStatus) adminDeviceStatus.textContent = getDeviceStatusLabel();
+      if (adminPlaylist) adminPlaylist.textContent = st.playlistId || "Nenhuma playlist carregada";
+    }
+
+    function openAdminMenu() {
+      if (!adminMenu) return;
+      refreshAdminMenu();
+      adminMenu.hidden = false;
+    }
+
+    function closeAdminMenu() {
+      if (adminMenu) adminMenu.hidden = true;
     }
 
     function updateFallbackOverlay(stage, status) {
