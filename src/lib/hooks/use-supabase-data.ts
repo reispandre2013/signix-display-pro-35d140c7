@@ -54,10 +54,16 @@ function isMissingFunctionError(error: unknown, fnName: string): boolean {
 
 function isMissingRelationError(error: unknown, relation: string): boolean {
   const msg = String((error as { message?: string } | null)?.message ?? "").toLowerCase();
+  const rel = relation.toLowerCase();
+  const relPublic = `public.${rel}`;
   return (
-    msg.includes(`relation "${relation.toLowerCase()}" does not exist`) ||
-    msg.includes(`relation ${relation.toLowerCase()} does not exist`) ||
-    msg.includes(`could not find the table '${relation.toLowerCase()}'`)
+    msg.includes(`relation "${rel}" does not exist`) ||
+    msg.includes(`relation ${rel} does not exist`) ||
+    msg.includes(`relation "${relPublic}" does not exist`) ||
+    msg.includes(`relation ${relPublic} does not exist`) ||
+    msg.includes(`could not find the table '${rel}'`) ||
+    msg.includes(`could not find the table '${relPublic}'`) ||
+    msg.includes("in the schema cache") && (msg.includes(`'${rel}'`) || msg.includes(`'${relPublic}'`))
   );
 }
 
