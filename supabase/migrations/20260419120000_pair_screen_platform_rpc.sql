@@ -2,6 +2,10 @@
 -- 1) Só aceita p_platform semântico ('android' | 'tizen'); ignora strings tipo navigator.platform.
 -- 2) Mantém platform já persistido se for android/tizen; senão default 'android'.
 -- 3) Retorna platform na tabela de resultado (compatível: coluna extra; clientes JSON ignoram chaves novas).
+--
+-- Nota: não é possível alterar o tipo de retorno (RETURNS TABLE) com CREATE OR REPLACE; é preciso dropar primeiro.
+
+drop function if exists public.pair_screen_by_code(text, text, text, text, text);
 
 create or replace function public.pair_screen_by_code(
   p_pairing_code text,

@@ -162,7 +162,7 @@ Run-Step -Title "Listando migracoes (local x remoto)" -Action {
 }
 
 Run-Step -Title "Aplicando migracoes no remoto (supabase db push)" -Action {
-  Invoke-SupabaseCli db push
+  Invoke-SupabaseCli db push --yes
 }
 
 Write-Host ""
