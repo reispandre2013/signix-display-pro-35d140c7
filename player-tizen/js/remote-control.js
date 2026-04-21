@@ -57,18 +57,21 @@
       }
     }
 
-    global.addEventListener("keydown", onKeyDown, true);
-    global.addEventListener("keyup", function onKeyUp(ev) {
+    function onKeyUp(ev) {
       var key = ev.key;
       var code = ev.keyCode;
       if (key === "Enter" || code === 13) {
         if (h.onEnterUp) h.onEnterUp(ev);
         ev.preventDefault();
       }
-    }, true);
+    }
+
+    global.addEventListener("keydown", onKeyDown, true);
+    global.addEventListener("keyup", onKeyUp, true);
 
     return function uninstall() {
       global.removeEventListener("keydown", onKeyDown, true);
+      global.removeEventListener("keyup", onKeyUp, true);
     };
   }
 
