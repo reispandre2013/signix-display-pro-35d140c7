@@ -1,13 +1,20 @@
 import { hasSupabaseEnv } from "@/lib/supabase-client";
 import { cacheMediaItems } from "@/player/services/media-cache";
-import { resolveScreenPayload } from "@/player/services/player-api";
+import { resolvePlaylistWithDevice, resolveScreenPayload } from "@/player/services/player-api";
 import { getCachedPayload, setCachedPayload } from "@/player/storage/player-local";
-import type { PlayerPayload } from "@/player/types";
+import type { LocalScreenCredentials, PlayerPayload } from "@/player/types";
 import { validatePayload } from "@/player/validators/payload-validator";
 
 export async function syncPlayerPayload(
-  screenId: string,
+  credentials: LocalScreenCredentials | { screenId: string },
 ): Promise<{ payload: PlayerPayload; fromCache: boolean }> {
+  const screenId = credentials.screenId;
+  const useDevice =
+    "deviceId" in credentials &&
+    Boolean(credentials.deviceId) &&
+    "authToken" in credentials &&
+    Boolean(credentials.authToken);
+
   if (!hasSupabaseEnv) {
     const empty: PlayerPayload = {
       screen_id: screenId,
@@ -22,7 +29,9 @@ export async function syncPlayerPayload(
   }
 
   try {
-    const payload = await resolveScreenPayload(screenId);
+    const payload = useDevice
+      ? await resolvePlaylistWithDevice(credentials.deviceId as string, credentials.authToken as string)
+      : await resolveScreenPayload(screenId);
     await cacheMediaItems(payload.items);
     await setCachedPayload(payload);
     return { payload, fromCache: false };

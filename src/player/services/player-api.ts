@@ -74,7 +74,7 @@ export async function pairScreen(code: string, fingerprint: string): Promise<Pai
         osName: string;
         playerVersion: string;
       },
-      { paired: boolean; screen: PairingResult | null }
+      { paired: boolean; screen: PairingResult | null; device_id?: string; auth_token?: string }
     >("pair-screen", {
       pairingCode,
       deviceFingerprint: fingerprint,
@@ -86,22 +86,21 @@ export async function pairScreen(code: string, fingerprint: string): Promise<Pai
     if (!result.screen) {
       throw new Error(mapPairingRpcError("invalid or expired pairing code"));
     }
-    return result.screen;
+    return {
+      ...result.screen,
+      ...(result.device_id ? { device_id: result.device_id } : {}),
+      ...(result.auth_token ? { auth_token: result.auth_token } : {}),
+    };
   } catch (e) {
     const raw = e instanceof Error ? e.message : "";
     throw new Error(mapPairingRpcError(raw));
   }
 }
 
-export async function resolveScreenPayload(screenId: string): Promise<PlayerPayload> {
-  const response = await postFunction<
-    { screenId: string },
-    { payload: ResolveCampaignResult | null }
-  >("resolve-screen-playlist", {
-    screenId,
-  });
-
-  const p = response.payload;
+function mapResolvePayloadToPlayerPayload(
+  screenId: string,
+  p: ResolveCampaignResult | null | undefined,
+): PlayerPayload {
   const items = p?.items ?? [];
   if (items.length === 0) {
     throw new Error("Nenhum item ativo encontrado para esta tela.");
@@ -119,6 +118,51 @@ export async function resolveScreenPayload(screenId: string): Promise<PlayerPayl
   };
 
   return validatePayload(payload);
+}
+
+export async function resolveScreenPayload(screenId: string): Promise<PlayerPayload> {
+  const response = await postFunction<
+    { screenId: string },
+    { payload: ResolveCampaignResult | null }
+  >("resolve-screen-playlist", {
+    screenId,
+  });
+
+  return mapResolvePayloadToPlayerPayload(screenId, response.payload);
+}
+
+export async function resolvePlaylistWithDevice(deviceId: string, authToken: string): Promise<PlayerPayload> {
+  const response = await postFunction<
+    { device_id: string; auth_token: string },
+    { payload: ResolveCampaignResult | null }
+  >("device-resolve-playlist", {
+    device_id: deviceId,
+    auth_token: authToken,
+  });
+
+  const p = response.payload;
+  const sid = p?.screen_id ?? "";
+  if (!sid) throw new Error("Resposta inválida: falta screen_id na playlist.");
+  return mapResolvePayloadToPlayerPayload(sid, p);
+}
+
+export type DeviceResetPairingResult = {
+  ok: boolean;
+  device_id: string;
+  screen_id: string;
+  pairing_code: string;
+  pairing_code_expires_at: string;
+  status: string;
+};
+
+export async function resetDevicePairing(deviceId: string, authToken: string): Promise<DeviceResetPairingResult> {
+  return await postFunction<{ device_id: string; auth_token: string }, DeviceResetPairingResult>(
+    "device-reset-pairing",
+    {
+      device_id: deviceId,
+      auth_token: authToken,
+    },
+  );
 }
 
 export async function sendHeartbeat(params: {

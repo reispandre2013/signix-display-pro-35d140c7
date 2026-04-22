@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { createServerFn } from "@tanstack/react-start";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { normalizePlayerPlatform, type PlayerPlatform } from "@/lib/platform-capabilities";
@@ -10,6 +11,10 @@ import {
 
 function normalizeCode(raw: string) {
   return raw.trim().toUpperCase().replace(/\s+/g, "");
+}
+
+function sha256HexUtf8(value: string): string {
+  return createHash("sha256").update(value, "utf8").digest("hex");
 }
 
 async function assertScreenCredentials(screenId: string, pairingCode: string) {
@@ -27,9 +32,33 @@ async function assertScreenCredentials(screenId: string, pairingCode: string) {
   return screen;
 }
 
+/** Valida device_id + auth_token (hash SHA-256) e devolve o screen_id associado. */
+async function assertDeviceCredentials(deviceId: string, authToken: string, expectedScreenId: string) {
+  const presented = sha256HexUtf8(authToken);
+  const { data: dev, error } = await supabaseAdmin
+    .from("player_devices")
+    .select("id, screen_id, auth_secret_hash, pairing_status")
+    .eq("id", deviceId)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!dev?.screen_id) throw new Error("Dispositivo não encontrado.");
+  if (String(dev.screen_id) !== String(expectedScreenId)) {
+    throw new Error("Dispositivo não corresponde a esta tela.");
+  }
+  if (!dev.auth_secret_hash || dev.auth_secret_hash !== presented) {
+    throw new Error("Token do dispositivo inválido ou revogado.");
+  }
+  if (dev.pairing_status !== "active") {
+    throw new Error("Dispositivo pendente de novo pareamento.");
+  }
+  return dev;
+}
+
 type HeartbeatInput = {
   screen_id: string;
-  pairing_code: string;
+  pairing_code?: string;
+  device_id?: string;
+  auth_token?: string;
   platform?: string;
   app_version?: string | null;
   network_status?: string | null;
@@ -46,11 +75,18 @@ function validateHeartbeat(input: unknown): HeartbeatInput {
   if (typeof input !== "object" || input === null) throw new Error("Payload inválido.");
   const o = input as Record<string, unknown>;
   if (typeof o.screen_id !== "string" || !o.screen_id) throw new Error("screen_id obrigatório.");
-  if (typeof o.pairing_code !== "string" || normalizeCode(o.pairing_code).length < 4)
-    throw new Error("pairing_code obrigatório.");
+  const device_id = typeof o.device_id === "string" ? o.device_id.trim() : "";
+  const auth_token = typeof o.auth_token === "string" ? o.auth_token : "";
+  const hasDevice = Boolean(device_id && auth_token);
+  const pairing_code = typeof o.pairing_code === "string" ? o.pairing_code : "";
+  if (!hasDevice && normalizeCode(pairing_code).length < 4) {
+    throw new Error("pairing_code ou (device_id + auth_token) obrigatório.");
+  }
   return {
     screen_id: o.screen_id,
-    pairing_code: o.pairing_code as string,
+    pairing_code: hasDevice ? undefined : pairing_code,
+    device_id: hasDevice ? device_id : undefined,
+    auth_token: hasDevice ? auth_token : undefined,
     platform: typeof o.platform === "string" ? o.platform : undefined,
     app_version: typeof o.app_version === "string" ? o.app_version : null,
     network_status: typeof o.network_status === "string" ? o.network_status : null,
@@ -71,7 +107,11 @@ function validateHeartbeat(input: unknown): HeartbeatInput {
 export const postPlayerHeartbeat = createServerFn({ method: "POST" })
   .inputValidator(validateHeartbeat)
   .handler(async ({ data }) => {
-    await assertScreenCredentials(data.screen_id, data.pairing_code);
+    if (data.device_id && data.auth_token) {
+      await assertDeviceCredentials(data.device_id, data.auth_token, data.screen_id);
+    } else {
+      await assertScreenCredentials(data.screen_id, data.pairing_code ?? "");
+    }
     const platform = normalizePlayerPlatform(data.platform) as PlayerPlatform;
     const now = new Date().toISOString();
     const resolution =
@@ -164,7 +204,9 @@ export const postPlayerLog = createServerFn({ method: "POST" })
 
 type GetPlaylistInput = {
   screen_id: string;
-  pairing_code: string;
+  pairing_code?: string;
+  device_id?: string;
+  auth_token?: string;
   platform?: string;
   etag?: string | null;
 };
@@ -173,10 +215,18 @@ function validateGetPlaylist(input: unknown): GetPlaylistInput {
   if (typeof input !== "object" || input === null) throw new Error("Payload inválido.");
   const o = input as Record<string, unknown>;
   if (typeof o.screen_id !== "string" || !o.screen_id) throw new Error("screen_id obrigatório.");
-  if (typeof o.pairing_code !== "string") throw new Error("pairing_code obrigatório.");
+  const device_id = typeof o.device_id === "string" ? o.device_id.trim() : "";
+  const auth_token = typeof o.auth_token === "string" ? o.auth_token : "";
+  const hasDevice = Boolean(device_id && auth_token);
+  const pairing_code = typeof o.pairing_code === "string" ? o.pairing_code : "";
+  if (!hasDevice && normalizeCode(pairing_code).length < 4) {
+    throw new Error("pairing_code ou (device_id + auth_token) obrigatório.");
+  }
   return {
     screen_id: o.screen_id,
-    pairing_code: o.pairing_code as string,
+    pairing_code: hasDevice ? undefined : pairing_code,
+    device_id: hasDevice ? device_id : undefined,
+    auth_token: hasDevice ? auth_token : undefined,
     platform: typeof o.platform === "string" ? o.platform : undefined,
     etag: typeof o.etag === "string" ? o.etag : null,
   };
@@ -198,7 +248,11 @@ function mapResolutionSourceForPlayer(s: PlaylistResolutionSource): "playlist_it
 export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
   .inputValidator(validateGetPlaylist)
   .handler(async ({ data }) => {
-    await assertScreenCredentials(data.screen_id, data.pairing_code);
+    if (data.device_id && data.auth_token) {
+      await assertDeviceCredentials(data.device_id, data.auth_token, data.screen_id);
+    } else {
+      await assertScreenCredentials(data.screen_id, data.pairing_code ?? "");
+    }
 
     const resolved = await resolveScreenPlaylistPayload(supabaseAdmin, data.screen_id);
     if (!resolved.organization_id) throw new Error("Tela não encontrada.");
@@ -242,7 +296,9 @@ export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
 
 type SyncAckInput = {
   screen_id: string;
-  pairing_code: string;
+  pairing_code?: string;
+  device_id?: string;
+  auth_token?: string;
   platform?: string;
   sync_type: string;
   sync_status: string;
@@ -254,12 +310,20 @@ function validateSyncAck(input: unknown): SyncAckInput {
   if (typeof input !== "object" || input === null) throw new Error("Payload inválido.");
   const o = input as Record<string, unknown>;
   if (typeof o.screen_id !== "string" || !o.screen_id) throw new Error("screen_id obrigatório.");
-  if (typeof o.pairing_code !== "string") throw new Error("pairing_code obrigatório.");
+  const device_id = typeof o.device_id === "string" ? o.device_id.trim() : "";
+  const auth_token = typeof o.auth_token === "string" ? o.auth_token : "";
+  const hasDevice = Boolean(device_id && auth_token);
+  const pairing_code = typeof o.pairing_code === "string" ? o.pairing_code : "";
+  if (!hasDevice && normalizeCode(pairing_code).length < 4) {
+    throw new Error("pairing_code ou (device_id + auth_token) obrigatório.");
+  }
   if (typeof o.sync_type !== "string" || !o.sync_type.trim()) throw new Error("sync_type obrigatório.");
   if (typeof o.sync_status !== "string" || !o.sync_status.trim()) throw new Error("sync_status obrigatório.");
   return {
     screen_id: o.screen_id,
-    pairing_code: o.pairing_code as string,
+    pairing_code: hasDevice ? undefined : pairing_code,
+    device_id: hasDevice ? device_id : undefined,
+    auth_token: hasDevice ? auth_token : undefined,
     platform: typeof o.platform === "string" ? o.platform : undefined,
     sync_type: o.sync_type.trim(),
     sync_status: o.sync_status.trim(),
@@ -272,7 +336,11 @@ function validateSyncAck(input: unknown): SyncAckInput {
 export const postPlayerSyncAck = createServerFn({ method: "POST" })
   .inputValidator(validateSyncAck)
   .handler(async ({ data }) => {
-    await assertScreenCredentials(data.screen_id, data.pairing_code);
+    if (data.device_id && data.auth_token) {
+      await assertDeviceCredentials(data.device_id, data.auth_token, data.screen_id);
+    } else {
+      await assertScreenCredentials(data.screen_id, data.pairing_code ?? "");
+    }
     const platform = normalizePlayerPlatform(data.platform) as PlayerPlatform;
     const now = new Date().toISOString();
 

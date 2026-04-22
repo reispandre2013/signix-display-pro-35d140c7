@@ -34,6 +34,9 @@ export interface PairingResult {
   paired: boolean;
   /** android | tizen — devolvido pela RPC após migration 20260419120000. */
   platform?: string;
+  /** Presente quando a edge `pair-screen` emitiu credenciais persistentes. */
+  device_id?: string;
+  auth_token?: string;
 }
 
 export interface LocalScreenCredentials {
@@ -42,6 +45,11 @@ export interface LocalScreenCredentials {
   screenName: string;
   fingerprint: string;
   pairedAt: string;
+  /** Credenciais persistentes (edge `pair-screen` / `device-reset-pairing`). */
+  deviceId?: string;
+  authToken?: string;
+  /** Após `device-reset-pairing`, código na tela até novo `pair-screen`. */
+  pairingCode?: string;
 }
 
 export interface PlaybackLog {

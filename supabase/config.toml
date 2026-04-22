@@ -1,5 +1,5 @@
 # Configuracao local do Supabase CLI (ajuste o project_id ao vincular ao projeto remoto).
-project_id = "SEU_PROJECT_ID"
+project_id = "auhwylnhqmdgphsvjszr"
 
 [api]
 enabled = true

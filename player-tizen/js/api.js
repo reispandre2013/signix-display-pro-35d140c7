@@ -131,6 +131,29 @@
       });
     }
 
+    /** Prefer `device-resolve-playlist` quando a TV tem token persistente. */
+    function resolvePlaylistPayload(creds) {
+      if (creds && creds.playerDeviceId && creds.authToken) {
+        return postFunction("device-resolve-playlist", {
+          device_id: creds.playerDeviceId,
+          auth_token: creds.authToken,
+        }).then(function (data) {
+          return data && data.payload != null ? data.payload : null;
+        });
+      }
+      if (!creds || !creds.screenId) {
+        return Promise.reject(new Error("Sem credenciais de tela."));
+      }
+      return resolveScreenPayload(creds.screenId);
+    }
+
+    function resetDevicePairing(deviceId, authToken) {
+      return postFunction("device-reset-pairing", {
+        device_id: deviceId,
+        auth_token: authToken,
+      });
+    }
+
     function sendHeartbeat(params) {
       return postFunction("heartbeat-screen", {
         screenId: params.screenId,
@@ -168,6 +191,8 @@
       checkAnonymousPairingStatus: checkAnonymousPairingStatus,
       pairScreen: pairScreen,
       resolveScreenPayload: resolveScreenPayload,
+      resolvePlaylistPayload: resolvePlaylistPayload,
+      resetDevicePairing: resetDevicePairing,
       sendHeartbeat: sendHeartbeat,
       sendPlaybackLog: sendPlaybackLog,
     };

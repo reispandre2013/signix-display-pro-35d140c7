@@ -66,6 +66,21 @@ export interface Unit {
 
 export type PlaylistFitMode = "contain" | "cover" | "stretch" | "center" | "fit-width" | "fit-height";
 
+/** Registo 1:1 com `screens` para credenciais do player (device_id + token). */
+export interface PlayerDevice {
+  id: string;
+  screen_id: string;
+  device_name: string;
+  auth_secret_hash: string | null;
+  auth_issued_at: string | null;
+  pairing_status: "active" | "pending_pairing";
+  playlist_id: string | null;
+  last_seen_at: string | null;
+  pairing_reset_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface Screen {
   id: string;
   organization_id: string;

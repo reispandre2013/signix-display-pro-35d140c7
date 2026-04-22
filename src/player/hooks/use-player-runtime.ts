@@ -3,7 +3,7 @@ import { DEFAULT_PLAYER_SETTINGS } from "@/player/config";
 import { useNetworkStatus } from "@/player/hooks/use-network-status";
 import { getCachedMediaUrl } from "@/player/services/media-cache";
 import { flushQueuedLogs, queuePlaybackLog } from "@/player/services/log-queue";
-import { pairScreen, sendHeartbeat } from "@/player/services/player-api";
+import { pairScreen, resetDevicePairing, sendHeartbeat } from "@/player/services/player-api";
 import { syncPlayerPayload } from "@/player/services/sync-service";
 import {
   clearCredentials,
@@ -101,7 +101,7 @@ export function usePlayerRuntime() {
     if (!credentials) return;
     setIsSyncing(true);
     try {
-      const result = await syncPlayerPayload(credentials.screenId);
+      const result = await syncPlayerPayload(credentials);
       setPayload(result.payload);
       setCurrentIndex(0);
       setStage(result.payload.items.length > 0 ? "playing" : "fallback");
@@ -128,6 +128,8 @@ export function usePlayerRuntime() {
           screenName: screen.screen_name,
           fingerprint: buildFingerprint(),
           pairedAt: new Date().toISOString(),
+          ...(screen.device_id ? { deviceId: screen.device_id } : {}),
+          ...(screen.auth_token ? { authToken: screen.auth_token } : {}),
         };
         await setCredentials(creds);
         setCredentialsState(creds);
@@ -148,6 +150,33 @@ export function usePlayerRuntime() {
     setCurrentIndex(0);
     setStage("activation");
   }, []);
+
+  const rotateDevicePairing = useCallback(async () => {
+    const c = credentials;
+    if (!c?.deviceId || !c.authToken) {
+      safeSetError("Esta tela ainda não tem credenciais de dispositivo. Use «Repor pareamento».");
+      return;
+    }
+    setStage("loading");
+    try {
+      const res = await resetDevicePairing(c.deviceId, c.authToken);
+      const next: LocalScreenCredentials = {
+        ...c,
+        authToken: undefined,
+        pairingCode: res.pairing_code,
+        deviceId: res.device_id,
+      };
+      await setCredentials(next);
+      setCredentialsState(next);
+      safeSetError(
+        "Novo código gerado. Confirme no painel e introduza o código em Ativação (ou aguarde o próximo sync se o código já estiver gravado).",
+      );
+      setStage("activation");
+    } catch (e) {
+      safeSetError(e instanceof Error ? e.message : "Falha ao gerar novo código.");
+      setStage("playing");
+    }
+  }, [credentials, safeSetError]);
 
   const updateSettings = useCallback((next: PlayerSettings) => {
     setSettingsState(next);
@@ -313,5 +342,6 @@ export function usePlayerRuntime() {
     updateSettings,
     setAdminVisible,
     resetPlayer,
+    rotateDevicePairing,
   };
 }

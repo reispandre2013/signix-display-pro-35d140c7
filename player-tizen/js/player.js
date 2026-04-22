@@ -376,7 +376,7 @@
       }
 
       return api
-        .resolveScreenPayload(creds.screenId)
+        .resolvePlaylistPayload(creds)
         .then(function (raw) {
           var internal = Adapter.internalPayloadFromResolve(raw);
           if (internal.items.length) {

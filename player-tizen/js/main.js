@@ -39,7 +39,7 @@
     el.classList.toggle("is-offline", !online);
   }
 
-  /** Instalações antigas só tinham screenId (resolve/heartbeat bastam). */
+  /** screenId obrigatório; resolve com token de dispositivo ou código / só id (legado). */
   function hasPlaybackCredentials(creds) {
     return !!(creds && creds.screenId);
   }
@@ -101,6 +101,7 @@
     var btnAdminClose = $("btn-admin-close");
     var btnAdminRepair = $("btn-admin-repair");
     var btnAdminUnlink = $("btn-admin-unlink");
+    var btnRotatePairing = $("btn-rotate-pairing");
 
     var debugVisible = false;
     var pollTimer = null;
@@ -360,15 +361,26 @@
           if (res.paired && res.screen_id) {
             clearPoll();
             var normalized = Adapter.normalizePairingCode(currentPairingCode);
-            afterPairSuccess({
-              screenId: res.screen_id,
-              pairingCode: normalized,
-              authToken: res.auth_token || res.token || normalized,
-              screenName: res.screen_name || "",
-              deviceId: res.screen_id,
-              organizationId: "",
-              pairedAt: new Date().toISOString(),
-            });
+            var fpPair =
+              "fp-tizen-" +
+              (typeof navigator !== "undefined" && navigator.userAgent ? navigator.userAgent.length : 8);
+            api
+              .pairScreen(normalized, fpPair)
+              .then(function (body) {
+                var c = Adapter.credentialsFromPairScreen(body);
+                afterPairSuccess({
+                  screenId: c.screenId,
+                  pairingCode: normalized,
+                  screenName: c.screenName || "",
+                  playerDeviceId: c.playerDeviceId,
+                  authToken: c.authToken,
+                  organizationId: c.organizationId || "",
+                  pairedAt: new Date().toISOString(),
+                });
+              })
+              .catch(function (e) {
+                runPairingError(e instanceof Error ? e.message : "Falha ao finalizar pareamento na TV.");
+              });
           }
         })
         .catch(function (e) {
@@ -453,15 +465,56 @@
       });
     }
     if (btnReset) btnReset.addEventListener("click", onReset);
+
+    function runDeviceRotatePairing() {
+      var creds = Storage.getCredentials();
+      if (!creds || !creds.playerDeviceId || !creds.authToken) {
+        runPairingError("Sem token de dispositivo. Use Repor para novo pareamento completo.");
+        return;
+      }
+      api
+        .resetDevicePairing(creds.playerDeviceId, creds.authToken)
+        .then(function (r) {
+          runPairingError("");
+          creds.authToken = null;
+          creds.pairingCode = r.pairing_code;
+          creds.playerDeviceId = r.device_id;
+          Storage.setCredentials(creds);
+          player.reset();
+          Storage.clearCachedPayload();
+          showStage("pairing");
+          renderCodeVisual(r.pairing_code);
+          if (pairingStatusEl) {
+            pairingStatusEl.textContent =
+              "Novo código. Confirme no painel e prima Enter para voltar a reproduzir.";
+          }
+        })
+        .catch(function (e) {
+          logger.error("[rotate-pairing]", e);
+          runPairingError(e instanceof Error ? e.message : "Falha ao gerar novo código.");
+        });
+    }
+
     if (btnAdminClose) btnAdminClose.addEventListener("click", closeAdminMenu);
     if (btnAdminRepair) {
       btnAdminRepair.addEventListener("click", function () {
-        resetPairing({ clearCache: false });
+        var creds = Storage.getCredentials();
+        if (creds && creds.playerDeviceId && creds.authToken) {
+          closeAdminMenu();
+          runDeviceRotatePairing();
+        } else {
+          resetPairing({ clearCache: false });
+        }
       });
     }
     if (btnAdminUnlink) {
       btnAdminUnlink.addEventListener("click", function () {
         resetPairing();
+      });
+    }
+    if (btnRotatePairing) {
+      btnRotatePairing.addEventListener("click", function () {
+        runDeviceRotatePairing();
       });
     }
     if (syncBtn) {
@@ -504,6 +557,28 @@
       },
       onEnter: function () {
         if (stagePairing && !stagePairing.hidden) {
+          var st = Storage.getCredentials();
+          if (st && st.screenId && st.pairingCode && !st.authToken) {
+            var fpE = "fp-tizen-enter";
+            api
+              .pairScreen(Adapter.normalizePairingCode(st.pairingCode), fpE)
+              .then(function (body) {
+                var c = Adapter.credentialsFromPairScreen(body);
+                afterPairSuccess({
+                  screenId: c.screenId,
+                  pairingCode: Adapter.normalizePairingCode(st.pairingCode),
+                  screenName: c.screenName || "",
+                  playerDeviceId: c.playerDeviceId,
+                  authToken: c.authToken,
+                  organizationId: c.organizationId || "",
+                  pairedAt: new Date().toISOString(),
+                });
+              })
+              .catch(function (e) {
+                runPairingError(e instanceof Error ? e.message : "Código inválido ou expirado.");
+              });
+            return;
+          }
           pollOnce();
           return;
         }

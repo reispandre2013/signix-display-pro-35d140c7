@@ -3,6 +3,13 @@ import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
 import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
 import { initAndroidTvShell } from "@/player/capacitor/android-shell";
+import {
+  PLAYER_LS_AUTH_TOKEN,
+  PLAYER_LS_DEVICE_ID,
+  PLAYER_LS_PAIRING_CODE,
+  PLAYER_LS_PAIRING_CODE_EXP,
+  PLAYER_LS_SCREEN_ID,
+} from "@/player/player-storage-keys";
 
 export const Route = createFileRoute("/pareamento")({
   head: () => ({ meta: [{ title: "Pareamento de Player — Signix" }] }),
@@ -14,10 +21,12 @@ export const Route = createFileRoute("/pareamento")({
   component: PairingPage,
 });
 
-const STORAGE_KEY = "signix_pairing_code";
-const STORAGE_EXP_KEY = "signix_pairing_code_exp";
-/** Gravado após pareamento — usado por `/player-screen` para sync. */
-export const STORAGE_SCREEN_ID = "signix_screen_id";
+const STORAGE_KEY = PLAYER_LS_PAIRING_CODE;
+const STORAGE_EXP_KEY = PLAYER_LS_PAIRING_CODE_EXP;
+/** Re-export para compatibilidade com imports antigos. */
+export const STORAGE_SCREEN_ID = PLAYER_LS_SCREEN_ID;
+export const STORAGE_DEVICE_ID = PLAYER_LS_DEVICE_ID;
+export const STORAGE_AUTH_TOKEN = PLAYER_LS_AUTH_TOKEN;
 
 function PairingPage() {
   const { platform: platformSearch } = Route.useSearch();
@@ -49,7 +58,9 @@ function PairingPage() {
       console.error("[pareamento] generateCode failed:", e);
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_EXP_KEY);
-      localStorage.removeItem(STORAGE_SCREEN_ID);
+      localStorage.removeItem(PLAYER_LS_SCREEN_ID);
+      localStorage.removeItem(PLAYER_LS_DEVICE_ID);
+      localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
       setCode(null);
       const msg = e instanceof Error ? e.message : String(e);
       setCodeError(
@@ -73,7 +84,9 @@ function PairingPage() {
     } else {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_EXP_KEY);
-      localStorage.removeItem(STORAGE_SCREEN_ID);
+      localStorage.removeItem(PLAYER_LS_SCREEN_ID);
+      localStorage.removeItem(PLAYER_LS_DEVICE_ID);
+      localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
       generateCode();
     }
   }, [playerPlatform]);
@@ -87,7 +100,7 @@ function PairingPage() {
       try {
         const res = await checkPairingStatus({ data: { code } });
         if (!cancelled && res?.paired) {
-          if (res.screen_id) localStorage.setItem(STORAGE_SCREEN_ID, res.screen_id);
+          if (res.screen_id) localStorage.setItem(PLAYER_LS_SCREEN_ID, res.screen_id);
           setPaired(true);
         }
       } catch {
@@ -101,6 +114,28 @@ function PairingPage() {
       clearInterval(interval);
     };
   }, [code, paired]);
+
+  /** Completa o pareamento na BD (RPC) e obtém device_id + auth_token para o player. */
+  useEffect(() => {
+    if (!paired || !code) return;
+    let cancelled = false;
+    const fp = `web-${typeof window !== "undefined" ? window.screen?.width ?? 0 : 0}-${typeof navigator !== "undefined" ? navigator.userAgent : ""}`;
+    void import("@/player/services/player-api")
+      .then(({ pairScreen }) => pairScreen(code, fp))
+      .then((pr) => {
+        if (cancelled) return;
+        if (pr.device_id && pr.auth_token) {
+          localStorage.setItem(PLAYER_LS_DEVICE_ID, pr.device_id);
+          localStorage.setItem(PLAYER_LS_AUTH_TOKEN, pr.auth_token);
+        }
+      })
+      .catch((e) => {
+        console.warn("[pareamento] pair-screen após vínculo:", e);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [paired, code]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background bg-mesh">
@@ -188,7 +223,9 @@ function PairingPage() {
                 onClick={() => {
                   localStorage.removeItem(STORAGE_KEY);
                   localStorage.removeItem(STORAGE_EXP_KEY);
-                  localStorage.removeItem(STORAGE_SCREEN_ID);
+                  localStorage.removeItem(PLAYER_LS_SCREEN_ID);
+                  localStorage.removeItem(PLAYER_LS_DEVICE_ID);
+                  localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
                   generateCode();
                 }}
                 disabled={loading}

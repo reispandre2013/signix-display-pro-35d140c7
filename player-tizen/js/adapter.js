@@ -99,12 +99,14 @@
     var s = body.screen;
     return {
       screenId: s.screen_id,
-      organizationId: s.organization_id,
+      organizationId: s.organization_id != null ? String(s.organization_id) : "",
       screenName: s.screen_name || "",
       unitId: s.unit_id != null ? s.unit_id : null,
       platform: s.platform || "tizen",
       fingerprint: null,
       pairedAt: new Date().toISOString(),
+      playerDeviceId: body.device_id != null ? String(body.device_id) : null,
+      authToken: body.auth_token != null ? String(body.auth_token) : null,
     };
   }
 

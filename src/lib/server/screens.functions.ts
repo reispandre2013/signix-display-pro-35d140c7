@@ -133,6 +133,15 @@ export const claimPairingCode = createServerFn({ method: "POST" })
       .single();
     if (screenErr) throw new Error(screenErr.message);
 
+    const { error: devInsErr } = await supabaseAdmin.from("player_devices").insert({
+      screen_id: screen.id as string,
+      device_name: data.name,
+      pairing_status: "pending_pairing",
+    });
+    if (devInsErr) {
+      console.warn("[claimPairingCode] player_devices (opcional):", devInsErr.message);
+    }
+
     // Marca código como usado e vincula
     const { error: updErr } = await supabaseAdmin
       .from("pairing_codes")
