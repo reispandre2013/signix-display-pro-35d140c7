@@ -4,8 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 
 const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
 
-const SUPABASE_URL =
-  process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? FALLBACK_SUPABASE_URL;
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? FALLBACK_SUPABASE_URL;
 const SERVICE_ROLE_KEY =
   process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
 
