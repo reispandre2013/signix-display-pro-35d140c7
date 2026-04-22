@@ -173,20 +173,17 @@ function CreateUserDialog({
         data: payload,
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!raw || typeof raw !== "object") {
-        throw new Error(
-          "Resposta vazia do servidor. Confirme SERVICE_ROLE_KEY no deploy e tente novamente.",
-        );
+      // Em alguns hosts o RPC devolve 200 sem corpo JSON; se não houve throw, o handler correu.
+      let mode: "password" | "invite" = payload.mode;
+      let email = payload.email;
+      if (raw && typeof raw === "object") {
+        const body = raw as { ok?: unknown; mode?: unknown; email?: unknown };
+        if (body.ok === false) {
+          throw new Error("O servidor não confirmou a criação do utilizador.");
+        }
+        if (body.mode === "invite" || body.mode === "password") mode = body.mode;
+        if (typeof body.email === "string") email = body.email;
       }
-      const body = raw as { ok?: unknown; mode?: unknown; email?: unknown };
-      if (!body.ok) {
-        throw new Error("O servidor não confirmou a criação do utilizador.");
-      }
-      const modeFrom = body.mode;
-      const emailFrom = body.email;
-      const mode =
-        modeFrom === "invite" || modeFrom === "password" ? modeFrom : payload.mode;
-      const email = typeof emailFrom === "string" ? emailFrom : payload.email;
       return { ok: true as const, mode, email };
     },
     onSuccess: (res) => {
