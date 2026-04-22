@@ -101,7 +101,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
     }
     try {
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const emailNorm = email.trim().toLowerCase();
+      const { error } = await supabase.auth.signInWithPassword({ email: emailNorm, password });
       return { error };
     } catch (err) {
       return { error: mapAuthError(err, "Não foi possível entrar.") };

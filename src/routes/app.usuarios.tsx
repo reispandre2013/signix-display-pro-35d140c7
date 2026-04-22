@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { createOrgUser } from "@/lib/server/users.functions";
 import { supabase } from "@/integrations/supabase/client";
+import type { Profile } from "@/lib/db-types";
 import {
   Dialog,
   DialogContent,
@@ -186,16 +187,29 @@ function CreateUserDialog({
       }
       return { ok: true as const, mode, email };
     },
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       toast.success(
         res.mode === "invite"
           ? `Convite enviado para ${res.email}.`
           : `Usuário ${res.email} criado com sucesso.`,
       );
+      const listKey = organizationId
+        ? (["users_profiles", organizationId] as const)
+        : (["users_profiles"] as const);
+      await qc.refetchQueries({ queryKey: listKey, type: "active" });
       if (organizationId) {
-        void qc.invalidateQueries({ queryKey: ["users_profiles", organizationId] });
-      } else {
-        void qc.invalidateQueries({ queryKey: ["users_profiles"] });
+        const list = qc.getQueryData<Profile[]>(listKey);
+        const want = res.email.trim().toLowerCase();
+        if (Array.isArray(list) && !list.some((p) => p.email.toLowerCase() === want)) {
+          await qc.refetchQueries({ queryKey: ["users_profiles"] });
+          const list2 = qc.getQueryData<Profile[]>(listKey);
+          if (Array.isArray(list2) && !list2.some((p) => p.email.toLowerCase() === want)) {
+            toast.warning(
+              "A lista ainda não mostra o utilizador. Atualize a página (F5). Se persistir, confirme SERVICE_ROLE_KEY e as migrações no Supabase.",
+              { duration: 9000 },
+            );
+          }
+        }
       }
       reset();
       onOpenChange(false);

@@ -37,7 +37,11 @@ function LoginPage() {
     const { error } = await signIn(email.trim(), password);
     setSubmitting(false);
     if (error) {
-      toast.error(error.message ?? "Não foi possível entrar.");
+      const raw = error.message ?? "";
+      const msg = /invalid login credentials/i.test(raw)
+        ? "E-mail ou senha incorretos. Use o e-mail em minúsculas e a senha definida ao criar o utilizador. Se o acesso foi só por convite por e-mail, conclua o link do convite antes de entrar com senha aqui."
+        : raw || "Não foi possível entrar.";
+      toast.error(msg);
       return;
     }
     toast.success("Bem-vindo!");
