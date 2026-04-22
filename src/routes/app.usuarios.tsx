@@ -163,10 +163,24 @@ function CreateUserDialog({
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData.session?.access_token;
       if (!token) throw new Error("Sessão expirada. Entre novamente.");
-      return createUserFn({
+      const raw = await createUserFn({
         data: payload,
         headers: { Authorization: `Bearer ${token}` },
       });
+      // O RPC pode devolver corpo vazio ou formato inesperado em alguns hosts;
+      // nunca deixe `onSuccess` sem `mode`/`email` (evita "reading 'mode'").
+      const modeFrom =
+        raw && typeof raw === "object" && "mode" in raw
+          ? (raw as { mode?: unknown }).mode
+          : undefined;
+      const emailFrom =
+        raw && typeof raw === "object" && "email" in raw
+          ? (raw as { email?: unknown }).email
+          : undefined;
+      const mode =
+        modeFrom === "invite" || modeFrom === "password" ? modeFrom : payload.mode;
+      const email = typeof emailFrom === "string" ? emailFrom : payload.email;
+      return { ok: true as const, mode, email };
     },
     onSuccess: (res) => {
       toast.success(
