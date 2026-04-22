@@ -1,22 +1,26 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Tv, Mail, Lock, User, Building2, ArrowRight, Loader2 } from "lucide-react";
+import { Tv, Mail, Lock, User, KeyRound, ArrowRight, Loader2 } from "lucide-react";
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
-import { useAuth } from "@/lib/auth-context";
+import { useServerFn } from "@tanstack/react-start";
+import { registerPublicEmployee } from "@/lib/server/public-signup.functions";
 
 export const Route = createFileRoute("/signup")({
   head: () => ({ meta: [{ title: "Criar conta — Signix" }] }),
   component: SignupPage,
 });
 
+type PublicRole = "operador" | "visualizador";
+
 function SignupPage() {
   const [name, setName] = useState("");
-  const [orgName, setOrgName] = useState("");
+  const [orgToken, setOrgToken] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<PublicRole>("operador");
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { signUp } = useAuth();
+  const registerFn = useServerFn(registerPublicEmployee);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -25,14 +29,23 @@ function SignupPage() {
       return;
     }
     setSubmitting(true);
-    const { error } = await signUp(email.trim(), password, name.trim(), orgName.trim());
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message ?? "Não foi possível criar a conta.");
-      return;
+    try {
+      await registerFn({
+        data: {
+          name: name.trim(),
+          email: email.trim(),
+          password,
+          org_token: orgToken.trim(),
+          role,
+        },
+      });
+      toast.success("Conta criada! Já pode entrar com o seu e-mail e senha.");
+      navigate({ to: "/login", replace: true });
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Não foi possível criar a conta.");
+    } finally {
+      setSubmitting(false);
     }
-    toast.success("Conta criada! Verifique seu e-mail se a confirmação estiver ativada.");
-    navigate({ to: "/app", replace: true });
   };
 
   return (
@@ -46,14 +59,37 @@ function SignupPage() {
         </div>
         <h2 className="font-display text-2xl font-bold">Criar nova conta</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Você será o <span className="text-foreground font-semibold">Admin Master</span> da nova organização.
+          Cadastro público limitado a Operador ou Visualizador. Peça ao Admin Master o código da sua organização
+          (em Configurações do painel).
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
           <Field icon={User} label="Seu nome" value={name} onChange={setName} required placeholder="Ana Souza" />
-          <Field icon={Building2} label="Nome da organização" value={orgName} onChange={setOrgName} required placeholder="Minha Empresa" />
+          <Field
+            icon={KeyRound}
+            label="Código da organização"
+            value={orgToken}
+            onChange={setOrgToken}
+            required
+            placeholder="Código fornecido pelo Admin Master"
+          />
           <Field icon={Mail} label="E-mail" type="email" value={email} onChange={setEmail} required placeholder="voce@empresa.com" />
           <Field icon={Lock} label="Senha (mín. 6 caracteres)" type="password" value={password} onChange={setPassword} required placeholder="••••••••" />
+
+          <div>
+            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Perfil solicitado</label>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value as PublicRole)}
+              className="w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="operador">Operador</option>
+              <option value="visualizador">Visualizador</option>
+            </select>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              Admin Master e Gestor só podem ser criados por um Admin Master dentro do painel.
+            </p>
+          </div>
 
           <button
             type="submit"
@@ -73,7 +109,13 @@ function SignupPage() {
 }
 
 function Field({
-  icon: Icon, label, value, onChange, type = "text", required, placeholder,
+  icon: Icon,
+  label,
+  value,
+  onChange,
+  type = "text",
+  required,
+  placeholder,
 }: {
   icon: typeof Mail;
   label: string;

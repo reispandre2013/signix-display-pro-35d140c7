@@ -14,6 +14,8 @@ export interface Organization {
   id: string;
   name: string;
   slug: string;
+  /** Código secreto para cadastro público de colaboradores (Operador / Visualizador). */
+  employee_signup_token?: string | null;
   logo_url: string | null;
   cnpj: string | null;
   email: string | null;

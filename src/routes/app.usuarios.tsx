@@ -123,7 +123,11 @@ function UsersPage() {
         )}
       </Panel>
 
-      <CreateUserDialog open={open} onOpenChange={setOpen} />
+      <CreateUserDialog
+        open={open}
+        onOpenChange={setOpen}
+        organizationId={profile?.organization_id ?? null}
+      />
     </div>
   );
 }
@@ -131,9 +135,11 @@ function UsersPage() {
 function CreateUserDialog({
   open,
   onOpenChange,
+  organizationId,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
+  organizationId: string | null;
 }) {
   const qc = useQueryClient();
   const createUserFn = useServerFn(createOrgUser);
@@ -167,16 +173,17 @@ function CreateUserDialog({
         data: payload,
         headers: { Authorization: `Bearer ${token}` },
       });
-      // O RPC pode devolver corpo vazio ou formato inesperado em alguns hosts;
-      // nunca deixe `onSuccess` sem `mode`/`email` (evita "reading 'mode'").
-      const modeFrom =
-        raw && typeof raw === "object" && "mode" in raw
-          ? (raw as { mode?: unknown }).mode
-          : undefined;
-      const emailFrom =
-        raw && typeof raw === "object" && "email" in raw
-          ? (raw as { email?: unknown }).email
-          : undefined;
+      if (!raw || typeof raw !== "object") {
+        throw new Error(
+          "Resposta vazia do servidor. Confirme SERVICE_ROLE_KEY no deploy e tente novamente.",
+        );
+      }
+      const body = raw as { ok?: unknown; mode?: unknown; email?: unknown };
+      if (!body.ok) {
+        throw new Error("O servidor não confirmou a criação do utilizador.");
+      }
+      const modeFrom = body.mode;
+      const emailFrom = body.email;
       const mode =
         modeFrom === "invite" || modeFrom === "password" ? modeFrom : payload.mode;
       const email = typeof emailFrom === "string" ? emailFrom : payload.email;
@@ -188,7 +195,11 @@ function CreateUserDialog({
           ? `Convite enviado para ${res.email}.`
           : `Usuário ${res.email} criado com sucesso.`,
       );
-      qc.invalidateQueries({ queryKey: ["users_profiles"] });
+      if (organizationId) {
+        void qc.invalidateQueries({ queryKey: ["users_profiles", organizationId] });
+      } else {
+        void qc.invalidateQueries({ queryKey: ["users_profiles"] });
+      }
       reset();
       onOpenChange(false);
     },

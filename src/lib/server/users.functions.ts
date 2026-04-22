@@ -4,6 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const SUPABASE_URL = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL ?? "";
+const SERVICE_ROLE_KEY =
+  process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 const ANON_KEY =
   process.env.SUPABASE_ANON_KEY ??
   process.env.SUPABASE_PUBLISHABLE_KEY ??
@@ -48,6 +50,12 @@ function validate(input: unknown): CreateInput {
 export const createOrgUser = createServerFn({ method: "POST" })
   .inputValidator(validate)
   .handler(async ({ data }) => {
+    if (!SUPABASE_URL || !SERVICE_ROLE_KEY) {
+      throw new Error(
+        "Servidor sem SERVICE_ROLE_KEY / SUPABASE_URL. A criação de utilizadores não está disponível neste ambiente.",
+      );
+    }
+
     // 1) Identifica o caller via JWT do header Authorization
     const authHeader = getRequestHeader("authorization") ?? "";
     const token = authHeader.replace(/^Bearer\s+/i, "");
@@ -108,29 +116,44 @@ export const createOrgUser = createServerFn({ method: "POST" })
       .eq("auth_user_id", newAuthUserId)
       .maybeSingle();
 
-    if (existingProfile) {
-      const { error: updErr } = await supabaseAdmin
-        .from("profiles")
-        .update({
+    try {
+      if (existingProfile) {
+        const { error: updErr } = await supabaseAdmin
+          .from("profiles")
+          .update({
+            organization_id: orgId,
+            name: data.name,
+            email: data.email,
+            role: data.role,
+            status: "active",
+          })
+          .eq("id", existingProfile.id);
+        if (updErr) throw new Error(updErr.message);
+      } else {
+        const { error: insErr } = await supabaseAdmin.from("profiles").insert({
+          auth_user_id: newAuthUserId,
           organization_id: orgId,
           name: data.name,
           email: data.email,
           role: data.role,
           status: "active",
-        })
-        .eq("id", existingProfile.id);
-      if (updErr) throw new Error(updErr.message);
-    } else {
-      const { error: insErr } = await supabaseAdmin.from("profiles").insert({
-        auth_user_id: newAuthUserId,
-        organization_id: orgId,
-        name: data.name,
-        email: data.email,
-        role: data.role,
-        status: "active",
-      });
-      if (insErr) throw new Error(insErr.message);
+        });
+        if (insErr) throw new Error(insErr.message);
+      }
+    } catch (e) {
+      await supabaseAdmin.auth.admin.deleteUser(newAuthUserId).catch(() => {});
+      throw e instanceof Error ? e : new Error("Falha ao gravar perfil.");
     }
 
-    return { ok: true, mode: data.mode, email: data.email };
+    const { data: verify, error: verErr } = await supabaseAdmin
+      .from("profiles")
+      .select("id, organization_id, email, role")
+      .eq("auth_user_id", newAuthUserId)
+      .maybeSingle();
+    if (verErr || !verify || verify.organization_id !== orgId) {
+      await supabaseAdmin.auth.admin.deleteUser(newAuthUserId).catch(() => {});
+      throw new Error("Não foi possível confirmar o utilizador criado. Tente novamente.");
+    }
+
+    return { ok: true as const, mode: data.mode, email: data.email };
   });

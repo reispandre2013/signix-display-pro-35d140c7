@@ -3,7 +3,13 @@ import { useState } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { useAuth } from "@/lib/auth-context";
-import { Bell, Shield, Globe, Palette, Save, Moon, Sun, LogOut } from "lucide-react";
+import { useOrganization } from "@/lib/hooks/use-supabase-data";
+import { supabase } from "@/integrations/supabase/client";
+import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { rotateEmployeeSignupToken } from "@/lib/server/public-signup.functions";
+import { toast } from "sonner";
+import { Bell, Shield, Globe, Palette, Save, Moon, Sun, LogOut, Copy, RefreshCw, Loader2, KeyRound } from "lucide-react";
 
 export const Route = createFileRoute("/app/configuracoes")({
   head: () => ({ meta: [{ title: "Configurações — Signix" }] }),
@@ -12,7 +18,55 @@ export const Route = createFileRoute("/app/configuracoes")({
 
 function SettingsPage() {
   const { profile, user, signOut } = useAuth();
+  const orgQuery = useOrganization();
+  const qc = useQueryClient();
+  const rotateTokenFn = useServerFn(rotateEmployeeSignupToken);
+  const [rotatingToken, setRotatingToken] = useState(false);
   const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  const org = orgQuery.data;
+  const signupToken = org?.employee_signup_token ?? null;
+
+  const copySignupToken = async () => {
+    if (!signupToken) {
+      toast.error("Código indisponível. Aplique a migração da base ou atualize a página.");
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(signupToken);
+      toast.success("Código copiado.");
+    } catch {
+      toast.error("Não foi possível copiar.");
+    }
+  };
+
+  const regenerateSignupToken = async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData.session?.access_token;
+    if (!token) {
+      toast.error("Sessão expirada. Entre novamente.");
+      return;
+    }
+    setRotatingToken(true);
+    try {
+      const res = await rotateTokenFn({
+        data: {},
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res && typeof res === "object" && "ok" in res && (res as { ok?: boolean }).ok) {
+        toast.success("Novo código gerado. O anterior deixa de funcionar.");
+        if (profile?.organization_id) {
+          await qc.invalidateQueries({ queryKey: ["organization", profile.organization_id] });
+        }
+      } else {
+        toast.error("Resposta inválida do servidor.");
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não foi possível gerar novo código.");
+    } finally {
+      setRotatingToken(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -34,6 +88,54 @@ function SettingsPage() {
           <LogOut className="h-3.5 w-3.5" /> Sair da conta
         </button>
       </Panel>
+
+      {profile?.role === "admin_master" ? (
+        <Panel title="Cadastro público de colaboradores" actions={<KeyRound className="h-4 w-4 text-muted-foreground" />}>
+          <p className="text-xs text-muted-foreground mb-3">
+            Compartilhe este código com quem deve criar conta pela página &quot;Criar nova conta&quot;. Só é possível
+            cadastrar perfis de Operador ou Visualizador com este código (nunca Admin Master).
+          </p>
+          {orgQuery.isLoading ? (
+            <p className="text-sm text-muted-foreground">Carregando…</p>
+          ) : signupToken ? (
+            <div className="space-y-3">
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  readOnly
+                  value={signupToken}
+                  className="flex-1 rounded-lg border border-input bg-surface px-3 py-2 font-mono text-xs focus:outline-none focus:ring-2 focus:ring-ring"
+                />
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => void copySignupToken()}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-input bg-surface px-3 py-2 text-xs font-medium hover:bg-accent"
+                  >
+                    <Copy className="h-3.5 w-3.5" /> Copiar
+                  </button>
+                  <button
+                    type="button"
+                    disabled={rotatingToken}
+                    onClick={() => void regenerateSignupToken()}
+                    className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium hover:bg-accent disabled:opacity-60"
+                  >
+                    {rotatingToken ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                    Novo código
+                  </button>
+                </div>
+              </div>
+              <p className="text-[11px] text-muted-foreground">
+                Ao gerar um novo código, convites antigos com o código anterior deixam de ser válidos.
+              </p>
+            </div>
+          ) : (
+            <p className="text-sm text-amber-600 dark:text-amber-400">
+              Coluna <code className="text-xs">employee_signup_token</code> não encontrada. Execute a migração
+              Supabase mais recente e recarregue esta página.
+            </p>
+          )}
+        </Panel>
+      ) : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Panel title="Aparência" actions={<Palette className="h-4 w-4 text-muted-foreground" />}>
