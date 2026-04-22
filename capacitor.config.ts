@@ -45,7 +45,7 @@ const fileEnv = loadDotEnvFile(envFile);
 const serverUrl = sanitizeServerUrl(
   process.env.CAPACITOR_SERVER_URL ??
     fileEnv.CAPACITOR_SERVER_URL ??
-    "https://signix-stream.lovable.app/pareamento",
+    "https://signix-display-pro.lovable.app/pareamento",
 );
 
 const config: CapacitorConfig = {
