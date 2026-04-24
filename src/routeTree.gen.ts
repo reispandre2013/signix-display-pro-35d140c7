@@ -18,8 +18,10 @@ import { Route as PareamentoRouteImport } from './routes/pareamento'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConfigurarRouteImport } from './routes/configurar'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as AdminSaasRouteImport } from './routes/admin-saas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AdminSaasIndexRouteImport } from './routes/admin-saas.index'
 import { Route as AppUsuariosRouteImport } from './routes/app.usuarios'
 import { Route as AppUnidadesRouteImport } from './routes/app.unidades'
 import { Route as AppTelasRouteImport } from './routes/app.telas'
@@ -35,6 +37,12 @@ import { Route as AppCampanhasRouteImport } from './routes/app.campanhas'
 import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
 import { Route as AppAlertasRouteImport } from './routes/app.alertas'
 import { Route as AppAgendamentosRouteImport } from './routes/app.agendamentos'
+import { Route as AdminSaasPlanosRouteImport } from './routes/admin-saas.planos'
+import { Route as AdminSaasPagamentosRouteImport } from './routes/admin-saas.pagamentos'
+import { Route as AdminSaasLogsRouteImport } from './routes/admin-saas.logs'
+import { Route as AdminSaasLicencasRouteImport } from './routes/admin-saas.licencas'
+import { Route as AdminSaasClientesRouteImport } from './routes/admin-saas.clientes'
+import { Route as AdminSaasAssinaturasRouteImport } from './routes/admin-saas.assinaturas'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -81,6 +89,11 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSaasRoute = AdminSaasRouteImport.update({
+  id: '/admin-saas',
+  path: '/admin-saas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -90,6 +103,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const AdminSaasIndexRoute = AdminSaasIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminSaasRoute,
 } as any)
 const AppUsuariosRoute = AppUsuariosRouteImport.update({
   id: '/usuarios',
@@ -166,9 +184,40 @@ const AppAgendamentosRoute = AppAgendamentosRouteImport.update({
   path: '/agendamentos',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminSaasPlanosRoute = AdminSaasPlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasPagamentosRoute = AdminSaasPagamentosRouteImport.update({
+  id: '/pagamentos',
+  path: '/pagamentos',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasLogsRoute = AdminSaasLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasLicencasRoute = AdminSaasLicencasRouteImport.update({
+  id: '/licencas',
+  path: '/licencas',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasClientesRoute = AdminSaasClientesRouteImport.update({
+  id: '/clientes',
+  path: '/clientes',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasAssinaturasRoute = AdminSaasAssinaturasRouteImport.update({
+  id: '/assinaturas',
+  path: '/assinaturas',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
@@ -178,6 +227,12 @@ export interface FileRoutesByFullPath {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
+  '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/licencas': typeof AdminSaasLicencasRoute
+  '/admin-saas/logs': typeof AdminSaasLogsRoute
+  '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
+  '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -193,6 +248,7 @@ export interface FileRoutesByFullPath {
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
@@ -205,6 +261,12 @@ export interface FileRoutesByTo {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
+  '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/licencas': typeof AdminSaasLicencasRoute
+  '/admin-saas/logs': typeof AdminSaasLogsRoute
+  '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
+  '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -220,11 +282,13 @@ export interface FileRoutesByTo {
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/admin-saas': typeof AdminSaasIndexRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
@@ -234,6 +298,12 @@ export interface FileRoutesById {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
+  '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/licencas': typeof AdminSaasLicencasRoute
+  '/admin-saas/logs': typeof AdminSaasLogsRoute
+  '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
+  '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/auditoria': typeof AppAuditoriaRoute
@@ -249,12 +319,14 @@ export interface FileRoutesById {
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin-saas'
     | '/app'
     | '/configurar'
     | '/login'
@@ -264,6 +336,12 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/admin-saas/assinaturas'
+    | '/admin-saas/clientes'
+    | '/admin-saas/licencas'
+    | '/admin-saas/logs'
+    | '/admin-saas/pagamentos'
+    | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/auditoria'
@@ -279,6 +357,7 @@ export interface FileRouteTypes {
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/admin-saas/'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -291,6 +370,12 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/admin-saas/assinaturas'
+    | '/admin-saas/clientes'
+    | '/admin-saas/licencas'
+    | '/admin-saas/logs'
+    | '/admin-saas/pagamentos'
+    | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/auditoria'
@@ -306,10 +391,12 @@ export interface FileRouteTypes {
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/admin-saas'
     | '/app'
   id:
     | '__root__'
     | '/'
+    | '/admin-saas'
     | '/app'
     | '/configurar'
     | '/login'
@@ -319,6 +406,12 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/admin-saas/assinaturas'
+    | '/admin-saas/clientes'
+    | '/admin-saas/licencas'
+    | '/admin-saas/logs'
+    | '/admin-saas/pagamentos'
+    | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/auditoria'
@@ -334,11 +427,13 @@ export interface FileRouteTypes {
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/admin-saas/'
     | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminSaasRoute: typeof AdminSaasRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
   ConfigurarRoute: typeof ConfigurarRoute
   LoginRoute: typeof LoginRoute
@@ -415,6 +510,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin-saas': {
+      id: '/admin-saas'
+      path: '/admin-saas'
+      fullPath: '/admin-saas'
+      preLoaderRoute: typeof AdminSaasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -428,6 +530,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/admin-saas/': {
+      id: '/admin-saas/'
+      path: '/'
+      fullPath: '/admin-saas/'
+      preLoaderRoute: typeof AdminSaasIndexRouteImport
+      parentRoute: typeof AdminSaasRoute
     }
     '/app/usuarios': {
       id: '/app/usuarios'
@@ -534,8 +643,74 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAgendamentosRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin-saas/planos': {
+      id: '/admin-saas/planos'
+      path: '/planos'
+      fullPath: '/admin-saas/planos'
+      preLoaderRoute: typeof AdminSaasPlanosRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/pagamentos': {
+      id: '/admin-saas/pagamentos'
+      path: '/pagamentos'
+      fullPath: '/admin-saas/pagamentos'
+      preLoaderRoute: typeof AdminSaasPagamentosRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/logs': {
+      id: '/admin-saas/logs'
+      path: '/logs'
+      fullPath: '/admin-saas/logs'
+      preLoaderRoute: typeof AdminSaasLogsRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/licencas': {
+      id: '/admin-saas/licencas'
+      path: '/licencas'
+      fullPath: '/admin-saas/licencas'
+      preLoaderRoute: typeof AdminSaasLicencasRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/clientes': {
+      id: '/admin-saas/clientes'
+      path: '/clientes'
+      fullPath: '/admin-saas/clientes'
+      preLoaderRoute: typeof AdminSaasClientesRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/assinaturas': {
+      id: '/admin-saas/assinaturas'
+      path: '/assinaturas'
+      fullPath: '/admin-saas/assinaturas'
+      preLoaderRoute: typeof AdminSaasAssinaturasRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
   }
 }
+
+interface AdminSaasRouteChildren {
+  AdminSaasAssinaturasRoute: typeof AdminSaasAssinaturasRoute
+  AdminSaasClientesRoute: typeof AdminSaasClientesRoute
+  AdminSaasLicencasRoute: typeof AdminSaasLicencasRoute
+  AdminSaasLogsRoute: typeof AdminSaasLogsRoute
+  AdminSaasPagamentosRoute: typeof AdminSaasPagamentosRoute
+  AdminSaasPlanosRoute: typeof AdminSaasPlanosRoute
+  AdminSaasIndexRoute: typeof AdminSaasIndexRoute
+}
+
+const AdminSaasRouteChildren: AdminSaasRouteChildren = {
+  AdminSaasAssinaturasRoute: AdminSaasAssinaturasRoute,
+  AdminSaasClientesRoute: AdminSaasClientesRoute,
+  AdminSaasLicencasRoute: AdminSaasLicencasRoute,
+  AdminSaasLogsRoute: AdminSaasLogsRoute,
+  AdminSaasPagamentosRoute: AdminSaasPagamentosRoute,
+  AdminSaasPlanosRoute: AdminSaasPlanosRoute,
+  AdminSaasIndexRoute: AdminSaasIndexRoute,
+}
+
+const AdminSaasRouteWithChildren = AdminSaasRoute._addFileChildren(
+  AdminSaasRouteChildren,
+)
 
 interface AppRouteChildren {
   AppAgendamentosRoute: typeof AppAgendamentosRoute
@@ -579,6 +754,7 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminSaasRoute: AdminSaasRouteWithChildren,
   AppRoute: AppRouteWithChildren,
   ConfigurarRoute: ConfigurarRoute,
   LoginRoute: LoginRoute,
