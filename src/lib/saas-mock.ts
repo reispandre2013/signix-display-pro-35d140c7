@@ -1,0 +1,186 @@
+/**
+ * Dados MOCK para a camada SaaS.
+ * Substituir por queries reais quando o backend (migration-saas-billing.sql) estiver aplicado.
+ */
+import type { Plan, Subscription, Invoice, License, SaasClient } from "@/types/saas";
+
+export const MOCK_PLANS: Plan[] = [
+  {
+    id: "plan-starter",
+    code: "starter",
+    name: "Starter",
+    description: "Ideal para começar",
+    price_monthly_cents: 9900,
+    price_yearly_cents: 99000,
+    currency: "BRL",
+    max_screens: 3,
+    max_users: 2,
+    max_storage_gb: 5,
+    features: ["Até 3 telas", "2 usuários", "Suporte por email"],
+    support_level: "standard",
+    is_recommended: false,
+    is_active: true,
+    sort_order: 1,
+  },
+  {
+    id: "plan-professional",
+    code: "professional",
+    name: "Professional",
+    description: "Para empresas em crescimento",
+    price_monthly_cents: 29900,
+    price_yearly_cents: 299000,
+    currency: "BRL",
+    max_screens: 10,
+    max_users: 5,
+    max_storage_gb: 25,
+    features: ["Até 10 telas", "5 usuários", "Agendamentos avançados", "Relatórios completos"],
+    support_level: "priority",
+    is_recommended: true,
+    is_active: true,
+    sort_order: 2,
+  },
+  {
+    id: "plan-business",
+    code: "business",
+    name: "Business",
+    description: "Operação multi-unidade",
+    price_monthly_cents: 69900,
+    price_yearly_cents: 699000,
+    currency: "BRL",
+    max_screens: 30,
+    max_users: 15,
+    max_storage_gb: 100,
+    features: ["Até 30 telas", "15 usuários", "Grupos de telas", "API", "Suporte prioritário"],
+    support_level: "priority",
+    is_recommended: false,
+    is_active: true,
+    sort_order: 3,
+  },
+  {
+    id: "plan-enterprise",
+    code: "enterprise",
+    name: "Enterprise",
+    description: "Sob medida e ilimitado",
+    price_monthly_cents: 199900,
+    price_yearly_cents: 1999000,
+    currency: "BRL",
+    max_screens: 9999,
+    max_users: 9999,
+    max_storage_gb: 1000,
+    features: ["Telas ilimitadas", "Usuários ilimitados", "SLA 99.9%", "Gerente dedicado"],
+    support_level: "dedicated",
+    is_recommended: false,
+    is_active: true,
+    sort_order: 4,
+  },
+];
+
+const now = new Date();
+const isoIn = (days: number) =>
+  new Date(now.getTime() + days * 86400000).toISOString();
+
+export const MOCK_CURRENT_SUBSCRIPTION: Subscription = {
+  id: "sub-current",
+  organization_id: "org-demo",
+  plan_id: "plan-professional",
+  plan: MOCK_PLANS[1],
+  status: "active",
+  billing_cycle: "monthly",
+  amount_cents: 29900,
+  currency: "BRL",
+  trial_ends_at: null,
+  current_period_start: isoIn(-12),
+  current_period_end: isoIn(18),
+  cancel_at_period_end: false,
+  canceled_at: null,
+};
+
+export const MOCK_CURRENT_USAGE = {
+  screens_used: 7,
+  screens_limit: 10,
+  users_used: 4,
+  users_limit: 5,
+  storage_used_gb: 11.4,
+  storage_limit_gb: 25,
+};
+
+export const MOCK_INVOICES: Invoice[] = Array.from({ length: 6 }).map((_, i) => ({
+  id: `inv-${i + 1}`,
+  organization_id: "org-demo",
+  subscription_id: "sub-current",
+  number: `2026-${String(1000 + i).padStart(4, "0")}`,
+  status: i === 0 ? "open" : "paid",
+  amount_cents: 29900,
+  currency: "BRL",
+  issued_at: isoIn(-30 * i - 1),
+  due_at: isoIn(-30 * i + 7),
+  paid_at: i === 0 ? null : isoIn(-30 * i + 3),
+  payment_method: i % 2 === 0 ? "card" : "pix",
+  pdf_url: null,
+}));
+
+export const MOCK_LICENSES: License[] = [
+  {
+    id: "lic-1",
+    organization_id: "org-demo",
+    subscription_id: "sub-current",
+    key: "SGNX-PRO-7H4K-9XQM-2025",
+    status: "active",
+    max_screens: 10,
+    valid_from: isoIn(-365),
+    valid_until: isoIn(180),
+  },
+];
+
+// ============== SUPER ADMIN — visão SaaS ==================
+export const MOCK_SAAS_METRICS = {
+  total_companies: 142,
+  active_subscriptions: 118,
+  expired_subscriptions: 14,
+  canceled_subscriptions: 10,
+  mrr_cents: 4_287_300,
+  arr_cents: 51_447_600,
+  new_clients_30d: 17,
+  churn_rate: 2.4,
+  overdue_invoices_count: 9,
+  total_active_screens: 1247,
+  pending_tickets: 6,
+};
+
+export const MOCK_SAAS_CLIENTS: SaasClient[] = [
+  { organization_id: "o1", organization_name: "Padaria Central", master_email: "ana@padariacentral.com.br",
+    plan_name: "Professional", subscription_status: "active", screens_used: 7, screens_limit: 10,
+    created_at: isoIn(-180), last_payment_at: isoIn(-12), license_status: "active" },
+  { organization_id: "o2", organization_name: "Rede Farma+", master_email: "marcos@farmamais.com",
+    plan_name: "Business", subscription_status: "active", screens_used: 22, screens_limit: 30,
+    created_at: isoIn(-310), last_payment_at: isoIn(-3), license_status: "active" },
+  { organization_id: "o3", organization_name: "Posto Aurora", master_email: "felipe@aurora.com",
+    plan_name: "Starter", subscription_status: "past_due", screens_used: 2, screens_limit: 3,
+    created_at: isoIn(-90), last_payment_at: isoIn(-45), license_status: "suspended" },
+  { organization_id: "o4", organization_name: "Mall Plaza", master_email: "ti@mallplaza.com",
+    plan_name: "Enterprise", subscription_status: "active", screens_used: 154, screens_limit: 9999,
+    created_at: isoIn(-720), last_payment_at: isoIn(-1), license_status: "active" },
+  { organization_id: "o5", organization_name: "Cantina Bella", master_email: "luiza@cantinabella.com",
+    plan_name: "Professional", subscription_status: "trialing", screens_used: 1, screens_limit: 10,
+    created_at: isoIn(-7), last_payment_at: null, license_status: "trial" },
+  { organization_id: "o6", organization_name: "AutoCenter Sul", master_email: "rafael@autosul.com",
+    plan_name: "Business", subscription_status: "canceled", screens_used: 0, screens_limit: 30,
+    created_at: isoIn(-540), last_payment_at: isoIn(-90), license_status: "canceled" },
+];
+
+export const MOCK_RECENT_PAYMENTS = MOCK_SAAS_CLIENTS.slice(0, 5).map((c, i) => ({
+  id: `pay-${i}`,
+  client: c.organization_name,
+  amount_cents: [29900, 69900, 9900, 199900, 29900][i],
+  method: ["Cartão", "PIX", "Boleto", "Cartão", "PIX"][i],
+  status: ["paid", "paid", "paid", "paid", "pending"][i],
+  date: isoIn(-i),
+}));
+
+export const MOCK_SAAS_LOGS = [
+  { id: "l1", actor: "ana@padariacentral.com.br", action: "subscription.upgraded", target: "Professional → Business", at: isoIn(-0.1) },
+  { id: "l2", actor: "felipe@aurora.com", action: "payment.failed", target: "Fatura #2026-1042", at: isoIn(-0.5) },
+  { id: "l3", actor: "system", action: "license.suspended", target: "Posto Aurora", at: isoIn(-0.6) },
+  { id: "l4", actor: "luiza@cantinabella.com", action: "trial.started", target: "Plano Professional", at: isoIn(-7) },
+  { id: "l5", actor: "marcos@farmamais.com", action: "user.created", target: "Operador: joao@farmamais.com", at: isoIn(-2) },
+];
