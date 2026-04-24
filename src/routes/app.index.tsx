@@ -133,6 +133,8 @@ function MasterDashboard() {
         }
       />
 
+      <SubscriptionBanner />
+
       {isLoading ? (
         <LoadingState />
       ) : (
