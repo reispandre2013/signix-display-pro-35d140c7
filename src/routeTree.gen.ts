@@ -14,9 +14,11 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as PlayerScreenRouteImport } from './routes/player-screen'
 import { Route as PlayerRouteImport } from './routes/player'
+import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PareamentoRouteImport } from './routes/pareamento'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConfigurarRouteImport } from './routes/configurar'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminSaasRouteImport } from './routes/admin-saas'
 import { Route as IndexRouteImport } from './routes/index'
@@ -28,13 +30,16 @@ import { Route as AppTelasRouteImport } from './routes/app.telas'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
 import { Route as AppPreviewRouteImport } from './routes/app.preview'
 import { Route as AppPlaylistsRouteImport } from './routes/app.playlists'
+import { Route as AppOperadorRouteImport } from './routes/app.operador'
 import { Route as AppMonitoramentoRouteImport } from './routes/app.monitoramento'
 import { Route as AppMidiasRouteImport } from './routes/app.midias'
 import { Route as AppGruposRouteImport } from './routes/app.grupos'
+import { Route as AppFaturasRouteImport } from './routes/app.faturas'
 import { Route as AppEmpresasRouteImport } from './routes/app.empresas'
 import { Route as AppConfiguracoesRouteImport } from './routes/app.configuracoes'
 import { Route as AppCampanhasRouteImport } from './routes/app.campanhas'
 import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
+import { Route as AppAssinaturaRouteImport } from './routes/app.assinatura'
 import { Route as AppAlertasRouteImport } from './routes/app.alertas'
 import { Route as AppAgendamentosRouteImport } from './routes/app.agendamentos'
 import { Route as AdminSaasPlanosRouteImport } from './routes/admin-saas.planos'
@@ -69,6 +74,11 @@ const PlayerRoute = PlayerRouteImport.update({
   path: '/player',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlanosRoute = PlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PareamentoRoute = PareamentoRouteImport.update({
   id: '/pareamento',
   path: '/pareamento',
@@ -82,6 +92,11 @@ const LoginRoute = LoginRouteImport.update({
 const ConfigurarRoute = ConfigurarRouteImport.update({
   id: '/configurar',
   path: '/configurar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -139,6 +154,11 @@ const AppPlaylistsRoute = AppPlaylistsRouteImport.update({
   path: '/playlists',
   getParentRoute: () => AppRoute,
 } as any)
+const AppOperadorRoute = AppOperadorRouteImport.update({
+  id: '/operador',
+  path: '/operador',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMonitoramentoRoute = AppMonitoramentoRouteImport.update({
   id: '/monitoramento',
   path: '/monitoramento',
@@ -152,6 +172,11 @@ const AppMidiasRoute = AppMidiasRouteImport.update({
 const AppGruposRoute = AppGruposRouteImport.update({
   id: '/grupos',
   path: '/grupos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFaturasRoute = AppFaturasRouteImport.update({
+  id: '/faturas',
+  path: '/faturas',
   getParentRoute: () => AppRoute,
 } as any)
 const AppEmpresasRoute = AppEmpresasRouteImport.update({
@@ -172,6 +197,11 @@ const AppCampanhasRoute = AppCampanhasRouteImport.update({
 const AppAuditoriaRoute = AppAuditoriaRouteImport.update({
   id: '/auditoria',
   path: '/auditoria',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAssinaturaRoute = AppAssinaturaRouteImport.update({
+  id: '/assinatura',
+  path: '/assinatura',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAlertasRoute = AppAlertasRouteImport.update({
@@ -219,9 +249,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
+  '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
@@ -235,13 +267,16 @@ export interface FileRoutesByFullPath {
   '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
   '/app/empresas': typeof AppEmpresasRoute
+  '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
   '/app/midias': typeof AppMidiasRoute
   '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/operador': typeof AppOperadorRoute
   '/app/playlists': typeof AppPlaylistsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -253,9 +288,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
+  '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
@@ -269,13 +306,16 @@ export interface FileRoutesByTo {
   '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
   '/app/empresas': typeof AppEmpresasRoute
+  '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
   '/app/midias': typeof AppMidiasRoute
   '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/operador': typeof AppOperadorRoute
   '/app/playlists': typeof AppPlaylistsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -290,9 +330,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
+  '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
@@ -306,13 +348,16 @@ export interface FileRoutesById {
   '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
   '/app/empresas': typeof AppEmpresasRoute
+  '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
   '/app/midias': typeof AppMidiasRoute
   '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/operador': typeof AppOperadorRoute
   '/app/playlists': typeof AppPlaylistsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/relatorios': typeof AppRelatoriosRoute
@@ -328,9 +373,11 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-saas'
     | '/app'
+    | '/checkout'
     | '/configurar'
     | '/login'
     | '/pareamento'
+    | '/planos'
     | '/player'
     | '/player-screen'
     | '/recuperar-senha'
@@ -344,13 +391,16 @@ export interface FileRouteTypes {
     | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
+    | '/app/assinatura'
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
     | '/app/empresas'
+    | '/app/faturas'
     | '/app/grupos'
     | '/app/midias'
     | '/app/monitoramento'
+    | '/app/operador'
     | '/app/playlists'
     | '/app/preview'
     | '/app/relatorios'
@@ -362,9 +412,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/checkout'
     | '/configurar'
     | '/login'
     | '/pareamento'
+    | '/planos'
     | '/player'
     | '/player-screen'
     | '/recuperar-senha'
@@ -378,13 +430,16 @@ export interface FileRouteTypes {
     | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
+    | '/app/assinatura'
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
     | '/app/empresas'
+    | '/app/faturas'
     | '/app/grupos'
     | '/app/midias'
     | '/app/monitoramento'
+    | '/app/operador'
     | '/app/playlists'
     | '/app/preview'
     | '/app/relatorios'
@@ -398,9 +453,11 @@ export interface FileRouteTypes {
     | '/'
     | '/admin-saas'
     | '/app'
+    | '/checkout'
     | '/configurar'
     | '/login'
     | '/pareamento'
+    | '/planos'
     | '/player'
     | '/player-screen'
     | '/recuperar-senha'
@@ -414,13 +471,16 @@ export interface FileRouteTypes {
     | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
+    | '/app/assinatura'
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
     | '/app/empresas'
+    | '/app/faturas'
     | '/app/grupos'
     | '/app/midias'
     | '/app/monitoramento'
+    | '/app/operador'
     | '/app/playlists'
     | '/app/preview'
     | '/app/relatorios'
@@ -435,9 +495,11 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminSaasRoute: typeof AdminSaasRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
+  CheckoutRoute: typeof CheckoutRoute
   ConfigurarRoute: typeof ConfigurarRoute
   LoginRoute: typeof LoginRoute
   PareamentoRoute: typeof PareamentoRoute
+  PlanosRoute: typeof PlanosRoute
   PlayerRoute: typeof PlayerRoute
   PlayerScreenRoute: typeof PlayerScreenRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
@@ -482,6 +544,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/planos': {
+      id: '/planos'
+      path: '/planos'
+      fullPath: '/planos'
+      preLoaderRoute: typeof PlanosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pareamento': {
       id: '/pareamento'
       path: '/pareamento'
@@ -501,6 +570,13 @@ declare module '@tanstack/react-router' {
       path: '/configurar'
       fullPath: '/configurar'
       preLoaderRoute: typeof ConfigurarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -580,6 +656,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPlaylistsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/operador': {
+      id: '/app/operador'
+      path: '/operador'
+      fullPath: '/app/operador'
+      preLoaderRoute: typeof AppOperadorRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/monitoramento': {
       id: '/app/monitoramento'
       path: '/monitoramento'
@@ -599,6 +682,13 @@ declare module '@tanstack/react-router' {
       path: '/grupos'
       fullPath: '/app/grupos'
       preLoaderRoute: typeof AppGruposRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/faturas': {
+      id: '/app/faturas'
+      path: '/faturas'
+      fullPath: '/app/faturas'
+      preLoaderRoute: typeof AppFaturasRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/empresas': {
@@ -627,6 +717,13 @@ declare module '@tanstack/react-router' {
       path: '/auditoria'
       fullPath: '/app/auditoria'
       preLoaderRoute: typeof AppAuditoriaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/assinatura': {
+      id: '/app/assinatura'
+      path: '/assinatura'
+      fullPath: '/app/assinatura'
+      preLoaderRoute: typeof AppAssinaturaRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/alertas': {
@@ -715,13 +812,16 @@ const AdminSaasRouteWithChildren = AdminSaasRoute._addFileChildren(
 interface AppRouteChildren {
   AppAgendamentosRoute: typeof AppAgendamentosRoute
   AppAlertasRoute: typeof AppAlertasRoute
+  AppAssinaturaRoute: typeof AppAssinaturaRoute
   AppAuditoriaRoute: typeof AppAuditoriaRoute
   AppCampanhasRoute: typeof AppCampanhasRoute
   AppConfiguracoesRoute: typeof AppConfiguracoesRoute
   AppEmpresasRoute: typeof AppEmpresasRoute
+  AppFaturasRoute: typeof AppFaturasRoute
   AppGruposRoute: typeof AppGruposRoute
   AppMidiasRoute: typeof AppMidiasRoute
   AppMonitoramentoRoute: typeof AppMonitoramentoRoute
+  AppOperadorRoute: typeof AppOperadorRoute
   AppPlaylistsRoute: typeof AppPlaylistsRoute
   AppPreviewRoute: typeof AppPreviewRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
@@ -734,13 +834,16 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAgendamentosRoute: AppAgendamentosRoute,
   AppAlertasRoute: AppAlertasRoute,
+  AppAssinaturaRoute: AppAssinaturaRoute,
   AppAuditoriaRoute: AppAuditoriaRoute,
   AppCampanhasRoute: AppCampanhasRoute,
   AppConfiguracoesRoute: AppConfiguracoesRoute,
   AppEmpresasRoute: AppEmpresasRoute,
+  AppFaturasRoute: AppFaturasRoute,
   AppGruposRoute: AppGruposRoute,
   AppMidiasRoute: AppMidiasRoute,
   AppMonitoramentoRoute: AppMonitoramentoRoute,
+  AppOperadorRoute: AppOperadorRoute,
   AppPlaylistsRoute: AppPlaylistsRoute,
   AppPreviewRoute: AppPreviewRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
@@ -756,9 +859,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminSaasRoute: AdminSaasRouteWithChildren,
   AppRoute: AppRouteWithChildren,
+  CheckoutRoute: CheckoutRoute,
   ConfigurarRoute: ConfigurarRoute,
   LoginRoute: LoginRoute,
   PareamentoRoute: PareamentoRoute,
+  PlanosRoute: PlanosRoute,
   PlayerRoute: PlayerRoute,
   PlayerScreenRoute: PlayerScreenRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
