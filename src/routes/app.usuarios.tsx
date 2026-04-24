@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { createOrgUser } from "@/lib/server/users.functions";
 import { supabase } from "@/integrations/supabase/client";
-import type { Profile } from "@/lib/db-types";
+import type { AppRole, Profile } from "@/lib/db-types";
 import {
   Dialog,
   DialogContent,
@@ -28,17 +28,19 @@ export const Route = createFileRoute("/app/usuarios")({
 });
 
 const roleLabel = {
+  super_admin: "Super Admin",
   admin_master: "Admin Master",
   gestor: "Gestor",
   operador: "Operador",
   visualizador: "Visualizador",
-} as const;
+} as const satisfies Record<AppRole, string>;
 const roleTone = {
+  super_admin: "primary",
   admin_master: "primary",
   gestor: "success",
   operador: "warning",
   visualizador: "neutral",
-} as const;
+} as const satisfies Record<AppRole, "primary" | "success" | "warning" | "neutral">;
 
 type Role = keyof typeof roleLabel;
 

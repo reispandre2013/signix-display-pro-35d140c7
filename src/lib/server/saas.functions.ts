@@ -2,6 +2,14 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 
+type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JsonValue }
+  | JsonValue[];
+
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "";
 const ANON =
   process.env.VITE_SUPABASE_ANON_KEY ??
@@ -28,5 +36,5 @@ export const getUserSaasContext = createServerFn({ method: "POST" }).handler(asy
 
   const { data, error } = await userClient.rpc("get_user_saas_context");
   if (error) throw new Error(error.message);
-  return data as Record<string, unknown>;
+  return (data ?? null) as JsonValue;
 });
