@@ -1,4 +1,4 @@
-export type AppRole = "admin_master" | "gestor" | "operador" | "visualizador";
+export type AppRole = "super_admin" | "admin_master" | "gestor" | "operador" | "visualizador";
 export type RecordStatus = "active" | "inactive" | "draft" | "archived" | "suspended";
 export type DeviceStatus = "online" | "offline" | "warning" | "syncing" | "maintenance";
 

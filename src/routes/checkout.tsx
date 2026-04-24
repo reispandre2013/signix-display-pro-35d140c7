@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Tv, ArrowLeft, ShieldCheck, CreditCard, Tag, Loader2 } from "lucide-react";
-import { MOCK_PLANS } from "@/lib/saas-mock";
+import { usePlanByCode } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -22,9 +22,14 @@ export const Route = createFileRoute("/checkout")({
 
 function CheckoutPage() {
   const search = Route.useSearch();
-  const plan = MOCK_PLANS.find((p) => p.code === search.plan) ?? MOCK_PLANS[1];
+  const planQ = usePlanByCode(search.plan);
+  const plan = planQ.data;
   const cycle = search.cycle ?? "monthly";
-  const amount = cycle === "monthly" ? plan.price_monthly_cents : plan.price_yearly_cents;
+  const amount = plan
+    ? cycle === "monthly"
+      ? plan.price_monthly_cents
+      : plan.price_yearly_cents
+    : 0;
 
   const [coupon, setCoupon] = useState("");
   const [method, setMethod] = useState<"card" | "pix" | "boleto">("card");
@@ -40,6 +45,26 @@ function CheckoutPage() {
       toast.success("Pagamento simulado aprovado! (mock)");
     }, 1200);
   };
+
+  if (planQ.isLoading) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-background">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
+  }
+  if (!plan) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-background p-6 text-center">
+        <div>
+          <p className="text-sm text-muted-foreground">Plano não encontrado. Volte e escolha outro plano.</p>
+          <Link to="/planos" className="mt-3 inline-block text-primary text-sm">
+            Ver planos
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background bg-mesh">

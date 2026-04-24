@@ -24,7 +24,7 @@ export interface Plan {
 }
 
 export type SubscriptionStatus =
-  | "trialing" | "active" | "past_due" | "canceled" | "expired" | "suspended";
+  | "trialing" | "active" | "past_due" | "canceled" | "expired" | "suspended" | "pending";
 
 export interface Subscription {
   id: string;

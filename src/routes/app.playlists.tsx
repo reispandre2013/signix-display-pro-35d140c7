@@ -150,7 +150,7 @@ function PlaylistsPage() {
       ids.splice(targetIndex, 0, moved);
       try {
         await reorderPlaylist.mutateAsync({ playlistId: current.id, orderedItemIds: ids });
-        toast.success("Ordem actualizada.");
+        toast.success("Ordem atualizada.");
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Erro ao reordenar.");
       }
@@ -286,7 +286,7 @@ function PlaylistsPage() {
                       </PrimaryButton>
                     </div>
                     {mediaOptions.length === 0 && (
-                      <p className="text-[11px] text-muted-foreground">Não há mídias activas na biblioteca.</p>
+                      <p className="text-[11px] text-muted-foreground">Não há mídias ativas na biblioteca.</p>
                     )}
                   </div>
 
@@ -436,7 +436,7 @@ function PlaylistsPage() {
                                     })
                                   }
                                 />
-                                Activo
+                                Ativo
                               </label>
                             </div>
                           </li>
@@ -478,7 +478,7 @@ function PlaylistsPage() {
                   description: metaForm.description.trim() || null,
                   status: metaForm.status as Playlist["status"],
                 });
-                toast.success("Playlist actualizada.");
+                toast.success("Playlist atualizada.");
                 setEditMeta(false);
               } catch (err) {
                 toast.error(err instanceof Error ? err.message : "Erro ao guardar.");

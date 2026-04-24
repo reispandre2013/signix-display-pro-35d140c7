@@ -1,11 +1,10 @@
 -- ============================================================================
 -- Signix SaaS — billing layer + super_admin role + module permissions
 -- ============================================================================
--- Aplicar via: supabase migration new saas_billing && colar este conteúdo
--- ou: copie este arquivo para supabase/migrations/<timestamp>_saas_billing.sql
--- e rode `supabase db push`.
---
--- Este arquivo é IDEMPOTENTE — pode ser executado múltiplas vezes.
+-- A camada canónica vive agora em:
+--   supabase/migrations/20260424200000_saas_platform_layer.sql
+-- Use `supabase db push` (não duplicar tabelas `plans` / `user_permissions` daqui).
+-- Este arquivo fica como referência histórica; pode divergir do schema em produção.
 -- ============================================================================
 
 -- 1) Adicionar super_admin ao enum app_role (se ainda não existir)

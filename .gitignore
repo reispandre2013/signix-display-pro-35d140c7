@@ -19,6 +19,9 @@ dist-ssr
 .env.capacitor
 scripts/supabase.credentials.ps1
 
+# Supabase CLI local cache
+supabase/.temp/
+
 # Build / deploy artefactos locais
 www/
 

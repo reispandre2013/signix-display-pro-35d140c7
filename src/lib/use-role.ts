@@ -19,7 +19,7 @@ export const ROLE_LABEL: Record<EffectiveRole, string> = {
 
 export function mapDbRole(role: AppRole | undefined | null): EffectiveRole {
   if (!role) return "visualizador";
-  if ((role as string) === "super_admin") return "super_admin";
+  if (role === "super_admin") return "super_admin";
   if (role === "admin_master" || role === "gestor") return "master";
   if (role === "operador") return "operador";
   return "visualizador";

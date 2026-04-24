@@ -810,7 +810,7 @@ function EditScreenModal({
           `Dispositivo atualizado. Não foi possível gravar: ${limits.join(" e ")} (migração pendente neste ambiente).`,
         );
       } else {
-        toast.success("Dispositivo actualizado.");
+        toast.success("Dispositivo atualizado.");
       }
       onSaved();
     } catch (err) {

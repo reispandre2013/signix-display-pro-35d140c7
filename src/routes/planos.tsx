@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Star, Sparkles, ArrowRight, Tv } from "lucide-react";
-import { MOCK_PLANS } from "@/lib/saas-mock";
+import { Check, Star, Sparkles, ArrowRight, Tv, Loader2 } from "lucide-react";
+import { usePublicPlans } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +19,8 @@ export const Route = createFileRoute("/planos")({
 
 function PlanosPublic() {
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
+  const { data: plans, isLoading, isError, error } = usePublicPlans();
+  const list = plans ?? [];
 
   return (
     <div className="min-h-screen bg-background bg-mesh">
@@ -62,8 +64,24 @@ function PlanosPublic() {
           </div>
         </div>
 
+        {isError && (
+          <p className="mt-8 text-center text-sm text-destructive" role="alert">
+            {error instanceof Error ? error.message : "Não foi possível carregar os planos. Verifique a ligação e as migrations SaaS."}
+          </p>
+        )}
+
+        {isLoading ? (
+          <div className="mt-12 flex justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : (
         <div className="mt-12 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          {MOCK_PLANS.map((p) => {
+          {list.length === 0 && !isError ? (
+            <p className="col-span-full text-center text-sm text-muted-foreground py-8">
+              Nenhum plano publicado. Configure planos ativos no Supabase (tabela <code className="text-xs">public.plans</code>).
+            </p>
+          ) : null}
+          {list.map((p) => {
             const price = cycle === "monthly" ? p.price_monthly_cents : Math.round(p.price_yearly_cents / 12);
             return (
               <div
@@ -120,6 +138,7 @@ function PlanosPublic() {
             );
           })}
         </div>
+        )}
 
         <section className="mt-16 max-w-3xl mx-auto">
           <h2 className="font-display text-2xl font-bold text-center">Perguntas frequentes</h2>

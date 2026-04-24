@@ -242,7 +242,7 @@ function mapResolutionSourceForPlayer(s: PlaylistResolutionSource): "playlist_it
 }
 
 /**
- * Devolve campanha activa + itens de playlist (ou fallback para mídias da org).
+ * Devolve campanha ativa + itens de playlist (ou fallback para mídias da org).
  * Autenticação: screen_id + pairing_code (igual ao gravado na screen após pareamento).
  */
 export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
@@ -332,7 +332,7 @@ function validateSyncAck(input: unknown): SyncAckInput {
   };
 }
 
-/** Regista conclusão de sync + actualiza `last_sync_at` na screen. */
+/** Registra conclusão de sync e atualiza `last_sync_at` na screen. */
 export const postPlayerSyncAck = createServerFn({ method: "POST" })
   .inputValidator(validateSyncAck)
   .handler(async ({ data }) => {

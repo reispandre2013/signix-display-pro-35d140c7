@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { useRole } from "@/lib/use-role";
-import { MOCK_CURRENT_SUBSCRIPTION, MOCK_CURRENT_USAGE } from "@/lib/saas-mock";
+import { useOrgBillingContext } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 
 import { KpiCard } from "@/components/ui-kit/KpiCard";
@@ -304,9 +304,39 @@ function Bar({ label, value, total, color }: { label: string; value: number; tot
 }
 
 function SubscriptionBanner() {
-  const sub = MOCK_CURRENT_SUBSCRIPTION;
-  const u = MOCK_CURRENT_USAGE;
-  const screensPct = Math.round((u.screens_used / u.screens_limit) * 100);
+  const { data: bundle, isLoading, isMissingTables } = useOrgBillingContext();
+  const sub = bundle?.subscription;
+  const u = bundle?.usage;
+
+  if (isMissingTables) {
+    return null;
+  }
+
+  if (isLoading && !bundle) {
+    return (
+      <div className="rounded-xl border border-border bg-gradient-surface p-4 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+        <Loader2 className="h-4 w-4 animate-spin" /> A carregar assinatura…
+      </div>
+    );
+  }
+
+  if (!sub || !u) {
+    return (
+      <div className="rounded-xl border border-dashed border-border bg-card/50 p-4 flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+        <p className="text-sm text-muted-foreground">Ainda sem assinatura ativa. Escolha um plano para desbloquear limites e billing.</p>
+        <Link
+          to="/planos"
+          className="inline-flex shrink-0 items-center gap-1 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
+        >
+          <Sparkles className="h-3.5 w-3.5" /> Ver planos
+        </Link>
+      </div>
+    );
+  }
+
+  const limit = u.screens_limit > 0 ? u.screens_limit : 1;
+  const screensPct = Math.min(100, Math.round((u.screens_used / limit) * 100));
+  const nextEnd = sub.current_period_end;
   return (
     <div className="rounded-xl border border-border bg-gradient-surface p-4 flex flex-col md:flex-row md:items-center gap-4 justify-between shadow-card">
       <div className="flex items-center gap-3">
@@ -315,9 +345,14 @@ function SubscriptionBanner() {
         </div>
         <div>
           <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Plano atual</p>
-          <p className="font-display text-base font-bold">{sub.plan?.name} · {formatPrice(sub.amount_cents)}/mês</p>
+          <p className="font-display text-base font-bold">
+            {sub.plan?.name ?? "—"} · {formatPrice(sub.amount_cents)}/mês
+          </p>
           <p className="text-[11px] text-muted-foreground mt-0.5">
-            Próxima cobrança em {format(new Date(sub.current_period_end), "dd/MM/yyyy")} · {u.screens_used}/{u.screens_limit} telas ({screensPct}%)
+            {nextEnd ? (
+              <>Próxima cobrança em {format(new Date(nextEnd), "dd/MM/yyyy")} · </>
+            ) : null}
+            {u.screens_used}/{u.screens_limit >= 9999 ? "∞" : u.screens_limit} telas ({screensPct}%)
           </p>
         </div>
       </div>
