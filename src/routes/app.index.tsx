@@ -1,8 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Monitor, Wifi, WifiOff, AlertTriangle, Megaphone, ImageIcon, ListVideo, Activity, ArrowRight, Clock, Zap, Loader2 } from "lucide-react";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
+import { Monitor, Wifi, WifiOff, AlertTriangle, Megaphone, ImageIcon, ListVideo, Activity, ArrowRight, Clock, Zap, Loader2, CreditCard, Sparkles } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
+import { useRole } from "@/lib/use-role";
+import { MOCK_CURRENT_SUBSCRIPTION, MOCK_CURRENT_USAGE } from "@/lib/saas-mock";
+import { formatPrice } from "@/types/saas";
+
 import { KpiCard } from "@/components/ui-kit/KpiCard";
 import { Panel } from "@/components/ui-kit/Panel";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
@@ -31,6 +35,17 @@ type ScreenRow = {
 };
 
 function Dashboard() {
+  const { role, isOperador, isVisualizador, isSuperAdmin } = useRole();
+
+  // Redireciona cada perfil ao seu próprio painel.
+  if (isSuperAdmin) return <Navigate to="/admin-saas" />;
+  if (isOperador) return <Navigate to="/app/operador" />;
+  if (isVisualizador) return <Navigate to="/app/visualizacao" />;
+
+  return <MasterDashboard />;
+}
+
+function MasterDashboard() {
   const screensQ = useScreens();
   const campaignsQ = useCampaigns();
   const alertsQ = useAlerts();
@@ -117,6 +132,8 @@ function Dashboard() {
           </>
         }
       />
+
+      <SubscriptionBanner />
 
       {isLoading ? (
         <LoadingState />
@@ -281,6 +298,36 @@ function Bar({ label, value, total, color }: { label: string; value: number; tot
       </div>
       <div className="h-2 rounded-full bg-muted overflow-hidden">
         <div className={`h-full ${color}`} style={{ width: `${pct}%` }} />
+      </div>
+    </div>
+  );
+}
+
+function SubscriptionBanner() {
+  const sub = MOCK_CURRENT_SUBSCRIPTION;
+  const u = MOCK_CURRENT_USAGE;
+  const screensPct = Math.round((u.screens_used / u.screens_limit) * 100);
+  return (
+    <div className="rounded-xl border border-border bg-gradient-surface p-4 flex flex-col md:flex-row md:items-center gap-4 justify-between shadow-card">
+      <div className="flex items-center gap-3">
+        <div className="h-10 w-10 rounded-lg bg-gradient-primary grid place-items-center text-primary-foreground shadow-glow">
+          <Sparkles className="h-5 w-5" />
+        </div>
+        <div>
+          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">Plano atual</p>
+          <p className="font-display text-base font-bold">{sub.plan?.name} · {formatPrice(sub.amount_cents)}/mês</p>
+          <p className="text-[11px] text-muted-foreground mt-0.5">
+            Próxima cobrança em {format(new Date(sub.current_period_end), "dd/MM/yyyy")} · {u.screens_used}/{u.screens_limit} telas ({screensPct}%)
+          </p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <Link to="/app/assinatura" className="inline-flex items-center gap-1 rounded-md border border-border px-3 py-1.5 text-xs font-medium hover:bg-surface">
+          <CreditCard className="h-3.5 w-3.5" /> Gerir assinatura
+        </Link>
+        <Link to="/planos" className="inline-flex items-center gap-1 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow">
+          <Sparkles className="h-3.5 w-3.5" /> Upgrade
+        </Link>
       </div>
     </div>
   );

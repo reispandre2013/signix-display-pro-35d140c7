@@ -14,27 +14,41 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as PlayerScreenRouteImport } from './routes/player-screen'
 import { Route as PlayerRouteImport } from './routes/player'
+import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PareamentoRouteImport } from './routes/pareamento'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ConfigurarRouteImport } from './routes/configurar'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as AdminSaasRouteImport } from './routes/admin-saas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AdminSaasIndexRouteImport } from './routes/admin-saas.index'
+import { Route as AppVisualizacaoRouteImport } from './routes/app.visualizacao'
 import { Route as AppUsuariosRouteImport } from './routes/app.usuarios'
 import { Route as AppUnidadesRouteImport } from './routes/app.unidades'
 import { Route as AppTelasRouteImport } from './routes/app.telas'
 import { Route as AppRelatoriosRouteImport } from './routes/app.relatorios'
 import { Route as AppPreviewRouteImport } from './routes/app.preview'
 import { Route as AppPlaylistsRouteImport } from './routes/app.playlists'
+import { Route as AppOperadorRouteImport } from './routes/app.operador'
 import { Route as AppMonitoramentoRouteImport } from './routes/app.monitoramento'
 import { Route as AppMidiasRouteImport } from './routes/app.midias'
 import { Route as AppGruposRouteImport } from './routes/app.grupos'
+import { Route as AppFaturasRouteImport } from './routes/app.faturas'
 import { Route as AppEmpresasRouteImport } from './routes/app.empresas'
 import { Route as AppConfiguracoesRouteImport } from './routes/app.configuracoes'
 import { Route as AppCampanhasRouteImport } from './routes/app.campanhas'
 import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
+import { Route as AppAssinaturaRouteImport } from './routes/app.assinatura'
 import { Route as AppAlertasRouteImport } from './routes/app.alertas'
 import { Route as AppAgendamentosRouteImport } from './routes/app.agendamentos'
+import { Route as AdminSaasPlanosRouteImport } from './routes/admin-saas.planos'
+import { Route as AdminSaasPagamentosRouteImport } from './routes/admin-saas.pagamentos'
+import { Route as AdminSaasLogsRouteImport } from './routes/admin-saas.logs'
+import { Route as AdminSaasLicencasRouteImport } from './routes/admin-saas.licencas'
+import { Route as AdminSaasClientesRouteImport } from './routes/admin-saas.clientes'
+import { Route as AdminSaasAssinaturasRouteImport } from './routes/admin-saas.assinaturas'
 
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
@@ -61,6 +75,11 @@ const PlayerRoute = PlayerRouteImport.update({
   path: '/player',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlanosRoute = PlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PareamentoRoute = PareamentoRouteImport.update({
   id: '/pareamento',
   path: '/pareamento',
@@ -76,9 +95,19 @@ const ConfigurarRoute = ConfigurarRouteImport.update({
   path: '/configurar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSaasRoute = AdminSaasRouteImport.update({
+  id: '/admin-saas',
+  path: '/admin-saas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +118,16 @@ const IndexRoute = IndexRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AdminSaasIndexRoute = AdminSaasIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AppVisualizacaoRoute = AppVisualizacaoRouteImport.update({
+  id: '/visualizacao',
+  path: '/visualizacao',
   getParentRoute: () => AppRoute,
 } as any)
 const AppUsuariosRoute = AppUsuariosRouteImport.update({
@@ -121,6 +160,11 @@ const AppPlaylistsRoute = AppPlaylistsRouteImport.update({
   path: '/playlists',
   getParentRoute: () => AppRoute,
 } as any)
+const AppOperadorRoute = AppOperadorRouteImport.update({
+  id: '/operador',
+  path: '/operador',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMonitoramentoRoute = AppMonitoramentoRouteImport.update({
   id: '/monitoramento',
   path: '/monitoramento',
@@ -134,6 +178,11 @@ const AppMidiasRoute = AppMidiasRouteImport.update({
 const AppGruposRoute = AppGruposRouteImport.update({
   id: '/grupos',
   path: '/grupos',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFaturasRoute = AppFaturasRouteImport.update({
+  id: '/faturas',
+  path: '/faturas',
   getParentRoute: () => AppRoute,
 } as any)
 const AppEmpresasRoute = AppEmpresasRouteImport.update({
@@ -156,6 +205,11 @@ const AppAuditoriaRoute = AppAuditoriaRouteImport.update({
   path: '/auditoria',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAssinaturaRoute = AppAssinaturaRouteImport.update({
+  id: '/assinatura',
+  path: '/assinatura',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAlertasRoute = AppAlertasRouteImport.update({
   id: '/alertas',
   path: '/alertas',
@@ -166,183 +220,298 @@ const AppAgendamentosRoute = AppAgendamentosRouteImport.update({
   path: '/agendamentos',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminSaasPlanosRoute = AdminSaasPlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasPagamentosRoute = AdminSaasPagamentosRouteImport.update({
+  id: '/pagamentos',
+  path: '/pagamentos',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasLogsRoute = AdminSaasLogsRouteImport.update({
+  id: '/logs',
+  path: '/logs',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasLicencasRoute = AdminSaasLicencasRouteImport.update({
+  id: '/licencas',
+  path: '/licencas',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasClientesRoute = AdminSaasClientesRouteImport.update({
+  id: '/clientes',
+  path: '/clientes',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
+const AdminSaasAssinaturasRoute = AdminSaasAssinaturasRouteImport.update({
+  id: '/assinaturas',
+  path: '/assinaturas',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
+  '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
+  '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/licencas': typeof AdminSaasLicencasRoute
+  '/admin-saas/logs': typeof AdminSaasLogsRoute
+  '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
+  '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
   '/app/empresas': typeof AppEmpresasRoute
+  '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
   '/app/midias': typeof AppMidiasRoute
   '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/operador': typeof AppOperadorRoute
   '/app/playlists': typeof AppPlaylistsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/app/visualizacao': typeof AppVisualizacaoRoute
+  '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/checkout': typeof CheckoutRoute
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
+  '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
+  '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/licencas': typeof AdminSaasLicencasRoute
+  '/admin-saas/logs': typeof AdminSaasLogsRoute
+  '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
+  '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
   '/app/empresas': typeof AppEmpresasRoute
+  '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
   '/app/midias': typeof AppMidiasRoute
   '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/operador': typeof AppOperadorRoute
   '/app/playlists': typeof AppPlaylistsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/app/visualizacao': typeof AppVisualizacaoRoute
+  '/admin-saas': typeof AdminSaasIndexRoute
   '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/checkout': typeof CheckoutRoute
   '/configurar': typeof ConfigurarRoute
   '/login': typeof LoginRoute
   '/pareamento': typeof PareamentoRoute
+  '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
+  '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/licencas': typeof AdminSaasLicencasRoute
+  '/admin-saas/logs': typeof AdminSaasLogsRoute
+  '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
+  '/admin-saas/planos': typeof AdminSaasPlanosRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
+  '/app/assinatura': typeof AppAssinaturaRoute
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
   '/app/empresas': typeof AppEmpresasRoute
+  '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
   '/app/midias': typeof AppMidiasRoute
   '/app/monitoramento': typeof AppMonitoramentoRoute
+  '/app/operador': typeof AppOperadorRoute
   '/app/playlists': typeof AppPlaylistsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/relatorios': typeof AppRelatoriosRoute
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/app/visualizacao': typeof AppVisualizacaoRoute
+  '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin-saas'
     | '/app'
+    | '/checkout'
     | '/configurar'
     | '/login'
     | '/pareamento'
+    | '/planos'
     | '/player'
     | '/player-screen'
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/admin-saas/assinaturas'
+    | '/admin-saas/clientes'
+    | '/admin-saas/licencas'
+    | '/admin-saas/logs'
+    | '/admin-saas/pagamentos'
+    | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
+    | '/app/assinatura'
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
     | '/app/empresas'
+    | '/app/faturas'
     | '/app/grupos'
     | '/app/midias'
     | '/app/monitoramento'
+    | '/app/operador'
     | '/app/playlists'
     | '/app/preview'
     | '/app/relatorios'
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/app/visualizacao'
+    | '/admin-saas/'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/checkout'
     | '/configurar'
     | '/login'
     | '/pareamento'
+    | '/planos'
     | '/player'
     | '/player-screen'
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/admin-saas/assinaturas'
+    | '/admin-saas/clientes'
+    | '/admin-saas/licencas'
+    | '/admin-saas/logs'
+    | '/admin-saas/pagamentos'
+    | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
+    | '/app/assinatura'
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
     | '/app/empresas'
+    | '/app/faturas'
     | '/app/grupos'
     | '/app/midias'
     | '/app/monitoramento'
+    | '/app/operador'
     | '/app/playlists'
     | '/app/preview'
     | '/app/relatorios'
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/app/visualizacao'
+    | '/admin-saas'
     | '/app'
   id:
     | '__root__'
     | '/'
+    | '/admin-saas'
     | '/app'
+    | '/checkout'
     | '/configurar'
     | '/login'
     | '/pareamento'
+    | '/planos'
     | '/player'
     | '/player-screen'
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/admin-saas/assinaturas'
+    | '/admin-saas/clientes'
+    | '/admin-saas/licencas'
+    | '/admin-saas/logs'
+    | '/admin-saas/pagamentos'
+    | '/admin-saas/planos'
     | '/app/agendamentos'
     | '/app/alertas'
+    | '/app/assinatura'
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
     | '/app/empresas'
+    | '/app/faturas'
     | '/app/grupos'
     | '/app/midias'
     | '/app/monitoramento'
+    | '/app/operador'
     | '/app/playlists'
     | '/app/preview'
     | '/app/relatorios'
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/app/visualizacao'
+    | '/admin-saas/'
     | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminSaasRoute: typeof AdminSaasRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
+  CheckoutRoute: typeof CheckoutRoute
   ConfigurarRoute: typeof ConfigurarRoute
   LoginRoute: typeof LoginRoute
   PareamentoRoute: typeof PareamentoRoute
+  PlanosRoute: typeof PlanosRoute
   PlayerRoute: typeof PlayerRoute
   PlayerScreenRoute: typeof PlayerScreenRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
@@ -387,6 +556,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/planos': {
+      id: '/planos'
+      path: '/planos'
+      fullPath: '/planos'
+      preLoaderRoute: typeof PlanosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pareamento': {
       id: '/pareamento'
       path: '/pareamento'
@@ -408,11 +584,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfigurarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-saas': {
+      id: '/admin-saas'
+      path: '/admin-saas'
+      fullPath: '/admin-saas'
+      preLoaderRoute: typeof AdminSaasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -427,6 +617,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/admin-saas/': {
+      id: '/admin-saas/'
+      path: '/'
+      fullPath: '/admin-saas/'
+      preLoaderRoute: typeof AdminSaasIndexRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/app/visualizacao': {
+      id: '/app/visualizacao'
+      path: '/visualizacao'
+      fullPath: '/app/visualizacao'
+      preLoaderRoute: typeof AppVisualizacaoRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/usuarios': {
@@ -471,6 +675,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPlaylistsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/operador': {
+      id: '/app/operador'
+      path: '/operador'
+      fullPath: '/app/operador'
+      preLoaderRoute: typeof AppOperadorRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/monitoramento': {
       id: '/app/monitoramento'
       path: '/monitoramento'
@@ -490,6 +701,13 @@ declare module '@tanstack/react-router' {
       path: '/grupos'
       fullPath: '/app/grupos'
       preLoaderRoute: typeof AppGruposRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/faturas': {
+      id: '/app/faturas'
+      path: '/faturas'
+      fullPath: '/app/faturas'
+      preLoaderRoute: typeof AppFaturasRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/empresas': {
@@ -520,6 +738,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAuditoriaRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/assinatura': {
+      id: '/app/assinatura'
+      path: '/assinatura'
+      fullPath: '/app/assinatura'
+      preLoaderRoute: typeof AppAssinaturaRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/alertas': {
       id: '/app/alertas'
       path: '/alertas'
@@ -534,44 +759,118 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAgendamentosRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin-saas/planos': {
+      id: '/admin-saas/planos'
+      path: '/planos'
+      fullPath: '/admin-saas/planos'
+      preLoaderRoute: typeof AdminSaasPlanosRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/pagamentos': {
+      id: '/admin-saas/pagamentos'
+      path: '/pagamentos'
+      fullPath: '/admin-saas/pagamentos'
+      preLoaderRoute: typeof AdminSaasPagamentosRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/logs': {
+      id: '/admin-saas/logs'
+      path: '/logs'
+      fullPath: '/admin-saas/logs'
+      preLoaderRoute: typeof AdminSaasLogsRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/licencas': {
+      id: '/admin-saas/licencas'
+      path: '/licencas'
+      fullPath: '/admin-saas/licencas'
+      preLoaderRoute: typeof AdminSaasLicencasRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/clientes': {
+      id: '/admin-saas/clientes'
+      path: '/clientes'
+      fullPath: '/admin-saas/clientes'
+      preLoaderRoute: typeof AdminSaasClientesRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
+    '/admin-saas/assinaturas': {
+      id: '/admin-saas/assinaturas'
+      path: '/assinaturas'
+      fullPath: '/admin-saas/assinaturas'
+      preLoaderRoute: typeof AdminSaasAssinaturasRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
   }
 }
+
+interface AdminSaasRouteChildren {
+  AdminSaasAssinaturasRoute: typeof AdminSaasAssinaturasRoute
+  AdminSaasClientesRoute: typeof AdminSaasClientesRoute
+  AdminSaasLicencasRoute: typeof AdminSaasLicencasRoute
+  AdminSaasLogsRoute: typeof AdminSaasLogsRoute
+  AdminSaasPagamentosRoute: typeof AdminSaasPagamentosRoute
+  AdminSaasPlanosRoute: typeof AdminSaasPlanosRoute
+  AdminSaasIndexRoute: typeof AdminSaasIndexRoute
+}
+
+const AdminSaasRouteChildren: AdminSaasRouteChildren = {
+  AdminSaasAssinaturasRoute: AdminSaasAssinaturasRoute,
+  AdminSaasClientesRoute: AdminSaasClientesRoute,
+  AdminSaasLicencasRoute: AdminSaasLicencasRoute,
+  AdminSaasLogsRoute: AdminSaasLogsRoute,
+  AdminSaasPagamentosRoute: AdminSaasPagamentosRoute,
+  AdminSaasPlanosRoute: AdminSaasPlanosRoute,
+  AdminSaasIndexRoute: AdminSaasIndexRoute,
+}
+
+const AdminSaasRouteWithChildren = AdminSaasRoute._addFileChildren(
+  AdminSaasRouteChildren,
+)
 
 interface AppRouteChildren {
   AppAgendamentosRoute: typeof AppAgendamentosRoute
   AppAlertasRoute: typeof AppAlertasRoute
+  AppAssinaturaRoute: typeof AppAssinaturaRoute
   AppAuditoriaRoute: typeof AppAuditoriaRoute
   AppCampanhasRoute: typeof AppCampanhasRoute
   AppConfiguracoesRoute: typeof AppConfiguracoesRoute
   AppEmpresasRoute: typeof AppEmpresasRoute
+  AppFaturasRoute: typeof AppFaturasRoute
   AppGruposRoute: typeof AppGruposRoute
   AppMidiasRoute: typeof AppMidiasRoute
   AppMonitoramentoRoute: typeof AppMonitoramentoRoute
+  AppOperadorRoute: typeof AppOperadorRoute
   AppPlaylistsRoute: typeof AppPlaylistsRoute
   AppPreviewRoute: typeof AppPreviewRoute
   AppRelatoriosRoute: typeof AppRelatoriosRoute
   AppTelasRoute: typeof AppTelasRoute
   AppUnidadesRoute: typeof AppUnidadesRoute
   AppUsuariosRoute: typeof AppUsuariosRoute
+  AppVisualizacaoRoute: typeof AppVisualizacaoRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
   AppAgendamentosRoute: AppAgendamentosRoute,
   AppAlertasRoute: AppAlertasRoute,
+  AppAssinaturaRoute: AppAssinaturaRoute,
   AppAuditoriaRoute: AppAuditoriaRoute,
   AppCampanhasRoute: AppCampanhasRoute,
   AppConfiguracoesRoute: AppConfiguracoesRoute,
   AppEmpresasRoute: AppEmpresasRoute,
+  AppFaturasRoute: AppFaturasRoute,
   AppGruposRoute: AppGruposRoute,
   AppMidiasRoute: AppMidiasRoute,
   AppMonitoramentoRoute: AppMonitoramentoRoute,
+  AppOperadorRoute: AppOperadorRoute,
   AppPlaylistsRoute: AppPlaylistsRoute,
   AppPreviewRoute: AppPreviewRoute,
   AppRelatoriosRoute: AppRelatoriosRoute,
   AppTelasRoute: AppTelasRoute,
   AppUnidadesRoute: AppUnidadesRoute,
   AppUsuariosRoute: AppUsuariosRoute,
+  AppVisualizacaoRoute: AppVisualizacaoRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
@@ -579,10 +878,13 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminSaasRoute: AdminSaasRouteWithChildren,
   AppRoute: AppRouteWithChildren,
+  CheckoutRoute: CheckoutRoute,
   ConfigurarRoute: ConfigurarRoute,
   LoginRoute: LoginRoute,
   PareamentoRoute: PareamentoRoute,
+  PlanosRoute: PlanosRoute,
   PlayerRoute: PlayerRoute,
   PlayerScreenRoute: PlayerScreenRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
