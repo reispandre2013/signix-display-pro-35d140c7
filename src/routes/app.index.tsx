@@ -35,6 +35,17 @@ type ScreenRow = {
 };
 
 function Dashboard() {
+  const { role, isOperador, isVisualizador, isSuperAdmin } = useRole();
+
+  // Redireciona cada perfil ao seu próprio painel.
+  if (isSuperAdmin) return <Navigate to="/admin-saas" />;
+  if (isOperador) return <Navigate to="/app/operador" />;
+  if (isVisualizador) return <Navigate to="/app/visualizacao" />;
+
+  return <MasterDashboard />;
+}
+
+function MasterDashboard() {
   const screensQ = useScreens();
   const campaignsQ = useCampaigns();
   const alertsQ = useAlerts();
