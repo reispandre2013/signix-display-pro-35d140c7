@@ -2,18 +2,7 @@
 -- Signix — Camada SaaS: roles, tabelas de billing, permissões, RLS, helpers
 -- Idempotente / seguro em deploy incremental. Não remove tabelas existentes.
 -- ============================================================================
-
--- 1) enum app_role: super_admin
-do $$
-begin
-  if not exists (
-    select 1 from pg_enum e
-    join pg_type t on t.oid = e.enumtypid
-    where t.typname = 'app_role' and e.enumlabel = 'super_admin'
-  ) then
-    alter type public.app_role add value 'super_admin';
-  end if;
-end$$;
+-- (enum super_admin: migration 20260424120000_app_role_add_super_admin.sql)
 
 -- 2) Pesos de papel (>= inclui tudo abaixo em has_role; super_admin inclui tudo)
 create or replace function public.role_weight(role_name public.app_role)
@@ -386,7 +375,6 @@ $$;
 
 grant execute on function public.get_user_saas_context() to authenticated;
 grant execute on function public.refresh_usage_counters(uuid) to authenticated, service_role;
-grant execute on function public.check_plan_limit(uuid, text, integer) to authenticated, service_role;
 
 -- 12) Validação de limites
 create or replace function public.check_plan_limit(p_org uuid, p_kind text, p_by integer default 1)
@@ -400,7 +388,7 @@ declare
   lim_val bigint;
   cur_val numeric;
   block boolean := false;
-  orgst public.record_status%type;
+  orgst public.record_status;
   lic_screens int;
   lic_users int;
   lic_playlists int;
@@ -471,6 +459,8 @@ begin
 end;
 $$;
 
+grant execute on function public.check_plan_limit(uuid, text, integer) to authenticated, service_role;
+
 -- 13) RLS: tabelas SaaS
 alter table public.plans enable row level security;
 alter table public.subscriptions enable row level security;
@@ -507,7 +497,7 @@ create policy "subscriptions_select" on public.subscriptions for select to authe
     organization_id = (select p.organization_id from public.profiles p where p.auth_user_id = auth.uid())
     or public.is_platform_admin()
   );
-create policy "subscriptions_mutation_super" on public.subscriptions for insert, update, delete to authenticated
+create policy "subscriptions_mutation_super" on public.subscriptions for all to authenticated
   using (public.is_platform_admin()) with check (public.is_platform_admin());
 
 drop policy if exists "invoices_org" on public.invoices;
@@ -518,7 +508,7 @@ create policy "invoices_select" on public.invoices for select to authenticated
     organization_id = (select p.organization_id from public.profiles p where p.auth_user_id = auth.uid())
     or public.is_platform_admin()
   );
-create policy "invoices_mutation_super" on public.invoices for insert, update, delete to authenticated
+create policy "invoices_mutation_super" on public.invoices for all to authenticated
   using (public.is_platform_admin()) with check (public.is_platform_admin());
 
 drop policy if exists "payments_org" on public.payments;
@@ -529,7 +519,7 @@ create policy "payments_select" on public.payments for select to authenticated
     organization_id = (select p.organization_id from public.profiles p where p.auth_user_id = auth.uid())
     or public.is_platform_admin()
   );
-create policy "payments_mutation_super" on public.payments for insert, update, delete to authenticated
+create policy "payments_mutation_super" on public.payments for all to authenticated
   using (public.is_platform_admin()) with check (public.is_platform_admin());
 
 drop policy if exists "licenses_org" on public.licenses;
@@ -540,7 +530,7 @@ create policy "licenses_select" on public.licenses for select to authenticated
     organization_id = (select p.organization_id from public.profiles p where p.auth_user_id = auth.uid())
     or public.is_platform_admin()
   );
-create policy "licenses_mutation_super" on public.licenses for insert, update, delete to authenticated
+create policy "licenses_mutation_super" on public.licenses for all to authenticated
   using (public.is_platform_admin()) with check (public.is_platform_admin());
 
 drop policy if exists "usage_org" on public.usage_counters;

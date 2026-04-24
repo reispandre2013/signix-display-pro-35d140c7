@@ -5,4 +5,4 @@ project_id = "auhwylnhqmdgphsvjszr"
 enabled = true
 
 [db]
-major_version = 15
+major_version = 17
