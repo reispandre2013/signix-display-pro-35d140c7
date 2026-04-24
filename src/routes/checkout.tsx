@@ -5,6 +5,9 @@ import { usePlanByCode } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
+import { supabase } from "@/integrations/supabase/client";
+import { hasSupabaseConfig as isSupabaseConfigured } from "@/lib/supabase-client";
 
 interface CheckoutSearch {
   plan?: string;
@@ -20,11 +23,32 @@ export const Route = createFileRoute("/checkout")({
   component: CheckoutPage,
 });
 
+type CreateCheckoutData = {
+  id?: string;
+  checkout_url?: string | null;
+  message?: string;
+  error?: string;
+  provider?: string;
+  asaas_subscription_id?: string;
+};
+
+function methodToAsaas(
+  m: "card" | "pix" | "boleto",
+): "UNDEFINED" | "CREDIT_CARD" | "PIX" | "BOLETO" {
+  if (m === "card") return "CREDIT_CARD";
+  if (m === "pix") return "PIX";
+  return "BOLETO";
+}
+
 function CheckoutPage() {
   const search = Route.useSearch();
   const planQ = usePlanByCode(search.plan);
   const plan = planQ.data;
   const cycle = search.cycle ?? "monthly";
+  const { session, loading: authLoading } = useAuth();
+  const [companyName, setCompanyName] = useState("");
+  const [cpfCnpj, setCpfCnpj] = useState("");
+
   const amount = plan
     ? cycle === "monthly"
       ? plan.price_monthly_cents
@@ -37,13 +61,53 @@ function CheckoutPage() {
   const discount = coupon.trim().toLowerCase() === "signix10" ? Math.round(amount * 0.1) : 0;
   const total = amount - discount;
 
+  const loginRedirect = `/checkout?plan=${encodeURIComponent(search.plan ?? "")}&cycle=${cycle}`;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isSupabaseConfigured()) {
+      toast.error("Supabase não configurado neste ambiente.");
+      return;
+    }
+    if (!plan) return;
+    if (!session) {
+      toast.error("Inicie sessão para concluir o pedido e registar a sessão de checkout no servidor.");
+      return;
+    }
+    const docDigits = cpfCnpj.replace(/\D/g, "");
+    if (docDigits.length !== 11 && docDigits.length !== 14) {
+      toast.error("Informe CPF (11) ou CNPJ (14) dígitos — obrigatório para a integração com o Asaas.");
+      return;
+    }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success("Pagamento simulado aprovado! (mock)");
-    }, 1200);
+    const { data, error } = await supabase.functions.invoke<CreateCheckoutData>("create-checkout-session", {
+      body: {
+        plan_id: plan.id,
+        company_name: companyName.trim() || undefined,
+        buyer_email: session.user.email ?? undefined,
+        cpf_cnpj: docDigits,
+        billing_cycle: cycle,
+        billing_type_asaas: methodToAsaas(method),
+      },
+    });
+    setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    const d = (data ?? {}) as CreateCheckoutData;
+    if (d.error) {
+      toast.error(d.error);
+      return;
+    }
+    if (d.checkout_url) {
+      window.location.href = d.checkout_url;
+      return;
+    }
+    toast.success(
+      d.message ??
+        `Pedido de checkout ${d.provider === "asaas" ? "Asaas" : ""} criado.`.trim(),
+    );
   };
 
   if (planQ.isLoading) {
@@ -83,13 +147,31 @@ function CheckoutPage() {
       </header>
 
       <main className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
+        {!authLoading && !session && (
+          <div className="lg:col-span-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-foreground/90">
+            <Link to="/login" search={{ redirect: loginRedirect }} className="font-medium text-primary underline">
+              Inicie sessão
+            </Link>{" "}
+            para concluir o pedido. O registo cria a sessão de checkout no Supabase (Edge Function) com o teu
+            utilizador.
+          </div>
+        )}
+
+        <form id="form-checkout" onSubmit={handleSubmit} className="lg:col-span-2 space-y-5">
           <section className="rounded-xl border border-border bg-card p-5">
             <h2 className="font-display font-semibold">Dados do comprador</h2>
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
               <Field label="Nome completo" required />
               <Field label="Email" type="email" required />
-              <Field label="CPF/CNPJ" required />
+              <Field
+                label="CPF/CNPJ"
+                required
+                value={cpfCnpj}
+                onChange={(e) => setCpfCnpj(e.target.value)}
+                inputMode="numeric"
+                autoComplete="off"
+                placeholder="Somente números"
+              />
               <Field label="Telefone" required />
             </div>
           </section>
@@ -97,7 +179,14 @@ function CheckoutPage() {
           <section className="rounded-xl border border-border bg-card p-5">
             <h2 className="font-display font-semibold">Empresa</h2>
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-              <Field label="Razão social" required className="md:col-span-2" />
+              <Field
+                label="Razão social"
+                required
+                className="md:col-span-2"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                autoComplete="organization"
+              />
               <Field label="Cidade" required />
               <Field label="Estado" required />
             </div>
@@ -176,15 +265,17 @@ function CheckoutPage() {
             </div>
 
             <button
-              onClick={handleSubmit}
-              disabled={loading}
+              type="submit"
+              form="form-checkout"
+              disabled={loading || !session}
               className="mt-5 w-full inline-flex items-center justify-center gap-1.5 rounded-md bg-gradient-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 disabled:opacity-60"
             >
               {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-              Confirmar pagamento
+              {session ? "Confirmar e registar pedido" : "Inicie sessão para continuar"}
             </button>
             <p className="mt-3 text-[10px] text-center text-muted-foreground flex items-center justify-center gap-1">
-              <ShieldCheck className="h-3 w-3" /> Pagamento seguro · ambiente de testes
+              <ShieldCheck className="h-3 w-3" /> Sessão autenticada com Supabase; gateway de pagamento em produção fica
+              ligado no backend.
             </p>
           </div>
         </aside>

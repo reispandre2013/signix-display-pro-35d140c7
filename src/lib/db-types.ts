@@ -26,6 +26,8 @@ export interface Organization {
   timezone: string;
   language: string;
   status: RecordStatus;
+  /** Cliente cus_xxx no Asaas (billing). */
+  asaas_customer_id?: string | null;
   created_at: string;
   updated_at: string;
 }

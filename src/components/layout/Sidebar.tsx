@@ -17,12 +17,12 @@ import {
   ScrollText,
   Eye,
   Tv,
-  LogOut,
   Sparkles,
   CreditCard,
   Receipt,
   Shield,
 } from "lucide-react";
+import { SidebarPlanCallout } from "./SidebarPlanCallout";
 import { cn } from "@/lib/utils";
 import { useRole, type ModuleKey } from "@/lib/use-role";
 
@@ -161,27 +161,7 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="m-3 rounded-xl border border-sidebar-border bg-gradient-surface p-4">
-        <div className="flex items-center gap-2 text-xs font-semibold">
-          <Sparkles className="h-4 w-4 text-primary" />
-          <span>Plano Professional</span>
-        </div>
-        <p className="mt-1 text-[11px] text-muted-foreground leading-snug">
-          7 de 10 telas em uso. Faça upgrade para liberar mais.
-        </p>
-        <Link
-          to="/planos"
-          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-md border border-sidebar-border bg-background/40 px-3 py-1.5 text-xs font-medium hover:bg-background/70 transition-smooth"
-        >
-          <Sparkles className="h-3.5 w-3.5" /> Ver planos
-        </Link>
-        <Link
-          to="/login"
-          className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-md border border-sidebar-border bg-background/20 px-3 py-1.5 text-[11px] font-medium hover:bg-background/50 transition-smooth"
-        >
-          <LogOut className="h-3 w-3" /> Sair
-        </Link>
-      </div>
+      <SidebarPlanCallout />
     </aside>
   );
 }

@@ -4,8 +4,14 @@ import { useState, FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { hasSupabaseConfig } from "@/lib/supabase-client";
+import { isSafeInternalRedirect } from "@/lib/safe-redirect";
+
+type LoginSearch = { redirect?: string };
 
 export const Route = createFileRoute("/login")({
+  validateSearch: (s: Record<string, unknown>): LoginSearch => ({
+    redirect: typeof s.redirect === "string" && s.redirect.length > 0 ? s.redirect : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Entrar — Signix" },
@@ -22,10 +28,16 @@ function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
   const { signIn, session, loading } = useAuth();
+  const { redirect: redirectTo } = Route.useSearch();
 
   useEffect(() => {
-    if (!loading && session) navigate({ to: "/app", replace: true });
-  }, [loading, session, navigate]);
+    if (loading || !session) return;
+    if (isSafeInternalRedirect(redirectTo)) {
+      window.location.replace(redirectTo);
+      return;
+    }
+    void navigate({ to: "/app", replace: true });
+  }, [loading, session, navigate, redirectTo]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -45,7 +57,11 @@ function LoginPage() {
       return;
     }
     toast.success("Bem-vindo!");
-    navigate({ to: "/app", replace: true });
+    if (isSafeInternalRedirect(redirectTo)) {
+      window.location.replace(redirectTo);
+    } else {
+      void navigate({ to: "/app", replace: true });
+    }
   };
 
   return (

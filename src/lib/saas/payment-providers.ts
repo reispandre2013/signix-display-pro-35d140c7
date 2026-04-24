@@ -1,6 +1,6 @@
 /**
- * Adaptador de pagamento: implemente em integrações reais (Stripe, Mercado Pago, Asaas, etc.).
- * O webhook (`payment-webhook`) despoleta o fluxo e grava `payments.raw_payload` em Postgres.
+ * Asaas: credenciais e webhook estão em `supabase/functions` (create-checkout + payment-webhook) e `docs/integrations/asaas.md`.
+ * O webhook despoleta o fluxo e grava `payments.raw_payload` em Postgres; stub legado ainda suporta `PAYMENT_WEBHOOK_SECRET`.
  */
 export type PaymentProviderName = "stripe" | "mercado_pago" | "asaas" | "infinitepay" | "custom";
 

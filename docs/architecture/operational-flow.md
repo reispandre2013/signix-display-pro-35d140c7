@@ -1,5 +1,7 @@
 # Fluxograma Operacional
 
+Integração com deploy (Lovable) e com camada SaaS: ver [lovable-saas-and-signage-integration.md](./lovable-saas-and-signage-integration.md).
+
 ```mermaid
 flowchart TD
     A[Usuário autentica no painel] --> B[Seleciona empresa/unidade]
