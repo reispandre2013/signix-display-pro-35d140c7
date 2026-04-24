@@ -16,11 +16,19 @@ import { Route as PlayerScreenRouteImport } from './routes/player-screen'
 import { Route as PlayerRouteImport } from './routes/player'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PareamentoRouteImport } from './routes/pareamento'
+import { Route as PagamentosRouteImport } from './routes/pagamentos'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as LicencasRouteImport } from './routes/licencas'
+import { Route as FaturasRouteImport } from './routes/faturas'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConfigurarRouteImport } from './routes/configurar'
+import { Route as ClientesRouteImport } from './routes/clientes'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as AssinaturasRouteImport } from './routes/assinaturas'
+import { Route as AssinaturaRouteImport } from './routes/assinatura'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminSaasRouteImport } from './routes/admin-saas'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AdminSaasIndexRouteImport } from './routes/admin-saas.index'
@@ -85,9 +93,29 @@ const PareamentoRoute = PareamentoRouteImport.update({
   path: '/pareamento',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PagamentosRoute = PagamentosRouteImport.update({
+  id: '/pagamentos',
+  path: '/pagamentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LicencasRoute = LicencasRouteImport.update({
+  id: '/licencas',
+  path: '/licencas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaturasRoute = FaturasRouteImport.update({
+  id: '/faturas',
+  path: '/faturas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ConfigurarRoute = ConfigurarRouteImport.update({
@@ -95,9 +123,24 @@ const ConfigurarRoute = ConfigurarRouteImport.update({
   path: '/configurar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ClientesRoute = ClientesRouteImport.update({
+  id: '/clientes',
+  path: '/clientes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssinaturasRoute = AssinaturasRouteImport.update({
+  id: '/assinaturas',
+  path: '/assinaturas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssinaturaRoute = AssinaturaRouteImport.update({
+  id: '/assinatura',
+  path: '/assinatura',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -108,6 +151,11 @@ const AppRoute = AppRouteImport.update({
 const AdminSaasRoute = AdminSaasRouteImport.update({
   id: '/admin-saas',
   path: '/admin-saas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -253,11 +301,19 @@ const AdminSaasAssinaturasRoute = AdminSaasAssinaturasRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/assinatura': typeof AssinaturaRoute
+  '/assinaturas': typeof AssinaturasRoute
   '/checkout': typeof CheckoutRoute
+  '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
+  '/dashboard': typeof DashboardRoute
+  '/faturas': typeof FaturasRoute
+  '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
+  '/pagamentos': typeof PagamentosRoute
   '/pareamento': typeof PareamentoRoute
   '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
@@ -295,9 +351,17 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/assinatura': typeof AssinaturaRoute
+  '/assinaturas': typeof AssinaturasRoute
   '/checkout': typeof CheckoutRoute
+  '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
+  '/dashboard': typeof DashboardRoute
+  '/faturas': typeof FaturasRoute
+  '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
+  '/pagamentos': typeof PagamentosRoute
   '/pareamento': typeof PareamentoRoute
   '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
@@ -336,11 +400,19 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
+  '/assinatura': typeof AssinaturaRoute
+  '/assinaturas': typeof AssinaturasRoute
   '/checkout': typeof CheckoutRoute
+  '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
+  '/dashboard': typeof DashboardRoute
+  '/faturas': typeof FaturasRoute
+  '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
+  '/pagamentos': typeof PagamentosRoute
   '/pareamento': typeof PareamentoRoute
   '/planos': typeof PlanosRoute
   '/player': typeof PlayerRoute
@@ -380,11 +452,19 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/admin-saas'
     | '/app'
+    | '/assinatura'
+    | '/assinaturas'
     | '/checkout'
+    | '/clientes'
     | '/configurar'
+    | '/dashboard'
+    | '/faturas'
+    | '/licencas'
     | '/login'
+    | '/pagamentos'
     | '/pareamento'
     | '/planos'
     | '/player'
@@ -422,9 +502,17 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
+    | '/assinatura'
+    | '/assinaturas'
     | '/checkout'
+    | '/clientes'
     | '/configurar'
+    | '/dashboard'
+    | '/faturas'
+    | '/licencas'
     | '/login'
+    | '/pagamentos'
     | '/pareamento'
     | '/planos'
     | '/player'
@@ -462,11 +550,19 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/admin-saas'
     | '/app'
+    | '/assinatura'
+    | '/assinaturas'
     | '/checkout'
+    | '/clientes'
     | '/configurar'
+    | '/dashboard'
+    | '/faturas'
+    | '/licencas'
     | '/login'
+    | '/pagamentos'
     | '/pareamento'
     | '/planos'
     | '/player'
@@ -505,11 +601,19 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   AdminSaasRoute: typeof AdminSaasRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
+  AssinaturaRoute: typeof AssinaturaRoute
+  AssinaturasRoute: typeof AssinaturasRoute
   CheckoutRoute: typeof CheckoutRoute
+  ClientesRoute: typeof ClientesRoute
   ConfigurarRoute: typeof ConfigurarRoute
+  DashboardRoute: typeof DashboardRoute
+  FaturasRoute: typeof FaturasRoute
+  LicencasRoute: typeof LicencasRoute
   LoginRoute: typeof LoginRoute
+  PagamentosRoute: typeof PagamentosRoute
   PareamentoRoute: typeof PareamentoRoute
   PlanosRoute: typeof PlanosRoute
   PlayerRoute: typeof PlayerRoute
@@ -570,11 +674,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PareamentoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pagamentos': {
+      id: '/pagamentos'
+      path: '/pagamentos'
+      fullPath: '/pagamentos'
+      preLoaderRoute: typeof PagamentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/licencas': {
+      id: '/licencas'
+      path: '/licencas'
+      fullPath: '/licencas'
+      preLoaderRoute: typeof LicencasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faturas': {
+      id: '/faturas'
+      path: '/faturas'
+      fullPath: '/faturas'
+      preLoaderRoute: typeof FaturasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/configurar': {
@@ -584,11 +716,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfigurarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clientes': {
+      id: '/clientes'
+      path: '/clientes'
+      fullPath: '/clientes'
+      preLoaderRoute: typeof ClientesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
       fullPath: '/checkout'
       preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assinaturas': {
+      id: '/assinaturas'
+      path: '/assinaturas'
+      fullPath: '/assinaturas'
+      preLoaderRoute: typeof AssinaturasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assinatura': {
+      id: '/assinatura'
+      path: '/assinatura'
+      fullPath: '/assinatura'
+      preLoaderRoute: typeof AssinaturaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -603,6 +756,13 @@ declare module '@tanstack/react-router' {
       path: '/admin-saas'
       fullPath: '/admin-saas'
       preLoaderRoute: typeof AdminSaasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -878,11 +1038,19 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   AdminSaasRoute: AdminSaasRouteWithChildren,
   AppRoute: AppRouteWithChildren,
+  AssinaturaRoute: AssinaturaRoute,
+  AssinaturasRoute: AssinaturasRoute,
   CheckoutRoute: CheckoutRoute,
+  ClientesRoute: ClientesRoute,
   ConfigurarRoute: ConfigurarRoute,
+  DashboardRoute: DashboardRoute,
+  FaturasRoute: FaturasRoute,
+  LicencasRoute: LicencasRoute,
   LoginRoute: LoginRoute,
+  PagamentosRoute: PagamentosRoute,
   PareamentoRoute: PareamentoRoute,
   PlanosRoute: PlanosRoute,
   PlayerRoute: PlayerRoute,
