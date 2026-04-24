@@ -24,6 +24,7 @@ import { Route as AdminSaasRouteImport } from './routes/admin-saas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AdminSaasIndexRouteImport } from './routes/admin-saas.index'
+import { Route as AppVisualizacaoRouteImport } from './routes/app.visualizacao'
 import { Route as AppUsuariosRouteImport } from './routes/app.usuarios'
 import { Route as AppUnidadesRouteImport } from './routes/app.unidades'
 import { Route as AppTelasRouteImport } from './routes/app.telas'
@@ -123,6 +124,11 @@ const AdminSaasIndexRoute = AdminSaasIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminSaasRoute,
+} as any)
+const AppVisualizacaoRoute = AppVisualizacaoRouteImport.update({
+  id: '/visualizacao',
+  path: '/visualizacao',
+  getParentRoute: () => AppRoute,
 } as any)
 const AppUsuariosRoute = AppUsuariosRouteImport.update({
   id: '/usuarios',
@@ -283,6 +289,7 @@ export interface FileRoutesByFullPath {
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/app/visualizacao': typeof AppVisualizacaoRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
@@ -322,6 +329,7 @@ export interface FileRoutesByTo {
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/app/visualizacao': typeof AppVisualizacaoRoute
   '/admin-saas': typeof AdminSaasIndexRoute
   '/app': typeof AppIndexRoute
 }
@@ -364,6 +372,7 @@ export interface FileRoutesById {
   '/app/telas': typeof AppTelasRoute
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
+  '/app/visualizacao': typeof AppVisualizacaoRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
@@ -407,6 +416,7 @@ export interface FileRouteTypes {
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/app/visualizacao'
     | '/admin-saas/'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
@@ -446,6 +456,7 @@ export interface FileRouteTypes {
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/app/visualizacao'
     | '/admin-saas'
     | '/app'
   id:
@@ -487,6 +498,7 @@ export interface FileRouteTypes {
     | '/app/telas'
     | '/app/unidades'
     | '/app/usuarios'
+    | '/app/visualizacao'
     | '/admin-saas/'
     | '/app/'
   fileRoutesById: FileRoutesById
@@ -613,6 +625,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin-saas/'
       preLoaderRoute: typeof AdminSaasIndexRouteImport
       parentRoute: typeof AdminSaasRoute
+    }
+    '/app/visualizacao': {
+      id: '/app/visualizacao'
+      path: '/visualizacao'
+      fullPath: '/app/visualizacao'
+      preLoaderRoute: typeof AppVisualizacaoRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/usuarios': {
       id: '/app/usuarios'
@@ -828,6 +847,7 @@ interface AppRouteChildren {
   AppTelasRoute: typeof AppTelasRoute
   AppUnidadesRoute: typeof AppUnidadesRoute
   AppUsuariosRoute: typeof AppUsuariosRoute
+  AppVisualizacaoRoute: typeof AppVisualizacaoRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
@@ -850,6 +870,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppTelasRoute: AppTelasRoute,
   AppUnidadesRoute: AppUnidadesRoute,
   AppUsuariosRoute: AppUsuariosRoute,
+  AppVisualizacaoRoute: AppVisualizacaoRoute,
   AppIndexRoute: AppIndexRoute,
 }
 
