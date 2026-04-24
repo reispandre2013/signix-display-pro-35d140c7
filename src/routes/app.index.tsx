@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useRole } from "@/lib/use-role";
 import { MOCK_CURRENT_SUBSCRIPTION, MOCK_CURRENT_USAGE } from "@/lib/saas-mock";
 import { formatPrice } from "@/types/saas";
-import { format } from "date-fns";
+
 import { KpiCard } from "@/components/ui-kit/KpiCard";
 import { Panel } from "@/components/ui-kit/Panel";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
