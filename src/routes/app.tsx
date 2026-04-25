@@ -2,6 +2,7 @@ import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-
 import { useEffect } from "react";
 import { AppShell } from "@/components/layout/AppShell";
 import { useAuth } from "@/lib/auth-context";
+import { useRole } from "@/lib/use-role";
 import { hasSupabaseEnv } from "@/lib/supabase-client";
 import { getCurrentSession } from "@/services/auth-service";
 
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/app")({
 
 function AppLayout() {
   const { session, loading } = useAuth();
+  const { isSuperAdmin } = useRole();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +39,11 @@ function AppLayout() {
   }
 
   if (!session) return null;
+
+  if (isSuperAdmin) {
+    navigate({ to: "/admin-saas", replace: true });
+    return null;
+  }
 
   return (
     <AppShell>
