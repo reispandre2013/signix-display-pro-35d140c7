@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useLocation, useNavigate, redirect } fro
 import { useEffect } from "react";
 import {
   Sparkles, LayoutDashboard, Building2, Package, ScrollText, Receipt,
-  KeyRound, CreditCard, ArrowLeft, LogOut, Tv,
+  KeyRound, CreditCard, ArrowLeft, LogOut, Tv, Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
@@ -29,6 +29,7 @@ const nav = [
   { to: "/admin-saas/pagamentos", label: "Pagamentos", icon: Receipt },
   { to: "/admin-saas/licencas", label: "Licenças", icon: KeyRound },
   { to: "/admin-saas/logs", label: "Logs", icon: ScrollText },
+  { to: "/admin-saas/diagnostico", label: "Diagnóstico", icon: Stethoscope },
 ];
 
 function AdminSaasLayout() {
