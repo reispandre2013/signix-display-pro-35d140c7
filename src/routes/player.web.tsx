@@ -274,7 +274,7 @@ function WebPlayerRoute() {
           loop={false}
           onPlay={() => void writeLog("started")}
           onEnded={() => void onVideoEnded()}
-          onError={() => void writeLog("failed", null, "Erro de vídeo")}
+          onError={() => void writeLog("failed", undefined, "Erro de vídeo")}
         />
       );
     }
@@ -298,7 +298,7 @@ function WebPlayerRoute() {
         style={style}
         alt=""
         onLoad={() => void writeLog("started")}
-        onError={() => void writeLog("failed", null, "Erro de imagem")}
+        onError={() => void writeLog("failed", undefined, "Erro de imagem")}
       />
     );
   }, [current, effectiveFit, writeLog, payload?.items?.length]);
