@@ -27,8 +27,10 @@ function AppLayout() {
   useEffect(() => {
     if (!loading && !session) {
       navigate({ to: "/login", replace: true });
+    } else if (!loading && session && isSuperAdmin) {
+      navigate({ to: "/admin-saas", replace: true });
     }
-  }, [loading, session, navigate]);
+  }, [loading, session, isSuperAdmin, navigate]);
 
   if (loading) {
     return (
@@ -41,7 +43,6 @@ function AppLayout() {
   if (!session) return null;
 
   if (isSuperAdmin) {
-    navigate({ to: "/admin-saas", replace: true });
     return null;
   }
 
