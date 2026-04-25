@@ -187,8 +187,8 @@ export function useOrgInvoices() {
 
 /** Diretório para painel super admin: une orgs, última assinatura, uso, licença, master. */
 export function useSaasDirectory() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "directory"],
@@ -308,8 +308,8 @@ type PaymentRow = {
 };
 
 export function useRecentSaaSPayments(limit = 8) {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "payments", "recent", limit],
@@ -355,8 +355,8 @@ export type SaasMetrics = {
 };
 
 export function useSaasMetrics() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "metrics"],
@@ -435,8 +435,8 @@ function emptyMetrics(): SaasMetrics {
 type AuditListItem = { id: string; actor: string; action: string; target: string; created_at: string };
 
 export function useAuditLogPreview(limit = 20) {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "audit", limit],
