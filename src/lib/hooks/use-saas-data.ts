@@ -513,8 +513,8 @@ export type LicenseTableRow = {
 };
 
 export function useSaaSLicensesList() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
   return useQuery({
     queryKey: ["saas", "licenses", "all"],
     enabled: ok,
@@ -561,8 +561,8 @@ export type SubscriptionsTableRow = {
 };
 
 export function useSaaSAllSubscriptions() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
   return useQuery({
     queryKey: ["saas", "subscriptions", "all"],
     enabled: ok,
