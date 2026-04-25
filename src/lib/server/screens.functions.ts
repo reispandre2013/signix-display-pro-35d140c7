@@ -233,7 +233,8 @@ export const createPairingCode = createServerFn({ method: "POST" })
         throw new Error(`Falha ao registrar código: ${error.message}`);
       }
       console.log("[createPairingCode] inserted:", inserted?.code);
-      return { code: inserted?.code ?? code, expires_at: inserted?.expires_at ?? expires_at };
+      const savedCode = inserted?.code ?? code;
+      return { code: savedCode, pairing_code: savedCode, expires_at: inserted?.expires_at ?? expires_at };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error("[createPairingCode] exception:", msg);
