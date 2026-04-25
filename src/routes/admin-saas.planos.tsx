@@ -327,7 +327,7 @@ function PlanEditor({
               <div className="relative">
                 <NumberInput value={form.max_storage_gb} onChange={(v) => set("max_storage_gb", v)} />
                 <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
-                  GB
+                  MB
                 </span>
               </div>
             </Field>
