@@ -289,3 +289,163 @@ export const deletePlan = createServerFn({ method: "POST" })
     if (error) throw new Error(`plans.delete: ${error.message}`);
     return { ok: true };
   });
+
+// ============================================================================
+// Admin Master provisioning (super_admin only)
+// ============================================================================
+
+export type OrgOption = { id: string; name: string; slug: string };
+
+/** Lista organizações para popular o seletor do criador de admin_master. */
+export const listOrganizationsForAdmin = createServerFn({ method: "POST" }).handler(
+  async (): Promise<{ organizations: OrgOption[] }> => {
+    mustEnv();
+    const user = await getAuthedUser();
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    await assertSuperAdmin(admin, user.id);
+    const { data, error } = await admin
+      .from("organizations")
+      .select("id,name,slug")
+      .order("name", { ascending: true });
+    if (error) throw new Error(`organizations.list: ${error.message}`);
+    return { organizations: (data ?? []) as OrgOption[] };
+  },
+);
+
+export type CreateAdminMasterInput = {
+  email: string;
+  password: string;
+  name: string;
+  organization_id: string;
+};
+
+/** Cria um usuário admin_master vinculado a uma organização existente. */
+export const createAdminMaster = createServerFn({ method: "POST" })
+  .inputValidator((input: CreateAdminMasterInput) => {
+    if (!input?.email || !/^\S+@\S+\.\S+$/.test(input.email))
+      throw new Error("Email inválido.");
+    if (!input?.password || input.password.length < 8)
+      throw new Error("Senha precisa ter ao menos 8 caracteres.");
+    if (!input?.name || input.name.trim().length < 2)
+      throw new Error("Nome obrigatório.");
+    if (!input?.organization_id) throw new Error("Organização obrigatória.");
+    return input;
+  })
+  .handler(
+    async ({
+      data,
+    }): Promise<{ ok: true; user_id: string; profile_id: string | null; organization_id: string }> => {
+      mustEnv();
+      const caller = await getAuthedUser();
+      const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+        auth: { persistSession: false, autoRefreshToken: false },
+      });
+      await assertSuperAdmin(admin, caller.id);
+
+      // Valida organização
+      const { data: org, error: orgErr } = await admin
+        .from("organizations")
+        .select("id,name")
+        .eq("id", data.organization_id)
+        .maybeSingle();
+      if (orgErr) throw new Error(`organizations.get: ${orgErr.message}`);
+      if (!org) throw new Error("Organização não encontrada.");
+
+      // 1) Cria (ou recupera) o usuário no auth
+      let userId: string | null = null;
+      const { data: created, error: createErr } = await admin.auth.admin.createUser({
+        email: data.email,
+        password: data.password,
+        email_confirm: true,
+        user_metadata: { name: data.name },
+      });
+      if (createErr) {
+        // Se já existir, busca pelo email via listUsers (paginado, busca primeira página suficiente)
+        if (/already|exists|registered|duplicate/i.test(createErr.message)) {
+          const { data: list, error: listErr } = await admin.auth.admin.listUsers({
+            page: 1,
+            perPage: 200,
+          });
+          if (listErr) throw new Error(`auth.listUsers: ${listErr.message}`);
+          const existing = list.users.find(
+            (u) => u.email?.toLowerCase() === data.email.toLowerCase(),
+          );
+          if (!existing) throw new Error(`auth.createUser: ${createErr.message}`);
+          userId = existing.id;
+          // Atualiza a senha para a informada (super_admin solicitou)
+          const { error: updErr } = await admin.auth.admin.updateUserById(existing.id, {
+            password: data.password,
+            email_confirm: true,
+          });
+          if (updErr) throw new Error(`auth.updateUser: ${updErr.message}`);
+        } else {
+          throw new Error(`auth.createUser: ${createErr.message}`);
+        }
+      } else {
+        userId = created.user?.id ?? null;
+      }
+      if (!userId) throw new Error("Não foi possível obter user_id.");
+
+      // 2) Profile (upsert por auth_user_id)
+      const { data: existingProfile } = await admin
+        .from("profiles")
+        .select("id")
+        .eq("auth_user_id", userId)
+        .maybeSingle();
+
+      let profileId: string | null = (existingProfile as { id?: string } | null)?.id ?? null;
+
+      if (profileId) {
+        const { error: updProfErr } = await admin
+          .from("profiles")
+          .update({
+            organization_id: data.organization_id,
+            name: data.name,
+            email: data.email,
+            role: "admin_master",
+            status: "active",
+          })
+          .eq("id", profileId);
+        if (updProfErr) throw new Error(`profiles.update: ${updProfErr.message}`);
+      } else {
+        const { data: insProf, error: insProfErr } = await admin
+          .from("profiles")
+          .insert({
+            auth_user_id: userId,
+            organization_id: data.organization_id,
+            name: data.name,
+            email: data.email,
+            role: "admin_master",
+            status: "active",
+          })
+          .select("id")
+          .single();
+        if (insProfErr) throw new Error(`profiles.insert: ${insProfErr.message}`);
+        profileId = (insProf as { id: string }).id;
+      }
+
+      // 3) user_roles (com organization_id NOT NULL)
+      const { error: roleErr } = await admin
+        .from("user_roles")
+        .upsert(
+          {
+            user_id: userId,
+            organization_id: data.organization_id,
+            role: "admin_master",
+          },
+          { onConflict: "user_id,role,organization_id" },
+        );
+      if (roleErr && !/duplicate|unique/i.test(roleErr.message)) {
+        throw new Error(`user_roles: ${roleErr.message}`);
+      }
+
+      return {
+        ok: true,
+        user_id: userId,
+        profile_id: profileId,
+        organization_id: data.organization_id,
+      };
+    },
+  );
