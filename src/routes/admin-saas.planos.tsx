@@ -213,7 +213,7 @@ function PlanosPage() {
                     users
                   </div>
                   <div>
-                    <div className="font-bold text-foreground text-sm">{p.max_storage_gb}GB</div>
+                    <div className="font-bold text-foreground text-sm">{p.max_storage_gb}MB</div>
                     storage
                   </div>
                 </div>
