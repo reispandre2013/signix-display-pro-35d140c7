@@ -1,11 +1,14 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { RefreshCw, Tv, Wifi, Monitor, CheckCircle2, AlertTriangle } from "lucide-react";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { activateWebPlayer, validateWebPairing } from "@/lib/server/web-player.functions";
+import { RefreshCw, Tv, Wifi, Monitor, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
+import { activateWebPlayerByCode } from "@/lib/server/web-player.functions";
 
 const LS_WEB_DEVICE_TOKEN = "signix_web_device_token";
 const LS_WEB_SCREEN_ID = "signix_web_screen_id";
+const LS_WEB_PAIRING_CODE = "signix_web_pairing_code";
+const LS_WEB_PAIRING_EXP = "signix_web_pairing_exp";
 
 export const Route = createFileRoute("/pair")({
   head: () => ({ meta: [{ title: "Pareamento Web Player — Signix" }] }),
@@ -21,13 +24,17 @@ function buildFingerprint() {
 
 function PairRouteComponent() {
   const navigate = useNavigate();
-  const validateFn = useServerFn(validateWebPairing);
-  const activateFn = useServerFn(activateWebPlayer);
-  const [code, setCode] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState<"idle" | "ok" | "error">("idle");
-  const [message, setMessage] = useState<string>("");
-  const [online, setOnline] = useState<boolean>(navigator.onLine);
+  const createCodeFn = useServerFn(createPairingCode);
+  const checkStatusFn = useServerFn(checkPairingStatus);
+  const activateFn = useServerFn(activateWebPlayerByCode);
+
+  const [code, setCode] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [paired, setPaired] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [activating, setActivating] = useState(false);
+  const [online, setOnline] = useState<boolean>(typeof navigator !== "undefined" ? navigator.onLine : true);
+  const activatedRef = useRef(false);
 
   useEffect(() => {
     const up = () => setOnline(true);
@@ -40,49 +47,108 @@ function PairRouteComponent() {
     };
   }, []);
 
-  const normalizedCode = useMemo(
-    () => code.toUpperCase().replace(/[•·‧_]/g, "-").replace(/\s+/g, ""),
-    [code],
-  );
-
-  const onPair = async () => {
-    if (!normalizedCode || busy) return;
-    setBusy(true);
-    setStatus("idle");
-    setMessage("");
+  const generateCode = async () => {
+    setLoading(true);
+    setError(null);
+    setPaired(false);
+    activatedRef.current = false;
     try {
-      const res = await validateFn({
-        data: {
-          pairing_code: normalizedCode,
-          fingerprint: buildFingerprint(),
-          user_agent: navigator.userAgent,
-          screen_width: window.screen.width,
-          screen_height: window.screen.height,
-        },
-      });
-      await activateFn({
-        data: {
-          screen_id: res.screen_id as string,
-          device_token: res.device_token as string,
-        },
-      });
-      localStorage.setItem(LS_WEB_DEVICE_TOKEN, String(res.device_token));
-      localStorage.setItem(LS_WEB_SCREEN_ID, String(res.screen_id));
-      setStatus("ok");
-      setMessage("Dispositivo pareado com sucesso. A iniciar player...");
-      setTimeout(() => {
-        void navigate({
-          to: "/player/web",
-          search: { screenId: String(res.screen_id), token: String(res.device_token), debug: undefined },
-        });
-      }, 900);
-    } catch (err) {
-      setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Falha no pareamento.");
+      const res = await createCodeFn({ data: { platform: "web" } });
+      if (!res?.code) throw new Error("Resposta inválida do servidor.");
+      localStorage.setItem(LS_WEB_PAIRING_CODE, res.code);
+      if (res.expires_at) localStorage.setItem(LS_WEB_PAIRING_EXP, res.expires_at);
+      setCode(res.code);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setError(msg || "Não foi possível gerar o código de pareamento.");
+      setCode(null);
+      localStorage.removeItem(LS_WEB_PAIRING_CODE);
+      localStorage.removeItem(LS_WEB_PAIRING_EXP);
     } finally {
-      setBusy(false);
+      setLoading(false);
     }
   };
+
+  // Restaura código existente se ainda válido, senão gera um novo.
+  useEffect(() => {
+    const stored = localStorage.getItem(LS_WEB_PAIRING_CODE);
+    const storedExp = localStorage.getItem(LS_WEB_PAIRING_EXP);
+    const stillValid = stored && storedExp && new Date(storedExp).getTime() > Date.now() + 30_000;
+    if (stillValid && stored) {
+      setCode(stored);
+      setLoading(false);
+    } else {
+      localStorage.removeItem(LS_WEB_PAIRING_CODE);
+      localStorage.removeItem(LS_WEB_PAIRING_EXP);
+      void generateCode();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Polling: aguarda admin reivindicar o código no painel
+  useEffect(() => {
+    if (!code || paired) return;
+    let cancelled = false;
+    const poll = async () => {
+      try {
+        const res = await checkStatusFn({ data: { code } });
+        if (cancelled) return;
+        if (res?.paired) setPaired(true);
+        if (res?.expired) {
+          setError("Código expirado. Gere um novo.");
+        }
+      } catch {
+        // ignora erros transitórios
+      }
+    };
+    void poll();
+    const id = setInterval(poll, 4000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [code, paired, checkStatusFn]);
+
+  // Quando o admin vincula, ativa a sessão web (cria web_player_sessions + token)
+  useEffect(() => {
+    if (!paired || !code || activatedRef.current) return;
+    activatedRef.current = true;
+    setActivating(true);
+    (async () => {
+      try {
+        const res = await activateFn({
+          data: {
+            pairing_code: code,
+            fingerprint: buildFingerprint(),
+            user_agent: navigator.userAgent,
+            screen_width: window.screen.width,
+            screen_height: window.screen.height,
+          },
+        });
+        localStorage.setItem(LS_WEB_DEVICE_TOKEN, String(res.device_token));
+        localStorage.setItem(LS_WEB_SCREEN_ID, String(res.screen_id));
+        localStorage.removeItem(LS_WEB_PAIRING_CODE);
+        localStorage.removeItem(LS_WEB_PAIRING_EXP);
+        setTimeout(() => {
+          void navigate({
+            to: "/player/web",
+            search: {
+              screenId: String(res.screen_id),
+              token: String(res.device_token),
+              debug: undefined,
+            },
+          });
+        }, 700);
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        setError(msg || "Falha ao ativar sessão web.");
+        setActivating(false);
+        activatedRef.current = false;
+      }
+    })();
+  }, [paired, code, activateFn, navigate]);
+
+  const codeChars = useMemo(() => (code ? code.split("") : []), [code]);
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -97,68 +163,77 @@ function PairRouteComponent() {
       </header>
 
       <main className="flex-1 grid place-items-center px-4 py-8">
-        <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-lg">
-          <h1 className="text-2xl font-display font-bold">Parear dispositivo web</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Insira o código criado no painel em <strong>Dispositivos › Novo dispositivo</strong>.
-          </p>
+        <div className="w-full max-w-xl text-center">
+          {paired ? (
+            <>
+              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-emerald-600 px-3 py-1 text-xs">
+                <CheckCircle2 className="h-3.5 w-3.5" /> Vinculado pelo painel
+              </div>
+              <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
+                {activating ? "Ativando o player web..." : "Tudo pronto!"}
+              </h1>
+              <div className="mt-6 inline-flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" /> A iniciar a sessão web...
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Aguardando confirmação no painel
+              </div>
+              <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
+                Use este código para parear<br />o navegador como player
+              </h1>
+              <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">
+                No painel acesse <span className="text-foreground font-medium">Dispositivos › Novo dispositivo</span>,
+                cole o código abaixo e selecione a plataforma <span className="text-foreground font-medium">Web Player</span>.
+              </p>
 
-          <div className="mt-5">
-            <label className="text-xs uppercase tracking-wider text-muted-foreground">Código de pareamento</label>
-            <input
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="ABCD-EFGH"
-              className="mt-1 w-full rounded-lg border border-input bg-background px-4 py-3 font-mono text-lg tracking-widest uppercase text-center"
-            />
-          </div>
+              <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-border bg-card px-8 py-6 shadow-lg min-h-[120px]">
+                {loading ? (
+                  <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                ) : error ? (
+                  <p className="max-w-sm text-sm text-destructive flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4" />
+                    {error}
+                  </p>
+                ) : code ? (
+                  codeChars.map((c, i) =>
+                    c === "-" ? (
+                      <span key={i} className="font-display text-4xl text-muted-foreground">·</span>
+                    ) : (
+                      <span key={i} className="font-mono text-5xl font-bold text-primary w-10 text-center">
+                        {c}
+                      </span>
+                    ),
+                  )
+                ) : null}
+              </div>
 
-          <div className="mt-4 flex gap-2">
-            <button
-              type="button"
-              onClick={() => void onPair()}
-              disabled={!normalizedCode || busy}
-              className="inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-60"
-            >
-              {busy ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Tv className="h-4 w-4" />}
-              Parear dispositivo
-            </button>
-            <button
-              type="button"
-              onClick={() => setCode("")}
-              className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm"
-            >
-              Trocar código
-            </button>
-          </div>
+              <div className="mt-6 grid grid-cols-2 gap-3 max-w-md mx-auto text-left">
+                <Info label="Internet" value={online ? "Online" : "Offline"} icon={<Wifi className="h-3.5 w-3.5" />} />
+                <Info
+                  label="Resolução"
+                  value={`${typeof window !== "undefined" ? window.screen.width : 0}x${typeof window !== "undefined" ? window.screen.height : 0}`}
+                  icon={<Monitor className="h-3.5 w-3.5" />}
+                />
+              </div>
 
-          {status !== "idle" ? (
-            <div
-              className={`mt-4 rounded-lg border px-3 py-2 text-sm ${
-                status === "ok"
-                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
-                  : "border-destructive/40 bg-destructive/10 text-destructive"
-              }`}
-            >
-              <span className="inline-flex items-center gap-2">
-                {status === "ok" ? <CheckCircle2 className="h-4 w-4" /> : <AlertTriangle className="h-4 w-4" />}
-                {message}
-              </span>
-            </div>
-          ) : null}
+              <button
+                type="button"
+                onClick={() => void generateCode()}
+                disabled={loading}
+                className="mt-6 inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm hover:bg-accent disabled:opacity-60"
+              >
+                <RefreshCw className="h-3.5 w-3.5" /> Gerar novo código
+              </button>
 
-          <div className="mt-5 grid grid-cols-2 gap-2 text-xs">
-            <Info label="Internet" value={online ? "Online" : "Offline"} icon={<Wifi className="h-3.5 w-3.5" />} />
-            <Info
-              label="Resolução"
-              value={`${window.screen.width}x${window.screen.height}`}
-              icon={<Monitor className="h-3.5 w-3.5" />}
-            />
-          </div>
-
-          <p className="mt-5 text-xs text-muted-foreground">
-            Dica kiosk: abra em fullscreen (`F11`) e use URL direta do player após parear.
-          </p>
+              <p className="mt-5 text-xs text-muted-foreground">
+                Dica kiosk: abra em fullscreen (`F11`) após pareado.
+              </p>
+            </>
+          )}
         </div>
       </main>
     </div>
@@ -167,11 +242,11 @@ function PairRouteComponent() {
 
 function Info({ label, value, icon }: { label: string; value: string; icon: ReactNode }) {
   return (
-    <div className="rounded-md border border-border px-3 py-2">
+    <div className="rounded-md border border-border px-3 py-2 bg-card/60">
       <p className="text-[10px] uppercase tracking-wider text-muted-foreground inline-flex items-center gap-1">
         {icon} {label}
       </p>
-      <p className="mt-1 font-medium">{value}</p>
+      <p className="mt-1 font-medium text-sm">{value}</p>
     </div>
   );
 }
