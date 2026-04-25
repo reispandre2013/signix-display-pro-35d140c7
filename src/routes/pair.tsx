@@ -54,10 +54,11 @@ function PairRouteComponent() {
     activatedRef.current = false;
     try {
       const res = await createCodeFn({ data: { platform: "web" } });
-      if (!res?.code) throw new Error("Resposta inválida do servidor.");
-      localStorage.setItem(LS_WEB_PAIRING_CODE, res.code);
+      const generatedCode = typeof res?.code === "string" ? res.code : typeof res?.pairing_code === "string" ? res.pairing_code : "";
+      if (!generatedCode) throw new Error("Resposta inválida do servidor.");
+      localStorage.setItem(LS_WEB_PAIRING_CODE, generatedCode);
       if (res.expires_at) localStorage.setItem(LS_WEB_PAIRING_EXP, res.expires_at);
-      setCode(res.code);
+      setCode(generatedCode);
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       setError(msg || "Não foi possível gerar o código de pareamento.");
