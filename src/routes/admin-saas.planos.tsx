@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { useAdminPlansCatalog } from "@/lib/hooks/use-saas-data";
 import { upsertPlan, deletePlan } from "@/lib/server/saas-admin.functions";
+import { withAuthHeader } from "@/lib/server/with-auth-header";
 import { formatPrice, type Plan } from "@/types/saas";
 import { cn } from "@/lib/utils";
 
@@ -81,28 +82,30 @@ function PlanosPage() {
 
   const saveMutation = useMutation({
     mutationFn: async (form: FormState) => {
-      return upsertFn({
-        data: {
-          id: form.id ?? null,
-          code: form.code,
-          name: form.name,
-          description: form.description || null,
-          price_monthly_cents: form.price_monthly_cents,
-          price_yearly_cents: form.price_yearly_cents,
-          currency: form.currency || "BRL",
-          max_screens: form.max_screens,
-          max_users: form.max_users,
-          max_storage_gb: form.max_storage_gb,
-          features: form.features
-            .split("\n")
-            .map((s) => s.trim())
-            .filter(Boolean),
-          support_level: form.support_level || null,
-          is_recommended: form.is_recommended,
-          is_active: form.is_active,
-          sort_order: form.sort_order,
-        },
-      });
+      return withAuthHeader(() =>
+        upsertFn({
+          data: {
+            id: form.id ?? null,
+            code: form.code,
+            name: form.name,
+            description: form.description || null,
+            price_monthly_cents: form.price_monthly_cents,
+            price_yearly_cents: form.price_yearly_cents,
+            currency: form.currency || "BRL",
+            max_screens: form.max_screens,
+            max_users: form.max_users,
+            max_storage_gb: form.max_storage_gb,
+            features: form.features
+              .split("\n")
+              .map((s) => s.trim())
+              .filter(Boolean),
+            support_level: form.support_level || null,
+            is_recommended: form.is_recommended,
+            is_active: form.is_active,
+            sort_order: form.sort_order,
+          },
+        }),
+      );
     },
     onSuccess: () => {
       toast.success("Plano salvo com sucesso");
@@ -115,7 +118,7 @@ function PlanosPage() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => deleteFn({ data: { id } }),
+    mutationFn: async (id: string) => withAuthHeader(() => deleteFn({ data: { id } })),
     onSuccess: () => {
       toast.success("Plano removido");
       queryClient.invalidateQueries({ queryKey: ["saas", "plans"] });
@@ -321,7 +324,12 @@ function PlanEditor({
               <NumberInput value={form.max_users} onChange={(v) => set("max_users", v)} />
             </Field>
             <Field label="Storage (GB)">
-              <NumberInput value={form.max_storage_gb} onChange={(v) => set("max_storage_gb", v)} />
+              <div className="relative">
+                <NumberInput value={form.max_storage_gb} onChange={(v) => set("max_storage_gb", v)} />
+                <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
+                  GB
+                </span>
+              </div>
             </Field>
           </div>
 
