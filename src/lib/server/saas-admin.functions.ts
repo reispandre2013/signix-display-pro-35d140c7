@@ -2,29 +2,40 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL ?? process.env.SUPABASE_URL ?? "";
+const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
+
+const SUPABASE_URL =
+  process.env.SUPABASE_URL ??
+  process.env.VITE_SUPABASE_URL ??
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SUPABASE_URL ??
+  FALLBACK_SUPABASE_URL;
+
 const ANON =
+  process.env.SUPABASE_ANON_KEY ??
   process.env.VITE_SUPABASE_ANON_KEY ??
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  process.env.SUPABASE_ANON_KEY ??
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SUPABASE_ANON_KEY ??
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SUPABASE_PUBLISHABLE_KEY ??
   "";
+
 const SERVICE_ROLE =
   process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
 function mustEnv() {
-  if (!SUPABASE_URL || !ANON) throw new Error("Configuração Supabase incompleta no servidor.");
+  if (!SUPABASE_URL) throw new Error("Configuração Supabase incompleta no servidor (URL ausente).");
   if (!SERVICE_ROLE) throw new Error("SERVICE_ROLE_KEY ausente no ambiente do servidor.");
+  // ANON é opcional para operações admin; só falha se também precisar autenticar usuário
 }
 
 async function getAuthedUser() {
   const authHeader = getRequestHeader("authorization") ?? "";
   const token = authHeader.replace(/^Bearer\s+/i, "");
   if (!token) throw new Error("Não autenticado.");
-  const userClient = createClient(SUPABASE_URL, ANON, {
-    global: { headers: { Authorization: `Bearer ${token}` } },
+  // Usa service role para validar o token sem depender da ANON key no servidor
+  const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const { data, error } = await userClient.auth.getUser();
+  const { data, error } = await adminClient.auth.getUser(token);
   if (error || !data.user) throw new Error("Sessão inválida.");
   return data.user;
 }
