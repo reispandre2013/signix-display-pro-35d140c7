@@ -14,7 +14,10 @@ function fnUrl(name: string) {
   return `${SUPABASE_URL}/functions/v1/${name}`;
 }
 
-async function invokeEdge<TReq extends object, TRes>(name: string, payload: TReq): Promise<TRes> {
+async function invokeEdge<TReq extends object>(
+  name: string,
+  payload: TReq,
+): Promise<Record<string, unknown>> {
   if (!ANON_KEY) throw new Error("SUPABASE_ANON_KEY ausente.");
   const response = await fetch(fnUrl(name), {
     method: "POST",
@@ -25,7 +28,7 @@ async function invokeEdge<TReq extends object, TRes>(name: string, payload: TReq
     },
     body: JSON.stringify(payload),
   });
-  const parsed = (await response.json()) as TRes & { error?: string };
+  const parsed = (await response.json()) as Record<string, unknown> & { error?: string };
   if (!response.ok || parsed.error) {
     throw new Error(parsed.error ?? `Falha em ${name}`);
   }

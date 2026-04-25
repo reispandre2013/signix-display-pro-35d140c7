@@ -6,5 +6,5 @@ export const Route = createFileRoute("/player/$screenId")({
 
 function PlayerByScreenRoute() {
   const { screenId } = Route.useParams();
-  return <Navigate to="/player/web" search={{ screenId }} replace />;
+  return <Navigate to="/player/web" search={{ screenId, token: undefined, debug: undefined }} replace />;
 }
