@@ -4,7 +4,12 @@ import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import { getPlayerCapabilities, normalizePlayerPlatform, type PlayerPlatform } from "@/lib/platform-capabilities";
 
-const SUPABASE_URL = process.env.SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL ?? "";
+const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
+const SUPABASE_URL =
+  process.env.SUPABASE_URL ??
+  process.env.VITE_SUPABASE_URL ??
+  import.meta.env.VITE_SUPABASE_URL ??
+  FALLBACK_SUPABASE_URL;
 const ANON_KEY =
   process.env.SUPABASE_ANON_KEY ??
   process.env.SUPABASE_PUBLISHABLE_KEY ??
