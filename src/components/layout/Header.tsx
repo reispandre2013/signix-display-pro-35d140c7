@@ -2,6 +2,7 @@ import { Search, Bell, ChevronDown, HelpCircle, Plus, LogOut } from "lucide-reac
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
+import { useRole } from "@/lib/use-role";
 import { toast } from "sonner";
 
 const breadcrumbs: Record<string, string> = {
@@ -24,6 +25,7 @@ const breadcrumbs: Record<string, string> = {
 };
 
 const roleLabel: Record<string, string> = {
+  super_admin: "Super Admin",
   admin_master: "Admin Master",
   gestor: "Gestor",
   operador: "Operador",
@@ -34,6 +36,7 @@ export function Header() {
   const { pathname } = useLocation();
   const title = breadcrumbs[pathname] ?? "Signix";
   const { profile, user, signOut } = useAuth();
+  const { role, label } = useRole();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -108,7 +111,7 @@ export function Header() {
               <div className="hidden sm:flex flex-col leading-tight text-left">
                 <span className="text-xs font-semibold truncate max-w-[140px]">{displayName}</span>
                 <span className="text-[10px] text-muted-foreground">
-                  {profile ? roleLabel[profile.role] : ""}
+                  {profile ? label : ""}
                 </span>
               </div>
               <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
@@ -118,7 +121,7 @@ export function Header() {
                 <div className="px-3 py-2.5 border-b border-border">
                   <p className="text-xs font-semibold truncate">{user?.email}</p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">
-                    {profile ? roleLabel[profile.role] : "Sem perfil"}
+                    {profile ? roleLabel[role] ?? label : "Sem perfil"}
                   </p>
                 </div>
                 <button
