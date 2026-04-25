@@ -31,11 +31,11 @@ async function getAuthedUser() {
   const authHeader = getRequestHeader("authorization") ?? "";
   const token = authHeader.replace(/^Bearer\s+/i, "");
   if (!token) throw new Error("Não autenticado.");
-  const userClient = createClient(SUPABASE_URL, ANON, {
-    global: { headers: { Authorization: `Bearer ${token}` } },
+  // Usa service role para validar o token sem depender da ANON key no servidor
+  const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
-  const { data, error } = await userClient.auth.getUser();
+  const { data, error } = await adminClient.auth.getUser(token);
   if (error || !data.user) throw new Error("Sessão inválida.");
   return data.user;
 }
