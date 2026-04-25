@@ -8,8 +8,9 @@ interface AuthContextValue {
   session: Session | null;
   user: User | null;
   profile: Profile | null;
+  userRoles: string[];
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
+  signIn: (email: string, password: string) => Promise<{ error: Error | null; profile?: Profile | null; userRoles?: string[] }>;
   signUp: (
     email: string,
     password: string,
@@ -39,6 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [userRoles, setUserRoles] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadProfile = async (uid: string) => {
@@ -47,7 +49,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select("*")
       .eq("auth_user_id", uid)
       .maybeSingle();
-    setProfile((data as Profile | null) ?? null);
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", uid);
+    const nextProfile = (data as Profile | null) ?? null;
+    const nextRoles = (roles ?? []).map((r) => String((r as { role: string }).role));
+    setProfile(nextProfile);
+    setUserRoles(nextRoles);
+    return { profile: nextProfile, userRoles: nextRoles };
   };
 
   useEffect(() => {
@@ -59,13 +69,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // 1) Listener PRIMEIRO (regra Supabase)
     const { data: sub } = supabase.auth.onAuthStateChange((_evt, sess) => {
+      setLoading(true);
       setSession(sess);
       setUser(sess?.user ?? null);
       if (sess?.user) {
         // defer pra evitar deadlock
-        setTimeout(() => loadProfile(sess.user.id), 0);
+        setTimeout(() => loadProfile(sess.user.id).finally(() => setLoading(false)), 0);
       } else {
         setProfile(null);
+        setUserRoles([]);
+        setLoading(false);
       }
     });
 
@@ -86,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setSession(null);
         setUser(null);
         setProfile(null);
+        setUserRoles([]);
         setLoading(false);
       });
 
@@ -102,8 +116,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     try {
       const emailNorm = email.trim().toLowerCase();
-      const { error } = await supabase.auth.signInWithPassword({ email: emailNorm, password });
-      return { error };
+      const { data, error } = await supabase.auth.signInWithPassword({ email: emailNorm, password });
+      if (error || !data.user) return { error };
+      const loaded = await loadProfile(data.user.id);
+      return { error: null, ...loaded };
     } catch (err) {
       return { error: mapAuthError(err, "Não foi possível entrar.") };
     }
@@ -144,7 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ session, user, profile, loading, signIn, signUp, signOut, refreshProfile }}
+      value={{ session, user, profile, userRoles, loading, signIn, signUp, signOut, refreshProfile }}
     >
       {children}
     </AuthContext.Provider>

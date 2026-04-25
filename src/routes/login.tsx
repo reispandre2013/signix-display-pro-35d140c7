@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
 import { hasSupabaseConfig } from "@/lib/supabase-client";
 import { isSafeInternalRedirect } from "@/lib/safe-redirect";
+import { mapDbRole } from "@/lib/use-role";
 
 type LoginSearch = { redirect?: string };
 
@@ -27,7 +28,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
-  const { signIn, session, loading } = useAuth();
+  const { signIn, session, loading, profile, userRoles } = useAuth();
   const { redirect: redirectTo } = Route.useSearch();
 
   useEffect(() => {
@@ -36,8 +37,12 @@ function LoginPage() {
       window.location.replace(redirectTo);
       return;
     }
+    if (userRoles.includes("super_admin") || mapDbRole(profile?.role) === "super_admin") {
+      void navigate({ to: "/admin-saas", replace: true });
+      return;
+    }
     void navigate({ to: "/app", replace: true });
-  }, [loading, session, navigate, redirectTo]);
+  }, [loading, session, navigate, redirectTo, profile?.role, userRoles]);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -46,7 +51,7 @@ function LoginPage() {
       return;
     }
     setSubmitting(true);
-    const { error } = await signIn(email.trim(), password);
+    const { error, profile: nextProfile, userRoles: nextRoles = [] } = await signIn(email.trim(), password);
     setSubmitting(false);
     if (error) {
       const raw = error.message ?? "";
@@ -59,6 +64,8 @@ function LoginPage() {
     toast.success("Bem-vindo!");
     if (isSafeInternalRedirect(redirectTo)) {
       window.location.replace(redirectTo);
+    } else if (nextRoles.includes("super_admin") || mapDbRole(nextProfile?.role) === "super_admin") {
+      void navigate({ to: "/admin-saas", replace: true });
     } else {
       void navigate({ to: "/app", replace: true });
     }

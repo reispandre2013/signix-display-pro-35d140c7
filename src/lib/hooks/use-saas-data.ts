@@ -11,6 +11,10 @@ import {
 } from "@/lib/saas/mappers";
 import type { Invoice, Plan, SaasClient, Subscription } from "@/types/saas";
 
+function hasSaasAdminAccess(profileRole: string | null | undefined, userRoles: string[] = []): boolean {
+  return profileRole === "super_admin" || userRoles.includes("super_admin");
+}
+
 function isMissingRelation(error: unknown, relation: string): boolean {
   const msg = String((error as { message?: string } | null)?.message ?? "").toLowerCase();
   const rel = relation.toLowerCase();
@@ -42,8 +46,8 @@ export function usePublicPlans() {
 
 /** Catálogo completo (inclui inativos) — super admin. */
 export function useAdminPlansCatalog() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
   return useQuery({
     queryKey: ["saas", "plans", "catalog"],
     queryFn: async (): Promise<Plan[]> => {
@@ -72,12 +76,13 @@ export function useOrgBillingContext(): {
   error: Error | null;
   isMissingTables: boolean;
 } {
-  const { profile } = useAuth();
+  const { profile, userRoles } = useAuth();
   const orgId = profile?.organization_id ?? null;
+  const isSaasAdmin = hasSaasAdminAccess(profile?.role, userRoles);
 
   const q = useQuery({
     queryKey: ["saas", "org", orgId, "billing"],
-    enabled: Boolean(orgId) && profile?.role !== "super_admin",
+    enabled: Boolean(orgId) && !isSaasAdmin,
     queryFn: async (): Promise<OrgBillingBundle> => {
       const { data: subRow, error: e1 } = await supabase
         .from("subscriptions")
@@ -157,12 +162,13 @@ export function useOrgBillingContext(): {
 }
 
 export function useOrgInvoices() {
-  const { profile } = useAuth();
+  const { profile, userRoles } = useAuth();
   const orgId = profile?.organization_id ?? null;
+  const isSaasAdmin = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "invoices", orgId],
-    enabled: Boolean(orgId) && profile?.role !== "super_admin",
+    enabled: Boolean(orgId) && !isSaasAdmin,
     queryFn: async (): Promise<Invoice[]> => {
       const { data, error } = await supabase
         .from("invoices")
@@ -181,8 +187,8 @@ export function useOrgInvoices() {
 
 /** Diretório para painel super admin: une orgs, última assinatura, uso, licença, master. */
 export function useSaasDirectory() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "directory"],
@@ -302,8 +308,8 @@ type PaymentRow = {
 };
 
 export function useRecentSaaSPayments(limit = 8) {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "payments", "recent", limit],
@@ -349,8 +355,8 @@ export type SaasMetrics = {
 };
 
 export function useSaasMetrics() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "metrics"],
@@ -429,8 +435,8 @@ function emptyMetrics(): SaasMetrics {
 type AuditListItem = { id: string; actor: string; action: string; target: string; created_at: string };
 
 export function useAuditLogPreview(limit = 20) {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
 
   return useQuery({
     queryKey: ["saas", "audit", limit],
@@ -507,8 +513,8 @@ export type LicenseTableRow = {
 };
 
 export function useSaaSLicensesList() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
   return useQuery({
     queryKey: ["saas", "licenses", "all"],
     enabled: ok,
@@ -555,8 +561,8 @@ export type SubscriptionsTableRow = {
 };
 
 export function useSaaSAllSubscriptions() {
-  const { profile } = useAuth();
-  const ok = profile?.role === "super_admin";
+  const { profile, userRoles } = useAuth();
+  const ok = hasSaasAdminAccess(profile?.role, userRoles);
   return useQuery({
     queryKey: ["saas", "subscriptions", "all"],
     enabled: ok,

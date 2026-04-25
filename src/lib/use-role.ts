@@ -78,8 +78,11 @@ const DEFAULT_PERMISSIONS: Record<EffectiveRole, ModuleKey[]> = {
 };
 
 export function useRole() {
-  const { profile, user } = useAuth();
-  const role: EffectiveRole = mapDbRole(profile?.role as AppRole | undefined);
+  const { profile, user, userRoles } = useAuth();
+  const hasSuperAdminGrant = userRoles.includes("super_admin");
+  const role: EffectiveRole = hasSuperAdminGrant
+    ? "super_admin"
+    : mapDbRole(profile?.role as AppRole | undefined);
   const allowed = new Set<ModuleKey>(DEFAULT_PERMISSIONS[role]);
 
   return {

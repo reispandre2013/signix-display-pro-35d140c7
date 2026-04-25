@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useLocation, useNavigate, redirect } fro
 import { useEffect } from "react";
 import {
   Sparkles, LayoutDashboard, Building2, Package, ScrollText, Receipt,
-  KeyRound, CreditCard, ArrowLeft, LogOut, Tv, Stethoscope,
+  KeyRound, CreditCard, ArrowLeft, LogOut, Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
@@ -105,12 +105,6 @@ function AdminSaasLayout() {
         </nav>
 
         <div className="m-3 space-y-2">
-          <Link
-            to="/app"
-            className="flex items-center gap-2 rounded-md border border-sidebar-border bg-background/30 px-3 py-2 text-xs hover:bg-background/60 transition-smooth"
-          >
-            <Tv className="h-3.5 w-3.5" /> Voltar ao app
-          </Link>
           <button
             onClick={async () => { await signOut(); toast.success("Você saiu."); navigate({ to: "/login" }); }}
             className="w-full flex items-center gap-2 rounded-md border border-sidebar-border bg-background/20 px-3 py-2 text-xs hover:bg-background/50 transition-smooth"
