@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { useAdminPlansCatalog } from "@/lib/hooks/use-saas-data";
 import { upsertPlan, deletePlan } from "@/lib/server/saas-admin.functions";
+import { withAuthHeader } from "@/lib/server/with-auth-header";
 import { formatPrice, type Plan } from "@/types/saas";
 import { cn } from "@/lib/utils";
 
