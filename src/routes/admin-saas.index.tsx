@@ -15,6 +15,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useMemo } from "react";
+import { CreateAdminMasterPanel } from "@/components/admin-saas/CreateAdminMasterPanel";
 
 export const Route = createFileRoute("/admin-saas/")({
   head: () => ({ meta: [{ title: "Visão geral SaaS — Signix" }] }),
@@ -210,6 +211,8 @@ function SaasOverview() {
           )}
         </Panel>
       </div>
+
+      <CreateAdminMasterPanel />
 
       <p className="text-center text-xs text-muted-foreground">
         <Link to="/admin-saas/pagamentos" className="text-primary hover:underline">
