@@ -51,6 +51,18 @@ function browserFromUserAgent(ua: string): { name: string; version: string } {
   return { name: "Unknown", version: "" };
 }
 
+function normalizePairingCode(raw: string) {
+  const compact = raw
+    .trim()
+    .toUpperCase()
+    .replace(/[·•‧]/g, "-")
+    .replace(/[‐‑‒–—―_]/g, "-")
+    .replace(/\s+/g, "");
+  const alnum = compact.replace(/[^A-Z0-9]/g, "");
+  if (alnum.length === 8) return `${alnum.slice(0, 4)}-${alnum.slice(4)}`;
+  return compact;
+}
+
 function fnUrl(name: string) {
   if (!SUPABASE_URL) throw new Error("SUPABASE_URL ausente.");
   return `${SUPABASE_URL}/functions/v1/${name}`;
@@ -99,7 +111,7 @@ export const activateWebPlayerByCode = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => {
     if (!input || typeof input !== "object") throw new Error("Payload inválido.");
     const o = input as Record<string, unknown>;
-    const code = typeof o.pairing_code === "string" ? o.pairing_code.trim().toUpperCase() : "";
+    const code = typeof o.pairing_code === "string" ? normalizePairingCode(o.pairing_code) : "";
     if (code.length < 4) throw new Error("Código de pareamento inválido.");
     return {
       pairing_code: code,
