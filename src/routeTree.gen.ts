@@ -55,6 +55,7 @@ import { Route as AdminSaasPlanosRouteImport } from './routes/admin-saas.planos'
 import { Route as AdminSaasPagamentosRouteImport } from './routes/admin-saas.pagamentos'
 import { Route as AdminSaasLogsRouteImport } from './routes/admin-saas.logs'
 import { Route as AdminSaasLicencasRouteImport } from './routes/admin-saas.licencas'
+import { Route as AdminSaasDiagnosticoRouteImport } from './routes/admin-saas.diagnostico'
 import { Route as AdminSaasClientesRouteImport } from './routes/admin-saas.clientes'
 import { Route as AdminSaasAssinaturasRouteImport } from './routes/admin-saas.assinaturas'
 
@@ -288,6 +289,11 @@ const AdminSaasLicencasRoute = AdminSaasLicencasRouteImport.update({
   path: '/licencas',
   getParentRoute: () => AdminSaasRoute,
 } as any)
+const AdminSaasDiagnosticoRoute = AdminSaasDiagnosticoRouteImport.update({
+  id: '/diagnostico',
+  path: '/diagnostico',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
 const AdminSaasClientesRoute = AdminSaasClientesRouteImport.update({
   id: '/clientes',
   path: '/clientes',
@@ -323,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
   '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/diagnostico': typeof AdminSaasDiagnosticoRoute
   '/admin-saas/licencas': typeof AdminSaasLicencasRoute
   '/admin-saas/logs': typeof AdminSaasLogsRoute
   '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
@@ -371,6 +378,7 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
   '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/diagnostico': typeof AdminSaasDiagnosticoRoute
   '/admin-saas/licencas': typeof AdminSaasLicencasRoute
   '/admin-saas/logs': typeof AdminSaasLogsRoute
   '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
@@ -422,6 +430,7 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
   '/admin-saas/clientes': typeof AdminSaasClientesRoute
+  '/admin-saas/diagnostico': typeof AdminSaasDiagnosticoRoute
   '/admin-saas/licencas': typeof AdminSaasLicencasRoute
   '/admin-saas/logs': typeof AdminSaasLogsRoute
   '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
@@ -474,6 +483,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin-saas/assinaturas'
     | '/admin-saas/clientes'
+    | '/admin-saas/diagnostico'
     | '/admin-saas/licencas'
     | '/admin-saas/logs'
     | '/admin-saas/pagamentos'
@@ -522,6 +532,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin-saas/assinaturas'
     | '/admin-saas/clientes'
+    | '/admin-saas/diagnostico'
     | '/admin-saas/licencas'
     | '/admin-saas/logs'
     | '/admin-saas/pagamentos'
@@ -572,6 +583,7 @@ export interface FileRouteTypes {
     | '/signup'
     | '/admin-saas/assinaturas'
     | '/admin-saas/clientes'
+    | '/admin-saas/diagnostico'
     | '/admin-saas/licencas'
     | '/admin-saas/logs'
     | '/admin-saas/pagamentos'
@@ -947,6 +959,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSaasLicencasRouteImport
       parentRoute: typeof AdminSaasRoute
     }
+    '/admin-saas/diagnostico': {
+      id: '/admin-saas/diagnostico'
+      path: '/diagnostico'
+      fullPath: '/admin-saas/diagnostico'
+      preLoaderRoute: typeof AdminSaasDiagnosticoRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
     '/admin-saas/clientes': {
       id: '/admin-saas/clientes'
       path: '/clientes'
@@ -967,6 +986,7 @@ declare module '@tanstack/react-router' {
 interface AdminSaasRouteChildren {
   AdminSaasAssinaturasRoute: typeof AdminSaasAssinaturasRoute
   AdminSaasClientesRoute: typeof AdminSaasClientesRoute
+  AdminSaasDiagnosticoRoute: typeof AdminSaasDiagnosticoRoute
   AdminSaasLicencasRoute: typeof AdminSaasLicencasRoute
   AdminSaasLogsRoute: typeof AdminSaasLogsRoute
   AdminSaasPagamentosRoute: typeof AdminSaasPagamentosRoute
@@ -977,6 +997,7 @@ interface AdminSaasRouteChildren {
 const AdminSaasRouteChildren: AdminSaasRouteChildren = {
   AdminSaasAssinaturasRoute: AdminSaasAssinaturasRoute,
   AdminSaasClientesRoute: AdminSaasClientesRoute,
+  AdminSaasDiagnosticoRoute: AdminSaasDiagnosticoRoute,
   AdminSaasLicencasRoute: AdminSaasLicencasRoute,
   AdminSaasLogsRoute: AdminSaasLogsRoute,
   AdminSaasPagamentosRoute: AdminSaasPagamentosRoute,

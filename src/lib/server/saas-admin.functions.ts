@@ -29,6 +29,11 @@ async function getAuthedUser() {
   return data.user;
 }
 
+type JsonSafe =
+  | string | number | boolean | null
+  | JsonSafe[]
+  | { [k: string]: JsonSafe };
+
 export type SaasDiagnosticsResult = {
   user: { id: string; email: string | null };
   profile: {
@@ -39,7 +44,7 @@ export type SaasDiagnosticsResult = {
   } | null;
   isSuperAdmin: boolean;
   counts: Record<string, number | { error: string }>;
-  samples: Record<string, unknown[]>;
+  samples: Record<string, JsonSafe[]>;
   envOk: boolean;
 };
 
@@ -93,7 +98,7 @@ export const getSaasDiagnostics = createServerFn({ method: "POST" }).handler(
         }
         if (!error) {
           const { data } = await admin.from(t).select("*").limit(2);
-          samples[t] = (data ?? []) as unknown[];
+          samples[t] = (data ?? []) as JsonSafe[];
         }
       }),
     );
