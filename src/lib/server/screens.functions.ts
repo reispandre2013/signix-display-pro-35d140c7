@@ -182,15 +182,16 @@ function validateCreatePairingInput(input: unknown): { platform: PlayerPlatform 
 export const createPairingCode = createServerFn({ method: "POST" })
   .inputValidator(validateCreatePairingInput)
   .handler(async ({ data }) => {
-    const hasUrl = Boolean(process.env.SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL);
+    // O supabaseAdmin já tem fallback de URL embutido (client.server.ts).
+    // Aqui só validamos a service role key, que é obrigatória.
     const hasKey = Boolean(
       process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY,
     );
-    console.log("[createPairingCode] env check:", { hasUrl, hasKey });
+    console.log("[createPairingCode] env check:", { hasKey });
 
-    if (!hasUrl || !hasKey) {
+    if (!hasKey) {
       throw new Error(
-        `Configuração do servidor ausente (url=${hasUrl}, serviceKey=${hasKey}). Verifique SERVICE_ROLE_KEY.`,
+        "Configuração do servidor ausente (SERVICE_ROLE_KEY). Defina o secret no projeto.",
       );
     }
 
