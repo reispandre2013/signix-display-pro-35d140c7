@@ -34,7 +34,15 @@ interface ClaimInput {
 }
 
 function normalizeCode(raw: string) {
-  return raw.trim().toUpperCase().replace(/\s+/g, "");
+  const compact = raw
+    .trim()
+    .toUpperCase()
+    .replace(/[·•‧]/g, "-")
+    .replace(/[‐‑‒–—―_]/g, "-")
+    .replace(/\s+/g, "");
+  const alnum = compact.replace(/[^A-Z0-9]/g, "");
+  if (alnum.length === 8) return `${alnum.slice(0, 4)}-${alnum.slice(4)}`;
+  return compact;
 }
 
 function toScreenOrientation(orientation: Orientation) {
@@ -109,20 +117,24 @@ export const claimPairingCode = createServerFn({ method: "POST" })
     // Busca o código (pode estar anônimo, sem organization_id)
     const { data: pairing, error: pairingErr } = await supabaseAdmin
       .from("pairing_codes")
-      .select("id, code, used_at, expires_at, screen_id")
+      .select("id, code, used_at, expires_at, screen_id, player_platform")
       .eq("code", data.code)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
 
     if (pairingErr) throw new Error(pairingErr.message);
-    if (!pairing) throw new Error("Código não encontrado. Verifique se a TV ainda exibe este código.");
+    if (!pairing) throw new Error("Código não encontrado. Confira se o código exibido no player é o atual ou gere um novo.");
     if (pairing.used_at || pairing.screen_id)
       throw new Error("Este código já foi utilizado.");
     if (pairing.expires_at && new Date(pairing.expires_at).getTime() < Date.now())
-      throw new Error("Código expirado. Gere um novo na TV.");
+      throw new Error("Código expirado. Gere um novo no player.");
 
-    const caps = getPlayerCapabilities(data.platform);
+    const claimedPlatform =
+      typeof pairing.player_platform === "string"
+        ? normalizePlayerPlatform(pairing.player_platform)
+        : data.platform;
+    const caps = getPlayerCapabilities(claimedPlatform);
     const insertRow: Record<string, unknown> = {
       organization_id: orgId,
       unit_id: data.unit_id,
