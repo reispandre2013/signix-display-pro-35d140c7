@@ -87,6 +87,109 @@ export const createWebPairingCode = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => invokeEdge("create-web-pairing-code", data));
 
+/**
+ * Ativa uma sessão Web Player a partir de um código de pareamento JÁ reivindicado
+ * por um admin (i.e. `pairing_codes.used_at` preenchido e ligado a uma `screen`).
+ *
+ * Não usa edge functions — fala direto com supabaseAdmin para evitar problemas de
+ * resolução de URL/anon key em runtime do Worker. Cria a `web_player_sessions` e
+ * devolve `device_token` para o player armazenar.
+ */
+export const activateWebPlayerByCode = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => {
+    if (!input || typeof input !== "object") throw new Error("Payload inválido.");
+    const o = input as Record<string, unknown>;
+    const code = typeof o.pairing_code === "string" ? o.pairing_code.trim().toUpperCase() : "";
+    if (code.length < 4) throw new Error("Código de pareamento inválido.");
+    return {
+      pairing_code: code,
+      fingerprint: typeof o.fingerprint === "string" ? o.fingerprint.slice(0, 255) : "",
+      user_agent: typeof o.user_agent === "string" ? o.user_agent.slice(0, 1024) : "",
+      screen_width: typeof o.screen_width === "number" ? o.screen_width : null,
+      screen_height: typeof o.screen_height === "number" ? o.screen_height : null,
+    };
+  })
+  .handler(async ({ data }) => {
+    const { data: pairing, error: pairingErr } = await supabaseAdmin
+      .from("pairing_codes")
+      .select("id, code, used_at, expires_at, screen_id, organization_id")
+      .eq("code", data.pairing_code)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (pairingErr) throw new Error(pairingErr.message);
+    if (!pairing) {
+      throw new Error("Código não encontrado. Verifique se o código ainda é válido.");
+    }
+    if (!pairing.screen_id || !pairing.organization_id || !pairing.used_at) {
+      throw new Error(
+        "Código ainda não vinculado no painel. Vá em Dispositivos › Novo dispositivo e cole este código.",
+      );
+    }
+    if (pairing.expires_at && new Date(pairing.expires_at).getTime() < Date.now()) {
+      throw new Error("Código expirado. Gere um novo.");
+    }
+
+    // Reaproveita sessão se já existir uma ativa para este screen + fingerprint.
+    const ua = data.user_agent || (getRequestHeader("user-agent") ?? "");
+    const browser = browserFromUserAgent(ua);
+    const token = randomToken();
+    const tokenHash = await sha256Hex(token);
+
+    const { data: session, error: sessionErr } = await supabaseAdmin
+      .from("web_player_sessions")
+      .insert({
+        screen_id: pairing.screen_id,
+        organization_id: pairing.organization_id,
+        device_token_hash: tokenHash,
+        fingerprint: data.fingerprint.slice(0, 255),
+        user_agent: ua.slice(0, 1024),
+        browser_name: browser.name,
+        browser_version: browser.version,
+        status: "active",
+        paired_at: new Date().toISOString(),
+      })
+      .select("id")
+      .single();
+    if (sessionErr) throw new Error(sessionErr.message);
+
+    const resolution =
+      typeof data.screen_width === "number" && typeof data.screen_height === "number"
+        ? `${Math.round(data.screen_width)}x${Math.round(data.screen_height)}`
+        : null;
+    const { error: scrErr } = await supabaseAdmin
+      .from("screens")
+      .update({
+        platform: "web",
+        player_type: "web_player",
+        device_token_hash: tokenHash,
+        device_fingerprint: data.fingerprint.slice(0, 255),
+        browser_name: browser.name,
+        browser_version: browser.version,
+        user_agent: ua.slice(0, 1024),
+        resolution,
+        screen_width: data.screen_width ?? null,
+        screen_height: data.screen_height ?? null,
+        device_status: "online",
+        is_online: true,
+        last_seen_at: new Date().toISOString(),
+      })
+      .eq("id", pairing.screen_id);
+    if (scrErr) {
+      // Não falha o pareamento por isso, só loga.
+      console.warn("[activateWebPlayerByCode] update screens warn:", scrErr.message);
+    }
+
+    return {
+      ok: true,
+      screen_id: pairing.screen_id as string,
+      organization_id: pairing.organization_id as string,
+      session_id: session.id as string,
+      device_token: token,
+    };
+  });
+
 export const validateWebPairing = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => {
     if (!input || typeof input !== "object") throw new Error("Payload inválido.");
