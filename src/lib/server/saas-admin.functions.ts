@@ -201,7 +201,7 @@ export type PlanUpsertInput = {
   sort_order: number;
 };
 
-async function assertSuperAdmin(admin: ReturnType<typeof createClient>, userId: string) {
+async function assertSuperAdmin(admin: ReturnType<typeof createClient<any, "public", any>>, userId: string) {
   const { data: profile } = await admin
     .from("profiles")
     .select("role")
