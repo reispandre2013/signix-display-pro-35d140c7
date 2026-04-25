@@ -73,7 +73,7 @@ function PairRouteComponent() {
       setTimeout(() => {
         void navigate({
           to: "/player/web",
-          search: { screenId: String(res.screen_id), token: String(res.device_token) },
+          search: { screenId: String(res.screen_id), token: String(res.device_token), debug: undefined },
         });
       }, 900);
     } catch (err) {
