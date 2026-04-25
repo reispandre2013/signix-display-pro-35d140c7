@@ -1,13 +1,55 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
-const SUPABASE_URL = process.env.SUPABASE_URL ?? import.meta.env.VITE_SUPABASE_URL ?? "";
+const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
+const FALLBACK_SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1aHd5bG5ocW1kZ3Boc3Zqc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyOTcxNTQsImV4cCI6MjA5MTg3MzE1NH0.NNHIM43GJyOYYSjgZX3F1o5Pk_WrEx8xYzIrZpJt3kw";
+
+const SUPABASE_URL =
+  process.env.SUPABASE_URL ??
+  process.env.VITE_SUPABASE_URL ??
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ((import.meta as any).env?.VITE_SUPABASE_URL as string | undefined) ??
+  FALLBACK_SUPABASE_URL;
 const ANON_KEY =
   process.env.SUPABASE_ANON_KEY ??
   process.env.SUPABASE_PUBLISHABLE_KEY ??
-  import.meta.env.VITE_SUPABASE_ANON_KEY ??
-  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  "";
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ((import.meta as any).env?.VITE_SUPABASE_ANON_KEY as string | undefined) ??
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ((import.meta as any).env?.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ??
+  FALLBACK_SUPABASE_ANON_KEY;
+
+async function sha256Hex(input: string): Promise<string> {
+  const data = new TextEncoder().encode(input);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function randomToken(size = 48): string {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+  let out = "";
+  const arr = crypto.getRandomValues(new Uint8Array(size));
+  for (let i = 0; i < arr.length; i += 1) out += chars[arr[i] % chars.length];
+  return out;
+}
+
+function browserFromUserAgent(ua: string): { name: string; version: string } {
+  const checks: Array<{ key: string; rx: RegExp }> = [
+    { key: "Edge", rx: /Edg\/([\d.]+)/i },
+    { key: "Chrome", rx: /Chrome\/([\d.]+)/i },
+    { key: "Firefox", rx: /Firefox\/([\d.]+)/i },
+    { key: "Safari", rx: /Version\/([\d.]+).*Safari/i },
+  ];
+  for (const c of checks) {
+    const m = (ua || "").match(c.rx);
+    if (m?.[1]) return { name: c.key, version: m[1] };
+  }
+  return { name: "Unknown", version: "" };
+}
 
 function fnUrl(name: string) {
   if (!SUPABASE_URL) throw new Error("SUPABASE_URL ausente.");
