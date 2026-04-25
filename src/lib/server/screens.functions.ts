@@ -51,7 +51,7 @@ function validate(input: unknown): ClaimInput {
   if (orientation !== "landscape" && orientation !== "portrait")
     throw new Error("Orientação inválida.");
   const plat =
-    typeof platform === "string" && (platform === "tizen" || platform === "android")
+    typeof platform === "string" && (platform === "tizen" || platform === "android" || platform === "web")
       ? (platform as PlayerPlatform)
       : "android";
   return {
@@ -184,7 +184,7 @@ export const claimPairingCode = createServerFn({ method: "POST" })
 function validateCreatePairingInput(input: unknown): { platform: PlayerPlatform } {
   if (input == null || typeof input !== "object") return { platform: "android" };
   const p = (input as Record<string, unknown>).platform;
-  if (p === "tizen" || p === "android") return { platform: p };
+  if (p === "tizen" || p === "android" || p === "web") return { platform: p };
   if (typeof p === "string") return { platform: normalizePlayerPlatform(p) };
   return { platform: "android" };
 }

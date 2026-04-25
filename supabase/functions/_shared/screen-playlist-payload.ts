@@ -32,6 +32,7 @@ export type ScreenPlaylistItemPayload = {
 export type PlaylistResolutionSource =
   | "screen_playlist_assignment"
   | "screen_group_playlist_assignment"
+  | "campaign_emergency"
   | "campaign_playlist"
   | "org_media_fallback"
   | "empty";
@@ -109,6 +110,7 @@ function assignmentWindowActive(row: { start_at: string | null; end_at: string |
 function scoreTierSource(source: PlaylistResolutionSource): number {
   if (source === "screen_playlist_assignment") return 3_000_000;
   if (source === "screen_group_playlist_assignment") return 2_000_000;
+  if (source === "campaign_emergency") return 1_500_000;
   if (source === "campaign_playlist") return 1_000_000;
   return 0;
 }
@@ -453,16 +455,18 @@ export async function resolveScreenPlaylistPayload(
 
   const campPick = await pickCampaignPlaylist(client, screenId, orgId, screen.unit_id);
   if (campPick) {
+    const isEmergency = campPick.priority >= 1000;
+    const source = isEmergency ? "campaign_emergency" : "campaign_playlist";
     choices.push({
       playlistId: campPick.campaign.playlist_id,
-      source: "campaign_playlist",
+      source,
       campaign: {
         id: campPick.campaign.id,
         name: campPick.campaign.name,
         playlist_id: campPick.campaign.playlist_id,
         priority: campPick.campaign.priority,
       },
-      score: effectiveScore("campaign_playlist", campPick.priority),
+      score: effectiveScore(source, campPick.priority),
     });
   }
 
@@ -502,7 +506,7 @@ export async function resolveScreenPlaylistPayload(
     etagSeed = `fallback:${orgId}:${items.map((i) => i.id).join(",")}`;
   }
 
-  if (source === "campaign_playlist" && campaign) {
+  if ((source === "campaign_playlist" || source === "campaign_emergency") && campaign) {
     await client.from("screens").update({ current_campaign_id: campaign.id }).eq("id", screenId);
   } else if (source === "screen_playlist_assignment" || source === "screen_group_playlist_assignment") {
     await client.from("screens").update({ current_campaign_id: null }).eq("id", screenId);

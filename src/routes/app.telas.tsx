@@ -34,6 +34,7 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { claimPairingCode } from "@/lib/server/screens.functions";
+import { revokeWebPlayerSession } from "@/lib/server/web-player.functions";
 import type { PlayerPlatform } from "@/lib/platform-capabilities";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
@@ -93,7 +94,7 @@ function sameNullableValue<T>(a: T | null | undefined, b: T | null | undefined):
 function platformDisplayLabel(platform: string | null | undefined): string {
   const p = (platform ?? "android").toLowerCase();
   if (p === "tizen") return "Samsung Tizen TV";
-  if (p === "web") return "Web / browser";
+  if (p === "web") return "Web Player";
   return "Android TV";
 }
 
@@ -109,7 +110,8 @@ function ScreensPage() {
   const unitsQ = useUnits();
   const del = useDeleteScreen();
   const [q, setQ] = useState("");
-  const [platformFilter, setPlatformFilter] = useState<"all" | "android" | "tizen">("all");
+  const [platformFilter, setPlatformFilter] = useState<"all" | "android" | "tizen" | "web">("all");
+  const revokeWebFn = useServerFn(revokeWebPlayerSession);
   const [pairOpen, setPairOpen] = useState(false);
   const [detailScreen, setDetailScreen] = useState<Screen | null>(null);
   const [editScreen, setEditScreen] = useState<Screen | null>(null);
@@ -124,6 +126,7 @@ function ScreensPage() {
         const plat = (s.platform ?? "android").toLowerCase();
         if (platformFilter === "android" && plat !== "android") return false;
         if (platformFilter === "tizen" && plat !== "tizen") return false;
+        if (platformFilter === "web" && plat !== "web") return false;
         if (!q) return true;
         return (
           s.name.toLowerCase().includes(q.toLowerCase()) ||
@@ -143,11 +146,28 @@ function ScreensPage() {
     }
   };
 
+  const handleCopyPlayerLink = async (screen: Screen) => {
+    const url = `${window.location.origin}/player/web?screenId=${screen.id}`;
+    await navigator.clipboard.writeText(url);
+    toast.success("Link do player copiado.");
+  };
+
+  const handleRevokeWeb = async (screen: Screen) => {
+    if (!confirm(`Revogar pareamento web de "${screen.name}"?`)) return;
+    try {
+      await revokeWebFn({ data: { screen_id: screen.id } });
+      toast.success("Pareamento web revogado.");
+      await screensQ.refetch();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao revogar.");
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Dispositivos"
-        subtitle="Cadastre dispositivos (Android TV ou Samsung Tizen) com código de pareamento. A plataforma deve ser a mesma configurada no player."
+        subtitle="Cadastre dispositivos Android TV, Tizen e Web Player por código de pareamento. A plataforma deve corresponder ao player."
         actions={
           <button
             type="button"
@@ -180,13 +200,14 @@ function ScreensPage() {
           <div className="flex flex-wrap items-center gap-2">
             <select
               value={platformFilter}
-              onChange={(e) => setPlatformFilter(e.target.value as "all" | "android" | "tizen")}
+              onChange={(e) => setPlatformFilter(e.target.value as "all" | "android" | "tizen" | "web")}
               className="rounded-md border border-input bg-surface px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
               aria-label="Filtrar por plataforma"
             >
               <option value="all">Todas as plataformas</option>
               <option value="android">Android TV</option>
               <option value="tizen">Tizen TV</option>
+              <option value="web">Web Player</option>
             </select>
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -335,6 +356,26 @@ function ScreensPage() {
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
+                        {(s.platform ?? "").toLowerCase() === "web" ? (
+                          <>
+                            <button
+                              type="button"
+                              title="Copiar link do player web"
+                              onClick={() => void handleCopyPlayerLink(s)}
+                              className="h-8 px-2 rounded-md text-[11px] hover:bg-accent text-muted-foreground hover:text-foreground"
+                            >
+                              Link
+                            </button>
+                            <button
+                              type="button"
+                              title="Revogar sessão web"
+                              onClick={() => void handleRevokeWeb(s)}
+                              className="h-8 px-2 rounded-md text-[11px] hover:bg-destructive/10 text-destructive"
+                            >
+                              Revogar
+                            </button>
+                          </>
+                        ) : null}
                       </div>
                     </td>
                   </tr>
@@ -429,7 +470,7 @@ function PairScreenModal({
             <div>
               <h2 className="font-display text-base font-bold">Novo dispositivo</h2>
               <p className="text-[11px] text-muted-foreground">
-                Use o código que a <strong>TV mostra</strong> (player Tizen nativo ou página de pareamento).
+                Use o código exibido no player da tela (Android, Tizen ou Web em <code>/pair</code>).
               </p>
             </div>
           </div>
@@ -455,8 +496,8 @@ function PairScreenModal({
               className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2.5 font-mono text-lg tracking-widest text-center uppercase focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
-              O código é gerado na TV (app Tizen Signix ou página <code className="text-foreground">/pareamento</code>).
-              A plataforma em baixo deve coincidir com a da TV.
+              O código é gerado no dispositivo do player (app ou navegador em <code className="text-foreground">/pair</code>).
+              A plataforma em baixo deve coincidir com a tela.
             </p>
           </div>
 
@@ -479,11 +520,19 @@ function PairScreenModal({
               Plataforma do dispositivo <span className="text-destructive">*</span>
             </legend>
             <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Plataforma do dispositivo">
-              {(["android", "tizen"] as const).map((value) => (
+              {([
+                { value: "android", label: "Android TV" },
+                { value: "tizen", label: "Samsung Tizen TV" },
+                { value: "web", label: "Web Player" },
+                { value: "web", label: "Navegador / Kiosk" },
+                { value: "web", label: "TV Box (browser)" },
+                { value: "web", label: "Mini PC / Notebook" },
+                { value: "web", label: "Outro (Web)" },
+              ] as const).map((entry) => (
                 <label
-                  key={value}
+                  key={`${entry.label}-${entry.value}`}
                   className={`flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
-                    platform === value
+                    platform === entry.value
                       ? "border-primary bg-primary/5 ring-1 ring-primary/30"
                       : "border-input hover:bg-accent/50"
                   }`}
@@ -491,13 +540,13 @@ function PairScreenModal({
                   <input
                     type="radio"
                     name="device-platform"
-                    value={value}
-                    checked={platform === value}
-                    onChange={() => setPlatform(value)}
+                    value={entry.value}
+                    checked={platform === entry.value}
+                    onChange={() => setPlatform(entry.value)}
                     className="h-4 w-4 shrink-0 border-input text-primary focus:ring-ring"
                   />
                   <span className="font-medium leading-tight">
-                    {value === "android" ? "Android TV" : "Samsung Tizen TV"}
+                    {entry.label}
                   </span>
                 </label>
               ))}
@@ -584,6 +633,10 @@ function ScreenDetailModal({
   unitLabel: string;
   onClose: () => void;
 }) {
+  const isWeb = (screen.platform ?? "").toLowerCase() === "web";
+  const playerUrl = `${window.location.origin}/player/web?screenId=${screen.id}`;
+  const pairUrl = `${window.location.origin}/pair`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(playerUrl)}`;
   return (
     <div
       className="fixed inset-0 z-50 grid place-items-center bg-black/60 backdrop-blur-sm p-4"
@@ -656,6 +709,38 @@ function ScreenDetailModal({
               </span>
             </div>
           </div>
+          {isWeb ? (
+            <div className="rounded-lg border border-border bg-surface/40 p-3 text-xs space-y-2">
+              <p className="font-semibold text-foreground">Ações Web Player</p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className="rounded border border-border px-2 py-1 hover:bg-accent"
+                  onClick={() => void navigator.clipboard.writeText(playerUrl).then(() => toast.success("Link do player copiado."))}
+                >
+                  Copiar link player
+                </button>
+                <button
+                  type="button"
+                  className="rounded border border-border px-2 py-1 hover:bg-accent"
+                  onClick={() => void navigator.clipboard.writeText(pairUrl).then(() => toast.success("Link de pareamento copiado."))}
+                >
+                  Copiar link pareamento
+                </button>
+                <a
+                  href={qrUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="rounded border border-border px-2 py-1 hover:bg-accent"
+                >
+                  Gerar QR Code
+                </a>
+              </div>
+              <p className="text-[10px] text-muted-foreground break-all">
+                URL player: {playerUrl}
+              </p>
+            </div>
+          ) : null}
         </div>
         <div className="border-t border-border px-5 py-3 flex justify-end">
           <button

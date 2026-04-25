@@ -16,6 +16,7 @@ import { Route as PlayerScreenRouteImport } from './routes/player-screen'
 import { Route as PlayerRouteImport } from './routes/player'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PareamentoRouteImport } from './routes/pareamento'
+import { Route as PairRouteImport } from './routes/pair'
 import { Route as PagamentosRouteImport } from './routes/pagamentos'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LicencasRouteImport } from './routes/licencas'
@@ -32,6 +33,9 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AdminSaasIndexRouteImport } from './routes/admin-saas.index'
+import { Route as PlayerWebRouteImport } from './routes/player.web'
+import { Route as PlayerScreenIdRouteImport } from './routes/player.$screenId'
+import { Route as DisplayTokenRouteImport } from './routes/display.$token'
 import { Route as AppVisualizacaoRouteImport } from './routes/app.visualizacao'
 import { Route as AppUsuariosRouteImport } from './routes/app.usuarios'
 import { Route as AppUnidadesRouteImport } from './routes/app.unidades'
@@ -92,6 +96,11 @@ const PlanosRoute = PlanosRouteImport.update({
 const PareamentoRoute = PareamentoRouteImport.update({
   id: '/pareamento',
   path: '/pareamento',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PairRoute = PairRouteImport.update({
+  id: '/pair',
+  path: '/pair',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PagamentosRoute = PagamentosRouteImport.update({
@@ -173,6 +182,21 @@ const AdminSaasIndexRoute = AdminSaasIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminSaasRoute,
+} as any)
+const PlayerWebRoute = PlayerWebRouteImport.update({
+  id: '/web',
+  path: '/web',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const PlayerScreenIdRoute = PlayerScreenIdRouteImport.update({
+  id: '/$screenId',
+  path: '/$screenId',
+  getParentRoute: () => PlayerRoute,
+} as any)
+const DisplayTokenRoute = DisplayTokenRouteImport.update({
+  id: '/display/$token',
+  path: '/display/$token',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AppVisualizacaoRoute = AppVisualizacaoRouteImport.update({
   id: '/visualizacao',
@@ -320,9 +344,10 @@ export interface FileRoutesByFullPath {
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
   '/pagamentos': typeof PagamentosRoute
+  '/pair': typeof PairRoute
   '/pareamento': typeof PareamentoRoute
   '/planos': typeof PlanosRoute
-  '/player': typeof PlayerRoute
+  '/player': typeof PlayerRouteWithChildren
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -353,6 +378,9 @@ export interface FileRoutesByFullPath {
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
   '/app/visualizacao': typeof AppVisualizacaoRoute
+  '/display/$token': typeof DisplayTokenRoute
+  '/player/$screenId': typeof PlayerScreenIdRoute
+  '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
@@ -369,9 +397,10 @@ export interface FileRoutesByTo {
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
   '/pagamentos': typeof PagamentosRoute
+  '/pair': typeof PairRoute
   '/pareamento': typeof PareamentoRoute
   '/planos': typeof PlanosRoute
-  '/player': typeof PlayerRoute
+  '/player': typeof PlayerRouteWithChildren
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -402,6 +431,9 @@ export interface FileRoutesByTo {
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
   '/app/visualizacao': typeof AppVisualizacaoRoute
+  '/display/$token': typeof DisplayTokenRoute
+  '/player/$screenId': typeof PlayerScreenIdRoute
+  '/player/web': typeof PlayerWebRoute
   '/admin-saas': typeof AdminSaasIndexRoute
   '/app': typeof AppIndexRoute
 }
@@ -421,9 +453,10 @@ export interface FileRoutesById {
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
   '/pagamentos': typeof PagamentosRoute
+  '/pair': typeof PairRoute
   '/pareamento': typeof PareamentoRoute
   '/planos': typeof PlanosRoute
-  '/player': typeof PlayerRoute
+  '/player': typeof PlayerRouteWithChildren
   '/player-screen': typeof PlayerScreenRoute
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -454,6 +487,9 @@ export interface FileRoutesById {
   '/app/unidades': typeof AppUnidadesRoute
   '/app/usuarios': typeof AppUsuariosRoute
   '/app/visualizacao': typeof AppVisualizacaoRoute
+  '/display/$token': typeof DisplayTokenRoute
+  '/player/$screenId': typeof PlayerScreenIdRoute
+  '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
 }
@@ -474,6 +510,7 @@ export interface FileRouteTypes {
     | '/licencas'
     | '/login'
     | '/pagamentos'
+    | '/pair'
     | '/pareamento'
     | '/planos'
     | '/player'
@@ -507,6 +544,9 @@ export interface FileRouteTypes {
     | '/app/unidades'
     | '/app/usuarios'
     | '/app/visualizacao'
+    | '/display/$token'
+    | '/player/$screenId'
+    | '/player/web'
     | '/admin-saas/'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
@@ -523,6 +563,7 @@ export interface FileRouteTypes {
     | '/licencas'
     | '/login'
     | '/pagamentos'
+    | '/pair'
     | '/pareamento'
     | '/planos'
     | '/player'
@@ -556,6 +597,9 @@ export interface FileRouteTypes {
     | '/app/unidades'
     | '/app/usuarios'
     | '/app/visualizacao'
+    | '/display/$token'
+    | '/player/$screenId'
+    | '/player/web'
     | '/admin-saas'
     | '/app'
   id:
@@ -574,6 +618,7 @@ export interface FileRouteTypes {
     | '/licencas'
     | '/login'
     | '/pagamentos'
+    | '/pair'
     | '/pareamento'
     | '/planos'
     | '/player'
@@ -607,6 +652,9 @@ export interface FileRouteTypes {
     | '/app/unidades'
     | '/app/usuarios'
     | '/app/visualizacao'
+    | '/display/$token'
+    | '/player/$screenId'
+    | '/player/web'
     | '/admin-saas/'
     | '/app/'
   fileRoutesById: FileRoutesById
@@ -626,13 +674,15 @@ export interface RootRouteChildren {
   LicencasRoute: typeof LicencasRoute
   LoginRoute: typeof LoginRoute
   PagamentosRoute: typeof PagamentosRoute
+  PairRoute: typeof PairRoute
   PareamentoRoute: typeof PareamentoRoute
   PlanosRoute: typeof PlanosRoute
-  PlayerRoute: typeof PlayerRoute
+  PlayerRoute: typeof PlayerRouteWithChildren
   PlayerScreenRoute: typeof PlayerScreenRoute
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
+  DisplayTokenRoute: typeof DisplayTokenRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -684,6 +734,13 @@ declare module '@tanstack/react-router' {
       path: '/pareamento'
       fullPath: '/pareamento'
       preLoaderRoute: typeof PareamentoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pair': {
+      id: '/pair'
+      path: '/pair'
+      fullPath: '/pair'
+      preLoaderRoute: typeof PairRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pagamentos': {
@@ -797,6 +854,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin-saas/'
       preLoaderRoute: typeof AdminSaasIndexRouteImport
       parentRoute: typeof AdminSaasRoute
+    }
+    '/player/web': {
+      id: '/player/web'
+      path: '/web'
+      fullPath: '/player/web'
+      preLoaderRoute: typeof PlayerWebRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/player/$screenId': {
+      id: '/player/$screenId'
+      path: '/$screenId'
+      fullPath: '/player/$screenId'
+      preLoaderRoute: typeof PlayerScreenIdRouteImport
+      parentRoute: typeof PlayerRoute
+    }
+    '/display/$token': {
+      id: '/display/$token'
+      path: '/display/$token'
+      fullPath: '/display/$token'
+      preLoaderRoute: typeof DisplayTokenRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/app/visualizacao': {
       id: '/app/visualizacao'
@@ -1057,6 +1135,19 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface PlayerRouteChildren {
+  PlayerScreenIdRoute: typeof PlayerScreenIdRoute
+  PlayerWebRoute: typeof PlayerWebRoute
+}
+
+const PlayerRouteChildren: PlayerRouteChildren = {
+  PlayerScreenIdRoute: PlayerScreenIdRoute,
+  PlayerWebRoute: PlayerWebRoute,
+}
+
+const PlayerRouteWithChildren =
+  PlayerRoute._addFileChildren(PlayerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
@@ -1072,13 +1163,15 @@ const rootRouteChildren: RootRouteChildren = {
   LicencasRoute: LicencasRoute,
   LoginRoute: LoginRoute,
   PagamentosRoute: PagamentosRoute,
+  PairRoute: PairRoute,
   PareamentoRoute: PareamentoRoute,
   PlanosRoute: PlanosRoute,
-  PlayerRoute: PlayerRoute,
+  PlayerRoute: PlayerRouteWithChildren,
   PlayerScreenRoute: PlayerScreenRoute,
   RecuperarSenhaRoute: RecuperarSenhaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
+  DisplayTokenRoute: DisplayTokenRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
