@@ -282,7 +282,12 @@ async function handle(req: Request): Promise<Response> {
     );
   }
 
-  const invoiceUrl = await resolveInvoiceUrlForSubscription(sub.id);
+  let invoiceUrl: string | null = null;
+  try {
+    invoiceUrl = await resolveInvoiceUrlForSubscription(sub.id);
+  } catch (e) {
+    console.warn("[create-checkout-session] resolveInvoiceUrl falhou:", e);
+  }
   const { error: upCs } = await adminClient
     .from("checkout_sessions")
     .update({
