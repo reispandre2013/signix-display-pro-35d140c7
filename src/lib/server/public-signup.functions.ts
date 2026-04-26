@@ -41,16 +41,12 @@ function validatePublicSignup(input: unknown): PublicSignupInput {
   const email = typeof o.email === "string" ? o.email.trim().toLowerCase() : "";
   const password = typeof o.password === "string" ? o.password : "";
   const name = typeof o.name === "string" ? o.name.trim() : "";
-  const org_token = typeof o.org_token === "string" ? o.org_token.trim() : "";
   const roleRaw = o.role;
   const role: PublicRole = roleRaw === "visualizador" ? "visualizador" : "operador";
   if (!/^\S+@\S+\.\S+$/.test(email)) throw new Error("E-mail inválido.");
   if (password.length < 6) throw new Error("Senha precisa de ao menos 6 caracteres.");
   if (name.length < 2) throw new Error("Nome inválido.");
-  if (org_token.length < 8) {
-    throw new Error("Informe o código da organização (fornecido pelo Admin Master).");
-  }
-  return { email, password, name, org_token, role };
+  return { email, password, name, role };
 }
 
 /**
