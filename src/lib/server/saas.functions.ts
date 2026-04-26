@@ -10,37 +10,38 @@ type JsonValue =
   | { [key: string]: JsonValue }
   | JsonValue[];
 
-/** Mesma ordem que `web-player.functions.ts` — em Workers/Vite, `VITE_*` pode vir só de `import.meta.env`. */
+/** Mesma resolução que `screens.functions.ts` + fallbacks públicos (chave anon já no client). */
+const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
+const FALLBACK_SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1aHd5bG5ocW1kZ3Boc3Zqc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyOTcxNTQsImV4cCI6MjA5MTg3MzE1NH0.NNHIM43GJyOYYSjgZX3F1o5Pk_WrEx8xYzIrZpJt3kw";
+
 const SUPABASE_URL =
   process.env.SUPABASE_URL ??
   process.env.VITE_SUPABASE_URL ??
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((import.meta as any).env?.VITE_SUPABASE_URL as string | undefined) ??
-  "";
-const ANON =
+  import.meta.env.VITE_SUPABASE_URL ??
+  FALLBACK_SUPABASE_URL;
+const ANON_KEY =
   process.env.SUPABASE_ANON_KEY ??
   process.env.SUPABASE_PUBLISHABLE_KEY ??
   process.env.VITE_SUPABASE_ANON_KEY ??
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((import.meta as any).env?.VITE_SUPABASE_ANON_KEY as string | undefined) ??
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ((import.meta as any).env?.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ??
-  "";
+  import.meta.env.VITE_SUPABASE_ANON_KEY ??
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
+  FALLBACK_SUPABASE_ANON_KEY;
 
 /**
  * Contexto SaaS do utilizador autenticado (perfil, org, assinatura, plano, licença, uso).
  * Usa RLS com JWT do cliente — não expõe service role.
  */
 export const getUserSaasContext = createServerFn({ method: "POST" }).handler(async () => {
-  if (!SUPABASE_URL || !ANON) {
+  if (!SUPABASE_URL || !ANON_KEY) {
     throw new Error("Configuração Supabase incompleta no servidor.");
   }
   const authHeader = getRequestHeader("authorization") ?? "";
   const token = authHeader.replace(/^Bearer\s+/i, "");
   if (!token) throw new Error("Não autenticado.");
 
-  const userClient = createClient(SUPABASE_URL, ANON, {
+  const userClient = createClient(SUPABASE_URL, ANON_KEY, {
     global: { headers: { Authorization: `Bearer ${token}` } },
     auth: { persistSession: false, autoRefreshToken: false },
   });
@@ -86,7 +87,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     };
   })
   .handler(async ({ data }) => {
-    if (!SUPABASE_URL || !ANON) {
+    if (!SUPABASE_URL || !ANON_KEY) {
       throw new Error("Configuração Supabase incompleta no servidor.");
     }
     const authHeader = getRequestHeader("authorization") ?? "";
@@ -97,7 +98,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        apikey: ANON,
+        apikey: ANON_KEY,
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
