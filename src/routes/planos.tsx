@@ -42,6 +42,17 @@ function PlanosPublic() {
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-16">
+        {requiresPlan && (
+          <div className="mb-8 rounded-xl border border-primary/30 bg-primary/5 p-4 flex items-start gap-3">
+            <Lock className="h-5 w-5 text-primary mt-0.5 shrink-0" />
+            <div className="text-sm">
+              <p className="font-semibold text-foreground">Falta um passo para acessar o painel.</p>
+              <p className="text-muted-foreground mt-1">
+                A sua conta foi criada. Para entrar no painel e começar a usar o Signix, escolha um plano abaixo e conclua a assinatura.
+              </p>
+            </div>
+          </div>
+        )}
         <div className="text-center max-w-2xl mx-auto">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-[11px] font-semibold uppercase tracking-wider">
             <Sparkles className="h-3 w-3" /> Preços simples
