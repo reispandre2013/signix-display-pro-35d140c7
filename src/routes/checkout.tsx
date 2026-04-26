@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { hasSupabaseConfig as isSupabaseConfigured } from "@/lib/supabase-client";
+import { useServerFn } from "@tanstack/react-start";
+import { createCheckoutSession } from "@/lib/server/saas.functions";
 
 interface CheckoutSearch {
   plan?: string;
@@ -56,6 +58,7 @@ function CheckoutPage() {
     : 0;
 
   const [coupon, setCoupon] = useState("");
+  const createCheckoutSessionFn = useServerFn(createCheckoutSession);
   const [method, setMethod] = useState<"card" | "pix" | "boleto">("card");
   const [loading, setLoading] = useState(false);
   const discount = coupon.trim().toLowerCase() === "signix10" ? Math.round(amount * 0.1) : 0;
@@ -80,34 +83,40 @@ function CheckoutPage() {
       return;
     }
     setLoading(true);
-    const { data, error } = await supabase.functions.invoke<CreateCheckoutData>("create-checkout-session", {
-      body: {
-        plan_id: plan.id,
-        company_name: companyName.trim() || undefined,
-        buyer_email: session.user.email ?? undefined,
-        cpf_cnpj: docDigits,
-        billing_cycle: cycle,
-        billing_type_asaas: methodToAsaas(method),
-      },
-    });
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      if (!token) throw new Error("Sessão expirada. Faça login novamente.");
+
+      const data = (await createCheckoutSessionFn({
+        data: {
+          plan_id: plan.id,
+          company_name: companyName.trim() || undefined,
+          buyer_email: session.user.email ?? undefined,
+          cpf_cnpj: docDigits,
+          billing_cycle: cycle,
+          billing_type_asaas: methodToAsaas(method),
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      })) as CreateCheckoutData;
+
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+        return;
+      }
+      toast.success(
+        data.message ??
+          `Pedido de checkout ${data.provider === "asaas" ? "Asaas" : ""} criado.`.trim(),
+      );
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao iniciar checkout.");
+    } finally {
+      setLoading(false);
     }
-    const d = (data ?? {}) as CreateCheckoutData;
-    if (d.error) {
-      toast.error(d.error);
-      return;
-    }
-    if (d.checkout_url) {
-      window.location.href = d.checkout_url;
-      return;
-    }
-    toast.success(
-      d.message ??
-        `Pedido de checkout ${d.provider === "asaas" ? "Asaas" : ""} criado.`.trim(),
-    );
   };
 
   if (planQ.isLoading) {
