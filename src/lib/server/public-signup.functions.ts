@@ -19,11 +19,13 @@ const ANON_KEY =
 
 type PublicRole = "operador" | "visualizador";
 
+const DEFAULT_PUBLIC_SIGNUP_ORG_SLUG =
+  process.env.PUBLIC_SIGNUP_DEFAULT_ORG_SLUG ?? "signix";
+
 interface PublicSignupInput {
   email: string;
   password: string;
   name: string;
-  org_token: string;
   role: PublicRole;
 }
 
@@ -39,16 +41,12 @@ function validatePublicSignup(input: unknown): PublicSignupInput {
   const email = typeof o.email === "string" ? o.email.trim().toLowerCase() : "";
   const password = typeof o.password === "string" ? o.password : "";
   const name = typeof o.name === "string" ? o.name.trim() : "";
-  const org_token = typeof o.org_token === "string" ? o.org_token.trim() : "";
   const roleRaw = o.role;
   const role: PublicRole = roleRaw === "visualizador" ? "visualizador" : "operador";
   if (!/^\S+@\S+\.\S+$/.test(email)) throw new Error("E-mail inválido.");
   if (password.length < 6) throw new Error("Senha precisa de ao menos 6 caracteres.");
   if (name.length < 2) throw new Error("Nome inválido.");
-  if (org_token.length < 8) {
-    throw new Error("Informe o código da organização (fornecido pelo Admin Master).");
-  }
-  return { email, password, name, org_token, role };
+  return { email, password, name, role };
 }
 
 /**
@@ -67,11 +65,13 @@ export const registerPublicEmployee = createServerFn({ method: "POST" })
     const { data: org, error: orgErr } = await supabaseAdmin
       .from("organizations")
       .select("id, status")
-      .eq("employee_signup_token", data.org_token)
+      .eq("slug", DEFAULT_PUBLIC_SIGNUP_ORG_SLUG)
       .maybeSingle();
     if (orgErr) throw new Error(orgErr.message);
     if (!org || org.status !== "active") {
-      throw new Error("Código da organização inválido ou empresa inativa.");
+      throw new Error(
+        `Organização padrão "${DEFAULT_PUBLIC_SIGNUP_ORG_SLUG}" não encontrada ou inativa. Contate o administrador.`,
+      );
     }
 
     const orgId = org.id as string;

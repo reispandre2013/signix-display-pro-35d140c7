@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Tv, Mail, Lock, User, KeyRound, ArrowRight, Loader2 } from "lucide-react";
+import { Tv, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
@@ -14,7 +14,6 @@ type PublicRole = "operador" | "visualizador";
 
 function SignupPage() {
   const [name, setName] = useState("");
-  const [orgToken, setOrgToken] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<PublicRole>("operador");
@@ -35,7 +34,6 @@ function SignupPage() {
           name: name.trim(),
           email: email.trim(),
           password,
-          org_token: orgToken.trim(),
           role,
         },
       });
@@ -59,20 +57,12 @@ function SignupPage() {
         </div>
         <h2 className="font-display text-2xl font-bold">Criar nova conta</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Cadastro público limitado a Operador ou Visualizador. Peça ao Admin Master o código da sua organização
-          (em Configurações do painel).
+          Cadastro público limitado a Operador ou Visualizador. Sua conta será vinculada automaticamente
+          à organização padrão.
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
           <Field icon={User} label="Seu nome" value={name} onChange={setName} required placeholder="Ana Souza" />
-          <Field
-            icon={KeyRound}
-            label="Código da organização"
-            value={orgToken}
-            onChange={setOrgToken}
-            required
-            placeholder="Código fornecido pelo Admin Master"
-          />
           <Field icon={Mail} label="E-mail" type="email" value={email} onChange={setEmail} required placeholder="voce@empresa.com" />
           <Field icon={Lock} label="Senha (mín. 6 caracteres)" type="password" value={password} onChange={setPassword} required placeholder="••••••••" />
 
