@@ -74,12 +74,16 @@ function CheckoutPage() {
     }
     if (!plan) return;
     if (!session) {
-      toast.error("Inicie sessão para concluir o pedido e registar a sessão de checkout no servidor.");
+      toast.error(
+        "Inicie sessão para concluir o pedido e registar a sessão de checkout no servidor.",
+      );
       return;
     }
     const docDigits = cpfCnpj.replace(/\D/g, "");
     if (docDigits.length !== 11 && docDigits.length !== 14) {
-      toast.error("Informe CPF (11) ou CNPJ (14) dígitos — obrigatório para a integração com o Asaas.");
+      toast.error(
+        "Informe CPF (11) ou CNPJ (14) dígitos — obrigatório para a integração com o Asaas.",
+      );
       return;
     }
     setLoading(true);
@@ -130,7 +134,9 @@ function CheckoutPage() {
     return (
       <div className="min-h-screen grid place-items-center bg-background p-6 text-center">
         <div>
-          <p className="text-sm text-muted-foreground">Plano não encontrado. Volte e escolha outro plano.</p>
+          <p className="text-sm text-muted-foreground">
+            Plano não encontrado. Volte e escolha outro plano.
+          </p>
           <Link to="/planos" className="mt-3 inline-block text-primary text-sm">
             Ver planos
           </Link>
@@ -158,11 +164,15 @@ function CheckoutPage() {
       <main className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
         {!authLoading && !session && (
           <div className="lg:col-span-3 rounded-lg border border-primary/30 bg-primary/5 px-4 py-3 text-sm text-foreground/90">
-            <Link to="/login" search={{ redirect: loginRedirect }} className="font-medium text-primary underline">
+            <Link
+              to="/login"
+              search={{ redirect: loginRedirect }}
+              className="font-medium text-primary underline"
+            >
               Inicie sessão
             </Link>{" "}
-            para concluir o pedido. O registo cria a sessão de checkout no Supabase (Edge Function) com o teu
-            utilizador.
+            para concluir o pedido. O registo cria a sessão de checkout no Supabase (Edge Function)
+            com o teu utilizador.
           </div>
         )}
 
@@ -211,7 +221,9 @@ function CheckoutPage() {
                   onClick={() => setMethod(m)}
                   className={cn(
                     "rounded-lg border px-3 py-3 text-xs font-semibold uppercase tracking-wider transition-smooth",
-                    method === m ? "border-primary bg-primary/10 text-primary" : "border-border hover:bg-surface",
+                    method === m
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border hover:bg-surface",
                   )}
                 >
                   {m === "card" ? "Cartão" : m === "pix" ? "PIX" : "Boleto"}
@@ -220,16 +232,24 @@ function CheckoutPage() {
             </div>
             {method === "card" && (
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field label="Número do cartão" placeholder="0000 0000 0000 0000" className="md:col-span-2" />
+                <Field
+                  label="Número do cartão"
+                  placeholder="0000 0000 0000 0000"
+                  className="md:col-span-2"
+                />
                 <Field label="Validade" placeholder="MM/AA" />
                 <Field label="CVV" placeholder="000" />
               </div>
             )}
             {method === "pix" && (
-              <p className="mt-4 text-xs text-muted-foreground">Após confirmar, você receberá o QR Code por email.</p>
+              <p className="mt-4 text-xs text-muted-foreground">
+                Após confirmar, você receberá o QR Code por email.
+              </p>
             )}
             {method === "boleto" && (
-              <p className="mt-4 text-xs text-muted-foreground">Disponível apenas para o ciclo anual.</p>
+              <p className="mt-4 text-xs text-muted-foreground">
+                Disponível apenas para o ciclo anual.
+              </p>
             )}
           </section>
         </form>
@@ -243,7 +263,9 @@ function CheckoutPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-sm">Plano {plan.name}</p>
-                <p className="text-[11px] text-muted-foreground">{cycle === "monthly" ? "Cobrança mensal" : "Cobrança anual"}</p>
+                <p className="text-[11px] text-muted-foreground">
+                  {cycle === "monthly" ? "Cobrança mensal" : "Cobrança anual"}
+                </p>
               </div>
               <p className="font-mono font-bold text-sm">{formatPrice(amount)}</p>
             </div>
@@ -259,17 +281,26 @@ function CheckoutPage() {
                 className="mt-1 w-full rounded-md border border-border bg-background px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
               {discount > 0 && (
-                <p className="mt-1 text-[11px] text-success">Cupom aplicado: −{formatPrice(discount)}</p>
+                <p className="mt-1 text-[11px] text-success">
+                  Cupom aplicado: −{formatPrice(discount)}
+                </p>
               )}
             </div>
 
             <div className="mt-4 space-y-1.5 text-sm border-t border-border pt-3">
-              <div className="flex justify-between text-muted-foreground"><span>Subtotal</span><span className="font-mono">{formatPrice(amount)}</span></div>
+              <div className="flex justify-between text-muted-foreground">
+                <span>Subtotal</span>
+                <span className="font-mono">{formatPrice(amount)}</span>
+              </div>
               {discount > 0 && (
-                <div className="flex justify-between text-success"><span>Desconto</span><span className="font-mono">−{formatPrice(discount)}</span></div>
+                <div className="flex justify-between text-success">
+                  <span>Desconto</span>
+                  <span className="font-mono">−{formatPrice(discount)}</span>
+                </div>
               )}
               <div className="flex justify-between font-bold pt-2 border-t border-border">
-                <span>Total</span><span className="font-mono">{formatPrice(total)}</span>
+                <span>Total</span>
+                <span className="font-mono">{formatPrice(total)}</span>
               </div>
             </div>
 
@@ -279,12 +310,16 @@ function CheckoutPage() {
               disabled={loading || !session}
               className="mt-5 w-full inline-flex items-center justify-center gap-1.5 rounded-md bg-gradient-primary px-3 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-90 disabled:opacity-60"
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <ShieldCheck className="h-4 w-4" />
+              )}
               {session ? "Confirmar e registar pedido" : "Inicie sessão para continuar"}
             </button>
             <p className="mt-3 text-[10px] text-center text-muted-foreground flex items-center justify-center gap-1">
-              <ShieldCheck className="h-3 w-3" /> Sessão autenticada com Supabase; gateway de pagamento em produção fica
-              ligado no backend.
+              <ShieldCheck className="h-3 w-3" /> Sessão autenticada com Supabase; gateway de
+              pagamento em produção fica ligado no backend.
             </p>
           </div>
         </aside>
@@ -293,7 +328,12 @@ function CheckoutPage() {
   );
 }
 
-function Field({ label, required, className, ...rest }: React.InputHTMLAttributes<HTMLInputElement> & { label: string; className?: string }) {
+function Field({
+  label,
+  required,
+  className,
+  ...rest
+}: React.InputHTMLAttributes<HTMLInputElement> & { label: string; className?: string }) {
   return (
     <label className={cn("block", className)}>
       <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">

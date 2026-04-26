@@ -12,13 +12,7 @@ export function LoadingPanel({ title = "Carregando…" }: { title?: string }) {
   );
 }
 
-export function ErrorPanel({
-  message,
-  onRetry,
-}: {
-  message: string;
-  onRetry?: () => void;
-}) {
+export function ErrorPanel({ message, onRetry }: { message: string; onRetry?: () => void }) {
   return (
     <Panel title="Erro">
       <div className="flex flex-col items-center gap-3 py-8 text-center">

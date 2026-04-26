@@ -5,17 +5,17 @@
 - **Multitenant** por `organization_id` em toda tabela sensível. `super_admin` (enum `app_role`) acede a todas as linhas vía `is_platform_admin()`.
 - **Papéis**:
   - `super_admin` — plataforma (SaaS Admin no UI).
-  - `admin_master` / `gestor` — mapeados para *master* no frontend (`useRole`).
+  - `admin_master` / `gestor` — mapeados para _master_ no frontend (`useRole`).
   - `operador` / `visualizador` — inalterados; RLS restringe escrita a `operador+` onde já existia.
 
 ## Dados (Postgres)
 
-| Tabela | Notas |
-|--------|--------|
-| `permission_catalog` | Chaves lógicas (`dashboard.view`, `billing.view`, …). |
-| `role_permissions` | Permissão por valor de `app_role`. |
-| `user_permissions` | Override por `profile_id` (master ajusta operador). |
-| `plans` | Preços em centavos; `slug` + limites (telas, users, storage MB, playlists, campanhas). |
+| Tabela                                                                                                      | Notas                                                                                              |
+| ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `permission_catalog`                                                                                        | Chaves lógicas (`dashboard.view`, `billing.view`, …).                                              |
+| `role_permissions`                                                                                          | Permissão por valor de `app_role`.                                                                 |
+| `user_permissions`                                                                                          | Override por `profile_id` (master ajusta operador).                                                |
+| `plans`                                                                                                     | Preços em centavos; `slug` + limites (telas, users, storage MB, playlists, campanhas).             |
 | `subscriptions`, `invoices`, `payments`, `licenses`, `checkout_sessions`, `usage_counters`, `saas_settings` | Billing e uso. Mutação via **service role** (Edge) ou `super_admin` na UI; leitura na organização. |
 
 ## Funções (RPC / SECURITY DEFINER)
@@ -26,12 +26,12 @@
 
 ## Edge Functions
 
-| Função | Papel |
-|--------|--------|
-| `get-saas-context` | Chama `get_user_saas_context` com o JWT. |
-| `create-checkout-session` | Stub: cria `checkout_sessions` (service role após verificar user). |
-| `payment-webhook` | Stub: grava `payments`; activação de licença/subscription: **TODO** (ver código). |
-| `validate-plan-limits` | Chama `check_plan_limit` com org do perfil. |
+| Função                    | Papel                                                                             |
+| ------------------------- | --------------------------------------------------------------------------------- |
+| `get-saas-context`        | Chama `get_user_saas_context` com o JWT.                                          |
+| `create-checkout-session` | Stub: cria `checkout_sessions` (service role após verificar user).                |
+| `payment-webhook`         | Stub: grava `payments`; activação de licença/subscription: **TODO** (ver código). |
+| `validate-plan-limits`    | Chama `check_plan_limit` com org do perfil.                                       |
 
 ## Trocar provedor de pagamento
 

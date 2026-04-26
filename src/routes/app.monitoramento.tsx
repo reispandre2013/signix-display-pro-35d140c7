@@ -64,8 +64,7 @@ function MonitorPage() {
   };
 
   const unitName = (id: string | null) => units.find((u) => u.id === id)?.name ?? "Sem unidade";
-  const campaignName = (id: string | null) =>
-    campaigns.find((c) => c.id === id)?.name ?? null;
+  const campaignName = (id: string | null) => campaigns.find((c) => c.id === id)?.name ?? null;
 
   return (
     <div className="space-y-6">
@@ -78,10 +77,16 @@ function MonitorPage() {
               <span className="h-1.5 w-1.5 rounded-full bg-success pulse-dot" /> Live
             </span>
             <div className="inline-flex rounded-md border border-border bg-surface p-0.5">
-              <button onClick={() => setView("grid")} className={`p-1.5 rounded ${view === "grid" ? "bg-accent" : ""}`}>
+              <button
+                onClick={() => setView("grid")}
+                className={`p-1.5 rounded ${view === "grid" ? "bg-accent" : ""}`}
+              >
                 <LayoutGrid className="h-3.5 w-3.5" />
               </button>
-              <button onClick={() => setView("table")} className={`p-1.5 rounded ${view === "table" ? "bg-accent" : ""}`}>
+              <button
+                onClick={() => setView("table")}
+                className={`p-1.5 rounded ${view === "table" ? "bg-accent" : ""}`}
+              >
                 <List className="h-3.5 w-3.5" />
               </button>
             </div>
@@ -139,7 +144,9 @@ function MonitorPage() {
                     </div>
                   )}
                   <div className="absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] text-white">
-                    <span className="rounded bg-black/50 backdrop-blur-md px-1.5 py-0.5">{s.platform ?? "—"}</span>
+                    <span className="rounded bg-black/50 backdrop-blur-md px-1.5 py-0.5">
+                      {s.platform ?? "—"}
+                    </span>
                     <span className="rounded bg-black/50 backdrop-blur-md px-1.5 py-0.5 font-mono">
                       {s.player_version ?? "—"}
                     </span>
@@ -149,7 +156,9 @@ function MonitorPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-sm font-medium truncate">{s.name}</p>
-                      <p className="text-[11px] text-muted-foreground truncate">{unitName(s.unit_id)}</p>
+                      <p className="text-[11px] text-muted-foreground truncate">
+                        {unitName(s.unit_id)}
+                      </p>
                     </div>
                   </div>
                   <div className="text-[11px] text-muted-foreground">
@@ -160,7 +169,10 @@ function MonitorPage() {
                     <p className="mt-0.5">
                       Último ping{" "}
                       {s.last_seen_at
-                        ? formatDistanceToNow(new Date(s.last_seen_at), { locale: ptBR, addSuffix: true })
+                        ? formatDistanceToNow(new Date(s.last_seen_at), {
+                            locale: ptBR,
+                            addSuffix: true,
+                          })
                         : "—"}
                     </p>
                   </div>
@@ -201,12 +213,18 @@ function MonitorPage() {
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {s.last_seen_at
-                        ? formatDistanceToNow(new Date(s.last_seen_at), { locale: ptBR, addSuffix: true })
+                        ? formatDistanceToNow(new Date(s.last_seen_at), {
+                            locale: ptBR,
+                            addSuffix: true,
+                          })
                         : "—"}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">
                       {s.last_sync_at
-                        ? formatDistanceToNow(new Date(s.last_sync_at), { locale: ptBR, addSuffix: true })
+                        ? formatDistanceToNow(new Date(s.last_sync_at), {
+                            locale: ptBR,
+                            addSuffix: true,
+                          })
                         : "—"}
                     </td>
                     <td className="px-4 py-3 truncate max-w-xs">

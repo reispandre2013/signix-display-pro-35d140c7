@@ -24,7 +24,10 @@ serve(async (req) => {
       .eq("id", ctx.sessionId);
     if (sesErr) return jsonResponse({ error: sesErr.message }, 400);
 
-    await adminClient.from("screens").update({ device_token_hash: nextHash }).eq("id", ctx.screenId);
+    await adminClient
+      .from("screens")
+      .update({ device_token_hash: nextHash })
+      .eq("id", ctx.screenId);
     return jsonResponse({ ok: true, device_token: nextToken });
   } catch (err) {
     return jsonResponse({ error: err instanceof Error ? err.message : "Unknown error" }, 400);

@@ -33,7 +33,9 @@ function PairRouteComponent() {
   const [paired, setPaired] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activating, setActivating] = useState(false);
-  const [online, setOnline] = useState<boolean>(typeof navigator !== "undefined" ? navigator.onLine : true);
+  const [online, setOnline] = useState<boolean>(
+    typeof navigator !== "undefined" ? navigator.onLine : true,
+  );
   const activatedRef = useRef(false);
 
   useEffect(() => {
@@ -54,7 +56,12 @@ function PairRouteComponent() {
     activatedRef.current = false;
     try {
       const res = await createCodeFn({ data: { platform: "web" } });
-      const generatedCode = typeof res?.code === "string" ? res.code : typeof res?.pairing_code === "string" ? res.pairing_code : "";
+      const generatedCode =
+        typeof res?.code === "string"
+          ? res.code
+          : typeof res?.pairing_code === "string"
+            ? res.pairing_code
+            : "";
       if (!generatedCode) throw new Error("Resposta inválida do servidor.");
       localStorage.setItem(LS_WEB_PAIRING_CODE, generatedCode);
       if (res.expires_at) localStorage.setItem(LS_WEB_PAIRING_EXP, res.expires_at);
@@ -184,11 +191,14 @@ function PairRouteComponent() {
                 Aguardando confirmação no painel
               </div>
               <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
-                Use este código para parear<br />o navegador como player
+                Use este código para parear
+                <br />o navegador como player
               </h1>
               <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">
-                No painel acesse <span className="text-foreground font-medium">Dispositivos › Novo dispositivo</span>,
-                cole o código abaixo e selecione a plataforma <span className="text-foreground font-medium">Web Player</span>.
+                No painel acesse{" "}
+                <span className="text-foreground font-medium">Dispositivos › Novo dispositivo</span>
+                , cole o código abaixo e selecione a plataforma{" "}
+                <span className="text-foreground font-medium">Web Player</span>.
               </p>
 
               <div className="mt-8 inline-flex items-center gap-3 rounded-2xl border border-border bg-card px-8 py-6 shadow-lg min-h-[120px]">
@@ -202,9 +212,14 @@ function PairRouteComponent() {
                 ) : code ? (
                   codeChars.map((c, i) =>
                     c === "-" ? (
-                      <span key={i} className="font-display text-4xl text-muted-foreground">·</span>
+                      <span key={i} className="font-display text-4xl text-muted-foreground">
+                        ·
+                      </span>
                     ) : (
-                      <span key={i} className="font-mono text-5xl font-bold text-primary w-10 text-center">
+                      <span
+                        key={i}
+                        className="font-mono text-5xl font-bold text-primary w-10 text-center"
+                      >
                         {c}
                       </span>
                     ),
@@ -213,7 +228,11 @@ function PairRouteComponent() {
               </div>
 
               <div className="mt-6 grid grid-cols-2 gap-3 max-w-md mx-auto text-left">
-                <Info label="Internet" value={online ? "Online" : "Offline"} icon={<Wifi className="h-3.5 w-3.5" />} />
+                <Info
+                  label="Internet"
+                  value={online ? "Online" : "Offline"}
+                  icon={<Wifi className="h-3.5 w-3.5" />}
+                />
                 <Info
                   label="Resolução"
                   value={`${typeof window !== "undefined" ? window.screen.width : 0}x${typeof window !== "undefined" ? window.screen.height : 0}`}

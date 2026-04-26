@@ -1,4 +1,25 @@
-import { S as Subscribable, p as pendingThenable, c as resolveEnabled, d as shallowEqualObjects, e as resolveStaleTime, n as noop, f as environmentManager, i as isValidTimeout, g as timeUntilStale, h as timeoutManager, j as focusManager, k as fetchState, l as replaceData, m as notifyManager, o as hashKey, q as getDefaultState, v as shouldThrowError, b as useQueryClient, a as useAuth, s as supabase } from "./router-BfC5KUx0.js";
+import {
+  S as Subscribable,
+  p as pendingThenable,
+  c as resolveEnabled,
+  d as shallowEqualObjects,
+  e as resolveStaleTime,
+  n as noop,
+  f as environmentManager,
+  i as isValidTimeout,
+  g as timeUntilStale,
+  h as timeoutManager,
+  j as focusManager,
+  k as fetchState,
+  l as replaceData,
+  m as notifyManager,
+  o as hashKey,
+  q as getDefaultState,
+  v as shouldThrowError,
+  b as useQueryClient,
+  a as useAuth,
+  s as supabase,
+} from "./router-BfC5KUx0.js";
 import { r as reactExports } from "./worker-entry-CFvqOeOX.js";
 var QueryObserver = class extends Subscribable {
   constructor(client, options) {
@@ -47,18 +68,10 @@ var QueryObserver = class extends Subscribable {
     }
   }
   shouldFetchOnReconnect() {
-    return shouldFetchOn(
-      this.#currentQuery,
-      this.options,
-      this.options.refetchOnReconnect
-    );
+    return shouldFetchOn(this.#currentQuery, this.options, this.options.refetchOnReconnect);
   }
   shouldFetchOnWindowFocus() {
-    return shouldFetchOn(
-      this.#currentQuery,
-      this.options,
-      this.options.refetchOnWindowFocus
-    );
+    return shouldFetchOn(this.#currentQuery, this.options, this.options.refetchOnWindowFocus);
   }
   destroy() {
     this.listeners = /* @__PURE__ */ new Set();
@@ -70,10 +83,13 @@ var QueryObserver = class extends Subscribable {
     const prevOptions = this.options;
     const prevQuery = this.#currentQuery;
     this.options = this.#client.defaultQueryOptions(options);
-    if (this.options.enabled !== void 0 && typeof this.options.enabled !== "boolean" && typeof this.options.enabled !== "function" && typeof resolveEnabled(this.options.enabled, this.#currentQuery) !== "boolean") {
-      throw new Error(
-        "Expected enabled to be a boolean or a callback that returns a boolean"
-      );
+    if (
+      this.options.enabled !== void 0 &&
+      typeof this.options.enabled !== "boolean" &&
+      typeof this.options.enabled !== "function" &&
+      typeof resolveEnabled(this.options.enabled, this.#currentQuery) !== "boolean"
+    ) {
+      throw new Error("Expected enabled to be a boolean or a callback that returns a boolean");
     }
     this.#updateQuery();
     this.#currentQuery.setOptions(this.options);
@@ -81,24 +97,35 @@ var QueryObserver = class extends Subscribable {
       this.#client.getQueryCache().notify({
         type: "observerOptionsUpdated",
         query: this.#currentQuery,
-        observer: this
+        observer: this,
       });
     }
     const mounted = this.hasListeners();
-    if (mounted && shouldFetchOptionally(
-      this.#currentQuery,
-      prevQuery,
-      this.options,
-      prevOptions
-    )) {
+    if (
+      mounted &&
+      shouldFetchOptionally(this.#currentQuery, prevQuery, this.options, prevOptions)
+    ) {
       this.#executeFetch();
     }
     this.updateResult();
-    if (mounted && (this.#currentQuery !== prevQuery || resolveEnabled(this.options.enabled, this.#currentQuery) !== resolveEnabled(prevOptions.enabled, this.#currentQuery) || resolveStaleTime(this.options.staleTime, this.#currentQuery) !== resolveStaleTime(prevOptions.staleTime, this.#currentQuery))) {
+    if (
+      mounted &&
+      (this.#currentQuery !== prevQuery ||
+        resolveEnabled(this.options.enabled, this.#currentQuery) !==
+          resolveEnabled(prevOptions.enabled, this.#currentQuery) ||
+        resolveStaleTime(this.options.staleTime, this.#currentQuery) !==
+          resolveStaleTime(prevOptions.staleTime, this.#currentQuery))
+    ) {
       this.#updateStaleTimeout();
     }
     const nextRefetchInterval = this.#computeRefetchInterval();
-    if (mounted && (this.#currentQuery !== prevQuery || resolveEnabled(this.options.enabled, this.#currentQuery) !== resolveEnabled(prevOptions.enabled, this.#currentQuery) || nextRefetchInterval !== this.#currentRefetchInterval)) {
+    if (
+      mounted &&
+      (this.#currentQuery !== prevQuery ||
+        resolveEnabled(this.options.enabled, this.#currentQuery) !==
+          resolveEnabled(prevOptions.enabled, this.#currentQuery) ||
+        nextRefetchInterval !== this.#currentRefetchInterval)
+    ) {
       this.#updateRefetchInterval(nextRefetchInterval);
     }
   }
@@ -122,16 +149,17 @@ var QueryObserver = class extends Subscribable {
         onPropTracked?.(key);
         if (key === "promise") {
           this.trackProp("data");
-          if (!this.options.experimental_prefetchInRender && this.#currentThenable.status === "pending") {
+          if (
+            !this.options.experimental_prefetchInRender &&
+            this.#currentThenable.status === "pending"
+          ) {
             this.#currentThenable.reject(
-              new Error(
-                "experimental_prefetchInRender feature flag is not enabled"
-              )
+              new Error("experimental_prefetchInRender feature flag is not enabled"),
             );
           }
         }
         return Reflect.get(target, key);
-      }
+      },
     });
   }
   trackProp(key) {
@@ -142,7 +170,7 @@ var QueryObserver = class extends Subscribable {
   }
   refetch({ ...options } = {}) {
     return this.fetch({
-      ...options
+      ...options,
     });
   }
   fetchOptimistic(options) {
@@ -153,7 +181,7 @@ var QueryObserver = class extends Subscribable {
   fetch(fetchOptions) {
     return this.#executeFetch({
       ...fetchOptions,
-      cancelRefetch: fetchOptions.cancelRefetch ?? true
+      cancelRefetch: fetchOptions.cancelRefetch ?? true,
     }).then(() => {
       this.updateResult();
       return this.#currentResult;
@@ -161,10 +189,7 @@ var QueryObserver = class extends Subscribable {
   }
   #executeFetch(fetchOptions) {
     this.#updateQuery();
-    let promise = this.#currentQuery.fetch(
-      this.options,
-      fetchOptions
-    );
+    let promise = this.#currentQuery.fetch(this.options, fetchOptions);
     if (!fetchOptions?.throwOnError) {
       promise = promise.catch(noop);
     }
@@ -172,11 +197,12 @@ var QueryObserver = class extends Subscribable {
   }
   #updateStaleTimeout() {
     this.#clearStaleTimeout();
-    const staleTime = resolveStaleTime(
-      this.options.staleTime,
-      this.#currentQuery
-    );
-    if (environmentManager.isServer() || this.#currentResult.isStale || !isValidTimeout(staleTime)) {
+    const staleTime = resolveStaleTime(this.options.staleTime, this.#currentQuery);
+    if (
+      environmentManager.isServer() ||
+      this.#currentResult.isStale ||
+      !isValidTimeout(staleTime)
+    ) {
       return;
     }
     const time = timeUntilStale(this.#currentResult.dataUpdatedAt, staleTime);
@@ -188,12 +214,21 @@ var QueryObserver = class extends Subscribable {
     }, timeout);
   }
   #computeRefetchInterval() {
-    return (typeof this.options.refetchInterval === "function" ? this.options.refetchInterval(this.#currentQuery) : this.options.refetchInterval) ?? false;
+    return (
+      (typeof this.options.refetchInterval === "function"
+        ? this.options.refetchInterval(this.#currentQuery)
+        : this.options.refetchInterval) ?? false
+    );
   }
   #updateRefetchInterval(nextInterval) {
     this.#clearRefetchInterval();
     this.#currentRefetchInterval = nextInterval;
-    if (environmentManager.isServer() || resolveEnabled(this.options.enabled, this.#currentQuery) === false || !isValidTimeout(this.#currentRefetchInterval) || this.#currentRefetchInterval === 0) {
+    if (
+      environmentManager.isServer() ||
+      resolveEnabled(this.options.enabled, this.#currentQuery) === false ||
+      !isValidTimeout(this.#currentRefetchInterval) ||
+      this.#currentRefetchInterval === 0
+    ) {
       return;
     }
     this.#refetchIntervalId = timeoutManager.setInterval(() => {
@@ -233,11 +268,12 @@ var QueryObserver = class extends Subscribable {
     if (options._optimisticResults) {
       const mounted = this.hasListeners();
       const fetchOnMount = !mounted && shouldFetchOnMount(query, options);
-      const fetchOptionally = mounted && shouldFetchOptionally(query, prevQuery, options, prevOptions);
+      const fetchOptionally =
+        mounted && shouldFetchOptionally(query, prevQuery, options, prevOptions);
       if (fetchOnMount || fetchOptionally) {
         newState = {
           ...newState,
-          ...fetchState(state.data, query.options)
+          ...fetchState(state.data, query.options),
         };
       }
       if (options._optimisticResults === "isRestoring") {
@@ -249,22 +285,24 @@ var QueryObserver = class extends Subscribable {
     let skipSelect = false;
     if (options.placeholderData !== void 0 && data === void 0 && status === "pending") {
       let placeholderData;
-      if (prevResult?.isPlaceholderData && options.placeholderData === prevResultOptions?.placeholderData) {
+      if (
+        prevResult?.isPlaceholderData &&
+        options.placeholderData === prevResultOptions?.placeholderData
+      ) {
         placeholderData = prevResult.data;
         skipSelect = true;
       } else {
-        placeholderData = typeof options.placeholderData === "function" ? options.placeholderData(
-          this.#lastQueryWithDefinedData?.state.data,
-          this.#lastQueryWithDefinedData
-        ) : options.placeholderData;
+        placeholderData =
+          typeof options.placeholderData === "function"
+            ? options.placeholderData(
+                this.#lastQueryWithDefinedData?.state.data,
+                this.#lastQueryWithDefinedData,
+              )
+            : options.placeholderData;
       }
       if (placeholderData !== void 0) {
         status = "success";
-        data = replaceData(
-          prevResult?.data,
-          placeholderData,
-          options
-        );
+        data = replaceData(prevResult?.data, placeholderData, options);
         isPlaceholderData = true;
       }
     }
@@ -310,7 +348,9 @@ var QueryObserver = class extends Subscribable {
       failureReason: newState.fetchFailureReason,
       errorUpdateCount: newState.errorUpdateCount,
       isFetched: query.isFetched(),
-      isFetchedAfterMount: newState.dataUpdateCount > queryInitialState.dataUpdateCount || newState.errorUpdateCount > queryInitialState.errorUpdateCount,
+      isFetchedAfterMount:
+        newState.dataUpdateCount > queryInitialState.dataUpdateCount ||
+        newState.errorUpdateCount > queryInitialState.errorUpdateCount,
       isFetching,
       isRefetching: isFetching && !isPending,
       isLoadingError: isError && !hasData,
@@ -320,7 +360,7 @@ var QueryObserver = class extends Subscribable {
       isStale: isStale(query, options),
       refetch: this.refetch,
       promise: this.#currentThenable,
-      isEnabled: resolveEnabled(options.enabled, query) !== false
+      isEnabled: resolveEnabled(options.enabled, query) !== false,
     };
     const nextResult = result;
     if (this.options.experimental_prefetchInRender) {
@@ -334,7 +374,7 @@ var QueryObserver = class extends Subscribable {
         }
       };
       const recreateThenable = () => {
-        const pending = this.#currentThenable = nextResult.promise = pendingThenable();
+        const pending = (this.#currentThenable = nextResult.promise = pendingThenable());
         finalizeThenableIfPossible(pending);
       };
       const prevThenable = this.#currentThenable;
@@ -375,13 +415,15 @@ var QueryObserver = class extends Subscribable {
         return true;
       }
       const { notifyOnChangeProps } = this.options;
-      const notifyOnChangePropsValue = typeof notifyOnChangeProps === "function" ? notifyOnChangeProps() : notifyOnChangeProps;
-      if (notifyOnChangePropsValue === "all" || !notifyOnChangePropsValue && !this.#trackedProps.size) {
+      const notifyOnChangePropsValue =
+        typeof notifyOnChangeProps === "function" ? notifyOnChangeProps() : notifyOnChangeProps;
+      if (
+        notifyOnChangePropsValue === "all" ||
+        (!notifyOnChangePropsValue && !this.#trackedProps.size)
+      ) {
         return true;
       }
-      const includedProps = new Set(
-        notifyOnChangePropsValue ?? this.#trackedProps
-      );
+      const includedProps = new Set(notifyOnChangePropsValue ?? this.#trackedProps);
       if (this.options.throwOnError) {
         includedProps.add("error");
       }
@@ -421,29 +463,46 @@ var QueryObserver = class extends Subscribable {
       }
       this.#client.getQueryCache().notify({
         query: this.#currentQuery,
-        type: "observerResultsUpdated"
+        type: "observerResultsUpdated",
       });
     });
   }
 };
 function shouldLoadOnMount(query, options) {
-  return resolveEnabled(options.enabled, query) !== false && query.state.data === void 0 && !(query.state.status === "error" && options.retryOnMount === false);
+  return (
+    resolveEnabled(options.enabled, query) !== false &&
+    query.state.data === void 0 &&
+    !(query.state.status === "error" && options.retryOnMount === false)
+  );
 }
 function shouldFetchOnMount(query, options) {
-  return shouldLoadOnMount(query, options) || query.state.data !== void 0 && shouldFetchOn(query, options, options.refetchOnMount);
+  return (
+    shouldLoadOnMount(query, options) ||
+    (query.state.data !== void 0 && shouldFetchOn(query, options, options.refetchOnMount))
+  );
 }
 function shouldFetchOn(query, options, field) {
-  if (resolveEnabled(options.enabled, query) !== false && resolveStaleTime(options.staleTime, query) !== "static") {
+  if (
+    resolveEnabled(options.enabled, query) !== false &&
+    resolveStaleTime(options.staleTime, query) !== "static"
+  ) {
     const value = typeof field === "function" ? field(query) : field;
-    return value === "always" || value !== false && isStale(query, options);
+    return value === "always" || (value !== false && isStale(query, options));
   }
   return false;
 }
 function shouldFetchOptionally(query, prevQuery, options, prevOptions) {
-  return (query !== prevQuery || resolveEnabled(prevOptions.enabled, query) === false) && (!options.suspense || query.state.status !== "error") && isStale(query, options);
+  return (
+    (query !== prevQuery || resolveEnabled(prevOptions.enabled, query) === false) &&
+    (!options.suspense || query.state.status !== "error") &&
+    isStale(query, options)
+  );
 }
 function isStale(query, options) {
-  return resolveEnabled(options.enabled, query) !== false && query.isStaleByTime(resolveStaleTime(options.staleTime, query));
+  return (
+    resolveEnabled(options.enabled, query) !== false &&
+    query.isStaleByTime(resolveStaleTime(options.staleTime, query))
+  );
 }
 function shouldAssignObserverCurrentProperties(observer, optimisticResult) {
   if (!shallowEqualObjects(observer.getCurrentResult(), optimisticResult)) {
@@ -474,10 +533,14 @@ var MutationObserver = class extends Subscribable {
       this.#client.getMutationCache().notify({
         type: "observerOptionsUpdated",
         mutation: this.#currentMutation,
-        observer: this
+        observer: this,
       });
     }
-    if (prevOptions?.mutationKey && this.options.mutationKey && hashKey(prevOptions.mutationKey) !== hashKey(this.options.mutationKey)) {
+    if (
+      prevOptions?.mutationKey &&
+      this.options.mutationKey &&
+      hashKey(prevOptions.mutationKey) !== hashKey(this.options.mutationKey)
+    ) {
       this.reset();
     } else if (this.#currentMutation?.state.status === "pending") {
       this.#currentMutation.setOptions(this.options);
@@ -517,7 +580,7 @@ var MutationObserver = class extends Subscribable {
       isError: state.status === "error",
       isIdle: state.status === "idle",
       mutate: this.mutate,
-      reset: this.reset
+      reset: this.reset,
     };
   }
   #notify(action) {
@@ -528,38 +591,22 @@ var MutationObserver = class extends Subscribable {
         const context = {
           client: this.#client,
           meta: this.options.meta,
-          mutationKey: this.options.mutationKey
+          mutationKey: this.options.mutationKey,
         };
         if (action?.type === "success") {
           try {
-            this.#mutateOptions.onSuccess?.(
-              action.data,
-              variables,
-              onMutateResult,
-              context
-            );
+            this.#mutateOptions.onSuccess?.(action.data, variables, onMutateResult, context);
           } catch (e) {
             void Promise.reject(e);
           }
           try {
-            this.#mutateOptions.onSettled?.(
-              action.data,
-              null,
-              variables,
-              onMutateResult,
-              context
-            );
+            this.#mutateOptions.onSettled?.(action.data, null, variables, onMutateResult, context);
           } catch (e) {
             void Promise.reject(e);
           }
         } else if (action?.type === "error") {
           try {
-            this.#mutateOptions.onError?.(
-              action.error,
-              variables,
-              onMutateResult,
-              context
-            );
+            this.#mutateOptions.onError?.(action.error, variables, onMutateResult, context);
           } catch (e) {
             void Promise.reject(e);
           }
@@ -569,7 +616,7 @@ var MutationObserver = class extends Subscribable {
               action.error,
               variables,
               onMutateResult,
-              context
+              context,
             );
           } catch (e) {
             void Promise.reject(e);
@@ -596,13 +643,16 @@ function createValue() {
     },
     isReset: () => {
       return isReset;
-    }
+    },
   };
 }
 var QueryErrorResetBoundaryContext = reactExports.createContext(createValue());
 var useQueryErrorResetBoundary = () => reactExports.useContext(QueryErrorResetBoundaryContext);
 var ensurePreventErrorBoundaryRetry = (options, errorResetBoundary, query) => {
-  const throwOnError = query?.state.error && typeof options.throwOnError === "function" ? shouldThrowError(options.throwOnError, [query.state.error, query]) : options.throwOnError;
+  const throwOnError =
+    query?.state.error && typeof options.throwOnError === "function"
+      ? shouldThrowError(options.throwOnError, [query.state.error, query])
+      : options.throwOnError;
   if (options.suspense || options.experimental_prefetchInRender || throwOnError) {
     if (!errorResetBoundary.isReset()) {
       options.retryOnMount = false;
@@ -614,67 +664,64 @@ var useClearResetErrorBoundary = (errorResetBoundary) => {
     errorResetBoundary.clearReset();
   }, [errorResetBoundary]);
 };
-var getHasError = ({
-  result,
-  errorResetBoundary,
-  throwOnError,
-  query,
-  suspense
-}) => {
-  return result.isError && !errorResetBoundary.isReset() && !result.isFetching && query && (suspense && result.data === void 0 || shouldThrowError(throwOnError, [result.error, query]));
+var getHasError = ({ result, errorResetBoundary, throwOnError, query, suspense }) => {
+  return (
+    result.isError &&
+    !errorResetBoundary.isReset() &&
+    !result.isFetching &&
+    query &&
+    ((suspense && result.data === void 0) || shouldThrowError(throwOnError, [result.error, query]))
+  );
 };
 var ensureSuspenseTimers = (defaultedOptions) => {
   if (defaultedOptions.suspense) {
     const MIN_SUSPENSE_TIME_MS = 1e3;
-    const clamp = (value) => value === "static" ? value : Math.max(value ?? MIN_SUSPENSE_TIME_MS, MIN_SUSPENSE_TIME_MS);
+    const clamp = (value) =>
+      value === "static" ? value : Math.max(value ?? MIN_SUSPENSE_TIME_MS, MIN_SUSPENSE_TIME_MS);
     const originalStaleTime = defaultedOptions.staleTime;
-    defaultedOptions.staleTime = typeof originalStaleTime === "function" ? (...args) => clamp(originalStaleTime(...args)) : clamp(originalStaleTime);
+    defaultedOptions.staleTime =
+      typeof originalStaleTime === "function"
+        ? (...args) => clamp(originalStaleTime(...args))
+        : clamp(originalStaleTime);
     if (typeof defaultedOptions.gcTime === "number") {
-      defaultedOptions.gcTime = Math.max(
-        defaultedOptions.gcTime,
-        MIN_SUSPENSE_TIME_MS
-      );
+      defaultedOptions.gcTime = Math.max(defaultedOptions.gcTime, MIN_SUSPENSE_TIME_MS);
     }
   }
 };
 var willFetch = (result, isRestoring) => result.isLoading && result.isFetching && !isRestoring;
 var shouldSuspend = (defaultedOptions, result) => defaultedOptions?.suspense && result.isPending;
-var fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) => observer.fetchOptimistic(defaultedOptions).catch(() => {
-  errorResetBoundary.clearReset();
-});
+var fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) =>
+  observer.fetchOptimistic(defaultedOptions).catch(() => {
+    errorResetBoundary.clearReset();
+  });
 function useBaseQuery(options, Observer, queryClient) {
   const isRestoring = useIsRestoring();
   const errorResetBoundary = useQueryErrorResetBoundary();
   const client = useQueryClient();
   const defaultedOptions = client.defaultQueryOptions(options);
-  client.getDefaultOptions().queries?._experimental_beforeQuery?.(
-    defaultedOptions
-  );
+  client.getDefaultOptions().queries?._experimental_beforeQuery?.(defaultedOptions);
   const query = client.getQueryCache().get(defaultedOptions.queryHash);
   defaultedOptions._optimisticResults = isRestoring ? "isRestoring" : "optimistic";
   ensureSuspenseTimers(defaultedOptions);
   ensurePreventErrorBoundaryRetry(defaultedOptions, errorResetBoundary, query);
   useClearResetErrorBoundary(errorResetBoundary);
   const isNewCacheEntry = !client.getQueryCache().get(defaultedOptions.queryHash);
-  const [observer] = reactExports.useState(
-    () => new Observer(
-      client,
-      defaultedOptions
-    )
-  );
+  const [observer] = reactExports.useState(() => new Observer(client, defaultedOptions));
   const result = observer.getOptimisticResult(defaultedOptions);
   const shouldSubscribe = !isRestoring && options.subscribed !== false;
   reactExports.useSyncExternalStore(
     reactExports.useCallback(
       (onStoreChange) => {
-        const unsubscribe = shouldSubscribe ? observer.subscribe(notifyManager.batchCalls(onStoreChange)) : noop;
+        const unsubscribe = shouldSubscribe
+          ? observer.subscribe(notifyManager.batchCalls(onStoreChange))
+          : noop;
         observer.updateResult();
         return unsubscribe;
       },
-      [observer, shouldSubscribe]
+      [observer, shouldSubscribe],
     ),
     () => observer.getCurrentResult(),
-    () => observer.getCurrentResult()
+    () => observer.getCurrentResult(),
   );
   reactExports.useEffect(() => {
     observer.setOptions(defaultedOptions);
@@ -682,27 +729,28 @@ function useBaseQuery(options, Observer, queryClient) {
   if (shouldSuspend(defaultedOptions, result)) {
     throw fetchOptimistic(defaultedOptions, observer, errorResetBoundary);
   }
-  if (getHasError({
-    result,
-    errorResetBoundary,
-    throwOnError: defaultedOptions.throwOnError,
-    query,
-    suspense: defaultedOptions.suspense
-  })) {
+  if (
+    getHasError({
+      result,
+      errorResetBoundary,
+      throwOnError: defaultedOptions.throwOnError,
+      query,
+      suspense: defaultedOptions.suspense,
+    })
+  ) {
     throw result.error;
   }
-  client.getDefaultOptions().queries?._experimental_afterQuery?.(
-    defaultedOptions,
-    result
-  );
-  if (defaultedOptions.experimental_prefetchInRender && !environmentManager.isServer() && willFetch(result, isRestoring)) {
-    const promise = isNewCacheEntry ? (
-      // Fetch immediately on render in order to ensure `.promise` is resolved even if the component is unmounted
-      fetchOptimistic(defaultedOptions, observer, errorResetBoundary)
-    ) : (
-      // subscribe to the "cache promise" so that we can finalize the currentThenable once data comes in
-      query?.promise
-    );
+  client.getDefaultOptions().queries?._experimental_afterQuery?.(defaultedOptions, result);
+  if (
+    defaultedOptions.experimental_prefetchInRender &&
+    !environmentManager.isServer() &&
+    willFetch(result, isRestoring)
+  ) {
+    const promise = isNewCacheEntry
+      ? // Fetch immediately on render in order to ensure `.promise` is resolved even if the component is unmounted
+        fetchOptimistic(defaultedOptions, observer, errorResetBoundary)
+      : // subscribe to the "cache promise" so that we can finalize the currentThenable once data comes in
+        query?.promise;
     promise?.catch(noop).finally(() => {
       observer.updateResult();
     });
@@ -714,28 +762,23 @@ function useQuery(options, queryClient) {
 }
 function useMutation(options, queryClient) {
   const client = useQueryClient();
-  const [observer] = reactExports.useState(
-    () => new MutationObserver(
-      client,
-      options
-    )
-  );
+  const [observer] = reactExports.useState(() => new MutationObserver(client, options));
   reactExports.useEffect(() => {
     observer.setOptions(options);
   }, [observer, options]);
   const result = reactExports.useSyncExternalStore(
     reactExports.useCallback(
       (onStoreChange) => observer.subscribe(notifyManager.batchCalls(onStoreChange)),
-      [observer]
+      [observer],
     ),
     () => observer.getCurrentResult(),
-    () => observer.getCurrentResult()
+    () => observer.getCurrentResult(),
   );
   const mutate = reactExports.useCallback(
     (variables, mutateOptions) => {
       observer.mutate(variables, mutateOptions).catch(noop);
     },
-    [observer]
+    [observer],
   );
   if (result.error && shouldThrowError(observer.options.throwOnError, [result.error])) {
     throw result.error;
@@ -752,10 +795,14 @@ function useOrganization() {
     queryKey: ["organization", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("organizations").select("*").eq("id", orgId).maybeSingle();
+      const { data, error } = await supabase
+        .from("organizations")
+        .select("*")
+        .eq("id", orgId)
+        .maybeSingle();
       if (error) throw error;
       return data;
-    }
+    },
   });
 }
 function useUnits() {
@@ -764,10 +811,14 @@ function useUnits() {
     queryKey: ["units", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("units").select("*").eq("organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("units")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useScreens() {
@@ -776,10 +827,14 @@ function useScreens() {
     queryKey: ["screens", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("screens").select("*").eq("organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("screens")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useScreenGroups() {
@@ -788,10 +843,14 @@ function useScreenGroups() {
     queryKey: ["screen_groups", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("screen_groups").select("*").eq("organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("screen_groups")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useMedia() {
@@ -800,10 +859,14 @@ function useMedia() {
     queryKey: ["media", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("media_assets").select("*").eq("organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("media_assets")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function usePlaylists() {
@@ -812,10 +875,14 @@ function usePlaylists() {
     queryKey: ["playlists", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("playlists").select("*").eq("organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("playlists")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useCampaigns() {
@@ -824,10 +891,14 @@ function useCampaigns() {
     queryKey: ["campaigns", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("campaigns").select("*").eq("organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("campaigns")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useCampaignSchedules() {
@@ -836,10 +907,14 @@ function useCampaignSchedules() {
     queryKey: ["campaign_schedules", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("campaign_schedules").select("*, campaigns!inner(organization_id, name)").eq("campaigns.organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("campaign_schedules")
+        .select("*, campaigns!inner(organization_id, name)")
+        .eq("campaigns.organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useAlerts() {
@@ -848,10 +923,15 @@ function useAlerts() {
     queryKey: ["alerts", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("alerts").select("*").eq("organization_id", orgId).order("created_at", { ascending: false }).limit(100);
+      const { data, error } = await supabase
+        .from("alerts")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false })
+        .limit(100);
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useAuditLogs() {
@@ -860,10 +940,15 @@ function useAuditLogs() {
     queryKey: ["audit_logs", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("audit_logs").select("*").eq("organization_id", orgId).order("created_at", { ascending: false }).limit(100);
+      const { data, error } = await supabase
+        .from("audit_logs")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false })
+        .limit(100);
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useUsers() {
@@ -872,10 +957,14 @@ function useUsers() {
     queryKey: ["users_profiles", orgId],
     enabled: !!orgId,
     queryFn: async () => {
-      const { data, error } = await supabase.from("profiles").select("*").eq("organization_id", orgId).order("created_at", { ascending: false });
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("organization_id", orgId)
+        .order("created_at", { ascending: false });
       if (error) throw error;
       return data ?? [];
-    }
+    },
   });
 }
 function useGenericInsert(table, invalidateKey) {
@@ -889,7 +978,7 @@ function useGenericInsert(table, invalidateKey) {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: [invalidateKey, orgId] })
+    onSuccess: () => qc.invalidateQueries({ queryKey: [invalidateKey, orgId] }),
   });
 }
 function useGenericUpdate(table, invalidateKey) {
@@ -897,11 +986,16 @@ function useGenericUpdate(table, invalidateKey) {
   const orgId = useOrgId();
   return useMutation({
     mutationFn: async ({ id, ...patch }) => {
-      const { data, error } = await supabase.from(table).update(patch).eq("id", id).select().single();
+      const { data, error } = await supabase
+        .from(table)
+        .update(patch)
+        .eq("id", id)
+        .select()
+        .single();
       if (error) throw error;
       return data;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: [invalidateKey, orgId] })
+    onSuccess: () => qc.invalidateQueries({ queryKey: [invalidateKey, orgId] }),
   });
 }
 function useGenericDelete(table, invalidateKey) {
@@ -913,7 +1007,7 @@ function useGenericDelete(table, invalidateKey) {
       if (error) throw error;
       return id;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: [invalidateKey, orgId] })
+    onSuccess: () => qc.invalidateQueries({ queryKey: [invalidateKey, orgId] }),
   });
 }
 const useCreateUnit = () => useGenericInsert("units", "units");
@@ -933,10 +1027,13 @@ function useResolveAlert() {
   const orgId = useOrgId();
   return useMutation({
     mutationFn: async (id) => {
-      const { error } = await supabase.from("alerts").update({ resolved_at: (/* @__PURE__ */ new Date()).toISOString(), status: "inactive" }).eq("id", id);
+      const { error } = await supabase
+        .from("alerts")
+        .update({ resolved_at: /* @__PURE__ */ new Date().toISOString(), status: "inactive" })
+        .eq("id", id);
       if (error) throw error;
     },
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["alerts", orgId] })
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["alerts", orgId] }),
   });
 }
 export {
@@ -964,5 +1061,5 @@ export {
   useDeleteCampaign as v,
   useAuditLogs as w,
   useResolveAlert as x,
-  useCampaignSchedules as y
+  useCampaignSchedules as y,
 };

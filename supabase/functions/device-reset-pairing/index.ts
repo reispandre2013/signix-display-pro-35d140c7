@@ -124,13 +124,20 @@ serve(async (req) => {
       .eq("id", dev.id);
     if (devUpErr) return jsonResponse({ error: devUpErr.message }, 400);
 
-    await insertPlayerDeviceAudit(adminClient, orgId, dev.id as string, "pairing_reset", {
-      invalidated_token_hash_prefix: invalidatedPrefix,
-      reset_at: now,
-    }, {
-      new_pairing_code_suffix: newCode.slice(-5),
-      pairing_expires_at: expiresAt,
-    });
+    await insertPlayerDeviceAudit(
+      adminClient,
+      orgId,
+      dev.id as string,
+      "pairing_reset",
+      {
+        invalidated_token_hash_prefix: invalidatedPrefix,
+        reset_at: now,
+      },
+      {
+        new_pairing_code_suffix: newCode.slice(-5),
+        pairing_expires_at: expiresAt,
+      },
+    );
 
     return jsonResponse({
       ok: true,

@@ -71,7 +71,9 @@ type CampaignRow = {
 
 const storageMediaBuckets = new Set(["media-images", "media-videos", "thumbnails"]);
 
-export function parseStorageObjectPath(rawPath: string | null | undefined): { bucket: string; objectPath: string } | null {
+export function parseStorageObjectPath(
+  rawPath: string | null | undefined,
+): { bucket: string; objectPath: string } | null {
   const path = String(rawPath ?? "").trim();
   if (!path || /^https?:\/\//i.test(path)) return null;
   const slash = path.indexOf("/");
@@ -89,7 +91,9 @@ export async function resolvePlayableMediaUrl(
 ): Promise<string | null> {
   const objectRef = parseStorageObjectPath(filePath);
   if (objectRef) {
-    const { data, error } = await client.storage.from(objectRef.bucket).createSignedUrl(objectRef.objectPath, 60 * 60);
+    const { data, error } = await client.storage
+      .from(objectRef.bucket)
+      .createSignedUrl(objectRef.objectPath, 60 * 60);
     if (!error && data?.signedUrl) return data.signedUrl;
   }
   return publicUrl ?? filePath ?? null;
@@ -101,7 +105,10 @@ function campaignActiveNow(c: CampaignRow): boolean {
   return new Date(c.start_at).getTime() <= now && now <= new Date(c.end_at).getTime();
 }
 
-function assignmentWindowActive(row: { start_at: string | null; end_at: string | null }, at: Date): boolean {
+function assignmentWindowActive(
+  row: { start_at: string | null; end_at: string | null },
+  at: Date,
+): boolean {
   if (row.start_at && new Date(row.start_at).getTime() > at.getTime()) return false;
   if (row.end_at && new Date(row.end_at).getTime() < at.getTime()) return false;
   return true;
@@ -187,7 +194,9 @@ type MediaRow = {
   status: string;
 };
 
-function detectMediaType(media: Pick<MediaRow, "mime_type" | "file_type" | "name">): "video" | "html" | "banner" | "image" {
+function detectMediaType(
+  media: Pick<MediaRow, "mime_type" | "file_type" | "name">,
+): "video" | "html" | "banner" | "image" {
   const fileType = String(media.file_type || "").toLowerCase();
   const mimeType = String(media.mime_type || "").toLowerCase();
   if (fileType.includes("video") || mimeType.startsWith("video/")) return "video";
@@ -218,7 +227,9 @@ async function buildItemsFromPlaylist(
   const ids = activeLinks.map((l) => l.media_asset_id);
   const { data: medias, error: mErr } = await client
     .from("media_assets")
-    .select("id, name, file_type, file_path, public_url, thumbnail_url, mime_type, duration_seconds, status")
+    .select(
+      "id, name, file_type, file_path, public_url, thumbnail_url, mime_type, duration_seconds, status",
+    )
     .in("id", ids)
     .eq("organization_id", orgId);
   if (mErr) throw new Error(mErr.message);
@@ -261,7 +272,9 @@ async function buildOrgMediaFallback(
 ): Promise<ScreenPlaylistItemPayload[]> {
   const { data: fallback, error: fErr } = await client
     .from("media_assets")
-    .select("id, name, file_type, file_path, public_url, thumbnail_url, mime_type, duration_seconds, status")
+    .select(
+      "id, name, file_type, file_path, public_url, thumbnail_url, mime_type, duration_seconds, status",
+    )
     .eq("organization_id", orgId)
     .eq("status", "active")
     .order("created_at", { ascending: false })
@@ -312,11 +325,17 @@ async function pickDirectAssignment(
   }
   let best: { playlist_id: string; priority: number; score: number } | null = null;
   for (const row of data ?? []) {
-    const r = row as { playlist_id: string; priority: number; start_at: string | null; end_at: string | null };
+    const r = row as {
+      playlist_id: string;
+      priority: number;
+      start_at: string | null;
+      end_at: string | null;
+    };
     if (!assignmentWindowActive(r, at)) continue;
     const pr = typeof r.priority === "number" ? r.priority : 50;
     const sc = effectiveScore("screen_playlist_assignment", pr);
-    if (!best || sc > best.score) best = { playlist_id: String(r.playlist_id), priority: pr, score: sc };
+    if (!best || sc > best.score)
+      best = { playlist_id: String(r.playlist_id), priority: pr, score: sc };
   }
   return best ? { playlist_id: best.playlist_id, priority: best.priority } : null;
 }
@@ -327,12 +346,17 @@ async function pickGroupAssignment(
   orgId: string,
   at: Date,
 ): Promise<{ playlist_id: string; priority: number } | null> {
-  const { data: memberships, error: mErr } = await client.from("screen_group_items").select("group_id").eq("screen_id", screenId);
+  const { data: memberships, error: mErr } = await client
+    .from("screen_group_items")
+    .select("group_id")
+    .eq("screen_id", screenId);
   if (mErr) {
     console.warn("[pickGroupAssignment] memberships", mErr.message);
     return null;
   }
-  const groupIds = [...new Set((memberships ?? []).map((x) => String((x as { group_id: string }).group_id)))];
+  const groupIds = [
+    ...new Set((memberships ?? []).map((x) => String((x as { group_id: string }).group_id))),
+  ];
   if (groupIds.length === 0) return null;
 
   const { data: assigns, error: aErr } = await client
@@ -357,7 +381,8 @@ async function pickGroupAssignment(
     if (!assignmentWindowActive(r, at)) continue;
     const pr = typeof r.priority === "number" ? r.priority : 50;
     const sc = effectiveScore("screen_group_playlist_assignment", pr);
-    if (!best || sc > best.score) best = { playlist_id: String(r.playlist_id), priority: pr, score: sc };
+    if (!best || sc > best.score)
+      best = { playlist_id: String(r.playlist_id), priority: pr, score: sc };
   }
   return best ? { playlist_id: best.playlist_id, priority: best.priority } : null;
 }
@@ -376,7 +401,9 @@ async function pickCampaignPlaylist(
     .select("campaign_id")
     .or(orFilters.join(","));
   if (tErr) console.warn("[pickCampaignPlaylist] targets", tErr.message);
-  const campaignIds = [...new Set((targets ?? []).map((t) => String((t as { campaign_id: string }).campaign_id)))];
+  const campaignIds = [
+    ...new Set((targets ?? []).map((t) => String((t as { campaign_id: string }).campaign_id))),
+  ];
   if (campaignIds.length === 0) return null;
 
   const { data: cRows, error: cErr } = await client
@@ -509,7 +536,10 @@ export async function resolveScreenPlaylistPayload(
 
   if ((source === "campaign_playlist" || source === "campaign_emergency") && campaign) {
     await client.from("screens").update({ current_campaign_id: campaign.id }).eq("id", screenId);
-  } else if (source === "screen_playlist_assignment" || source === "screen_group_playlist_assignment") {
+  } else if (
+    source === "screen_playlist_assignment" ||
+    source === "screen_group_playlist_assignment"
+  ) {
     await client.from("screens").update({ current_campaign_id: null }).eq("id", screenId);
   } else if (source === "org_media_fallback") {
     await client.from("screens").update({ current_campaign_id: null }).eq("id", screenId);

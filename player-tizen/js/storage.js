@@ -33,7 +33,10 @@
   }
 
   function setCredentials(creds) {
-    localStorage.setItem(C.STORAGE_CREDENTIALS || "signix_tizen_credentials", JSON.stringify(creds));
+    localStorage.setItem(
+      C.STORAGE_CREDENTIALS || "signix_tizen_credentials",
+      JSON.stringify(creds),
+    );
     if (creds && creds.screenId) localStorage.setItem(DEVICE_ID_KEY, String(creds.screenId));
     if (creds && creds.authToken) localStorage.setItem(AUTH_TOKEN_KEY, String(creds.authToken));
     if (creds && creds.screenName) localStorage.setItem("screen_name", String(creds.screenName));
@@ -54,7 +57,10 @@
   }
 
   function setCachedPayload(payload) {
-    localStorage.setItem(C.STORAGE_PAYLOAD_CACHE || "signix_tizen_payload_cache", JSON.stringify(payload));
+    localStorage.setItem(
+      C.STORAGE_PAYLOAD_CACHE || "signix_tizen_payload_cache",
+      JSON.stringify(payload),
+    );
   }
 
   function clearCachedPayload() {

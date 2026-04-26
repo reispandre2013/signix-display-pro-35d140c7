@@ -102,8 +102,9 @@ function ConfigurarPage() {
         <div className="rounded-xl border border-border bg-card p-6 shadow-elegant">
           <h1 className="font-display text-2xl font-bold">Conectar ao Supabase</h1>
           <p className="text-sm text-muted-foreground mt-1.5">
-            Preencha a URL do projeto e a <code className="text-xs bg-muted px-1 py-0.5 rounded">anon key</code> para
-            habilitar o login. Os dados ficam salvos apenas neste navegador.
+            Preencha a URL do projeto e a{" "}
+            <code className="text-xs bg-muted px-1 py-0.5 rounded">anon key</code> para habilitar o
+            login. Os dados ficam salvos apenas neste navegador.
           </p>
 
           <div className="mt-4 rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground space-y-1.5">

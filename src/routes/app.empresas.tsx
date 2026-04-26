@@ -100,16 +100,46 @@ function CompaniesPage() {
           }
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Field label="Nome da empresa" value={form.name} onChange={(v) => setForm({ ...form, name: v })} />
+            <Field
+              label="Nome da empresa"
+              value={form.name}
+              onChange={(v) => setForm({ ...form, name: v })}
+            />
             <Field label="CNPJ" value={form.cnpj} onChange={(v) => setForm({ ...form, cnpj: v })} />
-            <Field label="E-mail corporativo" value={form.email} onChange={(v) => setForm({ ...form, email: v })} />
-            <Field label="Telefone" value={form.phone} onChange={(v) => setForm({ ...form, phone: v })} />
-            <Field label="Endereço" value={form.address} onChange={(v) => setForm({ ...form, address: v })} />
-            <Field label="Cidade" value={form.city} onChange={(v) => setForm({ ...form, city: v })} />
-            <Field label="Estado" value={form.state} onChange={(v) => setForm({ ...form, state: v })} />
-            <Field label="Idioma" value={form.language} onChange={(v) => setForm({ ...form, language: v })} />
+            <Field
+              label="E-mail corporativo"
+              value={form.email}
+              onChange={(v) => setForm({ ...form, email: v })}
+            />
+            <Field
+              label="Telefone"
+              value={form.phone}
+              onChange={(v) => setForm({ ...form, phone: v })}
+            />
+            <Field
+              label="Endereço"
+              value={form.address}
+              onChange={(v) => setForm({ ...form, address: v })}
+            />
+            <Field
+              label="Cidade"
+              value={form.city}
+              onChange={(v) => setForm({ ...form, city: v })}
+            />
+            <Field
+              label="Estado"
+              value={form.state}
+              onChange={(v) => setForm({ ...form, state: v })}
+            />
+            <Field
+              label="Idioma"
+              value={form.language}
+              onChange={(v) => setForm({ ...form, language: v })}
+            />
             <div className="md:col-span-2">
-              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Fuso horário</label>
+              <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+                Fuso horário
+              </label>
               <div className="relative">
                 <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <input

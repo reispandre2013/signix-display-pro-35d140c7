@@ -43,8 +43,7 @@ export function SidebarPlanCallout() {
   if (isLoading) {
     return (
       <div className="m-3 rounded-xl border border-sidebar-border bg-gradient-surface p-4 flex items-center justify-center gap-2 text-xs text-muted-foreground min-h-[100px]">
-        <Loader2 className="h-4 w-4 animate-spin" />
-        A carregar plano…
+        <Loader2 className="h-4 w-4 animate-spin" />A carregar plano…
       </div>
     );
   }

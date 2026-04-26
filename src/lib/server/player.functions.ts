@@ -33,7 +33,11 @@ async function assertScreenCredentials(screenId: string, pairingCode: string) {
 }
 
 /** Valida device_id + auth_token (hash SHA-256) e devolve o screen_id associado. */
-async function assertDeviceCredentials(deviceId: string, authToken: string, expectedScreenId: string) {
+async function assertDeviceCredentials(
+  deviceId: string,
+  authToken: string,
+  expectedScreenId: string,
+) {
   const presented = sha256HexUtf8(authToken);
   const { data: dev, error } = await supabaseAdmin
     .from("player_devices")
@@ -142,7 +146,10 @@ export const postPlayerHeartbeat = createServerFn({ method: "POST" })
     if (data.app_version) patch.player_version = data.app_version;
     if (resolution) patch.resolution = resolution;
 
-    const { error: upErr } = await supabaseAdmin.from("screens").update(patch).eq("id", data.screen_id);
+    const { error: upErr } = await supabaseAdmin
+      .from("screens")
+      .update(patch)
+      .eq("id", data.screen_id);
     if (upErr) throw new Error(upErr.message);
 
     return { ok: true, server_time: now };
@@ -163,7 +170,8 @@ function validateLog(input: unknown): LogInput {
   const o = input as Record<string, unknown>;
   if (typeof o.screen_id !== "string" || !o.screen_id) throw new Error("screen_id obrigatório.");
   if (typeof o.pairing_code !== "string") throw new Error("pairing_code obrigatório.");
-  if (typeof o.event_type !== "string" || !o.event_type.trim()) throw new Error("event_type obrigatório.");
+  if (typeof o.event_type !== "string" || !o.event_type.trim())
+    throw new Error("event_type obrigatório.");
   return {
     screen_id: o.screen_id,
     pairing_code: o.pairing_code,
@@ -235,7 +243,9 @@ function validateGetPlaylist(input: unknown): GetPlaylistInput {
 /** Item normalizado para players (web / Android / Tizen). */
 export type ScreenPlaylistItem = ScreenPlaylistItemPayload;
 
-function mapResolutionSourceForPlayer(s: PlaylistResolutionSource): "playlist_items" | "org_media_fallback" | "empty" {
+function mapResolutionSourceForPlayer(
+  s: PlaylistResolutionSource,
+): "playlist_items" | "org_media_fallback" | "empty" {
   if (s === "org_media_fallback") return "org_media_fallback";
   if (s === "empty") return "empty";
   return "playlist_items";
@@ -285,7 +295,11 @@ export const getScreenPlaylistPayload = createServerFn({ method: "POST" })
       },
       campaign: resolved.campaign,
       playlist: resolved.playlist
-        ? { id: resolved.playlist.id, name: resolved.playlist.name, version: resolved.playlist.version }
+        ? {
+            id: resolved.playlist.id,
+            name: resolved.playlist.name,
+            version: resolved.playlist.version,
+          }
         : null,
       playlist_version: resolved.playlist?.version ?? null,
       items,
@@ -317,8 +331,10 @@ function validateSyncAck(input: unknown): SyncAckInput {
   if (!hasDevice && normalizeCode(pairing_code).length < 4) {
     throw new Error("pairing_code ou (device_id + auth_token) obrigatório.");
   }
-  if (typeof o.sync_type !== "string" || !o.sync_type.trim()) throw new Error("sync_type obrigatório.");
-  if (typeof o.sync_status !== "string" || !o.sync_status.trim()) throw new Error("sync_status obrigatório.");
+  if (typeof o.sync_type !== "string" || !o.sync_type.trim())
+    throw new Error("sync_type obrigatório.");
+  if (typeof o.sync_status !== "string" || !o.sync_status.trim())
+    throw new Error("sync_status obrigatório.");
   return {
     screen_id: o.screen_id,
     pairing_code: hasDevice ? undefined : pairing_code,

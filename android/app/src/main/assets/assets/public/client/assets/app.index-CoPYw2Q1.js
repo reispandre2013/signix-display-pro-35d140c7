@@ -1,1 +1,1390 @@
-import{j as i,r as c,e as Ce,a as Se,L as Q,t as ie}from"./index-DUcMANMA.js";import{c as $,a as Le}from"./utils-BQHNewu7.js";import{c as J}from"./createLucideIcon-BDYLgomD.js";import{P as O}from"./Panel-0HKdxBPL.js";import{P as De}from"./PageHeader-C0iFmY02.js";import{S as X}from"./StatusBadge-Deydaofp.js";import{L as _e,E as K}from"./States-snX8_8k6.js";import{b as Oe,a as Me,c as Te,u as We,d as ze}from"./use-supabase-data-neXhdC03.js";import{c as q,s as ee,a as Re,b as Ke,d as xe,e as ae,f as te,g as fe,h as Be,i as ye,j as se,k as Fe,l as Ge,p as Ve,r as qe,D as Qe,u as ge,R as $e,S as Xe,m as Ye,n as He,o as be,q as Ze,t as Ue,v as Je,w as ea,x as aa,y as ta,z as ia,A as sa,B as ra,Z as na,L as F,G as la,C as re,E as ne,F as le,H as W,I as oa,J as ca,K as da,M,N as ua,O as pa,P as ma,Q as ha,T as je,U as va,V as Y,W as xa,X as G,Y as fa,_ as ya,$ as ga,a0 as ba,a1 as ja,a2 as Aa,a3 as Na,a4 as Pa}from"./subDays-DBmf45Lc.js";import{f as oe}from"./format-Ca9zXj_K.js";import{L as wa}from"./loader-circle-BffduC8P.js";import{M as ce}from"./monitor-Ck3Yxne9.js";import{W as de}from"./wifi-DZkc2jYa.js";import{W as Ia}from"./wifi-off-DkH--R7b.js";import{T as ka}from"./triangle-alert-BTiM3Cgz.js";import{M as H}from"./megaphone-CoxL7Qo6.js";import{I as Ea}from"./image-BlTjWPMR.js";import{L as Ca}from"./list-video-BioUtere.js";import{A as Z}from"./arrow-right-DA0qr8cc.js";import{f as ue}from"./formatDistanceToNow-DlSrCos3.js";import{A as Sa}from"./activity-CDzXOf4C.js";import{C as La}from"./clock-CyUAU_SK.js";import{p as pe}from"./pt-BR-B79SV-js.js";import"./en-US-DfnapdEA.js";const Da=[["path",{d:"M16 17h6v-6",key:"t6n2it"}],["path",{d:"m22 17-8.5-8.5-5 5L2 7",key:"x473p"}]],_a=J("trending-down",Da);const Oa=[["path",{d:"M16 7h6v6",key:"box55l"}],["path",{d:"m22 7-8.5 8.5-5-5L2 17",key:"1t1m79"}]],Ma=J("trending-up",Oa);const Ta=[["path",{d:"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",key:"1xq2db"}]],Wa=J("zap",Ta),me={primary:"from-primary/20 to-primary/0 text-primary",success:"from-success/20 to-success/0 text-success",warning:"from-warning/20 to-warning/0 text-warning",destructive:"from-destructive/20 to-destructive/0 text-destructive",info:"from-info/20 to-info/0 text-info"};function D({label:a,value:e,delta:t,icon:s,tone:n="primary",hint:l}){return i.jsxs("div",{className:"relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-card transition-smooth hover:border-primary/40",children:[i.jsx("div",{className:$("absolute inset-0 bg-gradient-to-br opacity-60",me[n])}),i.jsxs("div",{className:"relative flex items-start justify-between",children:[i.jsxs("div",{children:[i.jsx("p",{className:"text-xs font-medium text-muted-foreground uppercase tracking-wider",children:a}),i.jsx("p",{className:"mt-2 font-display text-3xl font-bold tracking-tight",children:e}),l&&i.jsx("p",{className:"mt-1 text-[11px] text-muted-foreground",children:l})]}),i.jsx("div",{className:$("h-10 w-10 rounded-lg grid place-items-center",`bg-${n}/10`),children:i.jsx(s,{className:$("h-5 w-5",me[n].split(" ").pop())})})]}),t&&i.jsxs("div",{className:"relative mt-3 flex items-center gap-1 text-xs font-medium",children:[t.up?i.jsx(Ma,{className:"h-3.5 w-3.5 text-success"}):i.jsx(_a,{className:"h-3.5 w-3.5 text-destructive"}),i.jsx("span",{className:t.up?"text-success":"text-destructive",children:t.value}),i.jsx("span",{className:"text-muted-foreground",children:"vs. semana anterior"})]})]})}var Ae=(a,e,t)=>xe(a,"xAxis",ae(a,e),t),Ne=(a,e,t)=>fe(a,"xAxis",ae(a,e),t),Pe=(a,e,t)=>xe(a,"yAxis",te(a,e),t),we=(a,e,t)=>fe(a,"yAxis",te(a,e),t),za=q([ee,Ae,Pe,Ne,we],(a,e,t,s,n)=>ye(a,"xAxis")?se(e,s,!1):se(t,n,!1)),Ra=(a,e)=>e,Ie=q([Fe,Ra],(a,e)=>a.filter(t=>t.type==="area").find(t=>t.id===e)),ke=a=>{var e=ee(a),t=ye(e,"xAxis");return t?"yAxis":"xAxis"},Ka=(a,e)=>{var t=ke(a);return t==="yAxis"?te(a,e):ae(a,e)},Ba=(a,e,t)=>Ge(a,ke(a),Ka(a,e),t),Fa=q([Ie,Ba],(a,e)=>{var t;if(!(a==null||e==null)){var{stackId:s}=a,n=Be(a);if(!(s==null||n==null)){var l=(t=e[s])===null||t===void 0?void 0:t.stackedData,d=l?.find(r=>r.key===n);if(d!=null)return d.map(r=>[r[0],r[1]])}}}),Ga=q([ee,Ae,Pe,Ne,we,Fa,Re,za,Ie,Ke],(a,e,t,s,n,l,d,r,u,v)=>{var{chartData:p,dataStartIndex:x,dataEndIndex:b}=d;if(!(u==null||a!=="horizontal"&&a!=="vertical"||e==null||t==null||s==null||n==null||s.length===0||n.length===0||r==null)){var{data:m}=u,y;if(m&&m.length>0?y=m:y=p?.slice(x,b+1),y!=null)return ct({layout:a,xAxis:e,yAxis:t,xAxisTicks:s,yAxisTicks:n,dataStartIndex:x,areaSettings:u,stackedData:l,displayedData:y,chartBaseValue:v,bandSize:r})}}),Va=["id"],qa=["activeDot","animationBegin","animationDuration","animationEasing","connectNulls","dot","fill","fillOpacity","hide","isAnimationActive","legendType","stroke","xAxisId","yAxisId"];function _(){return _=Object.assign?Object.assign.bind():function(a){for(var e=1;e<arguments.length;e++){var t=arguments[e];for(var s in t)({}).hasOwnProperty.call(t,s)&&(a[s]=t[s])}return a},_.apply(null,arguments)}function Ee(a,e){if(a==null)return{};var t,s,n=Qa(a,e);if(Object.getOwnPropertySymbols){var l=Object.getOwnPropertySymbols(a);for(s=0;s<l.length;s++)t=l[s],e.indexOf(t)===-1&&{}.propertyIsEnumerable.call(a,t)&&(n[t]=a[t])}return n}function Qa(a,e){if(a==null)return{};var t={};for(var s in a)if({}.hasOwnProperty.call(a,s)){if(e.indexOf(s)!==-1)continue;t[s]=a[s]}return t}function he(a,e){var t=Object.keys(a);if(Object.getOwnPropertySymbols){var s=Object.getOwnPropertySymbols(a);e&&(s=s.filter(function(n){return Object.getOwnPropertyDescriptor(a,n).enumerable})),t.push.apply(t,s)}return t}function T(a){for(var e=1;e<arguments.length;e++){var t=arguments[e]!=null?arguments[e]:{};e%2?he(Object(t),!0).forEach(function(s){$a(a,s,t[s])}):Object.getOwnPropertyDescriptors?Object.defineProperties(a,Object.getOwnPropertyDescriptors(t)):he(Object(t)).forEach(function(s){Object.defineProperty(a,s,Object.getOwnPropertyDescriptor(t,s))})}return a}function $a(a,e,t){return(e=Xa(e))in a?Object.defineProperty(a,e,{value:t,enumerable:!0,configurable:!0,writable:!0}):a[e]=t,a}function Xa(a){var e=Ya(a,"string");return typeof e=="symbol"?e:e+""}function Ya(a,e){if(typeof a!="object"||!a)return a;var t=a[Symbol.toPrimitive];if(t!==void 0){var s=t.call(a,e);if(typeof s!="object")return s;throw new TypeError("@@toPrimitive must return a primitive value.")}return(e==="string"?String:Number)(a)}function V(a,e){return a&&a!=="none"?a:e}var Ha=a=>{var{dataKey:e,name:t,stroke:s,fill:n,legendType:l,hide:d}=a;return[{inactive:d,dataKey:e,type:l,color:V(s,n),value:be(t,e),payload:a}]},Za=c.memo(a=>{var{dataKey:e,data:t,stroke:s,strokeWidth:n,fill:l,name:d,hide:r,unit:u,tooltipType:v,id:p}=a,x={dataDefinedOnItem:t,getPosition:Ue,settings:{stroke:s,strokeWidth:n,fill:l,dataKey:e,nameKey:void 0,name:be(d,e),hide:r,type:v,color:V(s,l),unit:u,graphicalItemId:p}};return c.createElement(Ze,{tooltipEntrySettings:x})});function Ua(a){var{clipPathId:e,points:t,props:s}=a,{needClip:n,dot:l,dataKey:d}=s,r=je(s);return c.createElement(xa,{points:t,dot:l,className:"recharts-area-dots",dotClassName:"recharts-area-dot",dataKey:d,baseProps:r,needClip:n,clipPathId:e})}function Ja(a){var{showLabels:e,children:t,points:s}=a,n=s.map(l=>{var d,r,u={x:(d=l.x)!==null&&d!==void 0?d:0,y:(r=l.y)!==null&&r!==void 0?r:0,width:0,lowerWidth:0,upperWidth:0,height:0};return T(T({},u),{},{value:l.value,payload:l.payload,parentViewBox:void 0,viewBox:u,fill:void 0})});return c.createElement(ha,{value:e?n:void 0},t)}function ve(a){var{points:e,baseLine:t,needClip:s,clipPathId:n,props:l}=a,{layout:d,type:r,stroke:u,connectNulls:v,isRange:p}=l,{id:x}=l,b=Ee(l,Va),m=je(b),y=va(b);return c.createElement(c.Fragment,null,e?.length>1&&c.createElement(F,{clipPath:s?"url(#clipPath-".concat(n,")"):void 0},c.createElement(Y,_({},y,{id:x,points:e,connectNulls:v,type:r,baseLine:t,layout:d,stroke:"none",className:"recharts-area-area"})),u!=="none"&&c.createElement(Y,_({},m,{className:"recharts-area-curve",layout:d,type:r,connectNulls:v,fill:"none",points:e})),u!=="none"&&p&&Array.isArray(t)&&c.createElement(Y,_({},m,{className:"recharts-area-curve",layout:d,type:r,connectNulls:v,fill:"none",points:t}))),c.createElement(Ua,{points:e,props:b,clipPathId:n}))}function et(a){var e,t,{alpha:s,baseLine:n,points:l,strokeWidth:d}=a,r=(e=l[0])===null||e===void 0?void 0:e.y,u=(t=l[l.length-1])===null||t===void 0?void 0:t.y;if(!G(r)||!G(u))return null;var v=s*Math.abs(r-u),p=Math.max(...l.map(x=>x.x||0));return W(n)?p=Math.max(n,p):n&&Array.isArray(n)&&n.length&&(p=Math.max(...n.map(x=>x.x||0),p)),W(p)?c.createElement("rect",{x:0,y:r<u?r:r-v,width:p+(d?parseInt("".concat(d),10):1),height:Math.floor(v)}):null}function at(a){var e,t,{alpha:s,baseLine:n,points:l,strokeWidth:d}=a,r=(e=l[0])===null||e===void 0?void 0:e.x,u=(t=l[l.length-1])===null||t===void 0?void 0:t.x;if(!G(r)||!G(u))return null;var v=s*Math.abs(r-u),p=Math.max(...l.map(x=>x.y||0));return W(n)?p=Math.max(n,p):n&&Array.isArray(n)&&n.length&&(p=Math.max(...n.map(x=>x.y||0),p)),W(p)?c.createElement("rect",{x:r<u?r:r-v,y:0,width:v,height:Math.floor(p+(d?parseInt("".concat(d),10):1))}):null}function tt(a){var{alpha:e,layout:t,points:s,baseLine:n,strokeWidth:l}=a;return t==="vertical"?c.createElement(et,{alpha:e,points:s,baseLine:n,strokeWidth:l}):c.createElement(at,{alpha:e,points:s,baseLine:n,strokeWidth:l})}function it(a){var{needClip:e,clipPathId:t,props:s,previousPointsRef:n,previousBaselineRef:l}=a,{points:d,baseLine:r,isAnimationActive:u,animationBegin:v,animationDuration:p,animationEasing:x,onAnimationStart:b,onAnimationEnd:m}=s,y=c.useMemo(()=>({points:d,baseLine:r}),[d,r]),N=oa(y,"recharts-area-"),A=ca(),[P,E]=c.useState(!1),w=!P,h=c.useCallback(()=>{typeof m=="function"&&m(),E(!1)},[m]),g=c.useCallback(()=>{typeof b=="function"&&b(),E(!0)},[b]);if(A==null)return null;var j=n.current,o=l.current;return c.createElement(Ja,{showLabels:w,points:d},s.children,c.createElement(da,{animationId:N,begin:v,duration:p,isActive:u,easing:x,onAnimationEnd:h,onAnimationStart:g,key:N},f=>{if(j){var k=j.length/d.length,L=f===1?d:d.map((I,S)=>{var z=Math.floor(S*k);if(j[z]){var R=j[z];return T(T({},I),{},{x:M(R.x,I.x,f),y:M(R.y,I.y,f)})}return I}),C;return W(r)?C=M(o,r,f):ua(r)||pa(r)?C=M(o,0,f):C=r.map((I,S)=>{var z=Math.floor(S*k);if(Array.isArray(o)&&o[z]){var R=o[z];return T(T({},I),{},{x:M(R.x,I.x,f),y:M(R.y,I.y,f)})}return I}),f>0&&(n.current=L,l.current=C),c.createElement(ve,{points:L,baseLine:C,needClip:e,clipPathId:t,props:s})}return f>0&&(n.current=d,l.current=r),c.createElement(F,null,u&&c.createElement("defs",null,c.createElement("clipPath",{id:"animationClipPath-".concat(t)},c.createElement(tt,{alpha:f,points:d,baseLine:r,layout:A,strokeWidth:s.strokeWidth}))),c.createElement(F,{clipPath:"url(#animationClipPath-".concat(t,")")},c.createElement(ve,{points:d,baseLine:r,needClip:e,clipPathId:t,props:s})))}),c.createElement(ma,{label:s.label}))}function st(a){var{needClip:e,clipPathId:t,props:s}=a,n=c.useRef(null),l=c.useRef();return c.createElement(it,{needClip:e,clipPathId:t,props:s,previousPointsRef:n,previousBaselineRef:l})}class rt extends c.PureComponent{render(){var{hide:e,dot:t,points:s,className:n,top:l,left:d,needClip:r,xAxisId:u,yAxisId:v,width:p,height:x,id:b,baseLine:m,zIndex:y}=this.props;if(e)return null;var N=Le("recharts-area",n),A=b,{r:P,strokeWidth:E}=sa(t),w=ra(t),h=P*2+E,g=r?"url(#clipPath-".concat(w?"":"dots-").concat(A,")"):void 0;return c.createElement(na,{zIndex:y},c.createElement(F,{className:N},r&&c.createElement("defs",null,c.createElement(la,{clipPathId:A,xAxisId:u,yAxisId:v}),!w&&c.createElement("clipPath",{id:"clipPath-dots-".concat(A)},c.createElement("rect",{x:d-h/2,y:l-h/2,width:p+h,height:x+h}))),c.createElement(st,{needClip:r,clipPathId:A,props:this.props})),c.createElement(re,{points:s,mainColor:V(this.props.stroke,this.props.fill),itemDataKey:this.props.dataKey,activeDot:this.props.activeDot,clipPath:g}),this.props.isRange&&Array.isArray(m)&&c.createElement(re,{points:m,mainColor:V(this.props.stroke,this.props.fill),itemDataKey:this.props.dataKey,activeDot:this.props.activeDot,clipPath:g}))}}var nt={activeDot:!0,animationBegin:0,animationDuration:1500,animationEasing:"ease",connectNulls:!1,dot:!1,fill:"#3182bd",fillOpacity:.6,hide:!1,isAnimationActive:"auto",legendType:"line",stroke:"#3182bd",strokeWidth:1,type:"linear",label:!1,xAxisId:0,yAxisId:0,zIndex:Qe.area};function lt(a){var e,{activeDot:t,animationBegin:s,animationDuration:n,animationEasing:l,connectNulls:d,dot:r,fill:u,fillOpacity:v,hide:p,isAnimationActive:x,legendType:b,stroke:m,xAxisId:y,yAxisId:N}=a,A=Ee(a,qa),P=Je(),E=ea(),{needClip:w}=aa(y,N),h=ge(),{points:g,isRange:j,baseLine:o}=(e=ta(S=>Ga(S,a.id,h)))!==null&&e!==void 0?e:{},f=ia();if(P!=="horizontal"&&P!=="vertical"||f==null||E!=="AreaChart"&&E!=="ComposedChart")return null;var{height:k,width:L,x:C,y:I}=f;return!g||!g.length?null:c.createElement(rt,_({},A,{activeDot:t,animationBegin:s,animationDuration:n,animationEasing:l,baseLine:o,connectNulls:d,dot:r,fill:u,fillOpacity:v,height:k,hide:p,layout:P,isAnimationActive:x,isRange:j,legendType:b,needClip:w,points:g,stroke:m,width:L,left:C,top:I,xAxisId:y,yAxisId:N}))}var ot=(a,e,t,s,n)=>{var l=t??e;if(W(l))return l;var d=a==="horizontal"?n:s,r=d.scale.domain();if(d.type==="number"){var u=Math.max(r[0],r[1]),v=Math.min(r[0],r[1]);return l==="dataMin"?v:l==="dataMax"||u<0?u:Math.max(Math.min(r[0],r[1]),0)}return l==="dataMin"?r[0]:l==="dataMax"?r[1]:r[0]};function ct(a){var{areaSettings:{connectNulls:e,baseValue:t,dataKey:s},stackedData:n,layout:l,chartBaseValue:d,xAxis:r,yAxis:u,displayedData:v,dataStartIndex:p,xAxisTicks:x,yAxisTicks:b,bandSize:m}=a,y=n&&n.length,N=ot(l,d,t,r,u),A=l==="horizontal",P=!1,E=v.map((h,g)=>{var j,o,f,k;if(y)k=n[p+g];else{var L=ne(h,s);Array.isArray(L)?(k=L,P=!0):k=[N,L]}var C=(j=(o=k)===null||o===void 0?void 0:o[1])!==null&&j!==void 0?j:null,I=C==null||y&&!e&&ne(h,s)==null;if(A){var S;return{x:le({axis:r,ticks:x,bandSize:m,entry:h,index:g}),y:I?null:(S=u.scale.map(C))!==null&&S!==void 0?S:null,value:k,payload:h}}return{x:I?null:(f=r.scale.map(C))!==null&&f!==void 0?f:null,y:le({axis:u,ticks:b,bandSize:m,entry:h,index:g}),value:k,payload:h}}),w;return y||P?w=E.map(h=>{var g,j=Array.isArray(h.value)?h.value[0]:null;if(A){var o;return{x:h.x,y:j!=null&&h.y!=null&&(o=u.scale.map(j))!==null&&o!==void 0?o:null,payload:h.payload}}return{x:j!=null&&(g=r.scale.map(j))!==null&&g!==void 0?g:null,y:h.y,payload:h.payload}}):w=A?u.scale.map(N):r.scale.map(N),{points:E,baseLine:w??0,isRange:P}}function dt(a){var e=qe(a,nt),t=ge();return c.createElement($e,{id:e.id,type:"area"},s=>c.createElement(c.Fragment,null,c.createElement(Xe,{legendPayload:Ha(e)}),c.createElement(Za,{dataKey:e.dataKey,data:e.data,stroke:e.stroke,strokeWidth:e.strokeWidth,fill:e.fill,name:e.name,hide:e.hide,unit:e.unit,tooltipType:e.tooltipType,id:s}),c.createElement(Ye,{type:"area",id:s,data:e.data,dataKey:e.dataKey,xAxisId:e.xAxisId,yAxisId:e.yAxisId,zAxisId:0,stackId:He(e.stackId),hide:e.hide,barSize:void 0,baseValue:e.baseValue,isPanorama:t,connectNulls:e.connectNulls}),c.createElement(lt,_({},e,{id:s}))))}var U=c.memo(dt,Ve);U.displayName="Area";var ut=["axis"],pt=c.forwardRef((a,e)=>c.createElement(fa,{chartName:"AreaChart",defaultTooltipEventType:"axis",validateTooltipEventTypes:ut,tooltipPayloadSearcher:ya,categoricalChartProps:a,ref:e}));function Wt(){const a=Oe(),e=Me(),t=Te(),s=We(),n=ze(),l=Ce(),{profile:d}=Se(),r=d?.organization_id??null,u=a.isFetching||e.isFetching||t.isFetching||s.isFetching||n.isFetching,v=async()=>{try{await Promise.all([l.invalidateQueries({queryKey:["screens",r]}),l.invalidateQueries({queryKey:["campaigns",r]}),l.invalidateQueries({queryKey:["alerts",r]}),l.invalidateQueries({queryKey:["media",r]}),l.invalidateQueries({queryKey:["playlists",r]})]),await Promise.all([a.refetch(),e.refetch(),t.refetch(),s.refetch(),n.refetch()]),ie.success("Dados sincronizados.")}catch(o){ie.error(o instanceof Error?o.message:"Falha ao sincronizar.")}},p=a.data??[],x=e.data??[],b=t.data??[],m=p.length,y=p.filter(o=>o.is_online).length,N=p.filter(o=>o.device_status==="offline").length,A=p.filter(o=>o.device_status==="warning").length,P=x.filter(o=>o.status==="active"),E=Array.from({length:14}).map((o,f)=>{const k=ga(new Date,13-f);return{date:oe(k,"dd/MM"),exibicoes:m*(8+f%5),falhas:Math.max(0,N-f%3)}}),w=b.slice(0,5),h=p.filter(o=>o.device_status==="offline"||o.device_status==="warning").slice(0,5),g=[...p].filter(o=>o.last_sync_at).sort((o,f)=>+new Date(f.last_sync_at)-+new Date(o.last_sync_at)).slice(0,5),j=a.isLoading||e.isLoading;return i.jsxs("div",{className:"space-y-6",children:[i.jsx(De,{title:"Visão geral",subtitle:"Resumo operacional de todas as suas telas, campanhas e dispositivos.",actions:i.jsxs(i.Fragment,{children:[i.jsx("button",{className:"rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium hover:bg-accent transition-smooth",children:"Últimos 7 dias"}),i.jsxs("button",{onClick:v,disabled:u,className:"inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60",children:[u?i.jsx(wa,{className:"h-3.5 w-3.5 animate-spin"}):i.jsx(Wa,{className:"h-3.5 w-3.5"}),"Sincronizar tudo"]})]})}),j?i.jsx(_e,{}):i.jsxs(i.Fragment,{children:[i.jsxs("div",{className:"grid grid-cols-2 lg:grid-cols-4 gap-4",children:[i.jsx(D,{label:"Telas cadastradas",value:m,icon:ce,tone:"primary"}),i.jsx(D,{label:"Online agora",value:y,icon:de,tone:"success",hint:m?`${Math.round(y/m*100)}% disponibilidade`:"—"}),i.jsx(D,{label:"Offline",value:N,icon:Ia,tone:"destructive"}),i.jsx(D,{label:"Em atenção",value:A,icon:ka,tone:"warning",hint:"Saúde abaixo de 70%"})]}),i.jsxs("div",{className:"grid grid-cols-2 lg:grid-cols-3 gap-4",children:[i.jsx(D,{label:"Campanhas ativas",value:P.length,icon:H,tone:"info"}),i.jsx(D,{label:"Mídias na biblioteca",value:s.data?.length??0,icon:Ea,tone:"primary"}),i.jsx(D,{label:"Playlists",value:n.data?.length??0,icon:Ca,tone:"success"})]}),i.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-3 gap-6",children:[i.jsx(O,{className:"lg:col-span-2",title:"Exibições nos últimos 14 dias",description:"Estimativa baseada no parque de telas e ocorrências.",children:i.jsx("div",{className:"h-64",children:i.jsx(ba,{width:"100%",height:"100%",children:i.jsxs(pt,{data:E,children:[i.jsxs("defs",{children:[i.jsxs("linearGradient",{id:"exibG",x1:"0",y1:"0",x2:"0",y2:"1",children:[i.jsx("stop",{offset:"0%",stopColor:"oklch(0.68 0.19 252)",stopOpacity:.6}),i.jsx("stop",{offset:"100%",stopColor:"oklch(0.68 0.19 252)",stopOpacity:0})]}),i.jsxs("linearGradient",{id:"falG",x1:"0",y1:"0",x2:"0",y2:"1",children:[i.jsx("stop",{offset:"0%",stopColor:"oklch(0.62 0.22 22)",stopOpacity:.5}),i.jsx("stop",{offset:"100%",stopColor:"oklch(0.62 0.22 22)",stopOpacity:0})]})]}),i.jsx(ja,{strokeDasharray:"3 3",stroke:"oklch(0.28 0.025 252 / 30%)"}),i.jsx(Aa,{dataKey:"date",stroke:"oklch(0.66 0.025 248)",fontSize:11,tickLine:!1,axisLine:!1}),i.jsx(Na,{stroke:"oklch(0.66 0.025 248)",fontSize:11,tickLine:!1,axisLine:!1}),i.jsx(Pa,{contentStyle:{background:"oklch(0.21 0.022 252)",border:"1px solid oklch(0.28 0.025 252)",borderRadius:8,fontSize:12}}),i.jsx(U,{type:"monotone",dataKey:"exibicoes",stroke:"oklch(0.68 0.19 252)",strokeWidth:2,fill:"url(#exibG)",name:"Exibições"}),i.jsx(U,{type:"monotone",dataKey:"falhas",stroke:"oklch(0.62 0.22 22)",strokeWidth:2,fill:"url(#falG)",name:"Falhas"})]})})})}),i.jsx(O,{title:"Status dos dispositivos",description:"Distribuição por status atual.",children:i.jsxs("div",{className:"space-y-3 text-sm",children:[i.jsx(B,{label:"Online",value:y,total:m,color:"bg-success"}),i.jsx(B,{label:"Offline",value:N,total:m,color:"bg-destructive"}),i.jsx(B,{label:"Atenção",value:A,total:m,color:"bg-warning"}),i.jsx(B,{label:"Sincronizando",value:p.filter(o=>o.device_status==="syncing").length,total:m,color:"bg-info"})]})})]}),i.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-6",children:[i.jsx(O,{title:"Campanhas em execução",description:"Veiculações ativas no momento.",actions:i.jsxs(Q,{to:"/app/campanhas",className:"text-[11px] text-primary hover:underline inline-flex items-center gap-1",children:["Ver todas ",i.jsx(Z,{className:"h-3 w-3"})]}),children:P.length===0?i.jsx(K,{title:"Nenhuma campanha ativa",description:"Crie ou ative uma campanha para começar a exibir.",icon:H}):i.jsx("ul",{className:"divide-y divide-border -my-3",children:P.slice(0,5).map(o=>i.jsxs("li",{className:"flex items-center gap-3 py-3",children:[i.jsx("div",{className:"h-9 w-9 rounded-lg bg-primary/10 grid place-items-center text-primary",children:i.jsx(H,{className:"h-4 w-4"})}),i.jsxs("div",{className:"flex-1 min-w-0",children:[i.jsx("p",{className:"text-sm font-medium truncate",children:o.name}),i.jsxs("p",{className:"text-[11px] text-muted-foreground",children:["Prioridade ",o.priority]})]}),i.jsx(X,{tone:"success",label:"Ativa"})]},o.id))})}),i.jsx(O,{title:"Dispositivos com problema",description:"Telas offline ou em atenção.",actions:i.jsxs(Q,{to:"/app/monitoramento",className:"text-[11px] text-primary hover:underline inline-flex items-center gap-1",children:["Monitorar ",i.jsx(Z,{className:"h-3 w-3"})]}),children:h.length===0?i.jsx(K,{title:"Tudo normal",description:"Nenhum dispositivo offline ou em atenção.",icon:de}):i.jsx("ul",{className:"divide-y divide-border -my-3",children:h.map(o=>i.jsxs("li",{className:"flex items-center gap-3 py-3",children:[i.jsx("div",{className:"h-9 w-9 rounded-lg bg-destructive/10 grid place-items-center text-destructive",children:i.jsx(ce,{className:"h-4 w-4"})}),i.jsxs("div",{className:"flex-1 min-w-0",children:[i.jsx("p",{className:"text-sm font-medium truncate",children:o.name}),i.jsx("p",{className:"text-[11px] text-muted-foreground",children:o.last_seen_at?`visto ${ue(new Date(o.last_seen_at),{locale:pe,addSuffix:!0})}`:"nunca conectou"})]}),i.jsx(X,{tone:o.device_status==="offline"?"destructive":"warning",label:o.device_status})]},o.id))})})]}),i.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-2 gap-6",children:[i.jsx(O,{title:"Alertas recentes",description:"Últimos eventos detectados.",actions:i.jsxs(Q,{to:"/app/alertas",className:"text-[11px] text-primary hover:underline inline-flex items-center gap-1",children:["Ver todos ",i.jsx(Z,{className:"h-3 w-3"})]}),children:w.length===0?i.jsx(K,{title:"Nenhum alerta",description:"Tudo em ordem por aqui."}):i.jsx("ul",{className:"space-y-3",children:w.map(o=>i.jsxs("li",{className:"flex items-start gap-3",children:[i.jsx("div",{className:`mt-0.5 h-2 w-2 rounded-full ${o.severity==="critical"?"bg-destructive":o.severity==="high"?"bg-warning":"bg-info"} pulse-dot`}),i.jsxs("div",{className:"flex-1 min-w-0",children:[i.jsx("p",{className:"text-sm font-medium",children:o.alert_type}),i.jsx("p",{className:"text-[11px] text-muted-foreground",children:ue(new Date(o.created_at),{locale:pe,addSuffix:!0})})]}),i.jsx(X,{tone:o.resolved_at?"success":"warning",label:o.resolved_at?"Resolvido":"Pendente",withDot:!1})]},o.id))})}),i.jsx(O,{title:"Últimas sincronizações",description:"Telas que sincronizaram conteúdo recentemente.",children:g.length===0?i.jsx(K,{title:"Nenhuma sincronização registrada"}):i.jsx("ul",{className:"space-y-3",children:g.map(o=>i.jsxs("li",{className:"flex items-center gap-3",children:[i.jsx(Sa,{className:"h-4 w-4 text-success"}),i.jsx("div",{className:"flex-1 min-w-0",children:i.jsx("p",{className:"text-sm font-medium truncate",children:o.name})}),i.jsxs("span",{className:"inline-flex items-center gap-1 text-[11px] text-muted-foreground font-mono",children:[i.jsx(La,{className:"h-3 w-3"})," ",oe(new Date(o.last_sync_at),"HH:mm")]})]},o.id))})})]})]})]})}function B({label:a,value:e,total:t,color:s}){const n=t?e/t*100:0;return i.jsxs("div",{children:[i.jsxs("div",{className:"flex items-center justify-between text-xs mb-1",children:[i.jsx("span",{children:a}),i.jsxs("span",{className:"text-muted-foreground font-mono",children:[e," / ",t]})]}),i.jsx("div",{className:"h-2 rounded-full bg-muted overflow-hidden",children:i.jsx("div",{className:`h-full ${s}`,style:{width:`${n}%`}})})]})}export{Wt as component};
+import { j as i, r as c, e as Ce, a as Se, L as Q, t as ie } from "./index-DUcMANMA.js";
+import { c as $, a as Le } from "./utils-BQHNewu7.js";
+import { c as J } from "./createLucideIcon-BDYLgomD.js";
+import { P as O } from "./Panel-0HKdxBPL.js";
+import { P as De } from "./PageHeader-C0iFmY02.js";
+import { S as X } from "./StatusBadge-Deydaofp.js";
+import { L as _e, E as K } from "./States-snX8_8k6.js";
+import { b as Oe, a as Me, c as Te, u as We, d as ze } from "./use-supabase-data-neXhdC03.js";
+import {
+  c as q,
+  s as ee,
+  a as Re,
+  b as Ke,
+  d as xe,
+  e as ae,
+  f as te,
+  g as fe,
+  h as Be,
+  i as ye,
+  j as se,
+  k as Fe,
+  l as Ge,
+  p as Ve,
+  r as qe,
+  D as Qe,
+  u as ge,
+  R as $e,
+  S as Xe,
+  m as Ye,
+  n as He,
+  o as be,
+  q as Ze,
+  t as Ue,
+  v as Je,
+  w as ea,
+  x as aa,
+  y as ta,
+  z as ia,
+  A as sa,
+  B as ra,
+  Z as na,
+  L as F,
+  G as la,
+  C as re,
+  E as ne,
+  F as le,
+  H as W,
+  I as oa,
+  J as ca,
+  K as da,
+  M,
+  N as ua,
+  O as pa,
+  P as ma,
+  Q as ha,
+  T as je,
+  U as va,
+  V as Y,
+  W as xa,
+  X as G,
+  Y as fa,
+  _ as ya,
+  $ as ga,
+  a0 as ba,
+  a1 as ja,
+  a2 as Aa,
+  a3 as Na,
+  a4 as Pa,
+} from "./subDays-DBmf45Lc.js";
+import { f as oe } from "./format-Ca9zXj_K.js";
+import { L as wa } from "./loader-circle-BffduC8P.js";
+import { M as ce } from "./monitor-Ck3Yxne9.js";
+import { W as de } from "./wifi-DZkc2jYa.js";
+import { W as Ia } from "./wifi-off-DkH--R7b.js";
+import { T as ka } from "./triangle-alert-BTiM3Cgz.js";
+import { M as H } from "./megaphone-CoxL7Qo6.js";
+import { I as Ea } from "./image-BlTjWPMR.js";
+import { L as Ca } from "./list-video-BioUtere.js";
+import { A as Z } from "./arrow-right-DA0qr8cc.js";
+import { f as ue } from "./formatDistanceToNow-DlSrCos3.js";
+import { A as Sa } from "./activity-CDzXOf4C.js";
+import { C as La } from "./clock-CyUAU_SK.js";
+import { p as pe } from "./pt-BR-B79SV-js.js";
+import "./en-US-DfnapdEA.js";
+const Da = [
+    ["path", { d: "M16 17h6v-6", key: "t6n2it" }],
+    ["path", { d: "m22 17-8.5-8.5-5 5L2 7", key: "x473p" }],
+  ],
+  _a = J("trending-down", Da);
+const Oa = [
+    ["path", { d: "M16 7h6v6", key: "box55l" }],
+    ["path", { d: "m22 7-8.5 8.5-5-5L2 17", key: "1t1m79" }],
+  ],
+  Ma = J("trending-up", Oa);
+const Ta = [
+    [
+      "path",
+      {
+        d: "M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z",
+        key: "1xq2db",
+      },
+    ],
+  ],
+  Wa = J("zap", Ta),
+  me = {
+    primary: "from-primary/20 to-primary/0 text-primary",
+    success: "from-success/20 to-success/0 text-success",
+    warning: "from-warning/20 to-warning/0 text-warning",
+    destructive: "from-destructive/20 to-destructive/0 text-destructive",
+    info: "from-info/20 to-info/0 text-info",
+  };
+function D({ label: a, value: e, delta: t, icon: s, tone: n = "primary", hint: l }) {
+  return i.jsxs("div", {
+    className:
+      "relative overflow-hidden rounded-xl border border-border bg-card p-5 shadow-card transition-smooth hover:border-primary/40",
+    children: [
+      i.jsx("div", { className: $("absolute inset-0 bg-gradient-to-br opacity-60", me[n]) }),
+      i.jsxs("div", {
+        className: "relative flex items-start justify-between",
+        children: [
+          i.jsxs("div", {
+            children: [
+              i.jsx("p", {
+                className: "text-xs font-medium text-muted-foreground uppercase tracking-wider",
+                children: a,
+              }),
+              i.jsx("p", {
+                className: "mt-2 font-display text-3xl font-bold tracking-tight",
+                children: e,
+              }),
+              l && i.jsx("p", { className: "mt-1 text-[11px] text-muted-foreground", children: l }),
+            ],
+          }),
+          i.jsx("div", {
+            className: $("h-10 w-10 rounded-lg grid place-items-center", `bg-${n}/10`),
+            children: i.jsx(s, { className: $("h-5 w-5", me[n].split(" ").pop()) }),
+          }),
+        ],
+      }),
+      t &&
+        i.jsxs("div", {
+          className: "relative mt-3 flex items-center gap-1 text-xs font-medium",
+          children: [
+            t.up
+              ? i.jsx(Ma, { className: "h-3.5 w-3.5 text-success" })
+              : i.jsx(_a, { className: "h-3.5 w-3.5 text-destructive" }),
+            i.jsx("span", {
+              className: t.up ? "text-success" : "text-destructive",
+              children: t.value,
+            }),
+            i.jsx("span", { className: "text-muted-foreground", children: "vs. semana anterior" }),
+          ],
+        }),
+    ],
+  });
+}
+var Ae = (a, e, t) => xe(a, "xAxis", ae(a, e), t),
+  Ne = (a, e, t) => fe(a, "xAxis", ae(a, e), t),
+  Pe = (a, e, t) => xe(a, "yAxis", te(a, e), t),
+  we = (a, e, t) => fe(a, "yAxis", te(a, e), t),
+  za = q([ee, Ae, Pe, Ne, we], (a, e, t, s, n) => (ye(a, "xAxis") ? se(e, s, !1) : se(t, n, !1))),
+  Ra = (a, e) => e,
+  Ie = q([Fe, Ra], (a, e) => a.filter((t) => t.type === "area").find((t) => t.id === e)),
+  ke = (a) => {
+    var e = ee(a),
+      t = ye(e, "xAxis");
+    return t ? "yAxis" : "xAxis";
+  },
+  Ka = (a, e) => {
+    var t = ke(a);
+    return t === "yAxis" ? te(a, e) : ae(a, e);
+  },
+  Ba = (a, e, t) => Ge(a, ke(a), Ka(a, e), t),
+  Fa = q([Ie, Ba], (a, e) => {
+    var t;
+    if (!(a == null || e == null)) {
+      var { stackId: s } = a,
+        n = Be(a);
+      if (!(s == null || n == null)) {
+        var l = (t = e[s]) === null || t === void 0 ? void 0 : t.stackedData,
+          d = l?.find((r) => r.key === n);
+        if (d != null) return d.map((r) => [r[0], r[1]]);
+      }
+    }
+  }),
+  Ga = q([ee, Ae, Pe, Ne, we, Fa, Re, za, Ie, Ke], (a, e, t, s, n, l, d, r, u, v) => {
+    var { chartData: p, dataStartIndex: x, dataEndIndex: b } = d;
+    if (
+      !(
+        u == null ||
+        (a !== "horizontal" && a !== "vertical") ||
+        e == null ||
+        t == null ||
+        s == null ||
+        n == null ||
+        s.length === 0 ||
+        n.length === 0 ||
+        r == null
+      )
+    ) {
+      var { data: m } = u,
+        y;
+      if ((m && m.length > 0 ? (y = m) : (y = p?.slice(x, b + 1)), y != null))
+        return ct({
+          layout: a,
+          xAxis: e,
+          yAxis: t,
+          xAxisTicks: s,
+          yAxisTicks: n,
+          dataStartIndex: x,
+          areaSettings: u,
+          stackedData: l,
+          displayedData: y,
+          chartBaseValue: v,
+          bandSize: r,
+        });
+    }
+  }),
+  Va = ["id"],
+  qa = [
+    "activeDot",
+    "animationBegin",
+    "animationDuration",
+    "animationEasing",
+    "connectNulls",
+    "dot",
+    "fill",
+    "fillOpacity",
+    "hide",
+    "isAnimationActive",
+    "legendType",
+    "stroke",
+    "xAxisId",
+    "yAxisId",
+  ];
+function _() {
+  return (
+    (_ = Object.assign
+      ? Object.assign.bind()
+      : function (a) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var s in t) ({}).hasOwnProperty.call(t, s) && (a[s] = t[s]);
+          }
+          return a;
+        }),
+    _.apply(null, arguments)
+  );
+}
+function Ee(a, e) {
+  if (a == null) return {};
+  var t,
+    s,
+    n = Qa(a, e);
+  if (Object.getOwnPropertySymbols) {
+    var l = Object.getOwnPropertySymbols(a);
+    for (s = 0; s < l.length; s++)
+      ((t = l[s]), e.indexOf(t) === -1 && {}.propertyIsEnumerable.call(a, t) && (n[t] = a[t]));
+  }
+  return n;
+}
+function Qa(a, e) {
+  if (a == null) return {};
+  var t = {};
+  for (var s in a)
+    if ({}.hasOwnProperty.call(a, s)) {
+      if (e.indexOf(s) !== -1) continue;
+      t[s] = a[s];
+    }
+  return t;
+}
+function he(a, e) {
+  var t = Object.keys(a);
+  if (Object.getOwnPropertySymbols) {
+    var s = Object.getOwnPropertySymbols(a);
+    (e &&
+      (s = s.filter(function (n) {
+        return Object.getOwnPropertyDescriptor(a, n).enumerable;
+      })),
+      t.push.apply(t, s));
+  }
+  return t;
+}
+function T(a) {
+  for (var e = 1; e < arguments.length; e++) {
+    var t = arguments[e] != null ? arguments[e] : {};
+    e % 2
+      ? he(Object(t), !0).forEach(function (s) {
+          $a(a, s, t[s]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(a, Object.getOwnPropertyDescriptors(t))
+        : he(Object(t)).forEach(function (s) {
+            Object.defineProperty(a, s, Object.getOwnPropertyDescriptor(t, s));
+          });
+  }
+  return a;
+}
+function $a(a, e, t) {
+  return (
+    (e = Xa(e)) in a
+      ? Object.defineProperty(a, e, { value: t, enumerable: !0, configurable: !0, writable: !0 })
+      : (a[e] = t),
+    a
+  );
+}
+function Xa(a) {
+  var e = Ya(a, "string");
+  return typeof e == "symbol" ? e : e + "";
+}
+function Ya(a, e) {
+  if (typeof a != "object" || !a) return a;
+  var t = a[Symbol.toPrimitive];
+  if (t !== void 0) {
+    var s = t.call(a, e);
+    if (typeof s != "object") return s;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (e === "string" ? String : Number)(a);
+}
+function V(a, e) {
+  return a && a !== "none" ? a : e;
+}
+var Ha = (a) => {
+    var { dataKey: e, name: t, stroke: s, fill: n, legendType: l, hide: d } = a;
+    return [{ inactive: d, dataKey: e, type: l, color: V(s, n), value: be(t, e), payload: a }];
+  },
+  Za = c.memo((a) => {
+    var {
+        dataKey: e,
+        data: t,
+        stroke: s,
+        strokeWidth: n,
+        fill: l,
+        name: d,
+        hide: r,
+        unit: u,
+        tooltipType: v,
+        id: p,
+      } = a,
+      x = {
+        dataDefinedOnItem: t,
+        getPosition: Ue,
+        settings: {
+          stroke: s,
+          strokeWidth: n,
+          fill: l,
+          dataKey: e,
+          nameKey: void 0,
+          name: be(d, e),
+          hide: r,
+          type: v,
+          color: V(s, l),
+          unit: u,
+          graphicalItemId: p,
+        },
+      };
+    return c.createElement(Ze, { tooltipEntrySettings: x });
+  });
+function Ua(a) {
+  var { clipPathId: e, points: t, props: s } = a,
+    { needClip: n, dot: l, dataKey: d } = s,
+    r = je(s);
+  return c.createElement(xa, {
+    points: t,
+    dot: l,
+    className: "recharts-area-dots",
+    dotClassName: "recharts-area-dot",
+    dataKey: d,
+    baseProps: r,
+    needClip: n,
+    clipPathId: e,
+  });
+}
+function Ja(a) {
+  var { showLabels: e, children: t, points: s } = a,
+    n = s.map((l) => {
+      var d,
+        r,
+        u = {
+          x: (d = l.x) !== null && d !== void 0 ? d : 0,
+          y: (r = l.y) !== null && r !== void 0 ? r : 0,
+          width: 0,
+          lowerWidth: 0,
+          upperWidth: 0,
+          height: 0,
+        };
+      return T(
+        T({}, u),
+        {},
+        { value: l.value, payload: l.payload, parentViewBox: void 0, viewBox: u, fill: void 0 },
+      );
+    });
+  return c.createElement(ha, { value: e ? n : void 0 }, t);
+}
+function ve(a) {
+  var { points: e, baseLine: t, needClip: s, clipPathId: n, props: l } = a,
+    { layout: d, type: r, stroke: u, connectNulls: v, isRange: p } = l,
+    { id: x } = l,
+    b = Ee(l, Va),
+    m = je(b),
+    y = va(b);
+  return c.createElement(
+    c.Fragment,
+    null,
+    e?.length > 1 &&
+      c.createElement(
+        F,
+        { clipPath: s ? "url(#clipPath-".concat(n, ")") : void 0 },
+        c.createElement(
+          Y,
+          _({}, y, {
+            id: x,
+            points: e,
+            connectNulls: v,
+            type: r,
+            baseLine: t,
+            layout: d,
+            stroke: "none",
+            className: "recharts-area-area",
+          }),
+        ),
+        u !== "none" &&
+          c.createElement(
+            Y,
+            _({}, m, {
+              className: "recharts-area-curve",
+              layout: d,
+              type: r,
+              connectNulls: v,
+              fill: "none",
+              points: e,
+            }),
+          ),
+        u !== "none" &&
+          p &&
+          Array.isArray(t) &&
+          c.createElement(
+            Y,
+            _({}, m, {
+              className: "recharts-area-curve",
+              layout: d,
+              type: r,
+              connectNulls: v,
+              fill: "none",
+              points: t,
+            }),
+          ),
+      ),
+    c.createElement(Ua, { points: e, props: b, clipPathId: n }),
+  );
+}
+function et(a) {
+  var e,
+    t,
+    { alpha: s, baseLine: n, points: l, strokeWidth: d } = a,
+    r = (e = l[0]) === null || e === void 0 ? void 0 : e.y,
+    u = (t = l[l.length - 1]) === null || t === void 0 ? void 0 : t.y;
+  if (!G(r) || !G(u)) return null;
+  var v = s * Math.abs(r - u),
+    p = Math.max(...l.map((x) => x.x || 0));
+  return (
+    W(n)
+      ? (p = Math.max(n, p))
+      : n && Array.isArray(n) && n.length && (p = Math.max(...n.map((x) => x.x || 0), p)),
+    W(p)
+      ? c.createElement("rect", {
+          x: 0,
+          y: r < u ? r : r - v,
+          width: p + (d ? parseInt("".concat(d), 10) : 1),
+          height: Math.floor(v),
+        })
+      : null
+  );
+}
+function at(a) {
+  var e,
+    t,
+    { alpha: s, baseLine: n, points: l, strokeWidth: d } = a,
+    r = (e = l[0]) === null || e === void 0 ? void 0 : e.x,
+    u = (t = l[l.length - 1]) === null || t === void 0 ? void 0 : t.x;
+  if (!G(r) || !G(u)) return null;
+  var v = s * Math.abs(r - u),
+    p = Math.max(...l.map((x) => x.y || 0));
+  return (
+    W(n)
+      ? (p = Math.max(n, p))
+      : n && Array.isArray(n) && n.length && (p = Math.max(...n.map((x) => x.y || 0), p)),
+    W(p)
+      ? c.createElement("rect", {
+          x: r < u ? r : r - v,
+          y: 0,
+          width: v,
+          height: Math.floor(p + (d ? parseInt("".concat(d), 10) : 1)),
+        })
+      : null
+  );
+}
+function tt(a) {
+  var { alpha: e, layout: t, points: s, baseLine: n, strokeWidth: l } = a;
+  return t === "vertical"
+    ? c.createElement(et, { alpha: e, points: s, baseLine: n, strokeWidth: l })
+    : c.createElement(at, { alpha: e, points: s, baseLine: n, strokeWidth: l });
+}
+function it(a) {
+  var { needClip: e, clipPathId: t, props: s, previousPointsRef: n, previousBaselineRef: l } = a,
+    {
+      points: d,
+      baseLine: r,
+      isAnimationActive: u,
+      animationBegin: v,
+      animationDuration: p,
+      animationEasing: x,
+      onAnimationStart: b,
+      onAnimationEnd: m,
+    } = s,
+    y = c.useMemo(() => ({ points: d, baseLine: r }), [d, r]),
+    N = oa(y, "recharts-area-"),
+    A = ca(),
+    [P, E] = c.useState(!1),
+    w = !P,
+    h = c.useCallback(() => {
+      (typeof m == "function" && m(), E(!1));
+    }, [m]),
+    g = c.useCallback(() => {
+      (typeof b == "function" && b(), E(!0));
+    }, [b]);
+  if (A == null) return null;
+  var j = n.current,
+    o = l.current;
+  return c.createElement(
+    Ja,
+    { showLabels: w, points: d },
+    s.children,
+    c.createElement(
+      da,
+      {
+        animationId: N,
+        begin: v,
+        duration: p,
+        isActive: u,
+        easing: x,
+        onAnimationEnd: h,
+        onAnimationStart: g,
+        key: N,
+      },
+      (f) => {
+        if (j) {
+          var k = j.length / d.length,
+            L =
+              f === 1
+                ? d
+                : d.map((I, S) => {
+                    var z = Math.floor(S * k);
+                    if (j[z]) {
+                      var R = j[z];
+                      return T(T({}, I), {}, { x: M(R.x, I.x, f), y: M(R.y, I.y, f) });
+                    }
+                    return I;
+                  }),
+            C;
+          return (
+            W(r)
+              ? (C = M(o, r, f))
+              : ua(r) || pa(r)
+                ? (C = M(o, 0, f))
+                : (C = r.map((I, S) => {
+                    var z = Math.floor(S * k);
+                    if (Array.isArray(o) && o[z]) {
+                      var R = o[z];
+                      return T(T({}, I), {}, { x: M(R.x, I.x, f), y: M(R.y, I.y, f) });
+                    }
+                    return I;
+                  })),
+            f > 0 && ((n.current = L), (l.current = C)),
+            c.createElement(ve, { points: L, baseLine: C, needClip: e, clipPathId: t, props: s })
+          );
+        }
+        return (
+          f > 0 && ((n.current = d), (l.current = r)),
+          c.createElement(
+            F,
+            null,
+            u &&
+              c.createElement(
+                "defs",
+                null,
+                c.createElement(
+                  "clipPath",
+                  { id: "animationClipPath-".concat(t) },
+                  c.createElement(tt, {
+                    alpha: f,
+                    points: d,
+                    baseLine: r,
+                    layout: A,
+                    strokeWidth: s.strokeWidth,
+                  }),
+                ),
+              ),
+            c.createElement(
+              F,
+              { clipPath: "url(#animationClipPath-".concat(t, ")") },
+              c.createElement(ve, { points: d, baseLine: r, needClip: e, clipPathId: t, props: s }),
+            ),
+          )
+        );
+      },
+    ),
+    c.createElement(ma, { label: s.label }),
+  );
+}
+function st(a) {
+  var { needClip: e, clipPathId: t, props: s } = a,
+    n = c.useRef(null),
+    l = c.useRef();
+  return c.createElement(it, {
+    needClip: e,
+    clipPathId: t,
+    props: s,
+    previousPointsRef: n,
+    previousBaselineRef: l,
+  });
+}
+class rt extends c.PureComponent {
+  render() {
+    var {
+      hide: e,
+      dot: t,
+      points: s,
+      className: n,
+      top: l,
+      left: d,
+      needClip: r,
+      xAxisId: u,
+      yAxisId: v,
+      width: p,
+      height: x,
+      id: b,
+      baseLine: m,
+      zIndex: y,
+    } = this.props;
+    if (e) return null;
+    var N = Le("recharts-area", n),
+      A = b,
+      { r: P, strokeWidth: E } = sa(t),
+      w = ra(t),
+      h = P * 2 + E,
+      g = r ? "url(#clipPath-".concat(w ? "" : "dots-").concat(A, ")") : void 0;
+    return c.createElement(
+      na,
+      { zIndex: y },
+      c.createElement(
+        F,
+        { className: N },
+        r &&
+          c.createElement(
+            "defs",
+            null,
+            c.createElement(la, { clipPathId: A, xAxisId: u, yAxisId: v }),
+            !w &&
+              c.createElement(
+                "clipPath",
+                { id: "clipPath-dots-".concat(A) },
+                c.createElement("rect", {
+                  x: d - h / 2,
+                  y: l - h / 2,
+                  width: p + h,
+                  height: x + h,
+                }),
+              ),
+          ),
+        c.createElement(st, { needClip: r, clipPathId: A, props: this.props }),
+      ),
+      c.createElement(re, {
+        points: s,
+        mainColor: V(this.props.stroke, this.props.fill),
+        itemDataKey: this.props.dataKey,
+        activeDot: this.props.activeDot,
+        clipPath: g,
+      }),
+      this.props.isRange &&
+        Array.isArray(m) &&
+        c.createElement(re, {
+          points: m,
+          mainColor: V(this.props.stroke, this.props.fill),
+          itemDataKey: this.props.dataKey,
+          activeDot: this.props.activeDot,
+          clipPath: g,
+        }),
+    );
+  }
+}
+var nt = {
+  activeDot: !0,
+  animationBegin: 0,
+  animationDuration: 1500,
+  animationEasing: "ease",
+  connectNulls: !1,
+  dot: !1,
+  fill: "#3182bd",
+  fillOpacity: 0.6,
+  hide: !1,
+  isAnimationActive: "auto",
+  legendType: "line",
+  stroke: "#3182bd",
+  strokeWidth: 1,
+  type: "linear",
+  label: !1,
+  xAxisId: 0,
+  yAxisId: 0,
+  zIndex: Qe.area,
+};
+function lt(a) {
+  var e,
+    {
+      activeDot: t,
+      animationBegin: s,
+      animationDuration: n,
+      animationEasing: l,
+      connectNulls: d,
+      dot: r,
+      fill: u,
+      fillOpacity: v,
+      hide: p,
+      isAnimationActive: x,
+      legendType: b,
+      stroke: m,
+      xAxisId: y,
+      yAxisId: N,
+    } = a,
+    A = Ee(a, qa),
+    P = Je(),
+    E = ea(),
+    { needClip: w } = aa(y, N),
+    h = ge(),
+    {
+      points: g,
+      isRange: j,
+      baseLine: o,
+    } = (e = ta((S) => Ga(S, a.id, h))) !== null && e !== void 0 ? e : {},
+    f = ia();
+  if (
+    (P !== "horizontal" && P !== "vertical") ||
+    f == null ||
+    (E !== "AreaChart" && E !== "ComposedChart")
+  )
+    return null;
+  var { height: k, width: L, x: C, y: I } = f;
+  return !g || !g.length
+    ? null
+    : c.createElement(
+        rt,
+        _({}, A, {
+          activeDot: t,
+          animationBegin: s,
+          animationDuration: n,
+          animationEasing: l,
+          baseLine: o,
+          connectNulls: d,
+          dot: r,
+          fill: u,
+          fillOpacity: v,
+          height: k,
+          hide: p,
+          layout: P,
+          isAnimationActive: x,
+          isRange: j,
+          legendType: b,
+          needClip: w,
+          points: g,
+          stroke: m,
+          width: L,
+          left: C,
+          top: I,
+          xAxisId: y,
+          yAxisId: N,
+        }),
+      );
+}
+var ot = (a, e, t, s, n) => {
+  var l = t ?? e;
+  if (W(l)) return l;
+  var d = a === "horizontal" ? n : s,
+    r = d.scale.domain();
+  if (d.type === "number") {
+    var u = Math.max(r[0], r[1]),
+      v = Math.min(r[0], r[1]);
+    return l === "dataMin" ? v : l === "dataMax" || u < 0 ? u : Math.max(Math.min(r[0], r[1]), 0);
+  }
+  return l === "dataMin" ? r[0] : l === "dataMax" ? r[1] : r[0];
+};
+function ct(a) {
+  var {
+      areaSettings: { connectNulls: e, baseValue: t, dataKey: s },
+      stackedData: n,
+      layout: l,
+      chartBaseValue: d,
+      xAxis: r,
+      yAxis: u,
+      displayedData: v,
+      dataStartIndex: p,
+      xAxisTicks: x,
+      yAxisTicks: b,
+      bandSize: m,
+    } = a,
+    y = n && n.length,
+    N = ot(l, d, t, r, u),
+    A = l === "horizontal",
+    P = !1,
+    E = v.map((h, g) => {
+      var j, o, f, k;
+      if (y) k = n[p + g];
+      else {
+        var L = ne(h, s);
+        Array.isArray(L) ? ((k = L), (P = !0)) : (k = [N, L]);
+      }
+      var C =
+          (j = (o = k) === null || o === void 0 ? void 0 : o[1]) !== null && j !== void 0
+            ? j
+            : null,
+        I = C == null || (y && !e && ne(h, s) == null);
+      if (A) {
+        var S;
+        return {
+          x: le({ axis: r, ticks: x, bandSize: m, entry: h, index: g }),
+          y: I ? null : (S = u.scale.map(C)) !== null && S !== void 0 ? S : null,
+          value: k,
+          payload: h,
+        };
+      }
+      return {
+        x: I ? null : (f = r.scale.map(C)) !== null && f !== void 0 ? f : null,
+        y: le({ axis: u, ticks: b, bandSize: m, entry: h, index: g }),
+        value: k,
+        payload: h,
+      };
+    }),
+    w;
+  return (
+    y || P
+      ? (w = E.map((h) => {
+          var g,
+            j = Array.isArray(h.value) ? h.value[0] : null;
+          if (A) {
+            var o;
+            return {
+              x: h.x,
+              y:
+                j != null && h.y != null && (o = u.scale.map(j)) !== null && o !== void 0
+                  ? o
+                  : null,
+              payload: h.payload,
+            };
+          }
+          return {
+            x: j != null && (g = r.scale.map(j)) !== null && g !== void 0 ? g : null,
+            y: h.y,
+            payload: h.payload,
+          };
+        }))
+      : (w = A ? u.scale.map(N) : r.scale.map(N)),
+    { points: E, baseLine: w ?? 0, isRange: P }
+  );
+}
+function dt(a) {
+  var e = qe(a, nt),
+    t = ge();
+  return c.createElement($e, { id: e.id, type: "area" }, (s) =>
+    c.createElement(
+      c.Fragment,
+      null,
+      c.createElement(Xe, { legendPayload: Ha(e) }),
+      c.createElement(Za, {
+        dataKey: e.dataKey,
+        data: e.data,
+        stroke: e.stroke,
+        strokeWidth: e.strokeWidth,
+        fill: e.fill,
+        name: e.name,
+        hide: e.hide,
+        unit: e.unit,
+        tooltipType: e.tooltipType,
+        id: s,
+      }),
+      c.createElement(Ye, {
+        type: "area",
+        id: s,
+        data: e.data,
+        dataKey: e.dataKey,
+        xAxisId: e.xAxisId,
+        yAxisId: e.yAxisId,
+        zAxisId: 0,
+        stackId: He(e.stackId),
+        hide: e.hide,
+        barSize: void 0,
+        baseValue: e.baseValue,
+        isPanorama: t,
+        connectNulls: e.connectNulls,
+      }),
+      c.createElement(lt, _({}, e, { id: s })),
+    ),
+  );
+}
+var U = c.memo(dt, Ve);
+U.displayName = "Area";
+var ut = ["axis"],
+  pt = c.forwardRef((a, e) =>
+    c.createElement(fa, {
+      chartName: "AreaChart",
+      defaultTooltipEventType: "axis",
+      validateTooltipEventTypes: ut,
+      tooltipPayloadSearcher: ya,
+      categoricalChartProps: a,
+      ref: e,
+    }),
+  );
+function Wt() {
+  const a = Oe(),
+    e = Me(),
+    t = Te(),
+    s = We(),
+    n = ze(),
+    l = Ce(),
+    { profile: d } = Se(),
+    r = d?.organization_id ?? null,
+    u = a.isFetching || e.isFetching || t.isFetching || s.isFetching || n.isFetching,
+    v = async () => {
+      try {
+        (await Promise.all([
+          l.invalidateQueries({ queryKey: ["screens", r] }),
+          l.invalidateQueries({ queryKey: ["campaigns", r] }),
+          l.invalidateQueries({ queryKey: ["alerts", r] }),
+          l.invalidateQueries({ queryKey: ["media", r] }),
+          l.invalidateQueries({ queryKey: ["playlists", r] }),
+        ]),
+          await Promise.all([a.refetch(), e.refetch(), t.refetch(), s.refetch(), n.refetch()]),
+          ie.success("Dados sincronizados."));
+      } catch (o) {
+        ie.error(o instanceof Error ? o.message : "Falha ao sincronizar.");
+      }
+    },
+    p = a.data ?? [],
+    x = e.data ?? [],
+    b = t.data ?? [],
+    m = p.length,
+    y = p.filter((o) => o.is_online).length,
+    N = p.filter((o) => o.device_status === "offline").length,
+    A = p.filter((o) => o.device_status === "warning").length,
+    P = x.filter((o) => o.status === "active"),
+    E = Array.from({ length: 14 }).map((o, f) => {
+      const k = ga(new Date(), 13 - f);
+      return {
+        date: oe(k, "dd/MM"),
+        exibicoes: m * (8 + (f % 5)),
+        falhas: Math.max(0, N - (f % 3)),
+      };
+    }),
+    w = b.slice(0, 5),
+    h = p.filter((o) => o.device_status === "offline" || o.device_status === "warning").slice(0, 5),
+    g = [...p]
+      .filter((o) => o.last_sync_at)
+      .sort((o, f) => +new Date(f.last_sync_at) - +new Date(o.last_sync_at))
+      .slice(0, 5),
+    j = a.isLoading || e.isLoading;
+  return i.jsxs("div", {
+    className: "space-y-6",
+    children: [
+      i.jsx(De, {
+        title: "Visão geral",
+        subtitle: "Resumo operacional de todas as suas telas, campanhas e dispositivos.",
+        actions: i.jsxs(i.Fragment, {
+          children: [
+            i.jsx("button", {
+              className:
+                "rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-medium hover:bg-accent transition-smooth",
+              children: "Últimos 7 dias",
+            }),
+            i.jsxs("button", {
+              onClick: v,
+              disabled: u,
+              className:
+                "inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60",
+              children: [
+                u
+                  ? i.jsx(wa, { className: "h-3.5 w-3.5 animate-spin" })
+                  : i.jsx(Wa, { className: "h-3.5 w-3.5" }),
+                "Sincronizar tudo",
+              ],
+            }),
+          ],
+        }),
+      }),
+      j
+        ? i.jsx(_e, {})
+        : i.jsxs(i.Fragment, {
+            children: [
+              i.jsxs("div", {
+                className: "grid grid-cols-2 lg:grid-cols-4 gap-4",
+                children: [
+                  i.jsx(D, { label: "Telas cadastradas", value: m, icon: ce, tone: "primary" }),
+                  i.jsx(D, {
+                    label: "Online agora",
+                    value: y,
+                    icon: de,
+                    tone: "success",
+                    hint: m ? `${Math.round((y / m) * 100)}% disponibilidade` : "—",
+                  }),
+                  i.jsx(D, { label: "Offline", value: N, icon: Ia, tone: "destructive" }),
+                  i.jsx(D, {
+                    label: "Em atenção",
+                    value: A,
+                    icon: ka,
+                    tone: "warning",
+                    hint: "Saúde abaixo de 70%",
+                  }),
+                ],
+              }),
+              i.jsxs("div", {
+                className: "grid grid-cols-2 lg:grid-cols-3 gap-4",
+                children: [
+                  i.jsx(D, { label: "Campanhas ativas", value: P.length, icon: H, tone: "info" }),
+                  i.jsx(D, {
+                    label: "Mídias na biblioteca",
+                    value: s.data?.length ?? 0,
+                    icon: Ea,
+                    tone: "primary",
+                  }),
+                  i.jsx(D, {
+                    label: "Playlists",
+                    value: n.data?.length ?? 0,
+                    icon: Ca,
+                    tone: "success",
+                  }),
+                ],
+              }),
+              i.jsxs("div", {
+                className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
+                children: [
+                  i.jsx(O, {
+                    className: "lg:col-span-2",
+                    title: "Exibições nos últimos 14 dias",
+                    description: "Estimativa baseada no parque de telas e ocorrências.",
+                    children: i.jsx("div", {
+                      className: "h-64",
+                      children: i.jsx(ba, {
+                        width: "100%",
+                        height: "100%",
+                        children: i.jsxs(pt, {
+                          data: E,
+                          children: [
+                            i.jsxs("defs", {
+                              children: [
+                                i.jsxs("linearGradient", {
+                                  id: "exibG",
+                                  x1: "0",
+                                  y1: "0",
+                                  x2: "0",
+                                  y2: "1",
+                                  children: [
+                                    i.jsx("stop", {
+                                      offset: "0%",
+                                      stopColor: "oklch(0.68 0.19 252)",
+                                      stopOpacity: 0.6,
+                                    }),
+                                    i.jsx("stop", {
+                                      offset: "100%",
+                                      stopColor: "oklch(0.68 0.19 252)",
+                                      stopOpacity: 0,
+                                    }),
+                                  ],
+                                }),
+                                i.jsxs("linearGradient", {
+                                  id: "falG",
+                                  x1: "0",
+                                  y1: "0",
+                                  x2: "0",
+                                  y2: "1",
+                                  children: [
+                                    i.jsx("stop", {
+                                      offset: "0%",
+                                      stopColor: "oklch(0.62 0.22 22)",
+                                      stopOpacity: 0.5,
+                                    }),
+                                    i.jsx("stop", {
+                                      offset: "100%",
+                                      stopColor: "oklch(0.62 0.22 22)",
+                                      stopOpacity: 0,
+                                    }),
+                                  ],
+                                }),
+                              ],
+                            }),
+                            i.jsx(ja, {
+                              strokeDasharray: "3 3",
+                              stroke: "oklch(0.28 0.025 252 / 30%)",
+                            }),
+                            i.jsx(Aa, {
+                              dataKey: "date",
+                              stroke: "oklch(0.66 0.025 248)",
+                              fontSize: 11,
+                              tickLine: !1,
+                              axisLine: !1,
+                            }),
+                            i.jsx(Na, {
+                              stroke: "oklch(0.66 0.025 248)",
+                              fontSize: 11,
+                              tickLine: !1,
+                              axisLine: !1,
+                            }),
+                            i.jsx(Pa, {
+                              contentStyle: {
+                                background: "oklch(0.21 0.022 252)",
+                                border: "1px solid oklch(0.28 0.025 252)",
+                                borderRadius: 8,
+                                fontSize: 12,
+                              },
+                            }),
+                            i.jsx(U, {
+                              type: "monotone",
+                              dataKey: "exibicoes",
+                              stroke: "oklch(0.68 0.19 252)",
+                              strokeWidth: 2,
+                              fill: "url(#exibG)",
+                              name: "Exibições",
+                            }),
+                            i.jsx(U, {
+                              type: "monotone",
+                              dataKey: "falhas",
+                              stroke: "oklch(0.62 0.22 22)",
+                              strokeWidth: 2,
+                              fill: "url(#falG)",
+                              name: "Falhas",
+                            }),
+                          ],
+                        }),
+                      }),
+                    }),
+                  }),
+                  i.jsx(O, {
+                    title: "Status dos dispositivos",
+                    description: "Distribuição por status atual.",
+                    children: i.jsxs("div", {
+                      className: "space-y-3 text-sm",
+                      children: [
+                        i.jsx(B, { label: "Online", value: y, total: m, color: "bg-success" }),
+                        i.jsx(B, { label: "Offline", value: N, total: m, color: "bg-destructive" }),
+                        i.jsx(B, { label: "Atenção", value: A, total: m, color: "bg-warning" }),
+                        i.jsx(B, {
+                          label: "Sincronizando",
+                          value: p.filter((o) => o.device_status === "syncing").length,
+                          total: m,
+                          color: "bg-info",
+                        }),
+                      ],
+                    }),
+                  }),
+                ],
+              }),
+              i.jsxs("div", {
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
+                children: [
+                  i.jsx(O, {
+                    title: "Campanhas em execução",
+                    description: "Veiculações ativas no momento.",
+                    actions: i.jsxs(Q, {
+                      to: "/app/campanhas",
+                      className:
+                        "text-[11px] text-primary hover:underline inline-flex items-center gap-1",
+                      children: ["Ver todas ", i.jsx(Z, { className: "h-3 w-3" })],
+                    }),
+                    children:
+                      P.length === 0
+                        ? i.jsx(K, {
+                            title: "Nenhuma campanha ativa",
+                            description: "Crie ou ative uma campanha para começar a exibir.",
+                            icon: H,
+                          })
+                        : i.jsx("ul", {
+                            className: "divide-y divide-border -my-3",
+                            children: P.slice(0, 5).map((o) =>
+                              i.jsxs(
+                                "li",
+                                {
+                                  className: "flex items-center gap-3 py-3",
+                                  children: [
+                                    i.jsx("div", {
+                                      className:
+                                        "h-9 w-9 rounded-lg bg-primary/10 grid place-items-center text-primary",
+                                      children: i.jsx(H, { className: "h-4 w-4" }),
+                                    }),
+                                    i.jsxs("div", {
+                                      className: "flex-1 min-w-0",
+                                      children: [
+                                        i.jsx("p", {
+                                          className: "text-sm font-medium truncate",
+                                          children: o.name,
+                                        }),
+                                        i.jsxs("p", {
+                                          className: "text-[11px] text-muted-foreground",
+                                          children: ["Prioridade ", o.priority],
+                                        }),
+                                      ],
+                                    }),
+                                    i.jsx(X, { tone: "success", label: "Ativa" }),
+                                  ],
+                                },
+                                o.id,
+                              ),
+                            ),
+                          }),
+                  }),
+                  i.jsx(O, {
+                    title: "Dispositivos com problema",
+                    description: "Telas offline ou em atenção.",
+                    actions: i.jsxs(Q, {
+                      to: "/app/monitoramento",
+                      className:
+                        "text-[11px] text-primary hover:underline inline-flex items-center gap-1",
+                      children: ["Monitorar ", i.jsx(Z, { className: "h-3 w-3" })],
+                    }),
+                    children:
+                      h.length === 0
+                        ? i.jsx(K, {
+                            title: "Tudo normal",
+                            description: "Nenhum dispositivo offline ou em atenção.",
+                            icon: de,
+                          })
+                        : i.jsx("ul", {
+                            className: "divide-y divide-border -my-3",
+                            children: h.map((o) =>
+                              i.jsxs(
+                                "li",
+                                {
+                                  className: "flex items-center gap-3 py-3",
+                                  children: [
+                                    i.jsx("div", {
+                                      className:
+                                        "h-9 w-9 rounded-lg bg-destructive/10 grid place-items-center text-destructive",
+                                      children: i.jsx(ce, { className: "h-4 w-4" }),
+                                    }),
+                                    i.jsxs("div", {
+                                      className: "flex-1 min-w-0",
+                                      children: [
+                                        i.jsx("p", {
+                                          className: "text-sm font-medium truncate",
+                                          children: o.name,
+                                        }),
+                                        i.jsx("p", {
+                                          className: "text-[11px] text-muted-foreground",
+                                          children: o.last_seen_at
+                                            ? `visto ${ue(new Date(o.last_seen_at), { locale: pe, addSuffix: !0 })}`
+                                            : "nunca conectou",
+                                        }),
+                                      ],
+                                    }),
+                                    i.jsx(X, {
+                                      tone:
+                                        o.device_status === "offline" ? "destructive" : "warning",
+                                      label: o.device_status,
+                                    }),
+                                  ],
+                                },
+                                o.id,
+                              ),
+                            ),
+                          }),
+                  }),
+                ],
+              }),
+              i.jsxs("div", {
+                className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
+                children: [
+                  i.jsx(O, {
+                    title: "Alertas recentes",
+                    description: "Últimos eventos detectados.",
+                    actions: i.jsxs(Q, {
+                      to: "/app/alertas",
+                      className:
+                        "text-[11px] text-primary hover:underline inline-flex items-center gap-1",
+                      children: ["Ver todos ", i.jsx(Z, { className: "h-3 w-3" })],
+                    }),
+                    children:
+                      w.length === 0
+                        ? i.jsx(K, {
+                            title: "Nenhum alerta",
+                            description: "Tudo em ordem por aqui.",
+                          })
+                        : i.jsx("ul", {
+                            className: "space-y-3",
+                            children: w.map((o) =>
+                              i.jsxs(
+                                "li",
+                                {
+                                  className: "flex items-start gap-3",
+                                  children: [
+                                    i.jsx("div", {
+                                      className: `mt-0.5 h-2 w-2 rounded-full ${o.severity === "critical" ? "bg-destructive" : o.severity === "high" ? "bg-warning" : "bg-info"} pulse-dot`,
+                                    }),
+                                    i.jsxs("div", {
+                                      className: "flex-1 min-w-0",
+                                      children: [
+                                        i.jsx("p", {
+                                          className: "text-sm font-medium",
+                                          children: o.alert_type,
+                                        }),
+                                        i.jsx("p", {
+                                          className: "text-[11px] text-muted-foreground",
+                                          children: ue(new Date(o.created_at), {
+                                            locale: pe,
+                                            addSuffix: !0,
+                                          }),
+                                        }),
+                                      ],
+                                    }),
+                                    i.jsx(X, {
+                                      tone: o.resolved_at ? "success" : "warning",
+                                      label: o.resolved_at ? "Resolvido" : "Pendente",
+                                      withDot: !1,
+                                    }),
+                                  ],
+                                },
+                                o.id,
+                              ),
+                            ),
+                          }),
+                  }),
+                  i.jsx(O, {
+                    title: "Últimas sincronizações",
+                    description: "Telas que sincronizaram conteúdo recentemente.",
+                    children:
+                      g.length === 0
+                        ? i.jsx(K, { title: "Nenhuma sincronização registrada" })
+                        : i.jsx("ul", {
+                            className: "space-y-3",
+                            children: g.map((o) =>
+                              i.jsxs(
+                                "li",
+                                {
+                                  className: "flex items-center gap-3",
+                                  children: [
+                                    i.jsx(Sa, { className: "h-4 w-4 text-success" }),
+                                    i.jsx("div", {
+                                      className: "flex-1 min-w-0",
+                                      children: i.jsx("p", {
+                                        className: "text-sm font-medium truncate",
+                                        children: o.name,
+                                      }),
+                                    }),
+                                    i.jsxs("span", {
+                                      className:
+                                        "inline-flex items-center gap-1 text-[11px] text-muted-foreground font-mono",
+                                      children: [
+                                        i.jsx(La, { className: "h-3 w-3" }),
+                                        " ",
+                                        oe(new Date(o.last_sync_at), "HH:mm"),
+                                      ],
+                                    }),
+                                  ],
+                                },
+                                o.id,
+                              ),
+                            ),
+                          }),
+                  }),
+                ],
+              }),
+            ],
+          }),
+    ],
+  });
+}
+function B({ label: a, value: e, total: t, color: s }) {
+  const n = t ? (e / t) * 100 : 0;
+  return i.jsxs("div", {
+    children: [
+      i.jsxs("div", {
+        className: "flex items-center justify-between text-xs mb-1",
+        children: [
+          i.jsx("span", { children: a }),
+          i.jsxs("span", { className: "text-muted-foreground font-mono", children: [e, " / ", t] }),
+        ],
+      }),
+      i.jsx("div", {
+        className: "h-2 rounded-full bg-muted overflow-hidden",
+        children: i.jsx("div", { className: `h-full ${s}`, style: { width: `${n}%` } }),
+      }),
+    ],
+  });
+}
+export { Wt as component };

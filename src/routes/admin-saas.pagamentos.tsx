@@ -37,9 +37,14 @@ function PagamentosPage() {
   if (isError) {
     return (
       <div className="space-y-4">
-        <PageHeader title="Pagamentos e faturas" subtitle="Movimentação financeira da plataforma." />
+        <PageHeader
+          title="Pagamentos e faturas"
+          subtitle="Movimentação financeira da plataforma."
+        />
         <Panel>
-          <p className="text-sm text-destructive">{error instanceof Error ? error.message : "Erro ao carregar pagamentos."}</p>
+          <p className="text-sm text-destructive">
+            {error instanceof Error ? error.message : "Erro ao carregar pagamentos."}
+          </p>
         </Panel>
       </div>
     );
@@ -48,9 +53,14 @@ function PagamentosPage() {
   if (errMetrics) {
     return (
       <div className="space-y-4">
-        <PageHeader title="Pagamentos e faturas" subtitle="Movimentação financeira da plataforma." />
+        <PageHeader
+          title="Pagamentos e faturas"
+          subtitle="Movimentação financeira da plataforma."
+        />
         <Panel>
-          <p className="text-sm text-destructive">{errM instanceof Error ? errM.message : "Erro ao carregar métricas."}</p>
+          <p className="text-sm text-destructive">
+            {errM instanceof Error ? errM.message : "Erro ao carregar métricas."}
+          </p>
         </Panel>
       </div>
     );
@@ -59,7 +69,10 @@ function PagamentosPage() {
   if ((loadingM && !metrics) || loadingP) {
     return (
       <div className="space-y-6">
-        <PageHeader title="Pagamentos e faturas" subtitle="Movimentação financeira da plataforma." />
+        <PageHeader
+          title="Pagamentos e faturas"
+          subtitle="Movimentação financeira da plataforma."
+        />
         <div className="flex justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
@@ -74,9 +87,19 @@ function PagamentosPage() {
       <PageHeader title="Pagamentos e faturas" subtitle="Movimentação financeira da plataforma." />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="Recebido (30d)" value={formatPrice(received30dCents)} icon={CheckCircle2} tone="success" />
+        <KpiCard
+          label="Recebido (30d)"
+          value={formatPrice(received30dCents)}
+          icon={CheckCircle2}
+          tone="success"
+        />
         <KpiCard label="Pendentes (amostra)" value={pendingCount} icon={Clock} tone="warning" />
-        <KpiCard label="Faturas vencidas" value={m.overdue_invoices_count} icon={AlertTriangle} tone="destructive" />
+        <KpiCard
+          label="Faturas vencidas"
+          value={m.overdue_invoices_count}
+          icon={AlertTriangle}
+          tone="destructive"
+        />
         <KpiCard label="MRR" value={formatPrice(m.mrr_cents)} icon={Receipt} tone="info" />
       </div>
 

@@ -200,7 +200,9 @@ function ScreensPage() {
           <div className="flex flex-wrap items-center gap-2">
             <select
               value={platformFilter}
-              onChange={(e) => setPlatformFilter(e.target.value as "all" | "android" | "tizen" | "web")}
+              onChange={(e) =>
+                setPlatformFilter(e.target.value as "all" | "android" | "tizen" | "web")
+              }
               className="rounded-md border border-input bg-surface px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-ring"
               aria-label="Filtrar por plataforma"
             >
@@ -470,7 +472,8 @@ function PairScreenModal({
             <div>
               <h2 className="font-display text-base font-bold">Novo dispositivo</h2>
               <p className="text-[11px] text-muted-foreground">
-                Use o código exibido no player da tela (Android, Tizen ou Web em <code>/pair</code>).
+                Use o código exibido no player da tela (Android, Tizen ou Web em <code>/pair</code>
+                ).
               </p>
             </div>
           </div>
@@ -482,7 +485,10 @@ function PairScreenModal({
           </button>
         </div>
 
-        <form onSubmit={onSubmit} className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5">
+        <form
+          onSubmit={onSubmit}
+          className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5"
+        >
           <div>
             <label className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
               Código exibido na TV <span className="text-destructive">*</span>
@@ -496,8 +502,9 @@ function PairScreenModal({
               className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2.5 font-mono text-lg tracking-widest text-center uppercase focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <p className="mt-1 text-[11px] text-muted-foreground">
-              O código é gerado no dispositivo do player (app ou navegador em <code className="text-foreground">/pair</code>).
-              A plataforma em baixo deve coincidir com a tela.
+              O código é gerado no dispositivo do player (app ou navegador em{" "}
+              <code className="text-foreground">/pair</code>). A plataforma em baixo deve coincidir
+              com a tela.
             </p>
           </div>
 
@@ -519,16 +526,22 @@ function PairScreenModal({
             <legend className="text-[11px] uppercase tracking-wider text-muted-foreground font-semibold">
               Plataforma do dispositivo <span className="text-destructive">*</span>
             </legend>
-            <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2" role="radiogroup" aria-label="Plataforma do dispositivo">
-              {([
-                { value: "android", label: "Android TV" },
-                { value: "tizen", label: "Samsung Tizen TV" },
-                { value: "web", label: "Web Player" },
-                { value: "web", label: "Navegador / Kiosk" },
-                { value: "web", label: "TV Box (browser)" },
-                { value: "web", label: "Mini PC / Notebook" },
-                { value: "web", label: "Outro (Web)" },
-              ] as const).map((entry) => (
+            <div
+              className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2"
+              role="radiogroup"
+              aria-label="Plataforma do dispositivo"
+            >
+              {(
+                [
+                  { value: "android", label: "Android TV" },
+                  { value: "tizen", label: "Samsung Tizen TV" },
+                  { value: "web", label: "Web Player" },
+                  { value: "web", label: "Navegador / Kiosk" },
+                  { value: "web", label: "TV Box (browser)" },
+                  { value: "web", label: "Mini PC / Notebook" },
+                  { value: "web", label: "Outro (Web)" },
+                ] as const
+              ).map((entry) => (
                 <label
                   key={`${entry.label}-${entry.value}`}
                   className={`flex cursor-pointer items-center gap-3 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
@@ -545,9 +558,7 @@ function PairScreenModal({
                     onChange={() => setPlatform(entry.value)}
                     className="h-4 w-4 shrink-0 border-input text-primary focus:ring-ring"
                   />
-                  <span className="font-medium leading-tight">
-                    {entry.label}
-                  </span>
+                  <span className="font-medium leading-tight">{entry.label}</span>
                 </label>
               ))}
             </div>
@@ -557,8 +568,9 @@ function PairScreenModal({
           </fieldset>
 
           <p className="text-[11px] text-muted-foreground rounded-md border border-border/60 bg-muted/25 p-2.5 leading-relaxed">
-            Depois do pareamento pode definir uma <strong>playlist directa</strong> em <strong>Dispositivos → Editar</strong>{" "}
-            (prioridade sobre campanha) ou usar só <strong>Campanhas</strong> com alvo nesta tela ou unidade.
+            Depois do pareamento pode definir uma <strong>playlist directa</strong> em{" "}
+            <strong>Dispositivos → Editar</strong> (prioridade sobre campanha) ou usar só{" "}
+            <strong>Campanhas</strong> com alvo nesta tela ou unidade.
           </p>
 
           <div className="grid grid-cols-2 gap-3">
@@ -704,7 +716,10 @@ function ScreenDetailModal({
               <span className="text-muted-foreground">Último ping</span>
               <span className="text-right text-[11px]">
                 {screen.last_seen_at
-                  ? formatDistanceToNow(new Date(screen.last_seen_at), { locale: ptBR, addSuffix: true })
+                  ? formatDistanceToNow(new Date(screen.last_seen_at), {
+                      locale: ptBR,
+                      addSuffix: true,
+                    })
                   : "nunca"}
               </span>
             </div>
@@ -716,14 +731,22 @@ function ScreenDetailModal({
                 <button
                   type="button"
                   className="rounded border border-border px-2 py-1 hover:bg-accent"
-                  onClick={() => void navigator.clipboard.writeText(playerUrl).then(() => toast.success("Link do player copiado."))}
+                  onClick={() =>
+                    void navigator.clipboard
+                      .writeText(playerUrl)
+                      .then(() => toast.success("Link do player copiado."))
+                  }
                 >
                   Copiar link player
                 </button>
                 <button
                   type="button"
                   className="rounded border border-border px-2 py-1 hover:bg-accent"
-                  onClick={() => void navigator.clipboard.writeText(pairUrl).then(() => toast.success("Link de pareamento copiado."))}
+                  onClick={() =>
+                    void navigator.clipboard
+                      .writeText(pairUrl)
+                      .then(() => toast.success("Link de pareamento copiado."))
+                  }
                 >
                   Copiar link pareamento
                 </button>
@@ -736,9 +759,7 @@ function ScreenDetailModal({
                   Gerar QR Code
                 </a>
               </div>
-              <p className="text-[10px] text-muted-foreground break-all">
-                URL player: {playerUrl}
-              </p>
+              <p className="text-[10px] text-muted-foreground break-all">URL player: {playerUrl}</p>
             </div>
           ) : null}
         </div>
@@ -777,10 +798,16 @@ function EditScreenModal({
   const setPrimaryPlaylist = useSetScreenPrimaryPlaylist();
   const [name, setName] = useState(screen.name);
   const [unitId, setUnitId] = useState<string>(screen.unit_id ?? "");
-  const [orientation, setOrientation] = useState<"landscape" | "portrait">(dbToUiOrientation(screen.orientation));
+  const [orientation, setOrientation] = useState<"landscape" | "portrait">(
+    dbToUiOrientation(screen.orientation),
+  );
   const [resolution, setResolution] = useState(screen.resolution ?? "1920x1080");
-  const [screenWidth, setScreenWidth] = useState(screen.screen_width != null ? String(screen.screen_width) : "");
-  const [screenHeight, setScreenHeight] = useState(screen.screen_height != null ? String(screen.screen_height) : "");
+  const [screenWidth, setScreenWidth] = useState(
+    screen.screen_width != null ? String(screen.screen_width) : "",
+  );
+  const [screenHeight, setScreenHeight] = useState(
+    screen.screen_height != null ? String(screen.screen_height) : "",
+  );
   const [aspectRatio, setAspectRatio] = useState(screen.aspect_ratio ?? "");
   const [defaultFit, setDefaultFit] = useState(screen.default_fit_mode ?? "cover");
   const [autoScaleVideo, setAutoScaleVideo] = useState(screen.auto_scale_video !== false);
@@ -869,7 +896,9 @@ function EditScreenModal({
         sameNullableText(persistedBase.orientation, basePatch.orientation) &&
         sameNullableText(persistedBase.resolution, basePatch.resolution);
       if (!baseSaved) {
-        throw new Error("As alterações básicas não foram persistidas. Verifique permissões e tente novamente.");
+        throw new Error(
+          "As alterações básicas não foram persistidas. Verifique permissões e tente novamente.",
+        );
       }
 
       try {
@@ -929,14 +958,20 @@ function EditScreenModal({
             <X className="h-4 w-4" />
           </button>
         </div>
-        <form onSubmit={onSubmit} className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5">
+        <form
+          onSubmit={onSubmit}
+          className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-5"
+        >
           <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-[11px] text-muted-foreground">
             <strong className="text-foreground">Plataforma:</strong>{" "}
-            <span className={`inline-flex items-center rounded px-1.5 py-0.5 font-medium ${platformBadgeClass(screen.platform)}`}>
+            <span
+              className={`inline-flex items-center rounded px-1.5 py-0.5 font-medium ${platformBadgeClass(screen.platform)}`}
+            >
               {platformDisplayLabel(screen.platform)}
             </span>
-            . Não pode ser alterada após o cadastro (o player já está vinculado a Android ou Tizen). Para trocar de
-            plataforma, exclua o dispositivo e cadastre novamente com o código gerado no player correcto.
+            . Não pode ser alterada após o cadastro (o player já está vinculado a Android ou Tizen).
+            Para trocar de plataforma, exclua o dispositivo e cadastre novamente com o código gerado
+            no player correcto.
           </div>
 
           <div>
@@ -1041,19 +1076,35 @@ function EditScreenModal({
             </div>
             <div className="flex flex-wrap gap-3 text-[10px] text-muted-foreground">
               <label className="flex items-center gap-1">
-                <input type="checkbox" checked={autoScaleVideo} onChange={(e) => setAutoScaleVideo(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={autoScaleVideo}
+                  onChange={(e) => setAutoScaleVideo(e.target.checked)}
+                />
                 Auto escala vídeo
               </label>
               <label className="flex items-center gap-1">
-                <input type="checkbox" checked={autoScaleImage} onChange={(e) => setAutoScaleImage(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={autoScaleImage}
+                  onChange={(e) => setAutoScaleImage(e.target.checked)}
+                />
                 Auto escala imagem
               </label>
               <label className="flex items-center gap-1">
-                <input type="checkbox" checked={hideOverlay} onChange={(e) => setHideOverlay(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={hideOverlay}
+                  onChange={(e) => setHideOverlay(e.target.checked)}
+                />
                 Esconder overlay
               </label>
               <label className="flex items-center gap-1">
-                <input type="checkbox" checked={hideControls} onChange={(e) => setHideControls(e.target.checked)} />
+                <input
+                  type="checkbox"
+                  checked={hideControls}
+                  onChange={(e) => setHideControls(e.target.checked)}
+                />
                 Esconder barra / info
               </label>
             </div>
@@ -1064,8 +1115,8 @@ function EditScreenModal({
               Playlist directa (opcional)
             </label>
             <p className="text-[10px] text-muted-foreground mt-0.5 mb-1">
-              Se escolher uma playlist, ela tem prioridade sobre a campanha nesta TV. Deixe vazio para usar só
-              campanhas.
+              Se escolher uma playlist, ela tem prioridade sobre a campanha nesta TV. Deixe vazio
+              para usar só campanhas.
             </p>
             <select
               value={primaryPlaylistId}

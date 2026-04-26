@@ -34,7 +34,11 @@ function normalizeCode(raw: string | null | undefined): string {
 
 async function resolveLegacyScreenIdByPairingCode(code: string): Promise<string> {
   if (!code) return "";
-  const { data: screen, error } = await adminClient.from("screens").select("id").eq("pairing_code", code).maybeSingle();
+  const { data: screen, error } = await adminClient
+    .from("screens")
+    .select("id")
+    .eq("pairing_code", code)
+    .maybeSingle();
   if (error) throw new Error(error.message);
   return screen?.id ? String(screen.id) : "";
 }
@@ -86,7 +90,7 @@ serve(async (req) => {
   if (req.method !== "POST") return jsonResponse({ error: "Method not allowed" }, 405);
 
   try {
-    const body = await readJson<ResolvePayload>(req).catch(() => ({} as ResolvePayload));
+    const body = await readJson<ResolvePayload>(req).catch(() => ({}) as ResolvePayload);
     const screenId = await resolveScreenIdFromInput(body);
     const result = await resolvePlaylistByScreenId(adminClient, screenId);
     return jsonResponse(result);

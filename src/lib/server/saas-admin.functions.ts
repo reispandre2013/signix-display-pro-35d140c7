@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
 
@@ -14,12 +15,13 @@ const ANON =
   process.env.SUPABASE_ANON_KEY ??
   process.env.VITE_SUPABASE_ANON_KEY ??
   process.env.VITE_SUPABASE_PUBLISHABLE_KEY ??
-  (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SUPABASE_ANON_KEY ??
-  (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SUPABASE_PUBLISHABLE_KEY ??
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env
+    ?.VITE_SUPABASE_ANON_KEY ??
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env
+    ?.VITE_SUPABASE_PUBLISHABLE_KEY ??
   "";
 
-const SERVICE_ROLE =
-  process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
+const SERVICE_ROLE = process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
 function mustEnv() {
   if (!SUPABASE_URL) throw new Error("Configuração Supabase incompleta no servidor (URL ausente).");
@@ -40,10 +42,7 @@ async function getAuthedUser() {
   return data.user;
 }
 
-type JsonSafe =
-  | string | number | boolean | null
-  | JsonSafe[]
-  | { [k: string]: JsonSafe };
+type JsonSafe = string | number | boolean | null | JsonSafe[] | { [k: string]: JsonSafe };
 
 export type SaasDiagnosticsResult = {
   user: { id: string; email: string | null };
@@ -85,23 +84,17 @@ export const getSaasDiagnostics = createServerFn({ method: "POST" }).handler(
       .eq("auth_user_id", user.id)
       .maybeSingle();
 
-    const { data: roles } = await admin
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user.id);
+    const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", user.id);
 
     const isSuperAdmin =
-      (profile?.role === "super_admin") ||
-      (roles ?? []).some((r) => r.role === "super_admin");
+      profile?.role === "super_admin" || (roles ?? []).some((r) => r.role === "super_admin");
 
     const counts: SaasDiagnosticsResult["counts"] = {};
     const samples: SaasDiagnosticsResult["samples"] = {};
 
     await Promise.all(
       COUNT_TABLES.map(async (t) => {
-        const { count, error } = await admin
-          .from(t)
-          .select("*", { count: "exact", head: true });
+        const { count, error } = await admin.from(t).select("*", { count: "exact", head: true });
         if (error) {
           counts[t] = { error: error.message };
         } else {
@@ -201,16 +194,13 @@ export type PlanUpsertInput = {
   sort_order: number;
 };
 
-async function assertSuperAdmin(admin: ReturnType<typeof createClient<any, "public", any>>, userId: string) {
+async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
   const { data: profile } = await admin
     .from("profiles")
     .select("role")
     .eq("auth_user_id", userId)
     .maybeSingle();
-  const { data: roles } = await admin
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", userId);
+  const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
   const ok =
     (profile as { role?: string } | null)?.role === "super_admin" ||
     (roles ?? []).some((r) => (r as { role?: string }).role === "super_admin");
@@ -263,11 +253,7 @@ export const upsertPlan = createServerFn({ method: "POST" })
       return { ok: true, id: (row as { id: string }).id };
     }
 
-    const { data: row, error } = await admin
-      .from("plans")
-      .insert(payload)
-      .select("id")
-      .single();
+    const { data: row, error } = await admin.from("plans").insert(payload).select("id").single();
     if (error) throw new Error(`plans.insert: ${error.message}`);
     return { ok: true, id: (row as { id: string }).id };
   });
@@ -324,19 +310,22 @@ export type CreateAdminMasterInput = {
 /** Cria um usuário admin_master vinculado a uma organização existente. */
 export const createAdminMaster = createServerFn({ method: "POST" })
   .inputValidator((input: CreateAdminMasterInput) => {
-    if (!input?.email || !/^\S+@\S+\.\S+$/.test(input.email))
-      throw new Error("Email inválido.");
+    if (!input?.email || !/^\S+@\S+\.\S+$/.test(input.email)) throw new Error("Email inválido.");
     if (!input?.password || input.password.length < 8)
       throw new Error("Senha precisa ter ao menos 8 caracteres.");
-    if (!input?.name || input.name.trim().length < 2)
-      throw new Error("Nome obrigatório.");
+    if (!input?.name || input.name.trim().length < 2) throw new Error("Nome obrigatório.");
     if (!input?.organization_id) throw new Error("Organização obrigatória.");
     return input;
   })
   .handler(
     async ({
       data,
-    }): Promise<{ ok: true; user_id: string; profile_id: string | null; organization_id: string }> => {
+    }): Promise<{
+      ok: true;
+      user_id: string;
+      profile_id: string | null;
+      organization_id: string;
+    }> => {
       mustEnv();
       const caller = await getAuthedUser();
       const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
@@ -427,16 +416,14 @@ export const createAdminMaster = createServerFn({ method: "POST" })
       }
 
       // 3) user_roles (com organization_id NOT NULL)
-      const { error: roleErr } = await admin
-        .from("user_roles")
-        .upsert(
-          {
-            user_id: userId,
-            organization_id: data.organization_id,
-            role: "admin_master",
-          },
-          { onConflict: "user_id,role,organization_id" },
-        );
+      const { error: roleErr } = await admin.from("user_roles").upsert(
+        {
+          user_id: userId,
+          organization_id: data.organization_id,
+          role: "admin_master",
+        },
+        { onConflict: "user_id,role,organization_id" },
+      );
       if (roleErr && !/duplicate|unique/i.test(roleErr.message)) {
         throw new Error(`user_roles: ${roleErr.message}`);
       }

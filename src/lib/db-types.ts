@@ -68,7 +68,13 @@ export interface Unit {
   updated_at: string;
 }
 
-export type PlaylistFitMode = "contain" | "cover" | "stretch" | "center" | "fit-width" | "fit-height";
+export type PlaylistFitMode =
+  | "contain"
+  | "cover"
+  | "stretch"
+  | "center"
+  | "fit-width"
+  | "fit-height";
 
 /** Registo 1:1 com `screens` para credenciais do player (device_id + token). */
 export interface PlayerDevice {

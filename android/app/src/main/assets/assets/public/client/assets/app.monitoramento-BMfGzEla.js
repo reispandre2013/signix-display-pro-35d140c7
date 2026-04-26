@@ -1,1 +1,304 @@
-import{r as k,e as S,a as M,j as e,t as h}from"./index-DUcMANMA.js";import{P as C}from"./PageHeader-C0iFmY02.js";import{P as u}from"./Panel-0HKdxBPL.js";import{S as f}from"./StatusBadge-Deydaofp.js";import{L as E,a as L,E as z}from"./States-snX8_8k6.js";import{b as D,g as P,a as q}from"./use-supabase-data-neXhdC03.js";import{c as b}from"./createLucideIcon-BDYLgomD.js";import{L as T}from"./loader-circle-BffduC8P.js";import{R as Q}from"./refresh-cw-BxkW6C-k.js";import{T as g}from"./tv-qkDTjJdC.js";import{W as R}from"./wifi-off-DkH--R7b.js";import{f as n}from"./formatDistanceToNow-DlSrCos3.js";import{E as F}from"./eye-Cgf46zt5.js";import{M as K}from"./monitor-smartphone-Bgji6m1T.js";import{p as o}from"./pt-BR-B79SV-js.js";import"./utils-BQHNewu7.js";import"./en-US-DfnapdEA.js";const $=[["rect",{width:"7",height:"7",x:"3",y:"3",rx:"1",key:"1g98yp"}],["rect",{width:"7",height:"7",x:"14",y:"3",rx:"1",key:"6d4xhi"}],["rect",{width:"7",height:"7",x:"14",y:"14",rx:"1",key:"nxv5o0"}],["rect",{width:"7",height:"7",x:"3",y:"14",rx:"1",key:"1bb6yr"}]],A=b("layout-grid",$);const B=[["path",{d:"M3 5h.01",key:"18ugdj"}],["path",{d:"M3 12h.01",key:"nlz23k"}],["path",{d:"M3 19h.01",key:"noohij"}],["path",{d:"M8 5h13",key:"1pao27"}],["path",{d:"M8 12h13",key:"1za7za"}],["path",{d:"M8 19h13",key:"m83p4d"}]],I=b("list",B);function ne(){const{data:t=[],isLoading:j,error:c,refetch:y,isFetching:l}=D(),{data:N=[]}=P(),{data:w=[]}=q(),[r,m]=k.useState("grid"),i=S(),{profile:v}=M(),d=v?.organization_id??null,_=async()=>{try{await Promise.all([i.invalidateQueries({queryKey:["screens",d]}),i.invalidateQueries({queryKey:["units",d]}),i.invalidateQueries({queryKey:["campaigns",d]})]),await y(),h.success("Dados sincronizados.")}catch(s){h.error(s instanceof Error?s.message:"Falha ao sincronizar.")}},x=s=>N.find(a=>a.id===s)?.name??"Sem unidade",p=s=>w.find(a=>a.id===s)?.name??null;return e.jsxs("div",{className:"space-y-6",children:[e.jsx(C,{title:"Monitoramento em tempo real",subtitle:"Saúde, status e atividade de cada player.",actions:e.jsxs(e.Fragment,{children:[e.jsxs("span",{className:"inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1.5 text-[11px] text-muted-foreground",children:[e.jsx("span",{className:"h-1.5 w-1.5 rounded-full bg-success pulse-dot"})," Live"]}),e.jsxs("div",{className:"inline-flex rounded-md border border-border bg-surface p-0.5",children:[e.jsx("button",{onClick:()=>m("grid"),className:`p-1.5 rounded ${r==="grid"?"bg-accent":""}`,children:e.jsx(A,{className:"h-3.5 w-3.5"})}),e.jsx("button",{onClick:()=>m("table"),className:`p-1.5 rounded ${r==="table"?"bg-accent":""}`,children:e.jsx(I,{className:"h-3.5 w-3.5"})})]}),e.jsxs("button",{onClick:_,disabled:l,className:"inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60",children:[l?e.jsx(T,{className:"h-3.5 w-3.5 animate-spin"}):e.jsx(Q,{className:"h-3.5 w-3.5"}),"Sincronizar"]})]})}),j?e.jsx(E,{}):c?e.jsx(L,{error:c}):t.length===0?e.jsx(u,{children:e.jsx(z,{icon:g,title:"Nenhuma tela cadastrada",description:"Adicione players na seção Telas para monitorá-los aqui."})}):r==="grid"?e.jsx("div",{className:"grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4",children:t.map(s=>{const a=s.device_status==="offline"||!s.is_online;return e.jsxs("div",{className:"group rounded-xl border border-border bg-card overflow-hidden shadow-card hover:border-primary/40 hover:shadow-glow transition-smooth",children:[e.jsxs("div",{className:"relative aspect-video bg-gradient-surface overflow-hidden",children:[e.jsx("div",{className:"w-full h-full grid place-items-center",children:a?e.jsx(R,{className:"h-10 w-10 text-muted-foreground/40"}):e.jsx(g,{className:"h-10 w-10 text-primary/40"})}),e.jsx("div",{className:"absolute top-2 left-2",children:e.jsx(f,{status:s.device_status})}),s.resolution&&e.jsx("div",{className:"absolute top-2 right-2 inline-flex items-center gap-1 rounded-md bg-black/50 backdrop-blur-md px-2 py-0.5 text-[10px] text-white font-mono",children:s.resolution}),e.jsxs("div",{className:"absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] text-white",children:[e.jsx("span",{className:"rounded bg-black/50 backdrop-blur-md px-1.5 py-0.5",children:s.platform??"—"}),e.jsx("span",{className:"rounded bg-black/50 backdrop-blur-md px-1.5 py-0.5 font-mono",children:s.player_version??"—"})]})]}),e.jsxs("div",{className:"p-3.5 space-y-2",children:[e.jsx("div",{className:"flex items-start justify-between gap-2",children:e.jsxs("div",{className:"min-w-0",children:[e.jsx("p",{className:"text-sm font-medium truncate",children:s.name}),e.jsx("p",{className:"text-[11px] text-muted-foreground truncate",children:x(s.unit_id)})]})}),e.jsxs("div",{className:"text-[11px] text-muted-foreground",children:[e.jsxs("p",{className:"truncate",children:[e.jsx("span",{className:"text-foreground/80",children:"Em exibição:"})," ",p(s.current_campaign_id)??"—"]}),e.jsxs("p",{className:"mt-0.5",children:["Último ping"," ",s.last_seen_at?n(new Date(s.last_seen_at),{locale:o,addSuffix:!0}):"—"]})]}),e.jsx("div",{className:"flex items-center gap-1.5 pt-2 border-t border-border",children:e.jsxs("button",{className:"flex-1 inline-flex items-center justify-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:bg-accent transition-smooth",children:[e.jsx(F,{className:"h-3 w-3"})," Detalhes"]})})]})]},s.id)})}):e.jsx(u,{bodyClassName:"p-0",children:e.jsx("div",{className:"overflow-x-auto",children:e.jsxs("table",{className:"w-full text-sm",children:[e.jsx("thead",{children:e.jsxs("tr",{className:"border-b border-border bg-surface/50 text-[11px] uppercase tracking-wider text-muted-foreground",children:[e.jsx("th",{className:"px-4 py-2.5 text-left",children:"Tela"}),e.jsx("th",{className:"px-4 py-2.5 text-left",children:"Unidade"}),e.jsx("th",{className:"px-4 py-2.5 text-left",children:"Status"}),e.jsx("th",{className:"px-4 py-2.5 text-left",children:"Último ping"}),e.jsx("th",{className:"px-4 py-2.5 text-left",children:"Sync"}),e.jsx("th",{className:"px-4 py-2.5 text-left",children:"Campanha"})]})}),e.jsx("tbody",{children:t.map(s=>e.jsxs("tr",{className:"border-b border-border/50 hover:bg-surface/40",children:[e.jsxs("td",{className:"px-4 py-3 flex items-center gap-2",children:[e.jsx(K,{className:"h-4 w-4 text-muted-foreground"}),s.name]}),e.jsx("td",{className:"px-4 py-3",children:x(s.unit_id)}),e.jsx("td",{className:"px-4 py-3",children:e.jsx(f,{status:s.device_status})}),e.jsx("td",{className:"px-4 py-3 text-muted-foreground",children:s.last_seen_at?n(new Date(s.last_seen_at),{locale:o,addSuffix:!0}):"—"}),e.jsx("td",{className:"px-4 py-3 text-muted-foreground",children:s.last_sync_at?n(new Date(s.last_sync_at),{locale:o,addSuffix:!0}):"—"}),e.jsx("td",{className:"px-4 py-3 truncate max-w-xs",children:p(s.current_campaign_id)??"—"})]},s.id))})]})})})]})}export{ne as component};
+import { r as k, e as S, a as M, j as e, t as h } from "./index-DUcMANMA.js";
+import { P as C } from "./PageHeader-C0iFmY02.js";
+import { P as u } from "./Panel-0HKdxBPL.js";
+import { S as f } from "./StatusBadge-Deydaofp.js";
+import { L as E, a as L, E as z } from "./States-snX8_8k6.js";
+import { b as D, g as P, a as q } from "./use-supabase-data-neXhdC03.js";
+import { c as b } from "./createLucideIcon-BDYLgomD.js";
+import { L as T } from "./loader-circle-BffduC8P.js";
+import { R as Q } from "./refresh-cw-BxkW6C-k.js";
+import { T as g } from "./tv-qkDTjJdC.js";
+import { W as R } from "./wifi-off-DkH--R7b.js";
+import { f as n } from "./formatDistanceToNow-DlSrCos3.js";
+import { E as F } from "./eye-Cgf46zt5.js";
+import { M as K } from "./monitor-smartphone-Bgji6m1T.js";
+import { p as o } from "./pt-BR-B79SV-js.js";
+import "./utils-BQHNewu7.js";
+import "./en-US-DfnapdEA.js";
+const $ = [
+    ["rect", { width: "7", height: "7", x: "3", y: "3", rx: "1", key: "1g98yp" }],
+    ["rect", { width: "7", height: "7", x: "14", y: "3", rx: "1", key: "6d4xhi" }],
+    ["rect", { width: "7", height: "7", x: "14", y: "14", rx: "1", key: "nxv5o0" }],
+    ["rect", { width: "7", height: "7", x: "3", y: "14", rx: "1", key: "1bb6yr" }],
+  ],
+  A = b("layout-grid", $);
+const B = [
+    ["path", { d: "M3 5h.01", key: "18ugdj" }],
+    ["path", { d: "M3 12h.01", key: "nlz23k" }],
+    ["path", { d: "M3 19h.01", key: "noohij" }],
+    ["path", { d: "M8 5h13", key: "1pao27" }],
+    ["path", { d: "M8 12h13", key: "1za7za" }],
+    ["path", { d: "M8 19h13", key: "m83p4d" }],
+  ],
+  I = b("list", B);
+function ne() {
+  const { data: t = [], isLoading: j, error: c, refetch: y, isFetching: l } = D(),
+    { data: N = [] } = P(),
+    { data: w = [] } = q(),
+    [r, m] = k.useState("grid"),
+    i = S(),
+    { profile: v } = M(),
+    d = v?.organization_id ?? null,
+    _ = async () => {
+      try {
+        (await Promise.all([
+          i.invalidateQueries({ queryKey: ["screens", d] }),
+          i.invalidateQueries({ queryKey: ["units", d] }),
+          i.invalidateQueries({ queryKey: ["campaigns", d] }),
+        ]),
+          await y(),
+          h.success("Dados sincronizados."));
+      } catch (s) {
+        h.error(s instanceof Error ? s.message : "Falha ao sincronizar.");
+      }
+    },
+    x = (s) => N.find((a) => a.id === s)?.name ?? "Sem unidade",
+    p = (s) => w.find((a) => a.id === s)?.name ?? null;
+  return e.jsxs("div", {
+    className: "space-y-6",
+    children: [
+      e.jsx(C, {
+        title: "Monitoramento em tempo real",
+        subtitle: "Saúde, status e atividade de cada player.",
+        actions: e.jsxs(e.Fragment, {
+          children: [
+            e.jsxs("span", {
+              className:
+                "inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1.5 text-[11px] text-muted-foreground",
+              children: [
+                e.jsx("span", { className: "h-1.5 w-1.5 rounded-full bg-success pulse-dot" }),
+                " Live",
+              ],
+            }),
+            e.jsxs("div", {
+              className: "inline-flex rounded-md border border-border bg-surface p-0.5",
+              children: [
+                e.jsx("button", {
+                  onClick: () => m("grid"),
+                  className: `p-1.5 rounded ${r === "grid" ? "bg-accent" : ""}`,
+                  children: e.jsx(A, { className: "h-3.5 w-3.5" }),
+                }),
+                e.jsx("button", {
+                  onClick: () => m("table"),
+                  className: `p-1.5 rounded ${r === "table" ? "bg-accent" : ""}`,
+                  children: e.jsx(I, { className: "h-3.5 w-3.5" }),
+                }),
+              ],
+            }),
+            e.jsxs("button", {
+              onClick: _,
+              disabled: l,
+              className:
+                "inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-60",
+              children: [
+                l
+                  ? e.jsx(T, { className: "h-3.5 w-3.5 animate-spin" })
+                  : e.jsx(Q, { className: "h-3.5 w-3.5" }),
+                "Sincronizar",
+              ],
+            }),
+          ],
+        }),
+      }),
+      j
+        ? e.jsx(E, {})
+        : c
+          ? e.jsx(L, { error: c })
+          : t.length === 0
+            ? e.jsx(u, {
+                children: e.jsx(z, {
+                  icon: g,
+                  title: "Nenhuma tela cadastrada",
+                  description: "Adicione players na seção Telas para monitorá-los aqui.",
+                }),
+              })
+            : r === "grid"
+              ? e.jsx("div", {
+                  className: "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4",
+                  children: t.map((s) => {
+                    const a = s.device_status === "offline" || !s.is_online;
+                    return e.jsxs(
+                      "div",
+                      {
+                        className:
+                          "group rounded-xl border border-border bg-card overflow-hidden shadow-card hover:border-primary/40 hover:shadow-glow transition-smooth",
+                        children: [
+                          e.jsxs("div", {
+                            className: "relative aspect-video bg-gradient-surface overflow-hidden",
+                            children: [
+                              e.jsx("div", {
+                                className: "w-full h-full grid place-items-center",
+                                children: a
+                                  ? e.jsx(R, { className: "h-10 w-10 text-muted-foreground/40" })
+                                  : e.jsx(g, { className: "h-10 w-10 text-primary/40" }),
+                              }),
+                              e.jsx("div", {
+                                className: "absolute top-2 left-2",
+                                children: e.jsx(f, { status: s.device_status }),
+                              }),
+                              s.resolution &&
+                                e.jsx("div", {
+                                  className:
+                                    "absolute top-2 right-2 inline-flex items-center gap-1 rounded-md bg-black/50 backdrop-blur-md px-2 py-0.5 text-[10px] text-white font-mono",
+                                  children: s.resolution,
+                                }),
+                              e.jsxs("div", {
+                                className:
+                                  "absolute bottom-2 left-2 right-2 flex items-center justify-between text-[10px] text-white",
+                                children: [
+                                  e.jsx("span", {
+                                    className: "rounded bg-black/50 backdrop-blur-md px-1.5 py-0.5",
+                                    children: s.platform ?? "—",
+                                  }),
+                                  e.jsx("span", {
+                                    className:
+                                      "rounded bg-black/50 backdrop-blur-md px-1.5 py-0.5 font-mono",
+                                    children: s.player_version ?? "—",
+                                  }),
+                                ],
+                              }),
+                            ],
+                          }),
+                          e.jsxs("div", {
+                            className: "p-3.5 space-y-2",
+                            children: [
+                              e.jsx("div", {
+                                className: "flex items-start justify-between gap-2",
+                                children: e.jsxs("div", {
+                                  className: "min-w-0",
+                                  children: [
+                                    e.jsx("p", {
+                                      className: "text-sm font-medium truncate",
+                                      children: s.name,
+                                    }),
+                                    e.jsx("p", {
+                                      className: "text-[11px] text-muted-foreground truncate",
+                                      children: x(s.unit_id),
+                                    }),
+                                  ],
+                                }),
+                              }),
+                              e.jsxs("div", {
+                                className: "text-[11px] text-muted-foreground",
+                                children: [
+                                  e.jsxs("p", {
+                                    className: "truncate",
+                                    children: [
+                                      e.jsx("span", {
+                                        className: "text-foreground/80",
+                                        children: "Em exibição:",
+                                      }),
+                                      " ",
+                                      p(s.current_campaign_id) ?? "—",
+                                    ],
+                                  }),
+                                  e.jsxs("p", {
+                                    className: "mt-0.5",
+                                    children: [
+                                      "Último ping",
+                                      " ",
+                                      s.last_seen_at
+                                        ? n(new Date(s.last_seen_at), { locale: o, addSuffix: !0 })
+                                        : "—",
+                                    ],
+                                  }),
+                                ],
+                              }),
+                              e.jsx("div", {
+                                className: "flex items-center gap-1.5 pt-2 border-t border-border",
+                                children: e.jsxs("button", {
+                                  className:
+                                    "flex-1 inline-flex items-center justify-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:bg-accent transition-smooth",
+                                  children: [e.jsx(F, { className: "h-3 w-3" }), " Detalhes"],
+                                }),
+                              }),
+                            ],
+                          }),
+                        ],
+                      },
+                      s.id,
+                    );
+                  }),
+                })
+              : e.jsx(u, {
+                  bodyClassName: "p-0",
+                  children: e.jsx("div", {
+                    className: "overflow-x-auto",
+                    children: e.jsxs("table", {
+                      className: "w-full text-sm",
+                      children: [
+                        e.jsx("thead", {
+                          children: e.jsxs("tr", {
+                            className:
+                              "border-b border-border bg-surface/50 text-[11px] uppercase tracking-wider text-muted-foreground",
+                            children: [
+                              e.jsx("th", { className: "px-4 py-2.5 text-left", children: "Tela" }),
+                              e.jsx("th", {
+                                className: "px-4 py-2.5 text-left",
+                                children: "Unidade",
+                              }),
+                              e.jsx("th", {
+                                className: "px-4 py-2.5 text-left",
+                                children: "Status",
+                              }),
+                              e.jsx("th", {
+                                className: "px-4 py-2.5 text-left",
+                                children: "Último ping",
+                              }),
+                              e.jsx("th", { className: "px-4 py-2.5 text-left", children: "Sync" }),
+                              e.jsx("th", {
+                                className: "px-4 py-2.5 text-left",
+                                children: "Campanha",
+                              }),
+                            ],
+                          }),
+                        }),
+                        e.jsx("tbody", {
+                          children: t.map((s) =>
+                            e.jsxs(
+                              "tr",
+                              {
+                                className: "border-b border-border/50 hover:bg-surface/40",
+                                children: [
+                                  e.jsxs("td", {
+                                    className: "px-4 py-3 flex items-center gap-2",
+                                    children: [
+                                      e.jsx(K, { className: "h-4 w-4 text-muted-foreground" }),
+                                      s.name,
+                                    ],
+                                  }),
+                                  e.jsx("td", { className: "px-4 py-3", children: x(s.unit_id) }),
+                                  e.jsx("td", {
+                                    className: "px-4 py-3",
+                                    children: e.jsx(f, { status: s.device_status }),
+                                  }),
+                                  e.jsx("td", {
+                                    className: "px-4 py-3 text-muted-foreground",
+                                    children: s.last_seen_at
+                                      ? n(new Date(s.last_seen_at), { locale: o, addSuffix: !0 })
+                                      : "—",
+                                  }),
+                                  e.jsx("td", {
+                                    className: "px-4 py-3 text-muted-foreground",
+                                    children: s.last_sync_at
+                                      ? n(new Date(s.last_sync_at), { locale: o, addSuffix: !0 })
+                                      : "—",
+                                  }),
+                                  e.jsx("td", {
+                                    className: "px-4 py-3 truncate max-w-xs",
+                                    children: p(s.current_campaign_id) ?? "—",
+                                  }),
+                                ],
+                              },
+                              s.id,
+                            ),
+                          ),
+                        }),
+                      ],
+                    }),
+                  }),
+                }),
+    ],
+  });
+}
+export { ne as component };

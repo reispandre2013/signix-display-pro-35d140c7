@@ -56,12 +56,17 @@ export class AsaasApiError extends Error {
   }
 }
 
-export async function asaasJson<T>(path: string, init: RequestInit & { method?: string } = {}): Promise<T> {
+export async function asaasJson<T>(
+  path: string,
+  init: RequestInit & { method?: string } = {},
+): Promise<T> {
   const { apiKey, baseUrl, enabled } = getAsaasConfig();
   if (!enabled) {
     throw new Error("ASAAS_API_KEY não configurada.");
   }
-  const url = path.startsWith("http") ? path : `${baseUrl}${path.startsWith("/") ? "" : "/"}${path}`;
+  const url = path.startsWith("http")
+    ? path
+    : `${baseUrl}${path.startsWith("/") ? "" : "/"}${path}`;
   const h = new Headers(init.headers ?? undefined);
   h.set("access_token", apiKey);
   if (init.body != null && !h.has("Content-Type")) {
@@ -74,7 +79,11 @@ export async function asaasJson<T>(path: string, init: RequestInit & { method?: 
     try {
       const j = JSON.parse(text) as AsaasErrorResponse;
       if (j.errors?.length) {
-        msg = j.errors.map((e) => e.description).filter(Boolean).join("; ") || msg;
+        msg =
+          j.errors
+            .map((e) => e.description)
+            .filter(Boolean)
+            .join("; ") || msg;
       }
     } catch {
       if (text) msg = text.slice(0, 200);
@@ -89,7 +98,13 @@ export async function asaasJson<T>(path: string, init: RequestInit & { method?: 
 }
 
 export type AsaasCustomer = { id: string; object?: string; email?: string };
-export type AsaasSubscription = { id: string; object?: string; customer: string; value: number; cycle: string };
+export type AsaasSubscription = {
+  id: string;
+  object?: string;
+  customer: string;
+  value: number;
+  cycle: string;
+};
 export type AsaasPaymentList = { object?: string; data: AsaasPaymentItem[]; hasMore?: boolean };
 export type AsaasPaymentItem = {
   id: string;

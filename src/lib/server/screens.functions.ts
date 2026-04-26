@@ -2,7 +2,11 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { getPlayerCapabilities, normalizePlayerPlatform, type PlayerPlatform } from "@/lib/platform-capabilities";
+import {
+  getPlayerCapabilities,
+  normalizePlayerPlatform,
+  type PlayerPlatform,
+} from "@/lib/platform-capabilities";
 
 const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
 const FALLBACK_SUPABASE_ANON_KEY =
@@ -59,7 +63,8 @@ function validate(input: unknown): ClaimInput {
   if (orientation !== "landscape" && orientation !== "portrait")
     throw new Error("Orientação inválida.");
   const plat =
-    typeof platform === "string" && (platform === "tizen" || platform === "android" || platform === "web")
+    typeof platform === "string" &&
+    (platform === "tizen" || platform === "android" || platform === "web")
       ? (platform as PlayerPlatform)
       : "android";
   return {
@@ -124,9 +129,11 @@ export const claimPairingCode = createServerFn({ method: "POST" })
       .maybeSingle();
 
     if (pairingErr) throw new Error(pairingErr.message);
-    if (!pairing) throw new Error("Código não encontrado. Confira se o código exibido no player é o atual ou gere um novo.");
-    if (pairing.used_at || pairing.screen_id)
-      throw new Error("Este código já foi utilizado.");
+    if (!pairing)
+      throw new Error(
+        "Código não encontrado. Confira se o código exibido no player é o atual ou gere um novo.",
+      );
+    if (pairing.used_at || pairing.screen_id) throw new Error("Este código já foi utilizado.");
     if (pairing.expires_at && new Date(pairing.expires_at).getTime() < Date.now())
       throw new Error("Código expirado. Gere um novo no player.");
 
@@ -206,9 +213,7 @@ export const createPairingCode = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     // O supabaseAdmin já tem fallback de URL embutido (client.server.ts).
     // Aqui só validamos a service role key, que é obrigatória.
-    const hasKey = Boolean(
-      process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY,
-    );
+    const hasKey = Boolean(process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY);
     console.log("[createPairingCode] env check:", { hasKey });
 
     if (!hasKey) {
@@ -234,7 +239,11 @@ export const createPairingCode = createServerFn({ method: "POST" })
       }
       console.log("[createPairingCode] inserted:", inserted?.code);
       const savedCode = inserted?.code ?? code;
-      return { code: savedCode, pairing_code: savedCode, expires_at: inserted?.expires_at ?? expires_at };
+      return {
+        code: savedCode,
+        pairing_code: savedCode,
+        expires_at: inserted?.expires_at ?? expires_at,
+      };
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       console.error("[createPairingCode] exception:", msg);
@@ -265,7 +274,13 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
         .maybeSingle();
       if (error) {
         console.error("[checkPairingStatus] supabase error:", error.message);
-        return { paired: false, expired: false, found: false, status: "pending" as const, screen_id: null };
+        return {
+          paired: false,
+          expired: false,
+          found: false,
+          status: "pending" as const,
+          screen_id: null,
+        };
       }
       if (!pairing) {
         return {
@@ -281,7 +296,11 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
         : false;
       const paired = Boolean(pairing.used_at && pairing.screen_id);
       const expired = expiredByTime && !pairing.used_at;
-      const status = paired ? ("paired" as const) : expired ? ("expired" as const) : ("pending" as const);
+      const status = paired
+        ? ("paired" as const)
+        : expired
+          ? ("expired" as const)
+          : ("pending" as const);
       return {
         paired,
         expired,
@@ -292,7 +311,12 @@ export const checkPairingStatus = createServerFn({ method: "POST" })
       };
     } catch (e) {
       console.error("[checkPairingStatus] exception:", e instanceof Error ? e.message : String(e));
-      return { paired: false, expired: false, found: false, status: "pending" as const, screen_id: null };
+      return {
+        paired: false,
+        expired: false,
+        found: false,
+        status: "pending" as const,
+        screen_id: null,
+      };
     }
   });
-

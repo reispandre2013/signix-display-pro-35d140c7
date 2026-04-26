@@ -18,10 +18,16 @@ type Body = { kind?: string; by?: number };
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: cors });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: cors,
+    });
   }
   if (!url || !anon) {
-    return new Response(JSON.stringify({ error: "Server misconfiguration" }), { status: 500, headers: cors });
+    return new Response(JSON.stringify({ error: "Server misconfiguration" }), {
+      status: 500,
+      headers: cors,
+    });
   }
   const auth = req.headers.get("Authorization");
   if (!auth) {
@@ -37,17 +43,34 @@ serve(async (req) => {
   });
   const { data: userData } = await supabase.auth.getUser();
   if (!userData.user) {
-    return new Response(JSON.stringify({ error: "Invalid session" }), { status: 401, headers: cors });
+    return new Response(JSON.stringify({ error: "Invalid session" }), {
+      status: 401,
+      headers: cors,
+    });
   }
-  const { data: prof } = await supabase.from("profiles").select("organization_id").eq("auth_user_id", userData.user.id).maybeSingle();
+  const { data: prof } = await supabase
+    .from("profiles")
+    .select("organization_id")
+    .eq("auth_user_id", userData.user.id)
+    .maybeSingle();
   const orgId = prof?.organization_id as string | undefined;
   if (!orgId) {
-    return new Response(JSON.stringify({ error: "No organization" }), { status: 400, headers: cors });
+    return new Response(JSON.stringify({ error: "No organization" }), {
+      status: 400,
+      headers: cors,
+    });
   }
 
-  const { error } = await supabase.rpc("check_plan_limit", { p_org: orgId, p_kind: kind, p_by: by });
+  const { error } = await supabase.rpc("check_plan_limit", {
+    p_org: orgId,
+    p_kind: kind,
+    p_by: by,
+  });
   if (error) {
-    return new Response(JSON.stringify({ ok: false, error: error.message }), { status: 400, headers: cors });
+    return new Response(JSON.stringify({ ok: false, error: error.message }), {
+      status: 400,
+      headers: cors,
+    });
   }
   return new Response(JSON.stringify({ ok: true }), { status: 200, headers: cors });
 });

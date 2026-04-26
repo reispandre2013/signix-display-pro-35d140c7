@@ -1,4 +1,58 @@
-import { r as reactExports, f as functionalUpdate$1, a as arraysEqual, c as createLRUCache, i as isPromise, b as isRedirect, d as isNotFound, e as invariant, g as createControlledPromise, h as rootRouteId, j as isServer$1, k as compileDecodeCharMap, t as trimPath, l as rewriteBasepath, m as composeRewrites, p as processRouteTree, n as processRouteMasks, o as resolvePath, q as cleanPath, s as trimPathRight, u as parseHref, v as executeRewriteInput, w as isDangerousProtocol, x as redirect, y as findSingleMatch, z as deepEqual, D as DEFAULT_PROTOCOL_ALLOWLIST, A as interpolatePath, B as nullReplaceEqualDeep, C as replaceEqualDeep$1, E as last, F as decodePath, G as findFlatMatch, H as findRouteMatch, I as executeRewriteOutput, J as encodePathLikeUrl, K as trimPathLeft, L as joinPaths, M as useRouter, N as dummyMatchContext, O as matchContext, P as getDefaultExportFromCjs, Q as requireReactDom, R as exactPathTest, S as removeTrailingSlash, T as React, U as jsxRuntimeExports, V as isModuleNotFoundError, W as useHydrated, X as escapeHtml, Y as getAssetCrossOrigin, Z as resolveManifestAssetLink, _ as Outlet } from "./worker-entry-CFvqOeOX.js";
+import {
+  r as reactExports,
+  f as functionalUpdate$1,
+  a as arraysEqual,
+  c as createLRUCache,
+  i as isPromise,
+  b as isRedirect,
+  d as isNotFound,
+  e as invariant,
+  g as createControlledPromise,
+  h as rootRouteId,
+  j as isServer$1,
+  k as compileDecodeCharMap,
+  t as trimPath,
+  l as rewriteBasepath,
+  m as composeRewrites,
+  p as processRouteTree,
+  n as processRouteMasks,
+  o as resolvePath,
+  q as cleanPath,
+  s as trimPathRight,
+  u as parseHref,
+  v as executeRewriteInput,
+  w as isDangerousProtocol,
+  x as redirect,
+  y as findSingleMatch,
+  z as deepEqual,
+  D as DEFAULT_PROTOCOL_ALLOWLIST,
+  A as interpolatePath,
+  B as nullReplaceEqualDeep,
+  C as replaceEqualDeep$1,
+  E as last,
+  F as decodePath,
+  G as findFlatMatch,
+  H as findRouteMatch,
+  I as executeRewriteOutput,
+  J as encodePathLikeUrl,
+  K as trimPathLeft,
+  L as joinPaths,
+  M as useRouter,
+  N as dummyMatchContext,
+  O as matchContext,
+  P as getDefaultExportFromCjs,
+  Q as requireReactDom,
+  R as exactPathTest,
+  S as removeTrailingSlash,
+  T as React,
+  U as jsxRuntimeExports,
+  V as isModuleNotFoundError,
+  W as useHydrated,
+  X as escapeHtml,
+  Y as getAssetCrossOrigin,
+  Z as resolveManifestAssetLink,
+  _ as Outlet,
+} from "./worker-entry-CFvqOeOX.js";
 import { c as createClient } from "./index-Cf78ubZ7.js";
 var reactUse = reactExports.use;
 function useForwardedRef(ref) {
@@ -39,10 +93,10 @@ function parseSearchWith(parser) {
     const query = decode(searchStr);
     for (const key in query) {
       const value = query[key];
-      if (typeof value === "string") try {
-        query[key] = parser(value);
-      } catch (_err) {
-      }
+      if (typeof value === "string")
+        try {
+          query[key] = parser(value);
+        } catch (_err) {}
     }
     return query;
   };
@@ -50,15 +104,15 @@ function parseSearchWith(parser) {
 function stringifySearchWith(stringify, parser) {
   const hasParser = typeof parser === "function";
   function stringifyValue(val) {
-    if (typeof val === "object" && val !== null) try {
-      return stringify(val);
-    } catch (_err) {
-    }
-    else if (hasParser && typeof val === "string") try {
-      parser(val);
-      return stringify(val);
-    } catch (_err) {
-    }
+    if (typeof val === "object" && val !== null)
+      try {
+        return stringify(val);
+      } catch (_err) {}
+    else if (hasParser && typeof val === "string")
+      try {
+        parser(val);
+        return stringify(val);
+      } catch (_err) {}
     return val;
   }
   return (search) => {
@@ -74,13 +128,15 @@ function createNonReactiveMutableStore(initialValue) {
     },
     set(nextOrUpdater) {
       value = functionalUpdate$1(nextOrUpdater, value);
-    }
+    },
   };
 }
 function createNonReactiveReadonlyStore(read) {
-  return { get() {
-    return read();
-  } };
+  return {
+    get() {
+      return read();
+    },
+  };
 }
 function createRouterStores(initialState, config) {
   const { createMutableStore, createReadonlyStore, batch, init } = config;
@@ -99,16 +155,22 @@ function createRouterStores(initialState, config) {
   const pendingIds = createMutableStore([]);
   const cachedIds = createMutableStore([]);
   const matches = createReadonlyStore(() => readPoolMatches(matchStores, matchesId.get()));
-  const pendingMatches = createReadonlyStore(() => readPoolMatches(pendingMatchStores, pendingIds.get()));
-  const cachedMatches = createReadonlyStore(() => readPoolMatches(cachedMatchStores, cachedIds.get()));
+  const pendingMatches = createReadonlyStore(() =>
+    readPoolMatches(pendingMatchStores, pendingIds.get()),
+  );
+  const cachedMatches = createReadonlyStore(() =>
+    readPoolMatches(cachedMatchStores, cachedIds.get()),
+  );
   const firstId = createReadonlyStore(() => matchesId.get()[0]);
-  const hasPending = createReadonlyStore(() => matchesId.get().some((matchId) => {
-    return matchStores.get(matchId)?.get().status === "pending";
-  }));
+  const hasPending = createReadonlyStore(() =>
+    matchesId.get().some((matchId) => {
+      return matchStores.get(matchId)?.get().status === "pending";
+    }),
+  );
   const matchRouteDeps = createReadonlyStore(() => ({
     locationHref: location.get().href,
     resolvedLocationHref: resolvedLocation.get()?.href,
-    status: status.get()
+    status: status.get(),
   }));
   const __store = createReadonlyStore(() => ({
     status: status.get(),
@@ -119,7 +181,7 @@ function createRouterStores(initialState, config) {
     location: location.get(),
     resolvedLocation: resolvedLocation.get(),
     statusCode: statusCode.get(),
-    redirect: redirect2.get()
+    redirect: redirect2.get(),
   }));
   const matchStoreByRouteIdCache = createLRUCache(64);
   function getRouteMatchStore(routeId) {
@@ -161,7 +223,7 @@ function createRouterStores(initialState, config) {
     getRouteMatchStore,
     setMatches,
     setPending,
-    setCached
+    setCached,
   };
   setMatches(initialState.matches);
   init?.(store);
@@ -213,7 +275,7 @@ var resolvePreload = (inner, matchId) => {
   return !!(inner.preload && !inner.router.stores.matchStores.has(matchId));
 };
 var buildMatchContext = (inner, index, includeCurrentMatch = true) => {
-  const context = { ...inner.router.options.context ?? {} };
+  const context = { ...(inner.router.options.context ?? {}) };
   const end = includeCurrentMatch ? index : index - 1;
   for (let i = 0; i <= end; i++) {
     const innerMatch = inner.matches[i];
@@ -229,7 +291,9 @@ var getNotFoundBoundaryIndex = (inner, err) => {
   const requestedRouteId = err.routeId;
   const matchedRootIndex = inner.matches.findIndex((m) => m.routeId === inner.router.routeTree.id);
   const rootIndex = matchedRootIndex >= 0 ? matchedRootIndex : 0;
-  let startIndex = requestedRouteId ? inner.matches.findIndex((match) => match.routeId === requestedRouteId) : inner.firstBadMatchIndex ?? inner.matches.length - 1;
+  let startIndex = requestedRouteId
+    ? inner.matches.findIndex((match) => match.routeId === requestedRouteId)
+    : (inner.firstBadMatchIndex ?? inner.matches.length - 1);
   if (startIndex < 0) startIndex = rootIndex;
   for (let i = startIndex; i >= 0; i--) {
     const match = inner.matches[i];
@@ -248,10 +312,16 @@ var handleRedirectAndNotFound = (inner, match, err) => {
     match._nonReactive.error = err;
     inner.updateMatch(match.id, (prev) => ({
       ...prev,
-      status: isRedirect(err) ? "redirected" : isNotFound(err) ? "notFound" : prev.status === "pending" ? "success" : prev.status,
+      status: isRedirect(err)
+        ? "redirected"
+        : isNotFound(err)
+          ? "notFound"
+          : prev.status === "pending"
+            ? "success"
+            : prev.status,
       context: buildMatchContext(inner, match.index),
       isFetching: false,
-      error: err
+      error: err,
     }));
     if (isNotFound(err) && !err.routeId) err.routeId = match.routeId;
     match._nonReactive.loadPromise?.resolve();
@@ -275,7 +345,7 @@ var syncMatchContext = (inner, matchId, index) => {
   inner.updateMatch(matchId, (prev) => {
     return {
       ...prev,
-      context: nextContext
+      context: nextContext,
     };
   });
 };
@@ -302,7 +372,7 @@ var handleSerialError = (inner, index, err, routerCode) => {
       status: "error",
       isFetching: false,
       updatedAt: Date.now(),
-      abortController: new AbortController()
+      abortController: new AbortController(),
     };
   });
   if (!inner.preload && !isRedirect(err) && !isNotFound(err)) inner.serialError ??= err;
@@ -346,13 +416,14 @@ var isBeforeLoadSsr = (inner, matchId, index, route) => {
       routeId: match.routeId,
       search: makeMaybe(match.search, match.searchError),
       params: makeMaybe(match.params, match.paramsError),
-      ssr: match.ssr
-    }))
+      ssr: match.ssr,
+    })),
   };
   const tempSsr = route.options.ssr(ssrFnContext);
-  if (isPromise(tempSsr)) return tempSsr.then((ssr) => {
-    existingMatch.ssr = parentOverride(ssr ?? defaultSsr);
-  });
+  if (isPromise(tempSsr))
+    return tempSsr.then((ssr) => {
+      existingMatch.ssr = parentOverride(ssr ?? defaultSsr);
+    });
   existingMatch.ssr = parentOverride(tempSsr ?? defaultSsr);
 };
 var setupPendingTimeout = (inner, matchId, route, match) => {
@@ -367,13 +438,17 @@ var setupPendingTimeout = (inner, matchId, route, match) => {
 };
 var preBeforeLoadSetup = (inner, matchId, route) => {
   const existingMatch = inner.router.getMatch(matchId);
-  if (!existingMatch._nonReactive.beforeLoadPromise && !existingMatch._nonReactive.loaderPromise) return;
+  if (!existingMatch._nonReactive.beforeLoadPromise && !existingMatch._nonReactive.loaderPromise)
+    return;
   setupPendingTimeout(inner, matchId, route, existingMatch);
   const then = () => {
     const match = inner.router.getMatch(matchId);
-    if (match.preload && (match.status === "redirected" || match.status === "notFound")) handleRedirectAndNotFound(inner, match, match.error);
+    if (match.preload && (match.status === "redirected" || match.status === "notFound"))
+      handleRedirectAndNotFound(inner, match, match.error);
   };
-  return existingMatch._nonReactive.beforeLoadPromise ? existingMatch._nonReactive.beforeLoadPromise.then(then) : then();
+  return existingMatch._nonReactive.beforeLoadPromise
+    ? existingMatch._nonReactive.beforeLoadPromise.then(then)
+    : then();
 };
 var executeBeforeLoad = (inner, matchId, index, route) => {
   const match = inner.router.getMatch(matchId);
@@ -395,7 +470,7 @@ var executeBeforeLoad = (inner, matchId, index, route) => {
       ...prev,
       isFetching: "beforeLoad",
       fetchCount: prev.fetchCount + 1,
-      abortController
+      abortController,
     }));
   };
   const resolve = () => {
@@ -403,7 +478,7 @@ var executeBeforeLoad = (inner, matchId, index, route) => {
     match._nonReactive.beforeLoadPromise = void 0;
     inner.updateMatch(matchId, (prev) => ({
       ...prev,
-      isFetching: false
+      isFetching: false,
     }));
   };
   if (!route.options.beforeLoad) {
@@ -416,7 +491,7 @@ var executeBeforeLoad = (inner, matchId, index, route) => {
   match._nonReactive.beforeLoadPromise = createControlledPromise();
   const context = {
     ...buildMatchContext(inner, index, false),
-    ...match.__routeContext
+    ...match.__routeContext,
   };
   const { search, params, cause } = match;
   const preload = resolvePreload(inner, matchId);
@@ -427,15 +502,16 @@ var executeBeforeLoad = (inner, matchId, index, route) => {
     preload,
     context,
     location: inner.location,
-    navigate: (opts) => inner.router.navigate({
-      ...opts,
-      _fromLocation: inner.location
-    }),
+    navigate: (opts) =>
+      inner.router.navigate({
+        ...opts,
+        _fromLocation: inner.location,
+      }),
     buildLocation: inner.router.buildLocation,
     cause: preload ? "preload" : cause,
     matches: inner.matches,
     routeId: route.id,
-    ...inner.router.options.additionalContext
+    ...inner.router.options.additionalContext,
   };
   const updateContext = (beforeLoadContext2) => {
     if (beforeLoadContext2 === void 0) {
@@ -453,7 +529,7 @@ var executeBeforeLoad = (inner, matchId, index, route) => {
       pending();
       inner.updateMatch(matchId, (prev) => ({
         ...prev,
-        __beforeLoadContext: beforeLoadContext2
+        __beforeLoadContext: beforeLoadContext2,
       }));
       resolve();
     });
@@ -463,9 +539,11 @@ var executeBeforeLoad = (inner, matchId, index, route) => {
     beforeLoadContext = route.options.beforeLoad(beforeLoadFnContext);
     if (isPromise(beforeLoadContext)) {
       pending();
-      return beforeLoadContext.catch((err) => {
-        handleSerialError(inner, index, err, "BEFORE_LOAD");
-      }).then(updateContext);
+      return beforeLoadContext
+        .catch((err) => {
+          handleSerialError(inner, index, err, "BEFORE_LOAD");
+        })
+        .then(updateContext);
     }
   } catch (err) {
     pending();
@@ -500,12 +578,12 @@ var executeHead = (inner, matchId, route) => {
     matches: inner.matches,
     match,
     params: match.params,
-    loaderData: match.loaderData
+    loaderData: match.loaderData,
   };
   return Promise.all([
     route.options.head?.(assetContext),
     route.options.scripts?.(assetContext),
-    route.options.headers?.(assetContext)
+    route.options.headers?.(assetContext),
   ]).then(([headFnContent, scripts, headers]) => {
     return {
       meta: headFnContent?.meta,
@@ -513,7 +591,7 @@ var executeHead = (inner, matchId, route) => {
       headScripts: headFnContent?.scripts,
       headers,
       scripts,
-      styles: headFnContent?.styles
+      styles: headFnContent?.styles,
     };
   });
 };
@@ -530,13 +608,14 @@ var getLoaderContext = (inner, matchPromises, matchId, index, route) => {
     abortController,
     context,
     location: inner.location,
-    navigate: (opts) => inner.router.navigate({
-      ...opts,
-      _fromLocation: inner.location
-    }),
+    navigate: (opts) =>
+      inner.router.navigate({
+        ...opts,
+        _fromLocation: inner.location,
+      }),
     cause: preload ? "preload" : cause,
     route,
-    ...inner.router.options.additionalContext
+    ...inner.router.options.additionalContext,
   };
 };
 var runLoader = async (inner, matchPromises, matchId, index, route) => {
@@ -548,17 +627,29 @@ var runLoader = async (inner, matchPromises, matchId, index, route) => {
       const loader = typeof routeLoader === "function" ? routeLoader : routeLoader?.handler;
       const loaderResult = loader?.(getLoaderContext(inner, matchPromises, matchId, index, route));
       const loaderResultIsPromise = !!loader && isPromise(loaderResult);
-      if (!!(loaderResultIsPromise || route._lazyPromise || route._componentsPromise || route.options.head || route.options.scripts || route.options.headers || match._nonReactive.minPendingPromise)) inner.updateMatch(matchId, (prev) => ({
-        ...prev,
-        isFetching: "loader"
-      }));
+      if (
+        !!(
+          loaderResultIsPromise ||
+          route._lazyPromise ||
+          route._componentsPromise ||
+          route.options.head ||
+          route.options.scripts ||
+          route.options.headers ||
+          match._nonReactive.minPendingPromise
+        )
+      )
+        inner.updateMatch(matchId, (prev) => ({
+          ...prev,
+          isFetching: "loader",
+        }));
       if (loader) {
         const loaderData = loaderResultIsPromise ? await loaderResult : loaderResult;
         handleRedirectAndNotFound(inner, inner.router.getMatch(matchId), loaderData);
-        if (loaderData !== void 0) inner.updateMatch(matchId, (prev) => ({
-          ...prev,
-          loaderData
-        }));
+        if (loaderData !== void 0)
+          inner.updateMatch(matchId, (prev) => ({
+            ...prev,
+            loaderData,
+          }));
       }
       if (route._lazyPromise) await route._lazyPromise;
       const pendingPromise = match._nonReactive.minPendingPromise;
@@ -570,7 +661,7 @@ var runLoader = async (inner, matchPromises, matchId, index, route) => {
         context: buildMatchContext(inner, index),
         status: "success",
         isFetching: false,
-        updatedAt: Date.now()
+        updatedAt: Date.now(),
       }));
     } catch (e) {
       let error = e;
@@ -584,7 +675,7 @@ var runLoader = async (inner, matchPromises, matchId, index, route) => {
           ...prev,
           status: prev.status === "pending" ? "success" : prev.status,
           isFetching: false,
-          context: buildMatchContext(inner, index)
+          context: buildMatchContext(inner, index),
         }));
         return;
       }
@@ -604,7 +695,7 @@ var runLoader = async (inner, matchPromises, matchId, index, route) => {
         error,
         context: buildMatchContext(inner, index),
         status: "error",
-        isFetching: false
+        isFetching: false,
       }));
     }
   } catch (err) {
@@ -616,13 +707,23 @@ var runLoader = async (inner, matchPromises, matchId, index, route) => {
 var loadRouteMatch = async (inner, matchPromises, index) => {
   async function handleLoader(preload, prevMatch, previousRouteMatchId, match2, route2) {
     const age = Date.now() - prevMatch.updatedAt;
-    const staleAge = preload ? route2.options.preloadStaleTime ?? inner.router.options.defaultPreloadStaleTime ?? 3e4 : route2.options.staleTime ?? inner.router.options.defaultStaleTime ?? 0;
+    const staleAge = preload
+      ? (route2.options.preloadStaleTime ?? inner.router.options.defaultPreloadStaleTime ?? 3e4)
+      : (route2.options.staleTime ?? inner.router.options.defaultStaleTime ?? 0);
     const shouldReloadOption = route2.options.shouldReload;
-    const shouldReload = typeof shouldReloadOption === "function" ? shouldReloadOption(getLoaderContext(inner, matchPromises, matchId, index, route2)) : shouldReloadOption;
+    const shouldReload =
+      typeof shouldReloadOption === "function"
+        ? shouldReloadOption(getLoaderContext(inner, matchPromises, matchId, index, route2))
+        : shouldReloadOption;
     const { status, invalid } = match2;
-    const staleMatchShouldReload = age >= staleAge && (!!inner.forceStaleReload || match2.cause === "enter" || previousRouteMatchId !== void 0 && previousRouteMatchId !== match2.id);
-    loaderShouldRunAsync = status === "success" && (invalid || (shouldReload ?? staleMatchShouldReload));
-    if (preload && route2.options.preload === false) ;
+    const staleMatchShouldReload =
+      age >= staleAge &&
+      (!!inner.forceStaleReload ||
+        match2.cause === "enter" ||
+        (previousRouteMatchId !== void 0 && previousRouteMatchId !== match2.id));
+    loaderShouldRunAsync =
+      status === "success" && (invalid || (shouldReload ?? staleMatchShouldReload));
+    if (preload && route2.options.preload === false);
     else if (loaderShouldRunAsync && !inner.sync && shouldReloadInBackground) {
       loaderIsRunningAsync = true;
       (async () => {
@@ -637,7 +738,8 @@ var loadRouteMatch = async (inner, matchPromises, index) => {
           if (isRedirect(err)) await inner.router.navigate(err.options);
         }
       })();
-    } else if (status !== "success" || loaderShouldRunAsync) await runLoader(inner, matchPromises, matchId, index, route2);
+    } else if (status !== "success" || loaderShouldRunAsync)
+      await runLoader(inner, matchPromises, matchId, index, route2);
     else syncMatchContext(inner, matchId, index);
   }
   const { id: matchId, routeId } = inner.matches[index];
@@ -645,7 +747,9 @@ var loadRouteMatch = async (inner, matchPromises, index) => {
   let loaderIsRunningAsync = false;
   const route = inner.router.looseRoutesById[routeId];
   const routeLoader = route.options.loader;
-  const shouldReloadInBackground = ((typeof routeLoader === "function" ? void 0 : routeLoader?.staleReloadMode) ?? inner.router.options.defaultStaleReloadMode) !== "blocking";
+  const shouldReloadInBackground =
+    ((typeof routeLoader === "function" ? void 0 : routeLoader?.staleReloadMode) ??
+      inner.router.options.defaultStaleReloadMode) !== "blocking";
   if (shouldSkipLoader(inner, matchId)) {
     if (!inner.router.getMatch(matchId)) return inner.matches[index];
     syncMatchContext(inner, matchId, index);
@@ -653,23 +757,35 @@ var loadRouteMatch = async (inner, matchPromises, index) => {
   } else {
     const prevMatch = inner.router.getMatch(matchId);
     const activeIdAtIndex = inner.router.stores.matchesId.get()[index];
-    const previousRouteMatchId = (activeIdAtIndex && inner.router.stores.matchStores.get(activeIdAtIndex) || null)?.routeId === routeId ? activeIdAtIndex : inner.router.stores.matches.get().find((d) => d.routeId === routeId)?.id;
+    const previousRouteMatchId =
+      ((activeIdAtIndex && inner.router.stores.matchStores.get(activeIdAtIndex)) || null)
+        ?.routeId === routeId
+        ? activeIdAtIndex
+        : inner.router.stores.matches.get().find((d) => d.routeId === routeId)?.id;
     const preload = resolvePreload(inner, matchId);
     if (prevMatch._nonReactive.loaderPromise) {
-      if (prevMatch.status === "success" && !inner.sync && !prevMatch.preload && shouldReloadInBackground) return prevMatch;
+      if (
+        prevMatch.status === "success" &&
+        !inner.sync &&
+        !prevMatch.preload &&
+        shouldReloadInBackground
+      )
+        return prevMatch;
       await prevMatch._nonReactive.loaderPromise;
       const match2 = inner.router.getMatch(matchId);
       const error = match2._nonReactive.error || match2.error;
       if (error) handleRedirectAndNotFound(inner, match2, error);
-      if (match2.status === "pending") await handleLoader(preload, prevMatch, previousRouteMatchId, match2, route);
+      if (match2.status === "pending")
+        await handleLoader(preload, prevMatch, previousRouteMatchId, match2, route);
     } else {
       const nextPreload = preload && !inner.router.stores.matchStores.has(matchId);
       const match2 = inner.router.getMatch(matchId);
       match2._nonReactive.loaderPromise = createControlledPromise();
-      if (nextPreload !== match2.preload) inner.updateMatch(matchId, (prev) => ({
-        ...prev,
-        preload: nextPreload
-      }));
+      if (nextPreload !== match2.preload)
+        inner.updateMatch(matchId, (prev) => ({
+          ...prev,
+          preload: nextPreload,
+        }));
       await handleLoader(preload, prevMatch, previousRouteMatchId, match2, route);
     }
   }
@@ -688,7 +804,7 @@ var loadRouteMatch = async (inner, matchPromises, index) => {
     inner.updateMatch(matchId, (prev) => ({
       ...prev,
       isFetching: nextIsFetching,
-      invalid: false
+      invalid: false,
     }));
     return inner.router.getMatch(matchId);
   } else return match;
@@ -710,11 +826,20 @@ async function loadMatches(arg) {
     if (inner.serialError || inner.firstBadMatchIndex != null) break;
   }
   const baseMaxIndexExclusive = inner.firstBadMatchIndex ?? inner.matches.length;
-  const boundaryIndex = beforeLoadNotFound && !inner.preload ? getNotFoundBoundaryIndex(inner, beforeLoadNotFound) : void 0;
-  const maxIndexExclusive = beforeLoadNotFound && inner.preload ? 0 : boundaryIndex !== void 0 ? Math.min(boundaryIndex + 1, baseMaxIndexExclusive) : baseMaxIndexExclusive;
+  const boundaryIndex =
+    beforeLoadNotFound && !inner.preload
+      ? getNotFoundBoundaryIndex(inner, beforeLoadNotFound)
+      : void 0;
+  const maxIndexExclusive =
+    beforeLoadNotFound && inner.preload
+      ? 0
+      : boundaryIndex !== void 0
+        ? Math.min(boundaryIndex + 1, baseMaxIndexExclusive)
+        : baseMaxIndexExclusive;
   let firstNotFound;
   let firstUnhandledRejection;
-  for (let i = 0; i < maxIndexExclusive; i++) matchPromises.push(loadRouteMatch(inner, matchPromises, i));
+  for (let i = 0; i < maxIndexExclusive; i++)
+    matchPromises.push(loadRouteMatch(inner, matchPromises, i));
   try {
     await Promise.all(matchPromises);
   } catch {
@@ -728,8 +853,10 @@ async function loadMatches(arg) {
     }
     if (firstUnhandledRejection !== void 0) throw firstUnhandledRejection;
   }
-  const notFoundToThrow = firstNotFound ?? (beforeLoadNotFound && !inner.preload ? beforeLoadNotFound : void 0);
-  let headMaxIndex = inner.firstBadMatchIndex !== void 0 ? inner.firstBadMatchIndex : inner.matches.length - 1;
+  const notFoundToThrow =
+    firstNotFound ?? (beforeLoadNotFound && !inner.preload ? beforeLoadNotFound : void 0);
+  let headMaxIndex =
+    inner.firstBadMatchIndex !== void 0 ? inner.firstBadMatchIndex : inner.matches.length - 1;
   if (!notFoundToThrow && beforeLoadNotFound && inner.preload) return inner.matches;
   if (notFoundToThrow) {
     const renderedBoundaryIndex = getNotFoundBoundaryIndex(inner, notFoundToThrow);
@@ -739,35 +866,40 @@ async function loadMatches(arg) {
     const boundaryMatch = inner.matches[renderedBoundaryIndex];
     const boundaryRoute = inner.router.looseRoutesById[boundaryMatch.routeId];
     const defaultNotFoundComponent = inner.router.options?.defaultNotFoundComponent;
-    if (!boundaryRoute.options.notFoundComponent && defaultNotFoundComponent) boundaryRoute.options.notFoundComponent = defaultNotFoundComponent;
+    if (!boundaryRoute.options.notFoundComponent && defaultNotFoundComponent)
+      boundaryRoute.options.notFoundComponent = defaultNotFoundComponent;
     notFoundToThrow.routeId = boundaryMatch.routeId;
     const boundaryIsRoot = boundaryMatch.routeId === inner.router.routeTree.id;
     inner.updateMatch(boundaryMatch.id, (prev) => ({
       ...prev,
-      ...boundaryIsRoot ? {
-        status: "success",
-        globalNotFound: true,
-        error: void 0
-      } : {
-        status: "notFound",
-        error: notFoundToThrow
-      },
-      isFetching: false
+      ...(boundaryIsRoot
+        ? {
+            status: "success",
+            globalNotFound: true,
+            error: void 0,
+          }
+        : {
+            status: "notFound",
+            error: notFoundToThrow,
+          }),
+      isFetching: false,
     }));
     headMaxIndex = renderedBoundaryIndex;
     await loadRouteChunk(boundaryRoute, ["notFoundComponent"]);
   } else if (!inner.preload) {
     const rootMatch = inner.matches[0];
     if (!rootMatch.globalNotFound) {
-      if (inner.router.getMatch(rootMatch.id)?.globalNotFound) inner.updateMatch(rootMatch.id, (prev) => ({
-        ...prev,
-        globalNotFound: false,
-        error: void 0
-      }));
+      if (inner.router.getMatch(rootMatch.id)?.globalNotFound)
+        inner.updateMatch(rootMatch.id, (prev) => ({
+          ...prev,
+          globalNotFound: false,
+          error: void 0,
+        }));
     }
   }
   if (inner.serialError && inner.firstBadMatchIndex !== void 0) {
-    const errorRoute = inner.router.looseRoutesById[inner.matches[inner.firstBadMatchIndex].routeId];
+    const errorRoute =
+      inner.router.looseRoutesById[inner.matches[inner.firstBadMatchIndex].routeId];
     await loadRouteChunk(errorRoute, ["errorComponent"]);
   }
   for (let i = 0; i <= headMaxIndex; i++) {
@@ -779,7 +911,7 @@ async function loadMatches(arg) {
         const head = await headResult;
         inner.updateMatch(matchId, (prev) => ({
           ...prev,
-          ...head
+          ...head,
         }));
       }
     } catch (err) {
@@ -793,51 +925,58 @@ async function loadMatches(arg) {
   return inner.matches;
 }
 function preloadRouteComponents(route, componentTypesToLoad) {
-  const preloads = componentTypesToLoad.map((type) => route.options[type]?.preload?.()).filter(Boolean);
+  const preloads = componentTypesToLoad
+    .map((type) => route.options[type]?.preload?.())
+    .filter(Boolean);
   if (preloads.length === 0) return void 0;
   return Promise.all(preloads);
 }
 function loadRouteChunk(route, componentTypesToLoad = componentTypes) {
-  if (!route._lazyLoaded && route._lazyPromise === void 0) if (route.lazyFn) route._lazyPromise = route.lazyFn().then((lazyRoute) => {
-    const { id: _id, ...options } = lazyRoute.options;
-    Object.assign(route.options, options);
-    route._lazyLoaded = true;
-    route._lazyPromise = void 0;
-  });
-  else route._lazyLoaded = true;
-  const runAfterLazy = () => route._componentsLoaded ? void 0 : componentTypesToLoad === componentTypes ? (() => {
-    if (route._componentsPromise === void 0) {
-      const componentsPromise = preloadRouteComponents(route, componentTypes);
-      if (componentsPromise) route._componentsPromise = componentsPromise.then(() => {
-        route._componentsLoaded = true;
-        route._componentsPromise = void 0;
+  if (!route._lazyLoaded && route._lazyPromise === void 0)
+    if (route.lazyFn)
+      route._lazyPromise = route.lazyFn().then((lazyRoute) => {
+        const { id: _id, ...options } = lazyRoute.options;
+        Object.assign(route.options, options);
+        route._lazyLoaded = true;
+        route._lazyPromise = void 0;
       });
-      else route._componentsLoaded = true;
-    }
-    return route._componentsPromise;
-  })() : preloadRouteComponents(route, componentTypesToLoad);
+    else route._lazyLoaded = true;
+  const runAfterLazy = () =>
+    route._componentsLoaded
+      ? void 0
+      : componentTypesToLoad === componentTypes
+        ? (() => {
+            if (route._componentsPromise === void 0) {
+              const componentsPromise = preloadRouteComponents(route, componentTypes);
+              if (componentsPromise)
+                route._componentsPromise = componentsPromise.then(() => {
+                  route._componentsLoaded = true;
+                  route._componentsPromise = void 0;
+                });
+              else route._componentsLoaded = true;
+            }
+            return route._componentsPromise;
+          })()
+        : preloadRouteComponents(route, componentTypesToLoad);
   return route._lazyPromise ? route._lazyPromise.then(runAfterLazy) : runAfterLazy();
 }
 function makeMaybe(value, error) {
-  if (error) return {
-    status: "error",
-    error
-  };
+  if (error)
+    return {
+      status: "error",
+      error,
+    };
   return {
     status: "success",
-    value
+    value,
   };
 }
 function routeNeedsPreload(route) {
-  for (const componentType of componentTypes) if (route.options[componentType]?.preload) return true;
+  for (const componentType of componentTypes)
+    if (route.options[componentType]?.preload) return true;
   return false;
 }
-var componentTypes = [
-  "component",
-  "errorComponent",
-  "pendingComponent",
-  "notFoundComponent"
-];
+var componentTypes = ["component", "errorComponent", "pendingComponent", "notFoundComponent"];
 function getLocationChangeInfo(location, resolvedLocation) {
   const fromLocation = resolvedLocation;
   const toLocation = location;
@@ -846,13 +985,13 @@ function getLocationChangeInfo(location, resolvedLocation) {
     toLocation,
     pathChanged: fromLocation?.pathname !== toLocation.pathname,
     hrefChanged: fromLocation?.href !== toLocation.href,
-    hashChanged: fromLocation?.hash !== toLocation.hash
+    hashChanged: fromLocation?.hash !== toLocation.hash,
   };
 }
 var RouterCore = class {
   /**
-  * @deprecated Use the `createRouter` function instead
-  */
+   * @deprecated Use the `createRouter` function instead
+   */
   constructor(options, getStoreConfig) {
     this.tempLocationKey = `${Math.round(Math.random() * 1e7)}`;
     this.resetNextScroll = true;
@@ -869,13 +1008,15 @@ var RouterCore = class {
       const prevRewriteOption = prevOptions?.rewrite;
       this.options = {
         ...prevOptions,
-        ...newOptions
+        ...newOptions,
       };
       this.isServer = this.options.isServer ?? typeof document === "undefined";
       this.protocolAllowlist = new Set(this.options.protocolAllowlist);
-      if (this.options.pathParamsAllowedCharacters) this.pathParamsDecoder = compileDecodeCharMap(this.options.pathParamsAllowedCharacters);
-      if (!this.history || this.options.history && this.options.history !== this.history) if (!this.options.history) ;
-      else this.history = this.options.history;
+      if (this.options.pathParamsAllowedCharacters)
+        this.pathParamsDecoder = compileDecodeCharMap(this.options.pathParamsAllowedCharacters);
+      if (!this.history || (this.options.history && this.options.history !== this.history))
+        if (!this.options.history);
+        else this.history = this.options.history;
       this.origin = this.options.origin;
       if (!this.origin) this.origin = "http://localhost";
       if (this.history) this.updateLatestLocation();
@@ -889,11 +1030,12 @@ var RouterCore = class {
         } else {
           this.resolvePathCache = createLRUCache(1e3);
           processRouteTreeResult = this.buildRouteTree();
-          if (globalThis.__TSR_CACHE__ === void 0) globalThis.__TSR_CACHE__ = {
-            routeTree: this.routeTree,
-            processRouteTreeResult,
-            resolvePathCache: this.resolvePathCache
-          };
+          if (globalThis.__TSR_CACHE__ === void 0)
+            globalThis.__TSR_CACHE__ = {
+              routeTree: this.routeTree,
+              processRouteTreeResult,
+              resolvePathCache: this.resolvePathCache,
+            };
         }
         this.setRoutes(processRouteTreeResult);
       }
@@ -905,18 +1047,34 @@ var RouterCore = class {
       let needsLocationUpdate = false;
       const nextBasepath = this.options.basepath ?? "/";
       const nextRewriteOption = this.options.rewrite;
-      if (basepathWasUnset || prevBasepath !== nextBasepath || prevRewriteOption !== nextRewriteOption) {
+      if (
+        basepathWasUnset ||
+        prevBasepath !== nextBasepath ||
+        prevRewriteOption !== nextRewriteOption
+      ) {
         this.basepath = nextBasepath;
         const rewrites = [];
         const trimmed = trimPath(nextBasepath);
         if (trimmed && trimmed !== "/") rewrites.push(rewriteBasepath({ basepath: nextBasepath }));
         if (nextRewriteOption) rewrites.push(nextRewriteOption);
-        this.rewrite = rewrites.length === 0 ? void 0 : rewrites.length === 1 ? rewrites[0] : composeRewrites(rewrites);
+        this.rewrite =
+          rewrites.length === 0
+            ? void 0
+            : rewrites.length === 1
+              ? rewrites[0]
+              : composeRewrites(rewrites);
         if (this.history) this.updateLatestLocation();
         needsLocationUpdate = true;
       }
       if (needsLocationUpdate && this.stores) this.stores.location.set(this.latestLocation);
-      if (typeof window !== "undefined" && "CSS" in window && typeof window.CSS?.supports === "function") this.isViewTransitionTypesSupported = window.CSS.supports("selector(:active-view-transition-type(a)");
+      if (
+        typeof window !== "undefined" &&
+        "CSS" in window &&
+        typeof window.CSS?.supports === "function"
+      )
+        this.isViewTransitionTypesSupported = window.CSS.supports(
+          "selector(:active-view-transition-type(a)",
+        );
     };
     this.updateLatestLocation = () => {
       this.latestLocation = this.parseLocation(this.history.location, this.latestLocation);
@@ -931,7 +1089,7 @@ var RouterCore = class {
     this.subscribe = (eventType, fn) => {
       const listener = {
         eventType,
-        fn
+        fn,
       };
       this.subscribers.add(listener);
       return () => {
@@ -956,7 +1114,7 @@ var RouterCore = class {
             searchStr: searchStr2,
             search: nullReplaceEqualDeep(previousLocation?.search, parsedSearch2),
             hash: decodePath(hash.slice(1)).path,
-            state: replaceEqualDeep$1(previousLocation?.state, state)
+            state: replaceEqualDeep$1(previousLocation?.state, state),
           };
         }
         const fullUrl = new URL(href, this.origin);
@@ -972,7 +1130,7 @@ var RouterCore = class {
           searchStr,
           search: nullReplaceEqualDeep(previousLocation?.search, parsedSearch),
           hash: decodePath(url.hash.slice(1)).path,
-          state: replaceEqualDeep$1(previousLocation?.state, state)
+          state: replaceEqualDeep$1(previousLocation?.state, state),
         };
       };
       const location = parse(locationToParse);
@@ -984,7 +1142,7 @@ var RouterCore = class {
         delete parsedTempLocation.state.__tempLocation;
         return {
           ...parsedTempLocation,
-          maskedLocation: location
+          maskedLocation: location,
         };
       }
       return location;
@@ -994,21 +1152,25 @@ var RouterCore = class {
         base: from,
         to: cleanPath(path),
         trailingSlash: this.options.trailingSlash,
-        cache: this.resolvePathCache
+        cache: this.resolvePathCache,
       });
     };
     this.matchRoutes = (pathnameOrNext, locationSearchOrOpts, opts) => {
-      if (typeof pathnameOrNext === "string") return this.matchRoutesInternal({
-        pathname: pathnameOrNext,
-        search: locationSearchOrOpts
-      }, opts);
+      if (typeof pathnameOrNext === "string")
+        return this.matchRoutesInternal(
+          {
+            pathname: pathnameOrNext,
+            search: locationSearchOrOpts,
+          },
+          opts,
+        );
       return this.matchRoutesInternal(pathnameOrNext, locationSearchOrOpts);
     };
     this.getMatchedRoutes = (pathname) => {
       return getMatchedRoutes({
         pathname,
         routesById: this.routesById,
-        processedTree: this.processedTree
+        processedTree: this.processedTree,
       });
     };
     this.cancelMatch = (id) => {
@@ -1031,42 +1193,69 @@ var RouterCore = class {
     };
     this.buildLocation = (opts) => {
       const build = (dest = {}) => {
-        const currentLocation = dest._fromLocation || this.pendingBuiltLocation || this.latestLocation;
+        const currentLocation =
+          dest._fromLocation || this.pendingBuiltLocation || this.latestLocation;
         const lightweightResult = this.matchRoutesLightweight(currentLocation);
-        if (dest.from && false) ;
-        const defaultedFromPath = dest.unsafeRelative === "path" ? currentLocation.pathname : dest.from ?? lightweightResult.fullPath;
+        if (dest.from && false);
+        const defaultedFromPath =
+          dest.unsafeRelative === "path"
+            ? currentLocation.pathname
+            : (dest.from ?? lightweightResult.fullPath);
         const fromPath = this.resolvePathWithBase(defaultedFromPath, ".");
         const fromSearch = lightweightResult.search;
-        const fromParams = Object.assign(/* @__PURE__ */ Object.create(null), lightweightResult.params);
-        const nextTo = dest.to ? this.resolvePathWithBase(fromPath, `${dest.to}`) : this.resolvePathWithBase(fromPath, ".");
-        const nextParams = dest.params === false || dest.params === null ? /* @__PURE__ */ Object.create(null) : (dest.params ?? true) === true ? fromParams : Object.assign(fromParams, functionalUpdate$1(dest.params, fromParams));
+        const fromParams = Object.assign(
+          /* @__PURE__ */ Object.create(null),
+          lightweightResult.params,
+        );
+        const nextTo = dest.to
+          ? this.resolvePathWithBase(fromPath, `${dest.to}`)
+          : this.resolvePathWithBase(fromPath, ".");
+        const nextParams =
+          dest.params === false || dest.params === null
+            ? /* @__PURE__ */ Object.create(null)
+            : (dest.params ?? true) === true
+              ? fromParams
+              : Object.assign(fromParams, functionalUpdate$1(dest.params, fromParams));
         const destMatchResult = this.getMatchedRoutes(nextTo);
         let destRoutes = destMatchResult.matchedRoutes;
-        if ((!destMatchResult.foundRoute || destMatchResult.foundRoute.path !== "/" && destMatchResult.routeParams["**"]) && this.options.notFoundRoute) destRoutes = [...destRoutes, this.options.notFoundRoute];
-        if (Object.keys(nextParams).length > 0) for (const route of destRoutes) {
-          const fn = route.options.params?.stringify ?? route.options.stringifyParams;
-          if (fn) try {
-            Object.assign(nextParams, fn(nextParams));
-          } catch {
+        if (
+          (!destMatchResult.foundRoute ||
+            (destMatchResult.foundRoute.path !== "/" && destMatchResult.routeParams["**"])) &&
+          this.options.notFoundRoute
+        )
+          destRoutes = [...destRoutes, this.options.notFoundRoute];
+        if (Object.keys(nextParams).length > 0)
+          for (const route of destRoutes) {
+            const fn = route.options.params?.stringify ?? route.options.stringifyParams;
+            if (fn)
+              try {
+                Object.assign(nextParams, fn(nextParams));
+              } catch {}
           }
-        }
-        const nextPathname = opts.leaveParams ? nextTo : decodePath(interpolatePath({
-          path: nextTo,
-          params: nextParams,
-          decoder: this.pathParamsDecoder,
-          server: this.isServer
-        }).interpolatedPath).path;
+        const nextPathname = opts.leaveParams
+          ? nextTo
+          : decodePath(
+              interpolatePath({
+                path: nextTo,
+                params: nextParams,
+                decoder: this.pathParamsDecoder,
+                server: this.isServer,
+              }).interpolatedPath,
+            ).path;
         let nextSearch = fromSearch;
         if (opts._includeValidateSearch && this.options.search?.strict) {
           const validatedSearch = {};
           destRoutes.forEach((route) => {
-            if (route.options.validateSearch) try {
-              Object.assign(validatedSearch, validateSearch(route.options.validateSearch, {
-                ...validatedSearch,
-                ...nextSearch
-              }));
-            } catch {
-            }
+            if (route.options.validateSearch)
+              try {
+                Object.assign(
+                  validatedSearch,
+                  validateSearch(route.options.validateSearch, {
+                    ...validatedSearch,
+                    ...nextSearch,
+                  }),
+                );
+              } catch {}
           });
           nextSearch = validatedSearch;
         }
@@ -1074,13 +1263,23 @@ var RouterCore = class {
           search: nextSearch,
           dest,
           destRoutes,
-          _includeValidateSearch: opts._includeValidateSearch
+          _includeValidateSearch: opts._includeValidateSearch,
         });
         nextSearch = nullReplaceEqualDeep(fromSearch, nextSearch);
         const searchStr = this.options.stringifySearch(nextSearch);
-        const hash = dest.hash === true ? currentLocation.hash : dest.hash ? functionalUpdate$1(dest.hash, currentLocation.hash) : void 0;
+        const hash =
+          dest.hash === true
+            ? currentLocation.hash
+            : dest.hash
+              ? functionalUpdate$1(dest.hash, currentLocation.hash)
+              : void 0;
         const hashStr = hash ? `#${hash}` : "";
-        let nextState = dest.state === true ? currentLocation.state : dest.state ? functionalUpdate$1(dest.state, currentLocation.state) : {};
+        let nextState =
+          dest.state === true
+            ? currentLocation.state
+            : dest.state
+              ? functionalUpdate$1(dest.state, currentLocation.state)
+              : {};
         nextState = replaceEqualDeep$1(currentLocation.state, nextState);
         const fullPath = `${nextPathname}${searchStr}${hashStr}`;
         let href;
@@ -1107,7 +1306,7 @@ var RouterCore = class {
           state: nextState,
           hash: hash ?? "",
           external,
-          unmaskOnReload: dest.unmaskOnReload
+          unmaskOnReload: dest.unmaskOnReload,
         };
       };
       const buildWithMatches = (dest = {}, maskedDest) => {
@@ -1120,11 +1319,16 @@ var RouterCore = class {
             if (match) {
               Object.assign(params, match.rawParams);
               const { from: _from, params: maskParams, ...maskProps } = match.route;
-              const nextParams = maskParams === false || maskParams === null ? /* @__PURE__ */ Object.create(null) : (maskParams ?? true) === true ? params : Object.assign(params, functionalUpdate$1(maskParams, params));
+              const nextParams =
+                maskParams === false || maskParams === null
+                  ? /* @__PURE__ */ Object.create(null)
+                  : (maskParams ?? true) === true
+                    ? params
+                    : Object.assign(params, functionalUpdate$1(maskParams, params));
               maskedDest = {
                 from: opts.from,
                 ...maskProps,
-                params: nextParams
+                params: nextParams,
               };
               maskedNext = build(maskedDest);
             }
@@ -1133,20 +1337,16 @@ var RouterCore = class {
         if (maskedNext) next.maskedLocation = maskedNext;
         return next;
       };
-      if (opts.mask) return buildWithMatches(opts, {
-        from: opts.from,
-        ...opts.mask
-      });
+      if (opts.mask)
+        return buildWithMatches(opts, {
+          from: opts.from,
+          ...opts.mask,
+        });
       return buildWithMatches(opts);
     };
     this.commitLocation = async ({ viewTransition, ignoreBlocker, ...next }) => {
       const isSameState = () => {
-        const ignoredProps = [
-          "key",
-          "__TSR_key",
-          "__TSR_index",
-          "__hashScrollIntoViewOptions"
-        ];
+        const ignoredProps = ["key", "__TSR_key", "__TSR_index", "__hashScrollIntoViewOptions"];
         ignoredProps.forEach((prop) => {
           next.state[prop] = this.latestLocation.state[prop];
         });
@@ -1179,22 +1379,34 @@ var RouterCore = class {
                   __tempKey: void 0,
                   __tempLocation: void 0,
                   __TSR_key: void 0,
-                  key: void 0
-                }
-              }
-            }
+                  key: void 0,
+                },
+              },
+            },
           };
-          if (nextHistory.unmaskOnReload ?? this.options.unmaskOnReload ?? false) nextHistory.state.__tempKey = this.tempLocationKey;
+          if (nextHistory.unmaskOnReload ?? this.options.unmaskOnReload ?? false)
+            nextHistory.state.__tempKey = this.tempLocationKey;
         }
-        nextHistory.state.__hashScrollIntoViewOptions = hashScrollIntoView ?? this.options.defaultHashScrollIntoView ?? true;
+        nextHistory.state.__hashScrollIntoViewOptions =
+          hashScrollIntoView ?? this.options.defaultHashScrollIntoView ?? true;
         this.shouldViewTransition = viewTransition;
-        this.history[next.replace ? "replace" : "push"](nextHistory.publicHref, nextHistory.state, { ignoreBlocker });
+        this.history[next.replace ? "replace" : "push"](nextHistory.publicHref, nextHistory.state, {
+          ignoreBlocker,
+        });
       }
       this.resetNextScroll = next.resetScroll ?? true;
       if (!this.history.subscribers.size) this.load();
       return this.commitLocationPromise;
     };
-    this.buildAndCommitLocation = ({ replace, resetScroll, hashScrollIntoView, viewTransition, ignoreBlocker, href, ...rest } = {}) => {
+    this.buildAndCommitLocation = ({
+      replace,
+      resetScroll,
+      hashScrollIntoView,
+      viewTransition,
+      ignoreBlocker,
+      href,
+      ...rest
+    } = {}) => {
       if (href) {
         const currentIndex = this.history.location.state.__TSR_index;
         const parsed = parseHref(href, { __TSR_index: replace ? currentIndex : currentIndex + 1 });
@@ -1205,7 +1417,7 @@ var RouterCore = class {
       }
       const location = this.buildLocation({
         ...rest,
-        _includeValidateSearch: true
+        _includeValidateSearch: true,
       });
       this.pendingBuiltLocation = location;
       const commitPromise = this.commitLocation({
@@ -1214,7 +1426,7 @@ var RouterCore = class {
         replace,
         resetScroll,
         hashScrollIntoView,
-        ignoreBlocker
+        ignoreBlocker,
       });
       Promise.resolve().then(() => {
         if (this.pendingBuiltLocation === location) this.pendingBuiltLocation = void 0;
@@ -1223,17 +1435,17 @@ var RouterCore = class {
     };
     this.navigate = async ({ to, reloadDocument, href, publicHref, ...rest }) => {
       let hrefIsUrl = false;
-      if (href) try {
-        new URL(`${href}`);
-        hrefIsUrl = true;
-      } catch {
-      }
+      if (href)
+        try {
+          new URL(`${href}`);
+          hrefIsUrl = true;
+        } catch {}
       if (hrefIsUrl && !reloadDocument) reloadDocument = true;
       if (reloadDocument) {
         if (to !== void 0 || !href) {
           const location = this.buildLocation({
             to,
-            ...rest
+            ...rest,
           });
           href = href ?? location.publicHref;
           publicHref = publicHref ?? location.publicHref;
@@ -1244,13 +1456,17 @@ var RouterCore = class {
         }
         if (!rest.ignoreBlocker) {
           const blockers = this.history.getBlockers?.() ?? [];
-          for (const blocker of blockers) if (blocker?.blockerFn) {
-            if (await blocker.blockerFn({
-              currentLocation: this.latestLocation,
-              nextLocation: this.latestLocation,
-              action: "PUSH"
-            })) return Promise.resolve();
-          }
+          for (const blocker of blockers)
+            if (blocker?.blockerFn) {
+              if (
+                await blocker.blockerFn({
+                  currentLocation: this.latestLocation,
+                  nextLocation: this.latestLocation,
+                  action: "PUSH",
+                })
+              )
+                return Promise.resolve();
+            }
         }
         if (rest.replace) window.location.replace(reloadHref);
         else window.location.href = reloadHref;
@@ -1260,7 +1476,7 @@ var RouterCore = class {
         ...rest,
         href,
         to,
-        _isNavigate: true
+        _isNavigate: true,
       });
     };
     this.beforeLoad = () => {
@@ -1273,19 +1489,22 @@ var RouterCore = class {
           params: true,
           hash: true,
           state: true,
-          _includeValidateSearch: true
+          _includeValidateSearch: true,
         });
         if (this.latestLocation.publicHref !== nextLocation.publicHref) {
           const href = this.getParsedLocationHref(nextLocation);
           if (nextLocation.external) throw redirect({ href });
-          else throw redirect({
-            href,
-            _builtLocation: nextLocation
-          });
+          else
+            throw redirect({
+              href,
+              _builtLocation: nextLocation,
+            });
         }
       }
       const pendingMatches = this.matchRoutes(this.latestLocation);
-      const nextCachedMatches = this.stores.cachedMatches.get().filter((d) => !pendingMatches.some((e) => e.id === d.id));
+      const nextCachedMatches = this.stores.cachedMatches
+        .get()
+        .filter((d) => !pendingMatches.some((e) => e.id === d.id));
       this.batch(() => {
         this.stores.status.set("pending");
         this.stores.statusCode.set(200);
@@ -1305,14 +1524,18 @@ var RouterCore = class {
           try {
             this.beforeLoad();
             const next = this.latestLocation;
-            const locationChangeInfo = getLocationChangeInfo(next, this.stores.resolvedLocation.get());
-            if (!this.stores.redirect.get()) this.emit({
-              type: "onBeforeNavigate",
-              ...locationChangeInfo
-            });
+            const locationChangeInfo = getLocationChangeInfo(
+              next,
+              this.stores.resolvedLocation.get(),
+            );
+            if (!this.stores.redirect.get())
+              this.emit({
+                type: "onBeforeNavigate",
+                ...locationChangeInfo,
+              });
             this.emit({
               type: "onBeforeLoad",
-              ...locationChangeInfo
+              ...locationChangeInfo,
             });
             await loadMatches({
               router: this,
@@ -1332,40 +1555,67 @@ var RouterCore = class {
                       const pendingMatches = this.stores.pendingMatches.get();
                       const mountPending = pendingMatches.length;
                       const currentMatches = this.stores.matches.get();
-                      exitingMatches = mountPending ? currentMatches.filter((match) => !this.stores.pendingMatchStores.has(match.id)) : null;
+                      exitingMatches = mountPending
+                        ? currentMatches.filter(
+                            (match) => !this.stores.pendingMatchStores.has(match.id),
+                          )
+                        : null;
                       const pendingRouteIds = /* @__PURE__ */ new Set();
-                      for (const s of this.stores.pendingMatchStores.values()) if (s.routeId) pendingRouteIds.add(s.routeId);
+                      for (const s of this.stores.pendingMatchStores.values())
+                        if (s.routeId) pendingRouteIds.add(s.routeId);
                       const activeRouteIds = /* @__PURE__ */ new Set();
-                      for (const s of this.stores.matchStores.values()) if (s.routeId) activeRouteIds.add(s.routeId);
-                      hookExitingMatches = mountPending ? currentMatches.filter((match) => !pendingRouteIds.has(match.routeId)) : null;
-                      hookEnteringMatches = mountPending ? pendingMatches.filter((match) => !activeRouteIds.has(match.routeId)) : null;
-                      hookStayingMatches = mountPending ? pendingMatches.filter((match) => activeRouteIds.has(match.routeId)) : currentMatches;
+                      for (const s of this.stores.matchStores.values())
+                        if (s.routeId) activeRouteIds.add(s.routeId);
+                      hookExitingMatches = mountPending
+                        ? currentMatches.filter((match) => !pendingRouteIds.has(match.routeId))
+                        : null;
+                      hookEnteringMatches = mountPending
+                        ? pendingMatches.filter((match) => !activeRouteIds.has(match.routeId))
+                        : null;
+                      hookStayingMatches = mountPending
+                        ? pendingMatches.filter((match) => activeRouteIds.has(match.routeId))
+                        : currentMatches;
                       this.stores.isLoading.set(false);
                       this.stores.loadedAt.set(Date.now());
                       if (mountPending) {
                         this.stores.setMatches(pendingMatches);
                         this.stores.setPending([]);
-                        this.stores.setCached([...this.stores.cachedMatches.get(), ...exitingMatches.filter((d) => d.status !== "error" && d.status !== "notFound" && d.status !== "redirected")]);
+                        this.stores.setCached([
+                          ...this.stores.cachedMatches.get(),
+                          ...exitingMatches.filter(
+                            (d) =>
+                              d.status !== "error" &&
+                              d.status !== "notFound" &&
+                              d.status !== "redirected",
+                          ),
+                        ]);
                         this.clearExpiredCache();
                       }
                     });
                     for (const [matches, hook] of [
                       [hookExitingMatches, "onLeave"],
                       [hookEnteringMatches, "onEnter"],
-                      [hookStayingMatches, "onStay"]
+                      [hookStayingMatches, "onStay"],
                     ]) {
                       if (!matches) continue;
-                      for (const match of matches) this.looseRoutesById[match.routeId].options[hook]?.(match);
+                      for (const match of matches)
+                        this.looseRoutesById[match.routeId].options[hook]?.(match);
                     }
                   });
                 });
-              }
+              },
             });
           } catch (err) {
             if (isRedirect(err)) {
               redirect2 = err;
             } else if (isNotFound(err)) notFound = err;
-            const nextStatusCode = redirect2 ? redirect2.status : notFound ? 404 : this.stores.matches.get().some((d) => d.status === "error") ? 500 : 200;
+            const nextStatusCode = redirect2
+              ? redirect2.status
+              : notFound
+                ? 404
+                : this.stores.matches.get().some((d) => d.status === "error")
+                  ? 500
+                  : 200;
             this.batch(() => {
               this.stores.statusCode.set(nextStatusCode);
               this.stores.redirect.set(redirect2);
@@ -1381,7 +1631,8 @@ var RouterCore = class {
       });
       this.latestLoadPromise = loadPromise;
       await loadPromise;
-      while (this.latestLoadPromise && loadPromise !== this.latestLoadPromise) await this.latestLoadPromise;
+      while (this.latestLoadPromise && loadPromise !== this.latestLoadPromise)
+        await this.latestLoadPromise;
       let newStatusCode = void 0;
       if (this.hasNotFoundMatch()) newStatusCode = 404;
       else if (this.stores.matches.get().some((d) => d.status === "error")) newStatusCode = 500;
@@ -1390,19 +1641,27 @@ var RouterCore = class {
     this.startViewTransition = (fn) => {
       const shouldViewTransition = this.shouldViewTransition ?? this.options.defaultViewTransition;
       this.shouldViewTransition = void 0;
-      if (shouldViewTransition && typeof document !== "undefined" && "startViewTransition" in document && typeof document.startViewTransition === "function") {
+      if (
+        shouldViewTransition &&
+        typeof document !== "undefined" &&
+        "startViewTransition" in document &&
+        typeof document.startViewTransition === "function"
+      ) {
         let startViewTransitionParams;
         if (typeof shouldViewTransition === "object" && this.isViewTransitionTypesSupported) {
           const next = this.latestLocation;
           const prevLocation = this.stores.resolvedLocation.get();
-          const resolvedViewTransitionTypes = typeof shouldViewTransition.types === "function" ? shouldViewTransition.types(getLocationChangeInfo(next, prevLocation)) : shouldViewTransition.types;
+          const resolvedViewTransitionTypes =
+            typeof shouldViewTransition.types === "function"
+              ? shouldViewTransition.types(getLocationChangeInfo(next, prevLocation))
+              : shouldViewTransition.types;
           if (resolvedViewTransitionTypes === false) {
             fn();
             return;
           }
           startViewTransitionParams = {
             update: fn,
-            types: resolvedViewTransitionTypes
+            types: resolvedViewTransitionTypes,
           };
         } else startViewTransitionParams = fn;
         document.startViewTransition(startViewTransitionParams);
@@ -1424,24 +1683,32 @@ var RouterCore = class {
         if (cachedMatch) {
           const next = updater(cachedMatch.get());
           if (next.status === "redirected") {
-            if (this.stores.cachedMatchStores.delete(id)) this.stores.cachedIds.set((prev) => prev.filter((matchId) => matchId !== id));
+            if (this.stores.cachedMatchStores.delete(id))
+              this.stores.cachedIds.set((prev) => prev.filter((matchId) => matchId !== id));
           } else cachedMatch.set(next);
         }
       });
     };
     this.getMatch = (matchId) => {
-      return this.stores.cachedMatchStores.get(matchId)?.get() ?? this.stores.pendingMatchStores.get(matchId)?.get() ?? this.stores.matchStores.get(matchId)?.get();
+      return (
+        this.stores.cachedMatchStores.get(matchId)?.get() ??
+        this.stores.pendingMatchStores.get(matchId)?.get() ??
+        this.stores.matchStores.get(matchId)?.get()
+      );
     };
     this.invalidate = (opts) => {
       const invalidate = (d) => {
-        if (opts?.filter?.(d) ?? true) return {
-          ...d,
-          invalid: true,
-          ...opts?.forcePending || d.status === "error" || d.status === "notFound" ? {
-            status: "pending",
-            error: void 0
-          } : void 0
-        };
+        if (opts?.filter?.(d) ?? true)
+          return {
+            ...d,
+            invalid: true,
+            ...(opts?.forcePending || d.status === "error" || d.status === "notFound"
+              ? {
+                  status: "pending",
+                  error: void 0,
+                }
+              : void 0),
+          };
         return d;
       };
       this.batch(() => {
@@ -1462,22 +1729,29 @@ var RouterCore = class {
         const href = this.getParsedLocationHref(location);
         redirect2.options.href = href;
         redirect2.headers.set("Location", href);
-      } else if (locationHeader) try {
-        const url = new URL(locationHeader);
-        if (this.origin && url.origin === this.origin) {
-          const href = url.pathname + url.search + url.hash;
-          redirect2.options.href = href;
-          redirect2.headers.set("Location", href);
-        }
-      } catch {
-      }
-      if (redirect2.options.href && !redirect2.options._builtLocation && isDangerousProtocol(redirect2.options.href, this.protocolAllowlist)) throw new Error("Redirect blocked: unsafe protocol");
-      if (!redirect2.headers.get("Location")) redirect2.headers.set("Location", redirect2.options.href);
+      } else if (locationHeader)
+        try {
+          const url = new URL(locationHeader);
+          if (this.origin && url.origin === this.origin) {
+            const href = url.pathname + url.search + url.hash;
+            redirect2.options.href = href;
+            redirect2.headers.set("Location", href);
+          }
+        } catch {}
+      if (
+        redirect2.options.href &&
+        !redirect2.options._builtLocation &&
+        isDangerousProtocol(redirect2.options.href, this.protocolAllowlist)
+      )
+        throw new Error("Redirect blocked: unsafe protocol");
+      if (!redirect2.headers.get("Location"))
+        redirect2.headers.set("Location", redirect2.options.href);
       return redirect2;
     };
     this.clearCache = (opts) => {
       const filter = opts?.filter;
-      if (filter !== void 0) this.stores.setCached(this.stores.cachedMatches.get().filter((m) => !filter(m)));
+      if (filter !== void 0)
+        this.stores.setCached(this.stores.cachedMatches.get().filter((m) => !filter(m)));
       else this.stores.setCached([]);
     };
     this.clearExpiredCache = () => {
@@ -1485,7 +1759,10 @@ var RouterCore = class {
       const filter = (d) => {
         const route = this.looseRoutesById[d.routeId];
         if (!route.options.loader) return true;
-        const gcTime = (d.preload ? route.options.preloadGcTime ?? this.options.defaultPreloadGcTime : route.options.gcTime ?? this.options.defaultGcTime) ?? 300 * 1e3;
+        const gcTime =
+          (d.preload
+            ? (route.options.preloadGcTime ?? this.options.defaultPreloadGcTime)
+            : (route.options.gcTime ?? this.options.defaultGcTime)) ?? 300 * 1e3;
         if (d.status === "error") return true;
         return now - d.updatedAt >= gcTime;
       };
@@ -1497,10 +1774,16 @@ var RouterCore = class {
       let matches = this.matchRoutes(next, {
         throwOnError: true,
         preload: true,
-        dest: opts
+        dest: opts,
       });
-      const activeMatchIds = /* @__PURE__ */ new Set([...this.stores.matchesId.get(), ...this.stores.pendingIds.get()]);
-      const loadedMatchIds = /* @__PURE__ */ new Set([...activeMatchIds, ...this.stores.cachedIds.get()]);
+      const activeMatchIds = /* @__PURE__ */ new Set([
+        ...this.stores.matchesId.get(),
+        ...this.stores.pendingIds.get(),
+      ]);
+      const loadedMatchIds = /* @__PURE__ */ new Set([
+        ...activeMatchIds,
+        ...this.stores.cachedIds.get(),
+      ]);
       const matchesToCache = matches.filter((match) => !loadedMatchIds.has(match.id));
       if (matchesToCache.length) {
         const cachedMatches = this.stores.cachedMatches.get();
@@ -1513,9 +1796,10 @@ var RouterCore = class {
           location: next,
           preload: true,
           updateMatch: (id, updater) => {
-            if (activeMatchIds.has(id)) matches = matches.map((d) => d.id === id ? updater(d) : d);
+            if (activeMatchIds.has(id))
+              matches = matches.map((d) => (d.id === id ? updater(d) : d));
             else this.updateMatch(id, updater);
-          }
+          },
         });
         return matches;
       } catch (err) {
@@ -1523,7 +1807,7 @@ var RouterCore = class {
           if (err.options.reloadDocument) return;
           return await this.preloadRoute({
             ...err.options,
-            _fromLocation: next
+            _fromLocation: next,
           });
         }
         if (!isNotFound(err)) console.error(err);
@@ -1535,17 +1819,28 @@ var RouterCore = class {
         ...location,
         to: location.to ? this.resolvePathWithBase(location.from || "", location.to) : void 0,
         params: location.params || {},
-        leaveParams: true
+        leaveParams: true,
       };
       const next = this.buildLocation(matchLocation);
       if (opts?.pending && this.stores.status.get() !== "pending") return false;
-      const baseLocation = (opts?.pending === void 0 ? !this.stores.isLoading.get() : opts.pending) ? this.latestLocation : this.stores.resolvedLocation.get() || this.stores.location.get();
-      const match = findSingleMatch(next.pathname, opts?.caseSensitive ?? false, opts?.fuzzy ?? false, baseLocation.pathname, this.processedTree);
+      const baseLocation = (opts?.pending === void 0 ? !this.stores.isLoading.get() : opts.pending)
+        ? this.latestLocation
+        : this.stores.resolvedLocation.get() || this.stores.location.get();
+      const match = findSingleMatch(
+        next.pathname,
+        opts?.caseSensitive ?? false,
+        opts?.fuzzy ?? false,
+        baseLocation.pathname,
+        this.processedTree,
+      );
       if (!match) return false;
       if (location.params) {
         if (!deepEqual(match.rawParams, location.params, { partial: true })) return false;
       }
-      if (opts?.includeSearch ?? true) return deepEqual(baseLocation.search, next.search, { partial: true }) ? match.rawParams : false;
+      if (opts?.includeSearch ?? true)
+        return deepEqual(baseLocation.search, next.search, { partial: true })
+          ? match.rawParams
+          : false;
       return match.rawParams;
     };
     this.hasNotFoundMatch = () => {
@@ -1562,7 +1857,7 @@ var RouterCore = class {
       notFoundMode: options.notFoundMode ?? "fuzzy",
       stringifySearch: options.stringifySearch ?? defaultStringifySearch,
       parseSearch: options.parseSearch ?? defaultParseSearch,
-      protocolAllowlist: options.protocolAllowlist ?? DEFAULT_PROTOCOL_ALLOWLIST
+      protocolAllowlist: options.protocolAllowlist ?? DEFAULT_PROTOCOL_ALLOWLIST,
     });
     if (typeof document !== "undefined") self.__TSR_ROUTER__ = this;
   }
@@ -1589,19 +1884,26 @@ var RouterCore = class {
     return this.routesById;
   }
   getParentContext(parentMatch) {
-    return !parentMatch?.id ? this.options.context ?? void 0 : parentMatch.context ?? this.options.context ?? void 0;
+    return !parentMatch?.id
+      ? (this.options.context ?? void 0)
+      : (parentMatch.context ?? this.options.context ?? void 0);
   }
   matchRoutesInternal(next, opts) {
     const matchedRoutesResult = this.getMatchedRoutes(next.pathname);
     const { foundRoute, routeParams, parsedParams } = matchedRoutesResult;
     let { matchedRoutes } = matchedRoutesResult;
     let isGlobalNotFound = false;
-    if (foundRoute ? foundRoute.path !== "/" && routeParams["**"] : trimPathRight(next.pathname)) if (this.options.notFoundRoute) matchedRoutes = [...matchedRoutes, this.options.notFoundRoute];
-    else isGlobalNotFound = true;
-    const globalNotFoundRouteId = isGlobalNotFound ? findGlobalNotFoundRouteId(this.options.notFoundMode, matchedRoutes) : void 0;
+    if (foundRoute ? foundRoute.path !== "/" && routeParams["**"] : trimPathRight(next.pathname))
+      if (this.options.notFoundRoute)
+        matchedRoutes = [...matchedRoutes, this.options.notFoundRoute];
+      else isGlobalNotFound = true;
+    const globalNotFoundRouteId = isGlobalNotFound
+      ? findGlobalNotFoundRouteId(this.options.notFoundMode, matchedRoutes)
+      : void 0;
     const matches = new Array(matchedRoutes.length);
     const previousActiveMatchesByRouteId = /* @__PURE__ */ new Map();
-    for (const store of this.stores.matchStores.values()) if (store.routeId) previousActiveMatchesByRouteId.set(store.routeId, store.get());
+    for (const store of this.stores.matchStores.values())
+      if (store.routeId) previousActiveMatchesByRouteId.set(store.routeId, store.get());
     for (let index = 0; index < matchedRoutes.length; index++) {
       const route = matchedRoutes[index];
       const parentMatch = matches[index - 1];
@@ -1612,19 +1914,21 @@ var RouterCore = class {
         const parentSearch = parentMatch?.search ?? next.search;
         const parentStrictSearch = parentMatch?._strictSearch ?? void 0;
         try {
-          const strictSearch = validateSearch(route.options.validateSearch, { ...parentSearch }) ?? void 0;
+          const strictSearch =
+            validateSearch(route.options.validateSearch, { ...parentSearch }) ?? void 0;
           preMatchSearch = {
             ...parentSearch,
-            ...strictSearch
+            ...strictSearch,
           };
           strictMatchSearch = {
             ...parentStrictSearch,
-            ...strictSearch
+            ...strictSearch,
           };
           searchError = void 0;
         } catch (err) {
           let searchParamError = err;
-          if (!(err instanceof SearchParamError)) searchParamError = new SearchParamError(err.message, { cause: err });
+          if (!(err instanceof SearchParamError))
+            searchParamError = new SearchParamError(err.message, { cause: err });
           if (opts?.throwOnError) throw searchParamError;
           preMatchSearch = parentSearch;
           strictMatchSearch = {};
@@ -1637,33 +1941,43 @@ var RouterCore = class {
         path: route.fullPath,
         params: routeParams,
         decoder: this.pathParamsDecoder,
-        server: this.isServer
+        server: this.isServer,
       });
       const matchId = route.id + interpolatedPath + loaderDepsHash;
       const existingMatch = this.getMatch(matchId);
       const previousMatch = previousActiveMatchesByRouteId.get(route.id);
       const strictParams = existingMatch?._strictParams ?? usedParams;
       let paramsError = void 0;
-      if (!existingMatch) try {
-        extractStrictParams(route, usedParams, parsedParams, strictParams);
-      } catch (err) {
-        if (isNotFound(err) || isRedirect(err)) paramsError = err;
-        else paramsError = new PathParamError(err.message, { cause: err });
-        if (opts?.throwOnError) throw paramsError;
-      }
+      if (!existingMatch)
+        try {
+          extractStrictParams(route, usedParams, parsedParams, strictParams);
+        } catch (err) {
+          if (isNotFound(err) || isRedirect(err)) paramsError = err;
+          else paramsError = new PathParamError(err.message, { cause: err });
+          if (opts?.throwOnError) throw paramsError;
+        }
       Object.assign(routeParams, strictParams);
       const cause = previousMatch ? "stay" : "enter";
       let match;
-      if (existingMatch) match = {
-        ...existingMatch,
-        cause,
-        params: previousMatch?.params ?? routeParams,
-        _strictParams: strictParams,
-        search: previousMatch ? nullReplaceEqualDeep(previousMatch.search, preMatchSearch) : nullReplaceEqualDeep(existingMatch.search, preMatchSearch),
-        _strictSearch: strictMatchSearch
-      };
+      if (existingMatch)
+        match = {
+          ...existingMatch,
+          cause,
+          params: previousMatch?.params ?? routeParams,
+          _strictParams: strictParams,
+          search: previousMatch
+            ? nullReplaceEqualDeep(previousMatch.search, preMatchSearch)
+            : nullReplaceEqualDeep(existingMatch.search, preMatchSearch),
+          _strictSearch: strictMatchSearch,
+        };
       else {
-        const status = route.options.loader || route.options.beforeLoad || route.lazyFn || routeNeedsPreload(route) ? "pending" : "success";
+        const status =
+          route.options.loader ||
+          route.options.beforeLoad ||
+          route.lazyFn ||
+          routeNeedsPreload(route)
+            ? "pending"
+            : "success";
         match = {
           id: matchId,
           ssr: void 0,
@@ -1673,7 +1987,9 @@ var RouterCore = class {
           _strictParams: strictParams,
           pathname: interpolatedPath,
           updatedAt: Date.now(),
-          search: previousMatch ? nullReplaceEqualDeep(previousMatch.search, preMatchSearch) : preMatchSearch,
+          search: previousMatch
+            ? nullReplaceEqualDeep(previousMatch.search, preMatchSearch)
+            : preMatchSearch,
           _strictSearch: strictMatchSearch,
           searchError: void 0,
           status,
@@ -1687,7 +2003,9 @@ var RouterCore = class {
           abortController: new AbortController(),
           fetchCount: 0,
           cause,
-          loaderDeps: previousMatch ? replaceEqualDeep$1(previousMatch.loaderDeps, loaderDeps) : loaderDeps,
+          loaderDeps: previousMatch
+            ? replaceEqualDeep$1(previousMatch.loaderDeps, loaderDeps)
+            : loaderDeps,
           invalid: false,
           preload: false,
           links: void 0,
@@ -1695,7 +2013,7 @@ var RouterCore = class {
           headScripts: void 0,
           meta: void 0,
           staticData: route.options.staticData || {},
-          fullPath: route.fullPath
+          fullPath: route.fullPath,
         };
       }
       if (!opts?.preload) match.globalNotFound = globalNotFoundRouteId === route.id;
@@ -1704,7 +2022,7 @@ var RouterCore = class {
       match.context = {
         ...parentContext,
         ...match.__routeContext,
-        ...match.__beforeLoadContext
+        ...match.__beforeLoadContext,
       };
       matches[index] = match;
     }
@@ -1713,7 +2031,9 @@ var RouterCore = class {
       const route = this.looseRoutesById[match.routeId];
       const existingMatch = this.getMatch(match.id);
       const previousMatch = previousActiveMatchesByRouteId.get(match.routeId);
-      match.params = previousMatch ? nullReplaceEqualDeep(previousMatch.params, routeParams) : routeParams;
+      match.params = previousMatch
+        ? nullReplaceEqualDeep(previousMatch.params, routeParams)
+        : routeParams;
       if (!existingMatch) {
         const parentMatch = matches[index - 1];
         const parentContext = this.getParentContext(parentMatch);
@@ -1723,66 +2043,71 @@ var RouterCore = class {
             params: match.params,
             context: parentContext ?? {},
             location: next,
-            navigate: (opts2) => this.navigate({
-              ...opts2,
-              _fromLocation: next
-            }),
+            navigate: (opts2) =>
+              this.navigate({
+                ...opts2,
+                _fromLocation: next,
+              }),
             buildLocation: this.buildLocation,
             cause: match.cause,
             abortController: match.abortController,
             preload: !!match.preload,
             matches,
-            routeId: route.id
+            routeId: route.id,
           };
           match.__routeContext = route.options.context(contextFnContext) ?? void 0;
         }
         match.context = {
           ...parentContext,
           ...match.__routeContext,
-          ...match.__beforeLoadContext
+          ...match.__beforeLoadContext,
         };
       }
     }
     return matches;
   }
   /**
-  * Lightweight route matching for buildLocation.
-  * Only computes fullPath, accumulated search, and params - skipping expensive
-  * operations like AbortController, ControlledPromise, loaderDeps, and full match objects.
-  */
+   * Lightweight route matching for buildLocation.
+   * Only computes fullPath, accumulated search, and params - skipping expensive
+   * operations like AbortController, ControlledPromise, loaderDeps, and full match objects.
+   */
   matchRoutesLightweight(location) {
     const { matchedRoutes, routeParams, parsedParams } = this.getMatchedRoutes(location.pathname);
     const lastRoute = last(matchedRoutes);
     const accumulatedSearch = { ...location.search };
-    for (const route of matchedRoutes) try {
-      Object.assign(accumulatedSearch, validateSearch(route.options.validateSearch, accumulatedSearch));
-    } catch {
-    }
+    for (const route of matchedRoutes)
+      try {
+        Object.assign(
+          accumulatedSearch,
+          validateSearch(route.options.validateSearch, accumulatedSearch),
+        );
+      } catch {}
     const lastStateMatchId = last(this.stores.matchesId.get());
     const lastStateMatch = lastStateMatchId && this.stores.matchStores.get(lastStateMatchId)?.get();
-    const canReuseParams = lastStateMatch && lastStateMatch.routeId === lastRoute.id && lastStateMatch.pathname === location.pathname;
+    const canReuseParams =
+      lastStateMatch &&
+      lastStateMatch.routeId === lastRoute.id &&
+      lastStateMatch.pathname === location.pathname;
     let params;
     if (canReuseParams) params = lastStateMatch.params;
     else {
       const strictParams = Object.assign(/* @__PURE__ */ Object.create(null), routeParams);
-      for (const route of matchedRoutes) try {
-        extractStrictParams(route, routeParams, parsedParams ?? {}, strictParams);
-      } catch {
-      }
+      for (const route of matchedRoutes)
+        try {
+          extractStrictParams(route, routeParams, parsedParams ?? {}, strictParams);
+        } catch {}
       params = strictParams;
     }
     return {
       matchedRoutes,
       fullPath: lastRoute.fullPath,
       search: accumulatedSearch,
-      params
+      params,
     };
   }
 };
-var SearchParamError = class extends Error {
-};
-var PathParamError = class extends Error {
-};
+var SearchParamError = class extends Error {};
+var PathParamError = class extends Error {};
 function getInitialRouterState(location) {
   return {
     loadedAt: 0,
@@ -1792,7 +2117,7 @@ function getInitialRouterState(location) {
     resolvedLocation: void 0,
     location,
     matches: [],
-    statusCode: 200
+    statusCode: 200,
   };
 }
 function validateSearch(validateSearch2, input) {
@@ -1800,7 +2125,8 @@ function validateSearch(validateSearch2, input) {
   if ("~standard" in validateSearch2) {
     const result = validateSearch2["~standard"].validate(input);
     if (result instanceof Promise) throw new SearchParamError("Async validation not supported");
-    if (result.issues) throw new SearchParamError(JSON.stringify(result.issues, void 0, 2), { cause: result });
+    if (result.issues)
+      throw new SearchParamError(JSON.stringify(result.issues, void 0, 2), { cause: result });
     return result.value;
   }
   if ("parse" in validateSearch2) return validateSearch2.parse(input);
@@ -1822,7 +2148,7 @@ function getMatchedRoutes({ pathname, routesById, processedTree }) {
     matchedRoutes: match?.branch || [routesById["__root__"]],
     routeParams,
     foundRoute,
-    parsedParams
+    parsedParams,
   };
 }
 function applySearchMiddleware({ search, dest, destRoutes, _includeValidateSearch }) {
@@ -1832,17 +2158,20 @@ function buildMiddlewareChain(destRoutes) {
   const context = {
     dest: null,
     _includeValidateSearch: false,
-    middlewares: []
+    middlewares: [],
   };
   for (const route of destRoutes) {
     if ("search" in route.options) {
-      if (route.options.search?.middlewares) context.middlewares.push(...route.options.search.middlewares);
+      if (route.options.search?.middlewares)
+        context.middlewares.push(...route.options.search.middlewares);
     } else if (route.options.preSearchFilters || route.options.postSearchFilters) {
       const legacyMiddleware = ({ search, next }) => {
         let nextSearch = search;
-        if ("preSearchFilters" in route.options && route.options.preSearchFilters) nextSearch = route.options.preSearchFilters.reduce((prev, next2) => next2(prev), search);
+        if ("preSearchFilters" in route.options && route.options.preSearchFilters)
+          nextSearch = route.options.preSearchFilters.reduce((prev, next2) => next2(prev), search);
         const result = next(nextSearch);
-        if ("postSearchFilters" in route.options && route.options.postSearchFilters) return route.options.postSearchFilters.reduce((prev, next2) => next2(prev), result);
+        if ("postSearchFilters" in route.options && route.options.postSearchFilters)
+          return route.options.postSearchFilters.reduce((prev, next2) => next2(prev), result);
         return result;
       };
       context.middlewares.push(legacyMiddleware);
@@ -1854,7 +2183,7 @@ function buildMiddlewareChain(destRoutes) {
         try {
           return {
             ...result,
-            ...validateSearch(route.options.validateSearch, result) ?? void 0
+            ...(validateSearch(route.options.validateSearch, result) ?? void 0),
           };
         } catch {
           return result;
@@ -1878,7 +2207,7 @@ function buildMiddlewareChain(destRoutes) {
     };
     return middleware({
       search: currentSearch,
-      next
+      next,
     });
   };
   return function middleware(search, dest, _includeValidateSearch) {
@@ -1888,20 +2217,23 @@ function buildMiddlewareChain(destRoutes) {
   };
 }
 function findGlobalNotFoundRouteId(notFoundMode, routes) {
-  if (notFoundMode !== "root") for (let i = routes.length - 1; i >= 0; i--) {
-    const route = routes[i];
-    if (route.children) return route.id;
-  }
+  if (notFoundMode !== "root")
+    for (let i = routes.length - 1; i >= 0; i--) {
+      const route = routes[i];
+      if (route.children) return route.id;
+    }
   return rootRouteId;
 }
 function extractStrictParams(route, referenceParams, parsedParams, accumulatedParams) {
   const parseParams = route.options.params?.parse ?? route.options.parseParams;
-  if (parseParams) if (route.options.skipRouteOnParseError) {
-    for (const key in referenceParams) if (key in parsedParams) accumulatedParams[key] = parsedParams[key];
-  } else {
-    const result = parseParams(accumulatedParams);
-    Object.assign(accumulatedParams, result);
-  }
+  if (parseParams)
+    if (route.options.skipRouteOnParseError) {
+      for (const key in referenceParams)
+        if (key in parsedParams) accumulatedParams[key] = parsedParams[key];
+    } else {
+      const result = parseParams(accumulatedParams);
+      Object.assign(accumulatedParams, result);
+    }
 }
 var BaseRoute = class {
   get to() {
@@ -1929,7 +2261,9 @@ var BaseRoute = class {
       let path = isRoot ? rootRouteId : options2?.path;
       if (path && path !== "/") path = trimPathLeft(path);
       const customId = options2?.id || path;
-      let id = isRoot ? rootRouteId : joinPaths([this.parentRoute.id === "__root__" ? "" : this.parentRoute.id, customId]);
+      let id = isRoot
+        ? rootRouteId
+        : joinPaths([this.parentRoute.id === "__root__" ? "" : this.parentRoute.id, customId]);
       if (path === "__root__") path = "/";
       if (id !== "__root__") id = joinPaths(["/", id]);
       const fullPath = id === "__root__" ? "/" : joinPaths([this.parentRoute.fullPath, path]);
@@ -1943,7 +2277,8 @@ var BaseRoute = class {
     };
     this._addFileChildren = (children) => {
       if (Array.isArray(children)) this.children = children;
-      if (typeof children === "object" && children !== null) this.children = Object.values(children);
+      if (typeof children === "object" && children !== null)
+        this.children = Object.values(children);
       return this;
     };
     this._addFileTypes = () => {
@@ -1961,13 +2296,15 @@ var BaseRoute = class {
       this.lazyFn = lazyFn;
       return this;
     };
-    this.redirect = (opts) => redirect({
-      from: this.fullPath,
-      ...opts
-    });
+    this.redirect = (opts) =>
+      redirect({
+        from: this.fullPath,
+        ...opts,
+      });
     this.options = options || {};
     this.isRoot = !options?.getParentRoute;
-    if (options?.id && options?.path) throw new Error(`Route cannot have both an 'id' and a 'path' option.`);
+    if (options?.id && options?.path)
+      throw new Error(`Route cannot have both an 'id' and a 'path' option.`);
   }
 };
 var BaseRootRoute = class extends BaseRoute {
@@ -1979,7 +2316,11 @@ function useMatch(opts) {
   const router2 = useRouter();
   const nearestMatchId = reactExports.useContext(opts.from ? dummyMatchContext : matchContext);
   const key = opts.from ?? nearestMatchId;
-  const matchStore = key ? opts.from ? router2.stores.getRouteMatchStore(key) : router2.stores.matchStores.get(key) : void 0;
+  const matchStore = key
+    ? opts.from
+      ? router2.stores.getRouteMatchStore(key)
+      : router2.stores.matchStores.get(key)
+    : void 0;
   {
     const match = matchStore?.get();
     if ((opts.shouldThrow ?? true) && !match) {
@@ -1996,7 +2337,7 @@ function useLoaderData(opts) {
     structuralSharing: opts.structuralSharing,
     select: (s) => {
       return opts.select ? opts.select(s.loaderData) : s.loaderData;
-    }
+    },
   });
 }
 function useLoaderDeps(opts) {
@@ -2005,7 +2346,7 @@ function useLoaderDeps(opts) {
     ...rest,
     select: (s) => {
       return select ? select(s.loaderDeps) : s.loaderDeps;
-    }
+    },
   });
 }
 function useParams(opts) {
@@ -2017,7 +2358,7 @@ function useParams(opts) {
     select: (match) => {
       const params = opts.strict === false ? match.params : match._strictParams;
       return opts.select ? opts.select(params) : params;
-    }
+    },
   });
 }
 function useSearch(opts) {
@@ -2028,22 +2369,25 @@ function useSearch(opts) {
     structuralSharing: opts.structuralSharing,
     select: (match) => {
       return opts.select ? opts.select(match.search) : match.search;
-    }
+    },
   });
 }
 function useNavigate(_defaultOpts) {
   const router2 = useRouter();
-  return reactExports.useCallback((options) => {
-    return router2.navigate({
-      ...options,
-      from: options.from ?? _defaultOpts?.from
-    });
-  }, [_defaultOpts?.from, router2]);
+  return reactExports.useCallback(
+    (options) => {
+      return router2.navigate({
+        ...options,
+        from: options.from ?? _defaultOpts?.from,
+      });
+    },
+    [_defaultOpts?.from, router2],
+  );
 }
 function useRouteContext(opts) {
   return useMatch({
     ...opts,
-    select: (match) => opts.select ? opts.select(match.context) : match.context
+    select: (match) => (opts.select ? opts.select(match.context) : match.context),
   });
 }
 var reactDomExports = requireReactDom();
@@ -2051,41 +2395,81 @@ const ReactDOM = /* @__PURE__ */ getDefaultExportFromCjs(reactDomExports);
 function useLinkProps(options, forwardedRef) {
   const router2 = useRouter();
   const innerRef = useForwardedRef(forwardedRef);
-  const { activeProps, inactiveProps, activeOptions, to, preload: userPreload, preloadDelay: userPreloadDelay, preloadIntentProximity: _preloadIntentProximity, hashScrollIntoView, replace, startTransition, resetScroll, viewTransition, children, target, disabled, style, className, onClick, onBlur, onFocus, onMouseEnter, onMouseLeave, onTouchStart, ignoreBlocker, params: _params, search: _search, hash: _hash, state: _state, mask: _mask, reloadDocument: _reloadDocument, unsafeRelative: _unsafeRelative, from: _from, _fromLocation, ...propsSafeToSpread } = options;
+  const {
+    activeProps,
+    inactiveProps,
+    activeOptions,
+    to,
+    preload: userPreload,
+    preloadDelay: userPreloadDelay,
+    preloadIntentProximity: _preloadIntentProximity,
+    hashScrollIntoView,
+    replace,
+    startTransition,
+    resetScroll,
+    viewTransition,
+    children,
+    target,
+    disabled,
+    style,
+    className,
+    onClick,
+    onBlur,
+    onFocus,
+    onMouseEnter,
+    onMouseLeave,
+    onTouchStart,
+    ignoreBlocker,
+    params: _params,
+    search: _search,
+    hash: _hash,
+    state: _state,
+    mask: _mask,
+    reloadDocument: _reloadDocument,
+    unsafeRelative: _unsafeRelative,
+    from: _from,
+    _fromLocation,
+    ...propsSafeToSpread
+  } = options;
   {
     const safeInternal = isSafeInternal(to);
-    if (typeof to === "string" && !safeInternal && to.indexOf(":") > -1) try {
-      new URL(to);
-      if (isDangerousProtocol(to, router2.protocolAllowlist)) {
-        if (false) ;
+    if (typeof to === "string" && !safeInternal && to.indexOf(":") > -1)
+      try {
+        new URL(to);
+        if (isDangerousProtocol(to, router2.protocolAllowlist)) {
+          if (false);
+          return {
+            ...propsSafeToSpread,
+            ref: innerRef,
+            href: void 0,
+            ...(children && { children }),
+            ...(target && { target }),
+            ...(disabled && { disabled }),
+            ...(style && { style }),
+            ...(className && { className }),
+          };
+        }
         return {
           ...propsSafeToSpread,
           ref: innerRef,
-          href: void 0,
-          ...children && { children },
-          ...target && { target },
-          ...disabled && { disabled },
-          ...style && { style },
-          ...className && { className }
+          href: to,
+          ...(children && { children }),
+          ...(target && { target }),
+          ...(disabled && { disabled }),
+          ...(style && { style }),
+          ...(className && { className }),
         };
-      }
-      return {
-        ...propsSafeToSpread,
-        ref: innerRef,
-        href: to,
-        ...children && { children },
-        ...target && { target },
-        ...disabled && { disabled },
-        ...style && { style },
-        ...className && { className }
-      };
-    } catch {
-    }
+      } catch {}
     const next2 = router2.buildLocation({
       ...options,
-      from: options.from
+      from: options.from,
     });
-    const hrefOption2 = getHrefOption(next2.maskedLocation ? next2.maskedLocation.publicHref : next2.publicHref, next2.maskedLocation ? next2.maskedLocation.external : next2.external, router2.history, disabled);
+    const hrefOption2 = getHrefOption(
+      next2.maskedLocation ? next2.maskedLocation.publicHref : next2.publicHref,
+      next2.maskedLocation ? next2.maskedLocation.external : next2.external,
+      router2.history,
+      disabled,
+    );
     const externalLink2 = (() => {
       if (hrefOption2?.external) {
         if (isDangerousProtocol(hrefOption2.href, router2.protocolAllowlist)) {
@@ -2094,54 +2478,75 @@ function useLinkProps(options, forwardedRef) {
         return hrefOption2.href;
       }
       if (safeInternal) return void 0;
-      if (typeof to === "string" && to.indexOf(":") > -1) try {
-        new URL(to);
-        if (isDangerousProtocol(to, router2.protocolAllowlist)) {
-          if (false) ;
-          return;
-        }
-        return to;
-      } catch {
-      }
+      if (typeof to === "string" && to.indexOf(":") > -1)
+        try {
+          new URL(to);
+          if (isDangerousProtocol(to, router2.protocolAllowlist)) {
+            if (false);
+            return;
+          }
+          return to;
+        } catch {}
     })();
     const isActive2 = (() => {
       if (externalLink2) return false;
       const currentLocation2 = router2.stores.location.get();
       const exact = activeOptions?.exact ?? false;
       if (exact) {
-        if (!exactPathTest(currentLocation2.pathname, next2.pathname, router2.basepath)) return false;
+        if (!exactPathTest(currentLocation2.pathname, next2.pathname, router2.basepath))
+          return false;
       } else {
         const currentPathSplit = removeTrailingSlash(currentLocation2.pathname, router2.basepath);
         const nextPathSplit = removeTrailingSlash(next2.pathname, router2.basepath);
-        if (!(currentPathSplit.startsWith(nextPathSplit) && (currentPathSplit.length === nextPathSplit.length || currentPathSplit[nextPathSplit.length] === "/"))) return false;
+        if (
+          !(
+            currentPathSplit.startsWith(nextPathSplit) &&
+            (currentPathSplit.length === nextPathSplit.length ||
+              currentPathSplit[nextPathSplit.length] === "/")
+          )
+        )
+          return false;
       }
       if (activeOptions?.includeSearch ?? true) {
         if (currentLocation2.search !== next2.search) {
-          const currentSearchEmpty = !currentLocation2.search || typeof currentLocation2.search === "object" && Object.keys(currentLocation2.search).length === 0;
-          const nextSearchEmpty = !next2.search || typeof next2.search === "object" && Object.keys(next2.search).length === 0;
+          const currentSearchEmpty =
+            !currentLocation2.search ||
+            (typeof currentLocation2.search === "object" &&
+              Object.keys(currentLocation2.search).length === 0);
+          const nextSearchEmpty =
+            !next2.search ||
+            (typeof next2.search === "object" && Object.keys(next2.search).length === 0);
           if (!(currentSearchEmpty && nextSearchEmpty)) {
-            if (!deepEqual(currentLocation2.search, next2.search, {
-              partial: !exact,
-              ignoreUndefined: !activeOptions?.explicitUndefined
-            })) return false;
+            if (
+              !deepEqual(currentLocation2.search, next2.search, {
+                partial: !exact,
+                ignoreUndefined: !activeOptions?.explicitUndefined,
+              })
+            )
+              return false;
           }
         }
       }
       if (activeOptions?.includeHash) return false;
       return true;
     })();
-    if (externalLink2) return {
-      ...propsSafeToSpread,
-      ref: innerRef,
-      href: externalLink2,
-      ...children && { children },
-      ...target && { target },
-      ...disabled && { disabled },
-      ...style && { style },
-      ...className && { className }
-    };
-    const resolvedActiveProps2 = isActive2 ? functionalUpdate$1(activeProps, {}) ?? STATIC_ACTIVE_OBJECT : STATIC_EMPTY_OBJECT;
-    const resolvedInactiveProps2 = isActive2 ? STATIC_EMPTY_OBJECT : functionalUpdate$1(inactiveProps, {}) ?? STATIC_EMPTY_OBJECT;
+    if (externalLink2)
+      return {
+        ...propsSafeToSpread,
+        ref: innerRef,
+        href: externalLink2,
+        ...(children && { children }),
+        ...(target && { target }),
+        ...(disabled && { disabled }),
+        ...(style && { style }),
+        ...(className && { className }),
+      };
+    const resolvedActiveProps2 = isActive2
+      ? (functionalUpdate$1(activeProps, {}) ?? STATIC_ACTIVE_OBJECT)
+      : STATIC_EMPTY_OBJECT;
+    const resolvedInactiveProps2 = isActive2
+      ? STATIC_EMPTY_OBJECT
+      : (functionalUpdate$1(inactiveProps, {}) ?? STATIC_EMPTY_OBJECT);
     const resolvedStyle2 = (() => {
       const baseStyle = style;
       const activeStyle = resolvedActiveProps2.style;
@@ -2153,7 +2558,7 @@ function useLinkProps(options, forwardedRef) {
       return {
         ...baseStyle,
         ...activeStyle,
-        ...inactiveStyle
+        ...inactiveStyle,
       };
     })();
     const resolvedClassName2 = (() => {
@@ -2175,10 +2580,10 @@ function useLinkProps(options, forwardedRef) {
       ref: innerRef,
       disabled: !!disabled,
       target,
-      ...resolvedStyle2 && { style: resolvedStyle2 },
-      ...resolvedClassName2 && { className: resolvedClassName2 },
-      ...disabled && STATIC_DISABLED_PROPS,
-      ...isActive2 && STATIC_ACTIVE_PROPS
+      ...(resolvedStyle2 && { style: resolvedStyle2 }),
+      ...(resolvedClassName2 && { className: resolvedClassName2 }),
+      ...(disabled && STATIC_DISABLED_PROPS),
+      ...(isActive2 && STATIC_ACTIVE_PROPS),
     };
   }
 }
@@ -2186,21 +2591,22 @@ var STATIC_EMPTY_OBJECT = {};
 var STATIC_ACTIVE_OBJECT = { className: "active" };
 var STATIC_DISABLED_PROPS = {
   role: "link",
-  "aria-disabled": true
+  "aria-disabled": true,
 };
 var STATIC_ACTIVE_PROPS = {
   "data-status": "active",
-  "aria-current": "page"
+  "aria-current": "page",
 };
 function getHrefOption(publicHref, external, history, disabled) {
   if (disabled) return void 0;
-  if (external) return {
-    href: publicHref,
-    external: true
-  };
+  if (external)
+    return {
+      href: publicHref,
+      external: true,
+    };
   return {
     href: history.createHref(publicHref) || "/",
-    external: false
+    external: false,
   };
 }
 function isSafeInternal(to) {
@@ -2212,7 +2618,10 @@ function isSafeInternal(to) {
 var Link = reactExports.forwardRef((props, ref) => {
   const { _asChild, ...rest } = props;
   const { type: _type, ...linkProps } = useLinkProps(rest, ref);
-  const children = typeof rest.children === "function" ? rest.children({ isActive: linkProps["data-status"] === "active" }) : rest.children;
+  const children =
+    typeof rest.children === "function"
+      ? rest.children({ isActive: linkProps["data-status"] === "active" })
+      : rest.children;
   if (!_asChild) {
     const { disabled: _, ...rest2 } = linkProps;
     return reactExports.createElement("a", rest2, children);
@@ -2221,47 +2630,47 @@ var Link = reactExports.forwardRef((props, ref) => {
 });
 var Route$p = class Route extends BaseRoute {
   /**
-  * @deprecated Use the `createRoute` function instead.
-  */
+   * @deprecated Use the `createRoute` function instead.
+   */
   constructor(options) {
     super(options);
     this.useMatch = (opts) => {
       return useMatch({
         select: opts?.select,
         from: this.id,
-        structuralSharing: opts?.structuralSharing
+        structuralSharing: opts?.structuralSharing,
       });
     };
     this.useRouteContext = (opts) => {
       return useRouteContext({
         ...opts,
-        from: this.id
+        from: this.id,
       });
     };
     this.useSearch = (opts) => {
       return useSearch({
         select: opts?.select,
         structuralSharing: opts?.structuralSharing,
-        from: this.id
+        from: this.id,
       });
     };
     this.useParams = (opts) => {
       return useParams({
         select: opts?.select,
         structuralSharing: opts?.structuralSharing,
-        from: this.id
+        from: this.id,
       });
     };
     this.useLoaderDeps = (opts) => {
       return useLoaderDeps({
         ...opts,
-        from: this.id
+        from: this.id,
       });
     };
     this.useLoaderData = (opts) => {
       return useLoaderData({
         ...opts,
-        from: this.id
+        from: this.id,
       });
     };
     this.useNavigate = () => {
@@ -2271,7 +2680,7 @@ var Route$p = class Route extends BaseRoute {
       return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, {
         ref,
         from: this.fullPath,
-        ...props
+        ...props,
       });
     });
   }
@@ -2286,47 +2695,47 @@ function createRootRouteWithContext() {
 }
 var RootRoute = class extends BaseRootRoute {
   /**
-  * @deprecated `RootRoute` is now an internal implementation detail. Use `createRootRoute()` instead.
-  */
+   * @deprecated `RootRoute` is now an internal implementation detail. Use `createRootRoute()` instead.
+   */
   constructor(options) {
     super(options);
     this.useMatch = (opts) => {
       return useMatch({
         select: opts?.select,
         from: this.id,
-        structuralSharing: opts?.structuralSharing
+        structuralSharing: opts?.structuralSharing,
       });
     };
     this.useRouteContext = (opts) => {
       return useRouteContext({
         ...opts,
-        from: this.id
+        from: this.id,
       });
     };
     this.useSearch = (opts) => {
       return useSearch({
         select: opts?.select,
         structuralSharing: opts?.structuralSharing,
-        from: this.id
+        from: this.id,
       });
     };
     this.useParams = (opts) => {
       return useParams({
         select: opts?.select,
         structuralSharing: opts?.structuralSharing,
-        from: this.id
+        from: this.id,
       });
     };
     this.useLoaderDeps = (opts) => {
       return useLoaderDeps({
         ...opts,
-        from: this.id
+        from: this.id,
       });
     };
     this.useLoaderData = (opts) => {
       return useLoaderData({
         ...opts,
-        from: this.id
+        from: this.id,
       });
     };
     this.useNavigate = () => {
@@ -2336,7 +2745,7 @@ var RootRoute = class extends BaseRootRoute {
       return /* @__PURE__ */ jsxRuntimeExports.jsx(Link, {
         ref,
         from: this.fullPath,
-        ...props
+        ...props,
       });
     });
   }
@@ -2364,32 +2773,39 @@ function lazyRouteComponent(importer, exportName) {
   let error;
   let reload;
   const load = () => {
-    if (!loadPromise) loadPromise = importer().then((res) => {
-      loadPromise = void 0;
-      comp = res[exportName];
-    }).catch((err) => {
-      error = err;
-      if (isModuleNotFoundError(error)) {
-        if (error instanceof Error && typeof window !== "undefined" && typeof sessionStorage !== "undefined") {
-          const storageKey = `tanstack_router_reload:${error.message}`;
-          if (!sessionStorage.getItem(storageKey)) {
-            sessionStorage.setItem(storageKey, "1");
-            reload = true;
+    if (!loadPromise)
+      loadPromise = importer()
+        .then((res) => {
+          loadPromise = void 0;
+          comp = res[exportName];
+        })
+        .catch((err) => {
+          error = err;
+          if (isModuleNotFoundError(error)) {
+            if (
+              error instanceof Error &&
+              typeof window !== "undefined" &&
+              typeof sessionStorage !== "undefined"
+            ) {
+              const storageKey = `tanstack_router_reload:${error.message}`;
+              if (!sessionStorage.getItem(storageKey)) {
+                sessionStorage.setItem(storageKey, "1");
+                reload = true;
+              }
+            }
           }
-        }
-      }
-    });
+        });
     return loadPromise;
   };
   const lazyComp = function Lazy(props) {
     if (reload) {
       window.location.reload();
-      throw new Promise(() => {
-      });
+      throw new Promise(() => {});
     }
     if (error) throw error;
-    if (!comp) if (reactUse) reactUse(load());
-    else throw load();
+    if (!comp)
+      if (reactUse) reactUse(load());
+      else throw load();
     return reactExports.createElement(comp, props);
   };
   lazyComp.preload = load;
@@ -2399,7 +2815,7 @@ var getStoreFactory = (opts) => {
   return {
     createMutableStore: createNonReactiveMutableStore,
     createReadonlyStore: createNonReactiveReadonlyStore,
-    batch: (fn) => fn()
+    batch: (fn) => fn(),
   };
 };
 var createRouter = (options) => {
@@ -2416,29 +2832,29 @@ function Asset({ tag, attrs, children, nonce }) {
       return /* @__PURE__ */ jsxRuntimeExports.jsx("title", {
         ...attrs,
         suppressHydrationWarning: true,
-        children
+        children,
       });
     case "meta":
       return /* @__PURE__ */ jsxRuntimeExports.jsx("meta", {
         ...attrs,
-        suppressHydrationWarning: true
+        suppressHydrationWarning: true,
       });
     case "link":
       return /* @__PURE__ */ jsxRuntimeExports.jsx("link", {
         ...attrs,
         nonce,
-        suppressHydrationWarning: true
+        suppressHydrationWarning: true,
       });
     case "style":
       return /* @__PURE__ */ jsxRuntimeExports.jsx("style", {
         ...attrs,
         dangerouslySetInnerHTML: { __html: children },
-        nonce
+        nonce,
       });
     case "script":
       return /* @__PURE__ */ jsxRuntimeExports.jsx(Script, {
         attrs,
-        children
+        children,
       });
     default:
       return null;
@@ -2447,7 +2863,11 @@ function Asset({ tag, attrs, children, nonce }) {
 function Script({ attrs, children }) {
   useRouter();
   useHydrated();
-  const dataScript = typeof attrs?.type === "string" && attrs.type !== "" && attrs.type !== "text/javascript" && attrs.type !== "module";
+  const dataScript =
+    typeof attrs?.type === "string" &&
+    attrs.type !== "" &&
+    attrs.type !== "text/javascript" &&
+    attrs.type !== "module";
   reactExports.useEffect(() => {
     if (dataScript) return;
     if (attrs?.src) {
@@ -2459,9 +2879,12 @@ function Script({ attrs, children }) {
           return attrs.src;
         }
       })();
-      if (Array.from(document.querySelectorAll("script[src]")).find((el) => el.src === normSrc)) return;
+      if (Array.from(document.querySelectorAll("script[src]")).find((el) => el.src === normSrc))
+        return;
       const script = document.createElement("script");
-      for (const [key, value] of Object.entries(attrs)) if (key !== "suppressHydrationWarning" && value !== void 0 && value !== false) script.setAttribute(key, typeof value === "boolean" ? "" : String(value));
+      for (const [key, value] of Object.entries(attrs))
+        if (key !== "suppressHydrationWarning" && value !== void 0 && value !== false)
+          script.setAttribute(key, typeof value === "boolean" ? "" : String(value));
       document.head.appendChild(script);
       return () => {
         if (script.parentNode) script.parentNode.removeChild(script);
@@ -2470,37 +2893,40 @@ function Script({ attrs, children }) {
     if (typeof children === "string") {
       const typeAttr = typeof attrs?.type === "string" ? attrs.type : "text/javascript";
       const nonceAttr = typeof attrs?.nonce === "string" ? attrs.nonce : void 0;
-      if (Array.from(document.querySelectorAll("script:not([src])")).find((el) => {
-        if (!(el instanceof HTMLScriptElement)) return false;
-        const sType = el.getAttribute("type") ?? "text/javascript";
-        const sNonce = el.getAttribute("nonce") ?? void 0;
-        return el.textContent === children && sType === typeAttr && sNonce === nonceAttr;
-      })) return;
+      if (
+        Array.from(document.querySelectorAll("script:not([src])")).find((el) => {
+          if (!(el instanceof HTMLScriptElement)) return false;
+          const sType = el.getAttribute("type") ?? "text/javascript";
+          const sNonce = el.getAttribute("nonce") ?? void 0;
+          return el.textContent === children && sType === typeAttr && sNonce === nonceAttr;
+        })
+      )
+        return;
       const script = document.createElement("script");
       script.textContent = children;
       if (attrs) {
-        for (const [key, value] of Object.entries(attrs)) if (key !== "suppressHydrationWarning" && value !== void 0 && value !== false) script.setAttribute(key, typeof value === "boolean" ? "" : String(value));
+        for (const [key, value] of Object.entries(attrs))
+          if (key !== "suppressHydrationWarning" && value !== void 0 && value !== false)
+            script.setAttribute(key, typeof value === "boolean" ? "" : String(value));
       }
       document.head.appendChild(script);
       return () => {
         if (script.parentNode) script.parentNode.removeChild(script);
       };
     }
-  }, [
-    attrs,
-    children,
-    dataScript
-  ]);
+  }, [attrs, children, dataScript]);
   {
-    if (attrs?.src) return /* @__PURE__ */ jsxRuntimeExports.jsx("script", {
-      ...attrs,
-      suppressHydrationWarning: true
-    });
-    if (typeof children === "string") return /* @__PURE__ */ jsxRuntimeExports.jsx("script", {
-      ...attrs,
-      dangerouslySetInnerHTML: { __html: children },
-      suppressHydrationWarning: true
-    });
+    if (attrs?.src)
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("script", {
+        ...attrs,
+        suppressHydrationWarning: true,
+      });
+    if (typeof children === "string")
+      return /* @__PURE__ */ jsxRuntimeExports.jsx("script", {
+        ...attrs,
+        dangerouslySetInnerHTML: { __html: children },
+        suppressHydrationWarning: true,
+      });
     return null;
   }
 }
@@ -2515,96 +2941,118 @@ function buildTagsFromMatches(router2, nonce, matches, assetCrossOrigin) {
       const m = metas[j];
       if (!m) continue;
       if (m.title) {
-        if (!title) title = {
-          tag: "title",
-          children: m.title
-        };
-      } else if ("script:ld+json" in m) try {
-        const json = JSON.stringify(m["script:ld+json"]);
-        resultMeta.push({
-          tag: "script",
-          attrs: { type: "application/ld+json" },
-          children: escapeHtml(json)
-        });
-      } catch {
-      }
+        if (!title)
+          title = {
+            tag: "title",
+            children: m.title,
+          };
+      } else if ("script:ld+json" in m)
+        try {
+          const json = JSON.stringify(m["script:ld+json"]);
+          resultMeta.push({
+            tag: "script",
+            attrs: { type: "application/ld+json" },
+            children: escapeHtml(json),
+          });
+        } catch {}
       else {
         const attribute = m.name ?? m.property;
-        if (attribute) if (metaByAttribute[attribute]) continue;
-        else metaByAttribute[attribute] = true;
+        if (attribute)
+          if (metaByAttribute[attribute]) continue;
+          else metaByAttribute[attribute] = true;
         resultMeta.push({
           tag: "meta",
           attrs: {
             ...m,
-            nonce
-          }
+            nonce,
+          },
         });
       }
     }
   }
   if (title) resultMeta.push(title);
-  if (nonce) resultMeta.push({
-    tag: "meta",
-    attrs: {
-      property: "csp-nonce",
-      content: nonce
-    }
-  });
+  if (nonce)
+    resultMeta.push({
+      tag: "meta",
+      attrs: {
+        property: "csp-nonce",
+        content: nonce,
+      },
+    });
   resultMeta.reverse();
-  const constructedLinks = matches.map((match) => match.links).filter(Boolean).flat(1).map((link) => ({
-    tag: "link",
-    attrs: {
-      ...link,
-      nonce
-    }
-  }));
-  const manifest = router2.ssr?.manifest;
-  const assetLinks = matches.map((match) => manifest?.routes[match.routeId]?.assets ?? []).filter(Boolean).flat(1).filter((asset) => asset.tag === "link").map((asset) => ({
-    tag: "link",
-    attrs: {
-      ...asset.attrs,
-      crossOrigin: getAssetCrossOrigin(assetCrossOrigin, "stylesheet") ?? asset.attrs?.crossOrigin,
-      suppressHydrationWarning: true,
-      nonce
-    }
-  }));
-  const preloadLinks = [];
-  matches.map((match) => router2.looseRoutesById[match.routeId]).forEach((route) => router2.ssr?.manifest?.routes[route.id]?.preloads?.filter(Boolean).forEach((preload) => {
-    const preloadLink = resolveManifestAssetLink(preload);
-    preloadLinks.push({
+  const constructedLinks = matches
+    .map((match) => match.links)
+    .filter(Boolean)
+    .flat(1)
+    .map((link) => ({
       tag: "link",
       attrs: {
-        rel: "modulepreload",
-        href: preloadLink.href,
-        crossOrigin: getAssetCrossOrigin(assetCrossOrigin, "modulepreload") ?? preloadLink.crossOrigin,
-        nonce
-      }
-    });
-  }));
-  const styles = matches.map((match) => match.styles).flat(1).filter(Boolean).map(({ children, ...attrs }) => ({
-    tag: "style",
-    attrs: {
-      ...attrs,
-      nonce
-    },
-    children
-  }));
-  const headScripts = matches.map((match) => match.headScripts).flat(1).filter(Boolean).map(({ children, ...script }) => ({
-    tag: "script",
-    attrs: {
-      ...script,
-      nonce
-    },
-    children
-  }));
-  return uniqBy([
-    ...resultMeta,
-    ...preloadLinks,
-    ...constructedLinks,
-    ...assetLinks,
-    ...styles,
-    ...headScripts
-  ], (d) => JSON.stringify(d));
+        ...link,
+        nonce,
+      },
+    }));
+  const manifest = router2.ssr?.manifest;
+  const assetLinks = matches
+    .map((match) => manifest?.routes[match.routeId]?.assets ?? [])
+    .filter(Boolean)
+    .flat(1)
+    .filter((asset) => asset.tag === "link")
+    .map((asset) => ({
+      tag: "link",
+      attrs: {
+        ...asset.attrs,
+        crossOrigin:
+          getAssetCrossOrigin(assetCrossOrigin, "stylesheet") ?? asset.attrs?.crossOrigin,
+        suppressHydrationWarning: true,
+        nonce,
+      },
+    }));
+  const preloadLinks = [];
+  matches
+    .map((match) => router2.looseRoutesById[match.routeId])
+    .forEach((route) =>
+      router2.ssr?.manifest?.routes[route.id]?.preloads?.filter(Boolean).forEach((preload) => {
+        const preloadLink = resolveManifestAssetLink(preload);
+        preloadLinks.push({
+          tag: "link",
+          attrs: {
+            rel: "modulepreload",
+            href: preloadLink.href,
+            crossOrigin:
+              getAssetCrossOrigin(assetCrossOrigin, "modulepreload") ?? preloadLink.crossOrigin,
+            nonce,
+          },
+        });
+      }),
+    );
+  const styles = matches
+    .map((match) => match.styles)
+    .flat(1)
+    .filter(Boolean)
+    .map(({ children, ...attrs }) => ({
+      tag: "style",
+      attrs: {
+        ...attrs,
+        nonce,
+      },
+      children,
+    }));
+  const headScripts = matches
+    .map((match) => match.headScripts)
+    .flat(1)
+    .filter(Boolean)
+    .map(({ children, ...script }) => ({
+      tag: "script",
+      attrs: {
+        ...script,
+        nonce,
+      },
+      children,
+    }));
+  return uniqBy(
+    [...resultMeta, ...preloadLinks, ...constructedLinks, ...assetLinks, ...styles, ...headScripts],
+    (d) => JSON.stringify(d),
+  );
 }
 var useTags = (assetCrossOrigin) => {
   const router2 = useRouter();
@@ -2623,11 +3071,15 @@ function uniqBy(arr, fn) {
 function HeadContent(props) {
   const tags = useTags(props.assetCrossOrigin);
   const nonce = useRouter().options.ssr?.nonce;
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: tags.map((tag) => /* @__PURE__ */ reactExports.createElement(Asset, {
-    ...tag,
-    key: `tsr-meta-${JSON.stringify(tag)}`,
-    nonce
-  })) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
+    children: tags.map((tag) =>
+      /* @__PURE__ */ reactExports.createElement(Asset, {
+        ...tag,
+        key: `tsr-meta-${JSON.stringify(tag)}`,
+        nonce,
+      }),
+    ),
+  });
 }
 var Scripts = () => {
   const router2 = useRouter();
@@ -2636,27 +3088,38 @@ var Scripts = () => {
     const assetScripts = [];
     const manifest = router2.ssr?.manifest;
     if (!manifest) return [];
-    matches.map((match) => router2.looseRoutesById[match.routeId]).forEach((route) => manifest.routes[route.id]?.assets?.filter((d) => d.tag === "script").forEach((asset) => {
-      assetScripts.push({
-        tag: "script",
-        attrs: {
-          ...asset.attrs,
-          nonce
-        },
-        children: asset.children
-      });
-    }));
+    matches
+      .map((match) => router2.looseRoutesById[match.routeId])
+      .forEach((route) =>
+        manifest.routes[route.id]?.assets
+          ?.filter((d) => d.tag === "script")
+          .forEach((asset) => {
+            assetScripts.push({
+              tag: "script",
+              attrs: {
+                ...asset.attrs,
+                nonce,
+              },
+              children: asset.children,
+            });
+          }),
+      );
     return assetScripts;
   };
-  const getScripts = (matches) => matches.map((match) => match.scripts).flat(1).filter(Boolean).map(({ children, ...script }) => ({
-    tag: "script",
-    attrs: {
-      ...script,
-      suppressHydrationWarning: true,
-      nonce
-    },
-    children
-  }));
+  const getScripts = (matches) =>
+    matches
+      .map((match) => match.scripts)
+      .flat(1)
+      .filter(Boolean)
+      .map(({ children, ...script }) => ({
+        tag: "script",
+        attrs: {
+          ...script,
+          suppressHydrationWarning: true,
+          nonce,
+        },
+        children,
+      }));
   {
     const activeMatches = router2.stores.matches.get();
     const assetScripts = getAssetScripts(activeMatches);
@@ -2668,10 +3131,14 @@ function renderScripts(router2, scripts, assetScripts) {
   if (router2.serverSsr) serverBufferedScript = router2.serverSsr.takeBufferedScripts();
   const allScripts = [...scripts, ...assetScripts];
   if (serverBufferedScript) allScripts.unshift(serverBufferedScript);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: allScripts.map((asset, i) => /* @__PURE__ */ reactExports.createElement(Asset, {
-    ...asset,
-    key: `tsr-scripts-${asset.tag}-${i}`
-  })) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, {
+    children: allScripts.map((asset, i) =>
+      /* @__PURE__ */ reactExports.createElement(Asset, {
+        ...asset,
+        key: `tsr-scripts-${asset.tag}-${i}`,
+      }),
+    ),
+  });
 }
 var Subscribable = class {
   constructor() {
@@ -2689,10 +3156,8 @@ var Subscribable = class {
   hasListeners() {
     return this.listeners.size > 0;
   }
-  onSubscribe() {
-  }
-  onUnsubscribe() {
-  }
+  onSubscribe() {}
+  onUnsubscribe() {}
 };
 var FocusManager = class extends Subscribable {
   #focused;
@@ -2768,7 +3233,7 @@ var defaultTimeoutProvider = {
   setTimeout: (callback, delay) => setTimeout(callback, delay),
   clearTimeout: (timeoutId) => clearTimeout(timeoutId),
   setInterval: (callback, delay) => setInterval(callback, delay),
-  clearInterval: (intervalId) => clearInterval(intervalId)
+  clearInterval: (intervalId) => clearInterval(intervalId),
 };
 var TimeoutManager = class {
   // We cannot have TimeoutManager<T> as we must instantiate it with a concrete
@@ -2801,8 +3266,7 @@ function systemSetTimeoutZero(callback) {
   setTimeout(callback, 0);
 }
 var isServer = typeof window === "undefined" || "Deno" in globalThis;
-function noop() {
-}
+function noop() {}
 function functionalUpdate(updater, input) {
   return typeof updater === "function" ? updater(input) : updater;
 }
@@ -2819,14 +3283,7 @@ function resolveEnabled(enabled, query) {
   return typeof enabled === "function" ? enabled(query) : enabled;
 }
 function matchQuery(filters, query) {
-  const {
-    type = "all",
-    exact,
-    fetchStatus,
-    predicate,
-    queryKey,
-    stale
-  } = filters;
+  const { type = "all", exact, fetchStatus, predicate, queryKey, stale } = filters;
   if (queryKey) {
     if (exact) {
       if (query.queryHash !== hashQueryKeyByOptions(queryKey, query.options)) {
@@ -2883,12 +3340,15 @@ function hashQueryKeyByOptions(queryKey, options) {
   return hashFn(queryKey);
 }
 function hashKey(queryKey) {
-  return JSON.stringify(
-    queryKey,
-    (_, val) => isPlainObject(val) ? Object.keys(val).sort().reduce((result, key) => {
-      result[key] = val[key];
-      return result;
-    }, {}) : val
+  return JSON.stringify(queryKey, (_, val) =>
+    isPlainObject(val)
+      ? Object.keys(val)
+          .sort()
+          .reduce((result, key) => {
+            result[key] = val[key];
+            return result;
+          }, {})
+      : val,
   );
 }
 function partialMatchKey(a, b) {
@@ -2926,7 +3386,12 @@ function replaceEqualDeep(a, b, depth = 0) {
       if (array ? i < aSize : hasOwn.call(a, key)) equalItems++;
       continue;
     }
-    if (aItem === null || bItem === null || typeof aItem !== "object" || typeof bItem !== "object") {
+    if (
+      aItem === null ||
+      bItem === null ||
+      typeof aItem !== "object" ||
+      typeof bItem !== "object"
+    ) {
       copy[key] = bItem;
       continue;
     }
@@ -3027,7 +3492,7 @@ function addConsumeAwareSignal(object, getSignal, onCancelled) {
         signal.addEventListener("abort", onCancelled, { once: true });
       }
       return signal;
-    }
+    },
   });
   return object;
 }
@@ -3045,7 +3510,7 @@ var environmentManager = /* @__PURE__ */ (() => {
      */
     setIsServer(isServerValue) {
       isServerFn = isServerValue;
-    }
+    },
   };
 })();
 function pendingThenable() {
@@ -3056,8 +3521,7 @@ function pendingThenable() {
     reject = _reject;
   });
   thenable.status = "pending";
-  thenable.catch(() => {
-  });
+  thenable.catch(() => {});
   function finalize(data) {
     Object.assign(thenable, data);
     delete thenable.resolve;
@@ -3066,14 +3530,14 @@ function pendingThenable() {
   thenable.resolve = (value) => {
     finalize({
       status: "fulfilled",
-      value
+      value,
     });
     resolve(value);
   };
   thenable.reject = (reason) => {
     finalize({
       status: "rejected",
-      reason
+      reason,
     });
     reject(reason);
   };
@@ -3153,7 +3617,7 @@ function createNotifyManager() {
     },
     setScheduler: (fn) => {
       scheduleFn = fn;
-    }
+    },
   };
 }
 var notifyManager = createNotifyManager();
@@ -3239,7 +3703,10 @@ function createRetryer(config) {
   const continueRetry = () => {
     isRetryCancelled = false;
   };
-  const canContinue = () => focusManager.isFocused() && (config.networkMode === "always" || onlineManager.isOnline()) && config.canRun();
+  const canContinue = () =>
+    focusManager.isFocused() &&
+    (config.networkMode === "always" || onlineManager.isOnline()) &&
+    config.canRun();
   const canStart = () => canFetch(config.networkMode) && config.canRun();
   const resolve = (value) => {
     if (!isResolved()) {
@@ -3279,30 +3746,38 @@ function createRetryer(config) {
     } catch (error) {
       promiseOrValue = Promise.reject(error);
     }
-    Promise.resolve(promiseOrValue).then(resolve).catch((error) => {
-      if (isResolved()) {
-        return;
-      }
-      const retry = config.retry ?? (environmentManager.isServer() ? 0 : 3);
-      const retryDelay = config.retryDelay ?? defaultRetryDelay;
-      const delay = typeof retryDelay === "function" ? retryDelay(failureCount, error) : retryDelay;
-      const shouldRetry = retry === true || typeof retry === "number" && failureCount < retry || typeof retry === "function" && retry(failureCount, error);
-      if (isRetryCancelled || !shouldRetry) {
-        reject(error);
-        return;
-      }
-      failureCount++;
-      config.onFail?.(failureCount, error);
-      sleep(delay).then(() => {
-        return canContinue() ? void 0 : pause();
-      }).then(() => {
-        if (isRetryCancelled) {
-          reject(error);
-        } else {
-          run();
+    Promise.resolve(promiseOrValue)
+      .then(resolve)
+      .catch((error) => {
+        if (isResolved()) {
+          return;
         }
+        const retry = config.retry ?? (environmentManager.isServer() ? 0 : 3);
+        const retryDelay = config.retryDelay ?? defaultRetryDelay;
+        const delay =
+          typeof retryDelay === "function" ? retryDelay(failureCount, error) : retryDelay;
+        const shouldRetry =
+          retry === true ||
+          (typeof retry === "number" && failureCount < retry) ||
+          (typeof retry === "function" && retry(failureCount, error));
+        if (isRetryCancelled || !shouldRetry) {
+          reject(error);
+          return;
+        }
+        failureCount++;
+        config.onFail?.(failureCount, error);
+        sleep(delay)
+          .then(() => {
+            return canContinue() ? void 0 : pause();
+          })
+          .then(() => {
+            if (isRetryCancelled) {
+              reject(error);
+            } else {
+              run();
+            }
+          });
       });
-    });
   };
   return {
     promise: thenable,
@@ -3322,7 +3797,7 @@ function createRetryer(config) {
         pause().then(run);
       }
       return thenable;
-    }
+    },
   };
 }
 var Removable = class {
@@ -3341,7 +3816,7 @@ var Removable = class {
   updateGcTime(newGcTime) {
     this.gcTime = Math.max(
       this.gcTime || 0,
-      newGcTime ?? (environmentManager.isServer() ? Infinity : 5 * 60 * 1e3)
+      newGcTime ?? (environmentManager.isServer() ? Infinity : 5 * 60 * 1e3),
     );
   }
   clearGcTimeout() {
@@ -3385,9 +3860,7 @@ var Query = class extends Removable {
     if (this.state && this.state.data === void 0) {
       const defaultState = getDefaultState$1(this.options);
       if (defaultState.data !== void 0) {
-        this.setState(
-          successState(defaultState.data, defaultState.dataUpdatedAt)
-        );
+        this.setState(successState(defaultState.data, defaultState.dataUpdatedAt));
         this.#initialState = defaultState;
       }
     }
@@ -3403,7 +3876,7 @@ var Query = class extends Removable {
       data,
       type: "success",
       dataUpdatedAt: options?.updatedAt,
-      manual: options?.manual
+      manual: options?.manual,
     });
     return data;
   }
@@ -3428,7 +3901,7 @@ var Query = class extends Removable {
   }
   isActive() {
     return this.observers.some(
-      (observer) => resolveEnabled(observer.options.enabled, this) !== false
+      (observer) => resolveEnabled(observer.options.enabled, this) !== false,
     );
   }
   isDisabled() {
@@ -3443,16 +3916,14 @@ var Query = class extends Removable {
   isStatic() {
     if (this.getObserversCount() > 0) {
       return this.observers.some(
-        (observer) => resolveStaleTime(observer.options.staleTime, this) === "static"
+        (observer) => resolveStaleTime(observer.options.staleTime, this) === "static",
       );
     }
     return false;
   }
   isStale() {
     if (this.getObserversCount() > 0) {
-      return this.observers.some(
-        (observer) => observer.getCurrentResult().isStale
-      );
+      return this.observers.some((observer) => observer.getCurrentResult().isStale);
     }
     return this.state.data === void 0 || this.state.isInvalidated;
   }
@@ -3513,10 +3984,12 @@ var Query = class extends Removable {
     }
   }
   async fetch(options, fetchOptions) {
-    if (this.state.fetchStatus !== "idle" && // If the promise in the retryer is already rejected, we have to definitely
-    // re-start the fetch; there is a chance that the query is still in a
-    // pending state when that happens
-    this.#retryer?.status() !== "rejected") {
+    if (
+      this.state.fetchStatus !== "idle" && // If the promise in the retryer is already rejected, we have to definitely
+      // re-start the fetch; there is a chance that the query is still in a
+      // pending state when that happens
+      this.#retryer?.status() !== "rejected"
+    ) {
       if (this.state.data !== void 0 && fetchOptions?.cancelRefetch) {
         this.cancel({ silent: true });
       } else if (this.#retryer) {
@@ -3540,7 +4013,7 @@ var Query = class extends Removable {
         get: () => {
           this.#abortSignalConsumed = true;
           return abortController.signal;
-        }
+        },
       });
     };
     const fetchFn = () => {
@@ -3549,7 +4022,7 @@ var Query = class extends Removable {
         const queryFnContext2 = {
           client: this.#client,
           queryKey: this.queryKey,
-          meta: this.meta
+          meta: this.meta,
         };
         addSignalProperty(queryFnContext2);
         return queryFnContext2;
@@ -3557,11 +4030,7 @@ var Query = class extends Removable {
       const queryFnContext = createQueryFnContext();
       this.#abortSignalConsumed = false;
       if (this.options.persister) {
-        return this.options.persister(
-          queryFn,
-          queryFnContext,
-          this
-        );
+        return this.options.persister(queryFn, queryFnContext, this);
       }
       return queryFn(queryFnContext);
     };
@@ -3572,7 +4041,7 @@ var Query = class extends Removable {
         queryKey: this.queryKey,
         client: this.#client,
         state: this.state,
-        fetchFn
+        fetchFn,
       };
       addSignalProperty(context2);
       return context2;
@@ -3590,7 +4059,7 @@ var Query = class extends Removable {
         if (error instanceof CancelledError && error.revert) {
           this.setState({
             ...this.#revertState,
-            fetchStatus: "idle"
+            fetchStatus: "idle",
           });
         }
         abortController.abort();
@@ -3607,21 +4076,17 @@ var Query = class extends Removable {
       retry: context.options.retry,
       retryDelay: context.options.retryDelay,
       networkMode: context.options.networkMode,
-      canRun: () => true
+      canRun: () => true,
     });
     try {
       const data = await this.#retryer.start();
       if (data === void 0) {
-        if (false) ;
+        if (false);
         throw new Error(`${this.queryHash} data is undefined`);
       }
       this.setData(data);
       this.#cache.config.onSuccess?.(data, this);
-      this.#cache.config.onSettled?.(
-        data,
-        this.state.error,
-        this
-      );
+      this.#cache.config.onSettled?.(data, this.state.error, this);
       return data;
     } catch (error) {
       if (error instanceof CancelledError) {
@@ -3636,17 +4101,10 @@ var Query = class extends Removable {
       }
       this.#dispatch({
         type: "error",
-        error
+        error,
       });
-      this.#cache.config.onError?.(
-        error,
-        this
-      );
-      this.#cache.config.onSettled?.(
-        this.state.data,
-        error,
-        this
-      );
+      this.#cache.config.onError?.(error, this);
+      this.#cache.config.onSettled?.(this.state.data, error, this);
       throw error;
     } finally {
       this.scheduleGc();
@@ -3659,34 +4117,34 @@ var Query = class extends Removable {
           return {
             ...state,
             fetchFailureCount: action.failureCount,
-            fetchFailureReason: action.error
+            fetchFailureReason: action.error,
           };
         case "pause":
           return {
             ...state,
-            fetchStatus: "paused"
+            fetchStatus: "paused",
           };
         case "continue":
           return {
             ...state,
-            fetchStatus: "fetching"
+            fetchStatus: "fetching",
           };
         case "fetch":
           return {
             ...state,
             ...fetchState(state.data, this.options),
-            fetchMeta: action.meta ?? null
+            fetchMeta: action.meta ?? null,
           };
         case "success":
           const newState = {
             ...state,
             ...successState(action.data, action.dataUpdatedAt),
             dataUpdateCount: state.dataUpdateCount + 1,
-            ...!action.manual && {
+            ...(!action.manual && {
               fetchStatus: "idle",
               fetchFailureCount: 0,
-              fetchFailureReason: null
-            }
+              fetchFailureReason: null,
+            }),
           };
           this.#revertState = action.manual ? newState : void 0;
           return newState;
@@ -3703,17 +4161,17 @@ var Query = class extends Removable {
             status: "error",
             // flag existing data as invalidated if we get a background error
             // note that "no data" always means stale so we can set unconditionally here
-            isInvalidated: true
+            isInvalidated: true,
           };
         case "invalidate":
           return {
             ...state,
-            isInvalidated: true
+            isInvalidated: true,
           };
         case "setState":
           return {
             ...state,
-            ...action.state
+            ...action.state,
           };
       }
     };
@@ -3731,10 +4189,10 @@ function fetchState(data, options) {
     fetchFailureCount: 0,
     fetchFailureReason: null,
     fetchStatus: canFetch(options.networkMode) ? "fetching" : "paused",
-    ...data === void 0 && {
+    ...(data === void 0 && {
       error: null,
-      status: "pending"
-    }
+      status: "pending",
+    }),
   };
 }
 function successState(data, dataUpdatedAt) {
@@ -3743,17 +4201,22 @@ function successState(data, dataUpdatedAt) {
     dataUpdatedAt: dataUpdatedAt ?? Date.now(),
     error: null,
     isInvalidated: false,
-    status: "success"
+    status: "success",
   };
 }
 function getDefaultState$1(options) {
-  const data = typeof options.initialData === "function" ? options.initialData() : options.initialData;
+  const data =
+    typeof options.initialData === "function" ? options.initialData() : options.initialData;
   const hasData = data !== void 0;
-  const initialDataUpdatedAt = hasData ? typeof options.initialDataUpdatedAt === "function" ? options.initialDataUpdatedAt() : options.initialDataUpdatedAt : 0;
+  const initialDataUpdatedAt = hasData
+    ? typeof options.initialDataUpdatedAt === "function"
+      ? options.initialDataUpdatedAt()
+      : options.initialDataUpdatedAt
+    : 0;
   return {
     data,
     dataUpdateCount: 0,
-    dataUpdatedAt: hasData ? initialDataUpdatedAt ?? Date.now() : 0,
+    dataUpdatedAt: hasData ? (initialDataUpdatedAt ?? Date.now()) : 0,
     error: null,
     errorUpdateCount: 0,
     errorUpdatedAt: 0,
@@ -3762,7 +4225,7 @@ function getDefaultState$1(options) {
     fetchMeta: null,
     isInvalidated: false,
     status: hasData ? "success" : "pending",
-    fetchStatus: "idle"
+    fetchStatus: "idle",
   };
 }
 function infiniteQueryBehavior(pages) {
@@ -3780,7 +4243,7 @@ function infiniteQueryBehavior(pages) {
           addConsumeAwareSignal(
             object,
             () => context.signal,
-            () => cancelled = true
+            () => (cancelled = true),
           );
         };
         const queryFn = ensureQueryFn(context.options, context.fetchOptions);
@@ -3797,7 +4260,7 @@ function infiniteQueryBehavior(pages) {
               queryKey: context.queryKey,
               pageParam: param,
               direction: previous ? "backward" : "forward",
-              meta: context.options.meta
+              meta: context.options.meta,
             };
             addSignalProperty(queryFnContext2);
             return queryFnContext2;
@@ -3808,7 +4271,7 @@ function infiniteQueryBehavior(pages) {
           const addTo = previous ? addToStart : addToEnd;
           return {
             pages: addTo(data.pages, page, maxPages),
-            pageParams: addTo(data.pageParams, param, maxPages)
+            pageParams: addTo(data.pageParams, param, maxPages),
           };
         };
         if (direction && oldPages.length) {
@@ -3816,14 +4279,17 @@ function infiniteQueryBehavior(pages) {
           const pageParamFn = previous ? getPreviousPageParam : getNextPageParam;
           const oldData = {
             pages: oldPages,
-            pageParams: oldPageParams
+            pageParams: oldPageParams,
           };
           const param = pageParamFn(options, oldData);
           result = await fetchPage(oldData, param, previous);
         } else {
           const remainingPages = pages ?? oldPages.length;
           do {
-            const param = currentPage === 0 ? oldPageParams[0] ?? options.initialPageParam : getNextPageParam(options, result);
+            const param =
+              currentPage === 0
+                ? (oldPageParams[0] ?? options.initialPageParam)
+                : getNextPageParam(options, result);
             if (currentPage > 0 && param == null) {
               break;
             }
@@ -3841,28 +4307,27 @@ function infiniteQueryBehavior(pages) {
               client: context.client,
               queryKey: context.queryKey,
               meta: context.options.meta,
-              signal: context.signal
+              signal: context.signal,
             },
-            query
+            query,
           );
         };
       } else {
         context.fetchFn = fetchFn;
       }
-    }
+    },
   };
 }
 function getNextPageParam(options, { pages, pageParams }) {
   const lastIndex = pages.length - 1;
-  return pages.length > 0 ? options.getNextPageParam(
-    pages[lastIndex],
-    pages,
-    pageParams[lastIndex],
-    pageParams
-  ) : void 0;
+  return pages.length > 0
+    ? options.getNextPageParam(pages[lastIndex], pages, pageParams[lastIndex], pageParams)
+    : void 0;
 }
 function getPreviousPageParam(options, { pages, pageParams }) {
-  return pages.length > 0 ? options.getPreviousPageParam?.(pages[0], pages, pageParams[0], pageParams) : void 0;
+  return pages.length > 0
+    ? options.getPreviousPageParam?.(pages[0], pages, pageParams[0], pageParams)
+    : void 0;
 }
 var Mutation = class extends Removable {
   #client;
@@ -3893,7 +4358,7 @@ var Mutation = class extends Removable {
       this.#mutationCache.notify({
         type: "observerAdded",
         mutation: this,
-        observer
+        observer,
       });
     }
   }
@@ -3903,7 +4368,7 @@ var Mutation = class extends Removable {
     this.#mutationCache.notify({
       type: "observerRemoved",
       mutation: this,
-      observer
+      observer,
     });
   }
   optionalRemove() {
@@ -3916,8 +4381,10 @@ var Mutation = class extends Removable {
     }
   }
   continue() {
-    return this.#retryer?.continue() ?? // continuing a mutation assumes that variables are set, mutation must have been dehydrated before
-    this.execute(this.state.variables);
+    return (
+      this.#retryer?.continue() ?? // continuing a mutation assumes that variables are set, mutation must have been dehydrated before
+      this.execute(this.state.variables)
+    );
   }
   async execute(variables) {
     const onContinue = () => {
@@ -3926,7 +4393,7 @@ var Mutation = class extends Removable {
     const mutationFnContext = {
       client: this.#client,
       meta: this.options.meta,
-      mutationKey: this.options.mutationKey
+      mutationKey: this.options.mutationKey,
     };
     this.#retryer = createRetryer({
       fn: () => {
@@ -3945,7 +4412,7 @@ var Mutation = class extends Removable {
       retry: this.options.retry ?? 0,
       retryDelay: this.options.retryDelay,
       networkMode: this.options.networkMode,
-      canRun: () => this.#mutationCache.canRun(this)
+      canRun: () => this.#mutationCache.canRun(this),
     });
     const restored = this.state.status === "pending";
     const isPaused = !this.#retryer.canStart();
@@ -3955,22 +4422,15 @@ var Mutation = class extends Removable {
       } else {
         this.#dispatch({ type: "pending", variables, isPaused });
         if (this.#mutationCache.config.onMutate) {
-          await this.#mutationCache.config.onMutate(
-            variables,
-            this,
-            mutationFnContext
-          );
+          await this.#mutationCache.config.onMutate(variables, this, mutationFnContext);
         }
-        const context = await this.options.onMutate?.(
-          variables,
-          mutationFnContext
-        );
+        const context = await this.options.onMutate?.(variables, mutationFnContext);
         if (context !== this.state.context) {
           this.#dispatch({
             type: "pending",
             context,
             variables,
-            isPaused
+            isPaused,
           });
         }
       }
@@ -3980,29 +4440,18 @@ var Mutation = class extends Removable {
         variables,
         this.state.context,
         this,
-        mutationFnContext
+        mutationFnContext,
       );
-      await this.options.onSuccess?.(
-        data,
-        variables,
-        this.state.context,
-        mutationFnContext
-      );
+      await this.options.onSuccess?.(data, variables, this.state.context, mutationFnContext);
       await this.#mutationCache.config.onSettled?.(
         data,
         null,
         this.state.variables,
         this.state.context,
         this,
-        mutationFnContext
+        mutationFnContext,
       );
-      await this.options.onSettled?.(
-        data,
-        null,
-        variables,
-        this.state.context,
-        mutationFnContext
-      );
+      await this.options.onSettled?.(data, null, variables, this.state.context, mutationFnContext);
       this.#dispatch({ type: "success", data });
       return data;
     } catch (error) {
@@ -4012,18 +4461,13 @@ var Mutation = class extends Removable {
           variables,
           this.state.context,
           this,
-          mutationFnContext
+          mutationFnContext,
         );
       } catch (e) {
         void Promise.reject(e);
       }
       try {
-        await this.options.onError?.(
-          error,
-          variables,
-          this.state.context,
-          mutationFnContext
-        );
+        await this.options.onError?.(error, variables, this.state.context, mutationFnContext);
       } catch (e) {
         void Promise.reject(e);
       }
@@ -4034,7 +4478,7 @@ var Mutation = class extends Removable {
           this.state.variables,
           this.state.context,
           this,
-          mutationFnContext
+          mutationFnContext,
         );
       } catch (e) {
         void Promise.reject(e);
@@ -4045,7 +4489,7 @@ var Mutation = class extends Removable {
           error,
           variables,
           this.state.context,
-          mutationFnContext
+          mutationFnContext,
         );
       } catch (e) {
         void Promise.reject(e);
@@ -4063,17 +4507,17 @@ var Mutation = class extends Removable {
           return {
             ...state,
             failureCount: action.failureCount,
-            failureReason: action.error
+            failureReason: action.error,
           };
         case "pause":
           return {
             ...state,
-            isPaused: true
+            isPaused: true,
           };
         case "continue":
           return {
             ...state,
-            isPaused: false
+            isPaused: false,
           };
         case "pending":
           return {
@@ -4086,7 +4530,7 @@ var Mutation = class extends Removable {
             isPaused: action.isPaused,
             status: "pending",
             variables: action.variables,
-            submittedAt: Date.now()
+            submittedAt: Date.now(),
           };
         case "success":
           return {
@@ -4096,7 +4540,7 @@ var Mutation = class extends Removable {
             failureReason: null,
             error: null,
             status: "success",
-            isPaused: false
+            isPaused: false,
           };
         case "error":
           return {
@@ -4106,7 +4550,7 @@ var Mutation = class extends Removable {
             failureCount: state.failureCount + 1,
             failureReason: action.error,
             isPaused: false,
-            status: "error"
+            status: "error",
           };
       }
     };
@@ -4118,7 +4562,7 @@ var Mutation = class extends Removable {
       this.#mutationCache.notify({
         mutation: this,
         type: "updated",
-        action
+        action,
       });
     });
   }
@@ -4133,7 +4577,7 @@ function getDefaultState() {
     isPaused: false,
     status: "idle",
     variables: void 0,
-    submittedAt: 0
+    submittedAt: 0,
   };
 }
 var MutationCache = class extends Subscribable {
@@ -4153,7 +4597,7 @@ var MutationCache = class extends Subscribable {
       mutationCache: this,
       mutationId: ++this.#mutationId,
       options: client.defaultMutationOptions(options),
-      state
+      state,
     });
     this.add(mutation);
     return mutation;
@@ -4195,7 +4639,7 @@ var MutationCache = class extends Subscribable {
     if (typeof scope === "string") {
       const mutationsWithSameScope = this.#scopes.get(scope);
       const firstPendingMutation = mutationsWithSameScope?.find(
-        (m) => m.state.status === "pending"
+        (m) => m.state.status === "pending",
       );
       return !firstPendingMutation || firstPendingMutation === mutation;
     } else {
@@ -4205,7 +4649,9 @@ var MutationCache = class extends Subscribable {
   runNext(mutation) {
     const scope = scopeFor(mutation);
     if (typeof scope === "string") {
-      const foundMutation = this.#scopes.get(scope)?.find((m) => m !== mutation && m.state.isPaused);
+      const foundMutation = this.#scopes
+        .get(scope)
+        ?.find((m) => m !== mutation && m.state.isPaused);
       return foundMutation?.continue() ?? Promise.resolve();
     } else {
       return Promise.resolve();
@@ -4225,9 +4671,7 @@ var MutationCache = class extends Subscribable {
   }
   find(filters) {
     const defaultedFilters = { exact: true, ...filters };
-    return this.getAll().find(
-      (mutation) => matchMutation(defaultedFilters, mutation)
-    );
+    return this.getAll().find((mutation) => matchMutation(defaultedFilters, mutation));
   }
   findAll(filters = {}) {
     return this.getAll().filter((mutation) => matchMutation(filters, mutation));
@@ -4241,10 +4685,8 @@ var MutationCache = class extends Subscribable {
   }
   resumePausedMutations() {
     const pausedMutations = this.getAll().filter((x) => x.state.isPaused);
-    return notifyManager.batch(
-      () => Promise.all(
-        pausedMutations.map((mutation) => mutation.continue().catch(noop))
-      )
+    return notifyManager.batch(() =>
+      Promise.all(pausedMutations.map((mutation) => mutation.continue().catch(noop))),
     );
   }
 };
@@ -4269,7 +4711,7 @@ var QueryCache = class extends Subscribable {
         queryHash,
         options: client.defaultQueryOptions(options),
         state,
-        defaultOptions: client.getQueryDefaults(queryKey)
+        defaultOptions: client.getQueryDefaults(queryKey),
       });
       this.add(query);
     }
@@ -4280,7 +4722,7 @@ var QueryCache = class extends Subscribable {
       this.#queries.set(query.queryHash, query);
       this.notify({
         type: "added",
-        query
+        query,
       });
     }
   }
@@ -4309,13 +4751,13 @@ var QueryCache = class extends Subscribable {
   }
   find(filters) {
     const defaultedFilters = { exact: true, ...filters };
-    return this.getAll().find(
-      (query) => matchQuery(defaultedFilters, query)
-    );
+    return this.getAll().find((query) => matchQuery(defaultedFilters, query));
   }
   findAll(filters = {}) {
     const queries = this.getAll();
-    return Object.keys(filters).length > 0 ? queries.filter((query) => matchQuery(filters, query)) : queries;
+    return Object.keys(filters).length > 0
+      ? queries.filter((query) => matchQuery(filters, query))
+      : queries;
   }
   notify(event) {
     notifyManager.batch(() => {
@@ -4404,7 +4846,10 @@ var QueryClient = class {
     if (cachedData === void 0) {
       return this.fetchQuery(options);
     }
-    if (options.revalidateIfStale && query.isStaleByTime(resolveStaleTime(defaultedOptions.staleTime, query))) {
+    if (
+      options.revalidateIfStale &&
+      query.isStaleByTime(resolveStaleTime(defaultedOptions.staleTime, query))
+    ) {
       void this.prefetchQuery(defaultedOptions);
     }
     return Promise.resolve(cachedData);
@@ -4417,29 +4862,26 @@ var QueryClient = class {
   }
   setQueryData(queryKey, updater, options) {
     const defaultedOptions = this.defaultQueryOptions({ queryKey });
-    const query = this.#queryCache.get(
-      defaultedOptions.queryHash
-    );
+    const query = this.#queryCache.get(defaultedOptions.queryHash);
     const prevData = query?.state.data;
     const data = functionalUpdate(updater, prevData);
     if (data === void 0) {
       return void 0;
     }
-    return this.#queryCache.build(this, defaultedOptions).setData(data, { ...options, manual: true });
+    return this.#queryCache
+      .build(this, defaultedOptions)
+      .setData(data, { ...options, manual: true });
   }
   setQueriesData(filters, updater, options) {
-    return notifyManager.batch(
-      () => this.#queryCache.findAll(filters).map(({ queryKey }) => [
-        queryKey,
-        this.setQueryData(queryKey, updater, options)
-      ])
+    return notifyManager.batch(() =>
+      this.#queryCache
+        .findAll(filters)
+        .map(({ queryKey }) => [queryKey, this.setQueryData(queryKey, updater, options)]),
     );
   }
   getQueryState(queryKey) {
     const options = this.defaultQueryOptions({ queryKey });
-    return this.#queryCache.get(
-      options.queryHash
-    )?.state;
+    return this.#queryCache.get(options.queryHash)?.state;
   }
   removeQueries(filters) {
     const queryCache = this.#queryCache;
@@ -4458,16 +4900,16 @@ var QueryClient = class {
       return this.refetchQueries(
         {
           type: "active",
-          ...filters
+          ...filters,
         },
-        options
+        options,
       );
     });
   }
   cancelQueries(filters, cancelOptions = {}) {
     const defaultedCancelOptions = { revert: true, ...cancelOptions };
-    const promises = notifyManager.batch(
-      () => this.#queryCache.findAll(filters).map((query) => query.cancel(defaultedCancelOptions))
+    const promises = notifyManager.batch(() =>
+      this.#queryCache.findAll(filters).map((query) => query.cancel(defaultedCancelOptions)),
     );
     return Promise.all(promises).then(noop).catch(noop);
   }
@@ -4482,25 +4924,28 @@ var QueryClient = class {
       return this.refetchQueries(
         {
           ...filters,
-          type: filters?.refetchType ?? filters?.type ?? "active"
+          type: filters?.refetchType ?? filters?.type ?? "active",
         },
-        options
+        options,
       );
     });
   }
   refetchQueries(filters, options = {}) {
     const fetchOptions = {
       ...options,
-      cancelRefetch: options.cancelRefetch ?? true
+      cancelRefetch: options.cancelRefetch ?? true,
     };
-    const promises = notifyManager.batch(
-      () => this.#queryCache.findAll(filters).filter((query) => !query.isDisabled() && !query.isStatic()).map((query) => {
-        let promise = query.fetch(void 0, fetchOptions);
-        if (!fetchOptions.throwOnError) {
-          promise = promise.catch(noop);
-        }
-        return query.state.fetchStatus === "paused" ? Promise.resolve() : promise;
-      })
+    const promises = notifyManager.batch(() =>
+      this.#queryCache
+        .findAll(filters)
+        .filter((query) => !query.isDisabled() && !query.isStatic())
+        .map((query) => {
+          let promise = query.fetch(void 0, fetchOptions);
+          if (!fetchOptions.throwOnError) {
+            promise = promise.catch(noop);
+          }
+          return query.state.fetchStatus === "paused" ? Promise.resolve() : promise;
+        }),
     );
     return Promise.all(promises).then(noop);
   }
@@ -4510,9 +4955,9 @@ var QueryClient = class {
       defaultedOptions.retry = false;
     }
     const query = this.#queryCache.build(this, defaultedOptions);
-    return query.isStaleByTime(
-      resolveStaleTime(defaultedOptions.staleTime, query)
-    ) ? query.fetch(defaultedOptions) : Promise.resolve(query.state.data);
+    return query.isStaleByTime(resolveStaleTime(defaultedOptions.staleTime, query))
+      ? query.fetch(defaultedOptions)
+      : Promise.resolve(query.state.data);
   }
   prefetchQuery(options) {
     return this.fetchQuery(options).then(noop).catch(noop);
@@ -4549,7 +4994,7 @@ var QueryClient = class {
   setQueryDefaults(queryKey, options) {
     this.#queryDefaults.set(hashKey(queryKey), {
       queryKey,
-      defaultOptions: options
+      defaultOptions: options,
     });
   }
   getQueryDefaults(queryKey) {
@@ -4565,7 +5010,7 @@ var QueryClient = class {
   setMutationDefaults(mutationKey, options) {
     this.#mutationDefaults.set(hashKey(mutationKey), {
       mutationKey,
-      defaultOptions: options
+      defaultOptions: options,
     });
   }
   getMutationDefaults(mutationKey) {
@@ -4586,12 +5031,12 @@ var QueryClient = class {
       ...this.#defaultOptions.queries,
       ...this.getQueryDefaults(options.queryKey),
       ...options,
-      _defaulted: true
+      _defaulted: true,
     };
     if (!defaultedOptions.queryHash) {
       defaultedOptions.queryHash = hashQueryKeyByOptions(
         defaultedOptions.queryKey,
-        defaultedOptions
+        defaultedOptions,
       );
     }
     if (defaultedOptions.refetchOnReconnect === void 0) {
@@ -4614,9 +5059,9 @@ var QueryClient = class {
     }
     return {
       ...this.#defaultOptions.mutations,
-      ...options?.mutationKey && this.getMutationDefaults(options.mutationKey),
+      ...(options?.mutationKey && this.getMutationDefaults(options.mutationKey)),
       ...options,
-      _defaulted: true
+      _defaulted: true,
     };
   }
   clear() {
@@ -4624,9 +5069,7 @@ var QueryClient = class {
     this.#mutationCache.clear();
   }
 };
-var QueryClientContext = reactExports.createContext(
-  void 0
-);
+var QueryClientContext = reactExports.createContext(void 0);
 var useQueryClient = (queryClient) => {
   const client = reactExports.useContext(QueryClientContext);
   if (!client) {
@@ -4634,17 +5077,17 @@ var useQueryClient = (queryClient) => {
   }
   return client;
 };
-var QueryClientProvider = ({
-  client,
-  children
-}) => {
+var QueryClientProvider = ({ client, children }) => {
   reactExports.useEffect(() => {
     client.mount();
     return () => {
       client.unmount();
     };
   }, [client]);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientContext.Provider, { value: client, children });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientContext.Provider, {
+    value: client,
+    children,
+  });
 };
 function __insertCSS(code) {
   if (typeof document == "undefined") return;
@@ -4652,7 +5095,9 @@ function __insertCSS(code) {
   let style = document.createElement("style");
   style.type = "text/css";
   head.appendChild(style);
-  style.styleSheet ? style.styleSheet.cssText = code : style.appendChild(document.createTextNode(code));
+  style.styleSheet
+    ? (style.styleSheet.cssText = code)
+    : style.appendChild(document.createTextNode(code));
 }
 const getAsset = (type) => {
   switch (type) {
@@ -4670,84 +5115,112 @@ const getAsset = (type) => {
 };
 const bars = Array(12).fill(0);
 const Loader = ({ visible, className }) => {
-  return /* @__PURE__ */ React.createElement("div", {
-    className: [
-      "sonner-loading-wrapper",
-      className
-    ].filter(Boolean).join(" "),
-    "data-visible": visible
-  }, /* @__PURE__ */ React.createElement("div", {
-    className: "sonner-spinner"
-  }, bars.map((_, i) => /* @__PURE__ */ React.createElement("div", {
-    className: "sonner-loading-bar",
-    key: `spinner-bar-${i}`
-  }))));
+  return /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      className: ["sonner-loading-wrapper", className].filter(Boolean).join(" "),
+      "data-visible": visible,
+    },
+    /* @__PURE__ */ React.createElement(
+      "div",
+      {
+        className: "sonner-spinner",
+      },
+      bars.map((_, i) =>
+        /* @__PURE__ */ React.createElement("div", {
+          className: "sonner-loading-bar",
+          key: `spinner-bar-${i}`,
+        }),
+      ),
+    ),
+  );
 };
-const SuccessIcon = /* @__PURE__ */ React.createElement("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 20 20",
-  fill: "currentColor",
-  height: "20",
-  width: "20"
-}, /* @__PURE__ */ React.createElement("path", {
-  fillRule: "evenodd",
-  d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
-  clipRule: "evenodd"
-}));
-const WarningIcon = /* @__PURE__ */ React.createElement("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  fill: "currentColor",
-  height: "20",
-  width: "20"
-}, /* @__PURE__ */ React.createElement("path", {
-  fillRule: "evenodd",
-  d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
-  clipRule: "evenodd"
-}));
-const InfoIcon = /* @__PURE__ */ React.createElement("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 20 20",
-  fill: "currentColor",
-  height: "20",
-  width: "20"
-}, /* @__PURE__ */ React.createElement("path", {
-  fillRule: "evenodd",
-  d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
-  clipRule: "evenodd"
-}));
-const ErrorIcon = /* @__PURE__ */ React.createElement("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 20 20",
-  fill: "currentColor",
-  height: "20",
-  width: "20"
-}, /* @__PURE__ */ React.createElement("path", {
-  fillRule: "evenodd",
-  d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
-  clipRule: "evenodd"
-}));
-const CloseIcon = /* @__PURE__ */ React.createElement("svg", {
-  xmlns: "http://www.w3.org/2000/svg",
-  width: "12",
-  height: "12",
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: "1.5",
-  strokeLinecap: "round",
-  strokeLinejoin: "round"
-}, /* @__PURE__ */ React.createElement("line", {
-  x1: "18",
-  y1: "6",
-  x2: "6",
-  y2: "18"
-}), /* @__PURE__ */ React.createElement("line", {
-  x1: "6",
-  y1: "6",
-  x2: "18",
-  y2: "18"
-}));
+const SuccessIcon = /* @__PURE__ */ React.createElement(
+  "svg",
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 20 20",
+    fill: "currentColor",
+    height: "20",
+    width: "20",
+  },
+  /* @__PURE__ */ React.createElement("path", {
+    fillRule: "evenodd",
+    d: "M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z",
+    clipRule: "evenodd",
+  }),
+);
+const WarningIcon = /* @__PURE__ */ React.createElement(
+  "svg",
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 24 24",
+    fill: "currentColor",
+    height: "20",
+    width: "20",
+  },
+  /* @__PURE__ */ React.createElement("path", {
+    fillRule: "evenodd",
+    d: "M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z",
+    clipRule: "evenodd",
+  }),
+);
+const InfoIcon = /* @__PURE__ */ React.createElement(
+  "svg",
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 20 20",
+    fill: "currentColor",
+    height: "20",
+    width: "20",
+  },
+  /* @__PURE__ */ React.createElement("path", {
+    fillRule: "evenodd",
+    d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z",
+    clipRule: "evenodd",
+  }),
+);
+const ErrorIcon = /* @__PURE__ */ React.createElement(
+  "svg",
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 20 20",
+    fill: "currentColor",
+    height: "20",
+    width: "20",
+  },
+  /* @__PURE__ */ React.createElement("path", {
+    fillRule: "evenodd",
+    d: "M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z",
+    clipRule: "evenodd",
+  }),
+);
+const CloseIcon = /* @__PURE__ */ React.createElement(
+  "svg",
+  {
+    xmlns: "http://www.w3.org/2000/svg",
+    width: "12",
+    height: "12",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.5",
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+  },
+  /* @__PURE__ */ React.createElement("line", {
+    x1: "18",
+    y1: "6",
+    x2: "6",
+    y2: "18",
+  }),
+  /* @__PURE__ */ React.createElement("line", {
+    x1: "6",
+    y1: "6",
+    x2: "18",
+    y2: "18",
+  }),
+);
 const useIsDocumentHidden = () => {
   const [isDocumentHidden, setIsDocumentHidden] = React.useState(document.hidden);
   React.useEffect(() => {
@@ -4774,15 +5247,16 @@ class Observer {
     };
     this.addToast = (data) => {
       this.publish(data);
-      this.toasts = [
-        ...this.toasts,
-        data
-      ];
+      this.toasts = [...this.toasts, data];
     };
     this.create = (data) => {
       var _data_id;
       const { message, ...rest } = data;
-      const id = typeof (data == null ? void 0 : data.id) === "number" || ((_data_id = data.id) == null ? void 0 : _data_id.length) > 0 ? data.id : toastsCounter++;
+      const id =
+        typeof (data == null ? void 0 : data.id) === "number" ||
+        ((_data_id = data.id) == null ? void 0 : _data_id.length) > 0
+          ? data.id
+          : toastsCounter++;
       const alreadyExists = this.toasts.find((toast2) => {
         return toast2.id === id;
       });
@@ -4797,14 +5271,14 @@ class Observer {
               ...toast2,
               ...data,
               id,
-              title: message
+              title: message,
             });
             return {
               ...toast2,
               ...data,
               id,
               dismissible,
-              title: message
+              title: message,
             };
           }
           return toast2;
@@ -4814,7 +5288,7 @@ class Observer {
           title: message,
           ...rest,
           dismissible,
-          id
+          id,
         });
       }
       return id;
@@ -4822,16 +5296,22 @@ class Observer {
     this.dismiss = (id) => {
       if (id) {
         this.dismissedToasts.add(id);
-        requestAnimationFrame(() => this.subscribers.forEach((subscriber) => subscriber({
-          id,
-          dismiss: true
-        })));
+        requestAnimationFrame(() =>
+          this.subscribers.forEach((subscriber) =>
+            subscriber({
+              id,
+              dismiss: true,
+            }),
+          ),
+        );
       } else {
         this.toasts.forEach((toast2) => {
-          this.subscribers.forEach((subscriber) => subscriber({
-            id: toast2.id,
-            dismiss: true
-          }));
+          this.subscribers.forEach((subscriber) =>
+            subscriber({
+              id: toast2.id,
+              dismiss: true,
+            }),
+          );
         });
       }
       return id;
@@ -4839,42 +5319,42 @@ class Observer {
     this.message = (message, data) => {
       return this.create({
         ...data,
-        message
+        message,
       });
     };
     this.error = (message, data) => {
       return this.create({
         ...data,
         message,
-        type: "error"
+        type: "error",
       });
     };
     this.success = (message, data) => {
       return this.create({
         ...data,
         type: "success",
-        message
+        message,
       });
     };
     this.info = (message, data) => {
       return this.create({
         ...data,
         type: "info",
-        message
+        message,
       });
     };
     this.warning = (message, data) => {
       return this.create({
         ...data,
         type: "warning",
-        message
+        message,
       });
     };
     this.loading = (message, data) => {
       return this.create({
         ...data,
         type: "loading",
-        message
+        message,
       });
     };
     this.promise = (promise, data) => {
@@ -4888,103 +5368,135 @@ class Observer {
           promise,
           type: "loading",
           message: data.loading,
-          description: typeof data.description !== "function" ? data.description : void 0
+          description: typeof data.description !== "function" ? data.description : void 0,
         });
       }
       const p = Promise.resolve(promise instanceof Function ? promise() : promise);
       let shouldDismiss = id !== void 0;
       let result;
-      const originalPromise = p.then(async (response) => {
-        result = [
-          "resolve",
-          response
-        ];
-        const isReactElementResponse = React.isValidElement(response);
-        if (isReactElementResponse) {
-          shouldDismiss = false;
-          this.create({
-            id,
-            type: "default",
-            message: response
-          });
-        } else if (isHttpResponse(response) && !response.ok) {
-          shouldDismiss = false;
-          const promiseData = typeof data.error === "function" ? await data.error(`HTTP error! status: ${response.status}`) : data.error;
-          const description = typeof data.description === "function" ? await data.description(`HTTP error! status: ${response.status}`) : data.description;
-          const isExtendedResult = typeof promiseData === "object" && !React.isValidElement(promiseData);
-          const toastSettings = isExtendedResult ? promiseData : {
-            message: promiseData
-          };
-          this.create({
-            id,
-            type: "error",
-            description,
-            ...toastSettings
-          });
-        } else if (response instanceof Error) {
-          shouldDismiss = false;
-          const promiseData = typeof data.error === "function" ? await data.error(response) : data.error;
-          const description = typeof data.description === "function" ? await data.description(response) : data.description;
-          const isExtendedResult = typeof promiseData === "object" && !React.isValidElement(promiseData);
-          const toastSettings = isExtendedResult ? promiseData : {
-            message: promiseData
-          };
-          this.create({
-            id,
-            type: "error",
-            description,
-            ...toastSettings
-          });
-        } else if (data.success !== void 0) {
-          shouldDismiss = false;
-          const promiseData = typeof data.success === "function" ? await data.success(response) : data.success;
-          const description = typeof data.description === "function" ? await data.description(response) : data.description;
-          const isExtendedResult = typeof promiseData === "object" && !React.isValidElement(promiseData);
-          const toastSettings = isExtendedResult ? promiseData : {
-            message: promiseData
-          };
-          this.create({
-            id,
-            type: "success",
-            description,
-            ...toastSettings
-          });
-        }
-      }).catch(async (error) => {
-        result = [
-          "reject",
-          error
-        ];
-        if (data.error !== void 0) {
-          shouldDismiss = false;
-          const promiseData = typeof data.error === "function" ? await data.error(error) : data.error;
-          const description = typeof data.description === "function" ? await data.description(error) : data.description;
-          const isExtendedResult = typeof promiseData === "object" && !React.isValidElement(promiseData);
-          const toastSettings = isExtendedResult ? promiseData : {
-            message: promiseData
-          };
-          this.create({
-            id,
-            type: "error",
-            description,
-            ...toastSettings
-          });
-        }
-      }).finally(() => {
-        if (shouldDismiss) {
-          this.dismiss(id);
-          id = void 0;
-        }
-        data.finally == null ? void 0 : data.finally.call(data);
-      });
-      const unwrap = () => new Promise((resolve, reject) => originalPromise.then(() => result[0] === "reject" ? reject(result[1]) : resolve(result[1])).catch(reject));
+      const originalPromise = p
+        .then(async (response) => {
+          result = ["resolve", response];
+          const isReactElementResponse = React.isValidElement(response);
+          if (isReactElementResponse) {
+            shouldDismiss = false;
+            this.create({
+              id,
+              type: "default",
+              message: response,
+            });
+          } else if (isHttpResponse(response) && !response.ok) {
+            shouldDismiss = false;
+            const promiseData =
+              typeof data.error === "function"
+                ? await data.error(`HTTP error! status: ${response.status}`)
+                : data.error;
+            const description =
+              typeof data.description === "function"
+                ? await data.description(`HTTP error! status: ${response.status}`)
+                : data.description;
+            const isExtendedResult =
+              typeof promiseData === "object" && !React.isValidElement(promiseData);
+            const toastSettings = isExtendedResult
+              ? promiseData
+              : {
+                  message: promiseData,
+                };
+            this.create({
+              id,
+              type: "error",
+              description,
+              ...toastSettings,
+            });
+          } else if (response instanceof Error) {
+            shouldDismiss = false;
+            const promiseData =
+              typeof data.error === "function" ? await data.error(response) : data.error;
+            const description =
+              typeof data.description === "function"
+                ? await data.description(response)
+                : data.description;
+            const isExtendedResult =
+              typeof promiseData === "object" && !React.isValidElement(promiseData);
+            const toastSettings = isExtendedResult
+              ? promiseData
+              : {
+                  message: promiseData,
+                };
+            this.create({
+              id,
+              type: "error",
+              description,
+              ...toastSettings,
+            });
+          } else if (data.success !== void 0) {
+            shouldDismiss = false;
+            const promiseData =
+              typeof data.success === "function" ? await data.success(response) : data.success;
+            const description =
+              typeof data.description === "function"
+                ? await data.description(response)
+                : data.description;
+            const isExtendedResult =
+              typeof promiseData === "object" && !React.isValidElement(promiseData);
+            const toastSettings = isExtendedResult
+              ? promiseData
+              : {
+                  message: promiseData,
+                };
+            this.create({
+              id,
+              type: "success",
+              description,
+              ...toastSettings,
+            });
+          }
+        })
+        .catch(async (error) => {
+          result = ["reject", error];
+          if (data.error !== void 0) {
+            shouldDismiss = false;
+            const promiseData =
+              typeof data.error === "function" ? await data.error(error) : data.error;
+            const description =
+              typeof data.description === "function"
+                ? await data.description(error)
+                : data.description;
+            const isExtendedResult =
+              typeof promiseData === "object" && !React.isValidElement(promiseData);
+            const toastSettings = isExtendedResult
+              ? promiseData
+              : {
+                  message: promiseData,
+                };
+            this.create({
+              id,
+              type: "error",
+              description,
+              ...toastSettings,
+            });
+          }
+        })
+        .finally(() => {
+          if (shouldDismiss) {
+            this.dismiss(id);
+            id = void 0;
+          }
+          data.finally == null ? void 0 : data.finally.call(data);
+        });
+      const unwrap = () =>
+        new Promise((resolve, reject) =>
+          originalPromise
+            .then(() => (result[0] === "reject" ? reject(result[1]) : resolve(result[1])))
+            .catch(reject),
+        );
       if (typeof id !== "string" && typeof id !== "number") {
         return {
-          unwrap
+          unwrap,
         };
       } else {
         return Object.assign(id, {
-          unwrap
+          unwrap,
         });
       }
     };
@@ -4993,7 +5505,7 @@ class Observer {
       this.create({
         jsx: jsx(id),
         id,
-        ...data
+        ...data,
       });
       return id;
     };
@@ -5011,31 +5523,44 @@ const toastFunction = (message, data) => {
   ToastState.addToast({
     title: message,
     ...data,
-    id
+    id,
   });
   return id;
 };
 const isHttpResponse = (data) => {
-  return data && typeof data === "object" && "ok" in data && typeof data.ok === "boolean" && "status" in data && typeof data.status === "number";
+  return (
+    data &&
+    typeof data === "object" &&
+    "ok" in data &&
+    typeof data.ok === "boolean" &&
+    "status" in data &&
+    typeof data.status === "number"
+  );
 };
 const basicToast = toastFunction;
 const getHistory = () => ToastState.toasts;
 const getToasts = () => ToastState.getActiveToasts();
-const toast = Object.assign(basicToast, {
-  success: ToastState.success,
-  info: ToastState.info,
-  warning: ToastState.warning,
-  error: ToastState.error,
-  custom: ToastState.custom,
-  message: ToastState.message,
-  promise: ToastState.promise,
-  dismiss: ToastState.dismiss,
-  loading: ToastState.loading
-}, {
-  getHistory,
-  getToasts
-});
-__insertCSS("[data-sonner-toaster][dir=ltr],html[dir=ltr]{--toast-icon-margin-start:-3px;--toast-icon-margin-end:4px;--toast-svg-margin-start:-1px;--toast-svg-margin-end:0px;--toast-button-margin-start:auto;--toast-button-margin-end:0;--toast-close-button-start:0;--toast-close-button-end:unset;--toast-close-button-transform:translate(-35%, -35%)}[data-sonner-toaster][dir=rtl],html[dir=rtl]{--toast-icon-margin-start:4px;--toast-icon-margin-end:-3px;--toast-svg-margin-start:0px;--toast-svg-margin-end:-1px;--toast-button-margin-start:0;--toast-button-margin-end:auto;--toast-close-button-start:unset;--toast-close-button-end:0;--toast-close-button-transform:translate(35%, -35%)}[data-sonner-toaster]{position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1:hsl(0, 0%, 99%);--gray2:hsl(0, 0%, 97.3%);--gray3:hsl(0, 0%, 95.1%);--gray4:hsl(0, 0%, 93%);--gray5:hsl(0, 0%, 90.9%);--gray6:hsl(0, 0%, 88.7%);--gray7:hsl(0, 0%, 85.8%);--gray8:hsl(0, 0%, 78%);--gray9:hsl(0, 0%, 56.1%);--gray10:hsl(0, 0%, 52.3%);--gray11:hsl(0, 0%, 43.5%);--gray12:hsl(0, 0%, 9%);--border-radius:8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:0;z-index:999999999;transition:transform .4s ease}@media (hover:none) and (pointer:coarse){[data-sonner-toaster][data-lifted=true]{transform:none}}[data-sonner-toaster][data-x-position=right]{right:var(--offset-right)}[data-sonner-toaster][data-x-position=left]{left:var(--offset-left)}[data-sonner-toaster][data-x-position=center]{left:50%;transform:translateX(-50%)}[data-sonner-toaster][data-y-position=top]{top:var(--offset-top)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--offset-bottom)}[data-sonner-toast]{--y:translateY(100%);--lift-amount:calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:0;overflow-wrap:anywhere}[data-sonner-toast][data-styled=true]{padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px rgba(0,0,0,.1);width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}[data-sonner-toast]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-y-position=top]{top:0;--y:translateY(-100%);--lift:1;--lift-amount:calc(1 * var(--gap))}[data-sonner-toast][data-y-position=bottom]{bottom:0;--y:translateY(100%);--lift:-1;--lift-amount:calc(var(--lift) * var(--gap))}[data-sonner-toast][data-styled=true] [data-description]{font-weight:400;line-height:1.4;color:#3f3f3f}[data-rich-colors=true][data-sonner-toast][data-styled=true] [data-description]{color:inherit}[data-sonner-toaster][data-sonner-theme=dark] [data-description]{color:#e8e8e8}[data-sonner-toast][data-styled=true] [data-title]{font-weight:500;line-height:1.5;color:inherit}[data-sonner-toast][data-styled=true] [data-icon]{display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}[data-sonner-toast][data-promise=true] [data-icon]>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}[data-sonner-toast][data-styled=true] [data-icon]>*{flex-shrink:0}[data-sonner-toast][data-styled=true] [data-icon] svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}[data-sonner-toast][data-styled=true] [data-content]{display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;font-weight:500;cursor:pointer;outline:0;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}[data-sonner-toast][data-styled=true] [data-button]:focus-visible{box-shadow:0 0 0 2px rgba(0,0,0,.4)}[data-sonner-toast][data-styled=true] [data-button]:first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}[data-sonner-toast][data-styled=true] [data-cancel]{color:var(--normal-text);background:rgba(0,0,0,.08)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-styled=true] [data-cancel]{background:rgba(255,255,255,.3)}[data-sonner-toast][data-styled=true] [data-close-button]{position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;color:var(--gray12);background:var(--normal-bg);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}[data-sonner-toast][data-styled=true] [data-close-button]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-styled=true] [data-disabled=true]{cursor:not-allowed}[data-sonner-toast][data-styled=true]:hover [data-close-button]:hover{background:var(--gray2);border-color:var(--gray5)}[data-sonner-toast][data-swiping=true]::before{content:'';position:absolute;left:-100%;right:-100%;height:100%;z-index:-1}[data-sonner-toast][data-y-position=top][data-swiping=true]::before{bottom:50%;transform:scaleY(3) translateY(50%)}[data-sonner-toast][data-y-position=bottom][data-swiping=true]::before{top:50%;transform:scaleY(3) translateY(-50%)}[data-sonner-toast][data-swiping=false][data-removed=true]::before{content:'';position:absolute;inset:0;transform:scaleY(2)}[data-sonner-toast][data-expanded=true]::after{content:'';position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}[data-sonner-toast][data-mounted=true]{--y:translateY(0);opacity:1}[data-sonner-toast][data-expanded=false][data-front=false]{--scale:var(--toasts-before) * 0.05 + 1;--y:translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}[data-sonner-toast]>*{transition:opacity .4s}[data-sonner-toast][data-x-position=right]{right:0}[data-sonner-toast][data-x-position=left]{left:0}[data-sonner-toast][data-expanded=false][data-front=false][data-styled=true]>*{opacity:0}[data-sonner-toast][data-visible=false]{opacity:0;pointer-events:none}[data-sonner-toast][data-mounted=true][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}[data-sonner-toast][data-removed=true][data-front=true][data-swipe-out=false]{--y:translateY(calc(var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=false]{--y:translateY(40%);opacity:0;transition:transform .5s,opacity .2s}[data-sonner-toast][data-removed=true][data-front=false]::before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount-y,0)) translateX(var(--swipe-amount-x,0));transition:none}[data-sonner-toast][data-swiped=true]{user-select:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation-duration:.2s;animation-timing-function:ease-out;animation-fill-mode:forwards}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=left]{animation-name:swipe-out-left}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=right]{animation-name:swipe-out-right}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=up]{animation-name:swipe-out-up}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=down]{animation-name:swipe-out-down}@keyframes swipe-out-left{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) - 100%));opacity:0}}@keyframes swipe-out-right{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) + 100%));opacity:0}}@keyframes swipe-out-up{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) - 100%));opacity:0}}@keyframes swipe-out-down{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) + 100%));opacity:0}}@media (max-width:600px){[data-sonner-toaster]{position:fixed;right:var(--mobile-offset-right);left:var(--mobile-offset-left);width:100%}[data-sonner-toaster][dir=rtl]{left:calc(var(--mobile-offset-left) * -1)}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset-left) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset-left)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--mobile-offset-bottom)}[data-sonner-toaster][data-y-position=top]{top:var(--mobile-offset-top)}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset-left);right:var(--mobile-offset-right);transform:none}}[data-sonner-toaster][data-sonner-theme=light]{--normal-bg:#fff;--normal-border:var(--gray4);--normal-text:var(--gray12);--success-bg:hsl(143, 85%, 96%);--success-border:hsl(145, 92%, 87%);--success-text:hsl(140, 100%, 27%);--info-bg:hsl(208, 100%, 97%);--info-border:hsl(221, 91%, 93%);--info-text:hsl(210, 92%, 45%);--warning-bg:hsl(49, 100%, 97%);--warning-border:hsl(49, 91%, 84%);--warning-text:hsl(31, 92%, 45%);--error-bg:hsl(359, 100%, 97%);--error-border:hsl(359, 100%, 94%);--error-text:hsl(360, 100%, 45%)}[data-sonner-toaster][data-sonner-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg:#000;--normal-border:hsl(0, 0%, 20%);--normal-text:var(--gray1)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg:#fff;--normal-border:var(--gray3);--normal-text:var(--gray12)}[data-sonner-toaster][data-sonner-theme=dark]{--normal-bg:#000;--normal-bg-hover:hsl(0, 0%, 12%);--normal-border:hsl(0, 0%, 20%);--normal-border-hover:hsl(0, 0%, 25%);--normal-text:var(--gray1);--success-bg:hsl(150, 100%, 6%);--success-border:hsl(147, 100%, 12%);--success-text:hsl(150, 86%, 65%);--info-bg:hsl(215, 100%, 6%);--info-border:hsl(223, 43%, 17%);--info-text:hsl(216, 87%, 65%);--warning-bg:hsl(64, 100%, 6%);--warning-border:hsl(60, 100%, 9%);--warning-text:hsl(46, 87%, 65%);--error-bg:hsl(358, 76%, 10%);--error-border:hsl(357, 89%, 16%);--error-text:hsl(358, 100%, 81%)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]{background:var(--normal-bg);border-color:var(--normal-border);color:var(--normal-text)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]:hover{background:var(--normal-bg-hover);border-color:var(--normal-border-hover)}[data-rich-colors=true][data-sonner-toast][data-type=success]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size:16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:first-child{animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}100%{opacity:.15}}@media (prefers-reduced-motion){.sonner-loading-bar,[data-sonner-toast],[data-sonner-toast]>*{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}");
+const toast = Object.assign(
+  basicToast,
+  {
+    success: ToastState.success,
+    info: ToastState.info,
+    warning: ToastState.warning,
+    error: ToastState.error,
+    custom: ToastState.custom,
+    message: ToastState.message,
+    promise: ToastState.promise,
+    dismiss: ToastState.dismiss,
+    loading: ToastState.loading,
+  },
+  {
+    getHistory,
+    getToasts,
+  },
+);
+__insertCSS(
+  "[data-sonner-toaster][dir=ltr],html[dir=ltr]{--toast-icon-margin-start:-3px;--toast-icon-margin-end:4px;--toast-svg-margin-start:-1px;--toast-svg-margin-end:0px;--toast-button-margin-start:auto;--toast-button-margin-end:0;--toast-close-button-start:0;--toast-close-button-end:unset;--toast-close-button-transform:translate(-35%, -35%)}[data-sonner-toaster][dir=rtl],html[dir=rtl]{--toast-icon-margin-start:4px;--toast-icon-margin-end:-3px;--toast-svg-margin-start:0px;--toast-svg-margin-end:-1px;--toast-button-margin-start:0;--toast-button-margin-end:auto;--toast-close-button-start:unset;--toast-close-button-end:0;--toast-close-button-transform:translate(35%, -35%)}[data-sonner-toaster]{position:fixed;width:var(--width);font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;--gray1:hsl(0, 0%, 99%);--gray2:hsl(0, 0%, 97.3%);--gray3:hsl(0, 0%, 95.1%);--gray4:hsl(0, 0%, 93%);--gray5:hsl(0, 0%, 90.9%);--gray6:hsl(0, 0%, 88.7%);--gray7:hsl(0, 0%, 85.8%);--gray8:hsl(0, 0%, 78%);--gray9:hsl(0, 0%, 56.1%);--gray10:hsl(0, 0%, 52.3%);--gray11:hsl(0, 0%, 43.5%);--gray12:hsl(0, 0%, 9%);--border-radius:8px;box-sizing:border-box;padding:0;margin:0;list-style:none;outline:0;z-index:999999999;transition:transform .4s ease}@media (hover:none) and (pointer:coarse){[data-sonner-toaster][data-lifted=true]{transform:none}}[data-sonner-toaster][data-x-position=right]{right:var(--offset-right)}[data-sonner-toaster][data-x-position=left]{left:var(--offset-left)}[data-sonner-toaster][data-x-position=center]{left:50%;transform:translateX(-50%)}[data-sonner-toaster][data-y-position=top]{top:var(--offset-top)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--offset-bottom)}[data-sonner-toast]{--y:translateY(100%);--lift-amount:calc(var(--lift) * var(--gap));z-index:var(--z-index);position:absolute;opacity:0;transform:var(--y);touch-action:none;transition:transform .4s,opacity .4s,height .4s,box-shadow .2s;box-sizing:border-box;outline:0;overflow-wrap:anywhere}[data-sonner-toast][data-styled=true]{padding:16px;background:var(--normal-bg);border:1px solid var(--normal-border);color:var(--normal-text);border-radius:var(--border-radius);box-shadow:0 4px 12px rgba(0,0,0,.1);width:var(--width);font-size:13px;display:flex;align-items:center;gap:6px}[data-sonner-toast]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-y-position=top]{top:0;--y:translateY(-100%);--lift:1;--lift-amount:calc(1 * var(--gap))}[data-sonner-toast][data-y-position=bottom]{bottom:0;--y:translateY(100%);--lift:-1;--lift-amount:calc(var(--lift) * var(--gap))}[data-sonner-toast][data-styled=true] [data-description]{font-weight:400;line-height:1.4;color:#3f3f3f}[data-rich-colors=true][data-sonner-toast][data-styled=true] [data-description]{color:inherit}[data-sonner-toaster][data-sonner-theme=dark] [data-description]{color:#e8e8e8}[data-sonner-toast][data-styled=true] [data-title]{font-weight:500;line-height:1.5;color:inherit}[data-sonner-toast][data-styled=true] [data-icon]{display:flex;height:16px;width:16px;position:relative;justify-content:flex-start;align-items:center;flex-shrink:0;margin-left:var(--toast-icon-margin-start);margin-right:var(--toast-icon-margin-end)}[data-sonner-toast][data-promise=true] [data-icon]>svg{opacity:0;transform:scale(.8);transform-origin:center;animation:sonner-fade-in .3s ease forwards}[data-sonner-toast][data-styled=true] [data-icon]>*{flex-shrink:0}[data-sonner-toast][data-styled=true] [data-icon] svg{margin-left:var(--toast-svg-margin-start);margin-right:var(--toast-svg-margin-end)}[data-sonner-toast][data-styled=true] [data-content]{display:flex;flex-direction:column;gap:2px}[data-sonner-toast][data-styled=true] [data-button]{border-radius:4px;padding-left:8px;padding-right:8px;height:24px;font-size:12px;color:var(--normal-bg);background:var(--normal-text);margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end);border:none;font-weight:500;cursor:pointer;outline:0;display:flex;align-items:center;flex-shrink:0;transition:opacity .4s,box-shadow .2s}[data-sonner-toast][data-styled=true] [data-button]:focus-visible{box-shadow:0 0 0 2px rgba(0,0,0,.4)}[data-sonner-toast][data-styled=true] [data-button]:first-of-type{margin-left:var(--toast-button-margin-start);margin-right:var(--toast-button-margin-end)}[data-sonner-toast][data-styled=true] [data-cancel]{color:var(--normal-text);background:rgba(0,0,0,.08)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-styled=true] [data-cancel]{background:rgba(255,255,255,.3)}[data-sonner-toast][data-styled=true] [data-close-button]{position:absolute;left:var(--toast-close-button-start);right:var(--toast-close-button-end);top:0;height:20px;width:20px;display:flex;justify-content:center;align-items:center;padding:0;color:var(--gray12);background:var(--normal-bg);border:1px solid var(--gray4);transform:var(--toast-close-button-transform);border-radius:50%;cursor:pointer;z-index:1;transition:opacity .1s,background .2s,border-color .2s}[data-sonner-toast][data-styled=true] [data-close-button]:focus-visible{box-shadow:0 4px 12px rgba(0,0,0,.1),0 0 0 2px rgba(0,0,0,.2)}[data-sonner-toast][data-styled=true] [data-disabled=true]{cursor:not-allowed}[data-sonner-toast][data-styled=true]:hover [data-close-button]:hover{background:var(--gray2);border-color:var(--gray5)}[data-sonner-toast][data-swiping=true]::before{content:'';position:absolute;left:-100%;right:-100%;height:100%;z-index:-1}[data-sonner-toast][data-y-position=top][data-swiping=true]::before{bottom:50%;transform:scaleY(3) translateY(50%)}[data-sonner-toast][data-y-position=bottom][data-swiping=true]::before{top:50%;transform:scaleY(3) translateY(-50%)}[data-sonner-toast][data-swiping=false][data-removed=true]::before{content:'';position:absolute;inset:0;transform:scaleY(2)}[data-sonner-toast][data-expanded=true]::after{content:'';position:absolute;left:0;height:calc(var(--gap) + 1px);bottom:100%;width:100%}[data-sonner-toast][data-mounted=true]{--y:translateY(0);opacity:1}[data-sonner-toast][data-expanded=false][data-front=false]{--scale:var(--toasts-before) * 0.05 + 1;--y:translateY(calc(var(--lift-amount) * var(--toasts-before))) scale(calc(-1 * var(--scale)));height:var(--front-toast-height)}[data-sonner-toast]>*{transition:opacity .4s}[data-sonner-toast][data-x-position=right]{right:0}[data-sonner-toast][data-x-position=left]{left:0}[data-sonner-toast][data-expanded=false][data-front=false][data-styled=true]>*{opacity:0}[data-sonner-toast][data-visible=false]{opacity:0;pointer-events:none}[data-sonner-toast][data-mounted=true][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset)));height:var(--initial-height)}[data-sonner-toast][data-removed=true][data-front=true][data-swipe-out=false]{--y:translateY(calc(var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=true]{--y:translateY(calc(var(--lift) * var(--offset) + var(--lift) * -100%));opacity:0}[data-sonner-toast][data-removed=true][data-front=false][data-swipe-out=false][data-expanded=false]{--y:translateY(40%);opacity:0;transition:transform .5s,opacity .2s}[data-sonner-toast][data-removed=true][data-front=false]::before{height:calc(var(--initial-height) + 20%)}[data-sonner-toast][data-swiping=true]{transform:var(--y) translateY(var(--swipe-amount-y,0)) translateX(var(--swipe-amount-x,0));transition:none}[data-sonner-toast][data-swiped=true]{user-select:none}[data-sonner-toast][data-swipe-out=true][data-y-position=bottom],[data-sonner-toast][data-swipe-out=true][data-y-position=top]{animation-duration:.2s;animation-timing-function:ease-out;animation-fill-mode:forwards}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=left]{animation-name:swipe-out-left}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=right]{animation-name:swipe-out-right}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=up]{animation-name:swipe-out-up}[data-sonner-toast][data-swipe-out=true][data-swipe-direction=down]{animation-name:swipe-out-down}@keyframes swipe-out-left{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) - 100%));opacity:0}}@keyframes swipe-out-right{from{transform:var(--y) translateX(var(--swipe-amount-x));opacity:1}to{transform:var(--y) translateX(calc(var(--swipe-amount-x) + 100%));opacity:0}}@keyframes swipe-out-up{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) - 100%));opacity:0}}@keyframes swipe-out-down{from{transform:var(--y) translateY(var(--swipe-amount-y));opacity:1}to{transform:var(--y) translateY(calc(var(--swipe-amount-y) + 100%));opacity:0}}@media (max-width:600px){[data-sonner-toaster]{position:fixed;right:var(--mobile-offset-right);left:var(--mobile-offset-left);width:100%}[data-sonner-toaster][dir=rtl]{left:calc(var(--mobile-offset-left) * -1)}[data-sonner-toaster] [data-sonner-toast]{left:0;right:0;width:calc(100% - var(--mobile-offset-left) * 2)}[data-sonner-toaster][data-x-position=left]{left:var(--mobile-offset-left)}[data-sonner-toaster][data-y-position=bottom]{bottom:var(--mobile-offset-bottom)}[data-sonner-toaster][data-y-position=top]{top:var(--mobile-offset-top)}[data-sonner-toaster][data-x-position=center]{left:var(--mobile-offset-left);right:var(--mobile-offset-right);transform:none}}[data-sonner-toaster][data-sonner-theme=light]{--normal-bg:#fff;--normal-border:var(--gray4);--normal-text:var(--gray12);--success-bg:hsl(143, 85%, 96%);--success-border:hsl(145, 92%, 87%);--success-text:hsl(140, 100%, 27%);--info-bg:hsl(208, 100%, 97%);--info-border:hsl(221, 91%, 93%);--info-text:hsl(210, 92%, 45%);--warning-bg:hsl(49, 100%, 97%);--warning-border:hsl(49, 91%, 84%);--warning-text:hsl(31, 92%, 45%);--error-bg:hsl(359, 100%, 97%);--error-border:hsl(359, 100%, 94%);--error-text:hsl(360, 100%, 45%)}[data-sonner-toaster][data-sonner-theme=light] [data-sonner-toast][data-invert=true]{--normal-bg:#000;--normal-border:hsl(0, 0%, 20%);--normal-text:var(--gray1)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast][data-invert=true]{--normal-bg:#fff;--normal-border:var(--gray3);--normal-text:var(--gray12)}[data-sonner-toaster][data-sonner-theme=dark]{--normal-bg:#000;--normal-bg-hover:hsl(0, 0%, 12%);--normal-border:hsl(0, 0%, 20%);--normal-border-hover:hsl(0, 0%, 25%);--normal-text:var(--gray1);--success-bg:hsl(150, 100%, 6%);--success-border:hsl(147, 100%, 12%);--success-text:hsl(150, 86%, 65%);--info-bg:hsl(215, 100%, 6%);--info-border:hsl(223, 43%, 17%);--info-text:hsl(216, 87%, 65%);--warning-bg:hsl(64, 100%, 6%);--warning-border:hsl(60, 100%, 9%);--warning-text:hsl(46, 87%, 65%);--error-bg:hsl(358, 76%, 10%);--error-border:hsl(357, 89%, 16%);--error-text:hsl(358, 100%, 81%)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]{background:var(--normal-bg);border-color:var(--normal-border);color:var(--normal-text)}[data-sonner-toaster][data-sonner-theme=dark] [data-sonner-toast] [data-close-button]:hover{background:var(--normal-bg-hover);border-color:var(--normal-border-hover)}[data-rich-colors=true][data-sonner-toast][data-type=success]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=success] [data-close-button]{background:var(--success-bg);border-color:var(--success-border);color:var(--success-text)}[data-rich-colors=true][data-sonner-toast][data-type=info]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=info] [data-close-button]{background:var(--info-bg);border-color:var(--info-border);color:var(--info-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=warning] [data-close-button]{background:var(--warning-bg);border-color:var(--warning-border);color:var(--warning-text)}[data-rich-colors=true][data-sonner-toast][data-type=error]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}[data-rich-colors=true][data-sonner-toast][data-type=error] [data-close-button]{background:var(--error-bg);border-color:var(--error-border);color:var(--error-text)}.sonner-loading-wrapper{--size:16px;height:var(--size);width:var(--size);position:absolute;inset:0;z-index:10}.sonner-loading-wrapper[data-visible=false]{transform-origin:center;animation:sonner-fade-out .2s ease forwards}.sonner-spinner{position:relative;top:50%;left:50%;height:var(--size);width:var(--size)}.sonner-loading-bar{animation:sonner-spin 1.2s linear infinite;background:var(--gray11);border-radius:6px;height:8%;left:-10%;position:absolute;top:-3.9%;width:24%}.sonner-loading-bar:first-child{animation-delay:-1.2s;transform:rotate(.0001deg) translate(146%)}.sonner-loading-bar:nth-child(2){animation-delay:-1.1s;transform:rotate(30deg) translate(146%)}.sonner-loading-bar:nth-child(3){animation-delay:-1s;transform:rotate(60deg) translate(146%)}.sonner-loading-bar:nth-child(4){animation-delay:-.9s;transform:rotate(90deg) translate(146%)}.sonner-loading-bar:nth-child(5){animation-delay:-.8s;transform:rotate(120deg) translate(146%)}.sonner-loading-bar:nth-child(6){animation-delay:-.7s;transform:rotate(150deg) translate(146%)}.sonner-loading-bar:nth-child(7){animation-delay:-.6s;transform:rotate(180deg) translate(146%)}.sonner-loading-bar:nth-child(8){animation-delay:-.5s;transform:rotate(210deg) translate(146%)}.sonner-loading-bar:nth-child(9){animation-delay:-.4s;transform:rotate(240deg) translate(146%)}.sonner-loading-bar:nth-child(10){animation-delay:-.3s;transform:rotate(270deg) translate(146%)}.sonner-loading-bar:nth-child(11){animation-delay:-.2s;transform:rotate(300deg) translate(146%)}.sonner-loading-bar:nth-child(12){animation-delay:-.1s;transform:rotate(330deg) translate(146%)}@keyframes sonner-fade-in{0%{opacity:0;transform:scale(.8)}100%{opacity:1;transform:scale(1)}}@keyframes sonner-fade-out{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.8)}}@keyframes sonner-spin{0%{opacity:1}100%{opacity:.15}}@media (prefers-reduced-motion){.sonner-loading-bar,[data-sonner-toast],[data-sonner-toast]>*{transition:none!important;animation:none!important}}.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);transform-origin:center;transition:opacity .2s,transform .2s}.sonner-loader[data-visible=false]{opacity:0;transform:scale(.8) translate(-50%,-50%)}",
+);
 function isAction(action) {
   return action.label !== void 0;
 }
@@ -5062,8 +5587,42 @@ function getDefaultSwipeDirections(position) {
   return directions;
 }
 const Toast = (props) => {
-  var _toast_classNames, _toast_classNames1, _toast_classNames2, _toast_classNames3, _toast_classNames4, _toast_classNames5, _toast_classNames6, _toast_classNames7, _toast_classNames8;
-  const { invert: ToasterInvert, toast: toast2, unstyled, interacting, setHeights, visibleToasts, heights, index, toasts, expanded, removeToast, defaultRichColors, closeButton: closeButtonFromToaster, style, cancelButtonStyle, actionButtonStyle, className = "", descriptionClassName = "", duration: durationFromToaster, position, gap, expandByDefault, classNames, icons, closeButtonAriaLabel = "Close toast" } = props;
+  var _toast_classNames,
+    _toast_classNames1,
+    _toast_classNames2,
+    _toast_classNames3,
+    _toast_classNames4,
+    _toast_classNames5,
+    _toast_classNames6,
+    _toast_classNames7,
+    _toast_classNames8;
+  const {
+    invert: ToasterInvert,
+    toast: toast2,
+    unstyled,
+    interacting,
+    setHeights,
+    visibleToasts,
+    heights,
+    index,
+    toasts,
+    expanded,
+    removeToast,
+    defaultRichColors,
+    closeButton: closeButtonFromToaster,
+    style,
+    cancelButtonStyle,
+    actionButtonStyle,
+    className = "",
+    descriptionClassName = "",
+    duration: durationFromToaster,
+    position,
+    gap,
+    expandByDefault,
+    classNames,
+    icons,
+    closeButtonAriaLabel = "Close toast",
+  } = props;
   const [swipeDirection, setSwipeDirection] = React.useState(null);
   const [swipeOutDirection, setSwipeOutDirection] = React.useState(null);
   const [mounted, setMounted] = React.useState(false);
@@ -5082,21 +5641,20 @@ const Toast = (props) => {
   const dismissible = toast2.dismissible !== false;
   const toastClassname = toast2.className || "";
   const toastDescriptionClassname = toast2.descriptionClassName || "";
-  const heightIndex = React.useMemo(() => heights.findIndex((height) => height.toastId === toast2.id) || 0, [
-    heights,
-    toast2.id
-  ]);
+  const heightIndex = React.useMemo(
+    () => heights.findIndex((height) => height.toastId === toast2.id) || 0,
+    [heights, toast2.id],
+  );
   const closeButton = React.useMemo(() => {
     var _toast_closeButton;
-    return (_toast_closeButton = toast2.closeButton) != null ? _toast_closeButton : closeButtonFromToaster;
-  }, [
-    toast2.closeButton,
-    closeButtonFromToaster
-  ]);
-  const duration = React.useMemo(() => toast2.duration || durationFromToaster || TOAST_LIFETIME, [
-    toast2.duration,
-    durationFromToaster
-  ]);
+    return (_toast_closeButton = toast2.closeButton) != null
+      ? _toast_closeButton
+      : closeButtonFromToaster;
+  }, [toast2.closeButton, closeButtonFromToaster]);
+  const duration = React.useMemo(
+    () => toast2.duration || durationFromToaster || TOAST_LIFETIME,
+    [toast2.duration, durationFromToaster],
+  );
   const closeTimerStartTimeRef = React.useRef(0);
   const offset = React.useRef(0);
   const lastCloseTimerStartTimeRef = React.useRef(0);
@@ -5109,22 +5667,17 @@ const Toast = (props) => {
       }
       return prev + curr.height;
     }, 0);
-  }, [
-    heights,
-    heightIndex
-  ]);
+  }, [heights, heightIndex]);
   const isDocumentHidden = useIsDocumentHidden();
   const invert = toast2.invert || ToasterInvert;
   const disabled = toastType === "loading";
-  offset.current = React.useMemo(() => heightIndex * gap + toastsHeightBefore, [
-    heightIndex,
-    toastsHeightBefore
-  ]);
+  offset.current = React.useMemo(
+    () => heightIndex * gap + toastsHeightBefore,
+    [heightIndex, toastsHeightBefore],
+  );
   React.useEffect(() => {
     remainingTime.current = duration;
-  }, [
-    duration
-  ]);
+  }, [duration]);
   React.useEffect(() => {
     setMounted(true);
   }, []);
@@ -5137,16 +5690,13 @@ const Toast = (props) => {
         {
           toastId: toast2.id,
           height,
-          position: toast2.position
+          position: toast2.position,
         },
-        ...h
+        ...h,
       ]);
       return () => setHeights((h) => h.filter((height2) => height2.toastId !== toast2.id));
     }
-  }, [
-    setHeights,
-    toast2.id
-  ]);
+  }, [setHeights, toast2.id]);
   React.useLayoutEffect(() => {
     if (!mounted) return;
     const toastNode = toastRef.current;
@@ -5162,15 +5712,19 @@ const Toast = (props) => {
           {
             toastId: toast2.id,
             height: newHeight,
-            position: toast2.position
+            position: toast2.position,
           },
-          ...heights2
+          ...heights2,
         ];
       } else {
-        return heights2.map((height) => height.toastId === toast2.id ? {
-          ...height,
-          height: newHeight
-        } : height);
+        return heights2.map((height) =>
+          height.toastId === toast2.id
+            ? {
+                ...height,
+                height: newHeight,
+              }
+            : height,
+        );
       }
     });
   }, [
@@ -5181,7 +5735,7 @@ const Toast = (props) => {
     toast2.id,
     toast2.jsx,
     toast2.action,
-    toast2.cancel
+    toast2.cancel,
   ]);
   const deleteToast = React.useCallback(() => {
     setRemoved(true);
@@ -5190,25 +5744,25 @@ const Toast = (props) => {
     setTimeout(() => {
       removeToast(toast2);
     }, TIME_BEFORE_UNMOUNT);
-  }, [
-    toast2,
-    removeToast,
-    setHeights,
-    offset
-  ]);
+  }, [toast2, removeToast, setHeights, offset]);
   React.useEffect(() => {
-    if (toast2.promise && toastType === "loading" || toast2.duration === Infinity || toast2.type === "loading") return;
+    if (
+      (toast2.promise && toastType === "loading") ||
+      toast2.duration === Infinity ||
+      toast2.type === "loading"
+    )
+      return;
     let timeoutId;
     const pauseTimer = () => {
       if (lastCloseTimerStartTimeRef.current < closeTimerStartTimeRef.current) {
-        const elapsedTime = (/* @__PURE__ */ new Date()).getTime() - closeTimerStartTimeRef.current;
+        const elapsedTime = /* @__PURE__ */ new Date().getTime() - closeTimerStartTimeRef.current;
         remainingTime.current = remainingTime.current - elapsedTime;
       }
-      lastCloseTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
+      lastCloseTimerStartTimeRef.current = /* @__PURE__ */ new Date().getTime();
     };
     const startTimer = () => {
       if (remainingTime.current === Infinity) return;
-      closeTimerStartTimeRef.current = (/* @__PURE__ */ new Date()).getTime();
+      closeTimerStartTimeRef.current = /* @__PURE__ */ new Date().getTime();
       timeoutId = setTimeout(() => {
         toast2.onAutoClose == null ? void 0 : toast2.onAutoClose.call(toast2, toast2);
         deleteToast();
@@ -5220,209 +5774,384 @@ const Toast = (props) => {
       startTimer();
     }
     return () => clearTimeout(timeoutId);
-  }, [
-    expanded,
-    interacting,
-    toast2,
-    toastType,
-    isDocumentHidden,
-    deleteToast
-  ]);
+  }, [expanded, interacting, toast2, toastType, isDocumentHidden, deleteToast]);
   React.useEffect(() => {
     if (toast2.delete) {
       deleteToast();
       toast2.onDismiss == null ? void 0 : toast2.onDismiss.call(toast2, toast2);
     }
-  }, [
-    deleteToast,
-    toast2.delete
-  ]);
+  }, [deleteToast, toast2.delete]);
   function getLoadingIcon() {
     var _toast_classNames9;
     if (icons == null ? void 0 : icons.loading) {
       var _toast_classNames12;
-      return /* @__PURE__ */ React.createElement("div", {
-        className: cn(classNames == null ? void 0 : classNames.loader, toast2 == null ? void 0 : (_toast_classNames12 = toast2.classNames) == null ? void 0 : _toast_classNames12.loader, "sonner-loader"),
-        "data-visible": toastType === "loading"
-      }, icons.loading);
+      return /* @__PURE__ */ React.createElement(
+        "div",
+        {
+          className: cn(
+            classNames == null ? void 0 : classNames.loader,
+            toast2 == null
+              ? void 0
+              : (_toast_classNames12 = toast2.classNames) == null
+                ? void 0
+                : _toast_classNames12.loader,
+            "sonner-loader",
+          ),
+          "data-visible": toastType === "loading",
+        },
+        icons.loading,
+      );
     }
     return /* @__PURE__ */ React.createElement(Loader, {
-      className: cn(classNames == null ? void 0 : classNames.loader, toast2 == null ? void 0 : (_toast_classNames9 = toast2.classNames) == null ? void 0 : _toast_classNames9.loader),
-      visible: toastType === "loading"
+      className: cn(
+        classNames == null ? void 0 : classNames.loader,
+        toast2 == null
+          ? void 0
+          : (_toast_classNames9 = toast2.classNames) == null
+            ? void 0
+            : _toast_classNames9.loader,
+      ),
+      visible: toastType === "loading",
     });
   }
   const icon = toast2.icon || (icons == null ? void 0 : icons[toastType]) || getAsset(toastType);
   var _toast_richColors, _icons_close;
-  return /* @__PURE__ */ React.createElement("li", {
-    tabIndex: 0,
-    ref: toastRef,
-    className: cn(className, toastClassname, classNames == null ? void 0 : classNames.toast, toast2 == null ? void 0 : (_toast_classNames = toast2.classNames) == null ? void 0 : _toast_classNames.toast, classNames == null ? void 0 : classNames.default, classNames == null ? void 0 : classNames[toastType], toast2 == null ? void 0 : (_toast_classNames1 = toast2.classNames) == null ? void 0 : _toast_classNames1[toastType]),
-    "data-sonner-toast": "",
-    "data-rich-colors": (_toast_richColors = toast2.richColors) != null ? _toast_richColors : defaultRichColors,
-    "data-styled": !Boolean(toast2.jsx || toast2.unstyled || unstyled),
-    "data-mounted": mounted,
-    "data-promise": Boolean(toast2.promise),
-    "data-swiped": isSwiped,
-    "data-removed": removed,
-    "data-visible": isVisible,
-    "data-y-position": y,
-    "data-x-position": x,
-    "data-index": index,
-    "data-front": isFront,
-    "data-swiping": swiping,
-    "data-dismissible": dismissible,
-    "data-type": toastType,
-    "data-invert": invert,
-    "data-swipe-out": swipeOut,
-    "data-swipe-direction": swipeOutDirection,
-    "data-expanded": Boolean(expanded || expandByDefault && mounted),
-    "data-testid": toast2.testId,
-    style: {
-      "--index": index,
-      "--toasts-before": index,
-      "--z-index": toasts.length - index,
-      "--offset": `${removed ? offsetBeforeRemove : offset.current}px`,
-      "--initial-height": expandByDefault ? "auto" : `${initialHeight}px`,
-      ...style,
-      ...toast2.style
-    },
-    onDragEnd: () => {
-      setSwiping(false);
-      setSwipeDirection(null);
-      pointerStartRef.current = null;
-    },
-    onPointerDown: (event) => {
-      if (event.button === 2) return;
-      if (disabled || !dismissible) return;
-      dragStartTime.current = /* @__PURE__ */ new Date();
-      setOffsetBeforeRemove(offset.current);
-      event.target.setPointerCapture(event.pointerId);
-      if (event.target.tagName === "BUTTON") return;
-      setSwiping(true);
-      pointerStartRef.current = {
-        x: event.clientX,
-        y: event.clientY
-      };
-    },
-    onPointerUp: () => {
-      var _toastRef_current, _toastRef_current1, _dragStartTime_current;
-      if (swipeOut || !dismissible) return;
-      pointerStartRef.current = null;
-      const swipeAmountX = Number(((_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.getPropertyValue("--swipe-amount-x").replace("px", "")) || 0);
-      const swipeAmountY = Number(((_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.getPropertyValue("--swipe-amount-y").replace("px", "")) || 0);
-      const timeTaken = (/* @__PURE__ */ new Date()).getTime() - ((_dragStartTime_current = dragStartTime.current) == null ? void 0 : _dragStartTime_current.getTime());
-      const swipeAmount = swipeDirection === "x" ? swipeAmountX : swipeAmountY;
-      const velocity = Math.abs(swipeAmount) / timeTaken;
-      if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
+  return /* @__PURE__ */ React.createElement(
+    "li",
+    {
+      tabIndex: 0,
+      ref: toastRef,
+      className: cn(
+        className,
+        toastClassname,
+        classNames == null ? void 0 : classNames.toast,
+        toast2 == null
+          ? void 0
+          : (_toast_classNames = toast2.classNames) == null
+            ? void 0
+            : _toast_classNames.toast,
+        classNames == null ? void 0 : classNames.default,
+        classNames == null ? void 0 : classNames[toastType],
+        toast2 == null
+          ? void 0
+          : (_toast_classNames1 = toast2.classNames) == null
+            ? void 0
+            : _toast_classNames1[toastType],
+      ),
+      "data-sonner-toast": "",
+      "data-rich-colors":
+        (_toast_richColors = toast2.richColors) != null ? _toast_richColors : defaultRichColors,
+      "data-styled": !Boolean(toast2.jsx || toast2.unstyled || unstyled),
+      "data-mounted": mounted,
+      "data-promise": Boolean(toast2.promise),
+      "data-swiped": isSwiped,
+      "data-removed": removed,
+      "data-visible": isVisible,
+      "data-y-position": y,
+      "data-x-position": x,
+      "data-index": index,
+      "data-front": isFront,
+      "data-swiping": swiping,
+      "data-dismissible": dismissible,
+      "data-type": toastType,
+      "data-invert": invert,
+      "data-swipe-out": swipeOut,
+      "data-swipe-direction": swipeOutDirection,
+      "data-expanded": Boolean(expanded || (expandByDefault && mounted)),
+      "data-testid": toast2.testId,
+      style: {
+        "--index": index,
+        "--toasts-before": index,
+        "--z-index": toasts.length - index,
+        "--offset": `${removed ? offsetBeforeRemove : offset.current}px`,
+        "--initial-height": expandByDefault ? "auto" : `${initialHeight}px`,
+        ...style,
+        ...toast2.style,
+      },
+      onDragEnd: () => {
+        setSwiping(false);
+        setSwipeDirection(null);
+        pointerStartRef.current = null;
+      },
+      onPointerDown: (event) => {
+        if (event.button === 2) return;
+        if (disabled || !dismissible) return;
+        dragStartTime.current = /* @__PURE__ */ new Date();
         setOffsetBeforeRemove(offset.current);
-        toast2.onDismiss == null ? void 0 : toast2.onDismiss.call(toast2, toast2);
-        if (swipeDirection === "x") {
-          setSwipeOutDirection(swipeAmountX > 0 ? "right" : "left");
+        event.target.setPointerCapture(event.pointerId);
+        if (event.target.tagName === "BUTTON") return;
+        setSwiping(true);
+        pointerStartRef.current = {
+          x: event.clientX,
+          y: event.clientY,
+        };
+      },
+      onPointerUp: () => {
+        var _toastRef_current, _toastRef_current1, _dragStartTime_current;
+        if (swipeOut || !dismissible) return;
+        pointerStartRef.current = null;
+        const swipeAmountX = Number(
+          ((_toastRef_current = toastRef.current) == null
+            ? void 0
+            : _toastRef_current.style.getPropertyValue("--swipe-amount-x").replace("px", "")) || 0,
+        );
+        const swipeAmountY = Number(
+          ((_toastRef_current1 = toastRef.current) == null
+            ? void 0
+            : _toastRef_current1.style.getPropertyValue("--swipe-amount-y").replace("px", "")) || 0,
+        );
+        const timeTaken =
+          /* @__PURE__ */ new Date().getTime() -
+          ((_dragStartTime_current = dragStartTime.current) == null
+            ? void 0
+            : _dragStartTime_current.getTime());
+        const swipeAmount = swipeDirection === "x" ? swipeAmountX : swipeAmountY;
+        const velocity = Math.abs(swipeAmount) / timeTaken;
+        if (Math.abs(swipeAmount) >= SWIPE_THRESHOLD || velocity > 0.11) {
+          setOffsetBeforeRemove(offset.current);
+          toast2.onDismiss == null ? void 0 : toast2.onDismiss.call(toast2, toast2);
+          if (swipeDirection === "x") {
+            setSwipeOutDirection(swipeAmountX > 0 ? "right" : "left");
+          } else {
+            setSwipeOutDirection(swipeAmountY > 0 ? "down" : "up");
+          }
+          deleteToast();
+          setSwipeOut(true);
+          return;
         } else {
-          setSwipeOutDirection(swipeAmountY > 0 ? "down" : "up");
+          var _toastRef_current2, _toastRef_current3;
+          (_toastRef_current2 = toastRef.current) == null
+            ? void 0
+            : _toastRef_current2.style.setProperty("--swipe-amount-x", `0px`);
+          (_toastRef_current3 = toastRef.current) == null
+            ? void 0
+            : _toastRef_current3.style.setProperty("--swipe-amount-y", `0px`);
         }
-        deleteToast();
-        setSwipeOut(true);
-        return;
-      } else {
-        var _toastRef_current2, _toastRef_current3;
-        (_toastRef_current2 = toastRef.current) == null ? void 0 : _toastRef_current2.style.setProperty("--swipe-amount-x", `0px`);
-        (_toastRef_current3 = toastRef.current) == null ? void 0 : _toastRef_current3.style.setProperty("--swipe-amount-y", `0px`);
-      }
-      setIsSwiped(false);
-      setSwiping(false);
-      setSwipeDirection(null);
-    },
-    onPointerMove: (event) => {
-      var _window_getSelection, _toastRef_current, _toastRef_current1;
-      if (!pointerStartRef.current || !dismissible) return;
-      const isHighlighted = ((_window_getSelection = window.getSelection()) == null ? void 0 : _window_getSelection.toString().length) > 0;
-      if (isHighlighted) return;
-      const yDelta = event.clientY - pointerStartRef.current.y;
-      const xDelta = event.clientX - pointerStartRef.current.x;
-      var _props_swipeDirections;
-      const swipeDirections = (_props_swipeDirections = props.swipeDirections) != null ? _props_swipeDirections : getDefaultSwipeDirections(position);
-      if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) {
-        setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? "x" : "y");
-      }
-      let swipeAmount = {
-        x: 0,
-        y: 0
-      };
-      const getDampening = (delta) => {
-        const factor = Math.abs(delta) / 20;
-        return 1 / (1.5 + factor);
-      };
-      if (swipeDirection === "y") {
-        if (swipeDirections.includes("top") || swipeDirections.includes("bottom")) {
-          if (swipeDirections.includes("top") && yDelta < 0 || swipeDirections.includes("bottom") && yDelta > 0) {
-            swipeAmount.y = yDelta;
-          } else {
-            const dampenedDelta = yDelta * getDampening(yDelta);
-            swipeAmount.y = Math.abs(dampenedDelta) < Math.abs(yDelta) ? dampenedDelta : yDelta;
+        setIsSwiped(false);
+        setSwiping(false);
+        setSwipeDirection(null);
+      },
+      onPointerMove: (event) => {
+        var _window_getSelection, _toastRef_current, _toastRef_current1;
+        if (!pointerStartRef.current || !dismissible) return;
+        const isHighlighted =
+          ((_window_getSelection = window.getSelection()) == null
+            ? void 0
+            : _window_getSelection.toString().length) > 0;
+        if (isHighlighted) return;
+        const yDelta = event.clientY - pointerStartRef.current.y;
+        const xDelta = event.clientX - pointerStartRef.current.x;
+        var _props_swipeDirections;
+        const swipeDirections =
+          (_props_swipeDirections = props.swipeDirections) != null
+            ? _props_swipeDirections
+            : getDefaultSwipeDirections(position);
+        if (!swipeDirection && (Math.abs(xDelta) > 1 || Math.abs(yDelta) > 1)) {
+          setSwipeDirection(Math.abs(xDelta) > Math.abs(yDelta) ? "x" : "y");
+        }
+        let swipeAmount = {
+          x: 0,
+          y: 0,
+        };
+        const getDampening = (delta) => {
+          const factor = Math.abs(delta) / 20;
+          return 1 / (1.5 + factor);
+        };
+        if (swipeDirection === "y") {
+          if (swipeDirections.includes("top") || swipeDirections.includes("bottom")) {
+            if (
+              (swipeDirections.includes("top") && yDelta < 0) ||
+              (swipeDirections.includes("bottom") && yDelta > 0)
+            ) {
+              swipeAmount.y = yDelta;
+            } else {
+              const dampenedDelta = yDelta * getDampening(yDelta);
+              swipeAmount.y = Math.abs(dampenedDelta) < Math.abs(yDelta) ? dampenedDelta : yDelta;
+            }
+          }
+        } else if (swipeDirection === "x") {
+          if (swipeDirections.includes("left") || swipeDirections.includes("right")) {
+            if (
+              (swipeDirections.includes("left") && xDelta < 0) ||
+              (swipeDirections.includes("right") && xDelta > 0)
+            ) {
+              swipeAmount.x = xDelta;
+            } else {
+              const dampenedDelta = xDelta * getDampening(xDelta);
+              swipeAmount.x = Math.abs(dampenedDelta) < Math.abs(xDelta) ? dampenedDelta : xDelta;
+            }
           }
         }
-      } else if (swipeDirection === "x") {
-        if (swipeDirections.includes("left") || swipeDirections.includes("right")) {
-          if (swipeDirections.includes("left") && xDelta < 0 || swipeDirections.includes("right") && xDelta > 0) {
-            swipeAmount.x = xDelta;
-          } else {
-            const dampenedDelta = xDelta * getDampening(xDelta);
-            swipeAmount.x = Math.abs(dampenedDelta) < Math.abs(xDelta) ? dampenedDelta : xDelta;
-          }
+        if (Math.abs(swipeAmount.x) > 0 || Math.abs(swipeAmount.y) > 0) {
+          setIsSwiped(true);
         }
-      }
-      if (Math.abs(swipeAmount.x) > 0 || Math.abs(swipeAmount.y) > 0) {
-        setIsSwiped(true);
-      }
-      (_toastRef_current = toastRef.current) == null ? void 0 : _toastRef_current.style.setProperty("--swipe-amount-x", `${swipeAmount.x}px`);
-      (_toastRef_current1 = toastRef.current) == null ? void 0 : _toastRef_current1.style.setProperty("--swipe-amount-y", `${swipeAmount.y}px`);
-    }
-  }, closeButton && !toast2.jsx && toastType !== "loading" ? /* @__PURE__ */ React.createElement("button", {
-    "aria-label": closeButtonAriaLabel,
-    "data-disabled": disabled,
-    "data-close-button": true,
-    onClick: disabled || !dismissible ? () => {
-    } : () => {
-      deleteToast();
-      toast2.onDismiss == null ? void 0 : toast2.onDismiss.call(toast2, toast2);
+        (_toastRef_current = toastRef.current) == null
+          ? void 0
+          : _toastRef_current.style.setProperty("--swipe-amount-x", `${swipeAmount.x}px`);
+        (_toastRef_current1 = toastRef.current) == null
+          ? void 0
+          : _toastRef_current1.style.setProperty("--swipe-amount-y", `${swipeAmount.y}px`);
+      },
     },
-    className: cn(classNames == null ? void 0 : classNames.closeButton, toast2 == null ? void 0 : (_toast_classNames2 = toast2.classNames) == null ? void 0 : _toast_classNames2.closeButton)
-  }, (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon) : null, (toastType || toast2.icon || toast2.promise) && toast2.icon !== null && ((icons == null ? void 0 : icons[toastType]) !== null || toast2.icon) ? /* @__PURE__ */ React.createElement("div", {
-    "data-icon": "",
-    className: cn(classNames == null ? void 0 : classNames.icon, toast2 == null ? void 0 : (_toast_classNames3 = toast2.classNames) == null ? void 0 : _toast_classNames3.icon)
-  }, toast2.promise || toast2.type === "loading" && !toast2.icon ? toast2.icon || getLoadingIcon() : null, toast2.type !== "loading" ? icon : null) : null, /* @__PURE__ */ React.createElement("div", {
-    "data-content": "",
-    className: cn(classNames == null ? void 0 : classNames.content, toast2 == null ? void 0 : (_toast_classNames4 = toast2.classNames) == null ? void 0 : _toast_classNames4.content)
-  }, /* @__PURE__ */ React.createElement("div", {
-    "data-title": "",
-    className: cn(classNames == null ? void 0 : classNames.title, toast2 == null ? void 0 : (_toast_classNames5 = toast2.classNames) == null ? void 0 : _toast_classNames5.title)
-  }, toast2.jsx ? toast2.jsx : typeof toast2.title === "function" ? toast2.title() : toast2.title), toast2.description ? /* @__PURE__ */ React.createElement("div", {
-    "data-description": "",
-    className: cn(descriptionClassName, toastDescriptionClassname, classNames == null ? void 0 : classNames.description, toast2 == null ? void 0 : (_toast_classNames6 = toast2.classNames) == null ? void 0 : _toast_classNames6.description)
-  }, typeof toast2.description === "function" ? toast2.description() : toast2.description) : null), /* @__PURE__ */ React.isValidElement(toast2.cancel) ? toast2.cancel : toast2.cancel && isAction(toast2.cancel) ? /* @__PURE__ */ React.createElement("button", {
-    "data-button": true,
-    "data-cancel": true,
-    style: toast2.cancelButtonStyle || cancelButtonStyle,
-    onClick: (event) => {
-      if (!isAction(toast2.cancel)) return;
-      if (!dismissible) return;
-      toast2.cancel.onClick == null ? void 0 : toast2.cancel.onClick.call(toast2.cancel, event);
-      deleteToast();
-    },
-    className: cn(classNames == null ? void 0 : classNames.cancelButton, toast2 == null ? void 0 : (_toast_classNames7 = toast2.classNames) == null ? void 0 : _toast_classNames7.cancelButton)
-  }, toast2.cancel.label) : null, /* @__PURE__ */ React.isValidElement(toast2.action) ? toast2.action : toast2.action && isAction(toast2.action) ? /* @__PURE__ */ React.createElement("button", {
-    "data-button": true,
-    "data-action": true,
-    style: toast2.actionButtonStyle || actionButtonStyle,
-    onClick: (event) => {
-      if (!isAction(toast2.action)) return;
-      toast2.action.onClick == null ? void 0 : toast2.action.onClick.call(toast2.action, event);
-      if (event.defaultPrevented) return;
-      deleteToast();
-    },
-    className: cn(classNames == null ? void 0 : classNames.actionButton, toast2 == null ? void 0 : (_toast_classNames8 = toast2.classNames) == null ? void 0 : _toast_classNames8.actionButton)
-  }, toast2.action.label) : null);
+    closeButton && !toast2.jsx && toastType !== "loading"
+      ? /* @__PURE__ */ React.createElement(
+          "button",
+          {
+            "aria-label": closeButtonAriaLabel,
+            "data-disabled": disabled,
+            "data-close-button": true,
+            onClick:
+              disabled || !dismissible
+                ? () => {}
+                : () => {
+                    deleteToast();
+                    toast2.onDismiss == null ? void 0 : toast2.onDismiss.call(toast2, toast2);
+                  },
+            className: cn(
+              classNames == null ? void 0 : classNames.closeButton,
+              toast2 == null
+                ? void 0
+                : (_toast_classNames2 = toast2.classNames) == null
+                  ? void 0
+                  : _toast_classNames2.closeButton,
+            ),
+          },
+          (_icons_close = icons == null ? void 0 : icons.close) != null ? _icons_close : CloseIcon,
+        )
+      : null,
+    (toastType || toast2.icon || toast2.promise) &&
+      toast2.icon !== null &&
+      ((icons == null ? void 0 : icons[toastType]) !== null || toast2.icon)
+      ? /* @__PURE__ */ React.createElement(
+          "div",
+          {
+            "data-icon": "",
+            className: cn(
+              classNames == null ? void 0 : classNames.icon,
+              toast2 == null
+                ? void 0
+                : (_toast_classNames3 = toast2.classNames) == null
+                  ? void 0
+                  : _toast_classNames3.icon,
+            ),
+          },
+          toast2.promise || (toast2.type === "loading" && !toast2.icon)
+            ? toast2.icon || getLoadingIcon()
+            : null,
+          toast2.type !== "loading" ? icon : null,
+        )
+      : null,
+    /* @__PURE__ */ React.createElement(
+      "div",
+      {
+        "data-content": "",
+        className: cn(
+          classNames == null ? void 0 : classNames.content,
+          toast2 == null
+            ? void 0
+            : (_toast_classNames4 = toast2.classNames) == null
+              ? void 0
+              : _toast_classNames4.content,
+        ),
+      },
+      /* @__PURE__ */ React.createElement(
+        "div",
+        {
+          "data-title": "",
+          className: cn(
+            classNames == null ? void 0 : classNames.title,
+            toast2 == null
+              ? void 0
+              : (_toast_classNames5 = toast2.classNames) == null
+                ? void 0
+                : _toast_classNames5.title,
+          ),
+        },
+        toast2.jsx
+          ? toast2.jsx
+          : typeof toast2.title === "function"
+            ? toast2.title()
+            : toast2.title,
+      ),
+      toast2.description
+        ? /* @__PURE__ */ React.createElement(
+            "div",
+            {
+              "data-description": "",
+              className: cn(
+                descriptionClassName,
+                toastDescriptionClassname,
+                classNames == null ? void 0 : classNames.description,
+                toast2 == null
+                  ? void 0
+                  : (_toast_classNames6 = toast2.classNames) == null
+                    ? void 0
+                    : _toast_classNames6.description,
+              ),
+            },
+            typeof toast2.description === "function" ? toast2.description() : toast2.description,
+          )
+        : null,
+    ),
+    /* @__PURE__ */ React.isValidElement(toast2.cancel)
+      ? toast2.cancel
+      : toast2.cancel && isAction(toast2.cancel)
+        ? /* @__PURE__ */ React.createElement(
+            "button",
+            {
+              "data-button": true,
+              "data-cancel": true,
+              style: toast2.cancelButtonStyle || cancelButtonStyle,
+              onClick: (event) => {
+                if (!isAction(toast2.cancel)) return;
+                if (!dismissible) return;
+                toast2.cancel.onClick == null
+                  ? void 0
+                  : toast2.cancel.onClick.call(toast2.cancel, event);
+                deleteToast();
+              },
+              className: cn(
+                classNames == null ? void 0 : classNames.cancelButton,
+                toast2 == null
+                  ? void 0
+                  : (_toast_classNames7 = toast2.classNames) == null
+                    ? void 0
+                    : _toast_classNames7.cancelButton,
+              ),
+            },
+            toast2.cancel.label,
+          )
+        : null,
+    /* @__PURE__ */ React.isValidElement(toast2.action)
+      ? toast2.action
+      : toast2.action && isAction(toast2.action)
+        ? /* @__PURE__ */ React.createElement(
+            "button",
+            {
+              "data-button": true,
+              "data-action": true,
+              style: toast2.actionButtonStyle || actionButtonStyle,
+              onClick: (event) => {
+                if (!isAction(toast2.action)) return;
+                toast2.action.onClick == null
+                  ? void 0
+                  : toast2.action.onClick.call(toast2.action, event);
+                if (event.defaultPrevented) return;
+                deleteToast();
+              },
+              className: cn(
+                classNames == null ? void 0 : classNames.actionButton,
+                toast2 == null
+                  ? void 0
+                  : (_toast_classNames8 = toast2.classNames) == null
+                    ? void 0
+                    : _toast_classNames8.actionButton,
+              ),
+            },
+            toast2.action.label,
+          )
+        : null,
+  );
 };
 function getDocumentDirection() {
   if (typeof window === "undefined") return "ltr";
@@ -5435,36 +6164,24 @@ function getDocumentDirection() {
 }
 function assignOffset(defaultOffset, mobileOffset) {
   const styles = {};
-  [
-    defaultOffset,
-    mobileOffset
-  ].forEach((offset, index) => {
+  [defaultOffset, mobileOffset].forEach((offset, index) => {
     const isMobile = index === 1;
     const prefix = isMobile ? "--mobile-offset" : "--offset";
     const defaultValue = isMobile ? MOBILE_VIEWPORT_OFFSET : VIEWPORT_OFFSET;
     function assignAll(offset2) {
-      [
-        "top",
-        "right",
-        "bottom",
-        "left"
-      ].forEach((key) => {
+      ["top", "right", "bottom", "left"].forEach((key) => {
         styles[`${prefix}-${key}`] = typeof offset2 === "number" ? `${offset2}px` : offset2;
       });
     }
     if (typeof offset === "number" || typeof offset === "string") {
       assignAll(offset);
     } else if (typeof offset === "object") {
-      [
-        "top",
-        "right",
-        "bottom",
-        "left"
-      ].forEach((key) => {
+      ["top", "right", "bottom", "left"].forEach((key) => {
         if (offset[key] === void 0) {
           styles[`${prefix}-${key}`] = defaultValue;
         } else {
-          styles[`${prefix}-${key}`] = typeof offset[key] === "number" ? `${offset[key]}px` : offset[key];
+          styles[`${prefix}-${key}`] =
+            typeof offset[key] === "number" ? `${offset[key]}px` : offset[key];
         }
       });
     } else {
@@ -5474,32 +6191,55 @@ function assignOffset(defaultOffset, mobileOffset) {
   return styles;
 }
 const Toaster = /* @__PURE__ */ React.forwardRef(function Toaster2(props, ref) {
-  const { id, invert, position = "bottom-right", hotkey = [
-    "altKey",
-    "KeyT"
-  ], expand, closeButton, className, offset, mobileOffset, theme = "light", richColors, duration, style, visibleToasts = VISIBLE_TOASTS_AMOUNT, toastOptions, dir = getDocumentDirection(), gap = GAP, icons, containerAriaLabel = "Notifications" } = props;
+  const {
+    id,
+    invert,
+    position = "bottom-right",
+    hotkey = ["altKey", "KeyT"],
+    expand,
+    closeButton,
+    className,
+    offset,
+    mobileOffset,
+    theme = "light",
+    richColors,
+    duration,
+    style,
+    visibleToasts = VISIBLE_TOASTS_AMOUNT,
+    toastOptions,
+    dir = getDocumentDirection(),
+    gap = GAP,
+    icons,
+    containerAriaLabel = "Notifications",
+  } = props;
   const [toasts, setToasts] = React.useState([]);
   const filteredToasts = React.useMemo(() => {
     if (id) {
       return toasts.filter((toast2) => toast2.toasterId === id);
     }
     return toasts.filter((toast2) => !toast2.toasterId);
-  }, [
-    toasts,
-    id
-  ]);
+  }, [toasts, id]);
   const possiblePositions = React.useMemo(() => {
-    return Array.from(new Set([
-      position
-    ].concat(filteredToasts.filter((toast2) => toast2.position).map((toast2) => toast2.position))));
-  }, [
-    filteredToasts,
-    position
-  ]);
+    return Array.from(
+      new Set(
+        [position].concat(
+          filteredToasts.filter((toast2) => toast2.position).map((toast2) => toast2.position),
+        ),
+      ),
+    );
+  }, [filteredToasts, position]);
   const [heights, setHeights] = React.useState([]);
   const [expanded, setExpanded] = React.useState(false);
   const [interacting, setInteracting] = React.useState(false);
-  const [actualTheme, setActualTheme] = React.useState(theme !== "system" ? theme : typeof window !== "undefined" ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light" : "light");
+  const [actualTheme, setActualTheme] = React.useState(
+    theme !== "system"
+      ? theme
+      : typeof window !== "undefined"
+        ? window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light"
+        : "light",
+  );
   const listRef = React.useRef(null);
   const hotkeyLabel = hotkey.join("+").replace(/Key/g, "").replace(/Digit/g, "");
   const lastFocusedElementRef = React.useRef(null);
@@ -5507,7 +6247,11 @@ const Toaster = /* @__PURE__ */ React.forwardRef(function Toaster2(props, ref) {
   const removeToast = React.useCallback((toastToRemove) => {
     setToasts((toasts2) => {
       var _toasts_find;
-      if (!((_toasts_find = toasts2.find((toast2) => toast2.id === toastToRemove.id)) == null ? void 0 : _toasts_find.delete)) {
+      if (
+        !((_toasts_find = toasts2.find((toast2) => toast2.id === toastToRemove.id)) == null
+          ? void 0
+          : _toasts_find.delete)
+      ) {
         ToastState.dismiss(toastToRemove.id);
       }
       return toasts2.filter(({ id: id2 }) => id2 !== toastToRemove.id);
@@ -5517,10 +6261,16 @@ const Toaster = /* @__PURE__ */ React.forwardRef(function Toaster2(props, ref) {
     return ToastState.subscribe((toast2) => {
       if (toast2.dismiss) {
         requestAnimationFrame(() => {
-          setToasts((toasts2) => toasts2.map((t) => t.id === toast2.id ? {
-            ...t,
-            delete: true
-          } : t));
+          setToasts((toasts2) =>
+            toasts2.map((t) =>
+              t.id === toast2.id
+                ? {
+                    ...t,
+                    delete: true,
+                  }
+                : t,
+            ),
+          );
         });
         return;
       }
@@ -5533,22 +6283,17 @@ const Toaster = /* @__PURE__ */ React.forwardRef(function Toaster2(props, ref) {
                 ...toasts2.slice(0, indexOfExistingToast),
                 {
                   ...toasts2[indexOfExistingToast],
-                  ...toast2
+                  ...toast2,
                 },
-                ...toasts2.slice(indexOfExistingToast + 1)
+                ...toasts2.slice(indexOfExistingToast + 1),
               ];
             }
-            return [
-              toast2,
-              ...toasts2
-            ];
+            return [toast2, ...toasts2];
           });
         });
       });
     });
-  }, [
-    toasts
-  ]);
+  }, [toasts]);
   React.useEffect(() => {
     if (theme !== "system") {
       setActualTheme(theme);
@@ -5584,16 +6329,12 @@ const Toaster = /* @__PURE__ */ React.forwardRef(function Toaster2(props, ref) {
         }
       });
     }
-  }, [
-    theme
-  ]);
+  }, [theme]);
   React.useEffect(() => {
     if (toasts.length <= 1) {
       setExpanded(false);
     }
-  }, [
-    toasts
-  ]);
+  }, [toasts]);
   React.useEffect(() => {
     const handleKeyDown = (event) => {
       var _listRef_current;
@@ -5603,138 +6344,163 @@ const Toaster = /* @__PURE__ */ React.forwardRef(function Toaster2(props, ref) {
         setExpanded(true);
         (_listRef_current1 = listRef.current) == null ? void 0 : _listRef_current1.focus();
       }
-      if (event.code === "Escape" && (document.activeElement === listRef.current || ((_listRef_current = listRef.current) == null ? void 0 : _listRef_current.contains(document.activeElement)))) {
+      if (
+        event.code === "Escape" &&
+        (document.activeElement === listRef.current ||
+          ((_listRef_current = listRef.current) == null
+            ? void 0
+            : _listRef_current.contains(document.activeElement)))
+      ) {
         setExpanded(false);
       }
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [
-    hotkey
-  ]);
+  }, [hotkey]);
   React.useEffect(() => {
     if (listRef.current) {
       return () => {
         if (lastFocusedElementRef.current) {
           lastFocusedElementRef.current.focus({
-            preventScroll: true
+            preventScroll: true,
           });
           lastFocusedElementRef.current = null;
           isFocusWithinRef.current = false;
         }
       };
     }
-  }, [
-    listRef.current
-  ]);
+  }, [listRef.current]);
   return (
     // Remove item from normal navigation flow, only available via hotkey
-    /* @__PURE__ */ React.createElement("section", {
-      ref,
-      "aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
-      tabIndex: -1,
-      "aria-live": "polite",
-      "aria-relevant": "additions text",
-      "aria-atomic": "false",
-      suppressHydrationWarning: true
-    }, possiblePositions.map((position2, index) => {
-      var _heights_;
-      const [y, x] = position2.split("-");
-      if (!filteredToasts.length) return null;
-      return /* @__PURE__ */ React.createElement("ol", {
-        key: position2,
-        dir: dir === "auto" ? getDocumentDirection() : dir,
+    /* @__PURE__ */ React.createElement(
+      "section",
+      {
+        ref,
+        "aria-label": `${containerAriaLabel} ${hotkeyLabel}`,
         tabIndex: -1,
-        ref: listRef,
-        className,
-        "data-sonner-toaster": true,
-        "data-sonner-theme": actualTheme,
-        "data-y-position": y,
-        "data-x-position": x,
-        style: {
-          "--front-toast-height": `${((_heights_ = heights[0]) == null ? void 0 : _heights_.height) || 0}px`,
-          "--width": `${TOAST_WIDTH}px`,
-          "--gap": `${gap}px`,
-          ...style,
-          ...assignOffset(offset, mobileOffset)
-        },
-        onBlur: (event) => {
-          if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
-            isFocusWithinRef.current = false;
-            if (lastFocusedElementRef.current) {
-              lastFocusedElementRef.current.focus({
-                preventScroll: true
+        "aria-live": "polite",
+        "aria-relevant": "additions text",
+        "aria-atomic": "false",
+        suppressHydrationWarning: true,
+      },
+      possiblePositions.map((position2, index) => {
+        var _heights_;
+        const [y, x] = position2.split("-");
+        if (!filteredToasts.length) return null;
+        return /* @__PURE__ */ React.createElement(
+          "ol",
+          {
+            key: position2,
+            dir: dir === "auto" ? getDocumentDirection() : dir,
+            tabIndex: -1,
+            ref: listRef,
+            className,
+            "data-sonner-toaster": true,
+            "data-sonner-theme": actualTheme,
+            "data-y-position": y,
+            "data-x-position": x,
+            style: {
+              "--front-toast-height": `${((_heights_ = heights[0]) == null ? void 0 : _heights_.height) || 0}px`,
+              "--width": `${TOAST_WIDTH}px`,
+              "--gap": `${gap}px`,
+              ...style,
+              ...assignOffset(offset, mobileOffset),
+            },
+            onBlur: (event) => {
+              if (isFocusWithinRef.current && !event.currentTarget.contains(event.relatedTarget)) {
+                isFocusWithinRef.current = false;
+                if (lastFocusedElementRef.current) {
+                  lastFocusedElementRef.current.focus({
+                    preventScroll: true,
+                  });
+                  lastFocusedElementRef.current = null;
+                }
+              }
+            },
+            onFocus: (event) => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === "false";
+              if (isNotDismissible) return;
+              if (!isFocusWithinRef.current) {
+                isFocusWithinRef.current = true;
+                lastFocusedElementRef.current = event.relatedTarget;
+              }
+            },
+            onMouseEnter: () => setExpanded(true),
+            onMouseMove: () => setExpanded(true),
+            onMouseLeave: () => {
+              if (!interacting) {
+                setExpanded(false);
+              }
+            },
+            onDragEnd: () => setExpanded(false),
+            onPointerDown: (event) => {
+              const isNotDismissible =
+                event.target instanceof HTMLElement && event.target.dataset.dismissible === "false";
+              if (isNotDismissible) return;
+              setInteracting(true);
+            },
+            onPointerUp: () => setInteracting(false),
+          },
+          filteredToasts
+            .filter((toast2) => (!toast2.position && index === 0) || toast2.position === position2)
+            .map((toast2, index2) => {
+              var _toastOptions_duration, _toastOptions_closeButton;
+              return /* @__PURE__ */ React.createElement(Toast, {
+                key: toast2.id,
+                icons,
+                index: index2,
+                toast: toast2,
+                defaultRichColors: richColors,
+                duration:
+                  (_toastOptions_duration =
+                    toastOptions == null ? void 0 : toastOptions.duration) != null
+                    ? _toastOptions_duration
+                    : duration,
+                className: toastOptions == null ? void 0 : toastOptions.className,
+                descriptionClassName:
+                  toastOptions == null ? void 0 : toastOptions.descriptionClassName,
+                invert,
+                visibleToasts,
+                closeButton:
+                  (_toastOptions_closeButton =
+                    toastOptions == null ? void 0 : toastOptions.closeButton) != null
+                    ? _toastOptions_closeButton
+                    : closeButton,
+                interacting,
+                position: position2,
+                style: toastOptions == null ? void 0 : toastOptions.style,
+                unstyled: toastOptions == null ? void 0 : toastOptions.unstyled,
+                classNames: toastOptions == null ? void 0 : toastOptions.classNames,
+                cancelButtonStyle: toastOptions == null ? void 0 : toastOptions.cancelButtonStyle,
+                actionButtonStyle: toastOptions == null ? void 0 : toastOptions.actionButtonStyle,
+                closeButtonAriaLabel:
+                  toastOptions == null ? void 0 : toastOptions.closeButtonAriaLabel,
+                removeToast,
+                toasts: filteredToasts.filter((t) => t.position == toast2.position),
+                heights: heights.filter((h) => h.position == toast2.position),
+                setHeights,
+                expandByDefault: expand,
+                gap,
+                expanded,
+                swipeDirections: props.swipeDirections,
               });
-              lastFocusedElementRef.current = null;
-            }
-          }
-        },
-        onFocus: (event) => {
-          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === "false";
-          if (isNotDismissible) return;
-          if (!isFocusWithinRef.current) {
-            isFocusWithinRef.current = true;
-            lastFocusedElementRef.current = event.relatedTarget;
-          }
-        },
-        onMouseEnter: () => setExpanded(true),
-        onMouseMove: () => setExpanded(true),
-        onMouseLeave: () => {
-          if (!interacting) {
-            setExpanded(false);
-          }
-        },
-        onDragEnd: () => setExpanded(false),
-        onPointerDown: (event) => {
-          const isNotDismissible = event.target instanceof HTMLElement && event.target.dataset.dismissible === "false";
-          if (isNotDismissible) return;
-          setInteracting(true);
-        },
-        onPointerUp: () => setInteracting(false)
-      }, filteredToasts.filter((toast2) => !toast2.position && index === 0 || toast2.position === position2).map((toast2, index2) => {
-        var _toastOptions_duration, _toastOptions_closeButton;
-        return /* @__PURE__ */ React.createElement(Toast, {
-          key: toast2.id,
-          icons,
-          index: index2,
-          toast: toast2,
-          defaultRichColors: richColors,
-          duration: (_toastOptions_duration = toastOptions == null ? void 0 : toastOptions.duration) != null ? _toastOptions_duration : duration,
-          className: toastOptions == null ? void 0 : toastOptions.className,
-          descriptionClassName: toastOptions == null ? void 0 : toastOptions.descriptionClassName,
-          invert,
-          visibleToasts,
-          closeButton: (_toastOptions_closeButton = toastOptions == null ? void 0 : toastOptions.closeButton) != null ? _toastOptions_closeButton : closeButton,
-          interacting,
-          position: position2,
-          style: toastOptions == null ? void 0 : toastOptions.style,
-          unstyled: toastOptions == null ? void 0 : toastOptions.unstyled,
-          classNames: toastOptions == null ? void 0 : toastOptions.classNames,
-          cancelButtonStyle: toastOptions == null ? void 0 : toastOptions.cancelButtonStyle,
-          actionButtonStyle: toastOptions == null ? void 0 : toastOptions.actionButtonStyle,
-          closeButtonAriaLabel: toastOptions == null ? void 0 : toastOptions.closeButtonAriaLabel,
-          removeToast,
-          toasts: filteredToasts.filter((t) => t.position == toast2.position),
-          heights: heights.filter((h) => h.position == toast2.position),
-          setHeights,
-          expandByDefault: expand,
-          gap,
-          expanded,
-          swipeDirections: props.swipeDirections
-        });
-      }));
-    }))
+            }),
+        );
+      }),
+    )
   );
 });
 const SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1aHd5bG5ocW1kZ3Boc3Zqc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyOTcxNTQsImV4cCI6MjA5MTg3MzE1NH0.NNHIM43GJyOYYSjgZX3F1o5Pk_WrEx8xYzIrZpJt3kw";
+const SUPABASE_ANON_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1aHd5bG5ocW1kZ3Boc3Zqc3pyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYyOTcxNTQsImV4cCI6MjA5MTg3MzE1NH0.NNHIM43GJyOYYSjgZX3F1o5Pk_WrEx8xYzIrZpJt3kw";
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    storage: typeof window !== "undefined" ? window.localStorage : void 0
-  }
+    storage: typeof window !== "undefined" ? window.localStorage : void 0,
+  },
 });
 const AuthContext = reactExports.createContext(void 0);
 function AuthProvider({ children }) {
@@ -5743,7 +6509,11 @@ function AuthProvider({ children }) {
   const [profile, setProfile] = reactExports.useState(null);
   const [loading, setLoading] = reactExports.useState(true);
   const loadProfile = async (uid) => {
-    const { data } = await supabase.from("profiles").select("*").eq("auth_user_id", uid).maybeSingle();
+    const { data } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("auth_user_id", uid)
+      .maybeSingle();
     setProfile(data ?? null);
   };
   reactExports.useEffect(() => {
@@ -5778,8 +6548,8 @@ function AuthProvider({ children }) {
       password,
       options: {
         emailRedirectTo: redirectTo,
-        data: { name, organization_name: orgName }
-      }
+        data: { name, organization_name: orgName },
+      },
     });
     return { error };
   };
@@ -5789,13 +6559,10 @@ function AuthProvider({ children }) {
   const refreshProfile = async () => {
     if (user) await loadProfile(user.id);
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    AuthContext.Provider,
-    {
-      value: { session, user, profile, loading, signIn, signUp, signOut, refreshProfile },
-      children
-    }
-  );
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(AuthContext.Provider, {
+    value: { session, user, profile, loading, signIn, signUp, signOut, refreshProfile },
+    children,
+  });
 }
 function useAuth() {
   const ctx = reactExports.useContext(AuthContext);
@@ -5804,19 +6571,35 @@ function useAuth() {
 }
 const appCss = "/assets/styles-FYU-eySt.css";
 function NotFoundComponent() {
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex min-h-screen items-center justify-center bg-background px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-md text-center", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-7xl font-bold text-foreground", children: "404" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "mt-4 text-xl font-semibold text-foreground", children: "Página não encontrada" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-sm text-muted-foreground", children: "O endereço acessado não existe ou foi movido." }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-6", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Link,
-      {
-        to: "/",
-        className: "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90",
-        children: "Ir para início"
-      }
-    ) })
-  ] }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", {
+    className: "flex min-h-screen items-center justify-center bg-background px-4",
+    children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+      className: "max-w-md text-center",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", {
+          className: "text-7xl font-bold text-foreground",
+          children: "404",
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h2", {
+          className: "mt-4 text-xl font-semibold text-foreground",
+          children: "Página não encontrada",
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", {
+          className: "mt-2 text-sm text-muted-foreground",
+          children: "O endereço acessado não existe ou foi movido.",
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", {
+          className: "mt-6",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(Link, {
+            to: "/",
+            className:
+              "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90",
+            children: "Ir para início",
+          }),
+        }),
+      ],
+    }),
+  });
 }
 const Route$o = createRootRouteWithContext()({
   head: () => ({
@@ -5826,378 +6609,441 @@ const Route$o = createRootRouteWithContext()({
       { title: "Signix — Digital Signage Cloud" },
       {
         name: "description",
-        content: "Signix — plataforma SaaS de Digital Signage para gerenciar telas, playlists e campanhas em tempo real."
-      }
+        content:
+          "Signix — plataforma SaaS de Digital Signage para gerenciar telas, playlists e campanhas em tempo real.",
+      },
     ],
-    links: [{ rel: "stylesheet", href: appCss }]
+    links: [{ rel: "stylesheet", href: appCss }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
-  notFoundComponent: NotFoundComponent
+  notFoundComponent: NotFoundComponent,
 });
 function RootShell({ children }) {
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("html", { lang: "pt-BR", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("head", { children: /* @__PURE__ */ jsxRuntimeExports.jsx(HeadContent, {}) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("body", { children: [
-      children,
-      /* @__PURE__ */ jsxRuntimeExports.jsx(Scripts, {})
-    ] })
-  ] });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("html", {
+    lang: "pt-BR",
+    children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("head", {
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(HeadContent, {}),
+      }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("body", {
+        children: [children, /* @__PURE__ */ jsxRuntimeExports.jsx(Scripts, {})],
+      }),
+    ],
+  });
 }
 function RootComponent() {
   const { queryClient } = Route$o.useRouteContext();
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, { client: queryClient, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(AuthProvider, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Toaster, { richColors: true, position: "top-right" })
-  ] }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(QueryClientProvider, {
+    client: queryClient,
+    children: /* @__PURE__ */ jsxRuntimeExports.jsxs(AuthProvider, {
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Outlet, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Toaster, { richColors: true, position: "top-right" }),
+      ],
+    }),
+  });
 }
 const $$splitComponentImporter$n = () => import("./signup-DH7PLxJo.js");
 const Route$n = createFileRoute("/signup")({
   head: () => ({
-    meta: [{
-      title: "Criar conta — Signix"
-    }]
+    meta: [
+      {
+        title: "Criar conta — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$n, "component")
+  component: lazyRouteComponent($$splitComponentImporter$n, "component"),
 });
 const $$splitComponentImporter$m = () => import("./reset-password-C8k_lfJD.js");
 const Route$m = createFileRoute("/reset-password")({
   head: () => ({
-    meta: [{
-      title: "Nova senha — Signix"
-    }]
+    meta: [
+      {
+        title: "Nova senha — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$m, "component")
+  component: lazyRouteComponent($$splitComponentImporter$m, "component"),
 });
 const $$splitComponentImporter$l = () => import("./recuperar-senha-DQCQtJgY.js");
 const Route$l = createFileRoute("/recuperar-senha")({
   head: () => ({
-    meta: [{
-      title: "Recuperar senha — Signix"
-    }]
+    meta: [
+      {
+        title: "Recuperar senha — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$l, "component")
+  component: lazyRouteComponent($$splitComponentImporter$l, "component"),
 });
 const $$splitComponentImporter$k = () => import("./player-BrcPsUS0.js");
 const Route$k = createFileRoute("/player")({
   head: () => ({
-    meta: [{
-      title: "Player — Signix"
-    }]
+    meta: [
+      {
+        title: "Player — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$k, "component")
+  component: lazyRouteComponent($$splitComponentImporter$k, "component"),
 });
 const $$splitComponentImporter$j = () => import("./pareamento-DZh9PngF.js");
 const Route$j = createFileRoute("/pareamento")({
   head: () => ({
-    meta: [{
-      title: "Pareamento de Player — Signix"
-    }]
+    meta: [
+      {
+        title: "Pareamento de Player — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$j, "component")
+  component: lazyRouteComponent($$splitComponentImporter$j, "component"),
 });
 const $$splitComponentImporter$i = () => import("./login-UGZiEAB8.js");
 const Route$i = createFileRoute("/login")({
   head: () => ({
-    meta: [{
-      title: "Entrar — Signix"
-    }, {
-      name: "description",
-      content: "Acesse o painel Signix de Digital Signage."
-    }]
+    meta: [
+      {
+        title: "Entrar — Signix",
+      },
+      {
+        name: "description",
+        content: "Acesse o painel Signix de Digital Signage.",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$i, "component")
+  component: lazyRouteComponent($$splitComponentImporter$i, "component"),
 });
 const $$splitComponentImporter$h = () => import("./app-Dbii1F0Y.js");
 const Route$h = createFileRoute("/app")({
   head: () => ({
-    meta: [{
-      title: "Painel — Signix"
-    }]
+    meta: [
+      {
+        title: "Painel — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$h, "component")
+  component: lazyRouteComponent($$splitComponentImporter$h, "component"),
 });
 const $$splitComponentImporter$g = () => import("./index-DfB3OLnr.js");
 const Route$g = createFileRoute("/")({
   head: () => ({
-    meta: [{
-      title: "Signix — Digital Signage Cloud para empresas"
-    }, {
-      name: "description",
-      content: "Gerencie Smart TVs, players e campanhas em todas as suas unidades a partir de um único painel premium."
-    }, {
-      property: "og:title",
-      content: "Signix — Digital Signage Cloud"
-    }, {
-      property: "og:description",
-      content: "Plataforma SaaS para gestão de Indoor Smart TV e Digital Signage."
-    }]
+    meta: [
+      {
+        title: "Signix — Digital Signage Cloud para empresas",
+      },
+      {
+        name: "description",
+        content:
+          "Gerencie Smart TVs, players e campanhas em todas as suas unidades a partir de um único painel premium.",
+      },
+      {
+        property: "og:title",
+        content: "Signix — Digital Signage Cloud",
+      },
+      {
+        property: "og:description",
+        content: "Plataforma SaaS para gestão de Indoor Smart TV e Digital Signage.",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$g, "component")
+  component: lazyRouteComponent($$splitComponentImporter$g, "component"),
 });
 const $$splitComponentImporter$f = () => import("./app.index-XwmZkIVc.js");
 const Route$f = createFileRoute("/app/")({
   head: () => ({
-    meta: [{
-      title: "Dashboard — Signix"
-    }]
+    meta: [
+      {
+        title: "Dashboard — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$f, "component")
+  component: lazyRouteComponent($$splitComponentImporter$f, "component"),
 });
 const $$splitComponentImporter$e = () => import("./app.usuarios-_U1yXDcx.js");
 const Route$e = createFileRoute("/app/usuarios")({
   head: () => ({
-    meta: [{
-      title: "Usuários e permissões — Signix"
-    }]
+    meta: [
+      {
+        title: "Usuários e permissões — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$e, "component")
+  component: lazyRouteComponent($$splitComponentImporter$e, "component"),
 });
 const $$splitComponentImporter$d = () => import("./app.unidades-czYMD251.js");
 const Route$d = createFileRoute("/app/unidades")({
   head: () => ({
-    meta: [{
-      title: "Unidades — Signix"
-    }]
+    meta: [
+      {
+        title: "Unidades — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$d, "component")
+  component: lazyRouteComponent($$splitComponentImporter$d, "component"),
 });
 const $$splitComponentImporter$c = () => import("./app.telas-BY88tHry.js");
 const Route$c = createFileRoute("/app/telas")({
   head: () => ({
-    meta: [{
-      title: "Telas e Players — Signix"
-    }]
+    meta: [
+      {
+        title: "Telas e Players — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$c, "component")
+  component: lazyRouteComponent($$splitComponentImporter$c, "component"),
 });
 const $$splitComponentImporter$b = () => import("./app.relatorios-C3dwkWKd.js");
 const Route$b = createFileRoute("/app/relatorios")({
   head: () => ({
-    meta: [{
-      title: "Relatórios — Signix"
-    }]
+    meta: [
+      {
+        title: "Relatórios — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$b, "component")
+  component: lazyRouteComponent($$splitComponentImporter$b, "component"),
 });
 const $$splitComponentImporter$a = () => import("./app.preview-CfEdaHNz.js");
 const Route$a = createFileRoute("/app/preview")({
   head: () => ({
-    meta: [{
-      title: "Preview de campanhas — Signix"
-    }]
+    meta: [
+      {
+        title: "Preview de campanhas — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$a, "component")
+  component: lazyRouteComponent($$splitComponentImporter$a, "component"),
 });
 const $$splitComponentImporter$9 = () => import("./app.playlists-Bkw18DbS.js");
 const Route$9 = createFileRoute("/app/playlists")({
   head: () => ({
-    meta: [{
-      title: "Playlists — Signix"
-    }]
+    meta: [
+      {
+        title: "Playlists — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$9, "component")
+  component: lazyRouteComponent($$splitComponentImporter$9, "component"),
 });
 const $$splitComponentImporter$8 = () => import("./app.monitoramento-LYCfzMDy.js");
 const Route$8 = createFileRoute("/app/monitoramento")({
   head: () => ({
-    meta: [{
-      title: "Monitoramento — Signix"
-    }]
+    meta: [
+      {
+        title: "Monitoramento — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$8, "component")
+  component: lazyRouteComponent($$splitComponentImporter$8, "component"),
 });
 const $$splitComponentImporter$7 = () => import("./app.midias-CygWhHUy.js");
 const Route$7 = createFileRoute("/app/midias")({
   head: () => ({
-    meta: [{
-      title: "Biblioteca de mídias — Signix"
-    }]
+    meta: [
+      {
+        title: "Biblioteca de mídias — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$7, "component")
+  component: lazyRouteComponent($$splitComponentImporter$7, "component"),
 });
 const $$splitComponentImporter$6 = () => import("./app.grupos-7huteQ5y.js");
 const Route$6 = createFileRoute("/app/grupos")({
   head: () => ({
-    meta: [{
-      title: "Grupos de telas — Signix"
-    }]
+    meta: [
+      {
+        title: "Grupos de telas — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$6, "component")
+  component: lazyRouteComponent($$splitComponentImporter$6, "component"),
 });
 const $$splitComponentImporter$5 = () => import("./app.empresas-D8jjr9_2.js");
 const Route$5 = createFileRoute("/app/empresas")({
   head: () => ({
-    meta: [{
-      title: "Empresa — Signix"
-    }]
+    meta: [
+      {
+        title: "Empresa — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$5, "component")
+  component: lazyRouteComponent($$splitComponentImporter$5, "component"),
 });
 const $$splitComponentImporter$4 = () => import("./app.configuracoes-C8fMJsOg.js");
 const Route$4 = createFileRoute("/app/configuracoes")({
   head: () => ({
-    meta: [{
-      title: "Configurações — Signix"
-    }]
+    meta: [
+      {
+        title: "Configurações — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$4, "component")
+  component: lazyRouteComponent($$splitComponentImporter$4, "component"),
 });
 const $$splitComponentImporter$3 = () => import("./app.campanhas-Cv9wjopW.js");
 const Route$3 = createFileRoute("/app/campanhas")({
   head: () => ({
-    meta: [{
-      title: "Campanhas — Signix"
-    }]
+    meta: [
+      {
+        title: "Campanhas — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$3, "component")
+  component: lazyRouteComponent($$splitComponentImporter$3, "component"),
 });
 const $$splitComponentImporter$2 = () => import("./app.auditoria-C-fLuFTH.js");
 const Route$2 = createFileRoute("/app/auditoria")({
   head: () => ({
-    meta: [{
-      title: "Auditoria — Signix"
-    }]
+    meta: [
+      {
+        title: "Auditoria — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$2, "component")
+  component: lazyRouteComponent($$splitComponentImporter$2, "component"),
 });
 const $$splitComponentImporter$1 = () => import("./app.alertas-D7in7tf9.js");
 const Route$1 = createFileRoute("/app/alertas")({
   head: () => ({
-    meta: [{
-      title: "Alertas e falhas — Signix"
-    }]
+    meta: [
+      {
+        title: "Alertas e falhas — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter$1, "component")
+  component: lazyRouteComponent($$splitComponentImporter$1, "component"),
 });
 const $$splitComponentImporter = () => import("./app.agendamentos-DSgJwAtf.js");
 const Route2 = createFileRoute("/app/agendamentos")({
   head: () => ({
-    meta: [{
-      title: "Agendamentos — Signix"
-    }]
+    meta: [
+      {
+        title: "Agendamentos — Signix",
+      },
+    ],
   }),
-  component: lazyRouteComponent($$splitComponentImporter, "component")
+  component: lazyRouteComponent($$splitComponentImporter, "component"),
 });
 const SignupRoute = Route$n.update({
   id: "/signup",
   path: "/signup",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const ResetPasswordRoute = Route$m.update({
   id: "/reset-password",
   path: "/reset-password",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const RecuperarSenhaRoute = Route$l.update({
   id: "/recuperar-senha",
   path: "/recuperar-senha",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const PlayerRoute = Route$k.update({
   id: "/player",
   path: "/player",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const PareamentoRoute = Route$j.update({
   id: "/pareamento",
   path: "/pareamento",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const LoginRoute = Route$i.update({
   id: "/login",
   path: "/login",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const AppRoute = Route$h.update({
   id: "/app",
   path: "/app",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const IndexRoute = Route$g.update({
   id: "/",
   path: "/",
-  getParentRoute: () => Route$o
+  getParentRoute: () => Route$o,
 });
 const AppIndexRoute = Route$f.update({
   id: "/",
   path: "/",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppUsuariosRoute = Route$e.update({
   id: "/usuarios",
   path: "/usuarios",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppUnidadesRoute = Route$d.update({
   id: "/unidades",
   path: "/unidades",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppTelasRoute = Route$c.update({
   id: "/telas",
   path: "/telas",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppRelatoriosRoute = Route$b.update({
   id: "/relatorios",
   path: "/relatorios",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppPreviewRoute = Route$a.update({
   id: "/preview",
   path: "/preview",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppPlaylistsRoute = Route$9.update({
   id: "/playlists",
   path: "/playlists",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppMonitoramentoRoute = Route$8.update({
   id: "/monitoramento",
   path: "/monitoramento",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppMidiasRoute = Route$7.update({
   id: "/midias",
   path: "/midias",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppGruposRoute = Route$6.update({
   id: "/grupos",
   path: "/grupos",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppEmpresasRoute = Route$5.update({
   id: "/empresas",
   path: "/empresas",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppConfiguracoesRoute = Route$4.update({
   id: "/configuracoes",
   path: "/configuracoes",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppCampanhasRoute = Route$3.update({
   id: "/campanhas",
   path: "/campanhas",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppAuditoriaRoute = Route$2.update({
   id: "/auditoria",
   path: "/auditoria",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppAlertasRoute = Route$1.update({
   id: "/alertas",
   path: "/alertas",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppAgendamentosRoute = Route2.update({
   id: "/agendamentos",
   path: "/agendamentos",
-  getParentRoute: () => AppRoute
+  getParentRoute: () => AppRoute,
 });
 const AppRouteChildren = {
   AppAgendamentosRoute,
@@ -6215,7 +7061,7 @@ const AppRouteChildren = {
   AppTelasRoute,
   AppUnidadesRoute,
   AppUsuariosRoute,
-  AppIndexRoute
+  AppIndexRoute,
 };
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren);
 const rootRouteChildren = {
@@ -6226,56 +7072,73 @@ const rootRouteChildren = {
   PlayerRoute,
   RecuperarSenhaRoute,
   ResetPasswordRoute,
-  SignupRoute
+  SignupRoute,
 };
 const routeTree = Route$o._addFileChildren(rootRouteChildren)._addFileTypes();
 function DefaultErrorComponent({ error, reset }) {
   const router2 = useRouter();
-  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex min-h-screen items-center justify-center bg-background px-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-md text-center", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-2xl font-bold tracking-tight text-foreground", children: "Something went wrong" }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "mt-2 text-sm text-muted-foreground", children: error.message }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mt-6 flex items-center justify-center gap-3", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "button",
-        {
-          onClick: () => {
-            router2.invalidate();
-            reset();
-          },
-          className: "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90",
-          children: "Try again"
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        "a",
-        {
-          href: "/",
-          className: "inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent",
-          children: "Go home"
-        }
-      )
-    ] })
-  ] }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("div", {
+    className: "flex min-h-screen items-center justify-center bg-background px-4",
+    children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+      className: "max-w-md text-center",
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("h1", {
+          className: "text-2xl font-bold tracking-tight text-foreground",
+          children: "Something went wrong",
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("p", {
+          className: "mt-2 text-sm text-muted-foreground",
+          children: error.message,
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+          className: "mt-6 flex items-center justify-center gap-3",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("button", {
+              onClick: () => {
+                router2.invalidate();
+                reset();
+              },
+              className:
+                "inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90",
+              children: "Try again",
+            }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("a", {
+              href: "/",
+              className:
+                "inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-accent",
+              children: "Go home",
+            }),
+          ],
+        }),
+      ],
+    }),
+  });
 }
 const getRouter = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { staleTime: 3e4, refetchOnWindowFocus: false, retry: 1 }
-    }
+      queries: { staleTime: 3e4, refetchOnWindowFocus: false, retry: 1 },
+    },
   });
   const router2 = createRouter({
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
-    defaultErrorComponent: DefaultErrorComponent
+    defaultErrorComponent: DefaultErrorComponent,
   });
   return router2;
 };
-const router = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  getRouter
-}, Symbol.toStringTag, { value: "Module" }));
+const router = /* @__PURE__ */ Object.freeze(
+  /* @__PURE__ */ Object.defineProperty(
+    {
+      __proto__: null,
+      getRouter,
+    },
+    Symbol.toStringTag,
+    { value: "Module" },
+  ),
+);
 export {
   Link as L,
   ReactDOM as R,
@@ -6302,5 +7165,5 @@ export {
   toast as t,
   useNavigate as u,
   shouldThrowError as v,
-  router as w
+  router as w,
 };

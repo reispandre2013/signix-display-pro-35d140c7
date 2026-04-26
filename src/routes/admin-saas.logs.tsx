@@ -17,7 +17,10 @@ function LogsPage() {
   if (isLoading && logs.length === 0) {
     return (
       <div className="space-y-6">
-        <PageHeader title="Logs e auditoria" subtitle="Todos os eventos relevantes da plataforma." />
+        <PageHeader
+          title="Logs e auditoria"
+          subtitle="Todos os eventos relevantes da plataforma."
+        />
         <div className="flex justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>

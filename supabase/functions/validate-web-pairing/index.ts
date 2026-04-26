@@ -16,7 +16,9 @@ serve(async (req) => {
   if (req.method !== "POST") return jsonResponse({ error: "Method not allowed" }, 405);
   try {
     const body = await readJson<Body>(req);
-    const code = String(body.pairing_code ?? "").trim().toUpperCase();
+    const code = String(body.pairing_code ?? "")
+      .trim()
+      .toUpperCase();
     if (!code) return jsonResponse({ error: "pairing_code obrigatório." }, 400);
 
     const { data: pairing, error: pairingErr } = await adminClient

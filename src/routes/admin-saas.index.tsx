@@ -1,5 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Building2, CreditCard, DollarSign, TrendingUp, Users, AlertTriangle, Tv, Receipt, Loader2 } from "lucide-react";
+import {
+  Building2,
+  CreditCard,
+  DollarSign,
+  TrendingUp,
+  Users,
+  AlertTriangle,
+  Tv,
+  Receipt,
+  Loader2,
+} from "lucide-react";
 import { KpiCard } from "@/components/ui-kit/KpiCard";
 import { Panel } from "@/components/ui-kit/Panel";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
@@ -11,7 +21,15 @@ import {
   useSaasMetrics,
 } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { format, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { useMemo } from "react";
@@ -48,9 +66,14 @@ function SaasOverview() {
   if (isError) {
     return (
       <div className="space-y-4 p-4">
-        <PageHeader title="Visão geral da plataforma" subtitle="Métricas consolidadas de toda a operação SaaS." />
+        <PageHeader
+          title="Visão geral da plataforma"
+          subtitle="Métricas consolidadas de toda a operação SaaS."
+        />
         <Panel>
-          <p className="text-sm text-destructive">{error instanceof Error ? error.message : "Falha ao carregar métricas."}</p>
+          <p className="text-sm text-destructive">
+            {error instanceof Error ? error.message : "Falha ao carregar métricas."}
+          </p>
         </Panel>
       </div>
     );
@@ -74,7 +97,12 @@ function SaasOverview() {
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="Empresas/clientes" value={metrics.total_companies} icon={Building2} tone="primary" />
+        <KpiCard
+          label="Empresas/clientes"
+          value={metrics.total_companies}
+          icon={Building2}
+          tone="primary"
+        />
         <KpiCard
           label="Assinaturas ativas"
           value={metrics.active_subscriptions}
@@ -83,18 +111,42 @@ function SaasOverview() {
           hint={`${metrics.expired_subscriptions} vencidas · ${metrics.canceled_subscriptions} canceladas`}
         />
         <KpiCard label="MRR" value={formatPrice(metrics.mrr_cents)} icon={DollarSign} tone="info" />
-        <KpiCard label="ARR estimado" value={formatPrice(metrics.arr_cents)} icon={TrendingUp} tone="success" />
+        <KpiCard
+          label="ARR estimado"
+          value={formatPrice(metrics.arr_cents)}
+          icon={TrendingUp}
+          tone="success"
+        />
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KpiCard label="Novos clientes (30d)" value={metrics.new_clients_30d} icon={Users} tone="primary" />
+        <KpiCard
+          label="Novos clientes (30d)"
+          value={metrics.new_clients_30d}
+          icon={Users}
+          tone="primary"
+        />
         <KpiCard label="Churn" value={`${metrics.churn_rate}%`} icon={TrendingUp} tone="warning" />
-        <KpiCard label="Faturas vencidas" value={metrics.overdue_invoices_count} icon={AlertTriangle} tone="destructive" />
-        <KpiCard label="Telas ativas no SaaS" value={metrics.total_active_screens} icon={Tv} tone="info" />
+        <KpiCard
+          label="Faturas vencidas"
+          value={metrics.overdue_invoices_count}
+          icon={AlertTriangle}
+          tone="destructive"
+        />
+        <KpiCard
+          label="Telas ativas no SaaS"
+          value={metrics.total_active_screens}
+          icon={Tv}
+          tone="info"
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Panel className="lg:col-span-2" title="Receita mensal recorrente (MRR)" description="Série aproximada a partir do MRR atual.">
+        <Panel
+          className="lg:col-span-2"
+          title="Receita mensal recorrente (MRR)"
+          description="Série aproximada a partir do MRR atual."
+        >
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={mrrSeries}>
@@ -105,8 +157,19 @@ function SaasOverview() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.28 0.025 252 / 30%)" />
-                <XAxis dataKey="mes" stroke="oklch(0.66 0.025 248)" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="oklch(0.66 0.025 248)" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis
+                  dataKey="mes"
+                  stroke="oklch(0.66 0.025 248)"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
+                <YAxis
+                  stroke="oklch(0.66 0.025 248)"
+                  fontSize={11}
+                  tickLine={false}
+                  axisLine={false}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "oklch(0.21 0.022 252)",
@@ -171,7 +234,8 @@ function SaasOverview() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium truncate">{c.organization_name}</p>
                     <p className="text-[11px] text-muted-foreground">
-                      {c.plan_name ?? "—"} · {c.screens_used}/{c.screens_limit >= 9999 ? "∞" : c.screens_limit} telas
+                      {c.plan_name ?? "—"} · {c.screens_used}/
+                      {c.screens_limit >= 9999 ? "∞" : c.screens_limit} telas
                     </p>
                   </div>
                   <StatusBadge
@@ -201,7 +265,8 @@ function SaasOverview() {
                   <div className="mt-1 h-2 w-2 rounded-full bg-primary pulse-dot" />
                   <div className="flex-1 min-w-0">
                     <p className="text-sm">
-                      <span className="font-medium">{l.actor}</span> · <span className="text-muted-foreground">{l.action}</span>
+                      <span className="font-medium">{l.actor}</span> ·{" "}
+                      <span className="text-muted-foreground">{l.action}</span>
                     </p>
                     <p className="text-[11px] text-muted-foreground">{l.target}</p>
                   </div>

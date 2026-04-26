@@ -3,7 +3,17 @@ import { useMemo, useState } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
-import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { useCampaigns, useScreens, useUnits, useAlerts } from "@/lib/hooks/use-supabase-data";
 import { Download, Filter, BarChart3 } from "lucide-react";
 import { format, subDays } from "date-fns";
@@ -42,7 +52,7 @@ function ReportsPage() {
     return {
       date: format(date, "dd/MM"),
       exibicoes: Math.max(0, screensFiltered.length * 30 + ((i * 17) % 80)),
-      falhas: alerts.length > 0 ? (i % 5) : 0,
+      falhas: alerts.length > 0 ? i % 5 : 0,
     };
   });
 
@@ -90,8 +100,16 @@ function ReportsPage() {
             v: screensFiltered.filter((s) => s.is_online).length,
             d: `de ${screensFiltered.length} no filtro`,
           },
-          { l: "Campanhas ativas", v: campaigns.filter((c) => c.status === "active").length, d: `de ${campaigns.length} totais` },
-          { l: "Alertas pendentes", v: alerts.filter((a) => !a.resolved_at).length, d: "necessitam atenção" },
+          {
+            l: "Campanhas ativas",
+            v: campaigns.filter((c) => c.status === "active").length,
+            d: `de ${campaigns.length} totais`,
+          },
+          {
+            l: "Alertas pendentes",
+            v: alerts.filter((a) => !a.resolved_at).length,
+            d: "necessitam atenção",
+          },
           { l: "Unidades", v: units.length, d: "no total" },
         ].map((s) => (
           <div key={s.l} className="rounded-xl border border-border bg-card p-4 shadow-card">
@@ -136,16 +154,37 @@ function ReportsPage() {
         <Panel title="Status por unidade">
           <div className="h-64">
             {statusByUnit.length === 0 ? (
-              <EmptyState icon={BarChart3} title="Sem dados" description="Cadastre unidades e telas para ver este gráfico." />
+              <EmptyState
+                icon={BarChart3}
+                title="Sem dados"
+                description="Cadastre unidades e telas para ver este gráfico."
+              />
             ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={statusByUnit}>
                   <CartesianGrid strokeDasharray="3 3" stroke="oklch(0.28 0.025 252 / 30%)" />
-                  <XAxis dataKey="name" stroke="oklch(0.66 0.025 248)" fontSize={10} tickLine={false} axisLine={false} />
-                  <YAxis stroke="oklch(0.66 0.025 248)" fontSize={11} tickLine={false} axisLine={false} />
+                  <XAxis
+                    dataKey="name"
+                    stroke="oklch(0.66 0.025 248)"
+                    fontSize={10}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="oklch(0.66 0.025 248)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <Tooltip contentStyle={tooltipStyle} />
                   <Bar dataKey="online" stackId="a" fill="oklch(0.72 0.18 158)" name="Online" />
-                  <Bar dataKey="offline" stackId="a" fill="oklch(0.62 0.22 22)" radius={[4, 4, 0, 0]} name="Offline" />
+                  <Bar
+                    dataKey="offline"
+                    stackId="a"
+                    fill="oklch(0.62 0.22 22)"
+                    radius={[4, 4, 0, 0]}
+                    name="Offline"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -159,7 +198,11 @@ function ReportsPage() {
         ) : error ? (
           <ErrorState error={error} />
         ) : campaigns.length === 0 ? (
-          <EmptyState icon={BarChart3} title="Nenhuma campanha" description="Crie campanhas para ver métricas aqui." />
+          <EmptyState
+            icon={BarChart3}
+            title="Nenhuma campanha"
+            description="Crie campanhas para ver métricas aqui."
+          />
         ) : (
           <table className="w-full text-sm">
             <thead>

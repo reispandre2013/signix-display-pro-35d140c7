@@ -1,1 +1,90 @@
-import{r as i,u as m,j as e,t as r,s as u}from"./index-DUcMANMA.js";import{T as p}from"./tv-qkDTjJdC.js";import{L as x}from"./lock-ZHRdkGWQ.js";import{L as g}from"./loader-circle-BffduC8P.js";import"./createLucideIcon-BDYLgomD.js";function v(){const[s,l]=i.useState(""),[t,o]=i.useState(!1),d=m(),c=async a=>{if(a.preventDefault(),s.length<6){r.error("Senha deve ter ao menos 6 caracteres.");return}o(!0);const{error:n}=await u.auth.updateUser({password:s});if(o(!1),n){r.error(n.message);return}r.success("Senha atualizada com sucesso!"),d({to:"/app",replace:!0})};return e.jsx("div",{className:"min-h-screen grid place-items-center bg-background bg-mesh p-6",children:e.jsxs("div",{className:"w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elegant",children:[e.jsxs("div",{className:"flex items-center gap-2.5 mb-6",children:[e.jsx("div",{className:"h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow",children:e.jsx(p,{className:"h-5 w-5 text-primary-foreground"})}),e.jsx("p",{className:"font-display text-xl font-bold",children:"Signix"})]}),e.jsx("h1",{className:"font-display text-2xl font-bold",children:"Definir nova senha"}),e.jsx("p",{className:"text-sm text-muted-foreground mt-1.5",children:"Escolha uma senha forte com pelo menos 6 caracteres."}),e.jsxs("form",{onSubmit:c,className:"mt-6 space-y-4",children:[e.jsxs("div",{children:[e.jsx("label",{className:"text-xs font-medium text-muted-foreground mb-1.5 block",children:"Nova senha"}),e.jsxs("div",{className:"relative",children:[e.jsx(x,{className:"absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"}),e.jsx("input",{type:"password",required:!0,value:s,onChange:a=>l(a.target.value),placeholder:"••••••••",className:"w-full rounded-lg border border-input bg-surface pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"})]})]}),e.jsx("button",{type:"submit",disabled:t,className:"w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95 disabled:opacity-60",children:t?e.jsx(g,{className:"h-4 w-4 animate-spin"}):"Atualizar senha"})]})]})})}export{v as component};
+import { r as i, u as m, j as e, t as r, s as u } from "./index-DUcMANMA.js";
+import { T as p } from "./tv-qkDTjJdC.js";
+import { L as x } from "./lock-ZHRdkGWQ.js";
+import { L as g } from "./loader-circle-BffduC8P.js";
+import "./createLucideIcon-BDYLgomD.js";
+function v() {
+  const [s, l] = i.useState(""),
+    [t, o] = i.useState(!1),
+    d = m(),
+    c = async (a) => {
+      if ((a.preventDefault(), s.length < 6)) {
+        r.error("Senha deve ter ao menos 6 caracteres.");
+        return;
+      }
+      o(!0);
+      const { error: n } = await u.auth.updateUser({ password: s });
+      if ((o(!1), n)) {
+        r.error(n.message);
+        return;
+      }
+      (r.success("Senha atualizada com sucesso!"), d({ to: "/app", replace: !0 }));
+    };
+  return e.jsx("div", {
+    className: "min-h-screen grid place-items-center bg-background bg-mesh p-6",
+    children: e.jsxs("div", {
+      className: "w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elegant",
+      children: [
+        e.jsxs("div", {
+          className: "flex items-center gap-2.5 mb-6",
+          children: [
+            e.jsx("div", {
+              className:
+                "h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow",
+              children: e.jsx(p, { className: "h-5 w-5 text-primary-foreground" }),
+            }),
+            e.jsx("p", { className: "font-display text-xl font-bold", children: "Signix" }),
+          ],
+        }),
+        e.jsx("h1", {
+          className: "font-display text-2xl font-bold",
+          children: "Definir nova senha",
+        }),
+        e.jsx("p", {
+          className: "text-sm text-muted-foreground mt-1.5",
+          children: "Escolha uma senha forte com pelo menos 6 caracteres.",
+        }),
+        e.jsxs("form", {
+          onSubmit: c,
+          className: "mt-6 space-y-4",
+          children: [
+            e.jsxs("div", {
+              children: [
+                e.jsx("label", {
+                  className: "text-xs font-medium text-muted-foreground mb-1.5 block",
+                  children: "Nova senha",
+                }),
+                e.jsxs("div", {
+                  className: "relative",
+                  children: [
+                    e.jsx(x, {
+                      className:
+                        "absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground",
+                    }),
+                    e.jsx("input", {
+                      type: "password",
+                      required: !0,
+                      value: s,
+                      onChange: (a) => l(a.target.value),
+                      placeholder: "••••••••",
+                      className:
+                        "w-full rounded-lg border border-input bg-surface pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            e.jsx("button", {
+              type: "submit",
+              disabled: t,
+              className:
+                "w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95 disabled:opacity-60",
+              children: t ? e.jsx(g, { className: "h-4 w-4 animate-spin" }) : "Atualizar senha",
+            }),
+          ],
+        }),
+      ],
+    }),
+  });
+}
+export { v as component };

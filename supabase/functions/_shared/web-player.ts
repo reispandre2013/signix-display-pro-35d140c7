@@ -34,7 +34,10 @@ export function browserFromUserAgent(ua: string): { name: string; version: strin
   return { name: "Unknown", version: "" };
 }
 
-export async function validateWebSession(screenId: string, deviceToken: string): Promise<WebSessionContext> {
+export async function validateWebSession(
+  screenId: string,
+  deviceToken: string,
+): Promise<WebSessionContext> {
   const tokenHash = await sha256Hex(deviceToken);
   const { data: session, error } = await adminClient
     .from("web_player_sessions")

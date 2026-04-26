@@ -84,7 +84,9 @@ async function refreshPayloadMediaUrls(
     const bucket = path.slice(0, slash);
     const objectPath = path.slice(slash + 1);
     if (!storageMediaBuckets.has(bucket) || !objectPath) return null;
-    const { data, error: suErr } = await adminClient.storage.from(bucket).createSignedUrl(objectPath, 60 * 60);
+    const { data, error: suErr } = await adminClient.storage
+      .from(bucket)
+      .createSignedUrl(objectPath, 60 * 60);
     if (!suErr && data?.signedUrl) return data.signedUrl;
     return null;
   }
@@ -170,7 +172,8 @@ export async function resolvePlaylistByScreenId(
       store_type: resolved.screen.store_type,
       ...resolved.display,
     },
-    message: playlist.length > 0 ? "Playlist carregada" : "Nenhum item ativo encontrado para esta tela.",
+    message:
+      playlist.length > 0 ? "Playlist carregada" : "Nenhum item ativo encontrado para esta tela.",
     payload,
   };
 }

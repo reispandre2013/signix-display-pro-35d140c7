@@ -18,7 +18,10 @@ function AssinaturasPage() {
   if (isLoading && rows.length === 0) {
     return (
       <div className="space-y-6">
-        <PageHeader title="Assinaturas" subtitle="Todas as assinaturas ativas, em trial e canceladas." />
+        <PageHeader
+          title="Assinaturas"
+          subtitle="Todas as assinaturas ativas, em trial e canceladas."
+        />
         <div className="flex justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
@@ -28,7 +31,10 @@ function AssinaturasPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title="Assinaturas" subtitle="Todas as assinaturas ativas, em trial e canceladas." />
+      <PageHeader
+        title="Assinaturas"
+        subtitle="Todas as assinaturas ativas, em trial e canceladas."
+      />
 
       <Panel title={`${rows.length} assinaturas`}>
         <div className="overflow-x-auto -mx-5">
@@ -75,9 +81,10 @@ function AssinaturasPage() {
                     </td>
                     <td className="px-3 py-3 text-xs">{c.billing_cycle}</td>
                     <td className="px-3 py-3 text-xs font-mono tabular-nums">
-                      {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
-                        c.amount_cents / 100,
-                      )}
+                      {new Intl.NumberFormat("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      }).format(c.amount_cents / 100)}
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
                       {format(new Date(c.current_period_start), "dd/MM/yy", { locale: ptBR })}
@@ -88,7 +95,9 @@ function AssinaturasPage() {
                         : "—"}
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
-                      {c.last_paid ? format(new Date(c.last_paid), "dd/MM/yy", { locale: ptBR }) : "—"}
+                      {c.last_paid
+                        ? format(new Date(c.last_paid), "dd/MM/yy", { locale: ptBR })
+                        : "—"}
                     </td>
                     <td className="px-5 py-3 text-right">
                       <button

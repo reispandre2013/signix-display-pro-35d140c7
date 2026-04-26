@@ -77,7 +77,11 @@
 
   function tryExitApplication() {
     try {
-      if (global.tizen && global.tizen.application && global.tizen.application.getCurrentApplication) {
+      if (
+        global.tizen &&
+        global.tizen.application &&
+        global.tizen.application.getCurrentApplication
+      ) {
         global.tizen.application.getCurrentApplication().exit();
         return true;
       }

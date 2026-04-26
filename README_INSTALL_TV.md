@@ -14,12 +14,12 @@ Passo a passo completo: **secção 1.2** abaixo. Arquitetura e variáveis: **`do
 
 ## Pré-requisitos
 
-| Item | Detalhe |
-|------|-----------|
-| Computador | Windows, macOS ou Linux com Node.js 20+ e npm |
-| Android Studio | Instalado com **Android SDK** (API 35), **JDK 17+** e emulador opcional |
+| Item                                  | Detalhe                                                                                                                 |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Computador                            | Windows, macOS ou Linux com Node.js 20+ e npm                                                                           |
+| Android Studio                        | Instalado com **Android SDK** (API 35), **JDK 17+** e emulador opcional                                                 |
 | Projeto Signix publicado em **HTTPS** | O APK abre o **pareamento** no WebView (TanStack Start). Ex.: `https://seu-app.exemplo.com/pareamento?platform=android` |
-| Variáveis do player no deploy | `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` (ou `ANON`) configurados no build do site |
+| Variáveis do player no deploy         | `VITE_SUPABASE_URL` e `VITE_SUPABASE_PUBLISHABLE_KEY` (ou `ANON`) configurados no build do site                         |
 
 ---
 
@@ -108,9 +108,9 @@ npx cap sync android
    `android/app/build/outputs/apk/debug/app-debug.apk`
 
 4. **APK / AAB de release (loja ou produção):**  
-   **Build → Generate Signed App Bundle or APK**  
-   - Crie ou selecione um **keystore** (guarde a senha com segurança).  
-   - Escolha **release**, finalize o assistente.  
+   **Build → Generate Signed App Bundle or APK**
+   - Crie ou selecione um **keystore** (guarde a senha com segurança).
+   - Escolha **release**, finalize o assistente.
    - Guarde o APK/AAB gerado fora do repositório se contiver assinatura sensível.
 
 > **Versão do app:** alinhe `versionName` / `versionCode` em `android/app/build.gradle` com `src/player/version.ts` (`PLAYER_APP_VERSION`) antes de cada release pública.
@@ -128,7 +128,7 @@ No Android da TV/box: **Configurações → Segurança** (ou **Apps especiais �
 1. Copie `app-debug.apk` (ou o release) para um pendrive em FAT32/exFAT.
 2. Conecte na TV Box.
 3. Abra o **gerenciador de arquivos** do aparelho, localize o APK e toque para instalar.
-4. Confirme permissões e **Instalar**.  
+4. Confirme permissões e **Instalar**.
 5. Se aparecer “bloqueado por segurança”, volte ao passo 2.1 e libere a fonte correta.
 
 ### 2.3 Opção B — Downloader (URL pública)

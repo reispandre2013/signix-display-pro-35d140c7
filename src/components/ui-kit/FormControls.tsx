@@ -14,14 +14,20 @@ export function Modal({
 }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center p-4 bg-background/80 backdrop-blur-sm" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 grid place-items-center p-4 bg-background/80 backdrop-blur-sm"
+      onClick={onClose}
+    >
       <div
         className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-elegant"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-lg font-bold">{title}</h3>
-          <button onClick={onClose} className="h-8 w-8 grid place-items-center rounded-md hover:bg-accent">
+          <button
+            onClick={onClose}
+            className="h-8 w-8 grid place-items-center rounded-md hover:bg-accent"
+          >
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -31,13 +37,7 @@ export function Modal({
   );
 }
 
-export function FormField({
-  label,
-  children,
-}: {
-  label: string;
-  children: ReactNode;
-}) {
+export function FormField({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
       <label className="text-xs font-medium text-muted-foreground mb-1.5 block">{label}</label>
@@ -82,7 +82,8 @@ export function useModalForm<T>(initial: T) {
   const [open, setOpen] = useState(false);
   const [values, setValues] = useState<T>(initial);
   const reset = () => setValues(initial);
-  const set = <K extends keyof T>(key: K, value: T[K]) => setValues((v) => ({ ...v, [key]: value }));
+  const set = <K extends keyof T>(key: K, value: T[K]) =>
+    setValues((v) => ({ ...v, [key]: value }));
   return { open, setOpen, values, set, reset };
 }
 

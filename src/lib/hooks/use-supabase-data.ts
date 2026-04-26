@@ -28,7 +28,11 @@ function useOrgId() {
   return profile?.organization_id ?? null;
 }
 
-async function withTimeout<T>(promise: PromiseLike<T>, timeoutMs: number, message: string): Promise<T> {
+async function withTimeout<T>(
+  promise: PromiseLike<T>,
+  timeoutMs: number,
+  message: string,
+): Promise<T> {
   let timer: ReturnType<typeof setTimeout> | null = null;
   try {
     return await Promise.race([
@@ -44,12 +48,16 @@ async function withTimeout<T>(promise: PromiseLike<T>, timeoutMs: number, messag
 
 function isMissingColumnError(error: unknown, column: string): boolean {
   const msg = String((error as { message?: string } | null)?.message ?? "").toLowerCase();
-  return msg.includes(`column ${column.toLowerCase()}`) || msg.includes(`"${column.toLowerCase()}"`);
+  return (
+    msg.includes(`column ${column.toLowerCase()}`) || msg.includes(`"${column.toLowerCase()}"`)
+  );
 }
 
 function isMissingFunctionError(error: unknown, fnName: string): boolean {
   const msg = String((error as { message?: string } | null)?.message ?? "").toLowerCase();
-  return msg.includes(`function ${fnName.toLowerCase()}`) || msg.includes("could not find the function");
+  return (
+    msg.includes(`function ${fnName.toLowerCase()}`) || msg.includes("could not find the function")
+  );
 }
 
 function isMissingRelationError(error: unknown, relation: string): boolean {
@@ -63,7 +71,8 @@ function isMissingRelationError(error: unknown, relation: string): boolean {
     msg.includes(`relation ${relPublic} does not exist`) ||
     msg.includes(`could not find the table '${rel}'`) ||
     msg.includes(`could not find the table '${relPublic}'`) ||
-    msg.includes("in the schema cache") && (msg.includes(`'${rel}'`) || msg.includes(`'${relPublic}'`))
+    (msg.includes("in the schema cache") &&
+      (msg.includes(`'${rel}'`) || msg.includes(`'${relPublic}'`)))
   );
 }
 
@@ -101,14 +110,20 @@ async function fetchPlaylistItemsCompat(playlistId: string): Promise<PlaylistIte
     "id, playlist_id, media_asset_id, position, duration_override_seconds, transition_type, created_at, media_assets(id, name, file_type, public_url, thumbnail_url, mime_type, duration_seconds)";
 
   const first = await withTimeout(
-    supabase.from("playlist_items").select(fullSelect).eq("playlist_id", playlistId).order("position", { ascending: true }),
+    supabase
+      .from("playlist_items")
+      .select(fullSelect)
+      .eq("playlist_id", playlistId)
+      .order("position", { ascending: true }),
     12000,
     "Timeout ao listar itens da playlist.",
   );
 
   if (!first.error) {
     return (first.data ?? []).map((row) => {
-      const media = Array.isArray(row.media_assets) ? (row.media_assets[0] ?? null) : row.media_assets;
+      const media = Array.isArray(row.media_assets)
+        ? (row.media_assets[0] ?? null)
+        : row.media_assets;
       return {
         ...(row as unknown as PlaylistItemWithMedia),
         media_assets: media as PlaylistItemWithMedia["media_assets"],
@@ -126,14 +141,20 @@ async function fetchPlaylistItemsCompat(playlistId: string): Promise<PlaylistIte
   }
 
   const legacy = await withTimeout(
-    supabase.from("playlist_items").select(legacySelect).eq("playlist_id", playlistId).order("position", { ascending: true }),
+    supabase
+      .from("playlist_items")
+      .select(legacySelect)
+      .eq("playlist_id", playlistId)
+      .order("position", { ascending: true }),
     12000,
     "Timeout ao listar itens da playlist (modo compatível).",
   );
   if (legacy.error) throw legacy.error;
 
   return (legacy.data ?? []).map((row) => {
-    const media = Array.isArray(row.media_assets) ? (row.media_assets[0] ?? null) : row.media_assets;
+    const media = Array.isArray(row.media_assets)
+      ? (row.media_assets[0] ?? null)
+      : row.media_assets;
     return {
       ...(row as unknown as PlaylistItemWithMedia),
       fit_mode: "cover",
@@ -149,7 +170,9 @@ async function insertPlaylistMediaItems(opts: {
   playlistId: string;
   mediaAssetIds: string[];
 }): Promise<{ inserted: number; skippedAsDuplicate: number }> {
-  const mediaAssetIds = Array.from(new Set(opts.mediaAssetIds.map((x) => x.trim()).filter(Boolean)));
+  const mediaAssetIds = Array.from(
+    new Set(opts.mediaAssetIds.map((x) => x.trim()).filter(Boolean)),
+  );
   if (mediaAssetIds.length === 0) return { inserted: 0, skippedAsDuplicate: 0 };
 
   await safeReindexPlaylist(opts.playlistId);
@@ -325,7 +348,13 @@ export function useAddPlaylistItem() {
   const qc = useQueryClient();
   const orgId = useOrgId();
   return useMutation({
-    mutationFn: async ({ playlistId, mediaAssetId }: { playlistId: string; mediaAssetId: string }) => {
+    mutationFn: async ({
+      playlistId,
+      mediaAssetId,
+    }: {
+      playlistId: string;
+      mediaAssetId: string;
+    }) => {
       if (!orgId) throw new Error("Sem organização ativa.");
       const r = await insertPlaylistMediaItems({ playlistId, mediaAssetIds: [mediaAssetId] });
       if (r.inserted === 0) throw new Error("Esta mídia já está na playlist.");
@@ -429,7 +458,10 @@ export function useUpdatePlaylistItem() {
       id: string;
       playlistId: string;
       patch: Partial<
-        Pick<PlaylistItem, "duration_override_seconds" | "fit_mode" | "is_active" | "notes" | "transition_type">
+        Pick<
+          PlaylistItem,
+          "duration_override_seconds" | "fit_mode" | "is_active" | "notes" | "transition_type"
+        >
       >;
     }) => {
       const { error } = await supabase.from("playlist_items").update(vars.patch).eq("id", vars.id);
@@ -475,12 +507,16 @@ export function useScreenPrimaryPlaylistAssignment(screenId: string | null) {
         .maybeSingle();
       if (error) {
         if (isMissingRelationError(error, "screen_playlist_assignments")) {
-          console.warn("[screen] tabela screen_playlist_assignments ausente; usando fallback de campanha.");
+          console.warn(
+            "[screen] tabela screen_playlist_assignments ausente; usando fallback de campanha.",
+          );
           return null;
         }
         throw error;
       }
-      return data as (ScreenPlaylistAssignment & { playlists?: { id: string; name: string } | null }) | null;
+      return data as
+        | (ScreenPlaylistAssignment & { playlists?: { id: string; name: string } | null })
+        | null;
     },
   });
 }
@@ -499,7 +535,9 @@ export function useSetScreenPrimaryPlaylist() {
         .eq("assignment_type", "primary");
       if (offErr) {
         if (isMissingRelationError(offErr, "screen_playlist_assignments")) {
-          throw new Error("Migração pendente: tabela de atribuição de playlist por tela não encontrada.");
+          throw new Error(
+            "Migração pendente: tabela de atribuição de playlist por tela não encontrada.",
+          );
         }
         throw offErr;
       }
@@ -514,7 +552,9 @@ export function useSetScreenPrimaryPlaylist() {
       });
       if (error) {
         if (isMissingRelationError(error, "screen_playlist_assignments")) {
-          throw new Error("Migração pendente: tabela de atribuição de playlist por tela não encontrada.");
+          throw new Error(
+            "Migração pendente: tabela de atribuição de playlist por tela não encontrada.",
+          );
         }
         throw error;
       }
@@ -543,12 +583,16 @@ export function useScreenGroupPrimaryPlaylistAssignment(screenGroupId: string | 
         .maybeSingle();
       if (error) {
         if (isMissingRelationError(error, "screen_group_playlist_assignments")) {
-          console.warn("[group] tabela screen_group_playlist_assignments ausente; usando fallback de campanha.");
+          console.warn(
+            "[group] tabela screen_group_playlist_assignments ausente; usando fallback de campanha.",
+          );
           return null;
         }
         throw error;
       }
-      return data as (ScreenGroupPlaylistAssignment & { playlists?: { id: string; name: string } | null }) | null;
+      return data as
+        | (ScreenGroupPlaylistAssignment & { playlists?: { id: string; name: string } | null })
+        | null;
     },
   });
 }
@@ -566,7 +610,9 @@ export function useSetScreenGroupPrimaryPlaylist() {
         .eq("screen_group_id", vars.screenGroupId);
       if (offErr) {
         if (isMissingRelationError(offErr, "screen_group_playlist_assignments")) {
-          throw new Error("Migração pendente: tabela de atribuição de playlist por grupo não encontrada.");
+          throw new Error(
+            "Migração pendente: tabela de atribuição de playlist por grupo não encontrada.",
+          );
         }
         throw offErr;
       }
@@ -580,13 +626,17 @@ export function useSetScreenGroupPrimaryPlaylist() {
       });
       if (error) {
         if (isMissingRelationError(error, "screen_group_playlist_assignments")) {
-          throw new Error("Migração pendente: tabela de atribuição de playlist por grupo não encontrada.");
+          throw new Error(
+            "Migração pendente: tabela de atribuição de playlist por grupo não encontrada.",
+          );
         }
         throw error;
       }
     },
     onSuccess: (_, vars) => {
-      qc.invalidateQueries({ queryKey: ["screen_group_primary_playlist", orgId, vars.screenGroupId] });
+      qc.invalidateQueries({
+        queryKey: ["screen_group_primary_playlist", orgId, vars.screenGroupId],
+      });
       qc.invalidateQueries({ queryKey: ["screen_groups", orgId] });
     },
   });

@@ -4,7 +4,13 @@ import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
-import { Modal, FormField, TextInput, TextArea, PrimaryButton } from "@/components/ui-kit/FormControls";
+import {
+  Modal,
+  FormField,
+  TextInput,
+  TextArea,
+  PrimaryButton,
+} from "@/components/ui-kit/FormControls";
 import {
   useCampaigns,
   useCreateCampaign,
@@ -12,16 +18,7 @@ import {
   useUpdateCampaign,
   usePlaylists,
 } from "@/lib/hooks/use-supabase-data";
-import {
-  Plus,
-  Megaphone,
-  Calendar,
-  Layers,
-  Pause,
-  Play,
-  Eye,
-  Trash2,
-} from "lucide-react";
+import { Plus, Megaphone, Calendar, Layers, Pause, Play, Eye, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import type { CampaignStatus } from "@/lib/db-types";
@@ -125,7 +122,10 @@ function CampaignsPage() {
               <div className="relative h-32 bg-gradient-primary overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
                 <div className="absolute top-3 left-3 flex items-center gap-2">
-                  <StatusBadge tone={statusTone[c.status]} label={statusLabel[c.status].toUpperCase()} />
+                  <StatusBadge
+                    tone={statusTone[c.status]}
+                    label={statusLabel[c.status].toUpperCase()}
+                  />
                   <StatusBadge tone="primary" label={`PRIO ${c.priority}`} withDot={false} />
                 </div>
                 <div className="absolute bottom-3 left-3 right-3">
@@ -137,11 +137,22 @@ function CampaignsPage() {
                 <div className="grid grid-cols-2 gap-2 text-[11px]">
                   <Stat icon={Layers} label="Playlist" value={playlistName(c.playlist_id)} />
                   <Stat icon={Megaphone} label="Status" value={statusLabel[c.status]} />
-                  <Stat icon={Calendar} label="Início" value={format(new Date(c.start_at), "dd/MM/yyyy", { locale: ptBR })} />
-                  <Stat icon={Calendar} label="Fim" value={format(new Date(c.end_at), "dd/MM/yyyy", { locale: ptBR })} />
+                  <Stat
+                    icon={Calendar}
+                    label="Início"
+                    value={format(new Date(c.start_at), "dd/MM/yyyy", { locale: ptBR })}
+                  />
+                  <Stat
+                    icon={Calendar}
+                    label="Fim"
+                    value={format(new Date(c.end_at), "dd/MM/yyyy", { locale: ptBR })}
+                  />
                 </div>
                 <div className="flex items-center gap-1.5 pt-3 border-t border-border">
-                  <Link to="/app/preview" className="flex-1 inline-flex items-center justify-center gap-1 rounded-md border border-border px-2 py-1.5 text-xs hover:bg-accent transition-smooth">
+                  <Link
+                    to="/app/preview"
+                    className="flex-1 inline-flex items-center justify-center gap-1 rounded-md border border-border px-2 py-1.5 text-xs hover:bg-accent transition-smooth"
+                  >
                     <Eye className="h-3 w-3" /> Preview
                   </Link>
                   <button
@@ -174,10 +185,17 @@ function CampaignsPage() {
       <Modal open={open} onClose={() => setOpen(false)} title="Nova campanha">
         <form onSubmit={submit} className="space-y-3">
           <FormField label="Nome">
-            <TextInput required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <TextInput
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
           </FormField>
           <FormField label="Descrição">
-            <TextArea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <TextArea
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
           </FormField>
           <FormField label="Playlist">
             <select
@@ -196,10 +214,20 @@ function CampaignsPage() {
           </FormField>
           <div className="grid grid-cols-2 gap-3">
             <FormField label="Início">
-              <TextInput type="datetime-local" required value={form.start_at} onChange={(e) => setForm({ ...form, start_at: e.target.value })} />
+              <TextInput
+                type="datetime-local"
+                required
+                value={form.start_at}
+                onChange={(e) => setForm({ ...form, start_at: e.target.value })}
+              />
             </FormField>
             <FormField label="Fim">
-              <TextInput type="datetime-local" required value={form.end_at} onChange={(e) => setForm({ ...form, end_at: e.target.value })} />
+              <TextInput
+                type="datetime-local"
+                required
+                value={form.end_at}
+                onChange={(e) => setForm({ ...form, end_at: e.target.value })}
+              />
             </FormField>
           </div>
           <FormField label="Prioridade (1-10)">

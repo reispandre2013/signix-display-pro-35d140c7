@@ -79,7 +79,9 @@ export function Header() {
             placeholder="Buscar telas, campanhas, mídias…"
             className="flex-1 bg-transparent text-sm placeholder:text-muted-foreground focus:outline-none"
           />
-          <kbd className="hidden md:inline-flex items-center rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground font-mono">⌘K</kbd>
+          <kbd className="hidden md:inline-flex items-center rounded border border-border px-1.5 py-0.5 text-[10px] text-muted-foreground font-mono">
+            ⌘K
+          </kbd>
         </div>
 
         <div className="ml-auto flex items-center gap-2">
@@ -110,9 +112,7 @@ export function Header() {
               </div>
               <div className="hidden sm:flex flex-col leading-tight text-left">
                 <span className="text-xs font-semibold truncate max-w-[140px]">{displayName}</span>
-                <span className="text-[10px] text-muted-foreground">
-                  {profile ? label : ""}
-                </span>
+                <span className="text-[10px] text-muted-foreground">{profile ? label : ""}</span>
               </div>
               <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
             </button>
@@ -121,7 +121,7 @@ export function Header() {
                 <div className="px-3 py-2.5 border-b border-border">
                   <p className="text-xs font-semibold truncate">{user?.email}</p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">
-                    {profile ? roleLabel[role] ?? label : "Sem perfil"}
+                    {profile ? (roleLabel[role] ?? label) : "Sem perfil"}
                   </p>
                 </div>
                 <button

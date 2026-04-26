@@ -7,12 +7,10 @@ const __iconNode = [
     "path",
     {
       d: "M6 10H4a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2",
-      key: "secmi2"
-    }
+      key: "secmi2",
+    },
   ],
-  ["path", { d: "M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16", key: "16ra0t" }]
+  ["path", { d: "M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16", key: "16ra0t" }],
 ];
 const Building2 = createLucideIcon("building-2", __iconNode);
-export {
-  Building2 as B
-};
+export { Building2 as B };

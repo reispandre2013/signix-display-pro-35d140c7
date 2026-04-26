@@ -1,8 +1,24 @@
-import { createFileRoute, Outlet, Link, useLocation, useNavigate, redirect } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  Link,
+  useLocation,
+  useNavigate,
+  redirect,
+} from "@tanstack/react-router";
 import { useEffect } from "react";
 import {
-  Sparkles, LayoutDashboard, Building2, Package, ScrollText, Receipt,
-  KeyRound, CreditCard, ArrowLeft, LogOut, Stethoscope,
+  Sparkles,
+  LayoutDashboard,
+  Building2,
+  Package,
+  ScrollText,
+  Receipt,
+  KeyRound,
+  CreditCard,
+  ArrowLeft,
+  LogOut,
+  Stethoscope,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
@@ -61,7 +77,10 @@ function AdminSaasLayout() {
           <p className="mt-2 text-sm text-muted-foreground">
             Esta área é exclusiva para o Super Admin da plataforma.
           </p>
-          <Link to="/app" className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground">
+          <Link
+            to="/app"
+            className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+          >
             <ArrowLeft className="h-3.5 w-3.5" /> Voltar para o painel
           </Link>
         </div>
@@ -96,8 +115,12 @@ function AdminSaasLayout() {
                   active && "bg-sidebar-accent text-sidebar-accent-foreground shadow-card relative",
                 )}
               >
-                {active && <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-primary" />}
-                <Icon className={cn("h-4 w-4", active ? "text-primary" : "text-muted-foreground")} />
+                {active && (
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-0.5 rounded-r-full bg-primary" />
+                )}
+                <Icon
+                  className={cn("h-4 w-4", active ? "text-primary" : "text-muted-foreground")}
+                />
                 <span className="font-medium">{it.label}</span>
               </Link>
             );
@@ -106,7 +129,11 @@ function AdminSaasLayout() {
 
         <div className="m-3 space-y-2">
           <button
-            onClick={async () => { await signOut(); toast.success("Você saiu."); navigate({ to: "/login" }); }}
+            onClick={async () => {
+              await signOut();
+              toast.success("Você saiu.");
+              navigate({ to: "/login" });
+            }}
             className="w-full flex items-center gap-2 rounded-md border border-sidebar-border bg-background/20 px-3 py-2 text-xs hover:bg-background/50 transition-smooth"
           >
             <LogOut className="h-3.5 w-3.5" /> Sair
@@ -118,8 +145,12 @@ function AdminSaasLayout() {
         <header className="sticky top-0 z-30 glass border-b border-border">
           <div className="flex h-16 items-center gap-4 px-6">
             <div className="flex flex-col">
-              <span className="text-[11px] uppercase tracking-widest text-primary">Signix · SaaS</span>
-              <h1 className="font-display text-base font-semibold leading-none">Administração da Plataforma</h1>
+              <span className="text-[11px] uppercase tracking-widest text-primary">
+                Signix · SaaS
+              </span>
+              <h1 className="font-display text-base font-semibold leading-none">
+                Administração da Plataforma
+              </h1>
             </div>
           </div>
         </header>

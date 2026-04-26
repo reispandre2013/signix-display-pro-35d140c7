@@ -25,8 +25,7 @@ function AuditPage() {
   const { data: logs = [], isLoading, error } = useAuditLogs();
   const { data: users = [] } = useUsers();
 
-  const userName = (id: string | null) =>
-    users.find((u) => u.id === id)?.name ?? "Sistema";
+  const userName = (id: string | null) => users.find((u) => u.id === id)?.name ?? "Sistema";
 
   return (
     <div className="space-y-6">

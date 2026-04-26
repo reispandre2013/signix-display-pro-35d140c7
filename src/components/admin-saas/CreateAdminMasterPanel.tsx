@@ -13,10 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  createAdminMaster,
-  listOrganizationsForAdmin,
-} from "@/lib/server/saas-admin.functions";
+import { createAdminMaster, listOrganizationsForAdmin } from "@/lib/server/saas-admin.functions";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
 
 export function CreateAdminMasterPanel() {
@@ -110,9 +107,7 @@ export function CreateAdminMasterPanel() {
           <Select value={orgId} onValueChange={setOrgId}>
             <SelectTrigger>
               <SelectValue
-                placeholder={
-                  orgsQuery.isLoading ? "Carregando organizações…" : "Selecione…"
-                }
+                placeholder={orgsQuery.isLoading ? "Carregando organizações…" : "Selecione…"}
               />
             </SelectTrigger>
             <SelectContent>
@@ -132,8 +127,8 @@ export function CreateAdminMasterPanel() {
 
         <div className="lg:col-span-2 flex items-center justify-between gap-3 pt-2">
           <p className="text-[11px] text-muted-foreground">
-            Se o email já existir no auth, a senha será atualizada e o usuário será
-            promovido a admin_master nessa organização.
+            Se o email já existir no auth, a senha será atualizada e o usuário será promovido a
+            admin_master nessa organização.
           </p>
           <Button type="submit" disabled={createMutation.isPending}>
             {createMutation.isPending ? (

@@ -89,7 +89,9 @@ function ClientesPage() {
                         <span className="font-medium">{c.organization_name}</span>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-muted-foreground text-xs">{c.master_email ?? "—"}</td>
+                    <td className="px-3 py-3 text-muted-foreground text-xs">
+                      {c.master_email ?? "—"}
+                    </td>
                     <td className="px-3 py-3">
                       <span className="text-xs font-medium">{c.plan_name ?? "—"}</span>
                     </td>
@@ -130,7 +132,9 @@ function ClientesPage() {
                       {format(new Date(c.created_at), "dd/MM/yy", { locale: ptBR })}
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
-                      {c.last_payment_at ? format(new Date(c.last_payment_at), "dd/MM/yy", { locale: ptBR }) : "—"}
+                      {c.last_payment_at
+                        ? format(new Date(c.last_payment_at), "dd/MM/yy", { locale: ptBR })
+                        : "—"}
                     </td>
                     <td className="px-5 py-3 text-right">
                       <button

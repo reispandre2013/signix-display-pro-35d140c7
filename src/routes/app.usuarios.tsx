@@ -111,7 +111,11 @@ function UsersPage() {
                     </div>
                   </td>
                   <td className="px-5 py-3.5">
-                    <StatusBadge tone={roleTone[u.role]} label={roleLabel[u.role]} withDot={false} />
+                    <StatusBadge
+                      tone={roleTone[u.role]}
+                      label={roleLabel[u.role]}
+                      withDot={false}
+                    />
                   </td>
                   <td className="px-5 py-3.5">
                     <StatusBadge
@@ -227,7 +231,13 @@ function CreateUserDialog({
       toast.error("Senha deve ter ao menos 6 caracteres.");
       return;
     }
-    mutation.mutate({ name, email, role, mode, password: mode === "password" ? password : undefined });
+    mutation.mutate({
+      name,
+      email,
+      role,
+      mode,
+      password: mode === "password" ? password : undefined,
+    });
   };
 
   const genPassword = () => {
@@ -240,9 +250,7 @@ function CreateUserDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Adicionar usuário</DialogTitle>
-          <DialogDescription>
-            O usuário será adicionado à sua organização.
-          </DialogDescription>
+          <DialogDescription>O usuário será adicionado à sua organização.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={onSubmit} className="space-y-4">

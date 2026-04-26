@@ -61,7 +61,8 @@ serve(async (req) => {
       .maybeSingle();
     if (sErr) return jsonResponse({ error: sErr.message }, 400);
     if (!screen?.id) return jsonResponse({ error: "Tela não encontrada." }, 404);
-    if (String(screen.status ?? "active") !== "active") return jsonResponse({ error: "Tela inativa." }, 403);
+    if (String(screen.status ?? "active") !== "active")
+      return jsonResponse({ error: "Tela inativa." }, 403);
 
     const { data: org } = await adminClient
       .from("organizations")

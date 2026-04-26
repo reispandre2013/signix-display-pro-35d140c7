@@ -1,1 +1,300 @@
-import{r as h,j as e,L as w}from"./index-DUcMANMA.js";import{P as u}from"./PageHeader-C0iFmY02.js";import{P as m}from"./Panel-0HKdxBPL.js";import{L as v,a as k,E as _}from"./States-snX8_8k6.js";import{u as M,a as z}from"./use-supabase-data-neXhdC03.js";import{g as n,a as g}from"./media-url-boppB8Th.js";import{I as f}from"./image-BlTjWPMR.js";import{c as i}from"./createLucideIcon-BDYLgomD.js";import{M as P}from"./monitor-Ck3Yxne9.js";import{P as S}from"./play-E0OUE_5_.js";import{V as $}from"./volume-2-BdSkCNvX.js";import"./utils-BQHNewu7.js";import"./loader-circle-BffduC8P.js";const C=[["path",{d:"M8 3H5a2 2 0 0 0-2 2v3",key:"1dcmit"}],["path",{d:"M21 8V5a2 2 0 0 0-2-2h-3",key:"1e4gt3"}],["path",{d:"M3 16v3a2 2 0 0 0 2 2h3",key:"wsl5sc"}],["path",{d:"M16 21h3a2 2 0 0 0 2-2v-3",key:"18trek"}]],E=i("maximize",C);const V=[["path",{d:"M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z",key:"15892j"}],["path",{d:"M3 20V4",key:"1ptbpl"}]],I=i("skip-back",V);const L=[["path",{d:"M21 4v16",key:"7j8fe9"}],["path",{d:"M6.029 4.285A2 2 0 0 0 3 6v12a2 2 0 0 0 3.029 1.715l9.997-5.998a2 2 0 0 0 .003-3.432z",key:"zs4d6"}]],q=i("skip-forward",L);const A=[["rect",{width:"14",height:"20",x:"5",y:"2",rx:"2",ry:"2",key:"1yt0o3"}],["path",{d:"M12 18h.01",key:"mhygvu"}]],O=i("smartphone",A);const T=[["rect",{width:"18",height:"18",x:"3",y:"3",rx:"2",key:"afitv7"}]],D=i("square",T);function ee(){const{data:b=[],isLoading:j,error:x}=M(),{data:y=[]}=z(),a=b.slice(0,6),[c,d]=h.useState(0),[o,p]=h.useState("horizontal"),r=a[c],l=r?n(r.public_url,r.thumbnail_url):[];return j?e.jsx(v,{}):x?e.jsx(k,{error:x}):a.length===0?e.jsxs("div",{className:"space-y-6",children:[e.jsx(u,{title:"Preview de campanhas",subtitle:"Visualize antes de publicar."}),e.jsx(m,{children:e.jsx(_,{icon:f,title:"Sem mídias para visualizar",description:"Adicione mídias na biblioteca para ver o preview aqui."})})]}):e.jsxs("div",{className:"space-y-6",children:[e.jsx(u,{title:"Preview de campanhas",subtitle:"Visualize como a campanha será exibida no player antes de publicar.",actions:e.jsxs(w,{to:"/player",className:"inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow",children:[e.jsx(E,{className:"h-3.5 w-3.5"})," Tela cheia"]})}),e.jsxs("div",{className:"grid grid-cols-1 lg:grid-cols-3 gap-6",children:[e.jsxs("div",{className:"lg:col-span-2 space-y-3",children:[e.jsxs("div",{className:"flex items-center gap-2",children:[e.jsxs("button",{onClick:()=>p("horizontal"),className:`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs ${o==="horizontal"?"border-primary bg-primary/10 text-primary":"border-border bg-surface"}`,children:[e.jsx(P,{className:"h-3.5 w-3.5"})," 16:9"]}),e.jsxs("button",{onClick:()=>p("vertical"),className:`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs ${o==="vertical"?"border-primary bg-primary/10 text-primary":"border-border bg-surface"}`,children:[e.jsx(O,{className:"h-3.5 w-3.5"})," 9:16"]})]}),e.jsxs("div",{className:`relative mx-auto rounded-2xl border border-border bg-black overflow-hidden shadow-elegant ${o==="horizontal"?"aspect-video w-full":"aspect-[9/16] max-w-sm"}`,children:[l.length>0?e.jsx("img",{src:l[0],"data-sources":JSON.stringify(l),"data-source-index":"0",alt:r.name,className:"w-full h-full object-cover",referrerPolicy:"no-referrer",onError:s=>g(s.currentTarget)},`${r.id}-${l[0]}`):e.jsx("div",{className:"w-full h-full grid place-items-center text-white/40",children:e.jsx(f,{className:"h-16 w-16"})}),e.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"}),e.jsxs("div",{className:"absolute bottom-4 left-4 right-4 flex items-center justify-between text-white",children:[e.jsxs("div",{children:[e.jsx("p",{className:"text-xs text-white/60 uppercase tracking-widest",children:"Preview"}),e.jsx("p",{className:"font-display text-lg font-bold",children:r.name})]}),e.jsxs("span",{className:"font-mono text-xs bg-black/50 backdrop-blur-md rounded px-2 py-0.5",children:[r.duration_seconds??10,"s"]})]})]}),e.jsxs("div",{className:"flex items-center justify-center gap-3 rounded-xl border border-border bg-card p-3",children:[e.jsx("button",{onClick:()=>d(s=>(s-1+a.length)%a.length),className:"h-9 w-9 grid place-items-center rounded-md hover:bg-accent",children:e.jsx(I,{className:"h-4 w-4"})}),e.jsx("button",{className:"h-11 w-11 grid place-items-center rounded-full bg-gradient-primary shadow-glow",children:e.jsx(S,{className:"h-5 w-5 text-primary-foreground"})}),e.jsx("button",{onClick:()=>d(s=>(s+1)%a.length),className:"h-9 w-9 grid place-items-center rounded-md hover:bg-accent",children:e.jsx(q,{className:"h-4 w-4"})}),e.jsx("div",{className:"h-6 w-px bg-border mx-2"}),e.jsx($,{className:"h-4 w-4 text-muted-foreground"}),e.jsx("input",{type:"range",defaultValue:70,className:"w-32 accent-primary"})]})]}),e.jsxs("div",{className:"space-y-4",children:[e.jsx(m,{title:"Itens do preview",children:e.jsx("ul",{className:"space-y-1.5",children:a.map((s,t)=>e.jsx("li",{children:e.jsxs("button",{onClick:()=>d(t),className:`w-full flex items-center gap-2.5 rounded-md p-2 text-left transition-smooth ${t===c?"bg-primary/10 ring-1 ring-primary/30":"hover:bg-surface/60"}`,children:[e.jsxs("span",{className:"text-[11px] font-mono text-muted-foreground w-5",children:["#",t+1]}),e.jsx("div",{className:"h-9 w-14 rounded overflow-hidden bg-muted shrink-0",children:n(s.thumbnail_url,s.public_url)[0]&&e.jsx("img",{src:n(s.thumbnail_url,s.public_url)[0],"data-sources":JSON.stringify(n(s.thumbnail_url,s.public_url)),"data-source-index":"0",alt:s.name,className:"w-full h-full object-cover",loading:"lazy",referrerPolicy:"no-referrer",onError:N=>g(N.currentTarget)})}),e.jsxs("div",{className:"flex-1 min-w-0",children:[e.jsx("p",{className:"text-xs font-medium truncate",children:s.name}),e.jsxs("p",{className:"text-[10px] text-muted-foreground",children:[s.duration_seconds??10,"s"]})]}),t===c&&e.jsx(D,{className:"h-3 w-3 text-primary fill-primary"})]})},s.id))})}),e.jsx(m,{title:"Detalhes",children:e.jsxs("dl",{className:"text-xs space-y-2",children:[e.jsxs("div",{className:"flex justify-between",children:[e.jsx("dt",{className:"text-muted-foreground",children:"Campanha"}),e.jsx("dd",{children:y[0]?.name??"—"})]}),e.jsxs("div",{className:"flex justify-between",children:[e.jsx("dt",{className:"text-muted-foreground",children:"Itens"}),e.jsx("dd",{children:a.length})]}),e.jsxs("div",{className:"flex justify-between",children:[e.jsx("dt",{className:"text-muted-foreground",children:"Duração total"}),e.jsxs("dd",{children:[a.reduce((s,t)=>s+(t.duration_seconds??10),0),"s"]})]})]})})]})]})]})}export{ee as component};
+import { r as h, j as e, L as w } from "./index-DUcMANMA.js";
+import { P as u } from "./PageHeader-C0iFmY02.js";
+import { P as m } from "./Panel-0HKdxBPL.js";
+import { L as v, a as k, E as _ } from "./States-snX8_8k6.js";
+import { u as M, a as z } from "./use-supabase-data-neXhdC03.js";
+import { g as n, a as g } from "./media-url-boppB8Th.js";
+import { I as f } from "./image-BlTjWPMR.js";
+import { c as i } from "./createLucideIcon-BDYLgomD.js";
+import { M as P } from "./monitor-Ck3Yxne9.js";
+import { P as S } from "./play-E0OUE_5_.js";
+import { V as $ } from "./volume-2-BdSkCNvX.js";
+import "./utils-BQHNewu7.js";
+import "./loader-circle-BffduC8P.js";
+const C = [
+    ["path", { d: "M8 3H5a2 2 0 0 0-2 2v3", key: "1dcmit" }],
+    ["path", { d: "M21 8V5a2 2 0 0 0-2-2h-3", key: "1e4gt3" }],
+    ["path", { d: "M3 16v3a2 2 0 0 0 2 2h3", key: "wsl5sc" }],
+    ["path", { d: "M16 21h3a2 2 0 0 0 2-2v-3", key: "18trek" }],
+  ],
+  E = i("maximize", C);
+const V = [
+    [
+      "path",
+      {
+        d: "M17.971 4.285A2 2 0 0 1 21 6v12a2 2 0 0 1-3.029 1.715l-9.997-5.998a2 2 0 0 1-.003-3.432z",
+        key: "15892j",
+      },
+    ],
+    ["path", { d: "M3 20V4", key: "1ptbpl" }],
+  ],
+  I = i("skip-back", V);
+const L = [
+    ["path", { d: "M21 4v16", key: "7j8fe9" }],
+    [
+      "path",
+      {
+        d: "M6.029 4.285A2 2 0 0 0 3 6v12a2 2 0 0 0 3.029 1.715l9.997-5.998a2 2 0 0 0 .003-3.432z",
+        key: "zs4d6",
+      },
+    ],
+  ],
+  q = i("skip-forward", L);
+const A = [
+    ["rect", { width: "14", height: "20", x: "5", y: "2", rx: "2", ry: "2", key: "1yt0o3" }],
+    ["path", { d: "M12 18h.01", key: "mhygvu" }],
+  ],
+  O = i("smartphone", A);
+const T = [["rect", { width: "18", height: "18", x: "3", y: "3", rx: "2", key: "afitv7" }]],
+  D = i("square", T);
+function ee() {
+  const { data: b = [], isLoading: j, error: x } = M(),
+    { data: y = [] } = z(),
+    a = b.slice(0, 6),
+    [c, d] = h.useState(0),
+    [o, p] = h.useState("horizontal"),
+    r = a[c],
+    l = r ? n(r.public_url, r.thumbnail_url) : [];
+  return j
+    ? e.jsx(v, {})
+    : x
+      ? e.jsx(k, { error: x })
+      : a.length === 0
+        ? e.jsxs("div", {
+            className: "space-y-6",
+            children: [
+              e.jsx(u, { title: "Preview de campanhas", subtitle: "Visualize antes de publicar." }),
+              e.jsx(m, {
+                children: e.jsx(_, {
+                  icon: f,
+                  title: "Sem mídias para visualizar",
+                  description: "Adicione mídias na biblioteca para ver o preview aqui.",
+                }),
+              }),
+            ],
+          })
+        : e.jsxs("div", {
+            className: "space-y-6",
+            children: [
+              e.jsx(u, {
+                title: "Preview de campanhas",
+                subtitle: "Visualize como a campanha será exibida no player antes de publicar.",
+                actions: e.jsxs(w, {
+                  to: "/player",
+                  className:
+                    "inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow",
+                  children: [e.jsx(E, { className: "h-3.5 w-3.5" }), " Tela cheia"],
+                }),
+              }),
+              e.jsxs("div", {
+                className: "grid grid-cols-1 lg:grid-cols-3 gap-6",
+                children: [
+                  e.jsxs("div", {
+                    className: "lg:col-span-2 space-y-3",
+                    children: [
+                      e.jsxs("div", {
+                        className: "flex items-center gap-2",
+                        children: [
+                          e.jsxs("button", {
+                            onClick: () => p("horizontal"),
+                            className: `inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs ${o === "horizontal" ? "border-primary bg-primary/10 text-primary" : "border-border bg-surface"}`,
+                            children: [e.jsx(P, { className: "h-3.5 w-3.5" }), " 16:9"],
+                          }),
+                          e.jsxs("button", {
+                            onClick: () => p("vertical"),
+                            className: `inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs ${o === "vertical" ? "border-primary bg-primary/10 text-primary" : "border-border bg-surface"}`,
+                            children: [e.jsx(O, { className: "h-3.5 w-3.5" }), " 9:16"],
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        className: `relative mx-auto rounded-2xl border border-border bg-black overflow-hidden shadow-elegant ${o === "horizontal" ? "aspect-video w-full" : "aspect-[9/16] max-w-sm"}`,
+                        children: [
+                          l.length > 0
+                            ? e.jsx(
+                                "img",
+                                {
+                                  src: l[0],
+                                  "data-sources": JSON.stringify(l),
+                                  "data-source-index": "0",
+                                  alt: r.name,
+                                  className: "w-full h-full object-cover",
+                                  referrerPolicy: "no-referrer",
+                                  onError: (s) => g(s.currentTarget),
+                                },
+                                `${r.id}-${l[0]}`,
+                              )
+                            : e.jsx("div", {
+                                className: "w-full h-full grid place-items-center text-white/40",
+                                children: e.jsx(f, { className: "h-16 w-16" }),
+                              }),
+                          e.jsx("div", {
+                            className:
+                              "absolute inset-0 bg-gradient-to-t from-black/70 to-transparent",
+                          }),
+                          e.jsxs("div", {
+                            className:
+                              "absolute bottom-4 left-4 right-4 flex items-center justify-between text-white",
+                            children: [
+                              e.jsxs("div", {
+                                children: [
+                                  e.jsx("p", {
+                                    className: "text-xs text-white/60 uppercase tracking-widest",
+                                    children: "Preview",
+                                  }),
+                                  e.jsx("p", {
+                                    className: "font-display text-lg font-bold",
+                                    children: r.name,
+                                  }),
+                                ],
+                              }),
+                              e.jsxs("span", {
+                                className:
+                                  "font-mono text-xs bg-black/50 backdrop-blur-md rounded px-2 py-0.5",
+                                children: [r.duration_seconds ?? 10, "s"],
+                              }),
+                            ],
+                          }),
+                        ],
+                      }),
+                      e.jsxs("div", {
+                        className:
+                          "flex items-center justify-center gap-3 rounded-xl border border-border bg-card p-3",
+                        children: [
+                          e.jsx("button", {
+                            onClick: () => d((s) => (s - 1 + a.length) % a.length),
+                            className: "h-9 w-9 grid place-items-center rounded-md hover:bg-accent",
+                            children: e.jsx(I, { className: "h-4 w-4" }),
+                          }),
+                          e.jsx("button", {
+                            className:
+                              "h-11 w-11 grid place-items-center rounded-full bg-gradient-primary shadow-glow",
+                            children: e.jsx(S, { className: "h-5 w-5 text-primary-foreground" }),
+                          }),
+                          e.jsx("button", {
+                            onClick: () => d((s) => (s + 1) % a.length),
+                            className: "h-9 w-9 grid place-items-center rounded-md hover:bg-accent",
+                            children: e.jsx(q, { className: "h-4 w-4" }),
+                          }),
+                          e.jsx("div", { className: "h-6 w-px bg-border mx-2" }),
+                          e.jsx($, { className: "h-4 w-4 text-muted-foreground" }),
+                          e.jsx("input", {
+                            type: "range",
+                            defaultValue: 70,
+                            className: "w-32 accent-primary",
+                          }),
+                        ],
+                      }),
+                    ],
+                  }),
+                  e.jsxs("div", {
+                    className: "space-y-4",
+                    children: [
+                      e.jsx(m, {
+                        title: "Itens do preview",
+                        children: e.jsx("ul", {
+                          className: "space-y-1.5",
+                          children: a.map((s, t) =>
+                            e.jsx(
+                              "li",
+                              {
+                                children: e.jsxs("button", {
+                                  onClick: () => d(t),
+                                  className: `w-full flex items-center gap-2.5 rounded-md p-2 text-left transition-smooth ${t === c ? "bg-primary/10 ring-1 ring-primary/30" : "hover:bg-surface/60"}`,
+                                  children: [
+                                    e.jsxs("span", {
+                                      className: "text-[11px] font-mono text-muted-foreground w-5",
+                                      children: ["#", t + 1],
+                                    }),
+                                    e.jsx("div", {
+                                      className:
+                                        "h-9 w-14 rounded overflow-hidden bg-muted shrink-0",
+                                      children:
+                                        n(s.thumbnail_url, s.public_url)[0] &&
+                                        e.jsx("img", {
+                                          src: n(s.thumbnail_url, s.public_url)[0],
+                                          "data-sources": JSON.stringify(
+                                            n(s.thumbnail_url, s.public_url),
+                                          ),
+                                          "data-source-index": "0",
+                                          alt: s.name,
+                                          className: "w-full h-full object-cover",
+                                          loading: "lazy",
+                                          referrerPolicy: "no-referrer",
+                                          onError: (N) => g(N.currentTarget),
+                                        }),
+                                    }),
+                                    e.jsxs("div", {
+                                      className: "flex-1 min-w-0",
+                                      children: [
+                                        e.jsx("p", {
+                                          className: "text-xs font-medium truncate",
+                                          children: s.name,
+                                        }),
+                                        e.jsxs("p", {
+                                          className: "text-[10px] text-muted-foreground",
+                                          children: [s.duration_seconds ?? 10, "s"],
+                                        }),
+                                      ],
+                                    }),
+                                    t === c &&
+                                      e.jsx(D, { className: "h-3 w-3 text-primary fill-primary" }),
+                                  ],
+                                }),
+                              },
+                              s.id,
+                            ),
+                          ),
+                        }),
+                      }),
+                      e.jsx(m, {
+                        title: "Detalhes",
+                        children: e.jsxs("dl", {
+                          className: "text-xs space-y-2",
+                          children: [
+                            e.jsxs("div", {
+                              className: "flex justify-between",
+                              children: [
+                                e.jsx("dt", {
+                                  className: "text-muted-foreground",
+                                  children: "Campanha",
+                                }),
+                                e.jsx("dd", { children: y[0]?.name ?? "—" }),
+                              ],
+                            }),
+                            e.jsxs("div", {
+                              className: "flex justify-between",
+                              children: [
+                                e.jsx("dt", {
+                                  className: "text-muted-foreground",
+                                  children: "Itens",
+                                }),
+                                e.jsx("dd", { children: a.length }),
+                              ],
+                            }),
+                            e.jsxs("div", {
+                              className: "flex justify-between",
+                              children: [
+                                e.jsx("dt", {
+                                  className: "text-muted-foreground",
+                                  children: "Duração total",
+                                }),
+                                e.jsxs("dd", {
+                                  children: [
+                                    a.reduce((s, t) => s + (t.duration_seconds ?? 10), 0),
+                                    "s",
+                                  ],
+                                }),
+                              ],
+                            }),
+                          ],
+                        }),
+                      }),
+                    ],
+                  }),
+                ],
+              }),
+            ],
+          });
+}
+export { ee as component };

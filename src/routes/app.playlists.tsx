@@ -4,7 +4,13 @@ import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
-import { Modal, FormField, TextInput, TextArea, PrimaryButton } from "@/components/ui-kit/FormControls";
+import {
+  Modal,
+  FormField,
+  TextInput,
+  TextArea,
+  PrimaryButton,
+} from "@/components/ui-kit/FormControls";
 import {
   usePlaylists,
   useCreatePlaylist,
@@ -21,7 +27,16 @@ import {
 } from "@/lib/hooks/use-supabase-data";
 import { toast } from "sonner";
 import type { Playlist, PlaylistFitMode } from "@/lib/db-types";
-import { Plus, ListVideo, Eye, Trash2, ChevronUp, ChevronDown, Pencil, GripVertical } from "lucide-react";
+import {
+  Plus,
+  ListVideo,
+  Eye,
+  Trash2,
+  ChevronUp,
+  ChevronDown,
+  Pencil,
+  GripVertical,
+} from "lucide-react";
 
 export const Route = createFileRoute("/app/playlists")({
   head: () => ({ meta: [{ title: "Playlists — Signix" }] }),
@@ -46,7 +61,11 @@ function PlaylistsPage() {
   const [mediaToAdd, setMediaToAdd] = useState<string[]>([]);
   const [isAdding, setIsAdding] = useState(false);
   const [editMeta, setEditMeta] = useState(false);
-  const [metaForm, setMetaForm] = useState({ name: "", description: "", status: "draft" as string });
+  const [metaForm, setMetaForm] = useState({
+    name: "",
+    description: "",
+    status: "draft" as string,
+  });
 
   const current = useMemo(
     () => playlists.find((p) => p.id === (selected ?? playlists[0]?.id)) as PlaylistRow | undefined,
@@ -135,7 +154,14 @@ function PlaylistsPage() {
     }
   };
 
-  const fitModes: PlaylistFitMode[] = ["contain", "cover", "stretch", "center", "fit-width", "fit-height"];
+  const fitModes: PlaylistFitMode[] = [
+    "contain",
+    "cover",
+    "stretch",
+    "center",
+    "fit-width",
+    "fit-height",
+  ];
 
   const handleDropOnItem = useCallback(
     async (e: React.DragEvent, targetIndex: number) => {
@@ -199,7 +225,9 @@ function PlaylistsPage() {
                   type="button"
                   onClick={() => setSelected(p.id)}
                   className={`w-full text-left rounded-lg border ${
-                    active ? "border-primary/50 bg-primary/5 shadow-glow" : "border-border bg-card hover:border-primary/30"
+                    active
+                      ? "border-primary/50 bg-primary/5 shadow-glow"
+                      : "border-border bg-card hover:border-primary/30"
                   } p-4 transition-smooth`}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -221,7 +249,9 @@ function PlaylistsPage() {
                     />
                   </div>
                   {p.description && (
-                    <p className="text-[11px] text-muted-foreground mt-2 line-clamp-2">{p.description}</p>
+                    <p className="text-[11px] text-muted-foreground mt-2 line-clamp-2">
+                      {p.description}
+                    </p>
                   )}
                 </button>
               );
@@ -260,14 +290,18 @@ function PlaylistsPage() {
               >
                 <div className="space-y-4">
                   <div className="rounded-lg border border-border bg-muted/20 p-3 space-y-2">
-                    <p className="text-xs font-medium text-foreground">Adicionar mídias (Ctrl+clique para várias)</p>
+                    <p className="text-xs font-medium text-foreground">
+                      Adicionar mídias (Ctrl+clique para várias)
+                    </p>
                     <div className="flex flex-col sm:flex-row gap-2">
                       <select
                         multiple
                         size={Math.min(8, Math.max(4, mediaOptions.length))}
                         value={mediaToAdd}
                         onChange={(e) =>
-                          setMediaToAdd(Array.from(e.target.selectedOptions, (o) => o.value).filter(Boolean))
+                          setMediaToAdd(
+                            Array.from(e.target.selectedOptions, (o) => o.value).filter(Boolean),
+                          )
                         }
                         className="flex-1 rounded-md border border-input bg-surface px-2 py-1.5 text-xs min-h-[120px]"
                       >
@@ -286,7 +320,9 @@ function PlaylistsPage() {
                       </PrimaryButton>
                     </div>
                     {mediaOptions.length === 0 && (
-                      <p className="text-[11px] text-muted-foreground">Não há mídias ativas na biblioteca.</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        Não há mídias ativas na biblioteca.
+                      </p>
                     )}
                   </div>
 
@@ -310,7 +346,8 @@ function PlaylistsPage() {
                         const m = row.media_assets;
                         const itemFit = (row.fit_mode as PlaylistFitMode | undefined) ?? "cover";
                         const isDragging = draggingId === row.id;
-                        const isOver = dragOverIndex === index && draggingId && draggingId !== row.id;
+                        const isOver =
+                          dragOverIndex === index && draggingId && draggingId !== row.id;
                         return (
                           <li
                             key={row.id}
@@ -331,7 +368,10 @@ function PlaylistsPage() {
                                 draggable
                                 disabled={reorderPlaylist.isPending}
                                 onDragStart={(ev) => {
-                                  ev.dataTransfer.setData("application/x-signix-playlist-item", row.id);
+                                  ev.dataTransfer.setData(
+                                    "application/x-signix-playlist-item",
+                                    row.id,
+                                  );
                                   ev.dataTransfer.effectAllowed = "move";
                                   setDraggingId(row.id);
                                 }}
@@ -339,16 +379,26 @@ function PlaylistsPage() {
                               >
                                 <GripVertical className="h-4 w-4" />
                               </button>
-                              <span className="font-mono text-muted-foreground w-6 shrink-0">{row.position}</span>
+                              <span className="font-mono text-muted-foreground w-6 shrink-0">
+                                {row.position}
+                              </span>
                               <div className="flex-1 min-w-0">
-                                <p className="font-medium truncate">{m?.name ?? "Mídia removida?"}</p>
-                                <p className="text-[10px] text-muted-foreground truncate">{m?.file_type ?? "—"}</p>
+                                <p className="font-medium truncate">
+                                  {m?.name ?? "Mídia removida?"}
+                                </p>
+                                <p className="text-[10px] text-muted-foreground truncate">
+                                  {m?.file_type ?? "—"}
+                                </p>
                               </div>
                               <div className="flex items-center gap-0.5 shrink-0">
                                 <button
                                   type="button"
                                   title="Subir"
-                                  disabled={index === 0 || swapPositions.isPending || reorderPlaylist.isPending}
+                                  disabled={
+                                    index === 0 ||
+                                    swapPositions.isPending ||
+                                    reorderPlaylist.isPending
+                                  }
                                   onClick={() => void handleMove(index, -1)}
                                   className="h-7 w-7 grid place-items-center rounded border border-border hover:bg-accent disabled:opacity-40"
                                 >
@@ -373,7 +423,10 @@ function PlaylistsPage() {
                                   disabled={deleteItem.isPending}
                                   onClick={() => {
                                     if (!confirm("Remover este item da playlist?")) return;
-                                    void deleteItem.mutateAsync({ id: row.id, playlistId: current.id });
+                                    void deleteItem.mutateAsync({
+                                      id: row.id,
+                                      playlistId: current.id,
+                                    });
                                   }}
                                   className="h-7 w-7 grid place-items-center rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive"
                                 >
@@ -454,10 +507,17 @@ function PlaylistsPage() {
       <Modal open={open} onClose={() => setOpen(false)} title="Nova playlist">
         <form onSubmit={submit} className="space-y-3">
           <FormField label="Nome">
-            <TextInput required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <TextInput
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
           </FormField>
           <FormField label="Descrição">
-            <TextArea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <TextArea
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
           </FormField>
           <PrimaryButton type="submit" disabled={create.isPending}>
             {create.isPending ? "Salvando…" : "Criar"}

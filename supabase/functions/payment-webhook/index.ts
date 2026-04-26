@@ -5,7 +5,8 @@ import { reaisToCents } from "../_shared/asaas.ts";
 const cors: Record<string, string> = {
   "Content-Type": "application/json; charset=utf-8",
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, asaas-access-token, x-webhook-secret",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, asaas-access-token, x-webhook-secret",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -42,10 +43,16 @@ function asaasInvoiceStatus(
   event: string,
   pay: AsaasPay,
 ): "draft" | "open" | "paid" | "overdue" | "void" | "refunded" {
-  if (event === "PAYMENT_REFUNDED" || pay.status === "REFUNDED" || pay.status === "CHARGEBACK") return "refunded";
+  if (event === "PAYMENT_REFUNDED" || pay.status === "REFUNDED" || pay.status === "CHARGEBACK")
+    return "refunded";
   if (event === "PAYMENT_DELETED") return "void";
   if (event === "PAYMENT_OVERDUE" || pay.status === "OVERDUE") return "overdue";
-  if (event === "PAYMENT_RECEIVED" || pay.status === "RECEIVED" || event === "PAYMENT_CONFIRMED" || pay.status === "CONFIRMED") {
+  if (
+    event === "PAYMENT_RECEIVED" ||
+    pay.status === "RECEIVED" ||
+    event === "PAYMENT_CONFIRMED" ||
+    pay.status === "CONFIRMED"
+  ) {
     return "paid";
   }
   return "open";
@@ -91,9 +98,13 @@ async function ensureAsaasInvoiceLinkPayment(opts: {
   const methodLabel = (opts.pay.billingType ?? "outro").toLowerCase();
   const docUrl = opts.pay.invoiceUrl ?? opts.pay.bankSlipUrl ?? null;
   const dueAt = parseAsaasDate(opts.pay.dueDate);
-  const paidAt = st === "paid"
-    ? (parseAsaasDate(opts.pay.confirmedDate) ?? parseAsaasDate(opts.pay.paymentDate) ?? parseAsaasDate(opts.pay.creditDate) ?? new Date().toISOString())
-    : null;
+  const paidAt =
+    st === "paid"
+      ? (parseAsaasDate(opts.pay.confirmedDate) ??
+        parseAsaasDate(opts.pay.paymentDate) ??
+        parseAsaasDate(opts.pay.creditDate) ??
+        new Date().toISOString())
+      : null;
 
   const { data: inv, error: invErr } = await adminClient
     .from("invoices")
@@ -122,7 +133,10 @@ async function ensureAsaasInvoiceLinkPayment(opts: {
     return null;
   }
   const invId = (inv as { id: string }).id;
-  const { error: pUp } = await adminClient.from("payments").update({ invoice_id: invId }).eq("id", opts.paymentRowId);
+  const { error: pUp } = await adminClient
+    .from("payments")
+    .update({ invoice_id: invId })
+    .eq("id", opts.paymentRowId);
   if (pUp) console.error("[payment-webhook] payment link invoice", pUp);
   return invId;
 }
@@ -130,7 +144,10 @@ async function ensureAsaasInvoiceLinkPayment(opts: {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { status: 405, headers: cors });
+    return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), {
+      status: 405,
+      headers: cors,
+    });
   }
 
   const rawBody = await req.text();
@@ -138,14 +155,20 @@ serve(async (req) => {
   try {
     payload = JSON.parse(rawBody || "{}") as Record<string, unknown>;
   } catch {
-    return new Response(JSON.stringify({ ok: false, error: "Invalid JSON" }), { status: 400, headers: cors });
+    return new Response(JSON.stringify({ ok: false, error: "Invalid JSON" }), {
+      status: 400,
+      headers: cors,
+    });
   }
 
   const asaasToken = Deno.env.get("ASAAS_WEBHOOK_TOKEN")?.trim();
   const incomingAsaas = req.headers.get("asaas-access-token")?.trim();
   if (asaasToken && asaasToken.length > 0) {
     if (incomingAsaas !== asaasToken) {
-      return new Response(JSON.stringify({ ok: false, error: "Invalid asaas-access-token" }), { status: 401, headers: cors });
+      return new Response(JSON.stringify({ ok: false, error: "Invalid asaas-access-token" }), {
+        status: 401,
+        headers: cors,
+      });
     }
   }
 
@@ -157,7 +180,10 @@ serve(async (req) => {
   const secret = Deno.env.get("PAYMENT_WEBHOOK_SECRET");
   const incoming = req.headers.get("x-webhook-secret");
   if (secret && incoming !== secret) {
-    return new Response(JSON.stringify({ ok: false, error: "Invalid secret" }), { status: 401, headers: cors });
+    return new Response(JSON.stringify({ ok: false, error: "Invalid secret" }), {
+      status: 401,
+      headers: cors,
+    });
   }
 
   const orgId = typeof payload.organization_id === "string" ? payload.organization_id : null;
@@ -183,29 +209,49 @@ serve(async (req) => {
   });
 
   if (error) {
-    return new Response(JSON.stringify({ ok: false, error: error.message }), { status: 500, headers: cors });
+    return new Response(JSON.stringify({ ok: false, error: error.message }), {
+      status: 500,
+      headers: cors,
+    });
   }
 
-  return new Response(JSON.stringify({ ok: true, received: true, mode: "stub" }), { status: 200, headers: cors });
+  return new Response(JSON.stringify({ ok: true, received: true, mode: "stub" }), {
+    status: 200,
+    headers: cors,
+  });
 });
 
 async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Promise<Response> {
   const p = asaas.payment as AsaasPay;
   const payId = p.id;
   if (!payId) {
-    return new Response(JSON.stringify({ ok: true, skip: "no pay id" }), { status: 200, headers: cors });
+    return new Response(JSON.stringify({ ok: true, skip: "no pay id" }), {
+      status: 200,
+      headers: cors,
+    });
   }
 
   const event = asaas.event ?? "";
   if (
-    !["PAYMENT_RECEIVED", "PAYMENT_CONFIRMED", "PAYMENT_OVERDUE", "PAYMENT_REFUNDED", "PAYMENT_DELETED", "PAYMENT_CREATED"].includes(
-      event,
-    )
+    ![
+      "PAYMENT_RECEIVED",
+      "PAYMENT_CONFIRMED",
+      "PAYMENT_OVERDUE",
+      "PAYMENT_REFUNDED",
+      "PAYMENT_DELETED",
+      "PAYMENT_CREATED",
+    ].includes(event)
   ) {
-    return new Response(JSON.stringify({ ok: true, ignored: event }), { status: 200, headers: cors });
+    return new Response(JSON.stringify({ ok: true, ignored: event }), {
+      status: 200,
+      headers: cors,
+    });
   }
   if (event === "PAYMENT_CREATED") {
-    return new Response(JSON.stringify({ ok: true, skip: "PAYMENT_CREATED" }), { status: 200, headers: cors });
+    return new Response(JSON.stringify({ ok: true, skip: "PAYMENT_CREATED" }), {
+      status: 200,
+      headers: cors,
+    });
   }
 
   const { data: existing } = await adminClient
@@ -217,7 +263,10 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
 
   const asaasSubId = p.subscription ?? null;
   if (!asaasSubId) {
-    return new Response(JSON.stringify({ ok: true, skip: "no subscription on payment" }), { status: 200, headers: cors });
+    return new Response(JSON.stringify({ ok: true, skip: "no subscription on payment" }), {
+      status: 200,
+      headers: cors,
+    });
   }
 
   const { data: row, error: csErr } = await adminClient
@@ -228,11 +277,17 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
     .limit(1)
     .maybeSingle();
   if (csErr) {
-    return new Response(JSON.stringify({ ok: false, error: csErr.message }), { status: 500, headers: cors });
+    return new Response(JSON.stringify({ ok: false, error: csErr.message }), {
+      status: 500,
+      headers: cors,
+    });
   }
   if (!row?.organization_id) {
     return new Response(
-      JSON.stringify({ ok: true, message: "checkout_session not found for subscription " + asaasSubId }),
+      JSON.stringify({
+        ok: true,
+        message: "checkout_session not found for subscription " + asaasSubId,
+      }),
       { status: 200, headers: cors },
     );
   }
@@ -241,7 +296,11 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
   const planId = row.plan_id as string;
   const valueCents = p.value != null ? reaisToCents(Number(p.value)) : 0;
   const payStatus =
-    event === "PAYMENT_REFUNDED" ? "failed" : event === "PAYMENT_OVERDUE" || event === "PAYMENT_DELETED" ? "pending" : "paid";
+    event === "PAYMENT_REFUNDED"
+      ? "failed"
+      : event === "PAYMENT_OVERDUE" || event === "PAYMENT_DELETED"
+        ? "pending"
+        : "paid";
 
   const { data: ourSub } = await adminClient
     .from("subscriptions")
@@ -271,13 +330,19 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
       .select("id")
       .single();
     if (payErr || !ins) {
-      return new Response(JSON.stringify({ ok: false, error: payErr?.message ?? "insert payment" }), { status: 500, headers: cors });
+      return new Response(
+        JSON.stringify({ ok: false, error: payErr?.message ?? "insert payment" }),
+        { status: 500, headers: cors },
+      );
     }
     paymentRowId = (ins as { id: string }).id;
   } else {
     paymentRowId = (existing as { id: string }).id;
     if (ourSubId && !(existing as { subscription_id?: string }).subscription_id) {
-      await adminClient.from("payments").update({ subscription_id: ourSubId }).eq("id", paymentRowId);
+      await adminClient
+        .from("payments")
+        .update({ subscription_id: ourSubId })
+        .eq("id", paymentRowId);
     }
   }
 
@@ -295,12 +360,15 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
 
   const shouldProvision =
     !ourSub &&
-    (event === "PAYMENT_RECEIVED" || (event === "PAYMENT_CONFIRMED" && p.billingType === "CREDIT_CARD"));
+    (event === "PAYMENT_RECEIVED" ||
+      (event === "PAYMENT_CONFIRMED" && p.billingType === "CREDIT_CARD"));
 
   if (shouldProvision) {
     const { data: plan } = await adminClient
       .from("plans")
-      .select("id, name, max_screens, max_users, max_storage_mb, price_monthly_cents, price_yearly_cents")
+      .select(
+        "id, name, max_screens, max_users, max_storage_mb, price_monthly_cents, price_yearly_cents",
+      )
       .eq("id", planId)
       .maybeSingle();
     if (plan) {
@@ -359,11 +427,21 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
           .from("checkout_sessions")
           .update({ status: "succeeded", updated_at: new Date().toISOString() })
           .eq("id", row.id);
-        await adminClient.from("payments").update({ subscription_id: newSid }).eq("id", paymentRowId);
-        await adminClient.from("invoices").update({ subscription_id: newSid }).eq("external_id", payId).eq("external_provider", "asaas");
+        await adminClient
+          .from("payments")
+          .update({ subscription_id: newSid })
+          .eq("id", paymentRowId);
+        await adminClient
+          .from("invoices")
+          .update({ subscription_id: newSid })
+          .eq("external_id", payId)
+          .eq("external_provider", "asaas");
       }
     }
   }
 
-  return new Response(JSON.stringify({ ok: true, asaas: true, event, payment: payId, invoice: "synced" }), { status: 200, headers: cors });
+  return new Response(
+    JSON.stringify({ ok: true, asaas: true, event, payment: payId, invoice: "synced" }),
+    { status: 200, headers: cors },
+  );
 }

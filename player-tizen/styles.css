@@ -12,7 +12,13 @@ body {
   overflow: hidden;
   background: #050508;
   color: #f4f4f8;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Noto Sans",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 

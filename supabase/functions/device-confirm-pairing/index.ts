@@ -39,7 +39,9 @@ type Body = {
 function effectivePlatform(screenPlatform: string | null, bodyPlatform: string | null): string {
   const p = bodyPlatform != null ? String(bodyPlatform).trim().toLowerCase() : "";
   if (p === "android" || p === "tizen") return p;
-  const s = String(screenPlatform ?? "").trim().toLowerCase();
+  const s = String(screenPlatform ?? "")
+    .trim()
+    .toLowerCase();
   if (s === "android" || s === "tizen") return s;
   return "android";
 }
@@ -64,20 +66,26 @@ serve(async (req) => {
     const pairingRaw = body.pairing_code ?? body.pairingCode ?? "";
     const codeNorm = normalizeDevicePairingCode(String(pairingRaw));
     if ((!deviceId && !screenId) || codeNorm.length < 4) {
-      return jsonResponse({ error: "device_id ou screen_id, e pairing_code, são obrigatórios." }, 400);
+      return jsonResponse(
+        { error: "device_id ou screen_id, e pairing_code, são obrigatórios." },
+        400,
+      );
     }
 
-    let q = adminClient.from("player_devices").select("id, screen_id, pairing_status").eq(
-      "pairing_status",
-      "pending_pairing",
-    );
+    let q = adminClient
+      .from("player_devices")
+      .select("id, screen_id, pairing_status")
+      .eq("pairing_status", "pending_pairing");
     if (deviceId) q = q.eq("id", deviceId);
     else q = q.eq("screen_id", screenId);
 
     const { data: dev, error: devErr } = await q.maybeSingle();
     if (devErr) return jsonResponse({ error: devErr.message }, 400);
     if (!dev?.screen_id) {
-      return jsonResponse({ error: "Dispositivo não encontrado ou não está pendente de pareamento." }, 404);
+      return jsonResponse(
+        { error: "Dispositivo não encontrado ou não está pendente de pareamento." },
+        404,
+      );
     }
 
     const { data: screen, error: scrErr } = await adminClient
@@ -89,11 +97,15 @@ serve(async (req) => {
       .maybeSingle();
     if (scrErr || !screen?.id) return jsonResponse({ error: "Tela não encontrada." }, 404);
 
-    const screenPairing = screen.pairing_code ? normalizeDevicePairingCode(String(screen.pairing_code)) : "";
+    const screenPairing = screen.pairing_code
+      ? normalizeDevicePairingCode(String(screen.pairing_code))
+      : "";
     if (!screenPairing || screenPairing !== codeNorm) {
       return jsonResponse({ error: "Código de pareamento inválido." }, 400);
     }
-    const exp = screen.pairing_expires_at ? new Date(String(screen.pairing_expires_at)).getTime() : 0;
+    const exp = screen.pairing_expires_at
+      ? new Date(String(screen.pairing_expires_at)).getTime()
+      : 0;
     if (exp && exp < Date.now()) {
       return jsonResponse({ error: "Código de pareamento expirado." }, 400);
     }
@@ -127,11 +139,16 @@ serve(async (req) => {
       confirmedViaPanel = true;
     }
 
-    const fp = String(body.deviceFingerprint ?? body.device_fingerprint ?? "").trim() ||
+    const fp =
+      String(body.deviceFingerprint ?? body.device_fingerprint ?? "").trim() ||
       (screen.device_fingerprint ? String(screen.device_fingerprint) : "unknown");
-    const vPlat = effectivePlatform(screen.platform as string | null, body.platform as string | null);
+    const vPlat = effectivePlatform(
+      screen.platform as string | null,
+      body.platform as string | null,
+    );
     const osName = String(body.osName ?? body.os_name ?? screen.os_name ?? "").trim() || null;
-    const playerVersion = String(body.playerVersion ?? body.player_version ?? screen.player_version ?? "").trim() ||
+    const playerVersion =
+      String(body.playerVersion ?? body.player_version ?? screen.player_version ?? "").trim() ||
       null;
 
     const now = new Date().toISOString();

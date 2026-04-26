@@ -30,7 +30,10 @@ export async function syncPlayerPayload(
 
   try {
     const payload = useDevice
-      ? await resolvePlaylistWithDevice(credentials.deviceId as string, credentials.authToken as string)
+      ? await resolvePlaylistWithDevice(
+          credentials.deviceId as string,
+          credentials.authToken as string,
+        )
       : await resolveScreenPayload(screenId);
     await cacheMediaItems(payload.items);
     await setCachedPayload(payload);

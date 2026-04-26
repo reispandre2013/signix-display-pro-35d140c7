@@ -10,7 +10,10 @@ interface AuthContextValue {
   profile: Profile | null;
   userRoles: string[];
   loading: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: Error | null; profile?: Profile | null; userRoles?: string[] }>;
+  signIn: (
+    email: string,
+    password: string,
+  ) => Promise<{ error: Error | null; profile?: Profile | null; userRoles?: string[] }>;
   signUp: (
     email: string,
     password: string,
@@ -49,10 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select("*")
       .eq("auth_user_id", uid)
       .maybeSingle();
-    const { data: roles } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", uid);
+    const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", uid);
     const nextProfile = (data as Profile | null) ?? null;
     const nextRoles = (roles ?? []).map((r) => String((r as { role: string }).role));
     setProfile(nextProfile);
@@ -116,7 +116,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
     try {
       const emailNorm = email.trim().toLowerCase();
-      const { data, error } = await supabase.auth.signInWithPassword({ email: emailNorm, password });
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: emailNorm,
+        password,
+      });
       if (error || !data.user) return { error };
       const loaded = await loadProfile(data.user.id);
       return { error: null, ...loaded };
@@ -133,8 +136,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         ),
       };
     }
-    const redirectTo =
-      typeof window !== "undefined" ? `${window.location.origin}/app` : undefined;
+    const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/app` : undefined;
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -160,7 +162,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ session, user, profile, userRoles, loading, signIn, signUp, signOut, refreshProfile }}
+      value={{
+        session,
+        user,
+        profile,
+        userRoles,
+        loading,
+        signIn,
+        signUp,
+        signOut,
+        refreshProfile,
+      }}
     >
       {children}
     </AuthContext.Provider>

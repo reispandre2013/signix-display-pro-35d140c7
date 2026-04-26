@@ -1,4 +1,13 @@
-import { t as toDate, c as constructFrom, n as normalizeDates, e as enUS, a as getTimezoneOffsetInMilliseconds, d as minutesInDay, f as minutesInMonth, g as getDefaultOptions } from "./en-US-D5MXwIXi.js";
+import {
+  t as toDate,
+  c as constructFrom,
+  n as normalizeDates,
+  e as enUS,
+  a as getTimezoneOffsetInMilliseconds,
+  d as minutesInDay,
+  f as minutesInMonth,
+  g as getDefaultOptions,
+} from "./en-US-D5MXwIXi.js";
 function compareAsc(dateLeft, dateRight) {
   const diff = +toDate(dateLeft) - +toDate(dateRight);
   if (diff < 0) return -1;
@@ -9,11 +18,7 @@ function constructNow(date) {
   return constructFrom(date, Date.now());
 }
 function differenceInCalendarMonths(laterDate, earlierDate, options) {
-  const [laterDate_, earlierDate_] = normalizeDates(
-    options?.in,
-    laterDate,
-    earlierDate
-  );
+  const [laterDate_, earlierDate_] = normalizeDates(options?.in, laterDate, earlierDate);
   const yearsDiff = laterDate_.getFullYear() - earlierDate_.getFullYear();
   const monthsDiff = laterDate_.getMonth() - earlierDate_.getMonth();
   return yearsDiff * 12 + monthsDiff;
@@ -49,18 +54,20 @@ function differenceInMonths(laterDate, earlierDate, options) {
     options?.in,
     laterDate,
     laterDate,
-    earlierDate
+    earlierDate,
   );
   const sign = compareAsc(workingLaterDate, earlierDate_);
-  const difference = Math.abs(
-    differenceInCalendarMonths(workingLaterDate, earlierDate_)
-  );
+  const difference = Math.abs(differenceInCalendarMonths(workingLaterDate, earlierDate_));
   if (difference < 1) return 0;
   if (workingLaterDate.getMonth() === 1 && workingLaterDate.getDate() > 27)
     workingLaterDate.setDate(30);
   workingLaterDate.setMonth(workingLaterDate.getMonth() - sign * difference);
   let isLastMonthNotFull = compareAsc(workingLaterDate, earlierDate_) === -sign;
-  if (isLastDayOfMonth(laterDate_) && difference === 1 && compareAsc(laterDate_, earlierDate_) === 1) {
+  if (
+    isLastDayOfMonth(laterDate_) &&
+    difference === 1 &&
+    compareAsc(laterDate_, earlierDate_) === 1
+  ) {
     isLastMonthNotFull = false;
   }
   const result = sign * (difference - +isLastMonthNotFull);
@@ -78,14 +85,16 @@ function formatDistance(laterDate, earlierDate, options) {
   if (isNaN(comparison)) throw new RangeError("Invalid time value");
   const localizeOptions = Object.assign({}, options, {
     addSuffix: options?.addSuffix,
-    comparison
+    comparison,
   });
   const [laterDate_, earlierDate_] = normalizeDates(
     options?.in,
-    ...comparison > 0 ? [earlierDate, laterDate] : [laterDate, earlierDate]
+    ...(comparison > 0 ? [earlierDate, laterDate] : [laterDate, earlierDate]),
   );
   const seconds = differenceInSeconds(earlierDate_, laterDate_);
-  const offsetInSeconds = (getTimezoneOffsetInMilliseconds(earlierDate_) - getTimezoneOffsetInMilliseconds(laterDate_)) / 1e3;
+  const offsetInSeconds =
+    (getTimezoneOffsetInMilliseconds(earlierDate_) - getTimezoneOffsetInMilliseconds(laterDate_)) /
+    1e3;
   const minutes = Math.round((seconds - offsetInSeconds) / 60);
   let months;
   if (minutes < 2) {
@@ -145,6 +154,4 @@ function formatDistance(laterDate, earlierDate, options) {
 function formatDistanceToNow(date, options) {
   return formatDistance(date, constructNow(date), options);
 }
-export {
-  formatDistanceToNow as f
-};
+export { formatDistanceToNow as f };

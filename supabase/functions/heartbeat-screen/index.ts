@@ -68,9 +68,10 @@ serve(async (req) => {
     }
 
     const now = new Date().toISOString();
-    const platformRaw = body.deviceInfo && typeof body.deviceInfo.platform === "string"
-      ? body.deviceInfo.platform
-      : "tizen";
+    const platformRaw =
+      body.deviceInfo && typeof body.deviceInfo.platform === "string"
+        ? body.deviceInfo.platform
+        : "tizen";
     const platform = String(platformRaw || "tizen").slice(0, 64);
 
     const { error: insErr } = await adminClient.from("screen_heartbeats").insert({

@@ -37,7 +37,13 @@ function PlayerPage() {
 
   const currentSources = current
     ? getMediaUrlCandidates(
-        { mediaTypeHint: String((current as { file_type?: string }).file_type ?? "").includes("video") ? "video" : "image" },
+        {
+          mediaTypeHint: String((current as { file_type?: string }).file_type ?? "").includes(
+            "video",
+          )
+            ? "video"
+            : "image",
+        },
         current.public_url,
         current.thumbnail_url,
       )
@@ -134,7 +140,10 @@ function PlayerPage() {
           <span>
             Item {idx + 1} / {items.length} · {current.name}
           </span>
-          <Link to="/app" className="inline-flex items-center gap-1 hover:text-white transition-colors">
+          <Link
+            to="/app"
+            className="inline-flex items-center gap-1 hover:text-white transition-colors"
+          >
             <Maximize2 className="h-3 w-3" /> Sair do modo player
           </Link>
         </div>

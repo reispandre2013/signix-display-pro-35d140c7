@@ -24,7 +24,8 @@ function FaturasPage() {
         <PageHeader title="Faturas" subtitle="Histórico completo de cobranças da sua assinatura." />
         <Panel>
           <p className="text-sm text-muted-foreground">
-            Tabelas de billing ainda não aplicadas. Execute as migrations em <code className="text-xs">supabase/migrations</code>.
+            Tabelas de billing ainda não aplicadas. Execute as migrations em{" "}
+            <code className="text-xs">supabase/migrations</code>.
           </p>
         </Panel>
       </div>
@@ -77,10 +78,14 @@ function FaturasPage() {
                       {format(new Date(inv.issued_at), "dd/MM/yyyy", { locale: ptBR })}
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
-                      {inv.due_at ? format(new Date(inv.due_at), "dd/MM/yyyy", { locale: ptBR }) : "—"}
+                      {inv.due_at
+                        ? format(new Date(inv.due_at), "dd/MM/yyyy", { locale: ptBR })
+                        : "—"}
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
-                      {inv.paid_at ? format(new Date(inv.paid_at), "dd/MM/yyyy", { locale: ptBR }) : "—"}
+                      {inv.paid_at
+                        ? format(new Date(inv.paid_at), "dd/MM/yyyy", { locale: ptBR })
+                        : "—"}
                     </td>
                     <td className="px-3 py-3 text-xs capitalize">{inv.payment_method ?? "—"}</td>
                     <td className="px-3 py-3 font-mono text-xs">{formatPrice(inv.amount_cents)}</td>

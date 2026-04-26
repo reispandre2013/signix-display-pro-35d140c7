@@ -1,1 +1,296 @@
-import{r as d,j as e}from"./index-DUcMANMA.js";import{P as w}from"./PageHeader-C0iFmY02.js";import{P as k}from"./Panel-0HKdxBPL.js";import{S as M}from"./StatusBadge-Deydaofp.js";import{L as C,a as S,E as L}from"./States-snX8_8k6.js";import{P as g,M as P,F as o,T as c}from"./FormControls-CVqdqSiZ.js";import{u as F,m as A,n as T}from"./use-supabase-data-neXhdC03.js";import{g as q,a as I}from"./media-url-boppB8Th.js";import{P as E}from"./plus-Cunu08C7.js";import{c as i}from"./createLucideIcon-BDYLgomD.js";import{T as R}from"./trash-2-DoR7LW8e.js";import{f as U}from"./format-Ca9zXj_K.js";import{p as B}from"./pt-BR-B79SV-js.js";import{S as D}from"./search-DaE6IhiL.js";import{F as z}from"./funnel-CDD_PhDM.js";import{I as H}from"./image-BlTjWPMR.js";import"./utils-BQHNewu7.js";import"./loader-circle-BffduC8P.js";import"./x-Dpfm6mfs.js";import"./en-US-DfnapdEA.js";const V=[["path",{d:"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",key:"1oefj6"}],["path",{d:"M14 2v5a1 1 0 0 0 1 1h5",key:"wfsgrz"}],["path",{d:"M10 12.5 8 15l2 2.5",key:"1tg20x"}],["path",{d:"m14 12.5 2 2.5-2 2.5",key:"yinavb"}]],$=i("file-code",V);const O=[["path",{d:"m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16",key:"9kzy35"}],["path",{d:"M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2",key:"1t0f0t"}],["circle",{cx:"13",cy:"7",r:"1",fill:"currentColor",key:"1obus6"}],["rect",{x:"8",y:"2",width:"14",height:"14",rx:"2",key:"1gvhby"}]],J=i("images",O);const G=[["path",{d:"M12 3v12",key:"1x0j5s"}],["path",{d:"m17 8-5-5-5 5",key:"7q97r8"}],["path",{d:"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4",key:"ih7n3h"}]],K=i("upload",G);const Q=[["path",{d:"m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5",key:"ftymec"}],["rect",{x:"2",y:"6",width:"14",height:"12",rx:"2",key:"158x01"}]],W=i("video",Q);function fe(){const{data:u=[],isLoading:f,error:m}=F(),l=A(),b=T(),[v,r]=d.useState(!1),[p,j]=d.useState(""),[t,s]=d.useState({name:"",file_type:"image",public_url:"",duration_seconds:10}),h=u.filter(a=>a.name.toLowerCase().includes(p.toLowerCase())),y=async a=>{a.preventDefault(),await l.mutateAsync({name:t.name,file_type:t.file_type,file_path:t.public_url,public_url:t.public_url,thumbnail_url:t.public_url,duration_seconds:t.duration_seconds,tags:[],status:"active"}),r(!1),s({name:"",file_type:"image",public_url:"",duration_seconds:10})},N=a=>a.includes("video")?W:a.includes("html")?$:H;return e.jsxs("div",{className:"space-y-6",children:[e.jsx(w,{title:"Biblioteca de mídias",subtitle:"Arquivos disponíveis para uso em playlists e campanhas.",actions:e.jsxs(g,{onClick:()=>r(!0),children:[e.jsx(E,{className:"h-3.5 w-3.5"})," Adicionar mídia"]})}),e.jsxs("button",{onClick:()=>r(!0),className:"block w-full rounded-xl border-2 border-dashed border-border bg-surface/30 p-8 text-center hover:border-primary/40 hover:bg-surface/50 transition-smooth",children:[e.jsx("div",{className:"mx-auto h-12 w-12 rounded-xl bg-primary/10 grid place-items-center text-primary mb-3",children:e.jsx(K,{className:"h-6 w-6"})}),e.jsx("p",{className:"font-display text-base font-semibold",children:"Adicionar arquivo via URL"}),e.jsx("p",{className:"text-xs text-muted-foreground mt-1",children:"Cole a URL pública da imagem, vídeo ou HTML. Upload completo via Storage chega em breve."})]}),e.jsx(k,{title:`${u.length} arquivos`,actions:e.jsxs(e.Fragment,{children:[e.jsxs("div",{className:"relative",children:[e.jsx(D,{className:"absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground"}),e.jsx("input",{value:p,onChange:a=>j(a.target.value),placeholder:"Buscar mídia…",className:"rounded-md border border-input bg-surface pl-7 pr-3 py-1.5 text-xs w-48 focus:outline-none focus:ring-2 focus:ring-ring"})]}),e.jsxs("button",{className:"inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs hover:bg-accent",children:[e.jsx(z,{className:"h-3.5 w-3.5"})," Filtrar"]})]}),children:f?e.jsx(C,{}):m?e.jsx(S,{error:m}):h.length===0?e.jsx(L,{icon:J,title:"Nenhuma mídia",description:"Adicione arquivos para usar em campanhas."}):e.jsx("div",{className:"grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3",children:h.map(a=>{const x=N(a.file_type),n=q(a.thumbnail_url,a.public_url);return e.jsxs("article",{className:"group rounded-lg border border-border bg-card overflow-hidden hover:border-primary/40 hover:shadow-glow transition-smooth",children:[e.jsxs("div",{className:"relative aspect-video bg-surface overflow-hidden",children:[n.length>0?e.jsx("img",{src:n[0],"data-sources":JSON.stringify(n),"data-source-index":"0",alt:a.name,className:"w-full h-full object-cover",loading:"lazy",referrerPolicy:"no-referrer",onError:_=>I(_.currentTarget)}):e.jsx("div",{className:"w-full h-full grid place-items-center text-muted-foreground",children:e.jsx(x,{className:"h-6 w-6"})}),e.jsxs("div",{className:"absolute top-1.5 left-1.5 inline-flex items-center gap-1 rounded bg-black/60 backdrop-blur-md px-1.5 py-0.5 text-[10px] text-white uppercase tracking-wider font-medium",children:[e.jsx(x,{className:"h-2.5 w-2.5"})," ",a.file_type]}),e.jsx("div",{className:"absolute top-1.5 right-1.5",children:e.jsx(M,{tone:a.status==="active"?"success":"neutral",label:a.status,withDot:!1})}),a.duration_seconds&&e.jsxs("div",{className:"absolute bottom-1.5 left-1.5 text-[10px] text-white font-mono bg-black/60 backdrop-blur-md rounded px-1.5 py-0.5",children:[a.duration_seconds,"s"]})]}),e.jsxs("div",{className:"p-2.5",children:[e.jsxs("div",{className:"flex items-start justify-between gap-1.5",children:[e.jsx("p",{className:"text-xs font-medium truncate flex-1",children:a.name}),e.jsx("button",{onClick:()=>confirm("Remover mídia?")&&b.mutate(a.id),className:"h-5 w-5 grid place-items-center rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive shrink-0",children:e.jsx(R,{className:"h-3 w-3"})})]}),e.jsx("p",{className:"text-[10px] text-muted-foreground mt-0.5",children:U(new Date(a.created_at),"dd/MM",{locale:B})})]})]},a.id)})})}),e.jsx(P,{open:v,onClose:()=>r(!1),title:"Adicionar mídia",children:e.jsxs("form",{onSubmit:y,className:"space-y-3",children:[e.jsx(o,{label:"Nome",children:e.jsx(c,{required:!0,value:t.name,onChange:a=>s({...t,name:a.target.value})})}),e.jsx(o,{label:"Tipo",children:e.jsxs("select",{value:t.file_type,onChange:a=>s({...t,file_type:a.target.value}),className:"w-full rounded-lg border border-input bg-surface px-3 py-2 text-sm",children:[e.jsx("option",{value:"image",children:"Imagem"}),e.jsx("option",{value:"video",children:"Vídeo"}),e.jsx("option",{value:"html",children:"HTML"})]})}),e.jsx(o,{label:"URL pública",children:e.jsx(c,{type:"url",required:!0,placeholder:"https://…",value:t.public_url,onChange:a=>s({...t,public_url:a.target.value})})}),e.jsx(o,{label:"Duração (segundos)",children:e.jsx(c,{type:"number",min:1,value:t.duration_seconds,onChange:a=>s({...t,duration_seconds:Number(a.target.value)})})}),e.jsx(g,{type:"submit",disabled:l.isPending,children:l.isPending?"Salvando…":"Adicionar"})]})})]})}export{fe as component};
+import { r as d, j as e } from "./index-DUcMANMA.js";
+import { P as w } from "./PageHeader-C0iFmY02.js";
+import { P as k } from "./Panel-0HKdxBPL.js";
+import { S as M } from "./StatusBadge-Deydaofp.js";
+import { L as C, a as S, E as L } from "./States-snX8_8k6.js";
+import { P as g, M as P, F as o, T as c } from "./FormControls-CVqdqSiZ.js";
+import { u as F, m as A, n as T } from "./use-supabase-data-neXhdC03.js";
+import { g as q, a as I } from "./media-url-boppB8Th.js";
+import { P as E } from "./plus-Cunu08C7.js";
+import { c as i } from "./createLucideIcon-BDYLgomD.js";
+import { T as R } from "./trash-2-DoR7LW8e.js";
+import { f as U } from "./format-Ca9zXj_K.js";
+import { p as B } from "./pt-BR-B79SV-js.js";
+import { S as D } from "./search-DaE6IhiL.js";
+import { F as z } from "./funnel-CDD_PhDM.js";
+import { I as H } from "./image-BlTjWPMR.js";
+import "./utils-BQHNewu7.js";
+import "./loader-circle-BffduC8P.js";
+import "./x-Dpfm6mfs.js";
+import "./en-US-DfnapdEA.js";
+const V = [
+    [
+      "path",
+      {
+        d: "M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z",
+        key: "1oefj6",
+      },
+    ],
+    ["path", { d: "M14 2v5a1 1 0 0 0 1 1h5", key: "wfsgrz" }],
+    ["path", { d: "M10 12.5 8 15l2 2.5", key: "1tg20x" }],
+    ["path", { d: "m14 12.5 2 2.5-2 2.5", key: "yinavb" }],
+  ],
+  $ = i("file-code", V);
+const O = [
+    ["path", { d: "m22 11-1.296-1.296a2.4 2.4 0 0 0-3.408 0L11 16", key: "9kzy35" }],
+    ["path", { d: "M4 8a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2", key: "1t0f0t" }],
+    ["circle", { cx: "13", cy: "7", r: "1", fill: "currentColor", key: "1obus6" }],
+    ["rect", { x: "8", y: "2", width: "14", height: "14", rx: "2", key: "1gvhby" }],
+  ],
+  J = i("images", O);
+const G = [
+    ["path", { d: "M12 3v12", key: "1x0j5s" }],
+    ["path", { d: "m17 8-5-5-5 5", key: "7q97r8" }],
+    ["path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4", key: "ih7n3h" }],
+  ],
+  K = i("upload", G);
+const Q = [
+    [
+      "path",
+      {
+        d: "m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5",
+        key: "ftymec",
+      },
+    ],
+    ["rect", { x: "2", y: "6", width: "14", height: "12", rx: "2", key: "158x01" }],
+  ],
+  W = i("video", Q);
+function fe() {
+  const { data: u = [], isLoading: f, error: m } = F(),
+    l = A(),
+    b = T(),
+    [v, r] = d.useState(!1),
+    [p, j] = d.useState(""),
+    [t, s] = d.useState({ name: "", file_type: "image", public_url: "", duration_seconds: 10 }),
+    h = u.filter((a) => a.name.toLowerCase().includes(p.toLowerCase())),
+    y = async (a) => {
+      (a.preventDefault(),
+        await l.mutateAsync({
+          name: t.name,
+          file_type: t.file_type,
+          file_path: t.public_url,
+          public_url: t.public_url,
+          thumbnail_url: t.public_url,
+          duration_seconds: t.duration_seconds,
+          tags: [],
+          status: "active",
+        }),
+        r(!1),
+        s({ name: "", file_type: "image", public_url: "", duration_seconds: 10 }));
+    },
+    N = (a) => (a.includes("video") ? W : a.includes("html") ? $ : H);
+  return e.jsxs("div", {
+    className: "space-y-6",
+    children: [
+      e.jsx(w, {
+        title: "Biblioteca de mídias",
+        subtitle: "Arquivos disponíveis para uso em playlists e campanhas.",
+        actions: e.jsxs(g, {
+          onClick: () => r(!0),
+          children: [e.jsx(E, { className: "h-3.5 w-3.5" }), " Adicionar mídia"],
+        }),
+      }),
+      e.jsxs("button", {
+        onClick: () => r(!0),
+        className:
+          "block w-full rounded-xl border-2 border-dashed border-border bg-surface/30 p-8 text-center hover:border-primary/40 hover:bg-surface/50 transition-smooth",
+        children: [
+          e.jsx("div", {
+            className:
+              "mx-auto h-12 w-12 rounded-xl bg-primary/10 grid place-items-center text-primary mb-3",
+            children: e.jsx(K, { className: "h-6 w-6" }),
+          }),
+          e.jsx("p", {
+            className: "font-display text-base font-semibold",
+            children: "Adicionar arquivo via URL",
+          }),
+          e.jsx("p", {
+            className: "text-xs text-muted-foreground mt-1",
+            children:
+              "Cole a URL pública da imagem, vídeo ou HTML. Upload completo via Storage chega em breve.",
+          }),
+        ],
+      }),
+      e.jsx(k, {
+        title: `${u.length} arquivos`,
+        actions: e.jsxs(e.Fragment, {
+          children: [
+            e.jsxs("div", {
+              className: "relative",
+              children: [
+                e.jsx(D, {
+                  className:
+                    "absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground",
+                }),
+                e.jsx("input", {
+                  value: p,
+                  onChange: (a) => j(a.target.value),
+                  placeholder: "Buscar mídia…",
+                  className:
+                    "rounded-md border border-input bg-surface pl-7 pr-3 py-1.5 text-xs w-48 focus:outline-none focus:ring-2 focus:ring-ring",
+                }),
+              ],
+            }),
+            e.jsxs("button", {
+              className:
+                "inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs hover:bg-accent",
+              children: [e.jsx(z, { className: "h-3.5 w-3.5" }), " Filtrar"],
+            }),
+          ],
+        }),
+        children: f
+          ? e.jsx(C, {})
+          : m
+            ? e.jsx(S, { error: m })
+            : h.length === 0
+              ? e.jsx(L, {
+                  icon: J,
+                  title: "Nenhuma mídia",
+                  description: "Adicione arquivos para usar em campanhas.",
+                })
+              : e.jsx("div", {
+                  className: "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3",
+                  children: h.map((a) => {
+                    const x = N(a.file_type),
+                      n = q(a.thumbnail_url, a.public_url);
+                    return e.jsxs(
+                      "article",
+                      {
+                        className:
+                          "group rounded-lg border border-border bg-card overflow-hidden hover:border-primary/40 hover:shadow-glow transition-smooth",
+                        children: [
+                          e.jsxs("div", {
+                            className: "relative aspect-video bg-surface overflow-hidden",
+                            children: [
+                              n.length > 0
+                                ? e.jsx("img", {
+                                    src: n[0],
+                                    "data-sources": JSON.stringify(n),
+                                    "data-source-index": "0",
+                                    alt: a.name,
+                                    className: "w-full h-full object-cover",
+                                    loading: "lazy",
+                                    referrerPolicy: "no-referrer",
+                                    onError: (_) => I(_.currentTarget),
+                                  })
+                                : e.jsx("div", {
+                                    className:
+                                      "w-full h-full grid place-items-center text-muted-foreground",
+                                    children: e.jsx(x, { className: "h-6 w-6" }),
+                                  }),
+                              e.jsxs("div", {
+                                className:
+                                  "absolute top-1.5 left-1.5 inline-flex items-center gap-1 rounded bg-black/60 backdrop-blur-md px-1.5 py-0.5 text-[10px] text-white uppercase tracking-wider font-medium",
+                                children: [
+                                  e.jsx(x, { className: "h-2.5 w-2.5" }),
+                                  " ",
+                                  a.file_type,
+                                ],
+                              }),
+                              e.jsx("div", {
+                                className: "absolute top-1.5 right-1.5",
+                                children: e.jsx(M, {
+                                  tone: a.status === "active" ? "success" : "neutral",
+                                  label: a.status,
+                                  withDot: !1,
+                                }),
+                              }),
+                              a.duration_seconds &&
+                                e.jsxs("div", {
+                                  className:
+                                    "absolute bottom-1.5 left-1.5 text-[10px] text-white font-mono bg-black/60 backdrop-blur-md rounded px-1.5 py-0.5",
+                                  children: [a.duration_seconds, "s"],
+                                }),
+                            ],
+                          }),
+                          e.jsxs("div", {
+                            className: "p-2.5",
+                            children: [
+                              e.jsxs("div", {
+                                className: "flex items-start justify-between gap-1.5",
+                                children: [
+                                  e.jsx("p", {
+                                    className: "text-xs font-medium truncate flex-1",
+                                    children: a.name,
+                                  }),
+                                  e.jsx("button", {
+                                    onClick: () => confirm("Remover mídia?") && b.mutate(a.id),
+                                    className:
+                                      "h-5 w-5 grid place-items-center rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive shrink-0",
+                                    children: e.jsx(R, { className: "h-3 w-3" }),
+                                  }),
+                                ],
+                              }),
+                              e.jsx("p", {
+                                className: "text-[10px] text-muted-foreground mt-0.5",
+                                children: U(new Date(a.created_at), "dd/MM", { locale: B }),
+                              }),
+                            ],
+                          }),
+                        ],
+                      },
+                      a.id,
+                    );
+                  }),
+                }),
+      }),
+      e.jsx(P, {
+        open: v,
+        onClose: () => r(!1),
+        title: "Adicionar mídia",
+        children: e.jsxs("form", {
+          onSubmit: y,
+          className: "space-y-3",
+          children: [
+            e.jsx(o, {
+              label: "Nome",
+              children: e.jsx(c, {
+                required: !0,
+                value: t.name,
+                onChange: (a) => s({ ...t, name: a.target.value }),
+              }),
+            }),
+            e.jsx(o, {
+              label: "Tipo",
+              children: e.jsxs("select", {
+                value: t.file_type,
+                onChange: (a) => s({ ...t, file_type: a.target.value }),
+                className: "w-full rounded-lg border border-input bg-surface px-3 py-2 text-sm",
+                children: [
+                  e.jsx("option", { value: "image", children: "Imagem" }),
+                  e.jsx("option", { value: "video", children: "Vídeo" }),
+                  e.jsx("option", { value: "html", children: "HTML" }),
+                ],
+              }),
+            }),
+            e.jsx(o, {
+              label: "URL pública",
+              children: e.jsx(c, {
+                type: "url",
+                required: !0,
+                placeholder: "https://…",
+                value: t.public_url,
+                onChange: (a) => s({ ...t, public_url: a.target.value }),
+              }),
+            }),
+            e.jsx(o, {
+              label: "Duração (segundos)",
+              children: e.jsx(c, {
+                type: "number",
+                min: 1,
+                value: t.duration_seconds,
+                onChange: (a) => s({ ...t, duration_seconds: Number(a.target.value) }),
+              }),
+            }),
+            e.jsx(g, {
+              type: "submit",
+              disabled: l.isPending,
+              children: l.isPending ? "Salvando…" : "Adicionar",
+            }),
+          ],
+        }),
+      }),
+    ],
+  });
+}
+export { fe as component };

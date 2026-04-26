@@ -56,9 +56,9 @@ export function mapSubscriptionRow(sub: any, planRow: any | null): Subscription 
     "suspended",
     "pending",
   ];
-  const status = (allowed.includes(st as Subscription["status"])
-    ? st
-    : "active") as Subscription["status"];
+  const status = (
+    allowed.includes(st as Subscription["status"]) ? st : "active"
+  ) as Subscription["status"];
 
   const now = new Date().toISOString();
   return {
@@ -95,7 +95,8 @@ export function mapInvoiceRow(row: any): Invoice {
     due_at: row.due_at ?? row.due_date ?? null,
     paid_at: row.paid_at ?? null,
     payment_method: row.payment_method == null ? null : String(row.payment_method),
-    pdf_url: row.pdf_url == null || row.pdf_url === "" ? row.invoice_url ?? null : String(row.pdf_url),
+    pdf_url:
+      row.pdf_url == null || row.pdf_url === "" ? (row.invoice_url ?? null) : String(row.pdf_url),
   };
 }
 
@@ -106,7 +107,9 @@ export function mapLicenseRow(row: any): License {
     organization_id: String(row.organization_id),
     subscription_id: row.subscription_id == null ? null : String(row.subscription_id),
     key: String(row.license_key ?? row.key ?? ""),
-    status: (String(row.status) ?? "active") as License["status"],
+    status: (row.status != null && String(row.status) !== ""
+      ? String(row.status)
+      : "active") as License["status"],
     max_screens: Number(row.max_screens ?? 0),
     valid_from: row.valid_from ?? row.activated_at ?? new Date().toISOString(),
     valid_until: row.valid_until ?? row.expires_at ?? null,
@@ -145,7 +148,6 @@ export function buildUsageDisplay(
   };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function buildSaasClientRow(
   org: { id: string; name: string; created_at: string },
   sub: { status: string; plan?: { name?: string } } | null,

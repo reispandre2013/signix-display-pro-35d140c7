@@ -116,7 +116,11 @@ export function AdminOverlay({
         <div className="mt-4 grid grid-cols-2 gap-2 border-t border-white/15 pt-3">
           <button
             type="button"
-            onClick={() => void SignixTv.startLockTask().catch(() => window.alert("Lock task indisponível neste dispositivo."))}
+            onClick={() =>
+              void SignixTv.startLockTask().catch(() =>
+                window.alert("Lock task indisponível neste dispositivo."),
+              )
+            }
             className="inline-flex items-center justify-center gap-1 rounded border border-amber-400/40 px-2 py-2 text-xs text-amber-100 hover:bg-amber-500/15"
           >
             <Lock className="h-3.5 w-3.5" />

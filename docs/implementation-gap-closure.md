@@ -1,6 +1,7 @@
 # O que estava incompleto e foi criado
 
 ## Antes
+
 - Frontend com fluxo visual pronto, sem backend real.
 - Dados em `mock-data.ts`.
 - Sem autenticação efetiva.
@@ -11,6 +12,7 @@
 - Sem auditoria persistente.
 
 ## Entregue nesta implementação
+
 - Schema completo Supabase com 18 tabelas de negócio.
 - Migrations SQL versionadas com constraints, índices e triggers.
 - RLS multiempresa e políticas por perfil.
@@ -24,4 +26,5 @@
 - Documentação técnica, fluxo e checklists de produção/segurança/testes.
 
 ## Próximo passo recomendado
+
 - Migrar cada página `/app/*` para consumir `repositories` por feature, removendo dependência direta de `mock-data.ts` gradualmente.

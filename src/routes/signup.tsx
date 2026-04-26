@@ -57,17 +57,42 @@ function SignupPage() {
         </div>
         <h2 className="font-display text-2xl font-bold">Criar nova conta</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Cadastro público limitado a Operador ou Visualizador. Sua conta será vinculada automaticamente
-          à organização padrão.
+          Cadastro público limitado a Operador ou Visualizador. Sua conta será vinculada
+          automaticamente à organização padrão.
         </p>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
-          <Field icon={User} label="Seu nome" value={name} onChange={setName} required placeholder="Ana Souza" />
-          <Field icon={Mail} label="E-mail" type="email" value={email} onChange={setEmail} required placeholder="voce@empresa.com" />
-          <Field icon={Lock} label="Senha (mín. 6 caracteres)" type="password" value={password} onChange={setPassword} required placeholder="••••••••" />
+          <Field
+            icon={User}
+            label="Seu nome"
+            value={name}
+            onChange={setName}
+            required
+            placeholder="Ana Souza"
+          />
+          <Field
+            icon={Mail}
+            label="E-mail"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            required
+            placeholder="voce@empresa.com"
+          />
+          <Field
+            icon={Lock}
+            label="Senha (mín. 6 caracteres)"
+            type="password"
+            value={password}
+            onChange={setPassword}
+            required
+            placeholder="••••••••"
+          />
 
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Perfil solicitado</label>
+            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+              Perfil solicitado
+            </label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as PublicRole)}
@@ -86,11 +111,20 @@ function SignupPage() {
             disabled={submitting}
             className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95 disabled:opacity-60"
           >
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Criar conta <ArrowRight className="h-4 w-4" /></>}
+            {submitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                Criar conta <ArrowRight className="h-4 w-4" />
+              </>
+            )}
           </button>
 
           <p className="text-center text-xs text-muted-foreground">
-            Já tem conta? <Link to="/login" className="text-primary hover:underline">Entrar</Link>
+            Já tem conta?{" "}
+            <Link to="/login" className="text-primary hover:underline">
+              Entrar
+            </Link>
           </p>
         </form>
       </div>

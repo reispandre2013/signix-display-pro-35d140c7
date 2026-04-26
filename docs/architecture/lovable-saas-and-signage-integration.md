@@ -54,31 +54,31 @@ sequenceDiagram
 
 ## 3. Fluxo de painel / signage (síntese)
 
-| Etapa | Backend | Estado |
-|------|---------|--------|
-| Login / org / perfis | Supabase Auth + `profiles` + RLS | Integrado no app autenticado |
-| Pareamento TV | `pair-screen`, `create-pairing-code`, RLS + RPCs | Integrado (player) |
-| Heartbeat e online | `heartbeat-screen` + tabelas `screens` | Integrado |
-| Resolver playlist | `device-resolve-playlist` / `resolve-screen-playlist` | Integrado |
-| Provas de exibição | `generate-proof-of-play` + `playback_logs` | Conforme migrations / policies |
-| Relatórios / export | `export-report` | Chamar a partir de UI quando a rota fizer a acção (ver gap abaixo) |
-| Health diário | `daily-health-check` | Agendar (cron) no Supabase ou externo; não acionado sozinho pela UI |
-| Faturas / admin SaaS | Tabelas `invoices`, `subscriptions`, `payments` + hooks React Query | Integrado no painel master e super admin |
-| MRR histórico (gráfico) | Não existe série temporal dedicada | Gráfico usa MRR agregado; ver secção 5 |
+| Etapa                   | Backend                                                             | Estado                                                              |
+| ----------------------- | ------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Login / org / perfis    | Supabase Auth + `profiles` + RLS                                    | Integrado no app autenticado                                        |
+| Pareamento TV           | `pair-screen`, `create-pairing-code`, RLS + RPCs                    | Integrado (player)                                                  |
+| Heartbeat e online      | `heartbeat-screen` + tabelas `screens`                              | Integrado                                                           |
+| Resolver playlist       | `device-resolve-playlist` / `resolve-screen-playlist`               | Integrado                                                           |
+| Provas de exibição      | `generate-proof-of-play` + `playback_logs`                          | Conforme migrations / policies                                      |
+| Relatórios / export     | `export-report`                                                     | Chamar a partir de UI quando a rota fizer a acção (ver gap abaixo)  |
+| Health diário           | `daily-health-check`                                                | Agendar (cron) no Supabase ou externo; não acionado sozinho pela UI |
+| Faturas / admin SaaS    | Tabelas `invoices`, `subscriptions`, `payments` + hooks React Query | Integrado no painel master e super admin                            |
+| MRR histórico (gráfico) | Não existe série temporal dedicada                                  | Gráfico usa MRR agregado; ver secção 5                              |
 
 ---
 
 ## 4. Matriz de gaps (ações de produção)
 
-| Área | O que fazer |
-|------|------------|
-| **Asaas (BR)** | Definir `ASAAS_API_KEY`, `ASAAS_API_BASE`, `ASAAS_WEBHOOK_TOKEN` (ver [docs/integrations/asaas.md](../integrations/asaas.md)). |
-| **Assinaturas a partir do checkout** | Mapear `organization_id` do utilizador na sessão, criar/atualizar `subscriptions` e `invoices` no webhook. |
-| **Ações de assinatura (UI)** | Downgrade, cartão, cancelamento: implementar server actions ou funções com Service Role a partir de papéis permitidos. |
-| **export-report** | Ligar botões em `relatorios` (ou agendado) a invocação com JWT e descarga. |
-| **daily-health-check** | `cron.schedule` (Supabase) ou GitHub Action com `supabase functions invoke` + service. |
-| **Redirect Auth Lovable** | Incluir origem de deploy em `Authentication > URL configuration` (documentado no checklist de produção). |
-| **Capacitor / TV** | `CAPACITOR_SERVER_URL` / player aponta para a mesma origem HTTPS pública. |
+| Área                                 | O que fazer                                                                                                                    |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Asaas (BR)**                       | Definir `ASAAS_API_KEY`, `ASAAS_API_BASE`, `ASAAS_WEBHOOK_TOKEN` (ver [docs/integrations/asaas.md](../integrations/asaas.md)). |
+| **Assinaturas a partir do checkout** | Mapear `organization_id` do utilizador na sessão, criar/atualizar `subscriptions` e `invoices` no webhook.                     |
+| **Ações de assinatura (UI)**         | Downgrade, cartão, cancelamento: implementar server actions ou funções com Service Role a partir de papéis permitidos.         |
+| **export-report**                    | Ligar botões em `relatorios` (ou agendado) a invocação com JWT e descarga.                                                     |
+| **daily-health-check**               | `cron.schedule` (Supabase) ou GitHub Action com `supabase functions invoke` + service.                                         |
+| **Redirect Auth Lovable**            | Incluir origem de deploy em `Authentication > URL configuration` (documentado no checklist de produção).                       |
+| **Capacitor / TV**                   | `CAPACITOR_SERVER_URL` / player aponta para a mesma origem HTTPS pública.                                                      |
 
 ---
 
@@ -96,4 +96,4 @@ SaaS: `create-checkout-session`, `payment-webhook`, `get-saas-context`, `validat
 
 ---
 
-*Última atualização: análise de integração com o repositório signix-display-pro.*
+_Última atualização: análise de integração com o repositório signix-display-pro._

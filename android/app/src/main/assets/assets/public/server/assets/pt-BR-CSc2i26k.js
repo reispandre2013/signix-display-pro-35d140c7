@@ -1,66 +1,71 @@
-import { h as buildFormatLongFn, i as buildLocalizeFn, j as buildMatchFn, k as buildMatchPatternFn } from "./en-US-D5MXwIXi.js";
+import {
+  h as buildFormatLongFn,
+  i as buildLocalizeFn,
+  j as buildMatchFn,
+  k as buildMatchPatternFn,
+} from "./en-US-D5MXwIXi.js";
 const formatDistanceLocale = {
   lessThanXSeconds: {
     one: "menos de um segundo",
-    other: "menos de {{count}} segundos"
+    other: "menos de {{count}} segundos",
   },
   xSeconds: {
     one: "1 segundo",
-    other: "{{count}} segundos"
+    other: "{{count}} segundos",
   },
   halfAMinute: "meio minuto",
   lessThanXMinutes: {
     one: "menos de um minuto",
-    other: "menos de {{count}} minutos"
+    other: "menos de {{count}} minutos",
   },
   xMinutes: {
     one: "1 minuto",
-    other: "{{count}} minutos"
+    other: "{{count}} minutos",
   },
   aboutXHours: {
     one: "cerca de 1 hora",
-    other: "cerca de {{count}} horas"
+    other: "cerca de {{count}} horas",
   },
   xHours: {
     one: "1 hora",
-    other: "{{count}} horas"
+    other: "{{count}} horas",
   },
   xDays: {
     one: "1 dia",
-    other: "{{count}} dias"
+    other: "{{count}} dias",
   },
   aboutXWeeks: {
     one: "cerca de 1 semana",
-    other: "cerca de {{count}} semanas"
+    other: "cerca de {{count}} semanas",
   },
   xWeeks: {
     one: "1 semana",
-    other: "{{count}} semanas"
+    other: "{{count}} semanas",
   },
   aboutXMonths: {
     one: "cerca de 1 mês",
-    other: "cerca de {{count}} meses"
+    other: "cerca de {{count}} meses",
   },
   xMonths: {
     one: "1 mês",
-    other: "{{count}} meses"
+    other: "{{count}} meses",
   },
   aboutXYears: {
     one: "cerca de 1 ano",
-    other: "cerca de {{count}} anos"
+    other: "cerca de {{count}} anos",
   },
   xYears: {
     one: "1 ano",
-    other: "{{count}} anos"
+    other: "{{count}} anos",
   },
   overXYears: {
     one: "mais de 1 ano",
-    other: "mais de {{count}} anos"
+    other: "mais de {{count}} anos",
   },
   almostXYears: {
     one: "quase 1 ano",
-    other: "quase {{count}} anos"
-  }
+    other: "quase {{count}} anos",
+  },
 };
 const formatDistance = (token, count, options) => {
   let result;
@@ -85,33 +90,33 @@ const dateFormats = {
   full: "EEEE, d 'de' MMMM 'de' y",
   long: "d 'de' MMMM 'de' y",
   medium: "d MMM y",
-  short: "dd/MM/yyyy"
+  short: "dd/MM/yyyy",
 };
 const timeFormats = {
   full: "HH:mm:ss zzzz",
   long: "HH:mm:ss z",
   medium: "HH:mm:ss",
-  short: "HH:mm"
+  short: "HH:mm",
 };
 const dateTimeFormats = {
   full: "{{date}} 'às' {{time}}",
   long: "{{date}} 'às' {{time}}",
   medium: "{{date}}, {{time}}",
-  short: "{{date}}, {{time}}"
+  short: "{{date}}, {{time}}",
 };
 const formatLong = {
   date: buildFormatLongFn({
     formats: dateFormats,
-    defaultWidth: "full"
+    defaultWidth: "full",
   }),
   time: buildFormatLongFn({
     formats: timeFormats,
-    defaultWidth: "full"
+    defaultWidth: "full",
   }),
   dateTime: buildFormatLongFn({
     formats: dateTimeFormats,
-    defaultWidth: "full"
-  })
+    defaultWidth: "full",
+  }),
 };
 const formatRelativeLocale = {
   lastWeek: (date) => {
@@ -123,7 +128,7 @@ const formatRelativeLocale = {
   today: "'hoje às' p",
   tomorrow: "'amanhã às' p",
   nextWeek: "eeee 'às' p",
-  other: "P"
+  other: "P",
 };
 const formatRelative = (token, date, _baseDate, _options) => {
   const format = formatRelativeLocale[token];
@@ -135,29 +140,16 @@ const formatRelative = (token, date, _baseDate, _options) => {
 const eraValues = {
   narrow: ["AC", "DC"],
   abbreviated: ["AC", "DC"],
-  wide: ["antes de cristo", "depois de cristo"]
+  wide: ["antes de cristo", "depois de cristo"],
 };
 const quarterValues = {
   narrow: ["1", "2", "3", "4"],
   abbreviated: ["T1", "T2", "T3", "T4"],
-  wide: ["1º trimestre", "2º trimestre", "3º trimestre", "4º trimestre"]
+  wide: ["1º trimestre", "2º trimestre", "3º trimestre", "4º trimestre"],
 };
 const monthValues = {
   narrow: ["j", "f", "m", "a", "m", "j", "j", "a", "s", "o", "n", "d"],
-  abbreviated: [
-    "jan",
-    "fev",
-    "mar",
-    "abr",
-    "mai",
-    "jun",
-    "jul",
-    "ago",
-    "set",
-    "out",
-    "nov",
-    "dez"
-  ],
+  abbreviated: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
   wide: [
     "janeiro",
     "fevereiro",
@@ -170,21 +162,13 @@ const monthValues = {
     "setembro",
     "outubro",
     "novembro",
-    "dezembro"
-  ]
+    "dezembro",
+  ],
 };
 const dayValues = {
   narrow: ["D", "S", "T", "Q", "Q", "S", "S"],
   short: ["dom", "seg", "ter", "qua", "qui", "sex", "sab"],
-  abbreviated: [
-    "domingo",
-    "segunda",
-    "terça",
-    "quarta",
-    "quinta",
-    "sexta",
-    "sábado"
-  ],
+  abbreviated: ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"],
   wide: [
     "domingo",
     "segunda-feira",
@@ -192,8 +176,8 @@ const dayValues = {
     "quarta-feira",
     "quinta-feira",
     "sexta-feira",
-    "sábado"
-  ]
+    "sábado",
+  ],
 };
 const dayPeriodValues = {
   narrow: {
@@ -204,7 +188,7 @@ const dayPeriodValues = {
     morning: "manhã",
     afternoon: "tarde",
     evening: "tarde",
-    night: "noite"
+    night: "noite",
   },
   abbreviated: {
     am: "AM",
@@ -214,7 +198,7 @@ const dayPeriodValues = {
     morning: "manhã",
     afternoon: "tarde",
     evening: "tarde",
-    night: "noite"
+    night: "noite",
   },
   wide: {
     am: "a.m.",
@@ -224,8 +208,8 @@ const dayPeriodValues = {
     morning: "manhã",
     afternoon: "tarde",
     evening: "tarde",
-    night: "noite"
-  }
+    night: "noite",
+  },
 };
 const formattingDayPeriodValues = {
   narrow: {
@@ -236,7 +220,7 @@ const formattingDayPeriodValues = {
     morning: "da manhã",
     afternoon: "da tarde",
     evening: "da tarde",
-    night: "da noite"
+    night: "da noite",
   },
   abbreviated: {
     am: "AM",
@@ -246,7 +230,7 @@ const formattingDayPeriodValues = {
     morning: "da manhã",
     afternoon: "da tarde",
     evening: "da tarde",
-    night: "da noite"
+    night: "da noite",
   },
   wide: {
     am: "a.m.",
@@ -256,8 +240,8 @@ const formattingDayPeriodValues = {
     morning: "da manhã",
     afternoon: "da tarde",
     evening: "da tarde",
-    night: "da noite"
-  }
+    night: "da noite",
+  },
 };
 const ordinalNumber = (dirtyNumber, options) => {
   const number = Number(dirtyNumber);
@@ -270,67 +254,54 @@ const localize = {
   ordinalNumber,
   era: buildLocalizeFn({
     values: eraValues,
-    defaultWidth: "wide"
+    defaultWidth: "wide",
   }),
   quarter: buildLocalizeFn({
     values: quarterValues,
     defaultWidth: "wide",
-    argumentCallback: (quarter) => quarter - 1
+    argumentCallback: (quarter) => quarter - 1,
   }),
   month: buildLocalizeFn({
     values: monthValues,
-    defaultWidth: "wide"
+    defaultWidth: "wide",
   }),
   day: buildLocalizeFn({
     values: dayValues,
-    defaultWidth: "wide"
+    defaultWidth: "wide",
   }),
   dayPeriod: buildLocalizeFn({
     values: dayPeriodValues,
     defaultWidth: "wide",
     formattingValues: formattingDayPeriodValues,
-    defaultFormattingWidth: "wide"
-  })
+    defaultFormattingWidth: "wide",
+  }),
 };
 const matchOrdinalNumberPattern = /^(\d+)[ºªo]?/i;
 const parseOrdinalNumberPattern = /\d+/i;
 const matchEraPatterns = {
   narrow: /^(ac|dc|a|d)/i,
   abbreviated: /^(a\.?\s?c\.?|d\.?\s?c\.?)/i,
-  wide: /^(antes de cristo|depois de cristo)/i
+  wide: /^(antes de cristo|depois de cristo)/i,
 };
 const parseEraPatterns = {
   any: [/^ac/i, /^dc/i],
-  wide: [/^antes de cristo/i, /^depois de cristo/i]
+  wide: [/^antes de cristo/i, /^depois de cristo/i],
 };
 const matchQuarterPatterns = {
   narrow: /^[1234]/i,
   abbreviated: /^T[1234]/i,
-  wide: /^[1234](º)? trimestre/i
+  wide: /^[1234](º)? trimestre/i,
 };
 const parseQuarterPatterns = {
-  any: [/1/i, /2/i, /3/i, /4/i]
+  any: [/1/i, /2/i, /3/i, /4/i],
 };
 const matchMonthPatterns = {
   narrow: /^[jfmajsond]/i,
   abbreviated: /^(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)/i,
-  wide: /^(janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)/i
+  wide: /^(janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)/i,
 };
 const parseMonthPatterns = {
-  narrow: [
-    /^j/i,
-    /^f/i,
-    /^m/i,
-    /^a/i,
-    /^m/i,
-    /^j/i,
-    /^j/i,
-    /^a/i,
-    /^s/i,
-    /^o/i,
-    /^n/i,
-    /^d/i
-  ],
+  narrow: [/^j/i, /^f/i, /^m/i, /^a/i, /^m/i, /^j/i, /^j/i, /^a/i, /^s/i, /^o/i, /^n/i, /^d/i],
   any: [
     /^ja/i,
     /^fev/i,
@@ -343,23 +314,23 @@ const parseMonthPatterns = {
     /^set/i,
     /^out/i,
     /^nov/i,
-    /^dez/i
-  ]
+    /^dez/i,
+  ],
 };
 const matchDayPatterns = {
   narrow: /^(dom|[23456]ª?|s[aá]b)/i,
   short: /^(dom|[23456]ª?|s[aá]b)/i,
   abbreviated: /^(dom|seg|ter|qua|qui|sex|s[aá]b)/i,
-  wide: /^(domingo|(segunda|ter[cç]a|quarta|quinta|sexta)([- ]feira)?|s[aá]bado)/i
+  wide: /^(domingo|(segunda|ter[cç]a|quarta|quinta|sexta)([- ]feira)?|s[aá]bado)/i,
 };
 const parseDayPatterns = {
   short: [/^d/i, /^2/i, /^3/i, /^4/i, /^5/i, /^6/i, /^s[aá]/i],
   narrow: [/^d/i, /^2/i, /^3/i, /^4/i, /^5/i, /^6/i, /^s[aá]/i],
-  any: [/^d/i, /^seg/i, /^t/i, /^qua/i, /^qui/i, /^sex/i, /^s[aá]b/i]
+  any: [/^d/i, /^seg/i, /^t/i, /^qua/i, /^qui/i, /^sex/i, /^s[aá]b/i],
 };
 const matchDayPeriodPatterns = {
   narrow: /^(a|p|mn|md|(da) (manhã|tarde|noite))/i,
-  any: /^([ap]\.?\s?m\.?|meia[-\s]noite|meio[-\s]dia|(da) (manhã|tarde|noite))/i
+  any: /^([ap]\.?\s?m\.?|meia[-\s]noite|meio[-\s]dia|(da) (manhã|tarde|noite))/i,
 };
 const parseDayPeriodPatterns = {
   any: {
@@ -370,46 +341,46 @@ const parseDayPeriodPatterns = {
     morning: /manhã/i,
     afternoon: /tarde/i,
     evening: /tarde/i,
-    night: /noite/i
-  }
+    night: /noite/i,
+  },
 };
 const match = {
   ordinalNumber: buildMatchPatternFn({
     matchPattern: matchOrdinalNumberPattern,
     parsePattern: parseOrdinalNumberPattern,
-    valueCallback: (value) => parseInt(value, 10)
+    valueCallback: (value) => parseInt(value, 10),
   }),
   era: buildMatchFn({
     matchPatterns: matchEraPatterns,
     defaultMatchWidth: "wide",
     parsePatterns: parseEraPatterns,
-    defaultParseWidth: "any"
+    defaultParseWidth: "any",
   }),
   quarter: buildMatchFn({
     matchPatterns: matchQuarterPatterns,
     defaultMatchWidth: "wide",
     parsePatterns: parseQuarterPatterns,
     defaultParseWidth: "any",
-    valueCallback: (index) => index + 1
+    valueCallback: (index) => index + 1,
   }),
   month: buildMatchFn({
     matchPatterns: matchMonthPatterns,
     defaultMatchWidth: "wide",
     parsePatterns: parseMonthPatterns,
-    defaultParseWidth: "any"
+    defaultParseWidth: "any",
   }),
   day: buildMatchFn({
     matchPatterns: matchDayPatterns,
     defaultMatchWidth: "wide",
     parsePatterns: parseDayPatterns,
-    defaultParseWidth: "any"
+    defaultParseWidth: "any",
   }),
   dayPeriod: buildMatchFn({
     matchPatterns: matchDayPeriodPatterns,
     defaultMatchWidth: "any",
     parsePatterns: parseDayPeriodPatterns,
-    defaultParseWidth: "any"
-  })
+    defaultParseWidth: "any",
+  }),
 };
 const ptBR = {
   code: "pt-BR",
@@ -420,9 +391,7 @@ const ptBR = {
   match,
   options: {
     weekStartsOn: 0,
-    firstWeekContainsDate: 1
-  }
+    firstWeekContainsDate: 1,
+  },
 };
-export {
-  ptBR as p
-};
+export { ptBR as p };

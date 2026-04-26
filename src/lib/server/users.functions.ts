@@ -97,7 +97,8 @@ export const createOrgUser = createServerFn({ method: "POST" })
         email_confirm: true,
         user_metadata: { name: data.name, organization_id: orgId, role: data.role },
       });
-      if (createErr || !created.user) throw new Error(createErr?.message ?? "Falha ao criar usuário.");
+      if (createErr || !created.user)
+        throw new Error(createErr?.message ?? "Falha ao criar usuário.");
       newAuthUserId = created.user.id;
     } else {
       const redirectTo =
@@ -109,7 +110,8 @@ export const createOrgUser = createServerFn({ method: "POST" })
           redirectTo: redirectTo || undefined,
         },
       );
-      if (inviteErr || !invited.user) throw new Error(inviteErr?.message ?? "Falha ao enviar convite.");
+      if (inviteErr || !invited.user)
+        throw new Error(inviteErr?.message ?? "Falha ao enviar convite.");
       newAuthUserId = invited.user.id;
     }
 

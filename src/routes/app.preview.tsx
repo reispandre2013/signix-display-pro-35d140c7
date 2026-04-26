@@ -41,7 +41,9 @@ function PreviewPage() {
   const [idx, setIdx] = useState(0);
   const [orient, setOrient] = useState<"horizontal" | "vertical">("horizontal");
   const current = items[idx];
-  const currentIsVideo = String(current?.file_type ?? "").toLowerCase().includes("video");
+  const currentIsVideo = String(current?.file_type ?? "")
+    .toLowerCase()
+    .includes("video");
   const currentSources = current
     ? getMediaUrlCandidates(
         { mediaTypeHint: current.file_type?.toLowerCase().includes("video") ? "video" : "image" },
@@ -90,7 +92,9 @@ function PreviewPage() {
             <button
               onClick={() => setOrient("horizontal")}
               className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs ${
-                orient === "horizontal" ? "border-primary bg-primary/10 text-primary" : "border-border bg-surface"
+                orient === "horizontal"
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-surface"
               }`}
             >
               <Monitor className="h-3.5 w-3.5" /> 16:9
@@ -98,7 +102,9 @@ function PreviewPage() {
             <button
               onClick={() => setOrient("vertical")}
               className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-1 text-xs ${
-                orient === "vertical" ? "border-primary bg-primary/10 text-primary" : "border-border bg-surface"
+                orient === "vertical"
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border bg-surface"
               }`}
             >
               <Smartphone className="h-3.5 w-3.5" /> 9:16
@@ -151,13 +157,19 @@ function PreviewPage() {
           </div>
 
           <div className="flex items-center justify-center gap-3 rounded-xl border border-border bg-card p-3">
-            <button onClick={() => setIdx((i) => (i - 1 + items.length) % items.length)} className="h-9 w-9 grid place-items-center rounded-md hover:bg-accent">
+            <button
+              onClick={() => setIdx((i) => (i - 1 + items.length) % items.length)}
+              className="h-9 w-9 grid place-items-center rounded-md hover:bg-accent"
+            >
               <SkipBack className="h-4 w-4" />
             </button>
             <button className="h-11 w-11 grid place-items-center rounded-full bg-gradient-primary shadow-glow">
               <Play className="h-5 w-5 text-primary-foreground" />
             </button>
-            <button onClick={() => setIdx((i) => (i + 1) % items.length)} className="h-9 w-9 grid place-items-center rounded-md hover:bg-accent">
+            <button
+              onClick={() => setIdx((i) => (i + 1) % items.length)}
+              className="h-9 w-9 grid place-items-center rounded-md hover:bg-accent"
+            >
               <SkipForward className="h-4 w-4" />
             </button>
             <div className="h-6 w-px bg-border mx-2" />
@@ -177,24 +189,38 @@ function PreviewPage() {
                       i === idx ? "bg-primary/10 ring-1 ring-primary/30" : "hover:bg-surface/60"
                     }`}
                   >
-                    <span className="text-[11px] font-mono text-muted-foreground w-5">#{i + 1}</span>
+                    <span className="text-[11px] font-mono text-muted-foreground w-5">
+                      #{i + 1}
+                    </span>
                     <div className="h-9 w-14 rounded overflow-hidden bg-muted shrink-0">
                       {getMediaUrlCandidates(
-                        { mediaTypeHint: m.file_type?.toLowerCase().includes("video") ? "video" : "image" },
+                        {
+                          mediaTypeHint: m.file_type?.toLowerCase().includes("video")
+                            ? "video"
+                            : "image",
+                        },
                         m.thumbnail_url,
                         m.public_url,
                       )[0] && (
                         <img
                           src={
                             getMediaUrlCandidates(
-                              { mediaTypeHint: m.file_type?.toLowerCase().includes("video") ? "video" : "image" },
+                              {
+                                mediaTypeHint: m.file_type?.toLowerCase().includes("video")
+                                  ? "video"
+                                  : "image",
+                              },
                               m.thumbnail_url,
                               m.public_url,
                             )[0]
                           }
                           data-sources={JSON.stringify(
                             getMediaUrlCandidates(
-                              { mediaTypeHint: m.file_type?.toLowerCase().includes("video") ? "video" : "image" },
+                              {
+                                mediaTypeHint: m.file_type?.toLowerCase().includes("video")
+                                  ? "video"
+                                  : "image",
+                              },
                               m.thumbnail_url,
                               m.public_url,
                             ),
@@ -210,7 +236,9 @@ function PreviewPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium truncate">{m.name}</p>
-                      <p className="text-[10px] text-muted-foreground">{m.duration_seconds ?? 10}s</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {m.duration_seconds ?? 10}s
+                      </p>
                     </div>
                     {i === idx && <Square className="h-3 w-3 text-primary fill-primary" />}
                   </button>

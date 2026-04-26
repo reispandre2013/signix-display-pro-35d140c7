@@ -145,7 +145,9 @@ function PlanosPage() {
       <div className="space-y-4">
         <PageHeader title="Planos" subtitle="Catálogo de planos comerciais oferecidos no SaaS." />
         <Panel>
-          <p className="text-sm text-destructive">{error instanceof Error ? error.message : "Falha ao carregar planos."}</p>
+          <p className="text-sm text-destructive">
+            {error instanceof Error ? error.message : "Falha ao carregar planos."}
+          </p>
         </Panel>
       </div>
     );
@@ -185,14 +187,20 @@ function PlanosPage() {
                 )}
                 <h3 className="font-display text-xl font-bold">{p.name}</h3>
                 {p.is_active ? null : (
-                  <span className="ml-2 text-[10px] font-semibold uppercase text-muted-foreground">Inativo</span>
+                  <span className="ml-2 text-[10px] font-semibold uppercase text-muted-foreground">
+                    Inativo
+                  </span>
                 )}
                 <p className="text-xs text-muted-foreground mt-1">{p.description}</p>
                 <div className="mt-4">
-                  <span className="font-display text-3xl font-bold">{formatPrice(p.price_monthly_cents)}</span>
+                  <span className="font-display text-3xl font-bold">
+                    {formatPrice(p.price_monthly_cents)}
+                  </span>
                   <span className="text-xs text-muted-foreground">/mês</span>
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-1">ou {formatPrice(p.price_yearly_cents)} /ano</p>
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  ou {formatPrice(p.price_yearly_cents)} /ano
+                </p>
 
                 <ul className="mt-4 space-y-2 text-sm">
                   {p.features.map((f) => (
@@ -205,11 +213,15 @@ function PlanosPage() {
 
                 <div className="mt-4 grid grid-cols-3 gap-2 text-center text-[10px] text-muted-foreground border-t border-border pt-3">
                   <div>
-                    <div className="font-bold text-foreground text-sm">{p.max_screens >= 9999 ? "∞" : p.max_screens}</div>
+                    <div className="font-bold text-foreground text-sm">
+                      {p.max_screens >= 9999 ? "∞" : p.max_screens}
+                    </div>
                     telas
                   </div>
                   <div>
-                    <div className="font-bold text-foreground text-sm">{p.max_users >= 9999 ? "∞" : p.max_users}</div>
+                    <div className="font-bold text-foreground text-sm">
+                      {p.max_users >= 9999 ? "∞" : p.max_users}
+                    </div>
                     users
                   </div>
                   <div>
@@ -293,23 +305,43 @@ function PlanEditor({
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Field label="Código *">
-              <Input value={form.code} onChange={(v) => set("code", v)} placeholder="starter" required />
+              <Input
+                value={form.code}
+                onChange={(v) => set("code", v)}
+                placeholder="starter"
+                required
+              />
             </Field>
             <Field label="Nome *">
-              <Input value={form.name} onChange={(v) => set("name", v)} placeholder="Starter" required />
+              <Input
+                value={form.name}
+                onChange={(v) => set("name", v)}
+                placeholder="Starter"
+                required
+              />
             </Field>
           </div>
 
           <Field label="Descrição">
-            <Input value={form.description} onChange={(v) => set("description", v)} placeholder="Para começar" />
+            <Input
+              value={form.description}
+              onChange={(v) => set("description", v)}
+              placeholder="Para começar"
+            />
           </Field>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <Field label="Preço mensal (centavos)">
-              <NumberInput value={form.price_monthly_cents} onChange={(v) => set("price_monthly_cents", v)} />
+              <NumberInput
+                value={form.price_monthly_cents}
+                onChange={(v) => set("price_monthly_cents", v)}
+              />
             </Field>
             <Field label="Preço anual (centavos)">
-              <NumberInput value={form.price_yearly_cents} onChange={(v) => set("price_yearly_cents", v)} />
+              <NumberInput
+                value={form.price_yearly_cents}
+                onChange={(v) => set("price_yearly_cents", v)}
+              />
             </Field>
             <Field label="Moeda">
               <Input value={form.currency} onChange={(v) => set("currency", v)} placeholder="BRL" />
@@ -325,7 +357,10 @@ function PlanEditor({
             </Field>
             <Field label="Storage (MB)">
               <div className="relative">
-                <NumberInput value={form.max_storage_gb} onChange={(v) => set("max_storage_gb", v)} />
+                <NumberInput
+                  value={form.max_storage_gb}
+                  onChange={(v) => set("max_storage_gb", v)}
+                />
                 <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
                   MB
                 </span>
@@ -385,7 +420,11 @@ function PlanEditor({
                   disabled={deleting}
                   className="inline-flex items-center gap-1.5 rounded-md border border-destructive/40 px-3 py-1.5 text-xs font-medium text-destructive hover:bg-destructive/10 disabled:opacity-60"
                 >
-                  {deleting ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
+                  {deleting ? (
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-3.5 w-3.5" />
+                  )}
                   Remover
                 </button>
               )}
@@ -441,13 +480,7 @@ function Input({
   );
 }
 
-function NumberInput({
-  value,
-  onChange,
-}: {
-  value: number;
-  onChange: (v: number) => void;
-}) {
+function NumberInput({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
     <input
       type="number"

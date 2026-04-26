@@ -73,17 +73,25 @@ serve(async (req) => {
         })
         .select("id")
         .single();
-      if (insErr || !ins?.id) return jsonResponse({ error: insErr?.message ?? "Falha ao registar dispositivo." }, 400);
+      if (insErr || !ins?.id)
+        return jsonResponse({ error: insErr?.message ?? "Falha ao registar dispositivo." }, 400);
       deviceId = String(ins.id);
     }
 
     if (orgId) {
-      await insertPlayerDeviceAudit(adminClient, orgId, deviceId, "device_credentials_issued", null, {
-        screen_id: screenId,
-        token_hash_prefix: hashPrefixForAudit(hash),
-        via: "pair_screen",
-        at: now,
-      });
+      await insertPlayerDeviceAudit(
+        adminClient,
+        orgId,
+        deviceId,
+        "device_credentials_issued",
+        null,
+        {
+          screen_id: screenId,
+          token_hash_prefix: hashPrefixForAudit(hash),
+          via: "pair_screen",
+          at: now,
+        },
+      );
     }
 
     return jsonResponse({

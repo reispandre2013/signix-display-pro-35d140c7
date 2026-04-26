@@ -14,9 +14,7 @@
     var iframeEl = media.iframe;
     var onStage = typeof opts.onStage === "function" ? opts.onStage : function () {};
     var onIndexChange =
-      typeof opts.onIndexChange === "function"
-        ? opts.onIndexChange
-        : function () {};
+      typeof opts.onIndexChange === "function" ? opts.onIndexChange : function () {};
 
     var index = 0;
     var payload = null;
@@ -58,7 +56,9 @@
       }
       var defFit = d.default_fit_mode ? String(d.default_fit_mode) : "cover";
       var raw = item && (item.fit_mode_effective || item.fit_mode || defFit);
-      var fit = String(raw || "cover").toLowerCase().trim();
+      var fit = String(raw || "cover")
+        .toLowerCase()
+        .trim();
 
       if (fit === "contain") {
         el.style.objectFit = "contain";
@@ -209,7 +209,10 @@
 
     function scheduleImageAndWatchdog(item) {
       var C = global.SIGNIX_TIZEN_CONSTANTS || {};
-      var durSec = Math.max(C.IMAGE_MIN_DURATION_SEC || 4, item.duration_seconds || C.IMAGE_DEFAULT_DURATION_SEC || 8);
+      var durSec = Math.max(
+        C.IMAGE_MIN_DURATION_SEC || 4,
+        item.duration_seconds || C.IMAGE_DEFAULT_DURATION_SEC || 8,
+      );
       var durationMs = durSec * 1000;
       clearTimers();
 
@@ -282,7 +285,12 @@
         if (!videoEl) return Promise.resolve();
         return Cache.resolvePlayableUrl(item.media_url).then(function (url) {
           videoEl.style.display = "block";
-          applyMediaFit(videoEl, item, payload && payload.display ? payload.display : null, "video");
+          applyMediaFit(
+            videoEl,
+            item,
+            payload && payload.display ? payload.display : null,
+            "video",
+          );
           videoEl.muted = true;
           videoEl.playsInline = true;
           videoEl.setAttribute("playsinline", "");
@@ -312,10 +320,13 @@
 
           var C2 = global.SIGNIX_TIZEN_CONSTANTS || {};
           var durSec = Math.max(C2.IMAGE_MIN_DURATION_SEC || 4, item.duration_seconds || 300);
-          watchdogTimer = setTimeout(function () {
-            finalizePlayback("failed", "Watchdog vídeo").catch(function () {});
-            nextItem();
-          }, Math.max(durSec * 1000 * 2, 60000));
+          watchdogTimer = setTimeout(
+            function () {
+              finalizePlayback("failed", "Watchdog vídeo").catch(function () {});
+              nextItem();
+            },
+            Math.max(durSec * 1000 * 2, 60000),
+          );
         });
       }
 
@@ -325,7 +336,11 @@
         applyMediaFit(imgEl, item, payload && payload.display ? payload.display : null, "image");
         var cand =
           item.media_url_candidates ||
-          Adapter.getMediaUrlCandidates({ mediaTypeHint: "image" }, item.media_url, item.thumbnail_url);
+          Adapter.getMediaUrlCandidates(
+            { mediaTypeHint: "image" },
+            item.media_url,
+            item.thumbnail_url,
+          );
         imgEl.src = cand[0] || "";
         imgEl.dataset.sources = JSON.stringify(cand);
         imgEl.dataset.sourceIndex = "0";
@@ -353,7 +368,9 @@
         payload = internal;
         fromOfflineCache = !!offlineFlag;
         if (!items().length) {
-          lastError = offlineFlag ? "Sem conteúdo em cache." : "Nenhuma campanha ou playlist para esta tela.";
+          lastError = offlineFlag
+            ? "Sem conteúdo em cache."
+            : "Nenhuma campanha ou playlist para esta tela.";
           onStage("fallback", getRuntimeStatus());
           return;
         }

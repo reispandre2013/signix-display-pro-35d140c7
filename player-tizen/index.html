@@ -1,108 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <meta name="description" content="Signix Player — Samsung Tizen" />
-  <title>Signix Player — Tizen</title>
-  <link rel="stylesheet" href="styles.css" />
-  <!--
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <meta name="description" content="Signix Player — Samsung Tizen" />
+    <title>Signix Player — Tizen</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!--
     Credenciais: copie js/signix-config.local.example.js → js/signix-config.local.js e preencha
     (ficheiro local não vai para o git). Valores por defeito abaixo só para desenvolvimento.
     Publique as Edge Functions: create-pairing-code e check-pairing-status.
   -->
-  <script src="js/signix-config.local.js"></script>
-  <script>
-    window.SIGNIX_CONFIG = Object.assign(
-      {},
-      {
-        supabaseUrl: "https://SEU_PROJETO.supabase.co",
-        supabaseAnonKey: "COLE_AQUI_A_CHAVE_ANON_PUBLICAVEL",
-        debugMode: false,
-      },
-      window.SIGNIX_CONFIG || {},
-    );
-  </script>
-</head>
+    <script src="js/signix-config.local.js"></script>
+    <script>
+      window.SIGNIX_CONFIG = Object.assign(
+        {},
+        {
+          supabaseUrl: "https://SEU_PROJETO.supabase.co",
+          supabaseAnonKey: "COLE_AQUI_A_CHAVE_ANON_PUBLICAVEL",
+          debugMode: false,
+        },
+        window.SIGNIX_CONFIG || {},
+      );
+    </script>
+  </head>
 
-<body>
-  <div id="stage-pairing">
-    <div class="activation-wrap">
-      <div class="activation-card">
-        <h1>Pareamento</h1>
-        <p class="sub">Digite este código no painel para vincular esta TV.</p>
-        <p class="label">Código na TV</p>
-        <div id="pairing-code-display" class="pairing-code-row" aria-live="polite"></div>
-        <p id="pairing-expires" class="hint"></p>
-        <p id="pairing-status" class="pairing-status">Aguardando pareamento...</p>
-        <p id="pairing-error" class="pairing-error" hidden></p>
-        <div class="row-actions">
-          <button type="button" id="btn-new-pairing-code" class="primary">Gerar novo código</button>
-        </div>
-        <p class="hint">
-          O código expira em cerca de 10 minutos. Se necessário, gere outro aqui. Após o pareamento, a playlist
-          sincroniza automaticamente. Comando: Enter reforça a verificação; ◀ ▶ mudam o item em reprodução.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <div id="stage-player" hidden>
-    <div class="top-bar">
-      <div class="badge" id="brand-badge">Signix · Tizen</div>
-      <div style="display:flex;align-items:center;gap:0.5rem;">
-        <span class="badge" id="net-badge">Online</span>
-        <span class="badge" id="heartbeat-badge">Heartbeat: —</span>
-        <span class="badge" id="bar-counter">—</span>
-        <button type="button" id="btn-sync">Sincronizar</button>
-        <button type="button" id="btn-rotate-pairing" title="Invalida o token e gera novo código na tela">Novo código</button>
-        <button type="button" id="btn-reset">Repor</button>
-      </div>
-    </div>
-    <div class="media-layer">
-      <video id="media-video" playsinline muted></video>
-      <img id="media-image" alt="" referrerpolicy="no-referrer" />
-      <iframe id="media-html" title="Conteúdo HTML"></iframe>
-    </div>
-    <div id="offline-banner" hidden>A reproduzir a partir de cache local (offline)</div>
-    <div id="fallback-message" hidden>
-      <p id="fallback-text">Sem conteúdo ou sem ligação.</p>
-    </div>
-    <div id="debug-panel" hidden>
-      <pre id="debug-pre"></pre>
-    </div>
-    <div id="admin-menu" class="admin-menu" hidden>
-      <div class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-title">
-        <div class="admin-header">
-          <div>
-            <p class="label">Configuração</p>
-            <h2 id="admin-title">Administração da TV</h2>
+  <body>
+    <div id="stage-pairing">
+      <div class="activation-wrap">
+        <div class="activation-card">
+          <h1>Pareamento</h1>
+          <p class="sub">Digite este código no painel para vincular esta TV.</p>
+          <p class="label">Código na TV</p>
+          <div id="pairing-code-display" class="pairing-code-row" aria-live="polite"></div>
+          <p id="pairing-expires" class="hint"></p>
+          <p id="pairing-status" class="pairing-status">Aguardando pareamento...</p>
+          <p id="pairing-error" class="pairing-error" hidden></p>
+          <div class="row-actions">
+            <button type="button" id="btn-new-pairing-code" class="primary">
+              Gerar novo código
+            </button>
           </div>
-          <button type="button" id="btn-admin-close" class="ghost">Fechar</button>
-        </div>
-        <dl class="admin-facts">
-          <div><dt>Nome da TV</dt><dd id="admin-tv-name">—</dd></div>
-          <div><dt>Status</dt><dd id="admin-device-status">—</dd></div>
-          <div><dt>Playlist atual</dt><dd id="admin-playlist">—</dd></div>
-        </dl>
-        <div class="admin-actions">
-          <button type="button" id="btn-admin-repair" class="primary">Trocar código</button>
-          <button type="button" id="btn-admin-unlink">Desvincular dispositivo</button>
+          <p class="hint">
+            O código expira em cerca de 10 minutos. Se necessário, gere outro aqui. Após o
+            pareamento, a playlist sincroniza automaticamente. Comando: Enter reforça a verificação;
+            ◀ ▶ mudam o item em reprodução.
+          </p>
         </div>
       </div>
     </div>
-  </div>
 
-  <script src="js/constants.js"></script>
-  <script src="js/logger.js"></script>
-  <script src="js/storage.js"></script>
-  <script src="js/adapter.js"></script>
-  <script src="js/cache.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/remote-control.js"></script>
-  <script src="js/player.js"></script>
-  <script src="js/main.js"></script>
-</body>
+    <div id="stage-player" hidden>
+      <div class="top-bar">
+        <div class="badge" id="brand-badge">Signix · Tizen</div>
+        <div style="display: flex; align-items: center; gap: 0.5rem">
+          <span class="badge" id="net-badge">Online</span>
+          <span class="badge" id="heartbeat-badge">Heartbeat: —</span>
+          <span class="badge" id="bar-counter">—</span>
+          <button type="button" id="btn-sync">Sincronizar</button>
+          <button
+            type="button"
+            id="btn-rotate-pairing"
+            title="Invalida o token e gera novo código na tela"
+          >
+            Novo código
+          </button>
+          <button type="button" id="btn-reset">Repor</button>
+        </div>
+      </div>
+      <div class="media-layer">
+        <video id="media-video" playsinline muted></video>
+        <img id="media-image" alt="" referrerpolicy="no-referrer" />
+        <iframe id="media-html" title="Conteúdo HTML"></iframe>
+      </div>
+      <div id="offline-banner" hidden>A reproduzir a partir de cache local (offline)</div>
+      <div id="fallback-message" hidden>
+        <p id="fallback-text">Sem conteúdo ou sem ligação.</p>
+      </div>
+      <div id="debug-panel" hidden>
+        <pre id="debug-pre"></pre>
+      </div>
+      <div id="admin-menu" class="admin-menu" hidden>
+        <div class="admin-dialog" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+          <div class="admin-header">
+            <div>
+              <p class="label">Configuração</p>
+              <h2 id="admin-title">Administração da TV</h2>
+            </div>
+            <button type="button" id="btn-admin-close" class="ghost">Fechar</button>
+          </div>
+          <dl class="admin-facts">
+            <div>
+              <dt>Nome da TV</dt>
+              <dd id="admin-tv-name">—</dd>
+            </div>
+            <div>
+              <dt>Status</dt>
+              <dd id="admin-device-status">—</dd>
+            </div>
+            <div>
+              <dt>Playlist atual</dt>
+              <dd id="admin-playlist">—</dd>
+            </div>
+          </dl>
+          <div class="admin-actions">
+            <button type="button" id="btn-admin-repair" class="primary">Trocar código</button>
+            <button type="button" id="btn-admin-unlink">Desvincular dispositivo</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <script src="js/constants.js"></script>
+    <script src="js/logger.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/adapter.js"></script>
+    <script src="js/cache.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/remote-control.js"></script>
+    <script src="js/player.js"></script>
+    <script src="js/main.js"></script>
+  </body>
 </html>

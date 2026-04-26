@@ -41,11 +41,15 @@ function ResetPasswordPage() {
           <p className="font-display text-xl font-bold">Signix</p>
         </div>
         <h1 className="font-display text-2xl font-bold">Definir nova senha</h1>
-        <p className="text-sm text-muted-foreground mt-1.5">Escolha uma senha forte com pelo menos 6 caracteres.</p>
+        <p className="text-sm text-muted-foreground mt-1.5">
+          Escolha uma senha forte com pelo menos 6 caracteres.
+        </p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Nova senha</label>
+            <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
+              Nova senha
+            </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input

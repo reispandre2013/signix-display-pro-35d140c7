@@ -161,18 +161,18 @@
       if (!it || !it.media_asset_id) continue;
       if (it.is_active === false) continue;
       var mediaType = it.media_type || "image";
-      var candidates = getMediaUrlCandidates({ mediaTypeHint: mediaType }, it.media_url, it.thumbnail_url);
+      var candidates = getMediaUrlCandidates(
+        { mediaTypeHint: mediaType },
+        it.media_url,
+        it.thumbnail_url,
+      );
       var primary = candidates[0] || "";
       if (!primary && mediaType !== "html") continue;
 
       var dur = Number(it.duration_seconds);
       if (!dur || dur < 1) dur = C.IMAGE_DEFAULT_DURATION_SEC || 8;
 
-      var effFit =
-        it.fit_mode_effective ||
-        it.fit_mode ||
-        display.default_fit_mode ||
-        "cover";
+      var effFit = it.fit_mode_effective || it.fit_mode || display.default_fit_mode || "cover";
 
       items.push({
         id: String(it.id || it.media_asset_id),
@@ -203,7 +203,8 @@
       playlist_id: String(rawPayload.playlist_id || ""),
       playlist_version:
         rawPayload.playlist_version != null ? Number(rawPayload.playlist_version) : null,
-      resolution_source: rawPayload.resolution_source != null ? String(rawPayload.resolution_source) : null,
+      resolution_source:
+        rawPayload.resolution_source != null ? String(rawPayload.resolution_source) : null,
       payload_version: String(rawPayload.payload_version || ""),
       valid_until: rawPayload.valid_until != null ? rawPayload.valid_until : null,
       priority: rawPayload.priority != null ? rawPayload.priority : null,

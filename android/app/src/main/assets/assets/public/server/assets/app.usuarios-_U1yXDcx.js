@@ -1,10 +1,22 @@
-import { $ as createServerFn, r as reactExports, U as jsxRuntimeExports, a2 as React } from "./worker-entry-CFvqOeOX.js";
+import {
+  $ as createServerFn,
+  r as reactExports,
+  U as jsxRuntimeExports,
+  a2 as React,
+} from "./worker-entry-CFvqOeOX.js";
 import { P as PageHeader } from "./PageHeader-Dkx9-OAF.js";
 import { P as Panel } from "./Panel-iDal3y1F.js";
 import { S as StatusBadge } from "./StatusBadge-CQeJIG5P.js";
 import { L as LoadingState, a as ErrorState, E as EmptyState } from "./States-BZKT3Fib.js";
 import { e as useUsers, f as useMutation } from "./use-supabase-data-DWtjSxP7.js";
-import { r as reactDomExports, R as ReactDOM, a as useAuth, b as useQueryClient, t as toast, s as supabase } from "./router-BfC5KUx0.js";
+import {
+  r as reactDomExports,
+  R as ReactDOM,
+  a as useAuth,
+  b as useQueryClient,
+  t as toast,
+  s as supabase,
+} from "./router-BfC5KUx0.js";
 import { u as useServerFn } from "./useServerFn-BRV6kz2q.js";
 import { c as createSsrRpc } from "./createSsrRpc-BdiZaWN2.js";
 import { _ as __assign, a as __rest, b as __spreadArray } from "./index-Cf78ubZ7.js";
@@ -22,35 +34,43 @@ const __iconNode = [
   ["path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", key: "1yyitq" }],
   ["circle", { cx: "9", cy: "7", r: "4", key: "nufk8" }],
   ["line", { x1: "19", x2: "19", y1: "8", y2: "14", key: "1bvyxn" }],
-  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }]
+  ["line", { x1: "22", x2: "16", y1: "11", y2: "11", key: "1shjgl" }],
 ];
 const UserPlus = createLucideIcon("user-plus", __iconNode);
 function validate(input) {
   if (typeof input !== "object" || input === null) throw new Error("Payload inválido.");
-  const {
-    email,
-    name,
-    role,
-    mode,
-    password
-  } = input;
-  if (typeof email !== "string" || !/^\S+@\S+\.\S+$/.test(email)) throw new Error("E-mail inválido.");
+  const { email, name, role, mode, password } = input;
+  if (typeof email !== "string" || !/^\S+@\S+\.\S+$/.test(email))
+    throw new Error("E-mail inválido.");
   if (typeof name !== "string" || name.trim().length < 2) throw new Error("Nome inválido.");
-  if (role !== "admin_master" && role !== "gestor" && role !== "operador" && role !== "visualizador") throw new Error("Perfil inválido.");
+  if (
+    role !== "admin_master" &&
+    role !== "gestor" &&
+    role !== "operador" &&
+    role !== "visualizador"
+  )
+    throw new Error("Perfil inválido.");
   if (mode !== "password" && mode !== "invite") throw new Error("Modo inválido.");
-  if (mode === "password" && (typeof password !== "string" || password.length < 6)) throw new Error("Senha precisa de ao menos 6 caracteres.");
+  if (mode === "password" && (typeof password !== "string" || password.length < 6))
+    throw new Error("Senha precisa de ao menos 6 caracteres.");
   return {
     email: email.trim().toLowerCase(),
     name: name.trim(),
     role,
     mode,
-    password: typeof password === "string" ? password : void 0
+    password: typeof password === "string" ? password : void 0,
   };
 }
 const createOrgUser = createServerFn({
-  method: "POST"
-}).inputValidator(validate).handler(createSsrRpc("87d50a556753addcefbdda31b8f189739a7e7ba567a86abb808902c789a15842"));
-function composeEventHandlers(originalEventHandler, ourEventHandler, { checkForDefaultPrevented = true } = {}) {
+  method: "POST",
+})
+  .inputValidator(validate)
+  .handler(createSsrRpc("87d50a556753addcefbdda31b8f189739a7e7ba567a86abb808902c789a15842"));
+function composeEventHandlers(
+  originalEventHandler,
+  ourEventHandler,
+  { checkForDefaultPrevented = true } = {},
+) {
   return function handleEvent(event) {
     originalEventHandler?.(event);
     if (checkForDefaultPrevented === false || !event.defaultPrevented) {
@@ -138,7 +158,7 @@ function createContextScope(scopeName, createContextScopeDeps = []) {
       const contexts = scope?.[scopeName] || scopeContexts;
       return reactExports.useMemo(
         () => ({ [`__scope${scopeName}`]: { ...scope, [scopeName]: contexts } }),
-        [scope, contexts]
+        [scope, contexts],
       );
     };
   };
@@ -151,7 +171,7 @@ function composeContextScopes(...scopes) {
   const createScope = () => {
     const scopeHooks = scopes.map((createScope2) => ({
       useScope: createScope2(),
-      scopeName: createScope2.scopeName
+      scopeName: createScope2.scopeName,
     }));
     return function useComposedScopes(overrideScopes) {
       const nextScopes = scopeHooks.reduce((nextScopes2, { useScope, scopeName }) => {
@@ -159,14 +179,16 @@ function composeContextScopes(...scopes) {
         const currentScope = scopeProps[`__scope${scopeName}`];
         return { ...nextScopes2, ...currentScope };
       }, {});
-      return reactExports.useMemo(() => ({ [`__scope${baseScope.scopeName}`]: nextScopes }), [nextScopes]);
+      return reactExports.useMemo(
+        () => ({ [`__scope${baseScope.scopeName}`]: nextScopes }),
+        [nextScopes],
+      );
     };
   };
   createScope.scopeName = baseScope.scopeName;
   return createScope;
 }
-var useLayoutEffect2 = globalThis?.document ? reactExports.useLayoutEffect : () => {
-};
+var useLayoutEffect2 = globalThis?.document ? reactExports.useLayoutEffect : () => {};
 var useReactId = React[" useId ".trim().toString()] || (() => void 0);
 var count$1 = 0;
 function useId(deterministicId) {
@@ -177,16 +199,10 @@ function useId(deterministicId) {
   return deterministicId || (id ? `radix-${id}` : "");
 }
 var useInsertionEffect = React[" useInsertionEffect ".trim().toString()] || useLayoutEffect2;
-function useControllableState({
-  prop,
-  defaultProp,
-  onChange = () => {
-  },
-  caller
-}) {
+function useControllableState({ prop, defaultProp, onChange = () => {}, caller }) {
   const [uncontrolledProp, setUncontrolledProp, onChangeRef] = useUncontrolledState({
     defaultProp,
-    onChange
+    onChange,
   });
   const isControlled = prop !== void 0;
   const value = isControlled ? prop : uncontrolledProp;
@@ -198,7 +214,7 @@ function useControllableState({
         const from = wasControlled ? "controlled" : "uncontrolled";
         const to = isControlled ? "controlled" : "uncontrolled";
         console.warn(
-          `${caller} is changing from ${from} to ${to}. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.`
+          `${caller} is changing from ${from} to ${to}. Components should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled value for the lifetime of the component.`,
         );
       }
       isControlledRef.current = isControlled;
@@ -215,14 +231,11 @@ function useControllableState({
         setUncontrolledProp(nextValue);
       }
     },
-    [isControlled, prop, setUncontrolledProp, onChangeRef]
+    [isControlled, prop, setUncontrolledProp, onChangeRef],
   );
   return [value, setValue];
 }
-function useUncontrolledState({
-  defaultProp,
-  onChange
-}) {
+function useUncontrolledState({ defaultProp, onChange }) {
   const [value, setValue] = reactExports.useState(defaultProp);
   const prevValueRef = reactExports.useRef(value);
   const onChangeRef = reactExports.useRef(onChange);
@@ -257,9 +270,19 @@ function createSlot$1(ownerName) {
           return child;
         }
       });
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, {
+        ...slotProps,
+        ref: forwardedRef,
+        children: reactExports.isValidElement(newElement)
+          ? reactExports.cloneElement(newElement, void 0, newChildren)
+          : null,
+      });
     }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, {
+      ...slotProps,
+      ref: forwardedRef,
+      children,
+    });
   });
   Slot2.displayName = `${ownerName}.Slot`;
   return Slot2;
@@ -283,7 +306,12 @@ function createSlotClone$1(ownerName) {
 }
 var SLOTTABLE_IDENTIFIER$1 = /* @__PURE__ */ Symbol("radix.slottable");
 function isSlottable$1(child) {
-  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER$1;
+  return (
+    reactExports.isValidElement(child) &&
+    typeof child.type === "function" &&
+    "__radixId" in child.type &&
+    child.type.__radixId === SLOTTABLE_IDENTIFIER$1
+  );
 }
 function mergeProps$1(slotProps, childProps) {
   const overrideProps = { ...childProps };
@@ -339,7 +367,7 @@ var NODES = [
   "select",
   "span",
   "svg",
-  "ul"
+  "ul",
 ];
 var Primitive = NODES.reduce((primitive, node) => {
   const Slot2 = /* @__PURE__ */ createSlot$1(`Primitive.${node}`);
@@ -362,7 +390,12 @@ function useCallbackRef$1(callback) {
   reactExports.useEffect(() => {
     callbackRef.current = callback;
   });
-  return reactExports.useMemo(() => (...args) => callbackRef.current?.(...args), []);
+  return reactExports.useMemo(
+    () =>
+      (...args) =>
+        callbackRef.current?.(...args),
+    [],
+  );
 }
 function useEscapeKeydown(onEscapeKeyDownProp, ownerDocument = globalThis?.document) {
   const onEscapeKeyDown = useCallbackRef$1(onEscapeKeyDownProp);
@@ -384,104 +417,110 @@ var originalBodyPointerEvents;
 var DismissableLayerContext = reactExports.createContext({
   layers: /* @__PURE__ */ new Set(),
   layersWithOutsidePointerEventsDisabled: /* @__PURE__ */ new Set(),
-  branches: /* @__PURE__ */ new Set()
+  branches: /* @__PURE__ */ new Set(),
 });
-var DismissableLayer = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const {
-      disableOutsidePointerEvents = false,
-      onEscapeKeyDown,
-      onPointerDownOutside,
-      onFocusOutside,
-      onInteractOutside,
-      onDismiss,
-      ...layerProps
-    } = props;
-    const context = reactExports.useContext(DismissableLayerContext);
-    const [node, setNode] = reactExports.useState(null);
-    const ownerDocument = node?.ownerDocument ?? globalThis?.document;
-    const [, force] = reactExports.useState({});
-    const composedRefs = useComposedRefs(forwardedRef, (node2) => setNode(node2));
-    const layers = Array.from(context.layers);
-    const [highestLayerWithOutsidePointerEventsDisabled] = [...context.layersWithOutsidePointerEventsDisabled].slice(-1);
-    const highestLayerWithOutsidePointerEventsDisabledIndex = layers.indexOf(highestLayerWithOutsidePointerEventsDisabled);
-    const index = node ? layers.indexOf(node) : -1;
-    const isBodyPointerEventsDisabled = context.layersWithOutsidePointerEventsDisabled.size > 0;
-    const isPointerEventsEnabled = index >= highestLayerWithOutsidePointerEventsDisabledIndex;
-    const pointerDownOutside = usePointerDownOutside((event) => {
-      const target = event.target;
-      const isPointerDownOnBranch = [...context.branches].some((branch) => branch.contains(target));
-      if (!isPointerEventsEnabled || isPointerDownOnBranch) return;
-      onPointerDownOutside?.(event);
-      onInteractOutside?.(event);
-      if (!event.defaultPrevented) onDismiss?.();
-    }, ownerDocument);
-    const focusOutside = useFocusOutside((event) => {
-      const target = event.target;
-      const isFocusInBranch = [...context.branches].some((branch) => branch.contains(target));
-      if (isFocusInBranch) return;
-      onFocusOutside?.(event);
-      onInteractOutside?.(event);
-      if (!event.defaultPrevented) onDismiss?.();
-    }, ownerDocument);
-    useEscapeKeydown((event) => {
-      const isHighestLayer = index === context.layers.size - 1;
-      if (!isHighestLayer) return;
-      onEscapeKeyDown?.(event);
-      if (!event.defaultPrevented && onDismiss) {
-        event.preventDefault();
-        onDismiss();
+var DismissableLayer = reactExports.forwardRef((props, forwardedRef) => {
+  const {
+    disableOutsidePointerEvents = false,
+    onEscapeKeyDown,
+    onPointerDownOutside,
+    onFocusOutside,
+    onInteractOutside,
+    onDismiss,
+    ...layerProps
+  } = props;
+  const context = reactExports.useContext(DismissableLayerContext);
+  const [node, setNode] = reactExports.useState(null);
+  const ownerDocument = node?.ownerDocument ?? globalThis?.document;
+  const [, force] = reactExports.useState({});
+  const composedRefs = useComposedRefs(forwardedRef, (node2) => setNode(node2));
+  const layers = Array.from(context.layers);
+  const [highestLayerWithOutsidePointerEventsDisabled] = [
+    ...context.layersWithOutsidePointerEventsDisabled,
+  ].slice(-1);
+  const highestLayerWithOutsidePointerEventsDisabledIndex = layers.indexOf(
+    highestLayerWithOutsidePointerEventsDisabled,
+  );
+  const index = node ? layers.indexOf(node) : -1;
+  const isBodyPointerEventsDisabled = context.layersWithOutsidePointerEventsDisabled.size > 0;
+  const isPointerEventsEnabled = index >= highestLayerWithOutsidePointerEventsDisabledIndex;
+  const pointerDownOutside = usePointerDownOutside((event) => {
+    const target = event.target;
+    const isPointerDownOnBranch = [...context.branches].some((branch) => branch.contains(target));
+    if (!isPointerEventsEnabled || isPointerDownOnBranch) return;
+    onPointerDownOutside?.(event);
+    onInteractOutside?.(event);
+    if (!event.defaultPrevented) onDismiss?.();
+  }, ownerDocument);
+  const focusOutside = useFocusOutside((event) => {
+    const target = event.target;
+    const isFocusInBranch = [...context.branches].some((branch) => branch.contains(target));
+    if (isFocusInBranch) return;
+    onFocusOutside?.(event);
+    onInteractOutside?.(event);
+    if (!event.defaultPrevented) onDismiss?.();
+  }, ownerDocument);
+  useEscapeKeydown((event) => {
+    const isHighestLayer = index === context.layers.size - 1;
+    if (!isHighestLayer) return;
+    onEscapeKeyDown?.(event);
+    if (!event.defaultPrevented && onDismiss) {
+      event.preventDefault();
+      onDismiss();
+    }
+  }, ownerDocument);
+  reactExports.useEffect(() => {
+    if (!node) return;
+    if (disableOutsidePointerEvents) {
+      if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
+        originalBodyPointerEvents = ownerDocument.body.style.pointerEvents;
+        ownerDocument.body.style.pointerEvents = "none";
       }
-    }, ownerDocument);
-    reactExports.useEffect(() => {
+      context.layersWithOutsidePointerEventsDisabled.add(node);
+    }
+    context.layers.add(node);
+    dispatchUpdate();
+    return () => {
+      if (
+        disableOutsidePointerEvents &&
+        context.layersWithOutsidePointerEventsDisabled.size === 1
+      ) {
+        ownerDocument.body.style.pointerEvents = originalBodyPointerEvents;
+      }
+    };
+  }, [node, ownerDocument, disableOutsidePointerEvents, context]);
+  reactExports.useEffect(() => {
+    return () => {
       if (!node) return;
-      if (disableOutsidePointerEvents) {
-        if (context.layersWithOutsidePointerEventsDisabled.size === 0) {
-          originalBodyPointerEvents = ownerDocument.body.style.pointerEvents;
-          ownerDocument.body.style.pointerEvents = "none";
-        }
-        context.layersWithOutsidePointerEventsDisabled.add(node);
-      }
-      context.layers.add(node);
+      context.layers.delete(node);
+      context.layersWithOutsidePointerEventsDisabled.delete(node);
       dispatchUpdate();
-      return () => {
-        if (disableOutsidePointerEvents && context.layersWithOutsidePointerEventsDisabled.size === 1) {
-          ownerDocument.body.style.pointerEvents = originalBodyPointerEvents;
-        }
-      };
-    }, [node, ownerDocument, disableOutsidePointerEvents, context]);
-    reactExports.useEffect(() => {
-      return () => {
-        if (!node) return;
-        context.layers.delete(node);
-        context.layersWithOutsidePointerEventsDisabled.delete(node);
-        dispatchUpdate();
-      };
-    }, [node, context]);
-    reactExports.useEffect(() => {
-      const handleUpdate = () => force({});
-      document.addEventListener(CONTEXT_UPDATE, handleUpdate);
-      return () => document.removeEventListener(CONTEXT_UPDATE, handleUpdate);
-    }, []);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Primitive.div,
-      {
-        ...layerProps,
-        ref: composedRefs,
-        style: {
-          pointerEvents: isBodyPointerEventsDisabled ? isPointerEventsEnabled ? "auto" : "none" : void 0,
-          ...props.style
-        },
-        onFocusCapture: composeEventHandlers(props.onFocusCapture, focusOutside.onFocusCapture),
-        onBlurCapture: composeEventHandlers(props.onBlurCapture, focusOutside.onBlurCapture),
-        onPointerDownCapture: composeEventHandlers(
-          props.onPointerDownCapture,
-          pointerDownOutside.onPointerDownCapture
-        )
-      }
-    );
-  }
-);
+    };
+  }, [node, context]);
+  reactExports.useEffect(() => {
+    const handleUpdate = () => force({});
+    document.addEventListener(CONTEXT_UPDATE, handleUpdate);
+    return () => document.removeEventListener(CONTEXT_UPDATE, handleUpdate);
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, {
+    ...layerProps,
+    ref: composedRefs,
+    style: {
+      pointerEvents: isBodyPointerEventsDisabled
+        ? isPointerEventsEnabled
+          ? "auto"
+          : "none"
+        : void 0,
+      ...props.style,
+    },
+    onFocusCapture: composeEventHandlers(props.onFocusCapture, focusOutside.onFocusCapture),
+    onBlurCapture: composeEventHandlers(props.onBlurCapture, focusOutside.onBlurCapture),
+    onPointerDownCapture: composeEventHandlers(
+      props.onPointerDownCapture,
+      pointerDownOutside.onPointerDownCapture,
+    ),
+  });
+});
 DismissableLayer.displayName = DISMISSABLE_LAYER_NAME;
 var BRANCH_NAME = "DismissableLayerBranch";
 var DismissableLayerBranch = reactExports.forwardRef((props, forwardedRef) => {
@@ -503,17 +542,16 @@ DismissableLayerBranch.displayName = BRANCH_NAME;
 function usePointerDownOutside(onPointerDownOutside, ownerDocument = globalThis?.document) {
   const handlePointerDownOutside = useCallbackRef$1(onPointerDownOutside);
   const isPointerInsideReactTreeRef = reactExports.useRef(false);
-  const handleClickRef = reactExports.useRef(() => {
-  });
+  const handleClickRef = reactExports.useRef(() => {});
   reactExports.useEffect(() => {
     const handlePointerDown = (event) => {
       if (event.target && !isPointerInsideReactTreeRef.current) {
-        let handleAndDispatchPointerDownOutsideEvent2 = function() {
+        let handleAndDispatchPointerDownOutsideEvent2 = function () {
           handleAndDispatchCustomEvent(
             POINTER_DOWN_OUTSIDE,
             handlePointerDownOutside,
             eventDetail,
-            { discrete: true }
+            { discrete: true },
           );
         };
         const eventDetail = { originalEvent: event };
@@ -540,7 +578,7 @@ function usePointerDownOutside(onPointerDownOutside, ownerDocument = globalThis?
   }, [ownerDocument, handlePointerDownOutside]);
   return {
     // ensures we check React component tree (not just DOM tree)
-    onPointerDownCapture: () => isPointerInsideReactTreeRef.current = true
+    onPointerDownCapture: () => (isPointerInsideReactTreeRef.current = true),
   };
 }
 function useFocusOutside(onFocusOutside, ownerDocument = globalThis?.document) {
@@ -551,7 +589,7 @@ function useFocusOutside(onFocusOutside, ownerDocument = globalThis?.document) {
       if (event.target && !isFocusInsideReactTreeRef.current) {
         const eventDetail = { originalEvent: event };
         handleAndDispatchCustomEvent(FOCUS_OUTSIDE, handleFocusOutside, eventDetail, {
-          discrete: false
+          discrete: false,
         });
       }
     };
@@ -559,8 +597,8 @@ function useFocusOutside(onFocusOutside, ownerDocument = globalThis?.document) {
     return () => ownerDocument.removeEventListener("focusin", handleFocus);
   }, [ownerDocument, handleFocusOutside]);
   return {
-    onFocusCapture: () => isFocusInsideReactTreeRef.current = true,
-    onBlurCapture: () => isFocusInsideReactTreeRef.current = false
+    onFocusCapture: () => (isFocusInsideReactTreeRef.current = true),
+    onBlurCapture: () => (isFocusInsideReactTreeRef.current = false),
   };
 }
 function dispatchUpdate() {
@@ -601,32 +639,34 @@ var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
     },
     resume() {
       this.paused = false;
-    }
+    },
   }).current;
   reactExports.useEffect(() => {
     if (trapped) {
-      let handleFocusIn2 = function(event) {
-        if (focusScope.paused || !container) return;
-        const target = event.target;
-        if (container.contains(target)) {
-          lastFocusedElementRef.current = target;
-        } else {
-          focus(lastFocusedElementRef.current, { select: true });
-        }
-      }, handleFocusOut2 = function(event) {
-        if (focusScope.paused || !container) return;
-        const relatedTarget = event.relatedTarget;
-        if (relatedTarget === null) return;
-        if (!container.contains(relatedTarget)) {
-          focus(lastFocusedElementRef.current, { select: true });
-        }
-      }, handleMutations2 = function(mutations) {
-        const focusedElement = document.activeElement;
-        if (focusedElement !== document.body) return;
-        for (const mutation of mutations) {
-          if (mutation.removedNodes.length > 0) focus(container);
-        }
-      };
+      let handleFocusIn2 = function (event) {
+          if (focusScope.paused || !container) return;
+          const target = event.target;
+          if (container.contains(target)) {
+            lastFocusedElementRef.current = target;
+          } else {
+            focus(lastFocusedElementRef.current, { select: true });
+          }
+        },
+        handleFocusOut2 = function (event) {
+          if (focusScope.paused || !container) return;
+          const relatedTarget = event.relatedTarget;
+          if (relatedTarget === null) return;
+          if (!container.contains(relatedTarget)) {
+            focus(lastFocusedElementRef.current, { select: true });
+          }
+        },
+        handleMutations2 = function (mutations) {
+          const focusedElement = document.activeElement;
+          if (focusedElement !== document.body) return;
+          for (const mutation of mutations) {
+            if (mutation.removedNodes.length > 0) focus(container);
+          }
+        };
       document.addEventListener("focusin", handleFocusIn2);
       document.addEventListener("focusout", handleFocusOut2);
       const mutationObserver = new MutationObserver(handleMutations2);
@@ -692,9 +732,14 @@ var FocusScope = reactExports.forwardRef((props, forwardedRef) => {
         }
       }
     },
-    [loop, trapped, focusScope.paused]
+    [loop, trapped, focusScope.paused],
   );
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { tabIndex: -1, ...scopeProps, ref: composedRefs, onKeyDown: handleKeyDown });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, {
+    tabIndex: -1,
+    ...scopeProps,
+    ref: composedRefs,
+    onKeyDown: handleKeyDown,
+  });
 });
 FocusScope.displayName = FOCUS_SCOPE_NAME;
 function focusFirst(candidates, { select = false } = {}) {
@@ -717,7 +762,7 @@ function getTabbableCandidates(container) {
       const isHiddenInput = node.tagName === "INPUT" && node.type === "hidden";
       if (node.disabled || node.hidden || isHiddenInput) return NodeFilter.FILTER_SKIP;
       return node.tabIndex >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
-    }
+    },
   });
   while (walker.nextNode()) nodes.push(walker.currentNode);
   return nodes;
@@ -762,7 +807,7 @@ function createFocusScopesStack() {
     remove(focusScope) {
       stack = arrayRemove(stack, focusScope);
       stack[0]?.resume();
-    }
+    },
   };
 }
 function arrayRemove(array, item) {
@@ -781,8 +826,13 @@ var Portal$1 = reactExports.forwardRef((props, forwardedRef) => {
   const { container: containerProp, ...portalProps } = props;
   const [mounted, setMounted] = reactExports.useState(false);
   useLayoutEffect2(() => setMounted(true), []);
-  const container = containerProp || mounted && globalThis?.document?.body;
-  return container ? ReactDOM.createPortal(/* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...portalProps, ref: forwardedRef }), container) : null;
+  const container = containerProp || (mounted && globalThis?.document?.body);
+  return container
+    ? ReactDOM.createPortal(
+        /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, { ...portalProps, ref: forwardedRef }),
+        container,
+      )
+    : null;
 });
 Portal$1.displayName = PORTAL_NAME$1;
 function useStateMachine(initialState, machine) {
@@ -794,7 +844,10 @@ function useStateMachine(initialState, machine) {
 var Presence = (props) => {
   const { present, children } = props;
   const presence = usePresence(present);
-  const child = typeof children === "function" ? children({ present: presence.isPresent }) : reactExports.Children.only(children);
+  const child =
+    typeof children === "function"
+      ? children({ present: presence.isPresent })
+      : reactExports.Children.only(children);
   const ref = useComposedRefs(presence.ref, getElementRef$1(child));
   const forceMount = typeof children === "function";
   return forceMount || presence.isPresent ? reactExports.cloneElement(child, { ref }) : null;
@@ -809,15 +862,15 @@ function usePresence(present) {
   const [state, send] = useStateMachine(initialState, {
     mounted: {
       UNMOUNT: "unmounted",
-      ANIMATION_OUT: "unmountSuspended"
+      ANIMATION_OUT: "unmountSuspended",
     },
     unmountSuspended: {
       MOUNT: "mounted",
-      ANIMATION_END: "unmounted"
+      ANIMATION_END: "unmounted",
     },
     unmounted: {
-      MOUNT: "mounted"
-    }
+      MOUNT: "mounted",
+    },
   });
   reactExports.useEffect(() => {
     const currentAnimationName = getAnimationName(stylesRef.current);
@@ -888,7 +941,7 @@ function usePresence(present) {
     ref: reactExports.useCallback((node2) => {
       stylesRef.current = node2 ? getComputedStyle(node2) : null;
       setNode(node2);
-    }, [])
+    }, []),
   };
 }
 function getAnimationName(styles) {
@@ -945,7 +998,7 @@ function assignRef(ref, value) {
   return ref;
 }
 function useCallbackRef(initialValue, callback) {
-  var ref = reactExports.useState(function() {
+  var ref = reactExports.useState(function () {
     return {
       // value
       value: initialValue,
@@ -962,40 +1015,44 @@ function useCallbackRef(initialValue, callback) {
             ref.value = value;
             ref.callback(value, last);
           }
-        }
-      }
+        },
+      },
     };
   })[0];
   ref.callback = callback;
   return ref.facade;
 }
-var useIsomorphicLayoutEffect = typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
+var useIsomorphicLayoutEffect =
+  typeof window !== "undefined" ? reactExports.useLayoutEffect : reactExports.useEffect;
 var currentValues = /* @__PURE__ */ new WeakMap();
 function useMergeRefs(refs, defaultValue) {
-  var callbackRef = useCallbackRef(null, function(newValue) {
-    return refs.forEach(function(ref) {
+  var callbackRef = useCallbackRef(null, function (newValue) {
+    return refs.forEach(function (ref) {
       return assignRef(ref, newValue);
     });
   });
-  useIsomorphicLayoutEffect(function() {
-    var oldValue = currentValues.get(callbackRef);
-    if (oldValue) {
-      var prevRefs_1 = new Set(oldValue);
-      var nextRefs_1 = new Set(refs);
-      var current_1 = callbackRef.current;
-      prevRefs_1.forEach(function(ref) {
-        if (!nextRefs_1.has(ref)) {
-          assignRef(ref, null);
-        }
-      });
-      nextRefs_1.forEach(function(ref) {
-        if (!prevRefs_1.has(ref)) {
-          assignRef(ref, current_1);
-        }
-      });
-    }
-    currentValues.set(callbackRef, refs);
-  }, [refs]);
+  useIsomorphicLayoutEffect(
+    function () {
+      var oldValue = currentValues.get(callbackRef);
+      if (oldValue) {
+        var prevRefs_1 = new Set(oldValue);
+        var nextRefs_1 = new Set(refs);
+        var current_1 = callbackRef.current;
+        prevRefs_1.forEach(function (ref) {
+          if (!nextRefs_1.has(ref)) {
+            assignRef(ref, null);
+          }
+        });
+        nextRefs_1.forEach(function (ref) {
+          if (!prevRefs_1.has(ref)) {
+            assignRef(ref, current_1);
+          }
+        });
+      }
+      currentValues.set(callbackRef, refs);
+    },
+    [refs],
+  );
   return callbackRef;
 }
 function ItoI(a) {
@@ -1008,25 +1065,27 @@ function innerCreateMedium(defaults, middleware) {
   var buffer = [];
   var assigned = false;
   var medium = {
-    read: function() {
+    read: function () {
       if (assigned) {
-        throw new Error("Sidecar: could not `read` from an `assigned` medium. `read` could be used only with `useMedium`.");
+        throw new Error(
+          "Sidecar: could not `read` from an `assigned` medium. `read` could be used only with `useMedium`.",
+        );
       }
       if (buffer.length) {
         return buffer[buffer.length - 1];
       }
       return defaults;
     },
-    useMedium: function(data) {
+    useMedium: function (data) {
       var item = middleware(data, assigned);
       buffer.push(item);
-      return function() {
-        buffer = buffer.filter(function(x) {
+      return function () {
+        buffer = buffer.filter(function (x) {
           return x !== item;
         });
       };
     },
-    assignSyncMedium: function(cb) {
+    assignSyncMedium: function (cb) {
       assigned = true;
       while (buffer.length) {
         var cbs = buffer;
@@ -1034,15 +1093,15 @@ function innerCreateMedium(defaults, middleware) {
         cbs.forEach(cb);
       }
       buffer = {
-        push: function(x) {
+        push: function (x) {
           return cb(x);
         },
-        filter: function() {
+        filter: function () {
           return buffer;
-        }
+        },
       };
     },
-    assignMedium: function(cb) {
+    assignMedium: function (cb) {
       assigned = true;
       var pendingQueue = [];
       if (buffer.length) {
@@ -1051,26 +1110,26 @@ function innerCreateMedium(defaults, middleware) {
         cbs.forEach(cb);
         pendingQueue = buffer;
       }
-      var executeQueue = function() {
+      var executeQueue = function () {
         var cbs2 = pendingQueue;
         pendingQueue = [];
         cbs2.forEach(cb);
       };
-      var cycle = function() {
+      var cycle = function () {
         return Promise.resolve().then(executeQueue);
       };
       cycle();
       buffer = {
-        push: function(x) {
+        push: function (x) {
           pendingQueue.push(x);
           cycle();
         },
-        filter: function(filter) {
+        filter: function (filter) {
           pendingQueue = pendingQueue.filter(filter);
           return buffer;
-        }
+        },
       };
-    }
+    },
   };
   return medium;
 }
@@ -1082,8 +1141,9 @@ function createSidecarMedium(options) {
   medium.options = __assign({ async: true, ssr: false }, options);
   return medium;
 }
-var SideCar$1 = function(_a) {
-  var sideCar = _a.sideCar, rest = __rest(_a, ["sideCar"]);
+var SideCar$1 = function (_a) {
+  var sideCar = _a.sideCar,
+    rest = __rest(_a, ["sideCar"]);
   if (!sideCar) {
     throw new Error("Sidecar: please provide `sideCar` property to import the right car");
   }
@@ -1099,45 +1159,95 @@ function exportSidecar(medium, exported) {
   return SideCar$1;
 }
 var effectCar = createSidecarMedium();
-var nothing = function() {
+var nothing = function () {
   return;
 };
-var RemoveScroll = reactExports.forwardRef(function(props, parentRef) {
+var RemoveScroll = reactExports.forwardRef(function (props, parentRef) {
   var ref = reactExports.useRef(null);
   var _a = reactExports.useState({
-    onScrollCapture: nothing,
-    onWheelCapture: nothing,
-    onTouchMoveCapture: nothing
-  }), callbacks = _a[0], setCallbacks = _a[1];
-  var forwardProps = props.forwardProps, children = props.children, className = props.className, removeScrollBar = props.removeScrollBar, enabled = props.enabled, shards = props.shards, sideCar = props.sideCar, noRelative = props.noRelative, noIsolation = props.noIsolation, inert = props.inert, allowPinchZoom = props.allowPinchZoom, _b = props.as, Container = _b === void 0 ? "div" : _b, gapMode = props.gapMode, rest = __rest(props, ["forwardProps", "children", "className", "removeScrollBar", "enabled", "shards", "sideCar", "noRelative", "noIsolation", "inert", "allowPinchZoom", "as", "gapMode"]);
+      onScrollCapture: nothing,
+      onWheelCapture: nothing,
+      onTouchMoveCapture: nothing,
+    }),
+    callbacks = _a[0],
+    setCallbacks = _a[1];
+  var forwardProps = props.forwardProps,
+    children = props.children,
+    className = props.className,
+    removeScrollBar = props.removeScrollBar,
+    enabled = props.enabled,
+    shards = props.shards,
+    sideCar = props.sideCar,
+    noRelative = props.noRelative,
+    noIsolation = props.noIsolation,
+    inert = props.inert,
+    allowPinchZoom = props.allowPinchZoom,
+    _b = props.as,
+    Container = _b === void 0 ? "div" : _b,
+    gapMode = props.gapMode,
+    rest = __rest(props, [
+      "forwardProps",
+      "children",
+      "className",
+      "removeScrollBar",
+      "enabled",
+      "shards",
+      "sideCar",
+      "noRelative",
+      "noIsolation",
+      "inert",
+      "allowPinchZoom",
+      "as",
+      "gapMode",
+    ]);
   var SideCar2 = sideCar;
   var containerRef = useMergeRefs([ref, parentRef]);
   var containerProps = __assign(__assign({}, rest), callbacks);
   return reactExports.createElement(
     reactExports.Fragment,
     null,
-    enabled && reactExports.createElement(SideCar2, { sideCar: effectCar, removeScrollBar, shards, noRelative, noIsolation, inert, setCallbacks, allowPinchZoom: !!allowPinchZoom, lockRef: ref, gapMode }),
-    forwardProps ? reactExports.cloneElement(reactExports.Children.only(children), __assign(__assign({}, containerProps), { ref: containerRef })) : reactExports.createElement(Container, __assign({}, containerProps, { className, ref: containerRef }), children)
+    enabled &&
+      reactExports.createElement(SideCar2, {
+        sideCar: effectCar,
+        removeScrollBar,
+        shards,
+        noRelative,
+        noIsolation,
+        inert,
+        setCallbacks,
+        allowPinchZoom: !!allowPinchZoom,
+        lockRef: ref,
+        gapMode,
+      }),
+    forwardProps
+      ? reactExports.cloneElement(
+          reactExports.Children.only(children),
+          __assign(__assign({}, containerProps), { ref: containerRef }),
+        )
+      : reactExports.createElement(
+          Container,
+          __assign({}, containerProps, { className, ref: containerRef }),
+          children,
+        ),
   );
 });
 RemoveScroll.defaultProps = {
   enabled: true,
   removeScrollBar: true,
-  inert: false
+  inert: false,
 };
 RemoveScroll.classNames = {
   fullWidth: fullWidthClassName,
-  zeroRight: zeroRightClassName
+  zeroRight: zeroRightClassName,
 };
-var getNonce = function() {
+var getNonce = function () {
   if (typeof __webpack_nonce__ !== "undefined") {
     return __webpack_nonce__;
   }
   return void 0;
 };
 function makeStyleTag() {
-  if (!document)
-    return null;
+  if (!document) return null;
   var tag = document.createElement("style");
   tag.type = "text/css";
   var nonce = getNonce();
@@ -1157,43 +1267,47 @@ function insertStyleTag(tag) {
   var head = document.head || document.getElementsByTagName("head")[0];
   head.appendChild(tag);
 }
-var stylesheetSingleton = function() {
+var stylesheetSingleton = function () {
   var counter = 0;
   var stylesheet = null;
   return {
-    add: function(style) {
+    add: function (style) {
       if (counter == 0) {
-        if (stylesheet = makeStyleTag()) {
+        if ((stylesheet = makeStyleTag())) {
           injectStyles(stylesheet, style);
           insertStyleTag(stylesheet);
         }
       }
       counter++;
     },
-    remove: function() {
+    remove: function () {
       counter--;
       if (!counter && stylesheet) {
         stylesheet.parentNode && stylesheet.parentNode.removeChild(stylesheet);
         stylesheet = null;
       }
-    }
+    },
   };
 };
-var styleHookSingleton = function() {
+var styleHookSingleton = function () {
   var sheet = stylesheetSingleton();
-  return function(styles, isDynamic) {
-    reactExports.useEffect(function() {
-      sheet.add(styles);
-      return function() {
-        sheet.remove();
-      };
-    }, [styles && isDynamic]);
+  return function (styles, isDynamic) {
+    reactExports.useEffect(
+      function () {
+        sheet.add(styles);
+        return function () {
+          sheet.remove();
+        };
+      },
+      [styles && isDynamic],
+    );
   };
 };
-var styleSingleton = function() {
+var styleSingleton = function () {
   var useStyle = styleHookSingleton();
-  var Sheet = function(_a) {
-    var styles = _a.styles, dynamic = _a.dynamic;
+  var Sheet = function (_a) {
+    var styles = _a.styles,
+      dynamic = _a.dynamic;
     useStyle(styles, dynamic);
     return null;
   };
@@ -1203,19 +1317,19 @@ var zeroGap = {
   left: 0,
   top: 0,
   right: 0,
-  gap: 0
+  gap: 0,
 };
-var parse = function(x) {
+var parse = function (x) {
   return parseInt(x || "", 10) || 0;
 };
-var getOffset = function(gapMode) {
+var getOffset = function (gapMode) {
   var cs = window.getComputedStyle(document.body);
   var left = cs[gapMode === "padding" ? "paddingLeft" : "marginLeft"];
   var top = cs[gapMode === "padding" ? "paddingTop" : "marginTop"];
   var right = cs[gapMode === "padding" ? "paddingRight" : "marginRight"];
   return [parse(left), parse(top), parse(right)];
 };
-var getGapWidth = function(gapMode) {
+var getGapWidth = function (gapMode) {
   if (gapMode === void 0) {
     gapMode = "margin";
   }
@@ -1229,30 +1343,66 @@ var getGapWidth = function(gapMode) {
     left: offsets[0],
     top: offsets[1],
     right: offsets[2],
-    gap: Math.max(0, windowWidth - documentWidth + offsets[2] - offsets[0])
+    gap: Math.max(0, windowWidth - documentWidth + offsets[2] - offsets[0]),
   };
 };
 var Style = styleSingleton();
 var lockAttribute = "data-scroll-locked";
-var getStyles = function(_a, allowRelative, gapMode, important) {
-  var left = _a.left, top = _a.top, right = _a.right, gap = _a.gap;
+var getStyles = function (_a, allowRelative, gapMode, important) {
+  var left = _a.left,
+    top = _a.top,
+    right = _a.right,
+    gap = _a.gap;
   if (gapMode === void 0) {
     gapMode = "margin";
   }
-  return "\n  .".concat(noScrollbarsClassName, " {\n   overflow: hidden ").concat(important, ";\n   padding-right: ").concat(gap, "px ").concat(important, ";\n  }\n  body[").concat(lockAttribute, "] {\n    overflow: hidden ").concat(important, ";\n    overscroll-behavior: contain;\n    ").concat([
-    allowRelative && "position: relative ".concat(important, ";"),
-    gapMode === "margin" && "\n    padding-left: ".concat(left, "px;\n    padding-top: ").concat(top, "px;\n    padding-right: ").concat(right, "px;\n    margin-left:0;\n    margin-top:0;\n    margin-right: ").concat(gap, "px ").concat(important, ";\n    "),
-    gapMode === "padding" && "padding-right: ".concat(gap, "px ").concat(important, ";")
-  ].filter(Boolean).join(""), "\n  }\n  \n  .").concat(zeroRightClassName, " {\n    right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " {\n    margin-right: ").concat(gap, "px ").concat(important, ";\n  }\n  \n  .").concat(zeroRightClassName, " .").concat(zeroRightClassName, " {\n    right: 0 ").concat(important, ";\n  }\n  \n  .").concat(fullWidthClassName, " .").concat(fullWidthClassName, " {\n    margin-right: 0 ").concat(important, ";\n  }\n  \n  body[").concat(lockAttribute, "] {\n    ").concat(removedBarSizeVariable, ": ").concat(gap, "px;\n  }\n");
+  return "\n  ."
+    .concat(noScrollbarsClassName, " {\n   overflow: hidden ")
+    .concat(important, ";\n   padding-right: ")
+    .concat(gap, "px ")
+    .concat(important, ";\n  }\n  body[")
+    .concat(lockAttribute, "] {\n    overflow: hidden ")
+    .concat(important, ";\n    overscroll-behavior: contain;\n    ")
+    .concat(
+      [
+        allowRelative && "position: relative ".concat(important, ";"),
+        gapMode === "margin" &&
+          "\n    padding-left: "
+            .concat(left, "px;\n    padding-top: ")
+            .concat(top, "px;\n    padding-right: ")
+            .concat(right, "px;\n    margin-left:0;\n    margin-top:0;\n    margin-right: ")
+            .concat(gap, "px ")
+            .concat(important, ";\n    "),
+        gapMode === "padding" && "padding-right: ".concat(gap, "px ").concat(important, ";"),
+      ]
+        .filter(Boolean)
+        .join(""),
+      "\n  }\n  \n  .",
+    )
+    .concat(zeroRightClassName, " {\n    right: ")
+    .concat(gap, "px ")
+    .concat(important, ";\n  }\n  \n  .")
+    .concat(fullWidthClassName, " {\n    margin-right: ")
+    .concat(gap, "px ")
+    .concat(important, ";\n  }\n  \n  .")
+    .concat(zeroRightClassName, " .")
+    .concat(zeroRightClassName, " {\n    right: 0 ")
+    .concat(important, ";\n  }\n  \n  .")
+    .concat(fullWidthClassName, " .")
+    .concat(fullWidthClassName, " {\n    margin-right: 0 ")
+    .concat(important, ";\n  }\n  \n  body[")
+    .concat(lockAttribute, "] {\n    ")
+    .concat(removedBarSizeVariable, ": ")
+    .concat(gap, "px;\n  }\n");
 };
-var getCurrentUseCounter = function() {
+var getCurrentUseCounter = function () {
   var counter = parseInt(document.body.getAttribute(lockAttribute) || "0", 10);
   return isFinite(counter) ? counter : 0;
 };
-var useLockAttribute = function() {
-  reactExports.useEffect(function() {
+var useLockAttribute = function () {
+  reactExports.useEffect(function () {
     document.body.setAttribute(lockAttribute, (getCurrentUseCounter() + 1).toString());
-    return function() {
+    return function () {
       var newCounter = getCurrentUseCounter() - 1;
       if (newCounter <= 0) {
         document.body.removeAttribute(lockAttribute);
@@ -1262,22 +1412,30 @@ var useLockAttribute = function() {
     };
   }, []);
 };
-var RemoveScrollBar = function(_a) {
-  var noRelative = _a.noRelative, noImportant = _a.noImportant, _b = _a.gapMode, gapMode = _b === void 0 ? "margin" : _b;
+var RemoveScrollBar = function (_a) {
+  var noRelative = _a.noRelative,
+    noImportant = _a.noImportant,
+    _b = _a.gapMode,
+    gapMode = _b === void 0 ? "margin" : _b;
   useLockAttribute();
-  var gap = reactExports.useMemo(function() {
-    return getGapWidth(gapMode);
-  }, [gapMode]);
-  return reactExports.createElement(Style, { styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : "") });
+  var gap = reactExports.useMemo(
+    function () {
+      return getGapWidth(gapMode);
+    },
+    [gapMode],
+  );
+  return reactExports.createElement(Style, {
+    styles: getStyles(gap, !noRelative, gapMode, !noImportant ? "!important" : ""),
+  });
 };
 var passiveSupported = false;
 if (typeof window !== "undefined") {
   try {
     var options = Object.defineProperty({}, "passive", {
-      get: function() {
+      get: function () {
         passiveSupported = true;
         return true;
-      }
+      },
     });
     window.addEventListener("test", options, options);
     window.removeEventListener("test", options, options);
@@ -1286,10 +1444,10 @@ if (typeof window !== "undefined") {
   }
 }
 var nonPassive = passiveSupported ? { passive: false } : false;
-var alwaysContainsScroll = function(node) {
+var alwaysContainsScroll = function (node) {
   return node.tagName === "TEXTAREA";
 };
-var elementCanBeScrolled = function(node, overflow) {
+var elementCanBeScrolled = function (node, overflow) {
   if (!(node instanceof Element)) {
     return false;
   }
@@ -1297,16 +1455,20 @@ var elementCanBeScrolled = function(node, overflow) {
   return (
     // not-not-scrollable
     styles[overflow] !== "hidden" && // contains scroll inside self
-    !(styles.overflowY === styles.overflowX && !alwaysContainsScroll(node) && styles[overflow] === "visible")
+    !(
+      styles.overflowY === styles.overflowX &&
+      !alwaysContainsScroll(node) &&
+      styles[overflow] === "visible"
+    )
   );
 };
-var elementCouldBeVScrolled = function(node) {
+var elementCouldBeVScrolled = function (node) {
   return elementCanBeScrolled(node, "overflowY");
 };
-var elementCouldBeHScrolled = function(node) {
+var elementCouldBeHScrolled = function (node) {
   return elementCanBeScrolled(node, "overflowX");
 };
-var locationCouldBeScrolled = function(axis, node) {
+var locationCouldBeScrolled = function (axis, node) {
   var ownerDocument = node.ownerDocument;
   var current = node;
   do {
@@ -1315,7 +1477,9 @@ var locationCouldBeScrolled = function(axis, node) {
     }
     var isScrollable = elementCouldBeScrolled(axis, current);
     if (isScrollable) {
-      var _a = getScrollVariables(axis, current), scrollHeight = _a[1], clientHeight = _a[2];
+      var _a = getScrollVariables(axis, current),
+        scrollHeight = _a[1],
+        clientHeight = _a[2];
       if (scrollHeight > clientHeight) {
         return true;
       }
@@ -1324,32 +1488,28 @@ var locationCouldBeScrolled = function(axis, node) {
   } while (current && current !== ownerDocument.body);
   return false;
 };
-var getVScrollVariables = function(_a) {
-  var scrollTop = _a.scrollTop, scrollHeight = _a.scrollHeight, clientHeight = _a.clientHeight;
-  return [
-    scrollTop,
-    scrollHeight,
-    clientHeight
-  ];
+var getVScrollVariables = function (_a) {
+  var scrollTop = _a.scrollTop,
+    scrollHeight = _a.scrollHeight,
+    clientHeight = _a.clientHeight;
+  return [scrollTop, scrollHeight, clientHeight];
 };
-var getHScrollVariables = function(_a) {
-  var scrollLeft = _a.scrollLeft, scrollWidth = _a.scrollWidth, clientWidth = _a.clientWidth;
-  return [
-    scrollLeft,
-    scrollWidth,
-    clientWidth
-  ];
+var getHScrollVariables = function (_a) {
+  var scrollLeft = _a.scrollLeft,
+    scrollWidth = _a.scrollWidth,
+    clientWidth = _a.clientWidth;
+  return [scrollLeft, scrollWidth, clientWidth];
 };
-var elementCouldBeScrolled = function(axis, node) {
+var elementCouldBeScrolled = function (axis, node) {
   return axis === "v" ? elementCouldBeVScrolled(node) : elementCouldBeHScrolled(node);
 };
-var getScrollVariables = function(axis, node) {
+var getScrollVariables = function (axis, node) {
   return axis === "v" ? getVScrollVariables(node) : getHScrollVariables(node);
 };
-var getDirectionFactor = function(axis, direction) {
+var getDirectionFactor = function (axis, direction) {
   return axis === "h" && direction === "rtl" ? -1 : 1;
 };
-var handleScroll = function(axis, endTarget, event, sourceDelta, noOverscroll) {
+var handleScroll = function (axis, endTarget, event, sourceDelta, noOverscroll) {
   var directionFactor = getDirectionFactor(axis, window.getComputedStyle(endTarget).direction);
   var delta = directionFactor * sourceDelta;
   var target = event.target;
@@ -1362,7 +1522,10 @@ var handleScroll = function(axis, endTarget, event, sourceDelta, noOverscroll) {
     if (!target) {
       break;
     }
-    var _a = getScrollVariables(axis, target), position = _a[0], scroll_1 = _a[1], capacity = _a[2];
+    var _a = getScrollVariables(axis, target),
+      position = _a[0],
+      scroll_1 = _a[1],
+      capacity = _a[2];
     var elementScroll = scroll_1 - capacity - directionFactor * position;
     if (position || elementScroll) {
       if (elementCouldBeScrolled(axis, target)) {
@@ -1371,11 +1534,12 @@ var handleScroll = function(axis, endTarget, event, sourceDelta, noOverscroll) {
       }
     }
     var parent_1 = target.parentNode;
-    target = parent_1 && parent_1.nodeType === Node.DOCUMENT_FRAGMENT_NODE ? parent_1.host : parent_1;
+    target =
+      parent_1 && parent_1.nodeType === Node.DOCUMENT_FRAGMENT_NODE ? parent_1.host : parent_1;
   } while (
     // portaled content
-    !targetInLock && target !== document.body || // self content
-    targetInLock && (endTarget.contains(target) || endTarget === target)
+    (!targetInLock && target !== document.body) || // self content
+    (targetInLock && (endTarget.contains(target) || endTarget === target))
   );
   if (isDeltaPositive && (Math.abs(availableScroll) < 1 || false)) {
     shouldCancelScroll = true;
@@ -1384,20 +1548,24 @@ var handleScroll = function(axis, endTarget, event, sourceDelta, noOverscroll) {
   }
   return shouldCancelScroll;
 };
-var getTouchXY = function(event) {
-  return "changedTouches" in event ? [event.changedTouches[0].clientX, event.changedTouches[0].clientY] : [0, 0];
+var getTouchXY = function (event) {
+  return "changedTouches" in event
+    ? [event.changedTouches[0].clientX, event.changedTouches[0].clientY]
+    : [0, 0];
 };
-var getDeltaXY = function(event) {
+var getDeltaXY = function (event) {
   return [event.deltaX, event.deltaY];
 };
-var extractRef = function(ref) {
+var extractRef = function (ref) {
   return ref && "current" in ref ? ref.current : ref;
 };
-var deltaCompare = function(x, y) {
+var deltaCompare = function (x, y) {
   return x[0] === y[0] && x[1] === y[1];
 };
-var generateStyle = function(id) {
-  return "\n  .block-interactivity-".concat(id, " {pointer-events: none;}\n  .allow-interactivity-").concat(id, " {pointer-events: all;}\n");
+var generateStyle = function (id) {
+  return "\n  .block-interactivity-"
+    .concat(id, " {pointer-events: none;}\n  .allow-interactivity-")
+    .concat(id, " {pointer-events: all;}\n");
 };
 var idCounter = 0;
 var lockStack = [];
@@ -1408,27 +1576,40 @@ function RemoveScrollSideCar(props) {
   var id = reactExports.useState(idCounter++)[0];
   var Style2 = reactExports.useState(styleSingleton)[0];
   var lastProps = reactExports.useRef(props);
-  reactExports.useEffect(function() {
-    lastProps.current = props;
-  }, [props]);
-  reactExports.useEffect(function() {
-    if (props.inert) {
-      document.body.classList.add("block-interactivity-".concat(id));
-      var allow_1 = __spreadArray([props.lockRef.current], (props.shards || []).map(extractRef), true).filter(Boolean);
-      allow_1.forEach(function(el) {
-        return el.classList.add("allow-interactivity-".concat(id));
-      });
-      return function() {
-        document.body.classList.remove("block-interactivity-".concat(id));
-        allow_1.forEach(function(el) {
-          return el.classList.remove("allow-interactivity-".concat(id));
+  reactExports.useEffect(
+    function () {
+      lastProps.current = props;
+    },
+    [props],
+  );
+  reactExports.useEffect(
+    function () {
+      if (props.inert) {
+        document.body.classList.add("block-interactivity-".concat(id));
+        var allow_1 = __spreadArray(
+          [props.lockRef.current],
+          (props.shards || []).map(extractRef),
+          true,
+        ).filter(Boolean);
+        allow_1.forEach(function (el) {
+          return el.classList.add("allow-interactivity-".concat(id));
         });
-      };
-    }
-    return;
-  }, [props.inert, props.lockRef.current, props.shards]);
-  var shouldCancelEvent = reactExports.useCallback(function(event, parent) {
-    if ("touches" in event && event.touches.length === 2 || event.type === "wheel" && event.ctrlKey) {
+        return function () {
+          document.body.classList.remove("block-interactivity-".concat(id));
+          allow_1.forEach(function (el) {
+            return el.classList.remove("allow-interactivity-".concat(id));
+          });
+        };
+      }
+      return;
+    },
+    [props.inert, props.lockRef.current, props.shards],
+  );
+  var shouldCancelEvent = reactExports.useCallback(function (event, parent) {
+    if (
+      ("touches" in event && event.touches.length === 2) ||
+      (event.type === "wheel" && event.ctrlKey)
+    ) {
       return !lastProps.current.allowPinchZoom;
     }
     var touch = getTouchXY(event);
@@ -1443,7 +1624,9 @@ function RemoveScrollSideCar(props) {
     }
     var selection = window.getSelection();
     var anchorNode = selection && selection.anchorNode;
-    var isTouchingSelection = anchorNode ? anchorNode === target || anchorNode.contains(target) : false;
+    var isTouchingSelection = anchorNode
+      ? anchorNode === target || anchorNode.contains(target)
+      : false;
     if (isTouchingSelection) {
       return false;
     }
@@ -1469,14 +1652,18 @@ function RemoveScrollSideCar(props) {
     var cancelingAxis = activeAxis.current || currentAxis;
     return handleScroll(cancelingAxis, parent, event, cancelingAxis === "h" ? deltaX : deltaY);
   }, []);
-  var shouldPrevent = reactExports.useCallback(function(_event) {
+  var shouldPrevent = reactExports.useCallback(function (_event) {
     var event = _event;
     if (!lockStack.length || lockStack[lockStack.length - 1] !== Style2) {
       return;
     }
     var delta = "deltaY" in event ? getDeltaXY(event) : getTouchXY(event);
-    var sourceEvent = shouldPreventQueue.current.filter(function(e) {
-      return e.name === event.type && (e.target === event.target || event.target === e.shadowParent) && deltaCompare(e.delta, delta);
+    var sourceEvent = shouldPreventQueue.current.filter(function (e) {
+      return (
+        e.name === event.type &&
+        (e.target === event.target || event.target === e.shadowParent) &&
+        deltaCompare(e.delta, delta)
+      );
     })[0];
     if (sourceEvent && sourceEvent.should) {
       if (event.cancelable) {
@@ -1485,10 +1672,16 @@ function RemoveScrollSideCar(props) {
       return;
     }
     if (!sourceEvent) {
-      var shardNodes = (lastProps.current.shards || []).map(extractRef).filter(Boolean).filter(function(node) {
-        return node.contains(event.target);
-      });
-      var shouldStop = shardNodes.length > 0 ? shouldCancelEvent(event, shardNodes[0]) : !lastProps.current.noIsolation;
+      var shardNodes = (lastProps.current.shards || [])
+        .map(extractRef)
+        .filter(Boolean)
+        .filter(function (node) {
+          return node.contains(event.target);
+        });
+      var shouldStop =
+        shardNodes.length > 0
+          ? shouldCancelEvent(event, shardNodes[0])
+          : !lastProps.current.noIsolation;
       if (shouldStop) {
         if (event.cancelable) {
           event.preventDefault();
@@ -1496,37 +1689,47 @@ function RemoveScrollSideCar(props) {
       }
     }
   }, []);
-  var shouldCancel = reactExports.useCallback(function(name, delta, target, should) {
+  var shouldCancel = reactExports.useCallback(function (name, delta, target, should) {
     var event = { name, delta, target, should, shadowParent: getOutermostShadowParent(target) };
     shouldPreventQueue.current.push(event);
-    setTimeout(function() {
-      shouldPreventQueue.current = shouldPreventQueue.current.filter(function(e) {
+    setTimeout(function () {
+      shouldPreventQueue.current = shouldPreventQueue.current.filter(function (e) {
         return e !== event;
       });
     }, 1);
   }, []);
-  var scrollTouchStart = reactExports.useCallback(function(event) {
+  var scrollTouchStart = reactExports.useCallback(function (event) {
     touchStartRef.current = getTouchXY(event);
     activeAxis.current = void 0;
   }, []);
-  var scrollWheel = reactExports.useCallback(function(event) {
-    shouldCancel(event.type, getDeltaXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
+  var scrollWheel = reactExports.useCallback(function (event) {
+    shouldCancel(
+      event.type,
+      getDeltaXY(event),
+      event.target,
+      shouldCancelEvent(event, props.lockRef.current),
+    );
   }, []);
-  var scrollTouchMove = reactExports.useCallback(function(event) {
-    shouldCancel(event.type, getTouchXY(event), event.target, shouldCancelEvent(event, props.lockRef.current));
+  var scrollTouchMove = reactExports.useCallback(function (event) {
+    shouldCancel(
+      event.type,
+      getTouchXY(event),
+      event.target,
+      shouldCancelEvent(event, props.lockRef.current),
+    );
   }, []);
-  reactExports.useEffect(function() {
+  reactExports.useEffect(function () {
     lockStack.push(Style2);
     props.setCallbacks({
       onScrollCapture: scrollWheel,
       onWheelCapture: scrollWheel,
-      onTouchMoveCapture: scrollTouchMove
+      onTouchMoveCapture: scrollTouchMove,
     });
     document.addEventListener("wheel", shouldPrevent, nonPassive);
     document.addEventListener("touchmove", shouldPrevent, nonPassive);
     document.addEventListener("touchstart", scrollTouchStart, nonPassive);
-    return function() {
-      lockStack = lockStack.filter(function(inst) {
+    return function () {
+      lockStack = lockStack.filter(function (inst) {
         return inst !== Style2;
       });
       document.removeEventListener("wheel", shouldPrevent, nonPassive);
@@ -1534,12 +1737,18 @@ function RemoveScrollSideCar(props) {
       document.removeEventListener("touchstart", scrollTouchStart, nonPassive);
     };
   }, []);
-  var removeScrollBar = props.removeScrollBar, inert = props.inert;
+  var removeScrollBar = props.removeScrollBar,
+    inert = props.inert;
   return reactExports.createElement(
     reactExports.Fragment,
     null,
     inert ? reactExports.createElement(Style2, { styles: generateStyle(id) }) : null,
-    removeScrollBar ? reactExports.createElement(RemoveScrollBar, { noRelative: props.noRelative, gapMode: props.gapMode }) : null
+    removeScrollBar
+      ? reactExports.createElement(RemoveScrollBar, {
+          noRelative: props.noRelative,
+          gapMode: props.gapMode,
+        })
+      : null,
   );
 }
 function getOutermostShadowParent(node) {
@@ -1554,11 +1763,11 @@ function getOutermostShadowParent(node) {
   return shadowParent;
 }
 const SideCar = exportSidecar(effectCar, RemoveScrollSideCar);
-var ReactRemoveScroll = reactExports.forwardRef(function(props, ref) {
+var ReactRemoveScroll = reactExports.forwardRef(function (props, ref) {
   return reactExports.createElement(RemoveScroll, __assign({}, props, { ref, sideCar: SideCar }));
 });
 ReactRemoveScroll.classNames = RemoveScroll.classNames;
-var getDefaultParent = function(originalTarget) {
+var getDefaultParent = function (originalTarget) {
   if (typeof document === "undefined") {
     return null;
   }
@@ -1569,26 +1778,31 @@ var counterMap = /* @__PURE__ */ new WeakMap();
 var uncontrolledNodes = /* @__PURE__ */ new WeakMap();
 var markerMap = {};
 var lockCount = 0;
-var unwrapHost = function(node) {
+var unwrapHost = function (node) {
   return node && (node.host || unwrapHost(node.parentNode));
 };
-var correctTargets = function(parent, targets) {
-  return targets.map(function(target) {
-    if (parent.contains(target)) {
-      return target;
-    }
-    var correctedTarget = unwrapHost(target);
-    if (correctedTarget && parent.contains(correctedTarget)) {
-      return correctedTarget;
-    }
-    console.error("aria-hidden", target, "in not contained inside", parent, ". Doing nothing");
-    return null;
-  }).filter(function(x) {
-    return Boolean(x);
-  });
+var correctTargets = function (parent, targets) {
+  return targets
+    .map(function (target) {
+      if (parent.contains(target)) {
+        return target;
+      }
+      var correctedTarget = unwrapHost(target);
+      if (correctedTarget && parent.contains(correctedTarget)) {
+        return correctedTarget;
+      }
+      console.error("aria-hidden", target, "in not contained inside", parent, ". Doing nothing");
+      return null;
+    })
+    .filter(function (x) {
+      return Boolean(x);
+    });
 };
-var applyAttributeToOthers = function(originalTarget, parentNode, markerName, controlAttribute) {
-  var targets = correctTargets(parentNode, Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
+var applyAttributeToOthers = function (originalTarget, parentNode, markerName, controlAttribute) {
+  var targets = correctTargets(
+    parentNode,
+    Array.isArray(originalTarget) ? originalTarget : [originalTarget],
+  );
   if (!markerMap[markerName]) {
     markerMap[markerName] = /* @__PURE__ */ new WeakMap();
   }
@@ -1596,7 +1810,7 @@ var applyAttributeToOthers = function(originalTarget, parentNode, markerName, co
   var hiddenNodes = [];
   var elementsToKeep = /* @__PURE__ */ new Set();
   var elementsToStop = new Set(targets);
-  var keep = function(el) {
+  var keep = function (el) {
     if (!el || elementsToKeep.has(el)) {
       return;
     }
@@ -1604,11 +1818,11 @@ var applyAttributeToOthers = function(originalTarget, parentNode, markerName, co
     keep(el.parentNode);
   };
   targets.forEach(keep);
-  var deep = function(parent) {
+  var deep = function (parent) {
     if (!parent || elementsToStop.has(parent)) {
       return;
     }
-    Array.prototype.forEach.call(parent.children, function(node) {
+    Array.prototype.forEach.call(parent.children, function (node) {
       if (elementsToKeep.has(node)) {
         deep(node);
       } else {
@@ -1638,8 +1852,8 @@ var applyAttributeToOthers = function(originalTarget, parentNode, markerName, co
   deep(parentNode);
   elementsToKeep.clear();
   lockCount++;
-  return function() {
-    hiddenNodes.forEach(function(node) {
+  return function () {
+    hiddenNodes.forEach(function (node) {
       var counterValue = counterMap.get(node) - 1;
       var markerValue = markerCounter.get(node) - 1;
       counterMap.set(node, counterValue);
@@ -1663,14 +1877,14 @@ var applyAttributeToOthers = function(originalTarget, parentNode, markerName, co
     }
   };
 };
-var hideOthers = function(originalTarget, parentNode, markerName) {
+var hideOthers = function (originalTarget, parentNode, markerName) {
   if (markerName === void 0) {
     markerName = "data-aria-hidden";
   }
   var targets = Array.from(Array.isArray(originalTarget) ? originalTarget : [originalTarget]);
   var activeParentNode = getDefaultParent(originalTarget);
   if (!activeParentNode) {
-    return function() {
+    return function () {
       return null;
     };
   }
@@ -1694,9 +1908,19 @@ function createSlot(ownerName) {
           return child;
         }
       });
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children: reactExports.isValidElement(newElement) ? reactExports.cloneElement(newElement, void 0, newChildren) : null });
+      return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, {
+        ...slotProps,
+        ref: forwardedRef,
+        children: reactExports.isValidElement(newElement)
+          ? reactExports.cloneElement(newElement, void 0, newChildren)
+          : null,
+      });
     }
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, { ...slotProps, ref: forwardedRef, children });
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(SlotClone, {
+      ...slotProps,
+      ref: forwardedRef,
+      children,
+    });
   });
   Slot2.displayName = `${ownerName}.Slot`;
   return Slot2;
@@ -1720,7 +1944,12 @@ function createSlotClone(ownerName) {
 }
 var SLOTTABLE_IDENTIFIER = /* @__PURE__ */ Symbol("radix.slottable");
 function isSlottable(child) {
-  return reactExports.isValidElement(child) && typeof child.type === "function" && "__radixId" in child.type && child.type.__radixId === SLOTTABLE_IDENTIFIER;
+  return (
+    reactExports.isValidElement(child) &&
+    typeof child.type === "function" &&
+    "__radixId" in child.type &&
+    child.type.__radixId === SLOTTABLE_IDENTIFIER
+  );
 }
 function mergeProps(slotProps, childProps) {
   const overrideProps = { ...childProps };
@@ -1769,7 +1998,7 @@ var Dialog$1 = (props) => {
     open: openProp,
     defaultOpen,
     onOpenChange,
-    modal = true
+    modal = true,
   } = props;
   const triggerRef = reactExports.useRef(null);
   const contentRef = reactExports.useRef(null);
@@ -1777,244 +2006,249 @@ var Dialog$1 = (props) => {
     prop: openProp,
     defaultProp: defaultOpen ?? false,
     onChange: onOpenChange,
-    caller: DIALOG_NAME
+    caller: DIALOG_NAME,
   });
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(
-    DialogProvider,
-    {
-      scope: __scopeDialog,
-      triggerRef,
-      contentRef,
-      contentId: useId(),
-      titleId: useId(),
-      descriptionId: useId(),
-      open,
-      onOpenChange: setOpen,
-      onOpenToggle: reactExports.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
-      modal,
-      children
-    }
-  );
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(DialogProvider, {
+    scope: __scopeDialog,
+    triggerRef,
+    contentRef,
+    contentId: useId(),
+    titleId: useId(),
+    descriptionId: useId(),
+    open,
+    onOpenChange: setOpen,
+    onOpenToggle: reactExports.useCallback(() => setOpen((prevOpen) => !prevOpen), [setOpen]),
+    modal,
+    children,
+  });
 };
 Dialog$1.displayName = DIALOG_NAME;
 var TRIGGER_NAME = "DialogTrigger";
-var DialogTrigger = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...triggerProps } = props;
-    const context = useDialogContext(TRIGGER_NAME, __scopeDialog);
-    const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Primitive.button,
-      {
-        type: "button",
-        "aria-haspopup": "dialog",
-        "aria-expanded": context.open,
-        "aria-controls": context.contentId,
-        "data-state": getState(context.open),
-        ...triggerProps,
-        ref: composedTriggerRef,
-        onClick: composeEventHandlers(props.onClick, context.onOpenToggle)
-      }
-    );
-  }
-);
+var DialogTrigger = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeDialog, ...triggerProps } = props;
+  const context = useDialogContext(TRIGGER_NAME, __scopeDialog);
+  const composedTriggerRef = useComposedRefs(forwardedRef, context.triggerRef);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.button, {
+    type: "button",
+    "aria-haspopup": "dialog",
+    "aria-expanded": context.open,
+    "aria-controls": context.contentId,
+    "data-state": getState(context.open),
+    ...triggerProps,
+    ref: composedTriggerRef,
+    onClick: composeEventHandlers(props.onClick, context.onOpenToggle),
+  });
+});
 DialogTrigger.displayName = TRIGGER_NAME;
 var PORTAL_NAME = "DialogPortal";
 var [PortalProvider, usePortalContext] = createDialogContext(PORTAL_NAME, {
-  forceMount: void 0
+  forceMount: void 0,
 });
 var DialogPortal$1 = (props) => {
   const { __scopeDialog, forceMount, children, container } = props;
   const context = useDialogContext(PORTAL_NAME, __scopeDialog);
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, { scope: __scopeDialog, forceMount, children: reactExports.Children.map(children, (child) => /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, { asChild: true, container, children: child }) })) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(PortalProvider, {
+    scope: __scopeDialog,
+    forceMount,
+    children: reactExports.Children.map(children, (child) =>
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, {
+        present: forceMount || context.open,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(Portal$1, {
+          asChild: true,
+          container,
+          children: child,
+        }),
+      }),
+    ),
+  });
 };
 DialogPortal$1.displayName = PORTAL_NAME;
 var OVERLAY_NAME = "DialogOverlay";
-var DialogOverlay$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const portalContext = usePortalContext(OVERLAY_NAME, props.__scopeDialog);
-    const { forceMount = portalContext.forceMount, ...overlayProps } = props;
-    const context = useDialogContext(OVERLAY_NAME, props.__scopeDialog);
-    return context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlayImpl, { ...overlayProps, ref: forwardedRef }) }) : null;
-  }
-);
-DialogOverlay$1.displayName = OVERLAY_NAME;
-var Slot = /* @__PURE__ */ createSlot("DialogOverlay.RemoveScroll");
-var DialogOverlayImpl = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...overlayProps } = props;
-    const context = useDialogContext(OVERLAY_NAME, __scopeDialog);
-    return (
-      // Make sure `Content` is scrollable even when it doesn't live inside `RemoveScroll`
-      // ie. when `Overlay` and `Content` are siblings
-      /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, { as: Slot, allowPinchZoom: true, shards: [context.contentRef], children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Primitive.div,
-        {
-          "data-state": getState(context.open),
+var DialogOverlay$1 = reactExports.forwardRef((props, forwardedRef) => {
+  const portalContext = usePortalContext(OVERLAY_NAME, props.__scopeDialog);
+  const { forceMount = portalContext.forceMount, ...overlayProps } = props;
+  const context = useDialogContext(OVERLAY_NAME, props.__scopeDialog);
+  return context.modal
+    ? /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, {
+        present: forceMount || context.open,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlayImpl, {
           ...overlayProps,
           ref: forwardedRef,
-          style: { pointerEvents: "auto", ...overlayProps.style }
-        }
-      ) })
-    );
-  }
-);
-var CONTENT_NAME = "DialogContent";
-var DialogContent$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const portalContext = usePortalContext(CONTENT_NAME, props.__scopeDialog);
-    const { forceMount = portalContext.forceMount, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, { present: forceMount || context.open, children: context.modal ? /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentModal, { ...contentProps, ref: forwardedRef }) : /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentNonModal, { ...contentProps, ref: forwardedRef }) });
-  }
-);
-DialogContent$1.displayName = CONTENT_NAME;
-var DialogContentModal = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
-    const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
-    reactExports.useEffect(() => {
-      const content = contentRef.current;
-      if (content) return hideOthers(content);
-    }, []);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      DialogContentImpl,
-      {
-        ...props,
-        ref: composedRefs,
-        trapFocus: context.open,
-        disableOutsidePointerEvents: true,
-        onCloseAutoFocus: composeEventHandlers(props.onCloseAutoFocus, (event) => {
-          event.preventDefault();
-          context.triggerRef.current?.focus();
         }),
-        onPointerDownOutside: composeEventHandlers(props.onPointerDownOutside, (event) => {
-          const originalEvent = event.detail.originalEvent;
-          const ctrlLeftClick = originalEvent.button === 0 && originalEvent.ctrlKey === true;
-          const isRightClick = originalEvent.button === 2 || ctrlLeftClick;
-          if (isRightClick) event.preventDefault();
-        }),
-        onFocusOutside: composeEventHandlers(
-          props.onFocusOutside,
-          (event) => event.preventDefault()
-        )
-      }
-    );
-  }
-);
-var DialogContentNonModal = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
-    const hasInteractedOutsideRef = reactExports.useRef(false);
-    const hasPointerDownOutsideRef = reactExports.useRef(false);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      DialogContentImpl,
-      {
-        ...props,
+      })
+    : null;
+});
+DialogOverlay$1.displayName = OVERLAY_NAME;
+var Slot = /* @__PURE__ */ createSlot("DialogOverlay.RemoveScroll");
+var DialogOverlayImpl = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeDialog, ...overlayProps } = props;
+  const context = useDialogContext(OVERLAY_NAME, __scopeDialog);
+  return (
+    // Make sure `Content` is scrollable even when it doesn't live inside `RemoveScroll`
+    // ie. when `Overlay` and `Content` are siblings
+    /* @__PURE__ */ jsxRuntimeExports.jsx(ReactRemoveScroll, {
+      as: Slot,
+      allowPinchZoom: true,
+      shards: [context.contentRef],
+      children: /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.div, {
+        "data-state": getState(context.open),
+        ...overlayProps,
         ref: forwardedRef,
-        trapFocus: false,
-        disableOutsidePointerEvents: false,
-        onCloseAutoFocus: (event) => {
-          props.onCloseAutoFocus?.(event);
-          if (!event.defaultPrevented) {
-            if (!hasInteractedOutsideRef.current) context.triggerRef.current?.focus();
-            event.preventDefault();
-          }
-          hasInteractedOutsideRef.current = false;
-          hasPointerDownOutsideRef.current = false;
-        },
-        onInteractOutside: (event) => {
-          props.onInteractOutside?.(event);
-          if (!event.defaultPrevented) {
-            hasInteractedOutsideRef.current = true;
-            if (event.detail.originalEvent.type === "pointerdown") {
-              hasPointerDownOutsideRef.current = true;
-            }
-          }
-          const target = event.target;
-          const targetIsTrigger = context.triggerRef.current?.contains(target);
-          if (targetIsTrigger) event.preventDefault();
-          if (event.detail.originalEvent.type === "focusin" && hasPointerDownOutsideRef.current) {
-            event.preventDefault();
-          }
+        style: { pointerEvents: "auto", ...overlayProps.style },
+      }),
+    })
+  );
+});
+var CONTENT_NAME = "DialogContent";
+var DialogContent$1 = reactExports.forwardRef((props, forwardedRef) => {
+  const portalContext = usePortalContext(CONTENT_NAME, props.__scopeDialog);
+  const { forceMount = portalContext.forceMount, ...contentProps } = props;
+  const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Presence, {
+    present: forceMount || context.open,
+    children: context.modal
+      ? /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentModal, {
+          ...contentProps,
+          ref: forwardedRef,
+        })
+      : /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentNonModal, {
+          ...contentProps,
+          ref: forwardedRef,
+        }),
+  });
+});
+DialogContent$1.displayName = CONTENT_NAME;
+var DialogContentModal = reactExports.forwardRef((props, forwardedRef) => {
+  const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
+  const contentRef = reactExports.useRef(null);
+  const composedRefs = useComposedRefs(forwardedRef, context.contentRef, contentRef);
+  reactExports.useEffect(() => {
+    const content = contentRef.current;
+    if (content) return hideOthers(content);
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentImpl, {
+    ...props,
+    ref: composedRefs,
+    trapFocus: context.open,
+    disableOutsidePointerEvents: true,
+    onCloseAutoFocus: composeEventHandlers(props.onCloseAutoFocus, (event) => {
+      event.preventDefault();
+      context.triggerRef.current?.focus();
+    }),
+    onPointerDownOutside: composeEventHandlers(props.onPointerDownOutside, (event) => {
+      const originalEvent = event.detail.originalEvent;
+      const ctrlLeftClick = originalEvent.button === 0 && originalEvent.ctrlKey === true;
+      const isRightClick = originalEvent.button === 2 || ctrlLeftClick;
+      if (isRightClick) event.preventDefault();
+    }),
+    onFocusOutside: composeEventHandlers(props.onFocusOutside, (event) => event.preventDefault()),
+  });
+});
+var DialogContentNonModal = reactExports.forwardRef((props, forwardedRef) => {
+  const context = useDialogContext(CONTENT_NAME, props.__scopeDialog);
+  const hasInteractedOutsideRef = reactExports.useRef(false);
+  const hasPointerDownOutsideRef = reactExports.useRef(false);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(DialogContentImpl, {
+    ...props,
+    ref: forwardedRef,
+    trapFocus: false,
+    disableOutsidePointerEvents: false,
+    onCloseAutoFocus: (event) => {
+      props.onCloseAutoFocus?.(event);
+      if (!event.defaultPrevented) {
+        if (!hasInteractedOutsideRef.current) context.triggerRef.current?.focus();
+        event.preventDefault();
+      }
+      hasInteractedOutsideRef.current = false;
+      hasPointerDownOutsideRef.current = false;
+    },
+    onInteractOutside: (event) => {
+      props.onInteractOutside?.(event);
+      if (!event.defaultPrevented) {
+        hasInteractedOutsideRef.current = true;
+        if (event.detail.originalEvent.type === "pointerdown") {
+          hasPointerDownOutsideRef.current = true;
         }
       }
-    );
-  }
-);
-var DialogContentImpl = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
-    const context = useDialogContext(CONTENT_NAME, __scopeDialog);
-    const contentRef = reactExports.useRef(null);
-    const composedRefs = useComposedRefs(forwardedRef, contentRef);
-    useFocusGuards();
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(
-        FocusScope,
-        {
-          asChild: true,
-          loop: true,
-          trapped: trapFocus,
-          onMountAutoFocus: onOpenAutoFocus,
-          onUnmountAutoFocus: onCloseAutoFocus,
-          children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-            DismissableLayer,
-            {
-              role: "dialog",
-              id: context.contentId,
-              "aria-describedby": context.descriptionId,
-              "aria-labelledby": context.titleId,
-              "data-state": getState(context.open),
-              ...contentProps,
-              ref: composedRefs,
-              onDismiss: () => context.onOpenChange(false)
-            }
-          )
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(TitleWarning, { titleId: context.titleId }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(DescriptionWarning, { contentRef, descriptionId: context.descriptionId })
-      ] })
-    ] });
-  }
-);
+      const target = event.target;
+      const targetIsTrigger = context.triggerRef.current?.contains(target);
+      if (targetIsTrigger) event.preventDefault();
+      if (event.detail.originalEvent.type === "focusin" && hasPointerDownOutsideRef.current) {
+        event.preventDefault();
+      }
+    },
+  });
+});
+var DialogContentImpl = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeDialog, trapFocus, onOpenAutoFocus, onCloseAutoFocus, ...contentProps } = props;
+  const context = useDialogContext(CONTENT_NAME, __scopeDialog);
+  const contentRef = reactExports.useRef(null);
+  const composedRefs = useComposedRefs(forwardedRef, contentRef);
+  useFocusGuards();
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+    children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(FocusScope, {
+        asChild: true,
+        loop: true,
+        trapped: trapFocus,
+        onMountAutoFocus: onOpenAutoFocus,
+        onUnmountAutoFocus: onCloseAutoFocus,
+        children: /* @__PURE__ */ jsxRuntimeExports.jsx(DismissableLayer, {
+          role: "dialog",
+          id: context.contentId,
+          "aria-describedby": context.descriptionId,
+          "aria-labelledby": context.titleId,
+          "data-state": getState(context.open),
+          ...contentProps,
+          ref: composedRefs,
+          onDismiss: () => context.onOpenChange(false),
+        }),
+      }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, {
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TitleWarning, { titleId: context.titleId }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(DescriptionWarning, {
+            contentRef,
+            descriptionId: context.descriptionId,
+          }),
+        ],
+      }),
+    ],
+  });
+});
 var TITLE_NAME = "DialogTitle";
-var DialogTitle$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...titleProps } = props;
-    const context = useDialogContext(TITLE_NAME, __scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.h2, { id: context.titleId, ...titleProps, ref: forwardedRef });
-  }
-);
+var DialogTitle$1 = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeDialog, ...titleProps } = props;
+  const context = useDialogContext(TITLE_NAME, __scopeDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.h2, {
+    id: context.titleId,
+    ...titleProps,
+    ref: forwardedRef,
+  });
+});
 DialogTitle$1.displayName = TITLE_NAME;
 var DESCRIPTION_NAME = "DialogDescription";
-var DialogDescription$1 = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...descriptionProps } = props;
-    const context = useDialogContext(DESCRIPTION_NAME, __scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.p, { id: context.descriptionId, ...descriptionProps, ref: forwardedRef });
-  }
-);
+var DialogDescription$1 = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeDialog, ...descriptionProps } = props;
+  const context = useDialogContext(DESCRIPTION_NAME, __scopeDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.p, {
+    id: context.descriptionId,
+    ...descriptionProps,
+    ref: forwardedRef,
+  });
+});
 DialogDescription$1.displayName = DESCRIPTION_NAME;
 var CLOSE_NAME = "DialogClose";
-var DialogClose = reactExports.forwardRef(
-  (props, forwardedRef) => {
-    const { __scopeDialog, ...closeProps } = props;
-    const context = useDialogContext(CLOSE_NAME, __scopeDialog);
-    return /* @__PURE__ */ jsxRuntimeExports.jsx(
-      Primitive.button,
-      {
-        type: "button",
-        ...closeProps,
-        ref: forwardedRef,
-        onClick: composeEventHandlers(props.onClick, () => context.onOpenChange(false))
-      }
-    );
-  }
-);
+var DialogClose = reactExports.forwardRef((props, forwardedRef) => {
+  const { __scopeDialog, ...closeProps } = props;
+  const context = useDialogContext(CLOSE_NAME, __scopeDialog);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Primitive.button, {
+    type: "button",
+    ...closeProps,
+    ref: forwardedRef,
+    onClick: composeEventHandlers(props.onClick, () => context.onOpenChange(false)),
+  });
+});
 DialogClose.displayName = CLOSE_NAME;
 function getState(open) {
   return open ? "open" : "closed";
@@ -2023,7 +2257,7 @@ var TITLE_WARNING_NAME = "DialogTitleWarning";
 var [WarningProvider, useWarningContext] = createContext2(TITLE_WARNING_NAME, {
   contentName: CONTENT_NAME,
   titleName: TITLE_NAME,
-  docsSlug: "dialog"
+  docsSlug: "dialog",
 });
 var TitleWarning = ({ titleId }) => {
   const titleWarningContext = useWarningContext(TITLE_WARNING_NAME);
@@ -2062,122 +2296,222 @@ var Description = DialogDescription$1;
 var Close = DialogClose;
 const Dialog = Root;
 const DialogPortal = Portal;
-const DialogOverlay = reactExports.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-  Overlay,
-  {
+const DialogOverlay = reactExports.forwardRef(({ className, ...props }, ref) =>
+  /* @__PURE__ */ jsxRuntimeExports.jsx(Overlay, {
     ref,
     className: cn(
       "fixed inset-0 z-50 bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-      className
+      className,
     ),
-    ...props
-  }
-));
-DialogOverlay.displayName = Overlay.displayName;
-const DialogContent = reactExports.forwardRef(({ className, children, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogPortal, { children: [
-  /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlay, {}),
-  /* @__PURE__ */ jsxRuntimeExports.jsxs(
-    Content,
-    {
-      ref,
-      className: cn(
-        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
-        className
-      ),
-      ...props,
-      children: [
-        children,
-        /* @__PURE__ */ jsxRuntimeExports.jsxs(Close, { className: "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "sr-only", children: "Close" })
-        ] })
-      ]
-    }
-  )
-] }));
-DialogContent.displayName = Content.displayName;
-const DialogHeader = ({ className, ...props }) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: cn("flex flex-col space-y-1.5 text-center sm:text-left", className), ...props });
-DialogHeader.displayName = "DialogHeader";
-const DialogFooter = ({ className, ...props }) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-  "div",
-  {
-    className: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
-    ...props
-  }
+    ...props,
+  }),
 );
+DialogOverlay.displayName = Overlay.displayName;
+const DialogContent = reactExports.forwardRef(({ className, children, ...props }, ref) =>
+  /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogPortal, {
+    children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(DialogOverlay, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(Content, {
+        ref,
+        className: cn(
+          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+          className,
+        ),
+        ...props,
+        children: [
+          children,
+          /* @__PURE__ */ jsxRuntimeExports.jsxs(Close, {
+            className:
+              "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+            children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx(X, { className: "h-4 w-4" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", {
+                className: "sr-only",
+                children: "Close",
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  }),
+);
+DialogContent.displayName = Content.displayName;
+const DialogHeader = ({ className, ...props }) =>
+  /* @__PURE__ */ jsxRuntimeExports.jsx("div", {
+    className: cn("flex flex-col space-y-1.5 text-center sm:text-left", className),
+    ...props,
+  });
+DialogHeader.displayName = "DialogHeader";
+const DialogFooter = ({ className, ...props }) =>
+  /* @__PURE__ */ jsxRuntimeExports.jsx("div", {
+    className: cn("flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2", className),
+    ...props,
+  });
 DialogFooter.displayName = "DialogFooter";
-const DialogTitle = reactExports.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-  Title,
-  {
+const DialogTitle = reactExports.forwardRef(({ className, ...props }, ref) =>
+  /* @__PURE__ */ jsxRuntimeExports.jsx(Title, {
     ref,
     className: cn("text-lg font-semibold leading-none tracking-tight", className),
-    ...props
-  }
-));
+    ...props,
+  }),
+);
 DialogTitle.displayName = Title.displayName;
-const DialogDescription = reactExports.forwardRef(({ className, ...props }, ref) => /* @__PURE__ */ jsxRuntimeExports.jsx(
-  Description,
-  {
+const DialogDescription = reactExports.forwardRef(({ className, ...props }, ref) =>
+  /* @__PURE__ */ jsxRuntimeExports.jsx(Description, {
     ref,
     className: cn("text-sm text-muted-foreground", className),
-    ...props
-  }
-));
+    ...props,
+  }),
+);
 DialogDescription.displayName = Description.displayName;
 const roleLabel = {
   admin_master: "Admin Master",
   gestor: "Gestor",
   operador: "Operador",
-  visualizador: "Visualizador"
+  visualizador: "Visualizador",
 };
 const roleTone = {
   admin_master: "primary",
   gestor: "success",
   operador: "warning",
-  visualizador: "neutral"
+  visualizador: "neutral",
 };
 function UsersPage() {
   const q = useUsers();
   const users = q.data ?? [];
-  const {
-    profile
-  } = useAuth();
+  const { profile } = useAuth();
   const isMaster = profile?.role === "admin_master";
   const [open, setOpen] = reactExports.useState(false);
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "space-y-6", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(PageHeader, { title: "Usuários e permissões", subtitle: "Quem tem acesso ao painel e em que nível.", actions: isMaster ? /* @__PURE__ */ jsxRuntimeExports.jsxs("button", { onClick: () => setOpen(true), className: "inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(UserPlus, { className: "h-4 w-4" }),
-      " Adicionar usuário"
-    ] }) : null }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(Panel, { bodyClassName: "p-0", children: q.isLoading ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingState, {}) : q.error ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorState, { error: q.error }) }) : users.length === 0 ? /* @__PURE__ */ jsxRuntimeExports.jsx(EmptyState, { title: "Nenhum usuário ainda", description: "Convide pessoas para colaborar na sua organização.", icon: Users }) : /* @__PURE__ */ jsxRuntimeExports.jsxs("table", { className: "w-full text-sm", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("thead", { children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-border bg-surface/50 text-[11px] uppercase tracking-wider text-muted-foreground", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-5 py-3 text-left", children: "Usuário" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-5 py-3 text-left", children: "Perfil" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("th", { className: "px-5 py-3 text-left", children: "Status" })
-      ] }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", { children: users.map((u) => /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", { className: "border-b border-border/50 hover:bg-surface/40", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-5 py-3.5", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2.5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "h-9 w-9 rounded-full bg-gradient-primary grid place-items-center text-xs font-bold text-primary-foreground", children: u.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase() }),
-          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "font-medium", children: u.name }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-[11px] text-muted-foreground inline-flex items-center gap-1", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx(Mail, { className: "h-3 w-3" }),
-              " ",
-              u.email
-            ] })
-          ] })
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-5 py-3.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusBadge, { tone: roleTone[u.role], label: roleLabel[u.role], withDot: false }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("td", { className: "px-5 py-3.5", children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusBadge, { tone: u.status === "active" ? "success" : "neutral", label: u.status }) })
-      ] }, u.id)) })
-    ] }) }),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(CreateUserDialog, { open, onOpenChange: setOpen })
-  ] });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+    className: "space-y-6",
+    children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(PageHeader, {
+        title: "Usuários e permissões",
+        subtitle: "Quem tem acesso ao painel e em que nível.",
+        actions: isMaster
+          ? /* @__PURE__ */ jsxRuntimeExports.jsxs("button", {
+              onClick: () => setOpen(true),
+              className:
+                "inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95",
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx(UserPlus, { className: "h-4 w-4" }),
+                " Adicionar usuário",
+              ],
+            })
+          : null,
+      }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(Panel, {
+        bodyClassName: "p-0",
+        children: q.isLoading
+          ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoadingState, {})
+          : q.error
+            ? /* @__PURE__ */ jsxRuntimeExports.jsx("div", {
+                className: "p-4",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(ErrorState, { error: q.error }),
+              })
+            : users.length === 0
+              ? /* @__PURE__ */ jsxRuntimeExports.jsx(EmptyState, {
+                  title: "Nenhum usuário ainda",
+                  description: "Convide pessoas para colaborar na sua organização.",
+                  icon: Users,
+                })
+              : /* @__PURE__ */ jsxRuntimeExports.jsxs("table", {
+                  className: "w-full text-sm",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("thead", {
+                      children: /* @__PURE__ */ jsxRuntimeExports.jsxs("tr", {
+                        className:
+                          "border-b border-border bg-surface/50 text-[11px] uppercase tracking-wider text-muted-foreground",
+                        children: [
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("th", {
+                            className: "px-5 py-3 text-left",
+                            children: "Usuário",
+                          }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("th", {
+                            className: "px-5 py-3 text-left",
+                            children: "Perfil",
+                          }),
+                          /* @__PURE__ */ jsxRuntimeExports.jsx("th", {
+                            className: "px-5 py-3 text-left",
+                            children: "Status",
+                          }),
+                        ],
+                      }),
+                    }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("tbody", {
+                      children: users.map((u) =>
+                        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+                          "tr",
+                          {
+                            className: "border-b border-border/50 hover:bg-surface/40",
+                            children: [
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("td", {
+                                className: "px-5 py-3.5",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+                                  className: "flex items-center gap-2.5",
+                                  children: [
+                                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", {
+                                      className:
+                                        "h-9 w-9 rounded-full bg-gradient-primary grid place-items-center text-xs font-bold text-primary-foreground",
+                                      children: u.name
+                                        .split(" ")
+                                        .map((n) => n[0])
+                                        .slice(0, 2)
+                                        .join("")
+                                        .toUpperCase(),
+                                    }),
+                                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+                                      children: [
+                                        /* @__PURE__ */ jsxRuntimeExports.jsx("p", {
+                                          className: "font-medium",
+                                          children: u.name,
+                                        }),
+                                        /* @__PURE__ */ jsxRuntimeExports.jsxs("p", {
+                                          className:
+                                            "text-[11px] text-muted-foreground inline-flex items-center gap-1",
+                                          children: [
+                                            /* @__PURE__ */ jsxRuntimeExports.jsx(Mail, {
+                                              className: "h-3 w-3",
+                                            }),
+                                            " ",
+                                            u.email,
+                                          ],
+                                        }),
+                                      ],
+                                    }),
+                                  ],
+                                }),
+                              }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("td", {
+                                className: "px-5 py-3.5",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusBadge, {
+                                  tone: roleTone[u.role],
+                                  label: roleLabel[u.role],
+                                  withDot: false,
+                                }),
+                              }),
+                              /* @__PURE__ */ jsxRuntimeExports.jsx("td", {
+                                className: "px-5 py-3.5",
+                                children: /* @__PURE__ */ jsxRuntimeExports.jsx(StatusBadge, {
+                                  tone: u.status === "active" ? "success" : "neutral",
+                                  label: u.status,
+                                }),
+                              }),
+                            ],
+                          },
+                          u.id,
+                        ),
+                      ),
+                    }),
+                  ],
+                }),
+      }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(CreateUserDialog, { open, onOpenChange: setOpen }),
+    ],
+  });
 }
-function CreateUserDialog({
-  open,
-  onOpenChange
-}) {
+function CreateUserDialog({ open, onOpenChange }) {
   const qc = useQueryClient();
   const createUserFn = useServerFn(createOrgUser);
   const [name, setName] = reactExports.useState("");
@@ -2194,29 +2528,31 @@ function CreateUserDialog({
   };
   const mutation = useMutation({
     mutationFn: async (payload) => {
-      const {
-        data: sessionData
-      } = await supabase.auth.getSession();
+      const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData.session?.access_token;
       if (!token) throw new Error("Sessão expirada. Entre novamente.");
       return createUserFn({
         data: payload,
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
     },
     onSuccess: (res) => {
-      toast.success(res.mode === "invite" ? `Convite enviado para ${res.email}.` : `Usuário ${res.email} criado com sucesso.`);
+      toast.success(
+        res.mode === "invite"
+          ? `Convite enviado para ${res.email}.`
+          : `Usuário ${res.email} criado com sucesso.`,
+      );
       qc.invalidateQueries({
-        queryKey: ["users_profiles"]
+        queryKey: ["users_profiles"],
       });
       reset();
       onOpenChange(false);
     },
     onError: (err) => {
       toast.error(err.message ?? "Não foi possível criar o usuário.");
-    }
+    },
   });
   const onSubmit = (e) => {
     e.preventDefault();
@@ -2229,58 +2565,181 @@ function CreateUserDialog({
       email,
       role,
       mode,
-      password: mode === "password" ? password : void 0
+      password: mode === "password" ? password : void 0,
     });
   };
   const genPassword = () => {
     const s = Math.random().toString(36).slice(2, 6) + Math.random().toString(36).slice(2, 6);
     setPassword(s);
   };
-  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, { open, onOpenChange, children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, { children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, { children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: "Adicionar usuário" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, { children: "O usuário será adicionado à sua organização." })
-    ] }),
-    /* @__PURE__ */ jsxRuntimeExports.jsxs("form", { onSubmit, className: "space-y-4", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium text-muted-foreground mb-1.5 block", children: "Nome" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { required: true, value: name, onChange: (e) => setName(e.target.value), placeholder: "Maria Silva", className: "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium text-muted-foreground mb-1.5 block", children: "E-mail" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { required: true, type: "email", value: email, onChange: (e) => setEmail(e.target.value), placeholder: "maria@empresa.com", className: "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring" })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium text-muted-foreground mb-1.5 block", children: "Perfil" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("select", { value: role, onChange: (e) => setRole(e.target.value), className: "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "admin_master", children: "Admin Master" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "gestor", children: "Gestor" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "operador", children: "Operador" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("option", { value: "visualizador", children: "Visualizador" })
-        ] })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium text-muted-foreground mb-1.5 block", children: "Forma de acesso" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-2 gap-2", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => setMode("password"), className: `rounded-lg border px-3 py-2 text-sm transition ${mode === "password" ? "border-primary bg-primary/10 text-foreground" : "border-input bg-surface text-muted-foreground hover:border-primary/50"}`, children: "Senha temporária" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => setMode("invite"), className: `rounded-lg border px-3 py-2 text-sm transition ${mode === "invite" ? "border-primary bg-primary/10 text-foreground" : "border-input bg-surface text-muted-foreground hover:border-primary/50"}`, children: "Convite por e-mail" })
-        ] })
-      ] }),
-      mode === "password" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center justify-between mb-1.5", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("label", { className: "text-xs font-medium text-muted-foreground", children: "Senha temporária (mín. 6)" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: genPassword, className: "text-[11px] text-primary hover:underline", children: "Gerar" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("input", { required: true, type: "text", value: password, onChange: (e) => setPassword(e.target.value), placeholder: "••••••••", className: "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-[11px] text-muted-foreground mt-1", children: "Compartilhe com o usuário e peça que troque após entrar." })
-      ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "button", onClick: () => onOpenChange(false), className: "rounded-lg border border-input bg-surface px-4 py-2 text-sm hover:bg-surface/70", children: "Cancelar" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("button", { type: "submit", disabled: mutation.isPending, className: "inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95 disabled:opacity-60", children: mutation.isPending ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, { className: "h-4 w-4 animate-spin" }) : mode === "invite" ? "Enviar convite" : "Criar usuário" })
-      ] })
-    ] })
-  ] }) });
+  return /* @__PURE__ */ jsxRuntimeExports.jsx(Dialog, {
+    open,
+    onOpenChange,
+    children: /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogContent, {
+      children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogHeader, {
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(DialogTitle, { children: "Adicionar usuário" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(DialogDescription, {
+              children: "O usuário será adicionado à sua organização.",
+            }),
+          ],
+        }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("form", {
+          onSubmit,
+          className: "space-y-4",
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", {
+                  className: "text-xs font-medium text-muted-foreground mb-1.5 block",
+                  children: "Nome",
+                }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", {
+                  required: true,
+                  value: name,
+                  onChange: (e) => setName(e.target.value),
+                  placeholder: "Maria Silva",
+                  className:
+                    "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring",
+                }),
+              ],
+            }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", {
+                  className: "text-xs font-medium text-muted-foreground mb-1.5 block",
+                  children: "E-mail",
+                }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("input", {
+                  required: true,
+                  type: "email",
+                  value: email,
+                  onChange: (e) => setEmail(e.target.value),
+                  placeholder: "maria@empresa.com",
+                  className:
+                    "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring",
+                }),
+              ],
+            }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", {
+                  className: "text-xs font-medium text-muted-foreground mb-1.5 block",
+                  children: "Perfil",
+                }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("select", {
+                  value: role,
+                  onChange: (e) => setRole(e.target.value),
+                  className:
+                    "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", {
+                      value: "admin_master",
+                      children: "Admin Master",
+                    }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", {
+                      value: "gestor",
+                      children: "Gestor",
+                    }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", {
+                      value: "operador",
+                      children: "Operador",
+                    }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("option", {
+                      value: "visualizador",
+                      children: "Visualizador",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("label", {
+                  className: "text-xs font-medium text-muted-foreground mb-1.5 block",
+                  children: "Forma de acesso",
+                }),
+                /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+                  className: "grid grid-cols-2 gap-2",
+                  children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", {
+                      type: "button",
+                      onClick: () => setMode("password"),
+                      className: `rounded-lg border px-3 py-2 text-sm transition ${mode === "password" ? "border-primary bg-primary/10 text-foreground" : "border-input bg-surface text-muted-foreground hover:border-primary/50"}`,
+                      children: "Senha temporária",
+                    }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("button", {
+                      type: "button",
+                      onClick: () => setMode("invite"),
+                      className: `rounded-lg border px-3 py-2 text-sm transition ${mode === "invite" ? "border-primary bg-primary/10 text-foreground" : "border-input bg-surface text-muted-foreground hover:border-primary/50"}`,
+                      children: "Convite por e-mail",
+                    }),
+                  ],
+                }),
+              ],
+            }),
+            mode === "password" &&
+              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", {
+                    className: "flex items-center justify-between mb-1.5",
+                    children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("label", {
+                        className: "text-xs font-medium text-muted-foreground",
+                        children: "Senha temporária (mín. 6)",
+                      }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("button", {
+                        type: "button",
+                        onClick: genPassword,
+                        className: "text-[11px] text-primary hover:underline",
+                        children: "Gerar",
+                      }),
+                    ],
+                  }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("input", {
+                    required: true,
+                    type: "text",
+                    value: password,
+                    onChange: (e) => setPassword(e.target.value),
+                    placeholder: "••••••••",
+                    className:
+                      "w-full rounded-lg border border-input bg-surface px-3 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-ring",
+                  }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", {
+                    className: "text-[11px] text-muted-foreground mt-1",
+                    children: "Compartilhe com o usuário e peça que troque após entrar.",
+                  }),
+                ],
+              }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs(DialogFooter, {
+              children: [
+                /* @__PURE__ */ jsxRuntimeExports.jsx("button", {
+                  type: "button",
+                  onClick: () => onOpenChange(false),
+                  className:
+                    "rounded-lg border border-input bg-surface px-4 py-2 text-sm hover:bg-surface/70",
+                  children: "Cancelar",
+                }),
+                /* @__PURE__ */ jsxRuntimeExports.jsx("button", {
+                  type: "submit",
+                  disabled: mutation.isPending,
+                  className:
+                    "inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95 disabled:opacity-60",
+                  children: mutation.isPending
+                    ? /* @__PURE__ */ jsxRuntimeExports.jsx(LoaderCircle, {
+                        className: "h-4 w-4 animate-spin",
+                      })
+                    : mode === "invite"
+                      ? "Enviar convite"
+                      : "Criar usuário",
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+  });
 }
-export {
-  UsersPage as component
-};
+export { UsersPage as component };

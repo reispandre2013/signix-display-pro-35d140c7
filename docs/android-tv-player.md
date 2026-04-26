@@ -4,12 +4,12 @@ Este documento descreve como o **player web atual** (`/player`, `src/player/**`)
 
 ## 1. Arquitetura
 
-| Camada | Função |
-|--------|--------|
-| **Web (núcleo)** | `usePlayerRuntime`, pareamento, sync, playlist, heartbeat, fila de logs — inalterado em essência. |
-| **Capacitor** | WebView nativa + plugins (`App`, `StatusBar`, `SplashScreen`). |
-| **Plugin `SignixTv`** | Imersivo (system bars), `FLAG_KEEP_SCREEN_ON`, `startLockTask` / `stopLockTask`. |
-| **BootReceiver** | Abre `MainActivity` após `BOOT_COMPLETED` (sujeito a OEM). |
+| Camada                | Função                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------- |
+| **Web (núcleo)**      | `usePlayerRuntime`, pareamento, sync, playlist, heartbeat, fila de logs — inalterado em essência. |
+| **Capacitor**         | WebView nativa + plugins (`App`, `StatusBar`, `SplashScreen`).                                    |
+| **Plugin `SignixTv`** | Imersivo (system bars), `FLAG_KEEP_SCREEN_ON`, `startLockTask` / `stopLockTask`.                  |
+| **BootReceiver**      | Abre `MainActivity` após `BOOT_COMPLETED` (sujeito a OEM).                                        |
 
 ### Módulos web (`src/player/`)
 

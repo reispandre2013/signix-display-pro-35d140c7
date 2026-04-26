@@ -1,1 +1,23 @@
-import{j as e}from"./index-DUcMANMA.js";function r({title:x,subtitle:s,actions:t}){return e.jsxs("div",{className:"flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6",children:[e.jsxs("div",{children:[e.jsx("h2",{className:"font-display text-2xl lg:text-3xl font-bold tracking-tight",children:x}),s&&e.jsx("p",{className:"mt-1.5 text-sm text-muted-foreground max-w-2xl",children:s})]}),t&&e.jsx("div",{className:"flex items-center gap-2 flex-wrap",children:t})]})}export{r as P};
+import { j as e } from "./index-DUcMANMA.js";
+function r({ title: x, subtitle: s, actions: t }) {
+  return e.jsxs("div", {
+    className: "flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6",
+    children: [
+      e.jsxs("div", {
+        children: [
+          e.jsx("h2", {
+            className: "font-display text-2xl lg:text-3xl font-bold tracking-tight",
+            children: x,
+          }),
+          s &&
+            e.jsx("p", {
+              className: "mt-1.5 text-sm text-muted-foreground max-w-2xl",
+              children: s,
+            }),
+        ],
+      }),
+      t && e.jsx("div", { className: "flex items-center gap-2 flex-wrap", children: t }),
+    ],
+  });
+}
+export { r as P };

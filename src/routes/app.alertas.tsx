@@ -72,22 +72,36 @@ function AlertsPage() {
             {alerts.map((a) => {
               const resolved = !!a.resolved_at;
               return (
-                <li key={a.id} className="flex items-start gap-4 px-5 py-4 hover:bg-surface/40 transition-colors">
+                <li
+                  key={a.id}
+                  className="flex items-start gap-4 px-5 py-4 hover:bg-surface/40 transition-colors"
+                >
                   <div
                     className={`h-9 w-9 rounded-lg grid place-items-center shrink-0 ${
                       resolved ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
                     }`}
                   >
-                    {resolved ? <CheckCircle2 className="h-4 w-4" /> : <AlertTriangle className="h-4 w-4" />}
+                    {resolved ? (
+                      <CheckCircle2 className="h-4 w-4" />
+                    ) : (
+                      <AlertTriangle className="h-4 w-4" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="text-sm font-medium">{a.alert_type}</p>
-                      <StatusBadge tone={sevTone[a.severity]} label={sevLabel[a.severity]} withDot={false} />
+                      <StatusBadge
+                        tone={sevTone[a.severity]}
+                        label={sevLabel[a.severity]}
+                        withDot={false}
+                      />
                     </div>
                     <p className="text-[11px] text-muted-foreground mt-0.5">
                       {screenName(a.screen_id)} ·{" "}
-                      {formatDistanceToNow(new Date(a.created_at), { locale: ptBR, addSuffix: true })}
+                      {formatDistanceToNow(new Date(a.created_at), {
+                        locale: ptBR,
+                        addSuffix: true,
+                      })}
                     </p>
                     <p className="text-xs text-muted-foreground mt-1.5">{a.message}</p>
                   </div>

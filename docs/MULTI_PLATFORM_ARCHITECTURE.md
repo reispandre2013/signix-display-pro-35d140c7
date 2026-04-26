@@ -49,15 +49,15 @@ Documento técnico: diagnóstico do estado atual, plano de migração sem regres
 
 ## 4. Adaptações mínimas necessárias (incrementais)
 
-| # | Mudança | Motivo | Risco regressão |
-|---|---------|--------|------------------|
-| 1 | Coluna `pairing_codes.player_platform` + gravação em `createPairingCode` | Saber qual player pediu o código | Baixo: coluna nullable |
-| 2 | `claimPairingCode` aceitar `platform` (default `android`) e persistir em `screens.platform` | Painel escolhe / confirma plataforma | Baixo: default preserva Android |
-| 3 | Tabelas `screen_logs`, `screen_heartbeats`, `screen_sync_history` | Logs / heartbeat por screen + plataforma | Baixo: tabelas novas |
-| 4 | `postPlayerHeartbeat` / `postPlayerLog` (server functions) | Telemetria sem expor service key ao cliente | Médio: validar bem `screen_id` + `pairing_code` |
-| 5 | `src/lib/platform-capabilities.ts` | Evitar `if` espalhado | Baixo |
-| 6 | Painel: filtro + select plataforma + badges | UX multi-plataforma | Baixo |
-| 7 | Pasta `players/tizen-web/` | Base isolada Tizen (Web) | Nenhum no Android |
+| #   | Mudança                                                                                     | Motivo                                      | Risco regressão                                 |
+| --- | ------------------------------------------------------------------------------------------- | ------------------------------------------- | ----------------------------------------------- |
+| 1   | Coluna `pairing_codes.player_platform` + gravação em `createPairingCode`                    | Saber qual player pediu o código            | Baixo: coluna nullable                          |
+| 2   | `claimPairingCode` aceitar `platform` (default `android`) e persistir em `screens.platform` | Painel escolhe / confirma plataforma        | Baixo: default preserva Android                 |
+| 3   | Tabelas `screen_logs`, `screen_heartbeats`, `screen_sync_history`                           | Logs / heartbeat por screen + plataforma    | Baixo: tabelas novas                            |
+| 4   | `postPlayerHeartbeat` / `postPlayerLog` (server functions)                                  | Telemetria sem expor service key ao cliente | Médio: validar bem `screen_id` + `pairing_code` |
+| 5   | `src/lib/platform-capabilities.ts`                                                          | Evitar `if` espalhado                       | Baixo                                           |
+| 6   | Painel: filtro + select plataforma + badges                                                 | UX multi-plataforma                         | Baixo                                           |
+| 7   | Pasta `players/tizen-web/`                                                                  | Base isolada Tizen (Web)                    | Nenhum no Android                               |
 
 **Nota de nomenclatura:** o domínio do produto usa **`screens`**, não `devices`. As tabelas novas usam prefixo **`screen_`** e FK `screen_id` para não duplicar conceitos nem quebrar FKs existentes.
 
@@ -88,19 +88,19 @@ Documento técnico: diagnóstico do estado atual, plano de migração sem regres
 
 ### Mantidas (compatibilidade)
 
-| Função | Uso |
-|--------|-----|
-| `createPairingCode` | Player anónimo gera código (agora aceita `{ platform? }`) |
-| `checkPairingStatus` | Player polling |
-| `claimPairingCode` | Admin vincula código (agora aceita `{ platform? }`) |
+| Função               | Uso                                                       |
+| -------------------- | --------------------------------------------------------- |
+| `createPairingCode`  | Player anónimo gera código (agora aceita `{ platform? }`) |
+| `checkPairingStatus` | Player polling                                            |
+| `claimPairingCode`   | Admin vincula código (agora aceita `{ platform? }`)       |
 
 ### Novas (aditivas)
 
-| Função | Descrição |
-|--------|-----------|
-| `postPlayerHeartbeat` | Atualiza `screens` + insere `screen_heartbeats` (auth leve: `screen_id` + `pairing_code`) |
-| `postPlayerLog` | Insere `screen_logs` |
-| `postPlayerSyncHistory` *(opcional próxima iteração)* | Histórico de sync |
+| Função                                                | Descrição                                                                                 |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `postPlayerHeartbeat`                                 | Atualiza `screens` + insere `screen_heartbeats` (auth leve: `screen_id` + `pairing_code`) |
+| `postPlayerLog`                                       | Insere `screen_logs`                                                                      |
+| `postPlayerSyncHistory` _(opcional próxima iteração)_ | Histórico de sync                                                                         |
 
 REST clássico `POST /devices/...` **não substitui** as server functions; se no futuro expuser API HTTP, manter proxies que chamem a mesma lógica.
 
@@ -148,32 +148,32 @@ REST clássico `POST /devices/...` **não substitui** as server functions; se no
 
 ## 11. Ficheiros alterados / criados (esta fase)
 
-| Ficheiro | Motivo |
-|----------|--------|
-| `docs/MULTI_PLATFORM_ARCHITECTURE.md` | Diagnóstico, plano, compatibilidade, checklist |
+| Ficheiro                                                | Motivo                                                   |
+| ------------------------------------------------------- | -------------------------------------------------------- |
+| `docs/MULTI_PLATFORM_ARCHITECTURE.md`                   | Diagnóstico, plano, compatibilidade, checklist           |
 | `supabase/migrations/20260418143000_multi_platform.sql` | `player_platform`, `store_type`, tabelas `screen_*`, RLS |
-| `src/lib/platform-capabilities.ts` | Resolver de capabilities por plataforma |
-| `src/lib/server/player.functions.ts` | `postPlayerHeartbeat`, `postPlayerLog` |
-| `src/lib/server/screens.functions.ts` | `platform` no claim/create pairing |
-| `src/lib/db-types.ts` | `store_type`, `player_platform` opcionais |
-| `src/routes/app.telas.tsx` | Filtro, badge, select plataforma no pareamento |
-| `src/routes/pareamento.tsx` | `?platform=tizen` \| `android` + envio ao servidor |
-| `src/routes/__root.tsx` | Import side-effect para registar RPC do player |
-| `players/tizen-web/*` | Base estática + README (sem acoplamento ao build Vite) |
+| `src/lib/platform-capabilities.ts`                      | Resolver de capabilities por plataforma                  |
+| `src/lib/server/player.functions.ts`                    | `postPlayerHeartbeat`, `postPlayerLog`                   |
+| `src/lib/server/screens.functions.ts`                   | `platform` no claim/create pairing                       |
+| `src/lib/db-types.ts`                                   | `store_type`, `player_platform` opcionais                |
+| `src/routes/app.telas.tsx`                              | Filtro, badge, select plataforma no pareamento           |
+| `src/routes/pareamento.tsx`                             | `?platform=tizen` \| `android` + envio ao servidor       |
+| `src/routes/__root.tsx`                                 | Import side-effect para registar RPC do player           |
+| `players/tizen-web/*`                                   | Base estática + README (sem acoplamento ao build Vite)   |
 
 ## 12. Resumo executivo (entrega pedida)
 
-1. **Diagnóstico** — Secções 1–6 deste documento.  
-2. **Plano sem regressão** — Defaults `android`, colunas opcionais, tabelas novas.  
-3. **Ficheiros** — Tabela na secção 11.  
-4. **Backend** — Funções servidor estendidas + novas em `player.functions.ts`.  
-5. **Modelagem** — SQL em `supabase/migrations/` (prefixo `screen_`, FK `screen_id`).  
-6. **Android** — Sem mudança obrigatória; URL pode acrescentar `?platform=android` opcionalmente.  
-7. **Tizen** — Pasta `players/tizen-web/` + instrução de usar `/pareamento?platform=tizen` no mesmo host.  
-8. **Painel** — Filtro + campo plataforma + badges em Telas.  
-9. **Logs / heartbeat** — `postPlayerLog`, `postPlayerHeartbeat` + tabelas (após migration).  
-10. **Compatibilidade** — Payloads antigos sem `platform` tratados como Android.  
-11. **Testes** — Checklist secção 9 (manual).  
+1. **Diagnóstico** — Secções 1–6 deste documento.
+2. **Plano sem regressão** — Defaults `android`, colunas opcionais, tabelas novas.
+3. **Ficheiros** — Tabela na secção 11.
+4. **Backend** — Funções servidor estendidas + novas em `player.functions.ts`.
+5. **Modelagem** — SQL em `supabase/migrations/` (prefixo `screen_`, FK `screen_id`).
+6. **Android** — Sem mudança obrigatória; URL pode acrescentar `?platform=android` opcionalmente.
+7. **Tizen** — Pasta `players/tizen-web/` + instrução de usar `/pareamento?platform=tizen` no mesmo host.
+8. **Painel** — Filtro + campo plataforma + badges em Telas.
+9. **Logs / heartbeat** — `postPlayerLog`, `postPlayerHeartbeat` + tabelas (após migration).
+10. **Compatibilidade** — Payloads antigos sem `platform` tratados como Android.
+11. **Testes** — Checklist secção 9 (manual).
 12. **Documentação** — Este ficheiro.
 
 **Migrations:** aplicar manualmente no Supabase. **Endpoints REST** clássicos não foram criados; o modelo continua a ser **TanStack `createServerFn`** (adição, não substituição).

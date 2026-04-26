@@ -1,20 +1,20 @@
 {
-	"appId": "com.signix.player.tv",
-	"appName": "Signix Player TV",
-	"webDir": "dist",
-	"server": {
-		"url": "https://signix-display-pro.lovable.app/pareamento?platform=android",
-		"cleartext": false
-	},
-	"android": {
-		"appendUserAgent": " SignixPlayerTV/1.0.17",
-		"allowMixedContent": false
-	},
-	"plugins": {
-		"SplashScreen": {
-			"launchShowDuration": 0,
-			"launchAutoHide": true,
-			"backgroundColor": "#0a0a0f"
-		}
-	}
+  "appId": "com.signix.player.tv",
+  "appName": "Signix Player TV",
+  "webDir": "dist",
+  "server": {
+    "url": "https://signix-display-pro.lovable.app/pareamento?platform=android",
+    "cleartext": false
+  },
+  "android": {
+    "appendUserAgent": " SignixPlayerTV/1.0.17",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "launchAutoHide": true,
+      "backgroundColor": "#0a0a0f"
+    }
+  }
 }

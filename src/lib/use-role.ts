@@ -57,24 +57,65 @@ export type ModuleKey =
 /** Matriz de permissões padrão por perfil (somente leitura/escrita visual). */
 const DEFAULT_PERMISSIONS: Record<EffectiveRole, ModuleKey[]> = {
   super_admin: [
-    "dashboard","monitoramento","telas","grupos","midias","playlists","campanhas",
-    "agendamentos","preview","empresas","unidades","usuarios","relatorios","alertas",
-    "auditoria","configuracoes","assinatura","faturas",
-    "saas_overview","saas_clientes","saas_planos","saas_assinaturas","saas_pagamentos",
-    "saas_licencas","saas_logs",
+    "dashboard",
+    "monitoramento",
+    "telas",
+    "grupos",
+    "midias",
+    "playlists",
+    "campanhas",
+    "agendamentos",
+    "preview",
+    "empresas",
+    "unidades",
+    "usuarios",
+    "relatorios",
+    "alertas",
+    "auditoria",
+    "configuracoes",
+    "assinatura",
+    "faturas",
+    "saas_overview",
+    "saas_clientes",
+    "saas_planos",
+    "saas_assinaturas",
+    "saas_pagamentos",
+    "saas_licencas",
+    "saas_logs",
   ],
   master: [
-    "dashboard","monitoramento","telas","grupos","midias","playlists","campanhas",
-    "agendamentos","preview","empresas","unidades","usuarios","relatorios","alertas",
-    "auditoria","configuracoes","assinatura","faturas",
+    "dashboard",
+    "monitoramento",
+    "telas",
+    "grupos",
+    "midias",
+    "playlists",
+    "campanhas",
+    "agendamentos",
+    "preview",
+    "empresas",
+    "unidades",
+    "usuarios",
+    "relatorios",
+    "alertas",
+    "auditoria",
+    "configuracoes",
+    "assinatura",
+    "faturas",
   ],
   operador: [
-    "dashboard","monitoramento","telas","midias","playlists","campanhas",
-    "agendamentos","preview","relatorios","alertas",
+    "dashboard",
+    "monitoramento",
+    "telas",
+    "midias",
+    "playlists",
+    "campanhas",
+    "agendamentos",
+    "preview",
+    "relatorios",
+    "alertas",
   ],
-  visualizador: [
-    "dashboard","monitoramento","telas","campanhas","relatorios","alertas",
-  ],
+  visualizador: ["dashboard", "monitoramento", "telas", "campanhas", "relatorios", "alertas"],
 };
 
 export function useRole() {
@@ -97,7 +138,7 @@ export function useRole() {
       if (role === "visualizador") return false;
       if (role === "operador") {
         // operador edita apenas conteúdo operacional
-        return ["midias","playlists","campanhas","agendamentos"].includes(m);
+        return ["midias", "playlists", "campanhas", "agendamentos"].includes(m);
       }
       return allowed.has(m);
     },

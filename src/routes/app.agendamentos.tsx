@@ -69,11 +69,15 @@ function SchedulePage() {
                       <div
                         key={d + hourLabel}
                         className={`h-8 rounded-md border ${
-                          match ? "bg-primary/20 border-primary/40" : "border-border/40 bg-surface/30"
+                          match
+                            ? "bg-primary/20 border-primary/40"
+                            : "border-border/40 bg-surface/30"
                         }`}
                       >
                         {match && (
-                          <div className="text-[9px] text-foreground/80 px-1.5 py-1 truncate">Camp</div>
+                          <div className="text-[9px] text-foreground/80 px-1.5 py-1 truncate">
+                            Camp
+                          </div>
                         )}
                       </div>
                     );
@@ -101,11 +105,15 @@ function SchedulePage() {
                 <li key={s.id} className="rounded-lg border border-border bg-surface/50 p-3">
                   <div className="flex items-start justify-between gap-2">
                     <p className="text-sm font-medium">{s.campaigns?.name ?? "Campanha"}</p>
-                    <StatusBadge tone={s.is_active ? "success" : "warning"} label={s.is_active ? "Ativa" : "Pausada"} />
+                    <StatusBadge
+                      tone={s.is_active ? "success" : "warning"}
+                      label={s.is_active ? "Ativa" : "Pausada"}
+                    />
                   </div>
                   <div className="grid grid-cols-2 gap-2 mt-2 text-[11px] text-muted-foreground">
                     <span className="inline-flex items-center gap-1">
-                      <Clock className="h-3 w-3" /> {s.start_time.slice(0, 5)} – {s.end_time.slice(0, 5)}
+                      <Clock className="h-3 w-3" /> {s.start_time.slice(0, 5)} –{" "}
+                      {s.end_time.slice(0, 5)}
                     </span>
                     <span className="inline-flex items-center gap-1">
                       <Repeat className="h-3 w-3" /> {s.recurrence_rule ?? "Diária"}

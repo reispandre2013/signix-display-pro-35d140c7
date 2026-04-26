@@ -13,7 +13,8 @@
   function createApi(config) {
     var supabaseUrl = config.supabaseUrl;
     var anon = config.supabaseAnonKey;
-    if (!anon) throw new Error("Chave anónima Supabase em falta (window.SIGNIX_CONFIG.supabaseAnonKey).");
+    if (!anon)
+      throw new Error("Chave anónima Supabase em falta (window.SIGNIX_CONFIG.supabaseAnonKey).");
 
     function mapNetworkError(fnName, err) {
       var msg = err instanceof Error ? err.message : String(err);

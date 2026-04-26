@@ -44,7 +44,7 @@ serve(async (req) => {
   if (req.method !== "POST") return jsonResponse({ error: "Method not allowed" }, 405);
 
   try {
-    const body = await readJson<Body>(req).catch(() => ({} as Body));
+    const body = await readJson<Body>(req).catch(() => ({}) as Body);
     const platform = normalizePlatform(body.platform ?? null);
 
     const expires_at = new Date(Date.now() + 10 * 60 * 1000).toISOString();

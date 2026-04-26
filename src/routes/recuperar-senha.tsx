@@ -64,7 +64,11 @@ function RecoverPage() {
             disabled={submitting}
             className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-gradient-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow hover:opacity-95 transition-smooth disabled:opacity-60"
           >
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : "Enviar link de recuperação"}
+            {submitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              "Enviar link de recuperação"
+            )}
           </button>
         </form>
 

@@ -57,9 +57,7 @@
       config = readConfig();
     } catch (e) {
       document.body.innerHTML =
-        '<div class="fatal">' +
-        (e instanceof Error ? e.message : "Config em falta.") +
-        "</div>";
+        '<div class="fatal">' + (e instanceof Error ? e.message : "Config em falta.") + "</div>";
       return;
     }
 
@@ -70,9 +68,7 @@
     } catch (e) {
       logger.error(e);
       document.body.innerHTML =
-        '<div class="fatal">API: ' +
-        (e instanceof Error ? e.message : e) +
-        "</div>";
+        '<div class="fatal">API: ' + (e instanceof Error ? e.message : e) + "</div>";
       return;
     }
 
@@ -204,7 +200,9 @@
     function refreshAdminMenu() {
       var creds = Storage.getCredentials();
       var st = player.getRuntimeStatus();
-      if (adminTvName) adminTvName.textContent = (creds && creds.screenName) || (creds && creds.screenId) || "Não pareada";
+      if (adminTvName)
+        adminTvName.textContent =
+          (creds && creds.screenName) || (creds && creds.screenId) || "Não pareada";
       if (adminDeviceStatus) adminDeviceStatus.textContent = getDeviceStatusLabel();
       if (adminPlaylist) adminPlaylist.textContent = st.playlistId || "Nenhuma playlist carregada";
     }
@@ -264,8 +262,7 @@
           offlineBanner.hidden = !showOffline;
         }
         if (barCounter && status) {
-          barCounter.textContent =
-            status.total > 0 ? status.index + 1 + " / " + status.total : "—";
+          barCounter.textContent = status.total > 0 ? status.index + 1 + " / " + status.total : "—";
         }
         if (stage === "pairing") {
           showStage("pairing");
@@ -363,7 +360,9 @@
             var normalized = Adapter.normalizePairingCode(currentPairingCode);
             var fpPair =
               "fp-tizen-" +
-              (typeof navigator !== "undefined" && navigator.userAgent ? navigator.userAgent.length : 8);
+              (typeof navigator !== "undefined" && navigator.userAgent
+                ? navigator.userAgent.length
+                : 8);
             api
               .pairScreen(normalized, fpPair)
               .then(function (body) {
@@ -379,7 +378,9 @@
                 });
               })
               .catch(function (e) {
-                runPairingError(e instanceof Error ? e.message : "Falha ao finalizar pareamento na TV.");
+                runPairingError(
+                  e instanceof Error ? e.message : "Falha ao finalizar pareamento na TV.",
+                );
               });
           }
         })

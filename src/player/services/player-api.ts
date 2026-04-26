@@ -131,7 +131,10 @@ export async function resolveScreenPayload(screenId: string): Promise<PlayerPayl
   return mapResolvePayloadToPlayerPayload(screenId, response.payload);
 }
 
-export async function resolvePlaylistWithDevice(deviceId: string, authToken: string): Promise<PlayerPayload> {
+export async function resolvePlaylistWithDevice(
+  deviceId: string,
+  authToken: string,
+): Promise<PlayerPayload> {
   const response = await postFunction<
     { device_id: string; auth_token: string },
     { payload: ResolveCampaignResult | null }
@@ -155,7 +158,10 @@ export type DeviceResetPairingResult = {
   status: string;
 };
 
-export async function resetDevicePairing(deviceId: string, authToken: string): Promise<DeviceResetPairingResult> {
+export async function resetDevicePairing(
+  deviceId: string,
+  authToken: string,
+): Promise<DeviceResetPairingResult> {
   return await postFunction<{ device_id: string; auth_token: string }, DeviceResetPairingResult>(
     "device-reset-pairing",
     {

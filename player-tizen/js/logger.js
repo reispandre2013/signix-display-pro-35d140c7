@@ -18,7 +18,10 @@
     try {
       var max = C.LOGGER_RING_MAX || 400;
       while (ring.length > max) ring.shift();
-      localStorage.setItem(C.STORAGE_LOGGER_BUFFER || "signix_tizen_logger_buffer", JSON.stringify(ring));
+      localStorage.setItem(
+        C.STORAGE_LOGGER_BUFFER || "signix_tizen_logger_buffer",
+        JSON.stringify(ring),
+      );
     } catch (e) {
       /* quota */
     }

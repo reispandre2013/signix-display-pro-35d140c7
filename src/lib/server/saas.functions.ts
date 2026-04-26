@@ -2,13 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 
-type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JsonValue }
-  | JsonValue[];
+type JsonValue = string | number | boolean | null | { [key: string]: JsonValue } | JsonValue[];
 
 /** Mesma resolução que `screens.functions.ts` + fallbacks públicos (chave anon já no client). */
 const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
@@ -70,7 +64,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     if (!input || typeof input !== "object") throw new Error("Payload inválido.");
     const o = input as Record<string, unknown>;
     if (typeof o.plan_id !== "string" || !o.plan_id.trim()) throw new Error("plan_id obrigatório.");
-    if (typeof o.cpf_cnpj !== "string" || !o.cpf_cnpj.trim()) throw new Error("cpf_cnpj obrigatório.");
+    if (typeof o.cpf_cnpj !== "string" || !o.cpf_cnpj.trim())
+      throw new Error("cpf_cnpj obrigatório.");
     return {
       plan_id: o.plan_id.trim(),
       company_name: typeof o.company_name === "string" ? o.company_name : undefined,

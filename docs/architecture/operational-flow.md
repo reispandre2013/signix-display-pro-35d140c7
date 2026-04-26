@@ -24,6 +24,7 @@ flowchart TD
 ```
 
 ## Regras centrais no fluxo
+
 - Isolamento por `organization_id` em todo recurso sensível.
 - RLS para impedir leitura cruzada entre empresas.
 - Priorização de campanha por período + alvo + prioridade + agenda.

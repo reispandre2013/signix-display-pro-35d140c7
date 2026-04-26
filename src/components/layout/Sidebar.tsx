@@ -45,7 +45,12 @@ const sections: Section[] = [
       { to: "/app/midias", label: "Biblioteca de mídias", icon: ImageIcon, module: "midias" },
       { to: "/app/playlists", label: "Playlists", icon: ListVideo, module: "playlists" },
       { to: "/app/campanhas", label: "Campanhas", icon: Megaphone, module: "campanhas" },
-      { to: "/app/agendamentos", label: "Agendamentos", icon: CalendarClock, module: "agendamentos" },
+      {
+        to: "/app/agendamentos",
+        label: "Agendamentos",
+        icon: CalendarClock,
+        module: "agendamentos",
+      },
       { to: "/app/preview", label: "Preview de campanhas", icon: Eye, module: "preview" },
     ],
   },

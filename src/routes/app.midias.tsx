@@ -159,57 +159,57 @@ function MediaPage() {
     setFormError(null);
     try {
       if (sourceType === "upload") {
-      if (!profile?.organization_id) {
-        setFormError("Não foi possível identificar a organização da sessão.");
-        return;
-      }
-      if (!uploadFile) {
-        setFormError("Selecione um arquivo para upload.");
-        return;
-      }
+        if (!profile?.organization_id) {
+          setFormError("Não foi possível identificar a organização da sessão.");
+          return;
+        }
+        if (!uploadFile) {
+          setFormError("Selecione um arquivo para upload.");
+          return;
+        }
 
-      const detectedFile = detectMediaFromFile(uploadFile);
-      if (!detectedFile) {
-        setFormError("Formato inválido. Envie PNG/JPG/WEBP ou vídeo MP4.");
-        return;
-      }
-      if (detectedFile.fileType === "video" && detectedFile.mimeType !== "video/mp4") {
-        setFormError("No momento, apenas vídeo MP4 é suportado.");
-        return;
-      }
-      if (detectedFile.fileType === "image" && uploadFile.size > MAX_IMAGE_UPLOAD_BYTES) {
-        setFormError("Imagem acima do limite de 50MB.");
-        return;
-      }
-      if (detectedFile.fileType === "video" && uploadFile.size > MAX_VIDEO_UPLOAD_BYTES) {
-        setFormError("Vídeo acima do limite de 500MB.");
-        return;
-      }
+        const detectedFile = detectMediaFromFile(uploadFile);
+        if (!detectedFile) {
+          setFormError("Formato inválido. Envie PNG/JPG/WEBP ou vídeo MP4.");
+          return;
+        }
+        if (detectedFile.fileType === "video" && detectedFile.mimeType !== "video/mp4") {
+          setFormError("No momento, apenas vídeo MP4 é suportado.");
+          return;
+        }
+        if (detectedFile.fileType === "image" && uploadFile.size > MAX_IMAGE_UPLOAD_BYTES) {
+          setFormError("Imagem acima do limite de 50MB.");
+          return;
+        }
+        if (detectedFile.fileType === "video" && uploadFile.size > MAX_VIDEO_UPLOAD_BYTES) {
+          setFormError("Vídeo acima do limite de 500MB.");
+          return;
+        }
 
-      const cleaned = sanitizeFileName(form.name || uploadFile.name || "media");
-      const now = Date.now();
-      const objectPath = `${profile.organization_id}/${now}-${cleaned}.${detectedFile.extension}`;
-      const fullStoragePath = `${detectedFile.bucket}/${objectPath}`;
+        const cleaned = sanitizeFileName(form.name || uploadFile.name || "media");
+        const now = Date.now();
+        const objectPath = `${profile.organization_id}/${now}-${cleaned}.${detectedFile.extension}`;
+        const fullStoragePath = `${detectedFile.bucket}/${objectPath}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from(detectedFile.bucket)
-        .upload(objectPath, uploadFile, {
-          contentType: detectedFile.mimeType,
-          cacheControl: "3600",
-          upsert: false,
-        });
-      if (uploadError) {
-        setFormError(`Falha no upload: ${uploadError.message}`);
-        return;
-      }
+        const { error: uploadError } = await supabase.storage
+          .from(detectedFile.bucket)
+          .upload(objectPath, uploadFile, {
+            contentType: detectedFile.mimeType,
+            cacheControl: "3600",
+            upsert: false,
+          });
+        if (uploadError) {
+          setFormError(`Falha no upload: ${uploadError.message}`);
+          return;
+        }
 
-      const { data: signedData } = await supabase.storage
-        .from(detectedFile.bucket)
-        .createSignedUrl(objectPath, 60 * 60 * 24 * 30);
-      if (!signedData?.signedUrl) {
-        setFormError("Upload concluído, mas não foi possível gerar URL assinada.");
-        return;
-      }
+        const { data: signedData } = await supabase.storage
+          .from(detectedFile.bucket)
+          .createSignedUrl(objectPath, 60 * 60 * 24 * 30);
+        if (!signedData?.signedUrl) {
+          setFormError("Upload concluído, mas não foi possível gerar URL assinada.");
+          return;
+        }
 
         await create.mutateAsync({
           name: form.name,
@@ -315,7 +315,11 @@ function MediaPage() {
         ) : error ? (
           <ErrorState error={error} />
         ) : filtered.length === 0 ? (
-          <EmptyState icon={Images} title="Nenhuma mídia" description="Adicione arquivos para usar em campanhas." />
+          <EmptyState
+            icon={Images}
+            title="Nenhuma mídia"
+            description="Adicione arquivos para usar em campanhas."
+          />
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
             {filtered.map((m) => {
@@ -325,7 +329,11 @@ function MediaPage() {
                 : m.file_type?.toLowerCase().includes("html")
                   ? "html"
                   : "image";
-              const sources = getMediaUrlCandidates({ mediaTypeHint: hint }, m.thumbnail_url, m.public_url);
+              const sources = getMediaUrlCandidates(
+                { mediaTypeHint: hint },
+                m.thumbnail_url,
+                m.public_url,
+              );
               return (
                 <article
                   key={m.id}
@@ -364,7 +372,11 @@ function MediaPage() {
                       <Icon className="h-2.5 w-2.5" /> {m.file_type}
                     </div>
                     <div className="absolute top-1.5 right-1.5">
-                      <StatusBadge tone={m.status === "active" ? "success" : "neutral"} label={m.status} withDot={false} />
+                      <StatusBadge
+                        tone={m.status === "active" ? "success" : "neutral"}
+                        label={m.status}
+                        withDot={false}
+                      />
                     </div>
                     {m.duration_seconds && (
                       <div className="absolute bottom-1.5 left-1.5 text-[10px] text-white font-mono bg-black/60 backdrop-blur-md rounded px-1.5 py-0.5">
@@ -411,7 +423,11 @@ function MediaPage() {
             </p>
           ) : null}
           <FormField label="Nome">
-            <TextInput required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <TextInput
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
           </FormField>
           <FormField label="Origem da mídia">
             <div className="grid grid-cols-2 gap-2">
@@ -465,7 +481,11 @@ function MediaPage() {
               <input
                 type="file"
                 required
-                accept={form.file_type === "video" ? "video/mp4" : "image/png,image/jpeg,image/webp,video/mp4"}
+                accept={
+                  form.file_type === "video"
+                    ? "video/mp4"
+                    : "image/png,image/jpeg,image/webp,video/mp4"
+                }
                 onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
                 className="w-full rounded-lg border border-input bg-surface px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary"
               />

@@ -6,9 +6,7 @@ const __iconNode = [
   ["path", { d: "M19 12.859a10 10 0 0 0-2.007-1.523", key: "4k23kn" }],
   ["path", { d: "M2 8.82a15 15 0 0 1 4.177-2.643", key: "1grhjp" }],
   ["path", { d: "M22 8.82a15 15 0 0 0-11.288-3.764", key: "z3jwby" }],
-  ["path", { d: "m2 2 20 20", key: "1ooewy" }]
+  ["path", { d: "m2 2 20 20", key: "1ooewy" }],
 ];
 const WifiOff = createLucideIcon("wifi-off", __iconNode);
-export {
-  WifiOff as W
-};
+export { WifiOff as W };

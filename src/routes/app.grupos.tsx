@@ -4,7 +4,13 @@ import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
-import { Modal, FormField, TextInput, TextArea, PrimaryButton } from "@/components/ui-kit/FormControls";
+import {
+  Modal,
+  FormField,
+  TextInput,
+  TextArea,
+  PrimaryButton,
+} from "@/components/ui-kit/FormControls";
 import {
   useScreenGroups,
   useCreateScreenGroup,
@@ -61,8 +67,9 @@ function GroupPlaylistModal({ group, onClose }: { group: GroupRow; onClose: () =
     <Modal open title={`Playlist do grupo — ${group.name}`} onClose={onClose}>
       <form onSubmit={(e) => void save(e)} className="space-y-3">
         <p className="text-[11px] text-muted-foreground leading-relaxed">
-          As telas deste grupo usam esta playlist quando não existir atribuição directa na tela com prioridade
-          superior. Ordem global: <strong>tela directa</strong> → <strong>grupo</strong> → <strong>campanha</strong>.
+          As telas deste grupo usam esta playlist quando não existir atribuição directa na tela com
+          prioridade superior. Ordem global: <strong>tela directa</strong> → <strong>grupo</strong>{" "}
+          → <strong>campanha</strong>.
         </p>
         <FormField label="Playlist">
           <select
@@ -78,7 +85,9 @@ function GroupPlaylistModal({ group, onClose }: { group: GroupRow; onClose: () =
             ))}
           </select>
         </FormField>
-        {assignQ.isLoading && <p className="text-[11px] text-muted-foreground">A carregar atribuição…</p>}
+        {assignQ.isLoading && (
+          <p className="text-[11px] text-muted-foreground">A carregar atribuição…</p>
+        )}
         <div className="flex justify-end gap-2 pt-1">
           <button
             type="button"
@@ -162,7 +171,10 @@ function GroupsPage() {
                   </td>
                   <td className="px-5 py-3.5 text-muted-foreground">{g.description ?? "—"}</td>
                   <td className="px-5 py-3.5">
-                    <StatusBadge tone={g.status === "active" ? "success" : "neutral"} label={g.status} />
+                    <StatusBadge
+                      tone={g.status === "active" ? "success" : "neutral"}
+                      label={g.status}
+                    />
                   </td>
                   <td className="px-5 py-3.5">
                     <button
@@ -194,10 +206,17 @@ function GroupsPage() {
       <Modal open={open} onClose={() => setOpen(false)} title="Novo grupo de telas">
         <form onSubmit={submit} className="space-y-3">
           <FormField label="Nome">
-            <TextInput required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+            <TextInput
+              required
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
+            />
           </FormField>
           <FormField label="Descrição">
-            <TextArea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+            <TextArea
+              value={form.description}
+              onChange={(e) => setForm({ ...form, description: e.target.value })}
+            />
           </FormField>
           <PrimaryButton type="submit" disabled={create.isPending}>
             {create.isPending ? "Salvando…" : "Criar grupo"}
@@ -206,7 +225,10 @@ function GroupsPage() {
       </Modal>
 
       {playlistModalGroup && (
-        <GroupPlaylistModal group={playlistModalGroup} onClose={() => setPlaylistModalGroup(null)} />
+        <GroupPlaylistModal
+          group={playlistModalGroup}
+          onClose={() => setPlaylistModalGroup(null)}
+        />
       )}
     </div>
   );

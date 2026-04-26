@@ -19,8 +19,7 @@ const ANON_KEY =
 
 type PublicRole = "operador" | "visualizador";
 
-const DEFAULT_PUBLIC_SIGNUP_ORG_SLUG =
-  process.env.PUBLIC_SIGNUP_DEFAULT_ORG_SLUG ?? "signix";
+const DEFAULT_PUBLIC_SIGNUP_ORG_SLUG = process.env.PUBLIC_SIGNUP_DEFAULT_ORG_SLUG ?? "signix";
 
 interface PublicSignupInput {
   email: string;
@@ -87,9 +86,7 @@ export const registerPublicEmployee = createServerFn({ method: "POST" })
         .maybeSingle();
       if (firstErr) throw new Error(firstErr.message);
       if (!firstActive) {
-        throw new Error(
-          "Nenhuma organização ativa encontrada. Contate o administrador.",
-        );
+        throw new Error("Nenhuma organização ativa encontrada. Contate o administrador.");
       }
       orgId = firstActive.id as string;
     }
@@ -111,7 +108,9 @@ export const registerPublicEmployee = createServerFn({ method: "POST" })
     if (createErr) {
       const msg = createErr.message ?? "";
       if (/already|registered|exists/i.test(msg)) {
-        throw new Error("Este e-mail já está cadastrado. Use outro e-mail ou recuperação de senha.");
+        throw new Error(
+          "Este e-mail já está cadastrado. Use outro e-mail ou recuperação de senha.",
+        );
       }
       throw new Error(msg || "Falha ao criar conta.");
     }

@@ -1,4 +1,9 @@
-import { a4 as requireReact, r as reactExports, P as getDefaultExportFromCjs, a2 as React } from "./worker-entry-CFvqOeOX.js";
+import {
+  a4 as requireReact,
+  r as reactExports,
+  P as getDefaultExportFromCjs,
+  a2 as React,
+} from "./worker-entry-CFvqOeOX.js";
 import { r as reactDomExports } from "./router-BfC5KUx0.js";
 import { a as clsx } from "./utils-Bz4m9VPB.js";
 import { t as toDate, c as constructFrom } from "./en-US-D5MXwIXi.js";
@@ -12,27 +17,34 @@ function requireUseSyncExternalStoreShim_production() {
   hasRequiredUseSyncExternalStoreShim_production = 1;
   var React2 = requireReact();
   function is2(x2, y2) {
-    return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
+    return (x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2)) || (x2 !== x2 && y2 !== y2);
   }
-  var objectIs = "function" === typeof Object.is ? Object.is : is2, useState = React2.useState, useEffect = React2.useEffect, useLayoutEffect = React2.useLayoutEffect, useDebugValue = React2.useDebugValue;
+  var objectIs = "function" === typeof Object.is ? Object.is : is2,
+    useState = React2.useState,
+    useEffect = React2.useEffect,
+    useLayoutEffect = React2.useLayoutEffect,
+    useDebugValue = React2.useDebugValue;
   function useSyncExternalStore$2(subscribe, getSnapshot) {
-    var value = getSnapshot(), _useState = useState({ inst: { value, getSnapshot } }), inst = _useState[0].inst, forceUpdate = _useState[1];
+    var value = getSnapshot(),
+      _useState = useState({ inst: { value, getSnapshot } }),
+      inst = _useState[0].inst,
+      forceUpdate = _useState[1];
     useLayoutEffect(
-      function() {
+      function () {
         inst.value = value;
         inst.getSnapshot = getSnapshot;
         checkIfSnapshotChanged(inst) && forceUpdate({ inst });
       },
-      [subscribe, value, getSnapshot]
+      [subscribe, value, getSnapshot],
     );
     useEffect(
-      function() {
+      function () {
         checkIfSnapshotChanged(inst) && forceUpdate({ inst });
-        return subscribe(function() {
+        return subscribe(function () {
           checkIfSnapshotChanged(inst) && forceUpdate({ inst });
         });
       },
-      [subscribe]
+      [subscribe],
     );
     useDebugValue(value);
     return value;
@@ -50,8 +62,14 @@ function requireUseSyncExternalStoreShim_production() {
   function useSyncExternalStore$1(subscribe, getSnapshot) {
     return getSnapshot();
   }
-  var shim2 = "undefined" === typeof window || "undefined" === typeof window.document || "undefined" === typeof window.document.createElement ? useSyncExternalStore$1 : useSyncExternalStore$2;
-  useSyncExternalStoreShim_production.useSyncExternalStore = void 0 !== React2.useSyncExternalStore ? React2.useSyncExternalStore : shim2;
+  var shim2 =
+    "undefined" === typeof window ||
+    "undefined" === typeof window.document ||
+    "undefined" === typeof window.document.createElement
+      ? useSyncExternalStore$1
+      : useSyncExternalStore$2;
+  useSyncExternalStoreShim_production.useSyncExternalStore =
+    void 0 !== React2.useSyncExternalStore ? React2.useSyncExternalStore : shim2;
   return useSyncExternalStoreShim_production;
 }
 var hasRequiredShim;
@@ -67,19 +85,31 @@ var hasRequiredWithSelector_production;
 function requireWithSelector_production() {
   if (hasRequiredWithSelector_production) return withSelector_production;
   hasRequiredWithSelector_production = 1;
-  var React2 = requireReact(), shim2 = requireShim();
+  var React2 = requireReact(),
+    shim2 = requireShim();
   function is2(x2, y2) {
-    return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
+    return (x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2)) || (x2 !== x2 && y2 !== y2);
   }
-  var objectIs = "function" === typeof Object.is ? Object.is : is2, useSyncExternalStore = shim2.useSyncExternalStore, useRef = React2.useRef, useEffect = React2.useEffect, useMemo = React2.useMemo, useDebugValue = React2.useDebugValue;
-  withSelector_production.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
+  var objectIs = "function" === typeof Object.is ? Object.is : is2,
+    useSyncExternalStore = shim2.useSyncExternalStore,
+    useRef = React2.useRef,
+    useEffect = React2.useEffect,
+    useMemo = React2.useMemo,
+    useDebugValue = React2.useDebugValue;
+  withSelector_production.useSyncExternalStoreWithSelector = function (
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+    selector,
+    isEqual,
+  ) {
     var instRef = useRef(null);
     if (null === instRef.current) {
       var inst = { hasValue: false, value: null };
       instRef.current = inst;
     } else inst = instRef.current;
     instRef = useMemo(
-      function() {
+      function () {
         function memoizedSelector(nextSnapshot) {
           if (!hasMemo) {
             hasMemo = true;
@@ -88,37 +118,42 @@ function requireWithSelector_production() {
             if (void 0 !== isEqual && inst.hasValue) {
               var currentSelection = inst.value;
               if (isEqual(currentSelection, nextSnapshot))
-                return memoizedSelection = currentSelection;
+                return (memoizedSelection = currentSelection);
             }
-            return memoizedSelection = nextSnapshot;
+            return (memoizedSelection = nextSnapshot);
           }
           currentSelection = memoizedSelection;
           if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
           var nextSelection = selector(nextSnapshot);
           if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
-            return memoizedSnapshot = nextSnapshot, currentSelection;
+            return ((memoizedSnapshot = nextSnapshot), currentSelection);
           memoizedSnapshot = nextSnapshot;
-          return memoizedSelection = nextSelection;
+          return (memoizedSelection = nextSelection);
         }
-        var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
+        var hasMemo = false,
+          memoizedSnapshot,
+          memoizedSelection,
+          maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
         return [
-          function() {
+          function () {
             return memoizedSelector(getSnapshot());
           },
-          null === maybeGetServerSnapshot ? void 0 : function() {
-            return memoizedSelector(maybeGetServerSnapshot());
-          }
+          null === maybeGetServerSnapshot
+            ? void 0
+            : function () {
+                return memoizedSelector(maybeGetServerSnapshot());
+              },
         ];
       },
-      [getSnapshot, getServerSnapshot, selector, isEqual]
+      [getSnapshot, getServerSnapshot, selector, isEqual],
     );
     var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
     useEffect(
-      function() {
+      function () {
         inst.hasValue = true;
         inst.value = value;
       },
-      [value]
+      [value],
     );
     useDebugValue(value);
     return value;
@@ -135,7 +170,169 @@ function requireWithSelector$1() {
   return withSelector$1.exports;
 }
 var withSelectorExports = requireWithSelector$1();
-var EventKeys = ["dangerouslySetInnerHTML", "onCopy", "onCopyCapture", "onCut", "onCutCapture", "onPaste", "onPasteCapture", "onCompositionEnd", "onCompositionEndCapture", "onCompositionStart", "onCompositionStartCapture", "onCompositionUpdate", "onCompositionUpdateCapture", "onFocus", "onFocusCapture", "onBlur", "onBlurCapture", "onChange", "onChangeCapture", "onBeforeInput", "onBeforeInputCapture", "onInput", "onInputCapture", "onReset", "onResetCapture", "onSubmit", "onSubmitCapture", "onInvalid", "onInvalidCapture", "onLoad", "onLoadCapture", "onError", "onErrorCapture", "onKeyDown", "onKeyDownCapture", "onKeyPress", "onKeyPressCapture", "onKeyUp", "onKeyUpCapture", "onAbort", "onAbortCapture", "onCanPlay", "onCanPlayCapture", "onCanPlayThrough", "onCanPlayThroughCapture", "onDurationChange", "onDurationChangeCapture", "onEmptied", "onEmptiedCapture", "onEncrypted", "onEncryptedCapture", "onEnded", "onEndedCapture", "onLoadedData", "onLoadedDataCapture", "onLoadedMetadata", "onLoadedMetadataCapture", "onLoadStart", "onLoadStartCapture", "onPause", "onPauseCapture", "onPlay", "onPlayCapture", "onPlaying", "onPlayingCapture", "onProgress", "onProgressCapture", "onRateChange", "onRateChangeCapture", "onSeeked", "onSeekedCapture", "onSeeking", "onSeekingCapture", "onStalled", "onStalledCapture", "onSuspend", "onSuspendCapture", "onTimeUpdate", "onTimeUpdateCapture", "onVolumeChange", "onVolumeChangeCapture", "onWaiting", "onWaitingCapture", "onAuxClick", "onAuxClickCapture", "onClick", "onClickCapture", "onContextMenu", "onContextMenuCapture", "onDoubleClick", "onDoubleClickCapture", "onDrag", "onDragCapture", "onDragEnd", "onDragEndCapture", "onDragEnter", "onDragEnterCapture", "onDragExit", "onDragExitCapture", "onDragLeave", "onDragLeaveCapture", "onDragOver", "onDragOverCapture", "onDragStart", "onDragStartCapture", "onDrop", "onDropCapture", "onMouseDown", "onMouseDownCapture", "onMouseEnter", "onMouseLeave", "onMouseMove", "onMouseMoveCapture", "onMouseOut", "onMouseOutCapture", "onMouseOver", "onMouseOverCapture", "onMouseUp", "onMouseUpCapture", "onSelect", "onSelectCapture", "onTouchCancel", "onTouchCancelCapture", "onTouchEnd", "onTouchEndCapture", "onTouchMove", "onTouchMoveCapture", "onTouchStart", "onTouchStartCapture", "onPointerDown", "onPointerDownCapture", "onPointerMove", "onPointerMoveCapture", "onPointerUp", "onPointerUpCapture", "onPointerCancel", "onPointerCancelCapture", "onPointerEnter", "onPointerEnterCapture", "onPointerLeave", "onPointerLeaveCapture", "onPointerOver", "onPointerOverCapture", "onPointerOut", "onPointerOutCapture", "onGotPointerCapture", "onGotPointerCaptureCapture", "onLostPointerCapture", "onLostPointerCaptureCapture", "onScroll", "onScrollCapture", "onWheel", "onWheelCapture", "onAnimationStart", "onAnimationStartCapture", "onAnimationEnd", "onAnimationEndCapture", "onAnimationIteration", "onAnimationIterationCapture", "onTransitionEnd", "onTransitionEndCapture"];
+var EventKeys = [
+  "dangerouslySetInnerHTML",
+  "onCopy",
+  "onCopyCapture",
+  "onCut",
+  "onCutCapture",
+  "onPaste",
+  "onPasteCapture",
+  "onCompositionEnd",
+  "onCompositionEndCapture",
+  "onCompositionStart",
+  "onCompositionStartCapture",
+  "onCompositionUpdate",
+  "onCompositionUpdateCapture",
+  "onFocus",
+  "onFocusCapture",
+  "onBlur",
+  "onBlurCapture",
+  "onChange",
+  "onChangeCapture",
+  "onBeforeInput",
+  "onBeforeInputCapture",
+  "onInput",
+  "onInputCapture",
+  "onReset",
+  "onResetCapture",
+  "onSubmit",
+  "onSubmitCapture",
+  "onInvalid",
+  "onInvalidCapture",
+  "onLoad",
+  "onLoadCapture",
+  "onError",
+  "onErrorCapture",
+  "onKeyDown",
+  "onKeyDownCapture",
+  "onKeyPress",
+  "onKeyPressCapture",
+  "onKeyUp",
+  "onKeyUpCapture",
+  "onAbort",
+  "onAbortCapture",
+  "onCanPlay",
+  "onCanPlayCapture",
+  "onCanPlayThrough",
+  "onCanPlayThroughCapture",
+  "onDurationChange",
+  "onDurationChangeCapture",
+  "onEmptied",
+  "onEmptiedCapture",
+  "onEncrypted",
+  "onEncryptedCapture",
+  "onEnded",
+  "onEndedCapture",
+  "onLoadedData",
+  "onLoadedDataCapture",
+  "onLoadedMetadata",
+  "onLoadedMetadataCapture",
+  "onLoadStart",
+  "onLoadStartCapture",
+  "onPause",
+  "onPauseCapture",
+  "onPlay",
+  "onPlayCapture",
+  "onPlaying",
+  "onPlayingCapture",
+  "onProgress",
+  "onProgressCapture",
+  "onRateChange",
+  "onRateChangeCapture",
+  "onSeeked",
+  "onSeekedCapture",
+  "onSeeking",
+  "onSeekingCapture",
+  "onStalled",
+  "onStalledCapture",
+  "onSuspend",
+  "onSuspendCapture",
+  "onTimeUpdate",
+  "onTimeUpdateCapture",
+  "onVolumeChange",
+  "onVolumeChangeCapture",
+  "onWaiting",
+  "onWaitingCapture",
+  "onAuxClick",
+  "onAuxClickCapture",
+  "onClick",
+  "onClickCapture",
+  "onContextMenu",
+  "onContextMenuCapture",
+  "onDoubleClick",
+  "onDoubleClickCapture",
+  "onDrag",
+  "onDragCapture",
+  "onDragEnd",
+  "onDragEndCapture",
+  "onDragEnter",
+  "onDragEnterCapture",
+  "onDragExit",
+  "onDragExitCapture",
+  "onDragLeave",
+  "onDragLeaveCapture",
+  "onDragOver",
+  "onDragOverCapture",
+  "onDragStart",
+  "onDragStartCapture",
+  "onDrop",
+  "onDropCapture",
+  "onMouseDown",
+  "onMouseDownCapture",
+  "onMouseEnter",
+  "onMouseLeave",
+  "onMouseMove",
+  "onMouseMoveCapture",
+  "onMouseOut",
+  "onMouseOutCapture",
+  "onMouseOver",
+  "onMouseOverCapture",
+  "onMouseUp",
+  "onMouseUpCapture",
+  "onSelect",
+  "onSelectCapture",
+  "onTouchCancel",
+  "onTouchCancelCapture",
+  "onTouchEnd",
+  "onTouchEndCapture",
+  "onTouchMove",
+  "onTouchMoveCapture",
+  "onTouchStart",
+  "onTouchStartCapture",
+  "onPointerDown",
+  "onPointerDownCapture",
+  "onPointerMove",
+  "onPointerMoveCapture",
+  "onPointerUp",
+  "onPointerUpCapture",
+  "onPointerCancel",
+  "onPointerCancelCapture",
+  "onPointerEnter",
+  "onPointerEnterCapture",
+  "onPointerLeave",
+  "onPointerLeaveCapture",
+  "onPointerOver",
+  "onPointerOverCapture",
+  "onPointerOut",
+  "onPointerOutCapture",
+  "onGotPointerCapture",
+  "onGotPointerCaptureCapture",
+  "onLostPointerCapture",
+  "onLostPointerCaptureCapture",
+  "onScroll",
+  "onScrollCapture",
+  "onWheel",
+  "onWheelCapture",
+  "onAnimationStart",
+  "onAnimationStartCapture",
+  "onAnimationEnd",
+  "onAnimationEndCapture",
+  "onAnimationIteration",
+  "onAnimationIterationCapture",
+  "onTransitionEnd",
+  "onTransitionEndCapture",
+];
 function isEventKey(key) {
   if (typeof key !== "string") {
     return false;
@@ -451,7 +648,7 @@ var SVGElementPropKeys = [
   "zoomAndPan",
   "ref",
   "key",
-  "angle"
+  "angle",
 ];
 var SVGElementPropKeySet = new Set(SVGElementPropKeys);
 function isSvgElementPropKey(key) {
@@ -481,7 +678,11 @@ function svgPropertiesNoEventsFromUnknown(input) {
   if (input == null) {
     return null;
   }
-  if (/* @__PURE__ */ reactExports.isValidElement(input) && typeof input.props === "object" && input.props !== null) {
+  if (
+    /* @__PURE__ */ reactExports.isValidElement(input) &&
+    typeof input.props === "object" &&
+    input.props !== null
+  ) {
     var p = input.props;
     return svgPropertiesNoEvents(p);
   }
@@ -515,98 +716,124 @@ function svgPropertiesAndEventsFromUnknown(input) {
 }
 var _excluded$f = ["children", "width", "height", "viewBox", "className", "style", "title", "desc"];
 function _extends$k() {
-  return _extends$k = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$k.apply(null, arguments);
+  return (
+    (_extends$k = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$k.apply(null, arguments)
+  );
 }
 function _objectWithoutProperties$f(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$f(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$f(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$f(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 var Surface = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  var {
-    children,
-    width,
-    height,
-    viewBox,
-    className,
-    style,
-    title,
-    desc
-  } = props, others = _objectWithoutProperties$f(props, _excluded$f);
+  var { children, width, height, viewBox, className, style, title, desc } = props,
+    others = _objectWithoutProperties$f(props, _excluded$f);
   var svgView = viewBox || {
     width,
     height,
     x: 0,
-    y: 0
+    y: 0,
   };
   var layerClass = clsx("recharts-surface", className);
-  return /* @__PURE__ */ reactExports.createElement("svg", _extends$k({}, svgPropertiesAndEvents(others), {
-    className: layerClass,
-    width,
-    height,
-    style,
-    viewBox: "".concat(svgView.x, " ").concat(svgView.y, " ").concat(svgView.width, " ").concat(svgView.height),
-    ref
-  }), /* @__PURE__ */ reactExports.createElement("title", null, title), /* @__PURE__ */ reactExports.createElement("desc", null, desc), children);
+  return /* @__PURE__ */ reactExports.createElement(
+    "svg",
+    _extends$k({}, svgPropertiesAndEvents(others), {
+      className: layerClass,
+      width,
+      height,
+      style,
+      viewBox: ""
+        .concat(svgView.x, " ")
+        .concat(svgView.y, " ")
+        .concat(svgView.width, " ")
+        .concat(svgView.height),
+      ref,
+    }),
+    /* @__PURE__ */ reactExports.createElement("title", null, title),
+    /* @__PURE__ */ reactExports.createElement("desc", null, desc),
+    children,
+  );
 });
 var _excluded$e = ["children", "className"];
 function _extends$j() {
-  return _extends$j = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$j.apply(null, arguments);
+  return (
+    (_extends$j = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$j.apply(null, arguments)
+  );
 }
 function _objectWithoutProperties$e(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$e(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$e(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$e(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 var Layer = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  var {
-    children,
-    className
-  } = props, others = _objectWithoutProperties$e(props, _excluded$e);
+  var { children, className } = props,
+    others = _objectWithoutProperties$e(props, _excluded$e);
   var layerClass = clsx("recharts-layer", className);
-  return /* @__PURE__ */ reactExports.createElement("g", _extends$j({
-    className: layerClass
-  }, svgPropertiesAndEvents(others), {
-    ref
-  }), children);
+  return /* @__PURE__ */ reactExports.createElement(
+    "g",
+    _extends$j(
+      {
+        className: layerClass,
+      },
+      svgPropertiesAndEvents(others),
+      {
+        ref,
+      },
+    ),
+    children,
+  );
 });
 var LegendPortalContext = /* @__PURE__ */ reactExports.createContext(null);
 function constant$1(x2) {
@@ -614,7 +841,10 @@ function constant$1(x2) {
     return x2;
   };
 }
-const pi = Math.PI, tau = 2 * pi, epsilon = 1e-6, tauEpsilon = tau - epsilon;
+const pi = Math.PI,
+  tau = 2 * pi,
+  epsilon = 1e-6,
+  tauEpsilon = tau - epsilon;
 function append(strings) {
   this._ += strings[0];
   for (let i = 1, n = strings.length; i < n; ++i) {
@@ -626,7 +856,7 @@ function appendRound(digits) {
   if (!(d >= 0)) throw new Error(`invalid digits: ${digits}`);
   if (d > 15) return append;
   const k = 10 ** d;
-  return function(strings) {
+  return function (strings) {
     this._ += strings[0];
     for (let i = 1, n = strings.length; i < n; ++i) {
       this._ += Math.round(arguments[i] * k) / k + strings[i];
@@ -635,65 +865,91 @@ function appendRound(digits) {
 }
 class Path {
   constructor(digits) {
-    this._x0 = this._y0 = // start of current subpath
-    this._x1 = this._y1 = null;
+    this._x0 =
+      this._y0 = // start of current subpath
+      this._x1 =
+      this._y1 =
+        null;
     this._ = "";
     this._append = digits == null ? append : appendRound(digits);
   }
   moveTo(x2, y2) {
-    this._append`M${this._x0 = this._x1 = +x2},${this._y0 = this._y1 = +y2}`;
+    this._append`M${(this._x0 = this._x1 = +x2)},${(this._y0 = this._y1 = +y2)}`;
   }
   closePath() {
     if (this._x1 !== null) {
-      this._x1 = this._x0, this._y1 = this._y0;
+      ((this._x1 = this._x0), (this._y1 = this._y0));
       this._append`Z`;
     }
   }
   lineTo(x2, y2) {
-    this._append`L${this._x1 = +x2},${this._y1 = +y2}`;
+    this._append`L${(this._x1 = +x2)},${(this._y1 = +y2)}`;
   }
   quadraticCurveTo(x1, y1, x2, y2) {
-    this._append`Q${+x1},${+y1},${this._x1 = +x2},${this._y1 = +y2}`;
+    this._append`Q${+x1},${+y1},${(this._x1 = +x2)},${(this._y1 = +y2)}`;
   }
   bezierCurveTo(x1, y1, x2, y2, x3, y3) {
-    this._append`C${+x1},${+y1},${+x2},${+y2},${this._x1 = +x3},${this._y1 = +y3}`;
+    this._append`C${+x1},${+y1},${+x2},${+y2},${(this._x1 = +x3)},${(this._y1 = +y3)}`;
   }
   arcTo(x1, y1, x2, y2, r) {
-    x1 = +x1, y1 = +y1, x2 = +x2, y2 = +y2, r = +r;
+    ((x1 = +x1), (y1 = +y1), (x2 = +x2), (y2 = +y2), (r = +r));
     if (r < 0) throw new Error(`negative radius: ${r}`);
-    let x0 = this._x1, y0 = this._y1, x21 = x2 - x1, y21 = y2 - y1, x01 = x0 - x1, y01 = y0 - y1, l01_2 = x01 * x01 + y01 * y01;
+    let x0 = this._x1,
+      y0 = this._y1,
+      x21 = x2 - x1,
+      y21 = y2 - y1,
+      x01 = x0 - x1,
+      y01 = y0 - y1,
+      l01_2 = x01 * x01 + y01 * y01;
     if (this._x1 === null) {
-      this._append`M${this._x1 = x1},${this._y1 = y1}`;
-    } else if (!(l01_2 > epsilon)) ;
+      this._append`M${(this._x1 = x1)},${(this._y1 = y1)}`;
+    } else if (!(l01_2 > epsilon));
     else if (!(Math.abs(y01 * x21 - y21 * x01) > epsilon) || !r) {
-      this._append`L${this._x1 = x1},${this._y1 = y1}`;
+      this._append`L${(this._x1 = x1)},${(this._y1 = y1)}`;
     } else {
-      let x20 = x2 - x0, y20 = y2 - y0, l21_2 = x21 * x21 + y21 * y21, l20_2 = x20 * x20 + y20 * y20, l21 = Math.sqrt(l21_2), l01 = Math.sqrt(l01_2), l = r * Math.tan((pi - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2), t01 = l / l01, t21 = l / l21;
+      let x20 = x2 - x0,
+        y20 = y2 - y0,
+        l21_2 = x21 * x21 + y21 * y21,
+        l20_2 = x20 * x20 + y20 * y20,
+        l21 = Math.sqrt(l21_2),
+        l01 = Math.sqrt(l01_2),
+        l = r * Math.tan((pi - Math.acos((l21_2 + l01_2 - l20_2) / (2 * l21 * l01))) / 2),
+        t01 = l / l01,
+        t21 = l / l21;
       if (Math.abs(t01 - 1) > epsilon) {
         this._append`L${x1 + t01 * x01},${y1 + t01 * y01}`;
       }
-      this._append`A${r},${r},0,0,${+(y01 * x20 > x01 * y20)},${this._x1 = x1 + t21 * x21},${this._y1 = y1 + t21 * y21}`;
+      this
+        ._append`A${r},${r},0,0,${+(y01 * x20 > x01 * y20)},${(this._x1 = x1 + t21 * x21)},${(this._y1 = y1 + t21 * y21)}`;
     }
   }
   arc(x2, y2, r, a0, a1, ccw) {
-    x2 = +x2, y2 = +y2, r = +r, ccw = !!ccw;
+    ((x2 = +x2), (y2 = +y2), (r = +r), (ccw = !!ccw));
     if (r < 0) throw new Error(`negative radius: ${r}`);
-    let dx = r * Math.cos(a0), dy = r * Math.sin(a0), x0 = x2 + dx, y0 = y2 + dy, cw = 1 ^ ccw, da = ccw ? a0 - a1 : a1 - a0;
+    let dx = r * Math.cos(a0),
+      dy = r * Math.sin(a0),
+      x0 = x2 + dx,
+      y0 = y2 + dy,
+      cw = 1 ^ ccw,
+      da = ccw ? a0 - a1 : a1 - a0;
     if (this._x1 === null) {
       this._append`M${x0},${y0}`;
     } else if (Math.abs(this._x1 - x0) > epsilon || Math.abs(this._y1 - y0) > epsilon) {
       this._append`L${x0},${y0}`;
     }
     if (!r) return;
-    if (da < 0) da = da % tau + tau;
+    if (da < 0) da = (da % tau) + tau;
     if (da > tauEpsilon) {
-      this._append`A${r},${r},0,1,${cw},${x2 - dx},${y2 - dy}A${r},${r},0,1,${cw},${this._x1 = x0},${this._y1 = y0}`;
+      this
+        ._append`A${r},${r},0,1,${cw},${x2 - dx},${y2 - dy}A${r},${r},0,1,${cw},${(this._x1 = x0)},${(this._y1 = y0)}`;
     } else if (da > epsilon) {
-      this._append`A${r},${r},0,${+(da >= pi)},${cw},${this._x1 = x2 + r * Math.cos(a1)},${this._y1 = y2 + r * Math.sin(a1)}`;
+      this
+        ._append`A${r},${r},0,${+(da >= pi)},${cw},${(this._x1 = x2 + r * Math.cos(a1))},${(this._y1 = y2 + r * Math.sin(a1))}`;
     }
   }
   rect(x2, y2, w, h) {
-    this._append`M${this._x0 = this._x1 = +x2},${this._y0 = this._y1 = +y2}h${w = +w}v${+h}h${-w}Z`;
+    this
+      ._append`M${(this._x0 = this._x1 = +x2)},${(this._y0 = this._y1 = +y2)}h${(w = +w)}v${+h}h${-w}Z`;
   }
   toString() {
     return this._;
@@ -701,7 +957,7 @@ class Path {
 }
 function withPath(shape) {
   let digits = 3;
-  shape.digits = function(_) {
+  shape.digits = function (_) {
     if (!arguments.length) return digits;
     if (_ == null) {
       digits = null;
@@ -721,21 +977,21 @@ function Linear(context) {
   this._context = context;
 }
 Linear.prototype = {
-  areaStart: function() {
+  areaStart: function () {
     this._line = 0;
   },
-  areaEnd: function() {
+  areaEnd: function () {
     this._line = NaN;
   },
-  lineStart: function() {
+  lineStart: function () {
     this._point = 0;
   },
-  lineEnd: function() {
-    if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
+  lineEnd: function () {
+    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
     this._line = 1 - this._line;
   },
-  point: function(x2, y2) {
-    x2 = +x2, y2 = +y2;
+  point: function (x2, y2) {
+    ((x2 = +x2), (y2 = +y2));
     switch (this._point) {
       case 0:
         this._point = 1;
@@ -748,7 +1004,7 @@ Linear.prototype = {
         this._context.lineTo(x2, y2);
         break;
     }
-  }
+  },
 };
 function curveLinear(context) {
   return new Linear(context);
@@ -760,49 +1016,76 @@ function y(p) {
   return p[1];
 }
 function shapeLine(x$1, y$1) {
-  var defined2 = constant$1(true), context = null, curve = curveLinear, output = null, path = withPath(line);
+  var defined2 = constant$1(true),
+    context = null,
+    curve = curveLinear,
+    output = null,
+    path = withPath(line);
   x$1 = typeof x$1 === "function" ? x$1 : x$1 === void 0 ? x : constant$1(x$1);
   y$1 = typeof y$1 === "function" ? y$1 : y$1 === void 0 ? y : constant$1(y$1);
   function line(data) {
-    var i, n = (data = array(data)).length, d, defined0 = false, buffer;
-    if (context == null) output = curve(buffer = path());
+    var i,
+      n = (data = array(data)).length,
+      d,
+      defined0 = false,
+      buffer;
+    if (context == null) output = curve((buffer = path()));
     for (i = 0; i <= n; ++i) {
-      if (!(i < n && defined2(d = data[i], i, data)) === defined0) {
-        if (defined0 = !defined0) output.lineStart();
+      if (!(i < n && defined2((d = data[i]), i, data)) === defined0) {
+        if ((defined0 = !defined0)) output.lineStart();
         else output.lineEnd();
       }
       if (defined0) output.point(+x$1(d, i, data), +y$1(d, i, data));
     }
-    if (buffer) return output = null, buffer + "" || null;
+    if (buffer) return ((output = null), buffer + "" || null);
   }
-  line.x = function(_) {
-    return arguments.length ? (x$1 = typeof _ === "function" ? _ : constant$1(+_), line) : x$1;
+  line.x = function (_) {
+    return arguments.length ? ((x$1 = typeof _ === "function" ? _ : constant$1(+_)), line) : x$1;
   };
-  line.y = function(_) {
-    return arguments.length ? (y$1 = typeof _ === "function" ? _ : constant$1(+_), line) : y$1;
+  line.y = function (_) {
+    return arguments.length ? ((y$1 = typeof _ === "function" ? _ : constant$1(+_)), line) : y$1;
   };
-  line.defined = function(_) {
-    return arguments.length ? (defined2 = typeof _ === "function" ? _ : constant$1(!!_), line) : defined2;
+  line.defined = function (_) {
+    return arguments.length
+      ? ((defined2 = typeof _ === "function" ? _ : constant$1(!!_)), line)
+      : defined2;
   };
-  line.curve = function(_) {
-    return arguments.length ? (curve = _, context != null && (output = curve(context)), line) : curve;
+  line.curve = function (_) {
+    return arguments.length
+      ? ((curve = _), context != null && (output = curve(context)), line)
+      : curve;
   };
-  line.context = function(_) {
-    return arguments.length ? (_ == null ? context = output = null : output = curve(context = _), line) : context;
+  line.context = function (_) {
+    return arguments.length
+      ? (_ == null ? (context = output = null) : (output = curve((context = _))), line)
+      : context;
   };
   return line;
 }
 function shapeArea(x0, y0, y1) {
-  var x1 = null, defined2 = constant$1(true), context = null, curve = curveLinear, output = null, path = withPath(area);
+  var x1 = null,
+    defined2 = constant$1(true),
+    context = null,
+    curve = curveLinear,
+    output = null,
+    path = withPath(area);
   x0 = typeof x0 === "function" ? x0 : x0 === void 0 ? x : constant$1(+x0);
   y0 = typeof y0 === "function" ? y0 : y0 === void 0 ? constant$1(0) : constant$1(+y0);
   y1 = typeof y1 === "function" ? y1 : y1 === void 0 ? y : constant$1(+y1);
   function area(data) {
-    var i, j, k, n = (data = array(data)).length, d, defined0 = false, buffer, x0z = new Array(n), y0z = new Array(n);
-    if (context == null) output = curve(buffer = path());
+    var i,
+      j,
+      k,
+      n = (data = array(data)).length,
+      d,
+      defined0 = false,
+      buffer,
+      x0z = new Array(n),
+      y0z = new Array(n);
+    if (context == null) output = curve((buffer = path()));
     for (i = 0; i <= n; ++i) {
-      if (!(i < n && defined2(d = data[i], i, data)) === defined0) {
-        if (defined0 = !defined0) {
+      if (!(i < n && defined2((d = data[i]), i, data)) === defined0) {
+        if ((defined0 = !defined0)) {
           j = i;
           output.areaStart();
           output.lineStart();
@@ -817,50 +1100,64 @@ function shapeArea(x0, y0, y1) {
         }
       }
       if (defined0) {
-        x0z[i] = +x0(d, i, data), y0z[i] = +y0(d, i, data);
+        ((x0z[i] = +x0(d, i, data)), (y0z[i] = +y0(d, i, data)));
         output.point(x1 ? +x1(d, i, data) : x0z[i], y1 ? +y1(d, i, data) : y0z[i]);
       }
     }
-    if (buffer) return output = null, buffer + "" || null;
+    if (buffer) return ((output = null), buffer + "" || null);
   }
   function arealine() {
     return shapeLine().defined(defined2).curve(curve).context(context);
   }
-  area.x = function(_) {
-    return arguments.length ? (x0 = typeof _ === "function" ? _ : constant$1(+_), x1 = null, area) : x0;
+  area.x = function (_) {
+    return arguments.length
+      ? ((x0 = typeof _ === "function" ? _ : constant$1(+_)), (x1 = null), area)
+      : x0;
   };
-  area.x0 = function(_) {
-    return arguments.length ? (x0 = typeof _ === "function" ? _ : constant$1(+_), area) : x0;
+  area.x0 = function (_) {
+    return arguments.length ? ((x0 = typeof _ === "function" ? _ : constant$1(+_)), area) : x0;
   };
-  area.x1 = function(_) {
-    return arguments.length ? (x1 = _ == null ? null : typeof _ === "function" ? _ : constant$1(+_), area) : x1;
+  area.x1 = function (_) {
+    return arguments.length
+      ? ((x1 = _ == null ? null : typeof _ === "function" ? _ : constant$1(+_)), area)
+      : x1;
   };
-  area.y = function(_) {
-    return arguments.length ? (y0 = typeof _ === "function" ? _ : constant$1(+_), y1 = null, area) : y0;
+  area.y = function (_) {
+    return arguments.length
+      ? ((y0 = typeof _ === "function" ? _ : constant$1(+_)), (y1 = null), area)
+      : y0;
   };
-  area.y0 = function(_) {
-    return arguments.length ? (y0 = typeof _ === "function" ? _ : constant$1(+_), area) : y0;
+  area.y0 = function (_) {
+    return arguments.length ? ((y0 = typeof _ === "function" ? _ : constant$1(+_)), area) : y0;
   };
-  area.y1 = function(_) {
-    return arguments.length ? (y1 = _ == null ? null : typeof _ === "function" ? _ : constant$1(+_), area) : y1;
+  area.y1 = function (_) {
+    return arguments.length
+      ? ((y1 = _ == null ? null : typeof _ === "function" ? _ : constant$1(+_)), area)
+      : y1;
   };
-  area.lineX0 = area.lineY0 = function() {
+  area.lineX0 = area.lineY0 = function () {
     return arealine().x(x0).y(y0);
   };
-  area.lineY1 = function() {
+  area.lineY1 = function () {
     return arealine().x(x0).y(y1);
   };
-  area.lineX1 = function() {
+  area.lineX1 = function () {
     return arealine().x(x1).y(y0);
   };
-  area.defined = function(_) {
-    return arguments.length ? (defined2 = typeof _ === "function" ? _ : constant$1(!!_), area) : defined2;
+  area.defined = function (_) {
+    return arguments.length
+      ? ((defined2 = typeof _ === "function" ? _ : constant$1(!!_)), area)
+      : defined2;
   };
-  area.curve = function(_) {
-    return arguments.length ? (curve = _, context != null && (output = curve(context)), area) : curve;
+  area.curve = function (_) {
+    return arguments.length
+      ? ((curve = _), context != null && (output = curve(context)), area)
+      : curve;
   };
-  area.context = function(_) {
-    return arguments.length ? (_ == null ? context = output = null : output = curve(context = _), area) : context;
+  area.context = function (_) {
+    return arguments.length
+      ? (_ == null ? (context = output = null) : (output = curve((context = _))), area)
+      : context;
   };
   return area;
 }
@@ -879,11 +1176,11 @@ class Bump {
     this._point = 0;
   }
   lineEnd() {
-    if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
+    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
     this._line = 1 - this._line;
   }
   point(x2, y2) {
-    x2 = +x2, y2 = +y2;
+    ((x2 = +x2), (y2 = +y2));
     switch (this._point) {
       case 0: {
         this._point = 1;
@@ -895,12 +1192,28 @@ class Bump {
         this._point = 2;
       // falls through
       default: {
-        if (this._x) this._context.bezierCurveTo(this._x0 = (this._x0 + x2) / 2, this._y0, this._x0, y2, x2, y2);
-        else this._context.bezierCurveTo(this._x0, this._y0 = (this._y0 + y2) / 2, x2, this._y0, x2, y2);
+        if (this._x)
+          this._context.bezierCurveTo(
+            (this._x0 = (this._x0 + x2) / 2),
+            this._y0,
+            this._x0,
+            y2,
+            x2,
+            y2,
+          );
+        else
+          this._context.bezierCurveTo(
+            this._x0,
+            (this._y0 = (this._y0 + y2) / 2),
+            x2,
+            this._y0,
+            x2,
+            y2,
+          );
         break;
       }
     }
-    this._x0 = x2, this._y0 = y2;
+    ((this._x0 = x2), (this._y0 = y2));
   }
 }
 function bumpX(context) {
@@ -909,8 +1222,7 @@ function bumpX(context) {
 function bumpY(context) {
   return new Bump(context, false);
 }
-function noop$3() {
-}
+function noop$3() {}
 function point$2(that, x2, y2) {
   that._context.bezierCurveTo(
     (2 * that._x0 + that._x1) / 3,
@@ -918,24 +1230,24 @@ function point$2(that, x2, y2) {
     (that._x0 + 2 * that._x1) / 3,
     (that._y0 + 2 * that._y1) / 3,
     (that._x0 + 4 * that._x1 + x2) / 6,
-    (that._y0 + 4 * that._y1 + y2) / 6
+    (that._y0 + 4 * that._y1 + y2) / 6,
   );
 }
 function Basis(context) {
   this._context = context;
 }
 Basis.prototype = {
-  areaStart: function() {
+  areaStart: function () {
     this._line = 0;
   },
-  areaEnd: function() {
+  areaEnd: function () {
     this._line = NaN;
   },
-  lineStart: function() {
+  lineStart: function () {
     this._x0 = this._x1 = this._y0 = this._y1 = NaN;
     this._point = 0;
   },
-  lineEnd: function() {
+  lineEnd: function () {
     switch (this._point) {
       case 3:
         point$2(this, this._x1, this._y1);
@@ -944,11 +1256,11 @@ Basis.prototype = {
         this._context.lineTo(this._x1, this._y1);
         break;
     }
-    if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
+    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
     this._line = 1 - this._line;
   },
-  point: function(x2, y2) {
-    x2 = +x2, y2 = +y2;
+  point: function (x2, y2) {
+    ((x2 = +x2), (y2 = +y2));
     switch (this._point) {
       case 0:
         this._point = 1;
@@ -965,9 +1277,9 @@ Basis.prototype = {
         point$2(this, x2, y2);
         break;
     }
-    this._x0 = this._x1, this._x1 = x2;
-    this._y0 = this._y1, this._y1 = y2;
-  }
+    ((this._x0 = this._x1), (this._x1 = x2));
+    ((this._y0 = this._y1), (this._y1 = y2));
+  },
 };
 function curveBasis(context) {
   return new Basis(context);
@@ -978,11 +1290,21 @@ function BasisClosed(context) {
 BasisClosed.prototype = {
   areaStart: noop$3,
   areaEnd: noop$3,
-  lineStart: function() {
-    this._x0 = this._x1 = this._x2 = this._x3 = this._x4 = this._y0 = this._y1 = this._y2 = this._y3 = this._y4 = NaN;
+  lineStart: function () {
+    this._x0 =
+      this._x1 =
+      this._x2 =
+      this._x3 =
+      this._x4 =
+      this._y0 =
+      this._y1 =
+      this._y2 =
+      this._y3 =
+      this._y4 =
+        NaN;
     this._point = 0;
   },
-  lineEnd: function() {
+  lineEnd: function () {
     switch (this._point) {
       case 1: {
         this._context.moveTo(this._x2, this._y2);
@@ -1003,29 +1325,32 @@ BasisClosed.prototype = {
       }
     }
   },
-  point: function(x2, y2) {
-    x2 = +x2, y2 = +y2;
+  point: function (x2, y2) {
+    ((x2 = +x2), (y2 = +y2));
     switch (this._point) {
       case 0:
         this._point = 1;
-        this._x2 = x2, this._y2 = y2;
+        ((this._x2 = x2), (this._y2 = y2));
         break;
       case 1:
         this._point = 2;
-        this._x3 = x2, this._y3 = y2;
+        ((this._x3 = x2), (this._y3 = y2));
         break;
       case 2:
         this._point = 3;
-        this._x4 = x2, this._y4 = y2;
-        this._context.moveTo((this._x0 + 4 * this._x1 + x2) / 6, (this._y0 + 4 * this._y1 + y2) / 6);
+        ((this._x4 = x2), (this._y4 = y2));
+        this._context.moveTo(
+          (this._x0 + 4 * this._x1 + x2) / 6,
+          (this._y0 + 4 * this._y1 + y2) / 6,
+        );
         break;
       default:
         point$2(this, x2, y2);
         break;
     }
-    this._x0 = this._x1, this._x1 = x2;
-    this._y0 = this._y1, this._y1 = y2;
-  }
+    ((this._x0 = this._x1), (this._x1 = x2));
+    ((this._y0 = this._y1), (this._y1 = y2));
+  },
 };
 function curveBasisClosed(context) {
   return new BasisClosed(context);
@@ -1034,22 +1359,22 @@ function BasisOpen(context) {
   this._context = context;
 }
 BasisOpen.prototype = {
-  areaStart: function() {
+  areaStart: function () {
     this._line = 0;
   },
-  areaEnd: function() {
+  areaEnd: function () {
     this._line = NaN;
   },
-  lineStart: function() {
+  lineStart: function () {
     this._x0 = this._x1 = this._y0 = this._y1 = NaN;
     this._point = 0;
   },
-  lineEnd: function() {
-    if (this._line || this._line !== 0 && this._point === 3) this._context.closePath();
+  lineEnd: function () {
+    if (this._line || (this._line !== 0 && this._point === 3)) this._context.closePath();
     this._line = 1 - this._line;
   },
-  point: function(x2, y2) {
-    x2 = +x2, y2 = +y2;
+  point: function (x2, y2) {
+    ((x2 = +x2), (y2 = +y2));
     switch (this._point) {
       case 0:
         this._point = 1;
@@ -1059,7 +1384,8 @@ BasisOpen.prototype = {
         break;
       case 2:
         this._point = 3;
-        var x0 = (this._x0 + 4 * this._x1 + x2) / 6, y0 = (this._y0 + 4 * this._y1 + y2) / 6;
+        var x0 = (this._x0 + 4 * this._x1 + x2) / 6,
+          y0 = (this._y0 + 4 * this._y1 + y2) / 6;
         this._line ? this._context.lineTo(x0, y0) : this._context.moveTo(x0, y0);
         break;
       case 3:
@@ -1069,9 +1395,9 @@ BasisOpen.prototype = {
         point$2(this, x2, y2);
         break;
     }
-    this._x0 = this._x1, this._x1 = x2;
-    this._y0 = this._y1, this._y1 = y2;
-  }
+    ((this._x0 = this._x1), (this._x1 = x2));
+    ((this._y0 = this._y1), (this._y1 = y2));
+  },
 };
 function curveBasisOpen(context) {
   return new BasisOpen(context);
@@ -1082,17 +1408,17 @@ function LinearClosed(context) {
 LinearClosed.prototype = {
   areaStart: noop$3,
   areaEnd: noop$3,
-  lineStart: function() {
+  lineStart: function () {
     this._point = 0;
   },
-  lineEnd: function() {
+  lineEnd: function () {
     if (this._point) this._context.closePath();
   },
-  point: function(x2, y2) {
-    x2 = +x2, y2 = +y2;
+  point: function (x2, y2) {
+    ((x2 = +x2), (y2 = +y2));
     if (this._point) this._context.lineTo(x2, y2);
-    else this._point = 1, this._context.moveTo(x2, y2);
-  }
+    else ((this._point = 1), this._context.moveTo(x2, y2));
+  },
 };
 function curveLinearClosed(context) {
   return new LinearClosed(context);
@@ -1101,32 +1427,40 @@ function sign(x2) {
   return x2 < 0 ? -1 : 1;
 }
 function slope3(that, x2, y2) {
-  var h0 = that._x1 - that._x0, h1 = x2 - that._x1, s0 = (that._y1 - that._y0) / (h0 || h1 < 0 && -0), s1 = (y2 - that._y1) / (h1 || h0 < 0 && -0), p = (s0 * h1 + s1 * h0) / (h0 + h1);
+  var h0 = that._x1 - that._x0,
+    h1 = x2 - that._x1,
+    s0 = (that._y1 - that._y0) / (h0 || (h1 < 0 && -0)),
+    s1 = (y2 - that._y1) / (h1 || (h0 < 0 && -0)),
+    p = (s0 * h1 + s1 * h0) / (h0 + h1);
   return (sign(s0) + sign(s1)) * Math.min(Math.abs(s0), Math.abs(s1), 0.5 * Math.abs(p)) || 0;
 }
 function slope2(that, t) {
   var h = that._x1 - that._x0;
-  return h ? (3 * (that._y1 - that._y0) / h - t) / 2 : t;
+  return h ? ((3 * (that._y1 - that._y0)) / h - t) / 2 : t;
 }
 function point$1(that, t02, t12) {
-  var x0 = that._x0, y0 = that._y0, x1 = that._x1, y1 = that._y1, dx = (x1 - x0) / 3;
+  var x0 = that._x0,
+    y0 = that._y0,
+    x1 = that._x1,
+    y1 = that._y1,
+    dx = (x1 - x0) / 3;
   that._context.bezierCurveTo(x0 + dx, y0 + dx * t02, x1 - dx, y1 - dx * t12, x1, y1);
 }
 function MonotoneX(context) {
   this._context = context;
 }
 MonotoneX.prototype = {
-  areaStart: function() {
+  areaStart: function () {
     this._line = 0;
   },
-  areaEnd: function() {
+  areaEnd: function () {
     this._line = NaN;
   },
-  lineStart: function() {
+  lineStart: function () {
     this._x0 = this._x1 = this._y0 = this._y1 = this._t0 = NaN;
     this._point = 0;
   },
-  lineEnd: function() {
+  lineEnd: function () {
     switch (this._point) {
       case 2:
         this._context.lineTo(this._x1, this._y1);
@@ -1135,12 +1469,12 @@ MonotoneX.prototype = {
         point$1(this, this._t0, slope2(this, this._t0));
         break;
     }
-    if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
+    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
     this._line = 1 - this._line;
   },
-  point: function(x2, y2) {
+  point: function (x2, y2) {
     var t12 = NaN;
-    x2 = +x2, y2 = +y2;
+    ((x2 = +x2), (y2 = +y2));
     if (x2 === this._x1 && y2 === this._y1) return;
     switch (this._point) {
       case 0:
@@ -1152,39 +1486,39 @@ MonotoneX.prototype = {
         break;
       case 2:
         this._point = 3;
-        point$1(this, slope2(this, t12 = slope3(this, x2, y2)), t12);
+        point$1(this, slope2(this, (t12 = slope3(this, x2, y2))), t12);
         break;
       default:
-        point$1(this, this._t0, t12 = slope3(this, x2, y2));
+        point$1(this, this._t0, (t12 = slope3(this, x2, y2)));
         break;
     }
-    this._x0 = this._x1, this._x1 = x2;
-    this._y0 = this._y1, this._y1 = y2;
+    ((this._x0 = this._x1), (this._x1 = x2));
+    ((this._y0 = this._y1), (this._y1 = y2));
     this._t0 = t12;
-  }
+  },
 };
 function MonotoneY(context) {
   this._context = new ReflectContext(context);
 }
-(MonotoneY.prototype = Object.create(MonotoneX.prototype)).point = function(x2, y2) {
+(MonotoneY.prototype = Object.create(MonotoneX.prototype)).point = function (x2, y2) {
   MonotoneX.prototype.point.call(this, y2, x2);
 };
 function ReflectContext(context) {
   this._context = context;
 }
 ReflectContext.prototype = {
-  moveTo: function(x2, y2) {
+  moveTo: function (x2, y2) {
     this._context.moveTo(y2, x2);
   },
-  closePath: function() {
+  closePath: function () {
     this._context.closePath();
   },
-  lineTo: function(x2, y2) {
+  lineTo: function (x2, y2) {
     this._context.lineTo(y2, x2);
   },
-  bezierCurveTo: function(x1, y1, x2, y2, x3, y3) {
+  bezierCurveTo: function (x1, y1, x2, y2, x3, y3) {
     this._context.bezierCurveTo(y1, x1, y2, x2, y3, x3);
-  }
+  },
 };
 function monotoneX(context) {
   return new MonotoneX(context);
@@ -1196,44 +1530,52 @@ function Natural(context) {
   this._context = context;
 }
 Natural.prototype = {
-  areaStart: function() {
+  areaStart: function () {
     this._line = 0;
   },
-  areaEnd: function() {
+  areaEnd: function () {
     this._line = NaN;
   },
-  lineStart: function() {
+  lineStart: function () {
     this._x = [];
     this._y = [];
   },
-  lineEnd: function() {
-    var x2 = this._x, y2 = this._y, n = x2.length;
+  lineEnd: function () {
+    var x2 = this._x,
+      y2 = this._y,
+      n = x2.length;
     if (n) {
       this._line ? this._context.lineTo(x2[0], y2[0]) : this._context.moveTo(x2[0], y2[0]);
       if (n === 2) {
         this._context.lineTo(x2[1], y2[1]);
       } else {
-        var px = controlPoints(x2), py = controlPoints(y2);
+        var px = controlPoints(x2),
+          py = controlPoints(y2);
         for (var i0 = 0, i1 = 1; i1 < n; ++i0, ++i1) {
           this._context.bezierCurveTo(px[0][i0], py[0][i0], px[1][i0], py[1][i0], x2[i1], y2[i1]);
         }
       }
     }
-    if (this._line || this._line !== 0 && n === 1) this._context.closePath();
+    if (this._line || (this._line !== 0 && n === 1)) this._context.closePath();
     this._line = 1 - this._line;
     this._x = this._y = null;
   },
-  point: function(x2, y2) {
+  point: function (x2, y2) {
     this._x.push(+x2);
     this._y.push(+y2);
-  }
+  },
 };
 function controlPoints(x2) {
-  var i, n = x2.length - 1, m, a = new Array(n), b = new Array(n), r = new Array(n);
-  a[0] = 0, b[0] = 2, r[0] = x2[0] + 2 * x2[1];
-  for (i = 1; i < n - 1; ++i) a[i] = 1, b[i] = 4, r[i] = 4 * x2[i] + 2 * x2[i + 1];
-  a[n - 1] = 2, b[n - 1] = 7, r[n - 1] = 8 * x2[n - 1] + x2[n];
-  for (i = 1; i < n; ++i) m = a[i] / b[i - 1], b[i] -= m, r[i] -= m * r[i - 1];
+  var i,
+    n = x2.length - 1,
+    m,
+    a = new Array(n),
+    b = new Array(n),
+    r = new Array(n);
+  ((a[0] = 0), (b[0] = 2), (r[0] = x2[0] + 2 * x2[1]));
+  for (i = 1; i < n - 1; ++i) ((a[i] = 1), (b[i] = 4), (r[i] = 4 * x2[i] + 2 * x2[i + 1]));
+  ((a[n - 1] = 2), (b[n - 1] = 7), (r[n - 1] = 8 * x2[n - 1] + x2[n]));
+  for (i = 1; i < n; ++i) ((m = a[i] / b[i - 1]), (b[i] -= m), (r[i] -= m * r[i - 1]));
   a[n - 1] = r[n - 1] / b[n - 1];
   for (i = n - 2; i >= 0; --i) a[i] = (r[i] - a[i + 1]) / b[i];
   b[n - 1] = (x2[n] + a[n - 1]) / 2;
@@ -1248,23 +1590,23 @@ function Step(context, t) {
   this._t = t;
 }
 Step.prototype = {
-  areaStart: function() {
+  areaStart: function () {
     this._line = 0;
   },
-  areaEnd: function() {
+  areaEnd: function () {
     this._line = NaN;
   },
-  lineStart: function() {
+  lineStart: function () {
     this._x = this._y = NaN;
     this._point = 0;
   },
-  lineEnd: function() {
+  lineEnd: function () {
     if (0 < this._t && this._t < 1 && this._point === 2) this._context.lineTo(this._x, this._y);
-    if (this._line || this._line !== 0 && this._point === 1) this._context.closePath();
-    if (this._line >= 0) this._t = 1 - this._t, this._line = 1 - this._line;
+    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
+    if (this._line >= 0) ((this._t = 1 - this._t), (this._line = 1 - this._line));
   },
-  point: function(x2, y2) {
-    x2 = +x2, y2 = +y2;
+  point: function (x2, y2) {
+    ((x2 = +x2), (y2 = +y2));
     switch (this._point) {
       case 0:
         this._point = 1;
@@ -1285,8 +1627,8 @@ Step.prototype = {
         break;
       }
     }
-    this._x = x2, this._y = y2;
-  }
+    ((this._x = x2), (this._y = y2));
+  },
 };
 function curveStep(context) {
   return new Step(context, 0.5);
@@ -1300,14 +1642,15 @@ function stepAfter(context) {
 function stackOffsetNone(series, order) {
   if (!((n = series.length) > 1)) return;
   for (var i = 1, j, s0, s1 = series[order[0]], n, m = s1.length; i < n; ++i) {
-    s0 = s1, s1 = series[order[i]];
+    ((s0 = s1), (s1 = series[order[i]]));
     for (j = 0; j < m; ++j) {
       s1[j][1] += s1[j][0] = isNaN(s0[j][1]) ? s0[j][0] : s0[j][1];
     }
   }
 }
 function stackOrderNone(series) {
-  var n = series.length, o = new Array(n);
+  var n = series.length,
+    o = new Array(n);
   while (--n >= 0) o[n] = n;
   return o;
 }
@@ -1320,9 +1663,16 @@ function stackSeries(key) {
   return series;
 }
 function shapeStack() {
-  var keys = constant$1([]), order = stackOrderNone, offset = stackOffsetNone, value = stackValue;
+  var keys = constant$1([]),
+    order = stackOrderNone,
+    offset = stackOffsetNone,
+    value = stackValue;
   function stack(data) {
-    var sz = Array.from(keys.apply(this, arguments), stackSeries), i, n = sz.length, j = -1, oz;
+    var sz = Array.from(keys.apply(this, arguments), stackSeries),
+      i,
+      n = sz.length,
+      j = -1,
+      oz;
     for (const d of data) {
       for (i = 0, ++j; i < n; ++i) {
         (sz[i][j] = [0, +value(d, sz[i].key, j, data)]).data = d;
@@ -1334,17 +1684,25 @@ function shapeStack() {
     offset(sz, oz);
     return sz;
   }
-  stack.keys = function(_) {
-    return arguments.length ? (keys = typeof _ === "function" ? _ : constant$1(Array.from(_)), stack) : keys;
+  stack.keys = function (_) {
+    return arguments.length
+      ? ((keys = typeof _ === "function" ? _ : constant$1(Array.from(_))), stack)
+      : keys;
   };
-  stack.value = function(_) {
-    return arguments.length ? (value = typeof _ === "function" ? _ : constant$1(+_), stack) : value;
+  stack.value = function (_) {
+    return arguments.length
+      ? ((value = typeof _ === "function" ? _ : constant$1(+_)), stack)
+      : value;
   };
-  stack.order = function(_) {
-    return arguments.length ? (order = _ == null ? stackOrderNone : typeof _ === "function" ? _ : constant$1(Array.from(_)), stack) : order;
+  stack.order = function (_) {
+    return arguments.length
+      ? ((order =
+          _ == null ? stackOrderNone : typeof _ === "function" ? _ : constant$1(Array.from(_))),
+        stack)
+      : order;
   };
-  stack.offset = function(_) {
-    return arguments.length ? (offset = _ == null ? stackOffsetNone : _, stack) : offset;
+  stack.offset = function (_) {
+    return arguments.length ? ((offset = _ == null ? stackOffsetNone : _), stack) : offset;
   };
   return stack;
 }
@@ -1368,12 +1726,17 @@ function stackOffsetWiggle(series, order) {
   if (!((n = series.length) > 0) || !((m = (s0 = series[order[0]]).length) > 0)) return;
   for (var y2 = 0, j = 1, s0, m, n; j < m; ++j) {
     for (var i = 0, s1 = 0, s2 = 0; i < n; ++i) {
-      var si = series[order[i]], sij0 = si[j][1] || 0, sij1 = si[j - 1][1] || 0, s3 = (sij0 - sij1) / 2;
+      var si = series[order[i]],
+        sij0 = si[j][1] || 0,
+        sij1 = si[j - 1][1] || 0,
+        s3 = (sij0 - sij1) / 2;
       for (var k = 0; k < i; ++k) {
-        var sk = series[order[k]], skj0 = sk[j][1] || 0, skj1 = sk[j - 1][1] || 0;
+        var sk = series[order[k]],
+          skj0 = sk[j][1] || 0,
+          skj1 = sk[j - 1][1] || 0;
         s3 += skj0 - skj1;
       }
-      s1 += sij0, s2 += s3 * sij0;
+      ((s1 += sij0), (s2 += s3 * sij0));
     }
     s0[j - 1][1] += s0[j - 1][0] = y2;
     if (s1) y2 -= s2 / s1;
@@ -1387,7 +1750,7 @@ var hasRequiredIsUnsafeProperty;
 function requireIsUnsafeProperty() {
   if (hasRequiredIsUnsafeProperty) return isUnsafeProperty;
   hasRequiredIsUnsafeProperty = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isUnsafeProperty2(key) {
       return key === "__proto__";
@@ -1401,7 +1764,7 @@ var hasRequiredIsDeepKey;
 function requireIsDeepKey() {
   if (hasRequiredIsDeepKey) return isDeepKey;
   hasRequiredIsDeepKey = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isDeepKey2(key) {
       switch (typeof key) {
@@ -1423,7 +1786,7 @@ var hasRequiredToKey;
 function requireToKey() {
   if (hasRequiredToKey) return toKey;
   hasRequiredToKey = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function toKey2(value) {
       if (typeof value === "string" || typeof value === "symbol") {
@@ -1444,7 +1807,7 @@ var hasRequiredToString;
 function requireToString() {
   if (hasRequiredToString) return toString$1;
   hasRequiredToString = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function toString2(value) {
       if (value == null) {
@@ -1470,7 +1833,7 @@ var hasRequiredToPath;
 function requireToPath() {
   if (hasRequiredToPath) return toPath;
   hasRequiredToPath = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const toString2 = /* @__PURE__ */ requireToString();
     const toKey2 = /* @__PURE__ */ requireToKey();
@@ -1547,7 +1910,7 @@ var hasRequiredGet$1;
 function requireGet$1() {
   if (hasRequiredGet$1) return get$3;
   hasRequiredGet$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isUnsafeProperty2 = /* @__PURE__ */ requireIsUnsafeProperty();
     const isDeepKey2 = /* @__PURE__ */ requireIsDeepKey();
@@ -1638,7 +2001,8 @@ var getExports = /* @__PURE__ */ requireGet();
 const get$1 = /* @__PURE__ */ getDefaultExportFromCjs(getExports);
 var defaultRoundPrecision = 4;
 function round$1(num) {
-  var roundPrecision = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : defaultRoundPrecision;
+  var roundPrecision =
+    arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : defaultRoundPrecision;
   var factor = 10 ** roundPrecision;
   var rounded = Math.round(num * factor) / factor;
   if (Object.is(rounded, -0)) {
@@ -1647,7 +2011,11 @@ function round$1(num) {
   return rounded;
 }
 function roundTemplateLiteral(strings) {
-  for (var _len = arguments.length, values = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+  for (
+    var _len = arguments.length, values = new Array(_len > 1 ? _len - 1 : 0), _key = 1;
+    _key < _len;
+    _key++
+  ) {
     values[_key - 1] = arguments[_key];
   }
   return strings.reduce((result, string2, i) => {
@@ -1693,7 +2061,7 @@ var getPercentValue = function getPercentValue2(percent, totalValue) {
       return defaultValue;
     }
     var index = percent.indexOf("%");
-    value = totalValue * parseFloat(percent.slice(0, index)) / 100;
+    value = (totalValue * parseFloat(percent.slice(0, index))) / 100;
   } else {
     value = +percent;
   }
@@ -1730,7 +2098,12 @@ function findEntryInArray(ary2, specifiedKey, specifiedValue) {
   if (!ary2 || !ary2.length) {
     return void 0;
   }
-  return ary2.find((entry) => entry && (typeof specifiedKey === "function" ? specifiedKey(entry) : get$1(entry, specifiedKey)) === specifiedValue);
+  return ary2.find(
+    (entry) =>
+      entry &&
+      (typeof specifiedKey === "function" ? specifiedKey(entry) : get$1(entry, specifiedKey)) ===
+        specifiedValue,
+  );
 }
 var isNullish = (value) => {
   return value === null || typeof value === "undefined";
@@ -1744,8 +2117,7 @@ var upperFirst = (value) => {
 function isNotNil(value) {
   return value != null;
 }
-function noop$2() {
-}
+function noop$2() {}
 var isPolarCoordinate = (c) => {
   return "radius" in c && "startAngle" in c && "endAngle" in c;
 };
@@ -1763,7 +2135,7 @@ var adaptEventHandlers = (props, newHandler) => {
   var out = {};
   Object.keys(inputProps).forEach((key) => {
     if (isEventKey(key) && typeof inputProps[key] === "function") {
-      out[key] = ((e) => inputProps[key](inputProps, e));
+      out[key] = (e) => inputProps[key](inputProps, e);
     }
   });
   return out;
@@ -1773,7 +2145,7 @@ var getEventHandlerOfChild = (originalHandler, data, index) => (e) => {
   return null;
 };
 var adaptEventsOfChild = (props, data, index) => {
-  if (props === null || typeof props !== "object" && typeof props !== "function") {
+  if (props === null || (typeof props !== "object" && typeof props !== "function")) {
     return null;
   }
   var out = null;
@@ -1790,25 +2162,41 @@ function ownKeys$y(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$y(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$y(Object(t), true).forEach(function(r2) {
-      _defineProperty$A(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$y(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$y(Object(t), true).forEach(function (r2) {
+          _defineProperty$A(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$y(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$A(e, r, t) {
-  return (r = _toPropertyKey$A(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$A(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$A(t) {
   var i = _toPrimitive$A(t, "string");
@@ -1842,7 +2230,7 @@ var hasRequiredUniqBy$2;
 function requireUniqBy$2() {
   if (hasRequiredUniqBy$2) return uniqBy$2;
   hasRequiredUniqBy$2 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function uniqBy2(arr, mapper) {
       const map2 = /* @__PURE__ */ new Map();
@@ -1864,10 +2252,10 @@ var hasRequiredAry;
 function requireAry() {
   if (hasRequiredAry) return ary;
   hasRequiredAry = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function ary2(func, n) {
-      return function(...args) {
+      return function (...args) {
         return func.apply(this, args.slice(0, n));
       };
     }
@@ -1880,7 +2268,7 @@ var hasRequiredIdentity;
 function requireIdentity() {
   if (hasRequiredIdentity) return identity$3;
   hasRequiredIdentity = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function identity2(x2) {
       return x2;
@@ -1896,7 +2284,7 @@ var hasRequiredIsLength;
 function requireIsLength() {
   if (hasRequiredIsLength) return isLength;
   hasRequiredIsLength = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isLength2(value) {
       return Number.isSafeInteger(value) && value >= 0;
@@ -1909,7 +2297,7 @@ var hasRequiredIsArrayLike;
 function requireIsArrayLike() {
   if (hasRequiredIsArrayLike) return isArrayLike;
   hasRequiredIsArrayLike = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isLength2 = /* @__PURE__ */ requireIsLength();
     function isArrayLike2(value) {
@@ -1924,7 +2312,7 @@ var hasRequiredIsObjectLike;
 function requireIsObjectLike() {
   if (hasRequiredIsObjectLike) return isObjectLike;
   hasRequiredIsObjectLike = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isObjectLike2(value) {
       return typeof value === "object" && value !== null;
@@ -1937,7 +2325,7 @@ var hasRequiredIsArrayLikeObject;
 function requireIsArrayLikeObject() {
   if (hasRequiredIsArrayLikeObject) return isArrayLikeObject;
   hasRequiredIsArrayLikeObject = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isArrayLike2 = /* @__PURE__ */ requireIsArrayLike();
     const isObjectLike2 = /* @__PURE__ */ requireIsObjectLike();
@@ -1954,11 +2342,11 @@ var hasRequiredProperty;
 function requireProperty() {
   if (hasRequiredProperty) return property;
   hasRequiredProperty = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const get2 = /* @__PURE__ */ requireGet$1();
     function property2(path) {
-      return function(object2) {
+      return function (object2) {
         return get2.get(object2, path);
       };
     }
@@ -1974,7 +2362,7 @@ var hasRequiredIsObject;
 function requireIsObject() {
   if (hasRequiredIsObject) return isObject;
   hasRequiredIsObject = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isObject2(value) {
       return value !== null && (typeof value === "object" || typeof value === "function");
@@ -1988,10 +2376,10 @@ var hasRequiredIsPrimitive;
 function requireIsPrimitive() {
   if (hasRequiredIsPrimitive) return isPrimitive;
   hasRequiredIsPrimitive = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isPrimitive2(value) {
-      return value == null || typeof value !== "object" && typeof value !== "function";
+      return value == null || (typeof value !== "object" && typeof value !== "function");
     }
     exports$1.isPrimitive = isPrimitive2;
   })(isPrimitive);
@@ -2002,10 +2390,10 @@ var hasRequiredIsEqualsSameValueZero;
 function requireIsEqualsSameValueZero() {
   if (hasRequiredIsEqualsSameValueZero) return isEqualsSameValueZero;
   hasRequiredIsEqualsSameValueZero = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isEqualsSameValueZero2(value, other) {
-      return value === other || Number.isNaN(value) && Number.isNaN(other);
+      return value === other || (Number.isNaN(value) && Number.isNaN(other));
     }
     exports$1.isEqualsSameValueZero = isEqualsSameValueZero2;
   })(isEqualsSameValueZero);
@@ -2015,7 +2403,7 @@ var hasRequiredIsMatchWith;
 function requireIsMatchWith() {
   if (hasRequiredIsMatchWith) return isMatchWith;
   hasRequiredIsMatchWith = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isObject2 = /* @__PURE__ */ requireIsObject();
     const isPrimitive2 = /* @__PURE__ */ requireIsPrimitive();
@@ -2024,13 +2412,18 @@ function requireIsMatchWith() {
       if (typeof compare !== "function") {
         return isMatchWith2(target, source, () => void 0);
       }
-      return isMatchWithInternal(target, source, function doesMatch(objValue, srcValue, key, object2, source2, stack) {
-        const isEqual = compare(objValue, srcValue, key, object2, source2, stack);
-        if (isEqual !== void 0) {
-          return Boolean(isEqual);
-        }
-        return isMatchWithInternal(objValue, srcValue, doesMatch, stack);
-      }, /* @__PURE__ */ new Map());
+      return isMatchWithInternal(
+        target,
+        source,
+        function doesMatch(objValue, srcValue, key, object2, source2, stack) {
+          const isEqual = compare(objValue, srcValue, key, object2, source2, stack);
+          if (isEqual !== void 0) {
+            return Boolean(isEqual);
+          }
+          return isMatchWithInternal(objValue, srcValue, doesMatch, stack);
+        },
+        /* @__PURE__ */ new Map(),
+      );
     }
     function isMatchWithInternal(target, source, compare, stack) {
       if (source === target) {
@@ -2171,7 +2564,7 @@ var hasRequiredIsMatch;
 function requireIsMatch() {
   if (hasRequiredIsMatch) return isMatch;
   hasRequiredIsMatch = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isMatchWith2 = /* @__PURE__ */ requireIsMatchWith();
     function isMatch2(target, source) {
@@ -2188,10 +2581,12 @@ var hasRequiredGetSymbols;
 function requireGetSymbols() {
   if (hasRequiredGetSymbols) return getSymbols;
   hasRequiredGetSymbols = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function getSymbols2(object2) {
-      return Object.getOwnPropertySymbols(object2).filter((symbol) => Object.prototype.propertyIsEnumerable.call(object2, symbol));
+      return Object.getOwnPropertySymbols(object2).filter((symbol) =>
+        Object.prototype.propertyIsEnumerable.call(object2, symbol),
+      );
     }
     exports$1.getSymbols = getSymbols2;
   })(getSymbols);
@@ -2202,7 +2597,7 @@ var hasRequiredGetTag;
 function requireGetTag() {
   if (hasRequiredGetTag) return getTag;
   hasRequiredGetTag = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function getTag2(value) {
       if (value == null) {
@@ -2219,7 +2614,7 @@ var hasRequiredTags;
 function requireTags() {
   if (hasRequiredTags) return tags;
   hasRequiredTags = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const regexpTag = "[object RegExp]";
     const stringTag = "[object String]";
@@ -2281,7 +2676,7 @@ var hasRequiredIsTypedArray;
 function requireIsTypedArray() {
   if (hasRequiredIsTypedArray) return isTypedArray;
   hasRequiredIsTypedArray = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isTypedArray2(x2) {
       return ArrayBuffer.isView(x2) && !(x2 instanceof DataView);
@@ -2294,7 +2689,7 @@ var hasRequiredCloneDeepWith$1;
 function requireCloneDeepWith$1() {
   if (hasRequiredCloneDeepWith$1) return cloneDeepWith$1;
   hasRequiredCloneDeepWith$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const getSymbols2 = /* @__PURE__ */ requireGetSymbols();
     const getTag2 = /* @__PURE__ */ requireGetTag();
@@ -2304,7 +2699,13 @@ function requireCloneDeepWith$1() {
     function cloneDeepWith2(obj, cloneValue) {
       return cloneDeepWithImpl(obj, void 0, obj, /* @__PURE__ */ new Map(), cloneValue);
     }
-    function cloneDeepWithImpl(valueToClone, keyToClone, objectToClone, stack = /* @__PURE__ */ new Map(), cloneValue = void 0) {
+    function cloneDeepWithImpl(
+      valueToClone,
+      keyToClone,
+      objectToClone,
+      stack = /* @__PURE__ */ new Map(),
+      cloneValue = void 0,
+    ) {
       const cloned = cloneValue?.(valueToClone, keyToClone, objectToClone, stack);
       if (cloned !== void 0) {
         return cloned;
@@ -2357,25 +2758,32 @@ function requireCloneDeepWith$1() {
         return valueToClone.subarray();
       }
       if (isTypedArray2.isTypedArray(valueToClone)) {
-        const result = new (Object.getPrototypeOf(valueToClone)).constructor(valueToClone.length);
+        const result = new (Object.getPrototypeOf(valueToClone).constructor)(valueToClone.length);
         stack.set(valueToClone, result);
         for (let i = 0; i < valueToClone.length; i++) {
           result[i] = cloneDeepWithImpl(valueToClone[i], i, objectToClone, stack, cloneValue);
         }
         return result;
       }
-      if (valueToClone instanceof ArrayBuffer || typeof SharedArrayBuffer !== "undefined" && valueToClone instanceof SharedArrayBuffer) {
+      if (
+        valueToClone instanceof ArrayBuffer ||
+        (typeof SharedArrayBuffer !== "undefined" && valueToClone instanceof SharedArrayBuffer)
+      ) {
         return valueToClone.slice(0);
       }
       if (valueToClone instanceof DataView) {
-        const result = new DataView(valueToClone.buffer.slice(0), valueToClone.byteOffset, valueToClone.byteLength);
+        const result = new DataView(
+          valueToClone.buffer.slice(0),
+          valueToClone.byteOffset,
+          valueToClone.byteLength,
+        );
         stack.set(valueToClone, result);
         copyProperties(result, valueToClone, objectToClone, stack, cloneValue);
         return result;
       }
       if (typeof File !== "undefined" && valueToClone instanceof File) {
         const result = new File([valueToClone], valueToClone.name, {
-          type: valueToClone.type
+          type: valueToClone.type,
         });
         stack.set(valueToClone, result);
         copyProperties(result, valueToClone, objectToClone, stack, cloneValue);
@@ -2475,7 +2883,7 @@ var hasRequiredCloneDeep$1;
 function requireCloneDeep$1() {
   if (hasRequiredCloneDeep$1) return cloneDeep$1;
   hasRequiredCloneDeep$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const cloneDeepWith2 = /* @__PURE__ */ requireCloneDeepWith$1();
     function cloneDeep2(obj) {
@@ -2489,7 +2897,7 @@ var hasRequiredMatches;
 function requireMatches() {
   if (hasRequiredMatches) return matches;
   hasRequiredMatches = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isMatch2 = /* @__PURE__ */ requireIsMatch();
     const cloneDeep2 = /* @__PURE__ */ requireCloneDeep$1();
@@ -2510,7 +2918,7 @@ var hasRequiredCloneDeepWith;
 function requireCloneDeepWith() {
   if (hasRequiredCloneDeepWith) return cloneDeepWith;
   hasRequiredCloneDeepWith = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const cloneDeepWith$12 = /* @__PURE__ */ requireCloneDeepWith$1();
     const getTag2 = /* @__PURE__ */ requireGetTag();
@@ -2559,7 +2967,7 @@ var hasRequiredCloneDeep;
 function requireCloneDeep() {
   if (hasRequiredCloneDeep) return cloneDeep;
   hasRequiredCloneDeep = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const cloneDeepWith2 = /* @__PURE__ */ requireCloneDeepWith();
     function cloneDeep2(obj) {
@@ -2575,7 +2983,7 @@ var hasRequiredIsIndex;
 function requireIsIndex() {
   if (hasRequiredIsIndex) return isIndex;
   hasRequiredIsIndex = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const IS_UNSIGNED_INTEGER = /^(?:0|[1-9]\d*)$/;
     function isIndex2(value, length = Number.MAX_SAFE_INTEGER) {
@@ -2600,11 +3008,15 @@ var hasRequiredIsArguments;
 function requireIsArguments() {
   if (hasRequiredIsArguments) return isArguments;
   hasRequiredIsArguments = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const getTag2 = /* @__PURE__ */ requireGetTag();
     function isArguments2(value) {
-      return value !== null && typeof value === "object" && getTag2.getTag(value) === "[object Arguments]";
+      return (
+        value !== null &&
+        typeof value === "object" &&
+        getTag2.getTag(value) === "[object Arguments]"
+      );
     }
     exports$1.isArguments = isArguments2;
   })(isArguments);
@@ -2614,7 +3026,7 @@ var hasRequiredHas;
 function requireHas() {
   if (hasRequiredHas) return has$2;
   hasRequiredHas = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isDeepKey2 = /* @__PURE__ */ requireIsDeepKey();
     const isIndex2 = /* @__PURE__ */ requireIsIndex();
@@ -2624,7 +3036,11 @@ function requireHas() {
       let resolvedPath;
       if (Array.isArray(path)) {
         resolvedPath = path;
-      } else if (typeof path === "string" && isDeepKey2.isDeepKey(path) && object2?.[path] == null) {
+      } else if (
+        typeof path === "string" &&
+        isDeepKey2.isDeepKey(path) &&
+        object2?.[path] == null
+      ) {
         resolvedPath = toPath2.toPath(path);
       } else {
         resolvedPath = [path];
@@ -2636,7 +3052,10 @@ function requireHas() {
       for (let i = 0; i < resolvedPath.length; i++) {
         const key = resolvedPath[i];
         if (current2 == null || !Object.hasOwn(current2, key)) {
-          const isSparseIndex = (Array.isArray(current2) || isArguments2.isArguments(current2)) && isIndex2.isIndex(key) && key < current2.length;
+          const isSparseIndex =
+            (Array.isArray(current2) || isArguments2.isArguments(current2)) &&
+            isIndex2.isIndex(key) &&
+            key < current2.length;
           if (!isSparseIndex) {
             return false;
           }
@@ -2653,7 +3072,7 @@ var hasRequiredMatchesProperty;
 function requireMatchesProperty() {
   if (hasRequiredMatchesProperty) return matchesProperty;
   hasRequiredMatchesProperty = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isMatch2 = /* @__PURE__ */ requireIsMatch();
     const toKey2 = /* @__PURE__ */ requireToKey();
@@ -2674,7 +3093,7 @@ function requireMatchesProperty() {
         }
       }
       source = cloneDeep2.cloneDeep(source);
-      return function(target) {
+      return function (target) {
         const result = get2.get(target, property2);
         if (result === void 0) {
           return has2.has(target, property2);
@@ -2693,7 +3112,7 @@ var hasRequiredIteratee;
 function requireIteratee() {
   if (hasRequiredIteratee) return iteratee;
   hasRequiredIteratee = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const identity2 = /* @__PURE__ */ requireIdentity();
     const property2 = /* @__PURE__ */ requireProperty();
@@ -2728,7 +3147,7 @@ var hasRequiredUniqBy$1;
 function requireUniqBy$1() {
   if (hasRequiredUniqBy$1) return uniqBy$3;
   hasRequiredUniqBy$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const uniqBy$12 = /* @__PURE__ */ requireUniqBy$2();
     const ary2 = /* @__PURE__ */ requireAry();
@@ -2773,8 +3192,7 @@ var useAppDispatch = () => {
   }
   return noopDispatch;
 };
-var noop$1 = () => {
-};
+var noop$1 = () => {};
 var addNestedSubNoop = () => noop$1;
 var refEquality = (a, b) => a === b;
 function useAppSelector(selector) {
@@ -2790,23 +3208,40 @@ function useAppSelector(selector) {
       return selector(state);
     };
   }, [context, selector]);
-  return withSelectorExports.useSyncExternalStoreWithSelector(context ? context.subscription.addNestedSub : addNestedSubNoop, context ? context.store.getState : noop$1, context ? context.store.getState : noop$1, outOfContextSelector, refEquality);
+  return withSelectorExports.useSyncExternalStoreWithSelector(
+    context ? context.subscription.addNestedSub : addNestedSubNoop,
+    context ? context.store.getState : noop$1,
+    context ? context.store.getState : noop$1,
+    outOfContextSelector,
+    refEquality,
+  );
 }
-function assertIsFunction(func, errorMessage = `expected a function, instead received ${typeof func}`) {
+function assertIsFunction(
+  func,
+  errorMessage = `expected a function, instead received ${typeof func}`,
+) {
   if (typeof func !== "function") {
     throw new TypeError(errorMessage);
   }
 }
-function assertIsObject(object2, errorMessage = `expected an object, instead received ${typeof object2}`) {
+function assertIsObject(
+  object2,
+  errorMessage = `expected an object, instead received ${typeof object2}`,
+) {
   if (typeof object2 !== "object") {
     throw new TypeError(errorMessage);
   }
 }
-function assertIsArrayOfFunctions(array2, errorMessage = `expected all items to be functions, instead received the following types: `) {
+function assertIsArrayOfFunctions(
+  array2,
+  errorMessage = `expected all items to be functions, instead received the following types: `,
+) {
   if (!array2.every((item) => typeof item === "function")) {
-    const itemTypes = array2.map(
-      (item) => typeof item === "function" ? `function ${item.name || "unnamed"}()` : typeof item
-    ).join(", ");
+    const itemTypes = array2
+      .map((item) =>
+        typeof item === "function" ? `function ${item.name || "unnamed"}()` : typeof item,
+      )
+      .join(", ");
     throw new TypeError(`${errorMessage}[${itemTypes}]`);
   }
 }
@@ -2814,10 +3249,12 @@ var ensureIsArray = (item) => {
   return Array.isArray(item) ? item : [item];
 };
 function getDependencies(createSelectorArgs) {
-  const dependencies = Array.isArray(createSelectorArgs[0]) ? createSelectorArgs[0] : createSelectorArgs;
+  const dependencies = Array.isArray(createSelectorArgs[0])
+    ? createSelectorArgs[0]
+    : createSelectorArgs;
   assertIsArrayOfFunctions(
     dependencies,
-    `createSelector expects all input-selectors to be functions, but received the following types: `
+    `createSelector expects all input-selectors to be functions, but received the following types: `,
   );
   return dependencies;
 }
@@ -2845,7 +3282,7 @@ function createCacheNode() {
     s: UNTERMINATED,
     v: void 0,
     o: null,
-    p: null
+    p: null,
   };
 }
 function weakMapMemoize(func, options = {}) {
@@ -2858,7 +3295,7 @@ function weakMapMemoize(func, options = {}) {
     const { length } = arguments;
     for (let i = 0, l = length; i < l; i++) {
       const arg = arguments[i];
-      if (typeof arg === "function" || typeof arg === "object" && arg !== null) {
+      if (typeof arg === "function" || (typeof arg === "object" && arg !== null)) {
         let objectCache = cacheNode.o;
         if (objectCache === null) {
           cacheNode.o = objectCache = /* @__PURE__ */ new WeakMap();
@@ -2897,7 +3334,8 @@ function weakMapMemoize(func, options = {}) {
           result = lastResultValue;
           resultsCount !== 0 && resultsCount--;
         }
-        const needsWeakRef = typeof result === "object" && result !== null || typeof result === "function";
+        const needsWeakRef =
+          (typeof result === "object" && result !== null) || typeof result === "function";
         lastResult2 = needsWeakRef ? new Ref(result) : result;
       }
     }
@@ -2916,10 +3354,13 @@ function weakMapMemoize(func, options = {}) {
   return memoized;
 }
 function createSelectorCreator(memoizeOrOptions, ...memoizeOptionsFromArgs) {
-  const createSelectorCreatorOptions = typeof memoizeOrOptions === "function" ? {
-    memoize: memoizeOrOptions,
-    memoizeOptions: memoizeOptionsFromArgs
-  } : memoizeOrOptions;
+  const createSelectorCreatorOptions =
+    typeof memoizeOrOptions === "function"
+      ? {
+          memoize: memoizeOrOptions,
+          memoizeOptions: memoizeOptionsFromArgs,
+        }
+      : memoizeOrOptions;
   const createSelector2 = (...createSelectorArgs) => {
     let recomputations = 0;
     let dependencyRecomputations = 0;
@@ -2932,37 +3373,37 @@ function createSelectorCreator(memoizeOrOptions, ...memoizeOptionsFromArgs) {
     }
     assertIsFunction(
       resultFunc,
-      `createSelector expects an output function after the inputs, but received: [${typeof resultFunc}]`
+      `createSelector expects an output function after the inputs, but received: [${typeof resultFunc}]`,
     );
     const combinedOptions = {
       ...createSelectorCreatorOptions,
-      ...directlyPassedOptions
+      ...directlyPassedOptions,
     };
     const {
       memoize,
       memoizeOptions = [],
       argsMemoize = weakMapMemoize,
-      argsMemoizeOptions = []
+      argsMemoizeOptions = [],
     } = combinedOptions;
     const finalMemoizeOptions = ensureIsArray(memoizeOptions);
     const finalArgsMemoizeOptions = ensureIsArray(argsMemoizeOptions);
     const dependencies = getDependencies(createSelectorArgs);
-    const memoizedResultFunc = memoize(function recomputationWrapper() {
-      recomputations++;
-      return resultFunc.apply(
-        null,
-        arguments
-      );
-    }, ...finalMemoizeOptions);
-    const selector = argsMemoize(function dependenciesChecker() {
-      dependencyRecomputations++;
-      const inputSelectorResults = collectInputSelectorResults(
-        dependencies,
-        arguments
-      );
-      lastResult2 = memoizedResultFunc.apply(null, inputSelectorResults);
-      return lastResult2;
-    }, ...finalArgsMemoizeOptions);
+    const memoizedResultFunc = memoize(
+      function recomputationWrapper() {
+        recomputations++;
+        return resultFunc.apply(null, arguments);
+      },
+      ...finalMemoizeOptions,
+    );
+    const selector = argsMemoize(
+      function dependenciesChecker() {
+        dependencyRecomputations++;
+        const inputSelectorResults = collectInputSelectorResults(dependencies, arguments);
+        lastResult2 = memoizedResultFunc.apply(null, inputSelectorResults);
+        return lastResult2;
+      },
+      ...finalArgsMemoizeOptions,
+    );
     return Object.assign(selector, {
       resultFunc,
       memoizedResultFunc,
@@ -2977,11 +3418,11 @@ function createSelectorCreator(memoizeOrOptions, ...memoizeOptionsFromArgs) {
         recomputations = 0;
       },
       memoize,
-      argsMemoize
+      argsMemoize,
     });
   };
   Object.assign(createSelector2, {
-    withTypes: () => createSelector2
+    withTypes: () => createSelector2,
   });
   return createSelector2;
 }
@@ -2990,24 +3431,19 @@ var createStructuredSelector = Object.assign(
   (inputSelectorsObject, selectorCreator = createSelector) => {
     assertIsObject(
       inputSelectorsObject,
-      `createStructuredSelector expects first argument to be an object where each property is a selector, instead received a ${typeof inputSelectorsObject}`
+      `createStructuredSelector expects first argument to be an object where each property is a selector, instead received a ${typeof inputSelectorsObject}`,
     );
     const inputSelectorKeys = Object.keys(inputSelectorsObject);
-    const dependencies = inputSelectorKeys.map(
-      (key) => inputSelectorsObject[key]
-    );
-    const structuredSelector = selectorCreator(
-      dependencies,
-      (...inputSelectorResults) => {
-        return inputSelectorResults.reduce((composition, value, index) => {
-          composition[inputSelectorKeys[index]] = value;
-          return composition;
-        }, {});
-      }
-    );
+    const dependencies = inputSelectorKeys.map((key) => inputSelectorsObject[key]);
+    const structuredSelector = selectorCreator(dependencies, (...inputSelectorResults) => {
+      return inputSelectorResults.reduce((composition, value, index) => {
+        composition[inputSelectorKeys[index]] = value;
+        return composition;
+      }, {});
+    });
     return structuredSelector;
   },
-  { withTypes: () => createStructuredSelector }
+  { withTypes: () => createStructuredSelector },
 );
 var sortBy$3 = {};
 var orderBy = {};
@@ -3016,7 +3452,7 @@ var hasRequiredCompareValues;
 function requireCompareValues() {
   if (hasRequiredCompareValues) return compareValues;
   hasRequiredCompareValues = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function getPriority(a) {
       if (typeof a === "symbol") {
@@ -3059,7 +3495,7 @@ var hasRequiredIsSymbol;
 function requireIsSymbol() {
   if (hasRequiredIsSymbol) return isSymbol;
   hasRequiredIsSymbol = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function isSymbol2(value) {
       return typeof value === "symbol" || value instanceof Symbol;
@@ -3072,7 +3508,7 @@ var hasRequiredIsKey;
 function requireIsKey() {
   if (hasRequiredIsKey) return isKey;
   hasRequiredIsKey = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isSymbol2 = /* @__PURE__ */ requireIsSymbol();
     const regexIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/;
@@ -3081,10 +3517,19 @@ function requireIsKey() {
       if (Array.isArray(value)) {
         return false;
       }
-      if (typeof value === "number" || typeof value === "boolean" || value == null || isSymbol2.isSymbol(value)) {
+      if (
+        typeof value === "number" ||
+        typeof value === "boolean" ||
+        value == null ||
+        isSymbol2.isSymbol(value)
+      ) {
         return true;
       }
-      return typeof value === "string" && (regexIsPlainProp.test(value) || !regexIsDeepProp.test(value)) || object2 != null && Object.hasOwn(object2, value);
+      return (
+        (typeof value === "string" &&
+          (regexIsPlainProp.test(value) || !regexIsDeepProp.test(value))) ||
+        (object2 != null && Object.hasOwn(object2, value))
+      );
     }
     exports$1.isKey = isKey2;
   })(isKey);
@@ -3094,7 +3539,7 @@ var hasRequiredOrderBy;
 function requireOrderBy() {
   if (hasRequiredOrderBy) return orderBy;
   hasRequiredOrderBy = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const compareValues2 = /* @__PURE__ */ requireCompareValues();
     const isKey2 = /* @__PURE__ */ requireIsKey();
@@ -3149,24 +3594,36 @@ function requireOrderBy() {
         if (Array.isArray(criterion) && criterion.length === 1) {
           criterion = criterion[0];
         }
-        if (criterion == null || typeof criterion === "function" || Array.isArray(criterion) || isKey2.isKey(criterion)) {
+        if (
+          criterion == null ||
+          typeof criterion === "function" ||
+          Array.isArray(criterion) ||
+          isKey2.isKey(criterion)
+        ) {
           return criterion;
         }
         return { key: criterion, path: toPath2.toPath(criterion) };
       });
       const preparedCollection = collection.map((item) => ({
         original: item,
-        criteria: preparedCriteria.map((criterion) => getValueByCriterion(criterion, item))
+        criteria: preparedCriteria.map((criterion) => getValueByCriterion(criterion, item)),
       }));
-      return preparedCollection.slice().sort((a, b) => {
-        for (let i = 0; i < preparedCriteria.length; i++) {
-          const comparedResult = compareValues2.compareValues(a.criteria[i], b.criteria[i], orders[i]);
-          if (comparedResult !== 0) {
-            return comparedResult;
+      return preparedCollection
+        .slice()
+        .sort((a, b) => {
+          for (let i = 0; i < preparedCriteria.length; i++) {
+            const comparedResult = compareValues2.compareValues(
+              a.criteria[i],
+              b.criteria[i],
+              orders[i],
+            );
+            if (comparedResult !== 0) {
+              return comparedResult;
+            }
           }
-        }
-        return 0;
-      }).map((item) => item.original);
+          return 0;
+        })
+        .map((item) => item.original);
     }
     exports$1.orderBy = orderBy2;
   })(orderBy);
@@ -3177,7 +3634,7 @@ var hasRequiredFlatten;
 function requireFlatten() {
   if (hasRequiredFlatten) return flatten;
   hasRequiredFlatten = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function flatten2(arr, depth = 1) {
       const result = [];
@@ -3204,7 +3661,7 @@ var hasRequiredIsIterateeCall;
 function requireIsIterateeCall() {
   if (hasRequiredIsIterateeCall) return isIterateeCall;
   hasRequiredIsIterateeCall = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isIndex2 = /* @__PURE__ */ requireIsIndex();
     const isArrayLike2 = /* @__PURE__ */ requireIsArrayLike();
@@ -3214,7 +3671,13 @@ function requireIsIterateeCall() {
       if (!isObject2.isObject(object2)) {
         return false;
       }
-      if (typeof index === "number" && isArrayLike2.isArrayLike(object2) && isIndex2.isIndex(index) && index < object2.length || typeof index === "string" && index in object2) {
+      if (
+        (typeof index === "number" &&
+          isArrayLike2.isArrayLike(object2) &&
+          isIndex2.isIndex(index) &&
+          index < object2.length) ||
+        (typeof index === "string" && index in object2)
+      ) {
         return isEqualsSameValueZero2.isEqualsSameValueZero(object2[index], value);
       }
       return false;
@@ -3227,7 +3690,7 @@ var hasRequiredSortBy$1;
 function requireSortBy$1() {
   if (hasRequiredSortBy$1) return sortBy$3;
   hasRequiredSortBy$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const orderBy2 = /* @__PURE__ */ requireOrderBy();
     const flatten2 = /* @__PURE__ */ requireFlatten();
@@ -3236,7 +3699,10 @@ function requireSortBy$1() {
       const length = criteria.length;
       if (length > 1 && isIterateeCall2.isIterateeCall(collection, criteria[0], criteria[1])) {
         criteria = [];
-      } else if (length > 2 && isIterateeCall2.isIterateeCall(criteria[0], criteria[1], criteria[2])) {
+      } else if (
+        length > 2 &&
+        isIterateeCall2.isIterateeCall(criteria[0], criteria[1], criteria[2])
+      ) {
         criteria = [criteria[0]];
       }
       return orderBy2.orderBy(collection, flatten2.flatten(criteria), ["asc"]);
@@ -3259,9 +3725,7 @@ var selectLegendSettings = (state) => state.legend.settings;
 var selectLegendSize = (state) => state.legend.size;
 var selectAllLegendPayload2DArray = (state) => state.legend.payload;
 createSelector([selectAllLegendPayload2DArray, selectLegendSettings], (payloads, _ref2) => {
-  var {
-    itemSorter
-  } = _ref2;
+  var { itemSorter } = _ref2;
   var flat = payloads.flat(1);
   return itemSorter ? sortBy$1(flat, itemSorter) : flat;
 });
@@ -3272,7 +3736,7 @@ function useElementOffset() {
     height: 0,
     left: 0,
     top: 0,
-    width: 0
+    width: 0,
   });
   var updateBoundingBox = reactExports.useCallback(
     (node) => {
@@ -3282,38 +3746,49 @@ function useElementOffset() {
           height: rect.height,
           left: rect.left,
           top: rect.top,
-          width: rect.width
+          width: rect.width,
         };
-        if (Math.abs(box.height - lastBoundingBox.height) > EPS || Math.abs(box.left - lastBoundingBox.left) > EPS || Math.abs(box.top - lastBoundingBox.top) > EPS || Math.abs(box.width - lastBoundingBox.width) > EPS) {
+        if (
+          Math.abs(box.height - lastBoundingBox.height) > EPS ||
+          Math.abs(box.left - lastBoundingBox.left) > EPS ||
+          Math.abs(box.top - lastBoundingBox.top) > EPS ||
+          Math.abs(box.width - lastBoundingBox.width) > EPS
+        ) {
           setLastBoundingBox({
             height: box.height,
             left: box.left,
             top: box.top,
-            width: box.width
+            width: box.width,
           });
         }
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [lastBoundingBox.width, lastBoundingBox.height, lastBoundingBox.top, lastBoundingBox.left, ...extraDependencies]
+    [
+      lastBoundingBox.width,
+      lastBoundingBox.height,
+      lastBoundingBox.top,
+      lastBoundingBox.left,
+      ...extraDependencies,
+    ],
   );
   return [lastBoundingBox, updateBoundingBox];
 }
 function formatProdErrorMessage$1(code) {
   return `Minified Redux error #${code}; visit https://redux.js.org/Errors?code=${code} for the full message or use the non-minified dev environment for full errors. `;
 }
-var $$observable = /* @__PURE__ */ (() => typeof Symbol === "function" && Symbol.observable || "@@observable")();
+var $$observable = /* @__PURE__ */ (() =>
+  (typeof Symbol === "function" && Symbol.observable) || "@@observable")();
 var symbol_observable_default = $$observable;
 var randomString = () => Math.random().toString(36).substring(7).split("").join(".");
 var ActionTypes = {
   INIT: `@@redux/INIT${/* @__PURE__ */ randomString()}`,
   REPLACE: `@@redux/REPLACE${/* @__PURE__ */ randomString()}`,
-  PROBE_UNKNOWN_ACTION: () => `@@redux/PROBE_UNKNOWN_ACTION${randomString()}`
+  PROBE_UNKNOWN_ACTION: () => `@@redux/PROBE_UNKNOWN_ACTION${randomString()}`,
 };
 var actionTypes_default = ActionTypes;
 function isPlainObject$2(obj) {
-  if (typeof obj !== "object" || obj === null)
-    return false;
+  if (typeof obj !== "object" || obj === null) return false;
   let proto = obj;
   while (Object.getPrototypeOf(proto) !== null) {
     proto = Object.getPrototypeOf(proto);
@@ -3324,7 +3799,10 @@ function createStore(reducer, preloadedState, enhancer) {
   if (typeof reducer !== "function") {
     throw new Error(formatProdErrorMessage$1(2));
   }
-  if (typeof preloadedState === "function" && typeof enhancer === "function" || typeof enhancer === "function" && typeof arguments[3] === "function") {
+  if (
+    (typeof preloadedState === "function" && typeof enhancer === "function") ||
+    (typeof enhancer === "function" && typeof arguments[3] === "function")
+  ) {
     throw new Error(formatProdErrorMessage$1(0));
   }
   if (typeof preloadedState === "function" && typeof enhancer === "undefined") {
@@ -3400,7 +3878,7 @@ function createStore(reducer, preloadedState, enhancer) {
     } finally {
       isDispatching = false;
     }
-    const listeners = currentListeners = nextListeners;
+    const listeners = (currentListeners = nextListeners);
     listeners.forEach((listener2) => {
       listener2();
     });
@@ -3412,7 +3890,7 @@ function createStore(reducer, preloadedState, enhancer) {
     }
     currentReducer = nextReducer;
     dispatch({
-      type: actionTypes_default.REPLACE
+      type: actionTypes_default.REPLACE,
     });
   }
   function observable() {
@@ -3439,23 +3917,23 @@ function createStore(reducer, preloadedState, enhancer) {
         observeState();
         const unsubscribe = outerSubscribe(observeState);
         return {
-          unsubscribe
+          unsubscribe,
         };
       },
       [symbol_observable_default]() {
         return this;
-      }
+      },
     };
   }
   dispatch({
-    type: actionTypes_default.INIT
+    type: actionTypes_default.INIT,
   });
   const store = {
     dispatch,
     subscribe,
     getState,
     replaceReducer,
-    [symbol_observable_default]: observable
+    [symbol_observable_default]: observable,
   };
   return store;
 }
@@ -3463,14 +3941,16 @@ function assertReducerShape(reducers2) {
   Object.keys(reducers2).forEach((key) => {
     const reducer = reducers2[key];
     const initialState2 = reducer(void 0, {
-      type: actionTypes_default.INIT
+      type: actionTypes_default.INIT,
     });
     if (typeof initialState2 === "undefined") {
       throw new Error(formatProdErrorMessage$1(12));
     }
-    if (typeof reducer(void 0, {
-      type: actionTypes_default.PROBE_UNKNOWN_ACTION()
-    }) === "undefined") {
+    if (
+      typeof reducer(void 0, {
+        type: actionTypes_default.PROBE_UNKNOWN_ACTION(),
+      }) === "undefined"
+    ) {
       throw new Error(formatProdErrorMessage$1(13));
     }
   });
@@ -3520,7 +4000,11 @@ function compose(...funcs) {
   if (funcs.length === 1) {
     return funcs[0];
   }
-  return funcs.reduce((a, b) => (...args) => a(b(...args)));
+  return funcs.reduce(
+    (a, b) =>
+      (...args) =>
+        a(b(...args)),
+  );
 }
 function applyMiddleware(...middlewares) {
   return (createStore2) => (reducer, preloadedState) => {
@@ -3530,13 +4014,13 @@ function applyMiddleware(...middlewares) {
     };
     const middlewareAPI = {
       getState: store.getState,
-      dispatch: (action, ...args) => dispatch(action, ...args)
+      dispatch: (action, ...args) => dispatch(action, ...args),
     };
     const chain = middlewares.map((middleware) => middleware(middlewareAPI));
     dispatch = compose(...chain)(store.dispatch);
     return {
       ...store,
-      dispatch
+      dispatch,
     };
   };
 }
@@ -3547,9 +4031,7 @@ var NOTHING$1 = /* @__PURE__ */ Symbol.for("immer-nothing");
 var DRAFTABLE$1 = /* @__PURE__ */ Symbol.for("immer-draftable");
 var DRAFT_STATE$1 = /* @__PURE__ */ Symbol.for("immer-state");
 function die$1(error, ...args) {
-  throw new Error(
-    `[Immer] minified error nr: ${error}. Full error at: https://bit.ly/3cXEKWf`
-  );
+  throw new Error(`[Immer] minified error nr: ${error}. Full error at: https://bit.ly/3cXEKWf`);
 }
 var O = Object;
 var getPrototypeOf$1 = O.getPrototypeOf;
@@ -3561,23 +4043,25 @@ var WRITABLE = "writable";
 var VALUE = "value";
 var isDraft$1 = (value) => !!value && !!value[DRAFT_STATE$1];
 function isDraftable$1(value) {
-  if (!value)
-    return false;
-  return isPlainObject$1(value) || isArray(value) || !!value[DRAFTABLE$1] || !!value[CONSTRUCTOR]?.[DRAFTABLE$1] || isMap$1(value) || isSet$1(value);
+  if (!value) return false;
+  return (
+    isPlainObject$1(value) ||
+    isArray(value) ||
+    !!value[DRAFTABLE$1] ||
+    !!value[CONSTRUCTOR]?.[DRAFTABLE$1] ||
+    isMap$1(value) ||
+    isSet$1(value)
+  );
 }
 var objectCtorString$1 = O[PROTOTYPE][CONSTRUCTOR].toString();
 var cachedCtorStrings$1 = /* @__PURE__ */ new WeakMap();
 function isPlainObject$1(value) {
-  if (!value || !isObjectish(value))
-    return false;
+  if (!value || !isObjectish(value)) return false;
   const proto = getPrototypeOf$1(value);
-  if (proto === null || proto === O[PROTOTYPE])
-    return true;
+  if (proto === null || proto === O[PROTOTYPE]) return true;
   const Ctor = O.hasOwnProperty.call(proto, CONSTRUCTOR) && proto[CONSTRUCTOR];
-  if (Ctor === Object)
-    return true;
-  if (!isFunction(Ctor))
-    return false;
+  if (Ctor === Object) return true;
+  if (!isFunction(Ctor)) return false;
   let ctorString = cachedCtorStrings$1.get(Ctor);
   if (ctorString === void 0) {
     ctorString = Function.toString.call(Ctor);
@@ -3599,18 +4083,16 @@ function getArchtype$1(thing) {
   const state = thing[DRAFT_STATE$1];
   return state ? state.type_ : isArray(thing) ? 1 : isMap$1(thing) ? 2 : isSet$1(thing) ? 3 : 0;
 }
-var has$1 = (thing, prop, type = getArchtype$1(thing)) => type === 2 ? thing.has(prop) : O[PROTOTYPE].hasOwnProperty.call(thing, prop);
-var get = (thing, prop, type = getArchtype$1(thing)) => (
+var has$1 = (thing, prop, type = getArchtype$1(thing)) =>
+  type === 2 ? thing.has(prop) : O[PROTOTYPE].hasOwnProperty.call(thing, prop);
+var get = (thing, prop, type = getArchtype$1(thing)) =>
   // @ts-ignore
-  type === 2 ? thing.get(prop) : thing[prop]
-);
+  type === 2 ? thing.get(prop) : thing[prop];
 var set$1 = (thing, propOrOldValue, value, type = getArchtype$1(thing)) => {
-  if (type === 2)
-    thing.set(propOrOldValue, value);
+  if (type === 2) thing.set(propOrOldValue, value);
   else if (type === 3) {
     thing.add(value);
-  } else
-    thing[propOrOldValue] = value;
+  } else thing[propOrOldValue] = value;
 };
 function is$2(x2, y2) {
   if (x2 === y2) {
@@ -3630,7 +4112,7 @@ function isArrayIndex(value) {
   return Number.isInteger(n) && String(n) === value;
 }
 var latest$1 = (state) => state.copy_ || state.base_;
-var getFinalValue = (state) => state.modified_ ? state.copy_ : state.base_;
+var getFinalValue = (state) => (state.modified_ ? state.copy_ : state.base_);
 function shallowCopy$1(base, strict) {
   if (isMap$1(base)) {
     return new Map(base);
@@ -3638,10 +4120,9 @@ function shallowCopy$1(base, strict) {
   if (isSet$1(base)) {
     return new Set(base);
   }
-  if (isArray(base))
-    return Array[PROTOTYPE].slice.call(base);
+  if (isArray(base)) return Array[PROTOTYPE].slice.call(base);
   const isPlain = isPlainObject$1(base);
-  if (strict === true || strict === "class_only" && !isPlain) {
+  if (strict === true || (strict === "class_only" && !isPlain)) {
     const descriptors = O.getOwnPropertyDescriptors(base);
     delete descriptors[DRAFT_STATE$1];
     let keys = Reflect.ownKeys(descriptors);
@@ -3658,7 +4139,7 @@ function shallowCopy$1(base, strict) {
           [WRITABLE]: true,
           // could live with !!desc.set as well here...
           [ENUMERABLE]: desc[ENUMERABLE],
-          [VALUE]: base[key]
+          [VALUE]: base[key],
         };
     }
     return O.create(getPrototypeOf$1(base), descriptors);
@@ -3672,14 +4153,13 @@ function shallowCopy$1(base, strict) {
   }
 }
 function freeze$1(obj, deep = false) {
-  if (isFrozen$1(obj) || isDraft$1(obj) || !isDraftable$1(obj))
-    return obj;
+  if (isFrozen$1(obj) || isDraft$1(obj) || !isDraftable$1(obj)) return obj;
   if (getArchtype$1(obj) > 1) {
     O.defineProperties(obj, {
       set: dontMutateMethodOverride$1,
       add: dontMutateMethodOverride$1,
       clear: dontMutateMethodOverride$1,
-      delete: dontMutateMethodOverride$1
+      delete: dontMutateMethodOverride$1,
     });
   }
   O.freeze(obj);
@@ -3689,7 +4169,7 @@ function freeze$1(obj, deep = false) {
       (_key, value) => {
         freeze$1(value, true);
       },
-      false
+      false,
     );
   return obj;
 }
@@ -3697,11 +4177,10 @@ function dontMutateFrozenCollections$1() {
   die$1(2);
 }
 var dontMutateMethodOverride$1 = {
-  [VALUE]: dontMutateFrozenCollections$1
+  [VALUE]: dontMutateFrozenCollections$1,
 };
 function isFrozen$1(obj) {
-  if (obj === null || !isObjectish(obj))
-    return true;
+  if (obj === null || !isObjectish(obj)) return true;
   return O.isFrozen(obj);
 }
 var PluginMapSet = "MapSet";
@@ -3729,7 +4208,9 @@ var createScope$1 = (parent_, immer_) => ({
   handledSet_: /* @__PURE__ */ new Set(),
   processedForPatches_: /* @__PURE__ */ new Set(),
   mapSetPlugin_: isPluginLoaded(PluginMapSet) ? getPlugin$1(PluginMapSet) : void 0,
-  arrayMethodsPlugin_: isPluginLoaded(PluginArrayMethods) ? getPlugin$1(PluginArrayMethods) : void 0
+  arrayMethodsPlugin_: isPluginLoaded(PluginArrayMethods)
+    ? getPlugin$1(PluginArrayMethods)
+    : void 0,
 });
 function usePatchesInScope$1(scope, patchListener) {
   if (patchListener) {
@@ -3749,13 +4230,11 @@ function leaveScope$1(scope) {
     currentScope$1 = scope.parent_;
   }
 }
-var enterScope$1 = (immer2) => currentScope$1 = createScope$1(currentScope$1, immer2);
+var enterScope$1 = (immer2) => (currentScope$1 = createScope$1(currentScope$1, immer2));
 function revokeDraft$1(draft) {
   const state = draft[DRAFT_STATE$1];
-  if (state.type_ === 0 || state.type_ === 1)
-    state.revoke_();
-  else
-    state.revoked_ = true;
+  if (state.type_ === 0 || state.type_ === 1) state.revoke_();
+  else state.revoked_ = true;
 }
 function processResult$1(result, scope) {
   scope.unfinalizedDrafts_ = scope.drafts_.length;
@@ -3771,11 +4250,7 @@ function processResult$1(result, scope) {
     }
     const { patchPlugin_ } = scope;
     if (patchPlugin_) {
-      patchPlugin_.generateReplacementPatches_(
-        baseDraft[DRAFT_STATE$1].base_,
-        result,
-        scope
-      );
+      patchPlugin_.generateReplacementPatches_(baseDraft[DRAFT_STATE$1].base_, result, scope);
     }
   } else {
     result = finalize$1(scope, baseDraft);
@@ -3788,8 +4263,7 @@ function processResult$1(result, scope) {
   return result !== NOTHING$1 ? result : void 0;
 }
 function finalize$1(rootScope, value) {
-  if (isFrozen$1(value))
-    return value;
+  if (isFrozen$1(value)) return value;
   const state = value[DRAFT_STATE$1];
   if (!state) {
     const finalValue = handleValue(value, rootScope.handledSet_, rootScope);
@@ -3835,7 +4309,7 @@ function updateDraftInParent(parent, draftValue, finalizedValue, originalKey) {
     }
   }
   if (!parent.draftLocations_) {
-    const draftLocations = parent.draftLocations_ = /* @__PURE__ */ new Map();
+    const draftLocations = (parent.draftLocations_ = /* @__PURE__ */ new Map());
     each$1(parentCopy, (key, value) => {
       if (isDraft$1(value)) {
         const keys = draftLocations.get(value) || [];
@@ -3862,7 +4336,12 @@ function registerChildFinalizationCallback(parent, child, key) {
   });
 }
 function generatePatchesAndFinalize(state, rootScope) {
-  const shouldFinalize = state.modified_ && !state.finalized_ && (state.type_ === 3 || state.type_ === 1 && state.allIndicesReassigned_ || (state.assigned_?.size ?? 0) > 0);
+  const shouldFinalize =
+    state.modified_ &&
+    !state.finalized_ &&
+    (state.type_ === 3 ||
+      (state.type_ === 1 && state.allIndicesReassigned_) ||
+      (state.assigned_?.size ?? 0) > 0);
   if (shouldFinalize) {
     const { patchPlugin_ } = rootScope;
     if (patchPlugin_) {
@@ -3894,12 +4373,12 @@ function handleCrossReference(target, key, value) {
         }
       } else {
         if (get(targetCopy, key, target.type_) === value) {
-          if (scope_.drafts_.length > 1 && (target.assigned_.get(key) ?? false) === true && target.copy_) {
-            handleValue(
-              get(target.copy_, key, target.type_),
-              scope_.handledSet_,
-              scope_
-            );
+          if (
+            scope_.drafts_.length > 1 &&
+            (target.assigned_.get(key) ?? false) === true &&
+            target.copy_
+          ) {
+            handleValue(get(target.copy_, key, target.type_), scope_.handledSet_, scope_);
           }
         }
       }
@@ -3954,7 +4433,7 @@ function createProxyProxy$1(base, parent) {
     revoke_: null,
     isManual_: false,
     // `callbacks` actually gets assigned in `createProxy`
-    callbacks_: void 0
+    callbacks_: void 0,
   };
   let target = state;
   let traps = objectTraps$1;
@@ -3969,8 +4448,7 @@ function createProxyProxy$1(base, parent) {
 }
 var objectTraps$1 = {
   get(state, prop) {
-    if (prop === DRAFT_STATE$1)
-      return state;
+    if (prop === DRAFT_STATE$1) return state;
     let arrayPlugin = state.scope_.arrayMethodsPlugin_;
     const isArrayWithStringProp = state.type_ === 1 && typeof prop === "string";
     if (isArrayWithStringProp) {
@@ -3986,16 +4464,19 @@ var objectTraps$1 = {
     if (state.finalized_ || !isDraftable$1(value)) {
       return value;
     }
-    if (isArrayWithStringProp && state.operationMethod && arrayPlugin?.isMutatingArrayMethod(
-      state.operationMethod
-    ) && isArrayIndex(prop)) {
+    if (
+      isArrayWithStringProp &&
+      state.operationMethod &&
+      arrayPlugin?.isMutatingArrayMethod(state.operationMethod) &&
+      isArrayIndex(prop)
+    ) {
       return value;
     }
     if (value === peek$1(state.base_, prop)) {
       prepareCopy$1(state);
       const childKey = state.type_ === 1 ? +prop : prop;
       const childDraft = createProxy$1(state.scope_, value, state, childKey);
-      return state.copy_[childKey] = childDraft;
+      return (state.copy_[childKey] = childDraft);
     }
     return value;
   },
@@ -4024,9 +4505,11 @@ var objectTraps$1 = {
       prepareCopy$1(state);
       markChanged$1(state);
     }
-    if (state.copy_[prop] === value && // special case: handle new props with value 'undefined'
-    (value !== void 0 || prop in state.copy_) || // special case: NaN
-    Number.isNaN(value) && Number.isNaN(state.copy_[prop]))
+    if (
+      (state.copy_[prop] === value && // special case: handle new props with value 'undefined'
+        (value !== void 0 || prop in state.copy_)) || // special case: NaN
+      (Number.isNaN(value) && Number.isNaN(state.copy_[prop]))
+    )
       return true;
     state.copy_[prop] = value;
     state.assigned_.set(prop, true);
@@ -4051,13 +4534,12 @@ var objectTraps$1 = {
   getOwnPropertyDescriptor(state, prop) {
     const owner = latest$1(state);
     const desc = Reflect.getOwnPropertyDescriptor(owner, prop);
-    if (!desc)
-      return desc;
+    if (!desc) return desc;
     return {
       [WRITABLE]: true,
       [CONFIGURABLE]: state.type_ !== 1 || prop !== "length",
       [ENUMERABLE]: desc[ENUMERABLE],
-      [VALUE]: owner[prop]
+      [VALUE]: owner[prop],
     };
   },
   defineProperty() {
@@ -4068,21 +4550,21 @@ var objectTraps$1 = {
   },
   setPrototypeOf() {
     die$1(12);
-  }
+  },
 };
 var arrayTraps$1 = {};
 for (let key in objectTraps$1) {
   let fn = objectTraps$1[key];
-  arrayTraps$1[key] = function() {
+  arrayTraps$1[key] = function () {
     const args = arguments;
     args[0] = args[0][0];
     return fn.apply(this, args);
   };
 }
-arrayTraps$1.deleteProperty = function(state, prop) {
+arrayTraps$1.deleteProperty = function (state, prop) {
   return arrayTraps$1.set.call(this, state, prop, void 0);
 };
-arrayTraps$1.set = function(state, prop, value) {
+arrayTraps$1.set = function (state, prop, value) {
   return objectTraps$1.set.call(this, state[0], prop, value, state[0]);
 };
 function peek$1(draft, prop) {
@@ -4092,20 +4574,20 @@ function peek$1(draft, prop) {
 }
 function readPropFromProto$1(state, source, prop) {
   const desc = getDescriptorFromProto$1(source, prop);
-  return desc ? VALUE in desc ? desc[VALUE] : (
-    // This is a very special case, if the prop is a getter defined by the
-    // prototype, we should invoke it with the draft as context!
-    desc.get?.call(state.draft_)
-  ) : void 0;
+  return desc
+    ? VALUE in desc
+      ? desc[VALUE]
+      : // This is a very special case, if the prop is a getter defined by the
+        // prototype, we should invoke it with the draft as context!
+        desc.get?.call(state.draft_)
+    : void 0;
 }
 function getDescriptorFromProto$1(source, prop) {
-  if (!(prop in source))
-    return void 0;
+  if (!(prop in source)) return void 0;
   let proto = getPrototypeOf$1(source);
   while (proto) {
     const desc = Object.getOwnPropertyDescriptor(proto, prop);
-    if (desc)
-      return desc;
+    if (desc) return desc;
     proto = getPrototypeOf$1(proto);
   }
   return void 0;
@@ -4121,10 +4603,7 @@ function markChanged$1(state) {
 function prepareCopy$1(state) {
   if (!state.copy_) {
     state.assigned_ = /* @__PURE__ */ new Map();
-    state.copy_ = shallowCopy$1(
-      state.base_,
-      state.scope_.immer_.useStrictShallowCopy_
-    );
+    state.copy_ = shallowCopy$1(state.base_, state.scope_.immer_.useStrictShallowCopy_);
   }
 }
 var Immer2$1 = class Immer2 {
@@ -4141,10 +4620,8 @@ var Immer2$1 = class Immer2 {
           return self.produce(base2, (draft) => recipe.call(this, draft, ...args));
         };
       }
-      if (!isFunction(recipe))
-        die$1(6);
-      if (patchListener !== void 0 && !isFunction(patchListener))
-        die$1(7);
+      if (!isFunction(recipe)) die$1(6);
+      if (patchListener !== void 0 && !isFunction(patchListener)) die$1(7);
       let result;
       if (isDraftable$1(base)) {
         const scope = enterScope$1(this);
@@ -4154,33 +4631,27 @@ var Immer2$1 = class Immer2 {
           result = recipe(proxy);
           hasError = false;
         } finally {
-          if (hasError)
-            revokeScope$1(scope);
-          else
-            leaveScope$1(scope);
+          if (hasError) revokeScope$1(scope);
+          else leaveScope$1(scope);
         }
         usePatchesInScope$1(scope, patchListener);
         return processResult$1(result, scope);
       } else if (!base || !isObjectish(base)) {
         result = recipe(base);
-        if (result === void 0)
-          result = base;
-        if (result === NOTHING$1)
-          result = void 0;
-        if (this.autoFreeze_)
-          freeze$1(result, true);
+        if (result === void 0) result = base;
+        if (result === NOTHING$1) result = void 0;
+        if (this.autoFreeze_) freeze$1(result, true);
         if (patchListener) {
           const p = [];
           const ip = [];
           getPlugin$1(PluginPatches).generateReplacementPatches_(base, result, {
             patches_: p,
-            inversePatches_: ip
+            inversePatches_: ip,
           });
           patchListener(p, ip);
         }
         return result;
-      } else
-        die$1(1, base);
+      } else die$1(1, base);
     };
     this.produceWithPatches = (base, recipe) => {
       if (isFunction(base)) {
@@ -4193,18 +4664,15 @@ var Immer2$1 = class Immer2 {
       });
       return [result, patches, inversePatches];
     };
-    if (isBoolean$1(config2?.autoFreeze))
-      this.setAutoFreeze(config2.autoFreeze);
+    if (isBoolean$1(config2?.autoFreeze)) this.setAutoFreeze(config2.autoFreeze);
     if (isBoolean$1(config2?.useStrictShallowCopy))
       this.setUseStrictShallowCopy(config2.useStrictShallowCopy);
     if (isBoolean$1(config2?.useStrictIteration))
       this.setUseStrictIteration(config2.useStrictIteration);
   }
   createDraft(base) {
-    if (!isDraftable$1(base))
-      die$1(8);
-    if (isDraft$1(base))
-      base = current$1(base);
+    if (!isDraftable$1(base)) die$1(8);
+    if (isDraft$1(base)) base = current$1(base);
     const scope = enterScope$1(this);
     const proxy = createProxy$1(scope, base, void 0);
     proxy[DRAFT_STATE$1].isManual_ = true;
@@ -4213,8 +4681,7 @@ var Immer2$1 = class Immer2 {
   }
   finishDraft(draft, patchListener) {
     const state = draft && draft[DRAFT_STATE$1];
-    if (!state || !state.isManual_)
-      die$1(9);
+    if (!state || !state.isManual_) die$1(9);
     const { scope_: scope } = state;
     usePatchesInScope$1(scope, patchListener);
     return processResult$1(void 0, scope);
@@ -4263,14 +4730,15 @@ var Immer2$1 = class Immer2 {
     if (isDraft$1(base)) {
       return applyPatchesImpl(base, patches);
     }
-    return this.produce(
-      base,
-      (draft) => applyPatchesImpl(draft, patches)
-    );
+    return this.produce(base, (draft) => applyPatchesImpl(draft, patches));
   }
 };
 function createProxy$1(rootScope, value, parent, key) {
-  const [draft, state] = isMap$1(value) ? getPlugin$1(PluginMapSet).proxyMap_(value, parent) : isSet$1(value) ? getPlugin$1(PluginMapSet).proxySet_(value, parent) : createProxyProxy$1(value, parent);
+  const [draft, state] = isMap$1(value)
+    ? getPlugin$1(PluginMapSet).proxyMap_(value, parent)
+    : isSet$1(value)
+      ? getPlugin$1(PluginMapSet).proxySet_(value, parent)
+      : createProxyProxy$1(value, parent);
   const scope = parent?.scope_ ?? getCurrentScope$1();
   scope.drafts_.push(draft);
   state.callbacks_ = parent?.callbacks_ ?? [];
@@ -4289,19 +4757,16 @@ function createProxy$1(rootScope, value, parent, key) {
   return draft;
 }
 function current$1(value) {
-  if (!isDraft$1(value))
-    die$1(10, value);
+  if (!isDraft$1(value)) die$1(10, value);
   return currentImpl$1(value);
 }
 function currentImpl$1(value) {
-  if (!isDraftable$1(value) || isFrozen$1(value))
-    return value;
+  if (!isDraftable$1(value) || isFrozen$1(value)) return value;
   const state = value[DRAFT_STATE$1];
   let copy2;
   let strict = true;
   if (state) {
-    if (!state.modified_)
-      return state.base_;
+    if (!state.modified_) return state.base_;
     state.finalized_ = true;
     copy2 = shallowCopy$1(value, state.scope_.immer_.useStrictShallowCopy_);
     strict = state.scope_.immer_.shouldUseStrictIteration();
@@ -4313,7 +4778,7 @@ function currentImpl$1(value) {
     (key, childValue) => {
       set$1(copy2, key, currentImpl$1(childValue));
     },
-    strict
+    strict,
   );
   if (state) {
     state.finalized_ = false;
@@ -4323,21 +4788,27 @@ function currentImpl$1(value) {
 var immer$1 = new Immer2$1();
 var produce = immer$1.produce;
 function createThunkMiddleware(extraArgument) {
-  const middleware = ({ dispatch, getState }) => (next) => (action) => {
-    if (typeof action === "function") {
-      return action(dispatch, getState, extraArgument);
-    }
-    return next(action);
-  };
+  const middleware =
+    ({ dispatch, getState }) =>
+    (next) =>
+    (action) => {
+      if (typeof action === "function") {
+        return action(dispatch, getState, extraArgument);
+      }
+      return next(action);
+    };
   return middleware;
 }
 var thunk = createThunkMiddleware();
 var withExtraArgument = createThunkMiddleware;
-var composeWithDevTools = typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : function() {
-  if (arguments.length === 0) return void 0;
-  if (typeof arguments[0] === "object") return compose;
-  return compose.apply(null, arguments);
-};
+var composeWithDevTools =
+  typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : function () {
+        if (arguments.length === 0) return void 0;
+        if (typeof arguments[0] === "object") return compose;
+        return compose.apply(null, arguments);
+      };
 function createAction(type, prepareAction) {
   function actionCreator(...args) {
     if (prepareAction) {
@@ -4348,17 +4819,17 @@ function createAction(type, prepareAction) {
       return {
         type,
         payload: prepared.payload,
-        ..."meta" in prepared && {
-          meta: prepared.meta
-        },
-        ..."error" in prepared && {
-          error: prepared.error
-        }
+        ...("meta" in prepared && {
+          meta: prepared.meta,
+        }),
+        ...("error" in prepared && {
+          error: prepared.error,
+        }),
       };
     }
     return {
       type,
-      payload: args[0]
+      payload: args[0],
     };
   }
   actionCreator.toString = () => `${type}`;
@@ -4385,8 +4856,7 @@ var Tuple = class _Tuple extends Array {
   }
 };
 function freezeDraftable(val) {
-  return isDraftable$1(val) ? produce(val, () => {
-  }) : val;
+  return isDraftable$1(val) ? produce(val, () => {}) : val;
 }
 function getOrInsertComputed(map2, key, compute) {
   if (map2.has(key)) return map2.get(key);
@@ -4395,95 +4865,107 @@ function getOrInsertComputed(map2, key, compute) {
 function isBoolean(x2) {
   return typeof x2 === "boolean";
 }
-var buildGetDefaultMiddleware = () => function getDefaultMiddleware(options) {
-  const {
-    thunk: thunk$1 = true,
-    immutableCheck = true,
-    serializableCheck = true,
-    actionCreatorCheck = true
-  } = options ?? {};
-  let middlewareArray = new Tuple();
-  if (thunk$1) {
-    if (isBoolean(thunk$1)) {
-      middlewareArray.push(thunk);
-    } else {
-      middlewareArray.push(withExtraArgument(thunk$1.extraArgument));
+var buildGetDefaultMiddleware = () =>
+  function getDefaultMiddleware(options) {
+    const {
+      thunk: thunk$1 = true,
+      immutableCheck = true,
+      serializableCheck = true,
+      actionCreatorCheck = true,
+    } = options ?? {};
+    let middlewareArray = new Tuple();
+    if (thunk$1) {
+      if (isBoolean(thunk$1)) {
+        middlewareArray.push(thunk);
+      } else {
+        middlewareArray.push(withExtraArgument(thunk$1.extraArgument));
+      }
     }
-  }
-  return middlewareArray;
-};
+    return middlewareArray;
+  };
 var SHOULD_AUTOBATCH = "RTK_autoBatch";
 var prepareAutoBatched = () => (payload) => ({
   payload,
   meta: {
-    [SHOULD_AUTOBATCH]: true
-  }
+    [SHOULD_AUTOBATCH]: true,
+  },
 });
 var createQueueWithTimer = (timeout) => {
   return (notify) => {
     setTimeout(notify, timeout);
   };
 };
-var autoBatchEnhancer = (options = {
-  type: "raf"
-}) => (next) => (...args) => {
-  const store = next(...args);
-  let notifying = true;
-  let shouldNotifyAtEndOfTick = false;
-  let notificationQueued = false;
-  const listeners = /* @__PURE__ */ new Set();
-  const queueCallback = options.type === "tick" ? queueMicrotask : options.type === "raf" ? (
-    // requestAnimationFrame won't exist in SSR environments. Fall back to a vague approximation just to keep from erroring.
-    typeof window !== "undefined" && window.requestAnimationFrame ? window.requestAnimationFrame : createQueueWithTimer(10)
-  ) : options.type === "callback" ? options.queueNotification : createQueueWithTimer(options.timeout);
-  const notifyListeners = () => {
-    notificationQueued = false;
-    if (shouldNotifyAtEndOfTick) {
-      shouldNotifyAtEndOfTick = false;
-      listeners.forEach((l) => l());
-    }
-  };
-  return Object.assign({}, store, {
-    // Override the base `store.subscribe` method to keep original listeners
-    // from running if we're delaying notifications
-    subscribe(listener2) {
-      const wrappedListener = () => notifying && listener2();
-      const unsubscribe = store.subscribe(wrappedListener);
-      listeners.add(listener2);
-      return () => {
-        unsubscribe();
-        listeners.delete(listener2);
-      };
+var autoBatchEnhancer =
+  (
+    options = {
+      type: "raf",
     },
-    // Override the base `store.dispatch` method so that we can check actions
-    // for the `shouldAutoBatch` flag and determine if batching is active
-    dispatch(action) {
-      try {
-        notifying = !action?.meta?.[SHOULD_AUTOBATCH];
-        shouldNotifyAtEndOfTick = !notifying;
-        if (shouldNotifyAtEndOfTick) {
-          if (!notificationQueued) {
-            notificationQueued = true;
-            queueCallback(notifyListeners);
-          }
-        }
-        return store.dispatch(action);
-      } finally {
-        notifying = true;
+  ) =>
+  (next) =>
+  (...args) => {
+    const store = next(...args);
+    let notifying = true;
+    let shouldNotifyAtEndOfTick = false;
+    let notificationQueued = false;
+    const listeners = /* @__PURE__ */ new Set();
+    const queueCallback =
+      options.type === "tick"
+        ? queueMicrotask
+        : options.type === "raf"
+          ? // requestAnimationFrame won't exist in SSR environments. Fall back to a vague approximation just to keep from erroring.
+            typeof window !== "undefined" && window.requestAnimationFrame
+            ? window.requestAnimationFrame
+            : createQueueWithTimer(10)
+          : options.type === "callback"
+            ? options.queueNotification
+            : createQueueWithTimer(options.timeout);
+    const notifyListeners = () => {
+      notificationQueued = false;
+      if (shouldNotifyAtEndOfTick) {
+        shouldNotifyAtEndOfTick = false;
+        listeners.forEach((l) => l());
       }
+    };
+    return Object.assign({}, store, {
+      // Override the base `store.subscribe` method to keep original listeners
+      // from running if we're delaying notifications
+      subscribe(listener2) {
+        const wrappedListener = () => notifying && listener2();
+        const unsubscribe = store.subscribe(wrappedListener);
+        listeners.add(listener2);
+        return () => {
+          unsubscribe();
+          listeners.delete(listener2);
+        };
+      },
+      // Override the base `store.dispatch` method so that we can check actions
+      // for the `shouldAutoBatch` flag and determine if batching is active
+      dispatch(action) {
+        try {
+          notifying = !action?.meta?.[SHOULD_AUTOBATCH];
+          shouldNotifyAtEndOfTick = !notifying;
+          if (shouldNotifyAtEndOfTick) {
+            if (!notificationQueued) {
+              notificationQueued = true;
+              queueCallback(notifyListeners);
+            }
+          }
+          return store.dispatch(action);
+        } finally {
+          notifying = true;
+        }
+      },
+    });
+  };
+var buildGetDefaultEnhancers = (middlewareEnhancer) =>
+  function getDefaultEnhancers(options) {
+    const { autoBatch = true } = options ?? {};
+    let enhancerArray = new Tuple(middlewareEnhancer);
+    if (autoBatch) {
+      enhancerArray.push(autoBatchEnhancer(typeof autoBatch === "object" ? autoBatch : void 0));
     }
-  });
-};
-var buildGetDefaultEnhancers = (middlewareEnhancer) => function getDefaultEnhancers(options) {
-  const {
-    autoBatch = true
-  } = options ?? {};
-  let enhancerArray = new Tuple(middlewareEnhancer);
-  if (autoBatch) {
-    enhancerArray.push(autoBatchEnhancer(typeof autoBatch === "object" ? autoBatch : void 0));
-  }
-  return enhancerArray;
-};
+    return enhancerArray;
+  };
 function configureStore(options) {
   const getDefaultMiddleware = buildGetDefaultMiddleware();
   const {
@@ -4491,7 +4973,7 @@ function configureStore(options) {
     middleware,
     devTools = true,
     preloadedState = void 0,
-    enhancers = void 0
+    enhancers = void 0,
   } = options || {};
   let rootReducer2;
   if (typeof reducer === "function") {
@@ -4512,12 +4994,13 @@ function configureStore(options) {
     finalCompose = composeWithDevTools({
       // Enable capture of stack traces for dispatched Redux actions
       trace: false,
-      ...typeof devTools === "object" && devTools
+      ...(typeof devTools === "object" && devTools),
     });
   }
   const middlewareEnhancer = applyMiddleware(...finalMiddleware);
   const getDefaultEnhancers = buildGetDefaultEnhancers(middlewareEnhancer);
-  let storeEnhancers = typeof enhancers === "function" ? enhancers(getDefaultEnhancers) : getDefaultEnhancers();
+  let storeEnhancers =
+    typeof enhancers === "function" ? enhancers(getDefaultEnhancers) : getDefaultEnhancers();
   const composedEnhancer = finalCompose(...storeEnhancers);
   return createStore(rootReducer2, preloadedState, composedEnhancer);
 }
@@ -4527,7 +5010,8 @@ function executeReducerBuilderCallback(builderCallback) {
   let defaultCaseReducer;
   const builder = {
     addCase(typeOrActionCreator, reducer) {
-      const type = typeof typeOrActionCreator === "string" ? typeOrActionCreator : typeOrActionCreator.type;
+      const type =
+        typeof typeOrActionCreator === "string" ? typeOrActionCreator : typeOrActionCreator.type;
       if (!type) {
         throw new Error(formatProdErrorMessage(28));
       }
@@ -4541,23 +5025,24 @@ function executeReducerBuilderCallback(builderCallback) {
       if (reducers2.pending) actionsMap[asyncThunk.pending.type] = reducers2.pending;
       if (reducers2.rejected) actionsMap[asyncThunk.rejected.type] = reducers2.rejected;
       if (reducers2.fulfilled) actionsMap[asyncThunk.fulfilled.type] = reducers2.fulfilled;
-      if (reducers2.settled) actionMatchers.push({
-        matcher: asyncThunk.settled,
-        reducer: reducers2.settled
-      });
+      if (reducers2.settled)
+        actionMatchers.push({
+          matcher: asyncThunk.settled,
+          reducer: reducers2.settled,
+        });
       return builder;
     },
     addMatcher(matcher, reducer) {
       actionMatchers.push({
         matcher,
-        reducer
+        reducer,
       });
       return builder;
     },
     addDefaultCase(reducer) {
       defaultCaseReducer = reducer;
       return builder;
-    }
+    },
   };
   builderCallback(builder);
   return [actionsMap, actionMatchers, defaultCaseReducer];
@@ -4566,7 +5051,8 @@ function isStateFunction(x2) {
   return typeof x2 === "function";
 }
 function createReducer(initialState2, mapOrBuilderCallback) {
-  let [actionsMap, finalActionMatchers, finalDefaultCaseReducer] = executeReducerBuilderCallback(mapOrBuilderCallback);
+  let [actionsMap, finalActionMatchers, finalDefaultCaseReducer] =
+    executeReducerBuilderCallback(mapOrBuilderCallback);
   let getInitialState;
   if (isStateFunction(initialState2)) {
     getInitialState = () => freezeDraftable(initialState2());
@@ -4575,11 +5061,12 @@ function createReducer(initialState2, mapOrBuilderCallback) {
     getInitialState = () => frozenInitialState;
   }
   function reducer(state = getInitialState(), action) {
-    let caseReducers = [actionsMap[action.type], ...finalActionMatchers.filter(({
-      matcher
-    }) => matcher(action)).map(({
-      reducer: reducer2
-    }) => reducer2)];
+    let caseReducers = [
+      actionsMap[action.type],
+      ...finalActionMatchers
+        .filter(({ matcher }) => matcher(action))
+        .map(({ reducer: reducer2 }) => reducer2),
+    ];
     if (caseReducers.filter((cr) => !!cr).length === 0) {
       caseReducers = [finalDefaultCaseReducer];
     }
@@ -4618,7 +5105,7 @@ var nanoid = (size = 21) => {
   let id = "";
   let i = size;
   while (i--) {
-    id += urlAlphabet[Math.random() * 64 | 0];
+    id += urlAlphabet[(Math.random() * 64) | 0];
   }
   return id;
 };
@@ -4626,29 +5113,28 @@ var asyncThunkSymbol = /* @__PURE__ */ Symbol.for("rtk-slice-createasyncthunk");
 function getType(slice, actionKey) {
   return `${slice}/${actionKey}`;
 }
-function buildCreateSlice({
-  creators
-} = {}) {
+function buildCreateSlice({ creators } = {}) {
   const cAT = creators?.asyncThunk?.[asyncThunkSymbol];
   return function createSlice2(options) {
-    const {
-      name,
-      reducerPath = name
-    } = options;
+    const { name, reducerPath = name } = options;
     if (!name) {
       throw new Error(formatProdErrorMessage(11));
     }
-    const reducers2 = (typeof options.reducers === "function" ? options.reducers(buildReducerCreators()) : options.reducers) || {};
+    const reducers2 =
+      (typeof options.reducers === "function"
+        ? options.reducers(buildReducerCreators())
+        : options.reducers) || {};
     const reducerNames = Object.keys(reducers2);
     const context = {
       sliceCaseReducersByName: {},
       sliceCaseReducersByType: {},
       actionCreators: {},
-      sliceMatchers: []
+      sliceMatchers: [],
     };
     const contextMethods = {
       addCase(typeOrActionCreator, reducer2) {
-        const type = typeof typeOrActionCreator === "string" ? typeOrActionCreator : typeOrActionCreator.type;
+        const type =
+          typeof typeOrActionCreator === "string" ? typeOrActionCreator : typeOrActionCreator.type;
         if (!type) {
           throw new Error(formatProdErrorMessage(12));
         }
@@ -4661,7 +5147,7 @@ function buildCreateSlice({
       addMatcher(matcher, reducer2) {
         context.sliceMatchers.push({
           matcher,
-          reducer: reducer2
+          reducer: reducer2,
         });
         return contextMethods;
       },
@@ -4672,14 +5158,14 @@ function buildCreateSlice({
       exposeCaseReducer(name2, reducer2) {
         context.sliceCaseReducersByName[name2] = reducer2;
         return contextMethods;
-      }
+      },
     };
     reducerNames.forEach((reducerName) => {
       const reducerDefinition = reducers2[reducerName];
       const reducerDetails = {
         reducerName,
         type: getType(name, reducerName),
-        createNotation: typeof options.reducers === "function"
+        createNotation: typeof options.reducers === "function",
       };
       if (isAsyncThunkSliceReducerDefinition(reducerDefinition)) {
         handleThunkCaseReducerDefinition(reducerDetails, reducerDefinition, contextMethods, cAT);
@@ -4688,10 +5174,13 @@ function buildCreateSlice({
       }
     });
     function buildReducer() {
-      const [extraReducers = {}, actionMatchers = [], defaultCaseReducer = void 0] = typeof options.extraReducers === "function" ? executeReducerBuilderCallback(options.extraReducers) : [options.extraReducers];
+      const [extraReducers = {}, actionMatchers = [], defaultCaseReducer = void 0] =
+        typeof options.extraReducers === "function"
+          ? executeReducerBuilderCallback(options.extraReducers)
+          : [options.extraReducers];
       const finalCaseReducers = {
         ...extraReducers,
-        ...context.sliceCaseReducersByType
+        ...context.sliceCaseReducersByType,
       };
       return createReducer(options.initialState, (builder) => {
         for (let key in finalCaseReducers) {
@@ -4731,11 +5220,20 @@ function buildCreateSlice({
         return sliceState;
       }
       function getSelectors(selectState = selectSelf) {
-        const selectorCache = getOrInsertComputed(injectedSelectorCache, injected, () => /* @__PURE__ */ new WeakMap());
+        const selectorCache = getOrInsertComputed(
+          injectedSelectorCache,
+          injected,
+          () => /* @__PURE__ */ new WeakMap(),
+        );
         return getOrInsertComputed(selectorCache, selectState, () => {
           const map2 = {};
           for (const [name2, selector] of Object.entries(options.selectors ?? {})) {
-            map2[name2] = wrapSelector(selector, selectState, () => getOrInsertComputed(injectedStateCache, selectState, getInitialState), injected);
+            map2[name2] = wrapSelector(
+              selector,
+              selectState,
+              () => getOrInsertComputed(injectedStateCache, selectState, getInitialState),
+              injected,
+            );
           }
           return map2;
         });
@@ -4746,7 +5244,7 @@ function buildCreateSlice({
         get selectors() {
           return getSelectors(selectSlice);
         },
-        selectSlice
+        selectSlice,
       };
     }
     const slice = {
@@ -4756,20 +5254,20 @@ function buildCreateSlice({
       caseReducers: context.sliceCaseReducersByName,
       getInitialState,
       ...makeSelectorProps(reducerPath),
-      injectInto(injectable, {
-        reducerPath: pathOpt,
-        ...config2
-      } = {}) {
+      injectInto(injectable, { reducerPath: pathOpt, ...config2 } = {}) {
         const newReducerPath = pathOpt ?? reducerPath;
-        injectable.inject({
-          reducerPath: newReducerPath,
-          reducer
-        }, config2);
+        injectable.inject(
+          {
+            reducerPath: newReducerPath,
+            reducer,
+          },
+          config2,
+        );
         return {
           ...slice,
-          ...makeSelectorProps(newReducerPath, true)
+          ...makeSelectorProps(newReducerPath, true),
         };
-      }
+      },
     };
     return slice;
   };
@@ -4793,38 +5291,41 @@ function buildReducerCreators() {
     return {
       _reducerDefinitionType: "asyncThunk",
       payloadCreator,
-      ...config2
+      ...config2,
     };
   }
   asyncThunk.withTypes = () => asyncThunk;
   return {
     reducer(caseReducer) {
-      return Object.assign({
-        // hack so the wrapping function has the same name as the original
-        // we need to create a wrapper so the `reducerDefinitionType` is not assigned to the original
-        [caseReducer.name](...args) {
-          return caseReducer(...args);
-        }
-      }[caseReducer.name], {
-        _reducerDefinitionType: "reducer"
-        /* reducer */
-      });
+      return Object.assign(
+        {
+          // hack so the wrapping function has the same name as the original
+          // we need to create a wrapper so the `reducerDefinitionType` is not assigned to the original
+          [caseReducer.name](...args) {
+            return caseReducer(...args);
+          },
+        }[caseReducer.name],
+        {
+          _reducerDefinitionType: "reducer",
+          /* reducer */
+        },
+      );
     },
     preparedReducer(prepare, reducer) {
       return {
         _reducerDefinitionType: "reducerWithPrepare",
         prepare,
-        reducer
+        reducer,
       };
     },
-    asyncThunk
+    asyncThunk,
   };
 }
-function handleNormalReducerDefinition({
-  type,
-  reducerName,
-  createNotation
-}, maybeReducerWithPrepare, context) {
+function handleNormalReducerDefinition(
+  { type, reducerName, createNotation },
+  maybeReducerWithPrepare,
+  context,
+) {
   let caseReducer;
   let prepareCallback;
   if ("reducer" in maybeReducerWithPrepare) {
@@ -4836,7 +5337,13 @@ function handleNormalReducerDefinition({
   } else {
     caseReducer = maybeReducerWithPrepare;
   }
-  context.addCase(type, caseReducer).exposeCaseReducer(reducerName, caseReducer).exposeAction(reducerName, prepareCallback ? createAction(type, prepareCallback) : createAction(type));
+  context
+    .addCase(type, caseReducer)
+    .exposeCaseReducer(reducerName, caseReducer)
+    .exposeAction(
+      reducerName,
+      prepareCallback ? createAction(type, prepareCallback) : createAction(type),
+    );
 }
 function isAsyncThunkSliceReducerDefinition(reducerDefinition) {
   return reducerDefinition._reducerDefinitionType === "asyncThunk";
@@ -4844,21 +5351,11 @@ function isAsyncThunkSliceReducerDefinition(reducerDefinition) {
 function isCaseReducerWithPrepareDefinition(reducerDefinition) {
   return reducerDefinition._reducerDefinitionType === "reducerWithPrepare";
 }
-function handleThunkCaseReducerDefinition({
-  type,
-  reducerName
-}, reducerDefinition, context, cAT) {
+function handleThunkCaseReducerDefinition({ type, reducerName }, reducerDefinition, context, cAT) {
   if (!cAT) {
     throw new Error(formatProdErrorMessage(18));
   }
-  const {
-    payloadCreator,
-    fulfilled,
-    pending,
-    rejected,
-    settled,
-    options
-  } = reducerDefinition;
+  const { payloadCreator, fulfilled, pending, rejected, settled, options } = reducerDefinition;
   const thunk2 = cAT(type, payloadCreator, options);
   context.exposeAction(reducerName, thunk2);
   if (fulfilled) {
@@ -4877,11 +5374,10 @@ function handleThunkCaseReducerDefinition({
     fulfilled: fulfilled || noop,
     pending: pending || noop,
     rejected: rejected || noop,
-    settled: settled || noop
+    settled: settled || noop,
   });
 }
-function noop() {
-}
+function noop() {}
 var task = "task";
 var listener = "listener";
 var completed = "completed";
@@ -4903,15 +5399,14 @@ var assertFunction = (func, expected) => {
     throw new TypeError(formatProdErrorMessage(32));
   }
 };
-var noop2 = () => {
-};
+var noop2 = () => {};
 var catchRejection = (promise, onError = noop2) => {
   promise.catch(onError);
   return promise;
 };
 var addAbortSignalListener = (abortSignal, callback) => {
   abortSignal.addEventListener("abort", callback, {
-    once: true
+    once: true,
   });
   return () => abortSignal.removeEventListener("abort", callback);
 };
@@ -4940,12 +5435,12 @@ var runTask = async (task2, cleanUp) => {
     const value = await task2();
     return {
       status: "ok",
-      value
+      value,
     };
   } catch (error) {
     return {
       status: error instanceof TaskAbortError ? "cancelled" : "rejected",
-      error
+      error,
     };
   } finally {
     cleanUp?.();
@@ -4953,10 +5448,12 @@ var runTask = async (task2, cleanUp) => {
 };
 var createPause = (signal) => {
   return (promise) => {
-    return catchRejection(raceWithSignal(signal, promise).then((output) => {
-      validateActive(signal);
-      return output;
-    }));
+    return catchRejection(
+      raceWithSignal(signal, promise).then((output) => {
+        validateActive(signal);
+        return output;
+      }),
+    );
   };
 };
 var createDelay = (signal) => {
@@ -4965,28 +5462,30 @@ var createDelay = (signal) => {
     return pause(new Promise((resolve) => setTimeout(resolve, timeoutMs)));
   };
 };
-var {
-  assign
-} = Object;
+var { assign } = Object;
 var INTERNAL_NIL_TOKEN = {};
 var alm = "listenerMiddleware";
 var createFork = (parentAbortSignal, parentBlockingPromises) => {
-  const linkControllers = (controller) => addAbortSignalListener(parentAbortSignal, () => controller.abort(parentAbortSignal.reason));
+  const linkControllers = (controller) =>
+    addAbortSignalListener(parentAbortSignal, () => controller.abort(parentAbortSignal.reason));
   return (taskExecutor, opts) => {
     assertFunction(taskExecutor);
     const childAbortController = new AbortController();
     linkControllers(childAbortController);
-    const result = runTask(async () => {
-      validateActive(parentAbortSignal);
-      validateActive(childAbortController.signal);
-      const result2 = await taskExecutor({
-        pause: createPause(childAbortController.signal),
-        delay: createDelay(childAbortController.signal),
-        signal: childAbortController.signal
-      });
-      validateActive(childAbortController.signal);
-      return result2;
-    }, () => childAbortController.abort(taskCompleted));
+    const result = runTask(
+      async () => {
+        validateActive(parentAbortSignal);
+        validateActive(childAbortController.signal);
+        const result2 = await taskExecutor({
+          pause: createPause(childAbortController.signal),
+          delay: createDelay(childAbortController.signal),
+          signal: childAbortController.signal,
+        });
+        validateActive(childAbortController.signal);
+        return result2;
+      },
+      () => childAbortController.abort(taskCompleted),
+    );
     if (opts?.autoJoin) {
       parentBlockingPromises.push(result.catch(noop2));
     }
@@ -4994,22 +5493,21 @@ var createFork = (parentAbortSignal, parentBlockingPromises) => {
       result: createPause(parentAbortSignal)(result),
       cancel() {
         childAbortController.abort(taskCancelled);
-      }
+      },
     };
   };
 };
 var createTakePattern = (startListening, signal) => {
   const take = async (predicate, timeout) => {
     validateActive(signal);
-    let unsubscribe = () => {
-    };
+    let unsubscribe = () => {};
     const tuplePromise = new Promise((resolve, reject) => {
       let stopListening = startListening({
         predicate,
         effect: (action, listenerApi) => {
           listenerApi.unsubscribe();
           resolve([action, listenerApi.getState(), listenerApi.getOriginalState()]);
-        }
+        },
       });
       unsubscribe = () => {
         stopListening();
@@ -5031,13 +5529,7 @@ var createTakePattern = (startListening, signal) => {
   return (predicate, timeout) => catchRejection(take(predicate, timeout));
 };
 var getListenerEntryPropsFrom = (options) => {
-  let {
-    type,
-    actionCreator,
-    matcher,
-    predicate,
-    effect
-  } = options;
+  let { type, actionCreator, matcher, predicate, effect } = options;
   if (type) {
     predicate = createAction(type).match;
   } else if (actionCreator) {
@@ -5045,7 +5537,7 @@ var getListenerEntryPropsFrom = (options) => {
     predicate = actionCreator.match;
   } else if (matcher) {
     predicate = matcher;
-  } else if (predicate) ;
+  } else if (predicate);
   else {
     throw new Error(formatProdErrorMessage(21));
   }
@@ -5053,37 +5545,33 @@ var getListenerEntryPropsFrom = (options) => {
   return {
     predicate,
     type,
-    effect
+    effect,
   };
 };
-var createListenerEntry = /* @__PURE__ */ assign((options) => {
-  const {
-    type,
-    predicate,
-    effect
-  } = getListenerEntryPropsFrom(options);
-  const entry = {
-    id: nanoid(),
-    effect,
-    type,
-    predicate,
-    pending: /* @__PURE__ */ new Set(),
-    unsubscribe: () => {
-      throw new Error(formatProdErrorMessage(22));
-    }
-  };
-  return entry;
-}, {
-  withTypes: () => createListenerEntry
-});
+var createListenerEntry = /* @__PURE__ */ assign(
+  (options) => {
+    const { type, predicate, effect } = getListenerEntryPropsFrom(options);
+    const entry = {
+      id: nanoid(),
+      effect,
+      type,
+      predicate,
+      pending: /* @__PURE__ */ new Set(),
+      unsubscribe: () => {
+        throw new Error(formatProdErrorMessage(22));
+      },
+    };
+    return entry;
+  },
+  {
+    withTypes: () => createListenerEntry,
+  },
+);
 var findListenerEntry = (listenerMap, options) => {
-  const {
-    type,
-    effect,
-    predicate
-  } = getListenerEntryPropsFrom(options);
+  const { type, effect, predicate } = getListenerEntryPropsFrom(options);
   return Array.from(listenerMap.values()).find((entry) => {
-    const matchPredicateOrType = typeof type === "string" ? entry.type === type : entry.predicate === predicate;
+    const matchPredicateOrType =
+      typeof type === "string" ? entry.type === type : entry.predicate === predicate;
     return matchPredicateOrType && entry.effect === effect;
   });
 };
@@ -5110,11 +5598,11 @@ var safelyNotifyError = (errorHandler, errorToNotify, errorInfo) => {
   }
 };
 var addListener = /* @__PURE__ */ assign(/* @__PURE__ */ createAction(`${alm}/add`), {
-  withTypes: () => addListener
+  withTypes: () => addListener,
 });
 var clearAllListeners = /* @__PURE__ */ createAction(`${alm}/removeAll`);
 var removeListener = /* @__PURE__ */ assign(/* @__PURE__ */ createAction(`${alm}/remove`), {
-  withTypes: () => removeListener
+  withTypes: () => removeListener,
 });
 var defaultErrorHandler = (...args) => {
   console.error(`${alm}/error`, ...args);
@@ -5134,10 +5622,7 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
       executingListeners.set(entry, count - 1);
     }
   };
-  const {
-    extra,
-    onError = defaultErrorHandler
-  } = middlewareOptions;
+  const { extra, onError = defaultErrorHandler } = middlewareOptions;
   assertFunction(onError);
   const insertEntry = (entry) => {
     entry.unsubscribe = () => listenerMap.delete(entry.id);
@@ -5154,7 +5639,7 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
     return insertEntry(entry);
   };
   assign(startListening, {
-    withTypes: () => startListening
+    withTypes: () => startListening,
   });
   const stopListening = (options) => {
     const entry = findListenerEntry(listenerMap, options);
@@ -5167,7 +5652,7 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
     return !!entry;
   };
   assign(stopListening, {
-    withTypes: () => stopListening
+    withTypes: () => stopListening,
   });
   const notifyListener = async (entry, action, api, getOriginalState) => {
     const internalTaskController = new AbortController();
@@ -5176,43 +5661,45 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
     try {
       entry.pending.add(internalTaskController);
       trackExecutingListener(entry);
-      await Promise.resolve(entry.effect(
-        action,
-        // Use assign() rather than ... to avoid extra helper functions added to bundle
-        assign({}, api, {
-          getOriginalState,
-          condition: (predicate, timeout) => take(predicate, timeout).then(Boolean),
-          take,
-          delay: createDelay(internalTaskController.signal),
-          pause: createPause(internalTaskController.signal),
-          extra,
-          signal: internalTaskController.signal,
-          fork: createFork(internalTaskController.signal, autoJoinPromises),
-          unsubscribe: entry.unsubscribe,
-          subscribe: () => {
-            listenerMap.set(entry.id, entry);
-          },
-          cancelActiveListeners: () => {
-            entry.pending.forEach((controller, _, set2) => {
-              if (controller !== internalTaskController) {
-                controller.abort(listenerCancelled);
-                set2.delete(controller);
-              }
-            });
-          },
-          cancel: () => {
-            internalTaskController.abort(listenerCancelled);
-            entry.pending.delete(internalTaskController);
-          },
-          throwIfCancelled: () => {
-            validateActive(internalTaskController.signal);
-          }
-        })
-      ));
+      await Promise.resolve(
+        entry.effect(
+          action,
+          // Use assign() rather than ... to avoid extra helper functions added to bundle
+          assign({}, api, {
+            getOriginalState,
+            condition: (predicate, timeout) => take(predicate, timeout).then(Boolean),
+            take,
+            delay: createDelay(internalTaskController.signal),
+            pause: createPause(internalTaskController.signal),
+            extra,
+            signal: internalTaskController.signal,
+            fork: createFork(internalTaskController.signal, autoJoinPromises),
+            unsubscribe: entry.unsubscribe,
+            subscribe: () => {
+              listenerMap.set(entry.id, entry);
+            },
+            cancelActiveListeners: () => {
+              entry.pending.forEach((controller, _, set2) => {
+                if (controller !== internalTaskController) {
+                  controller.abort(listenerCancelled);
+                  set2.delete(controller);
+                }
+              });
+            },
+            cancel: () => {
+              internalTaskController.abort(listenerCancelled);
+              entry.pending.delete(internalTaskController);
+            },
+            throwIfCancelled: () => {
+              validateActive(internalTaskController.signal);
+            },
+          }),
+        ),
+      );
     } catch (listenerError) {
       if (!(listenerError instanceof TaskAbortError)) {
         safelyNotifyError(onError, listenerError, {
-          raisedBy: "effect"
+          raisedBy: "effect",
         });
       }
     } finally {
@@ -5257,7 +5744,7 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
           } catch (predicateError) {
             runListener = false;
             safelyNotifyError(onError, predicateError, {
-              raisedBy: "predicate"
+              raisedBy: "predicate",
             });
           }
           if (!runListener) {
@@ -5275,7 +5762,7 @@ var createListenerMiddleware = (middlewareOptions = {}) => {
     middleware,
     startListening,
     stopListening,
-    clearListeners: clearListenerMiddleware
+    clearListeners: clearListenerMiddleware,
   };
 };
 function formatProdErrorMessage(code) {
@@ -5289,9 +5776,9 @@ var initialState$d = {
     top: 5,
     right: 5,
     bottom: 5,
-    left: 5
+    left: 5,
   },
-  scale: 1
+  scale: 1,
 };
 var chartLayoutSlice = createSlice({
   name: "chartLayout",
@@ -5306,22 +5793,29 @@ var chartLayoutSlice = createSlice({
     },
     setMargin(state, action) {
       var _action$payload$top, _action$payload$right, _action$payload$botto, _action$payload$left;
-      state.margin.top = (_action$payload$top = action.payload.top) !== null && _action$payload$top !== void 0 ? _action$payload$top : 0;
-      state.margin.right = (_action$payload$right = action.payload.right) !== null && _action$payload$right !== void 0 ? _action$payload$right : 0;
-      state.margin.bottom = (_action$payload$botto = action.payload.bottom) !== null && _action$payload$botto !== void 0 ? _action$payload$botto : 0;
-      state.margin.left = (_action$payload$left = action.payload.left) !== null && _action$payload$left !== void 0 ? _action$payload$left : 0;
+      state.margin.top =
+        (_action$payload$top = action.payload.top) !== null && _action$payload$top !== void 0
+          ? _action$payload$top
+          : 0;
+      state.margin.right =
+        (_action$payload$right = action.payload.right) !== null && _action$payload$right !== void 0
+          ? _action$payload$right
+          : 0;
+      state.margin.bottom =
+        (_action$payload$botto = action.payload.bottom) !== null && _action$payload$botto !== void 0
+          ? _action$payload$botto
+          : 0;
+      state.margin.left =
+        (_action$payload$left = action.payload.left) !== null && _action$payload$left !== void 0
+          ? _action$payload$left
+          : 0;
     },
     setScale(state, action) {
       state.scale = action.payload;
-    }
-  }
+    },
+  },
 });
-var {
-  setMargin,
-  setLayout,
-  setChartSize,
-  setScale
-} = chartLayoutSlice.actions;
+var { setMargin, setLayout, setChartSize, setScale } = chartLayoutSlice.actions;
 var chartLayoutReducer = chartLayoutSlice.reducer;
 function getSliced(arr, startIndex, endIndex) {
   if (!Array.isArray(arr)) {
@@ -5342,25 +5836,41 @@ function ownKeys$x(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$x(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$x(Object(t), true).forEach(function(r2) {
-      _defineProperty$z(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$x(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$x(Object(t), true).forEach(function (r2) {
+          _defineProperty$z(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$x(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$z(e, r, t) {
-  return (r = _toPropertyKey$z(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$z(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$z(t) {
   var i = _toPrimitive$z(t, "string");
@@ -5390,29 +5900,42 @@ function getValueByDataKey(obj, dataKey, defaultValue) {
 }
 var appendOffsetOfLegend = (offset, legendSettings, legendSize) => {
   if (legendSettings && legendSize) {
-    var {
-      width: boxWidth,
-      height: boxHeight
-    } = legendSize;
-    var {
-      align,
-      verticalAlign,
-      layout
-    } = legendSettings;
-    if ((layout === "vertical" || layout === "horizontal" && verticalAlign === "middle") && align !== "center" && isNumber(offset[align])) {
-      return _objectSpread$x(_objectSpread$x({}, offset), {}, {
-        [align]: offset[align] + (boxWidth || 0)
-      });
+    var { width: boxWidth, height: boxHeight } = legendSize;
+    var { align, verticalAlign, layout } = legendSettings;
+    if (
+      (layout === "vertical" || (layout === "horizontal" && verticalAlign === "middle")) &&
+      align !== "center" &&
+      isNumber(offset[align])
+    ) {
+      return _objectSpread$x(
+        _objectSpread$x({}, offset),
+        {},
+        {
+          [align]: offset[align] + (boxWidth || 0),
+        },
+      );
     }
-    if ((layout === "horizontal" || layout === "vertical" && align === "center") && verticalAlign !== "middle" && isNumber(offset[verticalAlign])) {
-      return _objectSpread$x(_objectSpread$x({}, offset), {}, {
-        [verticalAlign]: offset[verticalAlign] + (boxHeight || 0)
-      });
+    if (
+      (layout === "horizontal" || (layout === "vertical" && align === "center")) &&
+      verticalAlign !== "middle" &&
+      isNumber(offset[verticalAlign])
+    ) {
+      return _objectSpread$x(
+        _objectSpread$x({}, offset),
+        {},
+        {
+          [verticalAlign]: offset[verticalAlign] + (boxHeight || 0),
+        },
+      );
     }
   }
   return offset;
 };
-var isCategoricalAxis = (layout, axisType) => layout === "horizontal" && axisType === "xAxis" || layout === "vertical" && axisType === "yAxis" || layout === "centric" && axisType === "angleAxis" || layout === "radial" && axisType === "radiusAxis";
+var isCategoricalAxis = (layout, axisType) =>
+  (layout === "horizontal" && axisType === "xAxis") ||
+  (layout === "vertical" && axisType === "yAxis") ||
+  (layout === "centric" && axisType === "angleAxis") ||
+  (layout === "radial" && axisType === "radiusAxis");
 var getCoordinatesOfGrid = (ticks2, minValue, maxValue, syncWithTicks) => {
   if (syncWithTicks) {
     return ticks2.map((entry) => entry.coordinate);
@@ -5450,73 +5973,86 @@ var getTicksOfAxis = (axis, isGrid, isAll) => {
     tickCount,
     ticks: ticks2,
     niceTicks,
-    axisType
+    axisType,
   } = axis;
   if (!scale) {
     return null;
   }
   var offsetForBand = realScaleType === "scaleBand" && scale.bandwidth ? scale.bandwidth() / 2 : 2;
   var offset = type === "category" && scale.bandwidth ? scale.bandwidth() / offsetForBand : 0;
-  offset = axisType === "angleAxis" && range2 && range2.length >= 2 ? mathSign(range2[0] - range2[1]) * 2 * offset : offset;
+  offset =
+    axisType === "angleAxis" && range2 && range2.length >= 2
+      ? mathSign(range2[0] - range2[1]) * 2 * offset
+      : offset;
   if (ticks2 || niceTicks) {
-    var result = (ticks2 || niceTicks || []).map((entry, index) => {
-      var scaleContent = duplicateDomain ? duplicateDomain.indexOf(entry) : entry;
-      var scaled = scale.map(scaleContent);
-      if (!isWellBehavedNumber(scaled)) {
-        return null;
-      }
-      return {
-        // If the scaleContent is not a number, the coordinate will be NaN.
-        // That could be the case for example with a PointScale and a string as domain.
-        coordinate: scaled + offset,
-        value: entry,
-        offset,
-        index
-      };
-    }).filter(isNotNil);
+    var result = (ticks2 || niceTicks || [])
+      .map((entry, index) => {
+        var scaleContent = duplicateDomain ? duplicateDomain.indexOf(entry) : entry;
+        var scaled = scale.map(scaleContent);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          // If the scaleContent is not a number, the coordinate will be NaN.
+          // That could be the case for example with a PointScale and a string as domain.
+          coordinate: scaled + offset,
+          value: entry,
+          offset,
+          index,
+        };
+      })
+      .filter(isNotNil);
     return result;
   }
   if (isCategorical && categoricalDomain) {
-    return categoricalDomain.map((entry, index) => {
-      var scaled = scale.map(entry);
-      if (!isWellBehavedNumber(scaled)) {
-        return null;
-      }
-      return {
-        coordinate: scaled + offset,
-        value: entry,
-        index,
-        offset
-      };
-    }).filter(isNotNil);
+    return categoricalDomain
+      .map((entry, index) => {
+        var scaled = scale.map(entry);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          coordinate: scaled + offset,
+          value: entry,
+          index,
+          offset,
+        };
+      })
+      .filter(isNotNil);
   }
   if (scale.ticks && true && tickCount != null) {
-    return scale.ticks(tickCount).map((entry, index) => {
+    return scale
+      .ticks(tickCount)
+      .map((entry, index) => {
+        var scaled = scale.map(entry);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          coordinate: scaled + offset,
+          value: entry,
+          index,
+          offset,
+        };
+      })
+      .filter(isNotNil);
+  }
+  return scale
+    .domain()
+    .map((entry, index) => {
       var scaled = scale.map(entry);
       if (!isWellBehavedNumber(scaled)) {
         return null;
       }
       return {
         coordinate: scaled + offset,
-        value: entry,
+        // @ts-expect-error can't use Date as an index
+        value: duplicateDomain ? duplicateDomain[entry] : entry,
         index,
-        offset
+        offset,
       };
-    }).filter(isNotNil);
-  }
-  return scale.domain().map((entry, index) => {
-    var scaled = scale.map(entry);
-    if (!isWellBehavedNumber(scaled)) {
-      return null;
-    }
-    return {
-      coordinate: scaled + offset,
-      // @ts-expect-error can't use Date as an index
-      value: duplicateDomain ? duplicateDomain[entry] : entry,
-      index,
-      offset
-    };
-  }).filter(isNotNil);
+    })
+    .filter(isNotNil);
 };
 var truncateByDomain = (value, domain) => {
   if (!domain || domain.length !== 2 || !isNumber(domain[0]) || !isNumber(domain[1])) {
@@ -5613,12 +6149,20 @@ var STACK_OFFSET_MAP = {
   silhouette: stackOffsetSilhouette,
   // @ts-expect-error definitelytyped types are incorrect
   wiggle: stackOffsetWiggle,
-  positive: offsetPositive
+  positive: offsetPositive,
 };
 var getStackedData = (data, dataKeys, offsetType) => {
   var _STACK_OFFSET_MAP$off;
-  var offsetAccessor = (_STACK_OFFSET_MAP$off = STACK_OFFSET_MAP[offsetType]) !== null && _STACK_OFFSET_MAP$off !== void 0 ? _STACK_OFFSET_MAP$off : stackOffsetNone;
-  var stack = shapeStack().keys(dataKeys).value((d, key) => Number(getValueByDataKey(d, key, 0))).order(stackOrderNone).offset(offsetAccessor);
+  var offsetAccessor =
+    (_STACK_OFFSET_MAP$off = STACK_OFFSET_MAP[offsetType]) !== null &&
+    _STACK_OFFSET_MAP$off !== void 0
+      ? _STACK_OFFSET_MAP$off
+      : stackOffsetNone;
+  var stack = shapeStack()
+    .keys(dataKeys)
+    .value((d, key) => Number(getValueByDataKey(d, key, 0)))
+    .order(stackOrderNone)
+    .offset(offsetAccessor);
   var result = stack(data);
   result.forEach((series, seriesIndex) => {
     series.forEach((point2, pointIndex) => {
@@ -5635,14 +6179,7 @@ function getNormalizedStackId(publicStackId) {
   return publicStackId == null ? void 0 : String(publicStackId);
 }
 function getCateCoordinateOfLine(_ref2) {
-  var {
-    axis,
-    ticks: ticks2,
-    bandSize,
-    entry,
-    index,
-    dataKey
-  } = _ref2;
+  var { axis, ticks: ticks2, bandSize, entry, index, dataKey } = _ref2;
   if (axis.type === "category") {
     if (!axis.allowDuplicatedCategory && axis.dataKey && !isNullish(entry[axis.dataKey])) {
       var matchedTick = findEntryInArray(ticks2, "value", entry[axis.dataKey]);
@@ -5650,7 +6187,9 @@ function getCateCoordinateOfLine(_ref2) {
         return matchedTick.coordinate + bandSize / 2;
       }
     }
-    return ticks2 !== null && ticks2 !== void 0 && ticks2[index] ? ticks2[index].coordinate + bandSize / 2 : null;
+    return ticks2 !== null && ticks2 !== void 0 && ticks2[index]
+      ? ticks2[index].coordinate + bandSize / 2
+      : null;
   }
   var value = getValueByDataKey(entry, !isNullish(dataKey) ? dataKey : axis.dataKey);
   var scaled = axis.scale.map(value);
@@ -5660,14 +6199,7 @@ function getCateCoordinateOfLine(_ref2) {
   return scaled;
 }
 var getCateCoordinateOfBar = (_ref2) => {
-  var {
-    axis,
-    ticks: ticks2,
-    offset,
-    bandSize,
-    entry,
-    index
-  } = _ref2;
+  var { axis, ticks: ticks2, offset, bandSize, entry, index } = _ref2;
   if (axis.type === "category") {
     return ticks2[index] ? ticks2[index].coordinate + offset : null;
   }
@@ -5682,9 +6214,7 @@ var getCateCoordinateOfBar = (_ref2) => {
   return scaled - bandSize / 2 + offset;
 };
 var getBaseValueOfBar = (_ref3) => {
-  var {
-    numericAxis
-  } = _ref3;
+  var { numericAxis } = _ref3;
   var domain = numericAxis.scale.domain();
   if (numericAxis.type === "number") {
     var minValue = Math.min(domain[0], domain[1]);
@@ -5710,24 +6240,30 @@ var getDomainOfStackGroups = (stackGroups, startIndex, endIndex) => {
   if (stackGroups == null) {
     return void 0;
   }
-  return makeDomainFinite(Object.keys(stackGroups).reduce((result, stackId) => {
-    var group = stackGroups[stackId];
-    if (!group) {
-      return result;
-    }
-    var {
-      stackedData
-    } = group;
-    var domain = stackedData.reduce((res, entry) => {
-      var sliced = getSliced(entry, startIndex, endIndex);
-      var s = getDomainOfSingle(sliced);
-      if (!isWellBehavedNumber(s[0]) || !isWellBehavedNumber(s[1])) {
-        return res;
-      }
-      return [Math.min(res[0], s[0]), Math.max(res[1], s[1])];
-    }, [Infinity, -Infinity]);
-    return [Math.min(domain[0], result[0]), Math.max(domain[1], result[1])];
-  }, [Infinity, -Infinity]));
+  return makeDomainFinite(
+    Object.keys(stackGroups).reduce(
+      (result, stackId) => {
+        var group = stackGroups[stackId];
+        if (!group) {
+          return result;
+        }
+        var { stackedData } = group;
+        var domain = stackedData.reduce(
+          (res, entry) => {
+            var sliced = getSliced(entry, startIndex, endIndex);
+            var s = getDomainOfSingle(sliced);
+            if (!isWellBehavedNumber(s[0]) || !isWellBehavedNumber(s[1])) {
+              return res;
+            }
+            return [Math.min(res[0], s[0]), Math.max(res[1], s[1])];
+          },
+          [Infinity, -Infinity],
+        );
+        return [Math.min(domain[0], result[0]), Math.max(domain[1], result[1])];
+      },
+      [Infinity, -Infinity],
+    ),
+  );
 };
 var MIN_VALUE_REG = /^dataMin[\s]*-[\s]*([0-9]+([.]{1}[0-9]+){0,1})$/;
 var MAX_VALUE_REG = /^dataMax[\s]*\+[\s]*([0-9]+([.]{1}[0-9]+){0,1})$/;
@@ -5744,26 +6280,28 @@ var getBandSizeOfAxis = (axis, ticks2, isBar) => {
     for (var i = 1, len = orderedTicks.length; i < len; i++) {
       var cur = orderedTicks[i];
       var prev = orderedTicks[i - 1];
-      bandSize = Math.min(((cur === null || cur === void 0 ? void 0 : cur.coordinate) || 0) - ((prev === null || prev === void 0 ? void 0 : prev.coordinate) || 0), bandSize);
+      bandSize = Math.min(
+        ((cur === null || cur === void 0 ? void 0 : cur.coordinate) || 0) -
+          ((prev === null || prev === void 0 ? void 0 : prev.coordinate) || 0),
+        bandSize,
+      );
     }
     return bandSize === Infinity ? 0 : bandSize;
   }
   return isBar ? void 0 : 0;
 };
 function getTooltipEntry(_ref4) {
-  var {
-    tooltipEntrySettings,
-    dataKey,
-    payload,
-    value,
-    name
-  } = _ref4;
-  return _objectSpread$x(_objectSpread$x({}, tooltipEntrySettings), {}, {
-    dataKey,
-    payload,
-    value,
-    name
-  });
+  var { tooltipEntrySettings, dataKey, payload, value, name } = _ref4;
+  return _objectSpread$x(
+    _objectSpread$x({}, tooltipEntrySettings),
+    {},
+    {
+      dataKey,
+      payload,
+      value,
+      name,
+    },
+  );
 }
 function getTooltipNameProp(nameFromItem, dataKey) {
   if (nameFromItem) {
@@ -5793,12 +6331,18 @@ var selectChartWidth = (state) => state.layout.width;
 var selectChartHeight = (state) => state.layout.height;
 var selectContainerScale = (state) => state.layout.scale;
 var selectMargin = (state) => state.layout.margin;
-var selectAllXAxes = createSelector((state) => state.cartesianAxis.xAxis, (xAxisMap) => {
-  return Object.values(xAxisMap);
-});
-var selectAllYAxes = createSelector((state) => state.cartesianAxis.yAxis, (yAxisMap) => {
-  return Object.values(yAxisMap);
-});
+var selectAllXAxes = createSelector(
+  (state) => state.cartesianAxis.xAxis,
+  (xAxisMap) => {
+    return Object.values(xAxisMap);
+  },
+);
+var selectAllYAxes = createSelector(
+  (state) => state.cartesianAxis.yAxis,
+  (yAxisMap) => {
+    return Object.values(yAxisMap);
+  },
+);
 var DATA_ITEM_INDEX_ATTRIBUTE_NAME = "data-recharts-item-index";
 var DATA_ITEM_GRAPHICAL_ITEM_ID_ATTRIBUTE_NAME = "data-recharts-item-id";
 var DEFAULT_Y_AXIS_WIDTH = 60;
@@ -5806,25 +6350,41 @@ function ownKeys$w(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$w(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$w(Object(t), true).forEach(function(r2) {
-      _defineProperty$y(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$w(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$w(Object(t), true).forEach(function (r2) {
+          _defineProperty$y(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$w(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$y(e, r, t) {
-  return (r = _toPropertyKey$y(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$y(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$y(t) {
   var i = _toPrimitive$y(t, "string");
@@ -5879,50 +6439,90 @@ function selectBottomAxesOffset(state) {
     return result;
   }, 0);
 }
-var selectChartOffsetInternal = createSelector([selectChartWidth, selectChartHeight, selectMargin, selectBrushHeight, selectLeftAxesOffset, selectRightAxesOffset, selectTopAxesOffset, selectBottomAxesOffset, selectLegendSettings, selectLegendSize], (chartWidth, chartHeight, margin, brushHeight, leftAxesOffset, rightAxesOffset, topAxesOffset, bottomAxesOffset, legendSettings, legendSize) => {
-  var offsetH = {
-    left: (margin.left || 0) + leftAxesOffset,
-    right: (margin.right || 0) + rightAxesOffset
-  };
-  var offsetV = {
-    top: (margin.top || 0) + topAxesOffset,
-    bottom: (margin.bottom || 0) + bottomAxesOffset
-  };
-  var offset = _objectSpread$w(_objectSpread$w({}, offsetV), offsetH);
-  var brushBottom = offset.bottom;
-  offset.bottom += brushHeight;
-  offset = appendOffsetOfLegend(offset, legendSettings, legendSize);
-  var offsetWidth = chartWidth - offset.left - offset.right;
-  var offsetHeight = chartHeight - offset.top - offset.bottom;
-  return _objectSpread$w(_objectSpread$w({
-    brushBottom
-  }, offset), {}, {
-    // never return negative values for height and width
-    width: Math.max(offsetWidth, 0),
-    height: Math.max(offsetHeight, 0)
-  });
-});
+var selectChartOffsetInternal = createSelector(
+  [
+    selectChartWidth,
+    selectChartHeight,
+    selectMargin,
+    selectBrushHeight,
+    selectLeftAxesOffset,
+    selectRightAxesOffset,
+    selectTopAxesOffset,
+    selectBottomAxesOffset,
+    selectLegendSettings,
+    selectLegendSize,
+  ],
+  (
+    chartWidth,
+    chartHeight,
+    margin,
+    brushHeight,
+    leftAxesOffset,
+    rightAxesOffset,
+    topAxesOffset,
+    bottomAxesOffset,
+    legendSettings,
+    legendSize,
+  ) => {
+    var offsetH = {
+      left: (margin.left || 0) + leftAxesOffset,
+      right: (margin.right || 0) + rightAxesOffset,
+    };
+    var offsetV = {
+      top: (margin.top || 0) + topAxesOffset,
+      bottom: (margin.bottom || 0) + bottomAxesOffset,
+    };
+    var offset = _objectSpread$w(_objectSpread$w({}, offsetV), offsetH);
+    var brushBottom = offset.bottom;
+    offset.bottom += brushHeight;
+    offset = appendOffsetOfLegend(offset, legendSettings, legendSize);
+    var offsetWidth = chartWidth - offset.left - offset.right;
+    var offsetHeight = chartHeight - offset.top - offset.bottom;
+    return _objectSpread$w(
+      _objectSpread$w(
+        {
+          brushBottom,
+        },
+        offset,
+      ),
+      {},
+      {
+        // never return negative values for height and width
+        width: Math.max(offsetWidth, 0),
+        height: Math.max(offsetHeight, 0),
+      },
+    );
+  },
+);
 var selectChartViewBox = createSelector(selectChartOffsetInternal, (offset) => ({
   x: offset.left,
   y: offset.top,
   width: offset.width,
-  height: offset.height
+  height: offset.height,
 }));
 var selectAxisViewBox = createSelector(selectChartWidth, selectChartHeight, (width, height) => ({
   x: 0,
   y: 0,
   width,
-  height
+  height,
 }));
 var PanoramaContext = /* @__PURE__ */ reactExports.createContext(null);
 var useIsPanorama = () => reactExports.useContext(PanoramaContext) != null;
 var selectBrushSettings = (state) => state.brush;
-var selectBrushDimensions = createSelector([selectBrushSettings, selectChartOffsetInternal, selectMargin], (brushSettings, offset, margin) => ({
-  height: brushSettings.height,
-  x: isNumber(brushSettings.x) ? brushSettings.x : offset.left,
-  y: isNumber(brushSettings.y) ? brushSettings.y : offset.top + offset.height + offset.brushBottom - ((margin === null || margin === void 0 ? void 0 : margin.bottom) || 0),
-  width: isNumber(brushSettings.width) ? brushSettings.width : offset.width
-}));
+var selectBrushDimensions = createSelector(
+  [selectBrushSettings, selectChartOffsetInternal, selectMargin],
+  (brushSettings, offset, margin) => ({
+    height: brushSettings.height,
+    x: isNumber(brushSettings.x) ? brushSettings.x : offset.left,
+    y: isNumber(brushSettings.y)
+      ? brushSettings.y
+      : offset.top +
+        offset.height +
+        offset.brushBottom -
+        ((margin === null || margin === void 0 ? void 0 : margin.bottom) || 0),
+    width: isNumber(brushSettings.width) ? brushSettings.width : offset.width,
+  }),
+);
 var throttle$2 = {};
 var debounce$1 = {};
 var debounce = {};
@@ -5930,7 +6530,7 @@ var hasRequiredDebounce$1;
 function requireDebounce$1() {
   if (hasRequiredDebounce$1) return debounce;
   hasRequiredDebounce$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     function debounce2(func, debounceMs, { signal, edges } = {}) {
       let pendingThis = void 0;
@@ -5974,7 +6574,7 @@ function requireDebounce$1() {
       const flush = () => {
         invoke();
       };
-      const debounced = function(...args) {
+      const debounced = function (...args) {
         if (signal?.aborted) {
           return;
         }
@@ -6000,7 +6600,7 @@ var hasRequiredDebounce;
 function requireDebounce() {
   if (hasRequiredDebounce) return debounce$1;
   hasRequiredDebounce = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const debounce$12 = /* @__PURE__ */ requireDebounce$1();
     function debounce2(func, debounceMs = 0, options = {}) {
@@ -6017,11 +6617,15 @@ function requireDebounce() {
       }
       let result = void 0;
       let pendingAt = null;
-      const _debounced = debounce$12.debounce(function(...args) {
-        result = func.apply(this, args);
-        pendingAt = null;
-      }, debounceMs, { edges });
-      const debounced = function(...args) {
+      const _debounced = debounce$12.debounce(
+        function (...args) {
+          result = func.apply(this, args);
+          pendingAt = null;
+        },
+        debounceMs,
+        { edges },
+      );
+      const debounced = function (...args) {
         if (maxWait != null) {
           if (pendingAt === null) {
             pendingAt = Date.now();
@@ -6053,7 +6657,7 @@ var hasRequiredThrottle$1;
 function requireThrottle$1() {
   if (hasRequiredThrottle$1) return throttle$2;
   hasRequiredThrottle$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const debounce2 = /* @__PURE__ */ requireDebounce();
     function throttle2(func, throttleMs = 0, options = {}) {
@@ -6061,7 +6665,7 @@ function requireThrottle$1() {
       return debounce2.debounce(func, throttleMs, {
         leading,
         maxWait: throttleMs,
-        trailing
+        trailing,
       });
     }
     exports$1.throttle = throttle2;
@@ -6079,7 +6683,11 @@ function requireThrottle() {
 var throttleExports = /* @__PURE__ */ requireThrottle();
 const throttle = /* @__PURE__ */ getDefaultExportFromCjs(throttleExports);
 var warn = function warn2(condition, format2) {
-  for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+  for (
+    var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2;
+    _key < _len;
+    _key++
+  ) {
     args[_key - 2] = arguments[_key];
   }
   if (typeof console !== "undefined" && console.warn) {
@@ -6088,7 +6696,9 @@ var warn = function warn2(condition, format2) {
     }
     if (!condition) {
       if (format2 === void 0) {
-        console.warn("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.");
+        console.warn(
+          "Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.",
+        );
       } else {
         var argIndex = 0;
         console.warn(format2.replace(/%s/g, () => args[argIndex++]));
@@ -6103,15 +6713,15 @@ var defaultResponsiveContainerProps = {
   minWidth: 0,
   initialDimension: {
     width: -1,
-    height: -1
-  }
+    height: -1,
+  },
 };
 var calculateChartDimensions = (containerWidth, containerHeight, props) => {
   var {
     width = defaultResponsiveContainerProps.width,
     height = defaultResponsiveContainerProps.height,
     aspect,
-    maxHeight
+    maxHeight,
   } = props;
   var calculatedWidth = isPercent(width) ? containerWidth : Number(width);
   var calculatedHeight = isPercent(height) ? containerHeight : Number(height);
@@ -6127,28 +6737,25 @@ var calculateChartDimensions = (containerWidth, containerHeight, props) => {
   }
   return {
     calculatedWidth,
-    calculatedHeight
+    calculatedHeight,
   };
 };
 var bothOverflow = {
   width: 0,
   height: 0,
-  overflow: "visible"
+  overflow: "visible",
 };
 var overflowX = {
   width: 0,
-  overflowX: "visible"
+  overflowX: "visible",
 };
 var overflowY = {
   height: 0,
-  overflowY: "visible"
+  overflowY: "visible",
 };
 var noStyle = {};
 var getInnerDivStyle = (props) => {
-  var {
-    width,
-    height
-  } = props;
+  var { width, height } = props;
   var isWidthPercent = isPercent(width);
   var isHeightPercent = isPercent(height);
   if (isWidthPercent && isHeightPercent) {
@@ -6163,11 +6770,7 @@ var getInnerDivStyle = (props) => {
   return noStyle;
 };
 function getDefaultWidthAndHeight(_ref2) {
-  var {
-    width,
-    height,
-    aspect
-  } = _ref2;
+  var { width, height, aspect } = _ref2;
   var calculatedWidth = width;
   var calculatedHeight = height;
   if (calculatedWidth === void 0 && calculatedHeight === void 0) {
@@ -6180,41 +6783,62 @@ function getDefaultWidthAndHeight(_ref2) {
   }
   return {
     width: calculatedWidth,
-    height: calculatedHeight
+    height: calculatedHeight,
   };
 }
 function _extends$i() {
-  return _extends$i = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$i.apply(null, arguments);
+  return (
+    (_extends$i = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$i.apply(null, arguments)
+  );
 }
 function ownKeys$v(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$v(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$v(Object(t), true).forEach(function(r2) {
-      _defineProperty$x(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$v(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$v(Object(t), true).forEach(function (r2) {
+          _defineProperty$x(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$v(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$x(e, r, t) {
-  return (r = _toPropertyKey$x(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$x(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$x(t) {
   var i = _toPrimitive$x(t, "string");
@@ -6230,26 +6854,31 @@ function _toPrimitive$x(t, r) {
   }
   return ("string" === r ? String : Number)(t);
 }
-var ResponsiveContainerContext = /* @__PURE__ */ reactExports.createContext(defaultResponsiveContainerProps.initialDimension);
+var ResponsiveContainerContext = /* @__PURE__ */ reactExports.createContext(
+  defaultResponsiveContainerProps.initialDimension,
+);
 function isAcceptableSize(size) {
   return isPositiveNumber(size.width) && isPositiveNumber(size.height);
 }
 function ResponsiveContainerContextProvider(_ref2) {
-  var {
-    children,
-    width,
-    height
-  } = _ref2;
-  var size = reactExports.useMemo(() => ({
-    width,
-    height
-  }), [width, height]);
+  var { children, width, height } = _ref2;
+  var size = reactExports.useMemo(
+    () => ({
+      width,
+      height,
+    }),
+    [width, height],
+  );
   if (!isAcceptableSize(size)) {
     return null;
   }
-  return /* @__PURE__ */ reactExports.createElement(ResponsiveContainerContext.Provider, {
-    value: size
-  }, children);
+  return /* @__PURE__ */ reactExports.createElement(
+    ResponsiveContainerContext.Provider,
+    {
+      value: size,
+    },
+    children,
+  );
 }
 var useResponsiveContainerContext = () => reactExports.useContext(ResponsiveContainerContext);
 var SizeDetectorContainer = /* @__PURE__ */ reactExports.forwardRef((_ref2, ref) => {
@@ -6270,7 +6899,7 @@ var SizeDetectorContainer = /* @__PURE__ */ reactExports.forwardRef((_ref2, ref)
     id,
     className,
     onResize,
-    style = {}
+    style = {},
   } = _ref2;
   var containerRef = reactExports.useRef(null);
   var onResizeRef = reactExports.useRef();
@@ -6278,18 +6907,21 @@ var SizeDetectorContainer = /* @__PURE__ */ reactExports.forwardRef((_ref2, ref)
   reactExports.useImperativeHandle(ref, () => containerRef.current);
   var [sizes, setSizes] = reactExports.useState({
     containerWidth: initialDimension.width,
-    containerHeight: initialDimension.height
+    containerHeight: initialDimension.height,
   });
   var setContainerSize = reactExports.useCallback((newWidth, newHeight) => {
     setSizes((prevState) => {
       var roundedWidth = Math.round(newWidth);
       var roundedHeight = Math.round(newHeight);
-      if (prevState.containerWidth === roundedWidth && prevState.containerHeight === roundedHeight) {
+      if (
+        prevState.containerWidth === roundedWidth &&
+        prevState.containerHeight === roundedHeight
+      ) {
         return prevState;
       }
       return {
         containerWidth: roundedWidth,
-        containerHeight: roundedHeight
+        containerHeight: roundedHeight,
       };
     });
   }, []);
@@ -6303,99 +6935,125 @@ var SizeDetectorContainer = /* @__PURE__ */ reactExports.forwardRef((_ref2, ref)
       if (entry == null) {
         return;
       }
-      var {
-        width: containerWidth3,
-        height: containerHeight3
-      } = entry.contentRect;
+      var { width: containerWidth3, height: containerHeight3 } = entry.contentRect;
       setContainerSize(containerWidth3, containerHeight3);
-      (_onResizeRef$current = onResizeRef.current) === null || _onResizeRef$current === void 0 || _onResizeRef$current.call(onResizeRef, containerWidth3, containerHeight3);
+      (_onResizeRef$current = onResizeRef.current) === null ||
+        _onResizeRef$current === void 0 ||
+        _onResizeRef$current.call(onResizeRef, containerWidth3, containerHeight3);
     };
     if (debounce2 > 0) {
       callback = throttle(callback, debounce2, {
         trailing: true,
-        leading: false
+        leading: false,
       });
     }
     var observer = new ResizeObserver(callback);
-    var {
-      width: containerWidth2,
-      height: containerHeight2
-    } = containerRef.current.getBoundingClientRect();
+    var { width: containerWidth2, height: containerHeight2 } =
+      containerRef.current.getBoundingClientRect();
     setContainerSize(containerWidth2, containerHeight2);
     observer.observe(containerRef.current);
     return () => {
       observer.disconnect();
     };
   }, [setContainerSize, debounce2]);
-  var {
-    containerWidth,
-    containerHeight
-  } = sizes;
+  var { containerWidth, containerHeight } = sizes;
   warn(!aspect || aspect > 0, "The aspect(%s) must be greater than zero.", aspect);
-  var {
-    calculatedWidth,
-    calculatedHeight
-  } = calculateChartDimensions(containerWidth, containerHeight, {
-    width,
-    height,
-    aspect,
-    maxHeight
-  });
-  warn(calculatedWidth != null && calculatedWidth > 0 || calculatedHeight != null && calculatedHeight > 0, "The width(%s) and height(%s) of chart should be greater than 0,\n       please check the style of container, or the props width(%s) and height(%s),\n       or add a minWidth(%s) or minHeight(%s) or use aspect(%s) to control the\n       height and width.", calculatedWidth, calculatedHeight, width, height, minWidth, minHeight, aspect);
-  return /* @__PURE__ */ reactExports.createElement("div", {
-    id: id ? "".concat(id) : void 0,
-    className: clsx("recharts-responsive-container", className),
-    style: _objectSpread$v(_objectSpread$v({}, style), {}, {
+  var { calculatedWidth, calculatedHeight } = calculateChartDimensions(
+    containerWidth,
+    containerHeight,
+    {
       width,
       height,
-      minWidth,
-      minHeight,
-      maxHeight
-    }),
-    ref: containerRef
-  }, /* @__PURE__ */ reactExports.createElement("div", {
-    style: getInnerDivStyle({
-      width,
-      height
-    })
-  }, /* @__PURE__ */ reactExports.createElement(ResponsiveContainerContextProvider, {
-    width: calculatedWidth,
-    height: calculatedHeight
-  }, children)));
+      aspect,
+      maxHeight,
+    },
+  );
+  warn(
+    (calculatedWidth != null && calculatedWidth > 0) ||
+      (calculatedHeight != null && calculatedHeight > 0),
+    "The width(%s) and height(%s) of chart should be greater than 0,\n       please check the style of container, or the props width(%s) and height(%s),\n       or add a minWidth(%s) or minHeight(%s) or use aspect(%s) to control the\n       height and width.",
+    calculatedWidth,
+    calculatedHeight,
+    width,
+    height,
+    minWidth,
+    minHeight,
+    aspect,
+  );
+  return /* @__PURE__ */ reactExports.createElement(
+    "div",
+    {
+      id: id ? "".concat(id) : void 0,
+      className: clsx("recharts-responsive-container", className),
+      style: _objectSpread$v(
+        _objectSpread$v({}, style),
+        {},
+        {
+          width,
+          height,
+          minWidth,
+          minHeight,
+          maxHeight,
+        },
+      ),
+      ref: containerRef,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      "div",
+      {
+        style: getInnerDivStyle({
+          width,
+          height,
+        }),
+      },
+      /* @__PURE__ */ reactExports.createElement(
+        ResponsiveContainerContextProvider,
+        {
+          width: calculatedWidth,
+          height: calculatedHeight,
+        },
+        children,
+      ),
+    ),
+  );
 });
 var ResponsiveContainer = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   var responsiveContainerContext = useResponsiveContainerContext();
-  if (isPositiveNumber(responsiveContainerContext.width) && isPositiveNumber(responsiveContainerContext.height)) {
+  if (
+    isPositiveNumber(responsiveContainerContext.width) &&
+    isPositiveNumber(responsiveContainerContext.height)
+  ) {
     return props.children;
   }
-  var {
-    width,
-    height
-  } = getDefaultWidthAndHeight({
+  var { width, height } = getDefaultWidthAndHeight({
     width: props.width,
     height: props.height,
-    aspect: props.aspect
+    aspect: props.aspect,
   });
-  var {
-    calculatedWidth,
-    calculatedHeight
-  } = calculateChartDimensions(void 0, void 0, {
+  var { calculatedWidth, calculatedHeight } = calculateChartDimensions(void 0, void 0, {
     width,
     height,
     aspect: props.aspect,
-    maxHeight: props.maxHeight
+    maxHeight: props.maxHeight,
   });
   if (isNumber(calculatedWidth) && isNumber(calculatedHeight)) {
-    return /* @__PURE__ */ reactExports.createElement(ResponsiveContainerContextProvider, {
-      width: calculatedWidth,
-      height: calculatedHeight
-    }, props.children);
+    return /* @__PURE__ */ reactExports.createElement(
+      ResponsiveContainerContextProvider,
+      {
+        width: calculatedWidth,
+        height: calculatedHeight,
+      },
+      props.children,
+    );
   }
-  return /* @__PURE__ */ reactExports.createElement(SizeDetectorContainer, _extends$i({}, props, {
-    width,
-    height,
-    ref
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    SizeDetectorContainer,
+    _extends$i({}, props, {
+      width,
+      height,
+      ref,
+    }),
+  );
 });
 function cartesianViewBoxToTrapezoid(box) {
   if (!box) {
@@ -6407,7 +7065,7 @@ function cartesianViewBoxToTrapezoid(box) {
     upperWidth: "upperWidth" in box ? box.upperWidth : box.width,
     lowerWidth: "lowerWidth" in box ? box.lowerWidth : box.width,
     width: box.width,
-    height: box.height
+    height: box.height,
   };
 }
 var useViewBox = () => {
@@ -6415,7 +7073,10 @@ var useViewBox = () => {
   var panorama = useIsPanorama();
   var rootViewBox = useAppSelector(selectChartViewBox);
   var brushDimensions = useAppSelector(selectBrushDimensions);
-  var brushPadding = (_useAppSelector = useAppSelector(selectBrushSettings)) === null || _useAppSelector === void 0 ? void 0 : _useAppSelector.padding;
+  var brushPadding =
+    (_useAppSelector = useAppSelector(selectBrushSettings)) === null || _useAppSelector === void 0
+      ? void 0
+      : _useAppSelector.padding;
   if (!panorama || !brushDimensions || !brushPadding) {
     return rootViewBox;
   }
@@ -6423,7 +7084,7 @@ var useViewBox = () => {
     width: brushDimensions.width - brushPadding.left - brushPadding.right,
     height: brushDimensions.height - brushPadding.top - brushPadding.bottom,
     x: brushPadding.left,
-    y: brushPadding.top
+    y: brushPadding.top,
   };
 };
 var manyComponentsThrowErrorsIfOffsetIsUndefined = {
@@ -6433,11 +7094,14 @@ var manyComponentsThrowErrorsIfOffsetIsUndefined = {
   right: 0,
   width: 0,
   height: 0,
-  brushBottom: 0
+  brushBottom: 0,
 };
 var useOffsetInternal = () => {
   var _useAppSelector2;
-  return (_useAppSelector2 = useAppSelector(selectChartOffsetInternal)) !== null && _useAppSelector2 !== void 0 ? _useAppSelector2 : manyComponentsThrowErrorsIfOffsetIsUndefined;
+  return (_useAppSelector2 = useAppSelector(selectChartOffsetInternal)) !== null &&
+    _useAppSelector2 !== void 0
+    ? _useAppSelector2
+    : manyComponentsThrowErrorsIfOffsetIsUndefined;
 };
 var useChartWidth = () => {
   return useAppSelector(selectChartWidth);
@@ -6468,23 +7132,28 @@ var useIsInChartContext = () => {
 var ReportChartSize = (props) => {
   var dispatch = useAppDispatch();
   var isPanorama = useIsPanorama();
-  var {
-    width: widthFromProps,
-    height: heightFromProps
-  } = props;
+  var { width: widthFromProps, height: heightFromProps } = props;
   var responsiveContainerCalculations = useResponsiveContainerContext();
   var width = widthFromProps;
   var height = heightFromProps;
   if (responsiveContainerCalculations) {
-    width = responsiveContainerCalculations.width > 0 ? responsiveContainerCalculations.width : widthFromProps;
-    height = responsiveContainerCalculations.height > 0 ? responsiveContainerCalculations.height : heightFromProps;
+    width =
+      responsiveContainerCalculations.width > 0
+        ? responsiveContainerCalculations.width
+        : widthFromProps;
+    height =
+      responsiveContainerCalculations.height > 0
+        ? responsiveContainerCalculations.height
+        : heightFromProps;
   }
   reactExports.useEffect(() => {
     if (!isPanorama && isPositiveNumber(width) && isPositiveNumber(height)) {
-      dispatch(setChartSize({
-        width,
-        height
-      }));
+      dispatch(
+        setChartSize({
+          width,
+          height,
+        }),
+      );
     }
   }, [dispatch, isPanorama, width, height]);
   return null;
@@ -6493,32 +7162,32 @@ var NOTHING = /* @__PURE__ */ Symbol.for("immer-nothing");
 var DRAFTABLE = /* @__PURE__ */ Symbol.for("immer-draftable");
 var DRAFT_STATE = /* @__PURE__ */ Symbol.for("immer-state");
 function die(error, ...args) {
-  throw new Error(
-    `[Immer] minified error nr: ${error}. Full error at: https://bit.ly/3cXEKWf`
-  );
+  throw new Error(`[Immer] minified error nr: ${error}. Full error at: https://bit.ly/3cXEKWf`);
 }
 var getPrototypeOf = Object.getPrototypeOf;
 function isDraft(value) {
   return !!value && !!value[DRAFT_STATE];
 }
 function isDraftable(value) {
-  if (!value)
-    return false;
-  return isPlainObject(value) || Array.isArray(value) || !!value[DRAFTABLE] || !!value.constructor?.[DRAFTABLE] || isMap(value) || isSet(value);
+  if (!value) return false;
+  return (
+    isPlainObject(value) ||
+    Array.isArray(value) ||
+    !!value[DRAFTABLE] ||
+    !!value.constructor?.[DRAFTABLE] ||
+    isMap(value) ||
+    isSet(value)
+  );
 }
 var objectCtorString = Object.prototype.constructor.toString();
 var cachedCtorStrings = /* @__PURE__ */ new WeakMap();
 function isPlainObject(value) {
-  if (!value || typeof value !== "object")
-    return false;
+  if (!value || typeof value !== "object") return false;
   const proto = Object.getPrototypeOf(value);
-  if (proto === null || proto === Object.prototype)
-    return true;
+  if (proto === null || proto === Object.prototype) return true;
   const Ctor = Object.hasOwnProperty.call(proto, "constructor") && proto.constructor;
-  if (Ctor === Object)
-    return true;
-  if (typeof Ctor !== "function")
-    return false;
+  if (Ctor === Object) return true;
+  if (typeof Ctor !== "function") return false;
   let ctorString = cachedCtorStrings.get(Ctor);
   if (ctorString === void 0) {
     ctorString = Function.toString.call(Ctor);
@@ -6541,16 +7210,16 @@ function getArchtype(thing) {
   return state ? state.type_ : Array.isArray(thing) ? 1 : isMap(thing) ? 2 : isSet(thing) ? 3 : 0;
 }
 function has(thing, prop) {
-  return getArchtype(thing) === 2 ? thing.has(prop) : Object.prototype.hasOwnProperty.call(thing, prop);
+  return getArchtype(thing) === 2
+    ? thing.has(prop)
+    : Object.prototype.hasOwnProperty.call(thing, prop);
 }
 function set(thing, propOrOldValue, value) {
   const t = getArchtype(thing);
-  if (t === 2)
-    thing.set(propOrOldValue, value);
+  if (t === 2) thing.set(propOrOldValue, value);
   else if (t === 3) {
     thing.add(value);
-  } else
-    thing[propOrOldValue] = value;
+  } else thing[propOrOldValue] = value;
 }
 function is$1(x2, y2) {
   if (x2 === y2) {
@@ -6575,10 +7244,9 @@ function shallowCopy(base, strict) {
   if (isSet(base)) {
     return new Set(base);
   }
-  if (Array.isArray(base))
-    return Array.prototype.slice.call(base);
+  if (Array.isArray(base)) return Array.prototype.slice.call(base);
   const isPlain = isPlainObject(base);
-  if (strict === true || strict === "class_only" && !isPlain) {
+  if (strict === true || (strict === "class_only" && !isPlain)) {
     const descriptors = Object.getOwnPropertyDescriptors(base);
     delete descriptors[DRAFT_STATE];
     let keys = Reflect.ownKeys(descriptors);
@@ -6595,7 +7263,7 @@ function shallowCopy(base, strict) {
           writable: true,
           // could live with !!desc.set as well here...
           enumerable: desc.enumerable,
-          value: base[key]
+          value: base[key],
         };
     }
     return Object.create(getPrototypeOf(base), descriptors);
@@ -6609,30 +7277,27 @@ function shallowCopy(base, strict) {
   }
 }
 function freeze(obj, deep = false) {
-  if (isFrozen(obj) || isDraft(obj) || !isDraftable(obj))
-    return obj;
+  if (isFrozen(obj) || isDraft(obj) || !isDraftable(obj)) return obj;
   if (getArchtype(obj) > 1) {
     Object.defineProperties(obj, {
       set: dontMutateMethodOverride,
       add: dontMutateMethodOverride,
       clear: dontMutateMethodOverride,
-      delete: dontMutateMethodOverride
+      delete: dontMutateMethodOverride,
     });
   }
   Object.freeze(obj);
-  if (deep)
-    Object.values(obj).forEach((value) => freeze(value, true));
+  if (deep) Object.values(obj).forEach((value) => freeze(value, true));
   return obj;
 }
 function dontMutateFrozenCollections() {
   die(2);
 }
 var dontMutateMethodOverride = {
-  value: dontMutateFrozenCollections
+  value: dontMutateFrozenCollections,
 };
 function isFrozen(obj) {
-  if (obj === null || typeof obj !== "object")
-    return true;
+  if (obj === null || typeof obj !== "object") return true;
   return Object.isFrozen(obj);
 }
 var plugins = {};
@@ -6655,7 +7320,7 @@ function createScope(parent_, immer_) {
     // Whenever the modified draft contains a draft from another scope, we
     // need to prevent auto-freezing so the unowned draft can be finalized.
     canAutoFreeze_: true,
-    unfinalizedDrafts_: 0
+    unfinalizedDrafts_: 0,
   };
 }
 function usePatchesInScope(scope, patchListener) {
@@ -6677,14 +7342,12 @@ function leaveScope(scope) {
   }
 }
 function enterScope(immer2) {
-  return currentScope = createScope(currentScope, immer2);
+  return (currentScope = createScope(currentScope, immer2));
 }
 function revokeDraft(draft) {
   const state = draft[DRAFT_STATE];
-  if (state.type_ === 0 || state.type_ === 1)
-    state.revoke_();
-  else
-    state.revoked_ = true;
+  if (state.type_ === 0 || state.type_ === 1) state.revoke_();
+  else state.revoked_ = true;
 }
 function processResult(result, scope) {
   scope.unfinalizedDrafts_ = scope.drafts_.length;
@@ -6697,15 +7360,14 @@ function processResult(result, scope) {
     }
     if (isDraftable(result)) {
       result = finalize(scope, result);
-      if (!scope.parent_)
-        maybeFreeze(scope, result);
+      if (!scope.parent_) maybeFreeze(scope, result);
     }
     if (scope.patches_) {
       getPlugin("Patches").generateReplacementPatches_(
         baseDraft[DRAFT_STATE].base_,
         result,
         scope.patches_,
-        scope.inversePatches_
+        scope.inversePatches_,
       );
     }
   } else {
@@ -6718,20 +7380,18 @@ function processResult(result, scope) {
   return result !== NOTHING ? result : void 0;
 }
 function finalize(rootScope, value, path) {
-  if (isFrozen(value))
-    return value;
+  if (isFrozen(value)) return value;
   const useStrictIteration = rootScope.immer_.shouldUseStrictIteration();
   const state = value[DRAFT_STATE];
   if (!state) {
     each(
       value,
       (key, childValue) => finalizeProperty(rootScope, state, value, key, childValue, path),
-      useStrictIteration
+      useStrictIteration,
     );
     return value;
   }
-  if (state.scope_ !== rootScope)
-    return value;
+  if (state.scope_ !== rootScope) return value;
   if (!state.modified_) {
     maybeFreeze(rootScope, state.base_, true);
     return state.base_;
@@ -6749,16 +7409,9 @@ function finalize(rootScope, value, path) {
     }
     each(
       resultEach,
-      (key, childValue) => finalizeProperty(
-        rootScope,
-        state,
-        result,
-        key,
-        childValue,
-        path,
-        isSet2
-      ),
-      useStrictIteration
+      (key, childValue) =>
+        finalizeProperty(rootScope, state, result, key, childValue, path, isSet2),
+      useStrictIteration,
     );
     maybeFreeze(rootScope, result, false);
     if (path && rootScope.patches_) {
@@ -6766,13 +7419,21 @@ function finalize(rootScope, value, path) {
         state,
         path,
         rootScope.patches_,
-        rootScope.inversePatches_
+        rootScope.inversePatches_,
       );
     }
   }
   return state.copy_;
 }
-function finalizeProperty(rootScope, parentState, targetObject, prop, childValue, rootPath, targetIsSet) {
+function finalizeProperty(
+  rootScope,
+  parentState,
+  targetObject,
+  prop,
+  childValue,
+  rootPath,
+  targetIsSet,
+) {
   if (childValue == null) {
     return;
   }
@@ -6784,14 +7445,18 @@ function finalizeProperty(rootScope, parentState, targetObject, prop, childValue
     return;
   }
   if (isDraft(childValue)) {
-    const path = rootPath && parentState && parentState.type_ !== 3 && // Set objects are atomic since they have no keys.
-    !has(parentState.assigned_, prop) ? rootPath.concat(prop) : void 0;
+    const path =
+      rootPath &&
+      parentState &&
+      parentState.type_ !== 3 && // Set objects are atomic since they have no keys.
+      !has(parentState.assigned_, prop)
+        ? rootPath.concat(prop)
+        : void 0;
     const res = finalize(rootScope, childValue, path);
     set(targetObject, prop, res);
     if (isDraft(res)) {
       rootScope.canAutoFreeze_ = false;
-    } else
-      return;
+    } else return;
   } else if (targetIsSet) {
     targetObject.add(childValue);
   }
@@ -6799,11 +7464,22 @@ function finalizeProperty(rootScope, parentState, targetObject, prop, childValue
     if (!rootScope.immer_.autoFreeze_ && rootScope.unfinalizedDrafts_ < 1) {
       return;
     }
-    if (parentState && parentState.base_ && parentState.base_[prop] === childValue && childIsFrozen) {
+    if (
+      parentState &&
+      parentState.base_ &&
+      parentState.base_[prop] === childValue &&
+      childIsFrozen
+    ) {
       return;
     }
     finalize(rootScope, childValue);
-    if ((!parentState || !parentState.scope_.parent_) && typeof prop !== "symbol" && (isMap(targetObject) ? targetObject.has(prop) : Object.prototype.propertyIsEnumerable.call(targetObject, prop)))
+    if (
+      (!parentState || !parentState.scope_.parent_) &&
+      typeof prop !== "symbol" &&
+      (isMap(targetObject)
+        ? targetObject.has(prop)
+        : Object.prototype.propertyIsEnumerable.call(targetObject, prop))
+    )
       maybeFreeze(rootScope, childValue);
   }
 }
@@ -6835,7 +7511,7 @@ function createProxyProxy(base, parent) {
     copy_: null,
     // Called by the `produce` function.
     revoke_: null,
-    isManual_: false
+    isManual_: false,
   };
   let target = state;
   let traps = objectTraps;
@@ -6850,8 +7526,7 @@ function createProxyProxy(base, parent) {
 }
 var objectTraps = {
   get(state, prop) {
-    if (prop === DRAFT_STATE)
-      return state;
+    if (prop === DRAFT_STATE) return state;
     const source = latest(state);
     if (!has(source, prop)) {
       return readPropFromProto(state, source, prop);
@@ -6862,7 +7537,7 @@ var objectTraps = {
     }
     if (value === peek(state.base_, prop)) {
       prepareCopy(state);
-      return state.copy_[prop] = createProxy(value, state);
+      return (state.copy_[prop] = createProxy(value, state));
     }
     return value;
   },
@@ -6886,14 +7561,15 @@ var objectTraps = {
         state.assigned_[prop] = false;
         return true;
       }
-      if (is$1(value, current2) && (value !== void 0 || has(state.base_, prop)))
-        return true;
+      if (is$1(value, current2) && (value !== void 0 || has(state.base_, prop))) return true;
       prepareCopy(state);
       markChanged(state);
     }
-    if (state.copy_[prop] === value && // special case: handle new props with value 'undefined'
-    (value !== void 0 || prop in state.copy_) || // special case: NaN
-    Number.isNaN(value) && Number.isNaN(state.copy_[prop]))
+    if (
+      (state.copy_[prop] === value && // special case: handle new props with value 'undefined'
+        (value !== void 0 || prop in state.copy_)) || // special case: NaN
+      (Number.isNaN(value) && Number.isNaN(state.copy_[prop]))
+    )
       return true;
     state.copy_[prop] = value;
     state.assigned_[prop] = true;
@@ -6917,13 +7593,12 @@ var objectTraps = {
   getOwnPropertyDescriptor(state, prop) {
     const owner = latest(state);
     const desc = Reflect.getOwnPropertyDescriptor(owner, prop);
-    if (!desc)
-      return desc;
+    if (!desc) return desc;
     return {
       writable: true,
       configurable: state.type_ !== 1 || prop !== "length",
       enumerable: desc.enumerable,
-      value: owner[prop]
+      value: owner[prop],
     };
   },
   defineProperty() {
@@ -6934,19 +7609,19 @@ var objectTraps = {
   },
   setPrototypeOf() {
     die(12);
-  }
+  },
 };
 var arrayTraps = {};
 each(objectTraps, (key, fn) => {
-  arrayTraps[key] = function() {
+  arrayTraps[key] = function () {
     arguments[0] = arguments[0][0];
     return fn.apply(this, arguments);
   };
 });
-arrayTraps.deleteProperty = function(state, prop) {
+arrayTraps.deleteProperty = function (state, prop) {
   return arrayTraps.set.call(this, state, prop, void 0);
 };
-arrayTraps.set = function(state, prop, value) {
+arrayTraps.set = function (state, prop, value) {
   return objectTraps.set.call(this, state[0], prop, value, state[0]);
 };
 function peek(draft, prop) {
@@ -6956,20 +7631,20 @@ function peek(draft, prop) {
 }
 function readPropFromProto(state, source, prop) {
   const desc = getDescriptorFromProto(source, prop);
-  return desc ? `value` in desc ? desc.value : (
-    // This is a very special case, if the prop is a getter defined by the
-    // prototype, we should invoke it with the draft as context!
-    desc.get?.call(state.draft_)
-  ) : void 0;
+  return desc
+    ? `value` in desc
+      ? desc.value
+      : // This is a very special case, if the prop is a getter defined by the
+        // prototype, we should invoke it with the draft as context!
+        desc.get?.call(state.draft_)
+    : void 0;
 }
 function getDescriptorFromProto(source, prop) {
-  if (!(prop in source))
-    return void 0;
+  if (!(prop in source)) return void 0;
   let proto = getPrototypeOf(source);
   while (proto) {
     const desc = Object.getOwnPropertyDescriptor(proto, prop);
-    if (desc)
-      return desc;
+    if (desc) return desc;
     proto = getPrototypeOf(proto);
   }
   return void 0;
@@ -6984,10 +7659,7 @@ function markChanged(state) {
 }
 function prepareCopy(state) {
   if (!state.copy_) {
-    state.copy_ = shallowCopy(
-      state.base_,
-      state.scope_.immer_.useStrictShallowCopy_
-    );
+    state.copy_ = shallowCopy(state.base_, state.scope_.immer_.useStrictShallowCopy_);
   }
 }
 var Immer22 = class {
@@ -7004,10 +7676,8 @@ var Immer22 = class {
           return self.produce(base2, (draft) => recipe.call(this, draft, ...args));
         };
       }
-      if (typeof recipe !== "function")
-        die(6);
-      if (patchListener !== void 0 && typeof patchListener !== "function")
-        die(7);
+      if (typeof recipe !== "function") die(6);
+      if (patchListener !== void 0 && typeof patchListener !== "function") die(7);
       let result;
       if (isDraftable(base)) {
         const scope = enterScope(this);
@@ -7017,21 +7687,16 @@ var Immer22 = class {
           result = recipe(proxy);
           hasError = false;
         } finally {
-          if (hasError)
-            revokeScope(scope);
-          else
-            leaveScope(scope);
+          if (hasError) revokeScope(scope);
+          else leaveScope(scope);
         }
         usePatchesInScope(scope, patchListener);
         return processResult(result, scope);
       } else if (!base || typeof base !== "object") {
         result = recipe(base);
-        if (result === void 0)
-          result = base;
-        if (result === NOTHING)
-          result = void 0;
-        if (this.autoFreeze_)
-          freeze(result, true);
+        if (result === void 0) result = base;
+        if (result === NOTHING) result = void 0;
+        if (this.autoFreeze_) freeze(result, true);
         if (patchListener) {
           const p = [];
           const ip = [];
@@ -7039,8 +7704,7 @@ var Immer22 = class {
           patchListener(p, ip);
         }
         return result;
-      } else
-        die(1, base);
+      } else die(1, base);
     };
     this.produceWithPatches = (base, recipe) => {
       if (typeof base === "function") {
@@ -7053,18 +7717,15 @@ var Immer22 = class {
       });
       return [result, patches, inversePatches];
     };
-    if (typeof config2?.autoFreeze === "boolean")
-      this.setAutoFreeze(config2.autoFreeze);
+    if (typeof config2?.autoFreeze === "boolean") this.setAutoFreeze(config2.autoFreeze);
     if (typeof config2?.useStrictShallowCopy === "boolean")
       this.setUseStrictShallowCopy(config2.useStrictShallowCopy);
     if (typeof config2?.useStrictIteration === "boolean")
       this.setUseStrictIteration(config2.useStrictIteration);
   }
   createDraft(base) {
-    if (!isDraftable(base))
-      die(8);
-    if (isDraft(base))
-      base = current(base);
+    if (!isDraftable(base)) die(8);
+    if (isDraft(base)) base = current(base);
     const scope = enterScope(this);
     const proxy = createProxy(base, void 0);
     proxy[DRAFT_STATE].isManual_ = true;
@@ -7073,8 +7734,7 @@ var Immer22 = class {
   }
   finishDraft(draft, patchListener) {
     const state = draft && draft[DRAFT_STATE];
-    if (!state || !state.isManual_)
-      die(9);
+    if (!state || !state.isManual_) die(9);
     const { scope_: scope } = state;
     usePatchesInScope(scope, patchListener);
     return processResult(void 0, scope);
@@ -7123,32 +7783,30 @@ var Immer22 = class {
     if (isDraft(base)) {
       return applyPatchesImpl(base, patches);
     }
-    return this.produce(
-      base,
-      (draft) => applyPatchesImpl(draft, patches)
-    );
+    return this.produce(base, (draft) => applyPatchesImpl(draft, patches));
   }
 };
 function createProxy(value, parent) {
-  const draft = isMap(value) ? getPlugin("MapSet").proxyMap_(value, parent) : isSet(value) ? getPlugin("MapSet").proxySet_(value, parent) : createProxyProxy(value, parent);
+  const draft = isMap(value)
+    ? getPlugin("MapSet").proxyMap_(value, parent)
+    : isSet(value)
+      ? getPlugin("MapSet").proxySet_(value, parent)
+      : createProxyProxy(value, parent);
   const scope = parent ? parent.scope_ : getCurrentScope();
   scope.drafts_.push(draft);
   return draft;
 }
 function current(value) {
-  if (!isDraft(value))
-    die(10, value);
+  if (!isDraft(value)) die(10, value);
   return currentImpl(value);
 }
 function currentImpl(value) {
-  if (!isDraftable(value) || isFrozen(value))
-    return value;
+  if (!isDraftable(value) || isFrozen(value)) return value;
   const state = value[DRAFT_STATE];
   let copy2;
   let strict = true;
   if (state) {
-    if (!state.modified_)
-      return state.base_;
+    if (!state.modified_) return state.base_;
     state.finalized_ = true;
     copy2 = shallowCopy(value, state.scope_.immer_.useStrictShallowCopy_);
     strict = state.scope_.immer_.shouldUseStrictIteration();
@@ -7160,7 +7818,7 @@ function currentImpl(value) {
     (key, childValue) => {
       set(copy2, key, currentImpl(childValue));
     },
-    strict
+    strict,
   );
   if (state) {
     state.finalized_ = false;
@@ -7177,13 +7835,13 @@ var initialState$c = {
     layout: "horizontal",
     align: "center",
     verticalAlign: "middle",
-    itemSorter: "value"
+    itemSorter: "value",
   },
   size: {
     width: 0,
-    height: 0
+    height: 0,
   },
-  payload: []
+  payload: [],
 };
 var legendSlice = createSlice({
   name: "legend",
@@ -7203,20 +7861,17 @@ var legendSlice = createSlice({
       reducer(state, action) {
         state.payload.push(castDraft(action.payload));
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     replaceLegendPayload: {
       reducer(state, action) {
-        var {
-          prev,
-          next
-        } = action.payload;
+        var { prev, next } = action.payload;
         var index = current$1(state).payload.indexOf(castDraft(prev));
         if (index > -1) {
           state.payload[index] = castDraft(next);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     removeLegendPayload: {
       reducer(state, action) {
@@ -7225,37 +7880,49 @@ var legendSlice = createSlice({
           state.payload.splice(index, 1);
         }
       },
-      prepare: prepareAutoBatched()
-    }
-  }
+      prepare: prepareAutoBatched(),
+    },
+  },
 });
 var {
   setLegendSize,
   setLegendSettings,
   addLegendPayload,
   replaceLegendPayload,
-  removeLegendPayload
+  removeLegendPayload,
 } = legendSlice.actions;
 var legendReducer = legendSlice.reducer;
 var withSelector = { exports: {} };
 var useSyncExternalStoreWithSelector_production = {};
 var hasRequiredUseSyncExternalStoreWithSelector_production;
 function requireUseSyncExternalStoreWithSelector_production() {
-  if (hasRequiredUseSyncExternalStoreWithSelector_production) return useSyncExternalStoreWithSelector_production;
+  if (hasRequiredUseSyncExternalStoreWithSelector_production)
+    return useSyncExternalStoreWithSelector_production;
   hasRequiredUseSyncExternalStoreWithSelector_production = 1;
   var React2 = requireReact();
   function is2(x2, y2) {
-    return x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
+    return (x2 === y2 && (0 !== x2 || 1 / x2 === 1 / y2)) || (x2 !== x2 && y2 !== y2);
   }
-  var objectIs = "function" === typeof Object.is ? Object.is : is2, useSyncExternalStore = React2.useSyncExternalStore, useRef = React2.useRef, useEffect = React2.useEffect, useMemo = React2.useMemo, useDebugValue = React2.useDebugValue;
-  useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = function(subscribe, getSnapshot, getServerSnapshot, selector, isEqual) {
+  var objectIs = "function" === typeof Object.is ? Object.is : is2,
+    useSyncExternalStore = React2.useSyncExternalStore,
+    useRef = React2.useRef,
+    useEffect = React2.useEffect,
+    useMemo = React2.useMemo,
+    useDebugValue = React2.useDebugValue;
+  useSyncExternalStoreWithSelector_production.useSyncExternalStoreWithSelector = function (
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+    selector,
+    isEqual,
+  ) {
     var instRef = useRef(null);
     if (null === instRef.current) {
       var inst = { hasValue: false, value: null };
       instRef.current = inst;
     } else inst = instRef.current;
     instRef = useMemo(
-      function() {
+      function () {
         function memoizedSelector(nextSnapshot) {
           if (!hasMemo) {
             hasMemo = true;
@@ -7264,37 +7931,42 @@ function requireUseSyncExternalStoreWithSelector_production() {
             if (void 0 !== isEqual && inst.hasValue) {
               var currentSelection = inst.value;
               if (isEqual(currentSelection, nextSnapshot))
-                return memoizedSelection = currentSelection;
+                return (memoizedSelection = currentSelection);
             }
-            return memoizedSelection = nextSnapshot;
+            return (memoizedSelection = nextSnapshot);
           }
           currentSelection = memoizedSelection;
           if (objectIs(memoizedSnapshot, nextSnapshot)) return currentSelection;
           var nextSelection = selector(nextSnapshot);
           if (void 0 !== isEqual && isEqual(currentSelection, nextSelection))
-            return memoizedSnapshot = nextSnapshot, currentSelection;
+            return ((memoizedSnapshot = nextSnapshot), currentSelection);
           memoizedSnapshot = nextSnapshot;
-          return memoizedSelection = nextSelection;
+          return (memoizedSelection = nextSelection);
         }
-        var hasMemo = false, memoizedSnapshot, memoizedSelection, maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
+        var hasMemo = false,
+          memoizedSnapshot,
+          memoizedSelection,
+          maybeGetServerSnapshot = void 0 === getServerSnapshot ? null : getServerSnapshot;
         return [
-          function() {
+          function () {
             return memoizedSelector(getSnapshot());
           },
-          null === maybeGetServerSnapshot ? void 0 : function() {
-            return memoizedSelector(maybeGetServerSnapshot());
-          }
+          null === maybeGetServerSnapshot
+            ? void 0
+            : function () {
+                return memoizedSelector(maybeGetServerSnapshot());
+              },
         ];
       },
-      [getSnapshot, getServerSnapshot, selector, isEqual]
+      [getSnapshot, getServerSnapshot, selector, isEqual],
     );
     var value = useSyncExternalStore(subscribe, instRef[0], instRef[1]);
     useEffect(
-      function() {
+      function () {
         inst.hasValue = true;
         inst.value = value;
       },
-      [value]
+      [value],
     );
     useDebugValue(value);
     return value;
@@ -7342,11 +8014,11 @@ function createListenerCollection() {
     },
     subscribe(callback) {
       let isSubscribed = true;
-      const listener2 = last = {
+      const listener2 = (last = {
         callback,
         next: null,
-        prev: last
-      };
+        prev: last,
+      });
       if (listener2.prev) {
         listener2.prev.next = listener2;
       } else {
@@ -7366,13 +8038,12 @@ function createListenerCollection() {
           first = listener2.next;
         }
       };
-    }
+    },
   };
 }
 var nullListeners = {
-  notify() {
-  },
-  get: () => []
+  notify() {},
+  get: () => [],
 };
 function createSubscription(store, parentSub) {
   let unsubscribe;
@@ -7437,15 +8108,22 @@ function createSubscription(store, parentSub) {
     isSubscribed,
     trySubscribe: trySubscribeSelf,
     tryUnsubscribe: tryUnsubscribeSelf,
-    getListeners: () => listeners
+    getListeners: () => listeners,
   };
   return subscription;
 }
-var canUseDOM = () => !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
+var canUseDOM = () =>
+  !!(
+    typeof window !== "undefined" &&
+    typeof window.document !== "undefined" &&
+    typeof window.document.createElement !== "undefined"
+  );
 var isDOM = /* @__PURE__ */ canUseDOM();
-var isRunningInReactNative = () => typeof navigator !== "undefined" && navigator.product === "ReactNative";
+var isRunningInReactNative = () =>
+  typeof navigator !== "undefined" && navigator.product === "ReactNative";
 var isReactNative = /* @__PURE__ */ isRunningInReactNative();
-var getUseIsomorphicLayoutEffect = () => isDOM || isReactNative ? reactExports.useLayoutEffect : reactExports.useEffect;
+var getUseIsomorphicLayoutEffect = () =>
+  isDOM || isReactNative ? reactExports.useLayoutEffect : reactExports.useEffect;
 var useIsomorphicLayoutEffect = /* @__PURE__ */ getUseIsomorphicLayoutEffect();
 function is(x2, y2) {
   if (x2 === y2) {
@@ -7463,25 +8141,27 @@ function shallowEqual(objA, objB) {
   const keysB = Object.keys(objB);
   if (keysA.length !== keysB.length) return false;
   for (let i = 0; i < keysA.length; i++) {
-    if (!Object.prototype.hasOwnProperty.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+    if (
+      !Object.prototype.hasOwnProperty.call(objB, keysA[i]) ||
+      !is(objA[keysA[i]], objB[keysA[i]])
+    ) {
       return false;
     }
   }
   return true;
 }
 var ContextKey = /* @__PURE__ */ Symbol.for(`react-redux-context`);
-var gT = typeof globalThis !== "undefined" ? globalThis : (
-  /* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */
-  {}
-);
+var gT =
+  typeof globalThis !== "undefined"
+    ? globalThis
+    : /* fall back to a per-module scope (pre-8.1 behaviour) if `globalThis` is not available */
+      {};
 function getContext() {
   if (!reactExports.createContext) return {};
-  const contextMap = gT[ContextKey] ??= /* @__PURE__ */ new Map();
+  const contextMap = (gT[ContextKey] ??= /* @__PURE__ */ new Map());
   let realContext = contextMap.get(reactExports.createContext);
   if (!realContext) {
-    realContext = reactExports.createContext(
-      null
-    );
+    realContext = reactExports.createContext(null);
     contextMap.set(reactExports.createContext, realContext);
   }
   return realContext;
@@ -7494,7 +8174,7 @@ function Provider(providerProps) {
     const baseContextValue = {
       store,
       subscription,
-      getServerState: serverState ? () => serverState : void 0
+      getServerState: serverState ? () => serverState : void 0,
     };
     {
       return baseContextValue;
@@ -7514,7 +8194,11 @@ function Provider(providerProps) {
     };
   }, [contextValue, previousState]);
   const Context = context || ReactReduxContext;
-  return /* @__PURE__ */ reactExports.createElement(Context.Provider, { value: contextValue }, children);
+  return /* @__PURE__ */ reactExports.createElement(
+    Context.Provider,
+    { value: contextValue },
+    children,
+  );
 }
 var Provider_default = Provider;
 var propsToShallowCompare = /* @__PURE__ */ new Set([
@@ -7539,14 +8223,14 @@ var propsToShallowCompare = /* @__PURE__ */ new Set([
   "wrapperStyle",
   // radius can be an array of 4 numbers, easy to compare shallowly
   "radius",
-  "throttledEvents"
+  "throttledEvents",
 ]);
 function sameValueZero(x2, y2) {
   if (x2 == null && y2 == null) {
     return true;
   }
   if (typeof x2 === "number" && typeof y2 === "number") {
-    return x2 === y2 || x2 !== x2 && y2 !== y2;
+    return x2 === y2 || (x2 !== x2 && y2 !== y2);
   }
   return x2 === y2;
 }
@@ -7567,37 +8251,58 @@ function propsAreEqual(prevProps, nextProps) {
   return true;
 }
 function _extends$h() {
-  return _extends$h = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$h.apply(null, arguments);
+  return (
+    (_extends$h = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$h.apply(null, arguments)
+  );
 }
 function ownKeys$u(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$u(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$u(Object(t), true).forEach(function(r2) {
-      _defineProperty$w(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$u(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$u(Object(t), true).forEach(function (r2) {
+          _defineProperty$w(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$u(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$w(e, r, t) {
-  return (r = _toPropertyKey$w(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$w(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$w(t) {
   var i = _toPrimitive$w(t, "string");
@@ -7614,7 +8319,9 @@ function _toPrimitive$w(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 function defaultFormatter(value) {
-  return Array.isArray(value) && isNumOrStr(value[0]) && isNumOrStr(value[1]) ? value.join(" ~ ") : value;
+  return Array.isArray(value) && isNumOrStr(value[0]) && isNumOrStr(value[1])
+    ? value.join(" ~ ")
+    : value;
 }
 var defaultDefaultTooltipContentProps = {
   separator: " : ",
@@ -7623,16 +8330,16 @@ var defaultDefaultTooltipContentProps = {
     padding: 10,
     backgroundColor: "#fff",
     border: "1px solid #ccc",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   itemStyle: {
     display: "block",
     paddingTop: 4,
     paddingBottom: 4,
-    color: "#000"
+    color: "#000",
   },
   labelStyle: {},
-  accessibilityLayer: false
+  accessibilityLayer: false,
 };
 function lodashLikeSortBy(array2, itemSorter) {
   if (itemSorter == null) {
@@ -7653,13 +8360,13 @@ var DefaultTooltipContent = (props) => {
     labelClassName,
     label,
     labelFormatter,
-    accessibilityLayer = defaultDefaultTooltipContentProps.accessibilityLayer
+    accessibilityLayer = defaultDefaultTooltipContentProps.accessibilityLayer,
   } = props;
   var renderContent2 = () => {
     if (payload && payload.length) {
       var listStyle = {
         padding: 0,
-        margin: 0
+        margin: 0,
       };
       var sortedPayload = lodashLikeSortBy(payload, itemSorter);
       var items = sortedPayload.map((entry, i) => {
@@ -7667,10 +8374,7 @@ var DefaultTooltipContent = (props) => {
           return null;
         }
         var finalFormatter = entry.formatter || formatter || defaultFormatter;
-        var {
-          value,
-          name
-        } = entry;
+        var { value, name } = entry;
         var finalValue = value;
         var finalName = name;
         if (finalFormatter) {
@@ -7683,34 +8387,76 @@ var DefaultTooltipContent = (props) => {
             return null;
           }
         }
-        var finalItemStyle = _objectSpread$u(_objectSpread$u({}, defaultDefaultTooltipContentProps.itemStyle), {}, {
-          color: entry.color || defaultDefaultTooltipContentProps.itemStyle.color
-        }, itemStyle);
-        return /* @__PURE__ */ reactExports.createElement("li", {
-          className: "recharts-tooltip-item",
-          key: "tooltip-item-".concat(i),
-          style: finalItemStyle
-        }, isNumOrStr(finalName) ? /* @__PURE__ */ reactExports.createElement("span", {
-          className: "recharts-tooltip-item-name"
-        }, finalName) : null, isNumOrStr(finalName) ? /* @__PURE__ */ reactExports.createElement("span", {
-          className: "recharts-tooltip-item-separator"
-        }, separator) : null, /* @__PURE__ */ reactExports.createElement("span", {
-          className: "recharts-tooltip-item-value"
-        }, finalValue), /* @__PURE__ */ reactExports.createElement("span", {
-          className: "recharts-tooltip-item-unit"
-        }, entry.unit || ""));
+        var finalItemStyle = _objectSpread$u(
+          _objectSpread$u({}, defaultDefaultTooltipContentProps.itemStyle),
+          {},
+          {
+            color: entry.color || defaultDefaultTooltipContentProps.itemStyle.color,
+          },
+          itemStyle,
+        );
+        return /* @__PURE__ */ reactExports.createElement(
+          "li",
+          {
+            className: "recharts-tooltip-item",
+            key: "tooltip-item-".concat(i),
+            style: finalItemStyle,
+          },
+          isNumOrStr(finalName)
+            ? /* @__PURE__ */ reactExports.createElement(
+                "span",
+                {
+                  className: "recharts-tooltip-item-name",
+                },
+                finalName,
+              )
+            : null,
+          isNumOrStr(finalName)
+            ? /* @__PURE__ */ reactExports.createElement(
+                "span",
+                {
+                  className: "recharts-tooltip-item-separator",
+                },
+                separator,
+              )
+            : null,
+          /* @__PURE__ */ reactExports.createElement(
+            "span",
+            {
+              className: "recharts-tooltip-item-value",
+            },
+            finalValue,
+          ),
+          /* @__PURE__ */ reactExports.createElement(
+            "span",
+            {
+              className: "recharts-tooltip-item-unit",
+            },
+            entry.unit || "",
+          ),
+        );
       });
-      return /* @__PURE__ */ reactExports.createElement("ul", {
-        className: "recharts-tooltip-item-list",
-        style: listStyle
-      }, items);
+      return /* @__PURE__ */ reactExports.createElement(
+        "ul",
+        {
+          className: "recharts-tooltip-item-list",
+          style: listStyle,
+        },
+        items,
+      );
     }
     return null;
   };
-  var finalStyle = _objectSpread$u(_objectSpread$u({}, defaultDefaultTooltipContentProps.contentStyle), contentStyle);
-  var finalLabelStyle = _objectSpread$u({
-    margin: 0
-  }, labelStyle);
+  var finalStyle = _objectSpread$u(
+    _objectSpread$u({}, defaultDefaultTooltipContentProps.contentStyle),
+    contentStyle,
+  );
+  var finalLabelStyle = _objectSpread$u(
+    {
+      margin: 0,
+    },
+    labelStyle,
+  );
   var hasLabel = !isNullish(label);
   var finalLabel = hasLabel ? label : "";
   var wrapperCN = clsx("recharts-default-tooltip", wrapperClassName);
@@ -7718,33 +8464,47 @@ var DefaultTooltipContent = (props) => {
   if (hasLabel && labelFormatter && payload !== void 0 && payload !== null) {
     finalLabel = labelFormatter(label, payload);
   }
-  var accessibilityAttributes = accessibilityLayer ? {
-    role: "status",
-    "aria-live": "assertive"
-  } : {};
-  return /* @__PURE__ */ reactExports.createElement("div", _extends$h({
-    className: wrapperCN,
-    style: finalStyle
-  }, accessibilityAttributes), /* @__PURE__ */ reactExports.createElement("p", {
-    className: labelCN,
-    style: finalLabelStyle
-  }, /* @__PURE__ */ reactExports.isValidElement(finalLabel) ? finalLabel : "".concat(finalLabel)), renderContent2());
+  var accessibilityAttributes = accessibilityLayer
+    ? {
+        role: "status",
+        "aria-live": "assertive",
+      }
+    : {};
+  return /* @__PURE__ */ reactExports.createElement(
+    "div",
+    _extends$h(
+      {
+        className: wrapperCN,
+        style: finalStyle,
+      },
+      accessibilityAttributes,
+    ),
+    /* @__PURE__ */ reactExports.createElement(
+      "p",
+      {
+        className: labelCN,
+        style: finalLabelStyle,
+      },
+      /* @__PURE__ */ reactExports.isValidElement(finalLabel) ? finalLabel : "".concat(finalLabel),
+    ),
+    renderContent2(),
+  );
 };
 var CSS_CLASS_PREFIX = "recharts-tooltip-wrapper";
 var TOOLTIP_HIDDEN = {
-  visibility: "hidden"
+  visibility: "hidden",
 };
 function getTooltipCSSClassName(_ref2) {
-  var {
-    coordinate,
-    translateX,
-    translateY
-  } = _ref2;
+  var { coordinate, translateX, translateY } = _ref2;
   return clsx(CSS_CLASS_PREFIX, {
-    ["".concat(CSS_CLASS_PREFIX, "-right")]: isNumber(translateX) && coordinate && isNumber(coordinate.x) && translateX >= coordinate.x,
-    ["".concat(CSS_CLASS_PREFIX, "-left")]: isNumber(translateX) && coordinate && isNumber(coordinate.x) && translateX < coordinate.x,
-    ["".concat(CSS_CLASS_PREFIX, "-bottom")]: isNumber(translateY) && coordinate && isNumber(coordinate.y) && translateY >= coordinate.y,
-    ["".concat(CSS_CLASS_PREFIX, "-top")]: isNumber(translateY) && coordinate && isNumber(coordinate.y) && translateY < coordinate.y
+    ["".concat(CSS_CLASS_PREFIX, "-right")]:
+      isNumber(translateX) && coordinate && isNumber(coordinate.x) && translateX >= coordinate.x,
+    ["".concat(CSS_CLASS_PREFIX, "-left")]:
+      isNumber(translateX) && coordinate && isNumber(coordinate.x) && translateX < coordinate.x,
+    ["".concat(CSS_CLASS_PREFIX, "-bottom")]:
+      isNumber(translateY) && coordinate && isNumber(coordinate.y) && translateY >= coordinate.y,
+    ["".concat(CSS_CLASS_PREFIX, "-top")]:
+      isNumber(translateY) && coordinate && isNumber(coordinate.y) && translateY < coordinate.y,
   });
 }
 function getTooltipTranslateXY(_ref2) {
@@ -7757,7 +8517,7 @@ function getTooltipTranslateXY(_ref2) {
     reverseDirection,
     tooltipDimension,
     viewBox,
-    viewBoxDimension
+    viewBoxDimension,
   } = _ref2;
   if (position && isNumber(position[key])) {
     return position[key];
@@ -7790,13 +8550,11 @@ function getTooltipTranslateXY(_ref2) {
   return Math.max(positive, viewBoxKey);
 }
 function getTransformStyle(_ref3) {
-  var {
-    translateX,
-    translateY,
-    useTranslate3d
-  } = _ref3;
+  var { translateX, translateY, useTranslate3d } = _ref3;
   return {
-    transform: useTranslate3d ? "translate3d(".concat(translateX, "px, ").concat(translateY, "px, 0)") : "translate(".concat(translateX, "px, ").concat(translateY, "px)")
+    transform: useTranslate3d
+      ? "translate3d(".concat(translateX, "px, ").concat(translateY, "px, 0)")
+      : "translate(".concat(translateX, "px, ").concat(translateY, "px)"),
   };
 }
 function getTooltipTranslate(_ref4) {
@@ -7809,7 +8567,7 @@ function getTooltipTranslate(_ref4) {
     reverseDirection,
     tooltipBox,
     useTranslate3d,
-    viewBox
+    viewBox,
   } = _ref4;
   var cssProperties, translateX, translateY;
   if (tooltipBox.height > 0 && tooltipBox.width > 0 && coordinate) {
@@ -7822,7 +8580,7 @@ function getTooltipTranslate(_ref4) {
       reverseDirection,
       tooltipDimension: tooltipBox.width,
       viewBox,
-      viewBoxDimension: viewBox.width
+      viewBoxDimension: viewBox.width,
     });
     translateY = getTooltipTranslateXY({
       allowEscapeViewBox,
@@ -7833,12 +8591,12 @@ function getTooltipTranslate(_ref4) {
       reverseDirection,
       tooltipDimension: tooltipBox.height,
       viewBox,
-      viewBoxDimension: viewBox.height
+      viewBoxDimension: viewBox.height,
     });
     cssProperties = getTransformStyle({
       translateX,
       translateY,
-      useTranslate3d
+      useTranslate3d,
     });
   } else {
     cssProperties = TOOLTIP_HIDDEN;
@@ -7848,13 +8606,19 @@ function getTooltipTranslate(_ref4) {
     cssClasses: getTooltipCSSClassName({
       translateX,
       translateY,
-      coordinate
-    })
+      coordinate,
+    }),
   };
 }
-var parseIsSsrByDefault = () => !(typeof window !== "undefined" && window.document && Boolean(window.document.createElement) && window.setTimeout);
+var parseIsSsrByDefault = () =>
+  !(
+    typeof window !== "undefined" &&
+    window.document &&
+    Boolean(window.document.createElement) &&
+    window.setTimeout
+  );
 var Global = {
-  isSsr: parseIsSsrByDefault()
+  isSsr: parseIsSsrByDefault(),
 };
 function usePrefersReducedMotion() {
   var [prefersReducedMotion, setPrefersReducedMotion] = reactExports.useState(() => {
@@ -7885,25 +8649,41 @@ function ownKeys$t(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$t(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$t(Object(t), true).forEach(function(r2) {
-      _defineProperty$v(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$t(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$t(Object(t), true).forEach(function (r2) {
+          _defineProperty$v(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$t(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$v(e, r, t) {
-  return (r = _toPropertyKey$v(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$v(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$v(t) {
   var i = _toPrimitive$v(t, "string");
@@ -7929,14 +8709,19 @@ function resolveTransitionProperty(args) {
   return void 0;
 }
 function TooltipBoundingBoxImpl(props) {
-  var _props$coordinate3, _props$coordinate4, _props$coordinate$x2, _props$coordinate5, _props$coordinate$y2, _props$coordinate6;
+  var _props$coordinate3,
+    _props$coordinate4,
+    _props$coordinate$x2,
+    _props$coordinate5,
+    _props$coordinate$y2,
+    _props$coordinate6;
   var prefersReducedMotion = usePrefersReducedMotion();
   var [state, setState] = reactExports.useState(() => ({
     dismissed: false,
     dismissedAtCoordinate: {
       x: 0,
-      y: 0
-    }
+      y: 0,
+    },
   }));
   reactExports.useEffect(() => {
     var handleKeyDown = (event) => {
@@ -7945,9 +8730,21 @@ function TooltipBoundingBoxImpl(props) {
         setState({
           dismissed: true,
           dismissedAtCoordinate: {
-            x: (_props$coordinate$x = (_props$coordinate = props.coordinate) === null || _props$coordinate === void 0 ? void 0 : _props$coordinate.x) !== null && _props$coordinate$x !== void 0 ? _props$coordinate$x : 0,
-            y: (_props$coordinate$y = (_props$coordinate2 = props.coordinate) === null || _props$coordinate2 === void 0 ? void 0 : _props$coordinate2.y) !== null && _props$coordinate$y !== void 0 ? _props$coordinate$y : 0
-          }
+            x:
+              (_props$coordinate$x =
+                (_props$coordinate = props.coordinate) === null || _props$coordinate === void 0
+                  ? void 0
+                  : _props$coordinate.x) !== null && _props$coordinate$x !== void 0
+                ? _props$coordinate$x
+                : 0,
+            y:
+              (_props$coordinate$y =
+                (_props$coordinate2 = props.coordinate) === null || _props$coordinate2 === void 0
+                  ? void 0
+                  : _props$coordinate2.y) !== null && _props$coordinate$y !== void 0
+                ? _props$coordinate$y
+                : 0,
+          },
         });
       }
     };
@@ -7955,16 +8752,40 @@ function TooltipBoundingBoxImpl(props) {
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [(_props$coordinate3 = props.coordinate) === null || _props$coordinate3 === void 0 ? void 0 : _props$coordinate3.x, (_props$coordinate4 = props.coordinate) === null || _props$coordinate4 === void 0 ? void 0 : _props$coordinate4.y]);
-  if (state.dismissed && (((_props$coordinate$x2 = (_props$coordinate5 = props.coordinate) === null || _props$coordinate5 === void 0 ? void 0 : _props$coordinate5.x) !== null && _props$coordinate$x2 !== void 0 ? _props$coordinate$x2 : 0) !== state.dismissedAtCoordinate.x || ((_props$coordinate$y2 = (_props$coordinate6 = props.coordinate) === null || _props$coordinate6 === void 0 ? void 0 : _props$coordinate6.y) !== null && _props$coordinate$y2 !== void 0 ? _props$coordinate$y2 : 0) !== state.dismissedAtCoordinate.y)) {
-    setState(_objectSpread$t(_objectSpread$t({}, state), {}, {
-      dismissed: false
-    }));
+  }, [
+    (_props$coordinate3 = props.coordinate) === null || _props$coordinate3 === void 0
+      ? void 0
+      : _props$coordinate3.x,
+    (_props$coordinate4 = props.coordinate) === null || _props$coordinate4 === void 0
+      ? void 0
+      : _props$coordinate4.y,
+  ]);
+  if (
+    state.dismissed &&
+    (((_props$coordinate$x2 =
+      (_props$coordinate5 = props.coordinate) === null || _props$coordinate5 === void 0
+        ? void 0
+        : _props$coordinate5.x) !== null && _props$coordinate$x2 !== void 0
+      ? _props$coordinate$x2
+      : 0) !== state.dismissedAtCoordinate.x ||
+      ((_props$coordinate$y2 =
+        (_props$coordinate6 = props.coordinate) === null || _props$coordinate6 === void 0
+          ? void 0
+          : _props$coordinate6.y) !== null && _props$coordinate$y2 !== void 0
+        ? _props$coordinate$y2
+        : 0) !== state.dismissedAtCoordinate.y)
+  ) {
+    setState(
+      _objectSpread$t(
+        _objectSpread$t({}, state),
+        {},
+        {
+          dismissed: false,
+        },
+      ),
+    );
   }
-  var {
-    cssClasses,
-    cssProperties
-  } = getTooltipTranslate({
+  var { cssClasses, cssProperties } = getTooltipTranslate({
     allowEscapeViewBox: props.allowEscapeViewBox,
     coordinate: props.coordinate,
     offsetLeft: typeof props.offset === "number" ? props.offset : props.offset.x,
@@ -7973,74 +8794,116 @@ function TooltipBoundingBoxImpl(props) {
     reverseDirection: props.reverseDirection,
     tooltipBox: {
       height: props.lastBoundingBox.height,
-      width: props.lastBoundingBox.width
+      width: props.lastBoundingBox.width,
     },
     useTranslate3d: props.useTranslate3d,
-    viewBox: props.viewBox
+    viewBox: props.viewBox,
   });
-  var positionStyle = props.hasPortalFromProps ? {} : _objectSpread$t(_objectSpread$t({
-    transition: resolveTransitionProperty({
-      prefersReducedMotion,
-      isAnimationActive: props.isAnimationActive,
-      active: props.active,
-      animationDuration: props.animationDuration,
-      animationEasing: props.animationEasing
-    })
-  }, cssProperties), {}, {
-    pointerEvents: "none",
-    position: "absolute",
-    top: 0,
-    left: 0
-  });
-  var outerStyle = _objectSpread$t(_objectSpread$t({}, positionStyle), {}, {
-    visibility: !state.dismissed && props.active && props.hasPayload ? "visible" : "hidden"
-  }, props.wrapperStyle);
-  return /* @__PURE__ */ reactExports.createElement("div", {
-    // @ts-expect-error typescript library does not recognize xmlns attribute, but it's required for an HTML chunk inside SVG.
-    xmlns: "http://www.w3.org/1999/xhtml",
-    tabIndex: -1,
-    className: cssClasses,
-    style: outerStyle,
-    ref: props.innerRef
-  }, props.children);
+  var positionStyle = props.hasPortalFromProps
+    ? {}
+    : _objectSpread$t(
+        _objectSpread$t(
+          {
+            transition: resolveTransitionProperty({
+              prefersReducedMotion,
+              isAnimationActive: props.isAnimationActive,
+              active: props.active,
+              animationDuration: props.animationDuration,
+              animationEasing: props.animationEasing,
+            }),
+          },
+          cssProperties,
+        ),
+        {},
+        {
+          pointerEvents: "none",
+          position: "absolute",
+          top: 0,
+          left: 0,
+        },
+      );
+  var outerStyle = _objectSpread$t(
+    _objectSpread$t({}, positionStyle),
+    {},
+    {
+      visibility: !state.dismissed && props.active && props.hasPayload ? "visible" : "hidden",
+    },
+    props.wrapperStyle,
+  );
+  return /* @__PURE__ */ reactExports.createElement(
+    "div",
+    {
+      // @ts-expect-error typescript library does not recognize xmlns attribute, but it's required for an HTML chunk inside SVG.
+      xmlns: "http://www.w3.org/1999/xhtml",
+      tabIndex: -1,
+      className: cssClasses,
+      style: outerStyle,
+      ref: props.innerRef,
+    },
+    props.children,
+  );
 }
 var TooltipBoundingBox = /* @__PURE__ */ reactExports.memo(TooltipBoundingBoxImpl);
 var useAccessibilityLayer = () => {
   var _useAppSelector;
-  return (_useAppSelector = useAppSelector((state) => state.rootProps.accessibilityLayer)) !== null && _useAppSelector !== void 0 ? _useAppSelector : true;
+  return (_useAppSelector = useAppSelector((state) => state.rootProps.accessibilityLayer)) !==
+    null && _useAppSelector !== void 0
+    ? _useAppSelector
+    : true;
 };
 function _extends$g() {
-  return _extends$g = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$g.apply(null, arguments);
+  return (
+    (_extends$g = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$g.apply(null, arguments)
+  );
 }
 function ownKeys$s(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$s(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$s(Object(t), true).forEach(function(r2) {
-      _defineProperty$u(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$s(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$s(Object(t), true).forEach(function (r2) {
+          _defineProperty$u(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$s(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$u(e, r, t) {
-  return (r = _toPropertyKey$u(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$u(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$u(t) {
   var i = _toPrimitive$u(t, "string");
@@ -8069,7 +8932,7 @@ var CURVE_FACTORIES = {
   curveNatural,
   curveStep,
   curveStepAfter: stepAfter,
-  curveStepBefore: stepBefore
+  curveStepBefore: stepBefore,
 };
 var defined = (p) => isWellBehavedNumber(p.x) && isWellBehavedNumber(p.y);
 var areaDefined = (d) => d.base != null && defined(d.base) && defined(d);
@@ -8090,7 +8953,7 @@ var getCurveFactory = (type, layout) => {
 };
 var defaultCurveProps = {
   connectNulls: false,
-  type: "linear"
+  type: "linear",
 };
 var getPath$1 = (_ref2) => {
   var {
@@ -8098,19 +8961,31 @@ var getPath$1 = (_ref2) => {
     points = [],
     baseLine,
     layout,
-    connectNulls = defaultCurveProps.connectNulls
+    connectNulls = defaultCurveProps.connectNulls,
   } = _ref2;
   var curveFactory = getCurveFactory(type, layout);
   var formatPoints = connectNulls ? points.filter(defined) : points;
   if (Array.isArray(baseLine)) {
     var _lineFunction;
-    var areaPoints = points.map((entry, index) => _objectSpread$s(_objectSpread$s({}, entry), {}, {
-      base: baseLine[index]
-    }));
+    var areaPoints = points.map((entry, index) =>
+      _objectSpread$s(
+        _objectSpread$s({}, entry),
+        {},
+        {
+          base: baseLine[index],
+        },
+      ),
+    );
     if (layout === "vertical") {
-      _lineFunction = shapeArea().y(getY).x1(getX).x0((d) => d.base.x);
+      _lineFunction = shapeArea()
+        .y(getY)
+        .x1(getX)
+        .x0((d) => d.base.x);
     } else {
-      _lineFunction = shapeArea().x(getX).y1(getY).y0((d) => d.base.y);
+      _lineFunction = shapeArea()
+        .x(getX)
+        .y1(getY)
+        .y0((d) => d.base.y);
     }
     var _nullableLineFunction = _lineFunction.defined(areaDefined).curve(curveFactory);
     var finalPoints = connectNulls ? areaPoints.filter(areaDefined) : areaPoints;
@@ -8128,12 +9003,7 @@ var getPath$1 = (_ref2) => {
   return nullableLineFunction(formatPoints);
 };
 var Curve = (props) => {
-  var {
-    className,
-    points,
-    path,
-    pathRef
-  } = props;
+  var { className, points, path, pathRef } = props;
   var layout = useChartLayout();
   if ((!points || !points.length) && !path) {
     return null;
@@ -8143,48 +9013,72 @@ var Curve = (props) => {
     points: props.points,
     baseLine: props.baseLine,
     layout: props.layout || layout,
-    connectNulls: props.connectNulls
+    connectNulls: props.connectNulls,
   };
   var realPath = points && points.length ? getPath$1(getPathInput) : path;
-  return /* @__PURE__ */ reactExports.createElement("path", _extends$g({}, svgPropertiesNoEvents(props), adaptEventHandlers(props), {
-    className: clsx("recharts-curve", className),
-    d: realPath === null ? void 0 : realPath,
-    ref: pathRef
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    "path",
+    _extends$g({}, svgPropertiesNoEvents(props), adaptEventHandlers(props), {
+      className: clsx("recharts-curve", className),
+      d: realPath === null ? void 0 : realPath,
+      ref: pathRef,
+    }),
+  );
 };
 var _excluded$d = ["x", "y", "top", "left", "width", "height", "className"];
 function _extends$f() {
-  return _extends$f = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$f.apply(null, arguments);
+  return (
+    (_extends$f = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$f.apply(null, arguments)
+  );
 }
 function ownKeys$r(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$r(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$r(Object(t), true).forEach(function(r2) {
-      _defineProperty$t(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$r(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$r(Object(t), true).forEach(function (r2) {
+          _defineProperty$t(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$r(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$t(e, r, t) {
-  return (r = _toPropertyKey$t(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$t(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$t(t) {
   var i = _toPrimitive$t(t, "string");
@@ -8202,50 +9096,66 @@ function _toPrimitive$t(t, r) {
 }
 function _objectWithoutProperties$d(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$d(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$d(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$d(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 var getPath = (x2, y2, width, height, top, left) => {
-  return "M".concat(x2, ",").concat(top, "v").concat(height, "M").concat(left, ",").concat(y2, "h").concat(width);
+  return "M"
+    .concat(x2, ",")
+    .concat(top, "v")
+    .concat(height, "M")
+    .concat(left, ",")
+    .concat(y2, "h")
+    .concat(width);
 };
 var Cross = (_ref2) => {
-  var {
-    x: x2 = 0,
-    y: y2 = 0,
-    top = 0,
-    left = 0,
-    width = 0,
-    height = 0,
-    className
-  } = _ref2, rest = _objectWithoutProperties$d(_ref2, _excluded$d);
-  var props = _objectSpread$r({
-    x: x2,
-    y: y2,
-    top,
-    left,
-    width,
-    height
-  }, rest);
-  if (!isNumber(x2) || !isNumber(y2) || !isNumber(width) || !isNumber(height) || !isNumber(top) || !isNumber(left)) {
+  var { x: x2 = 0, y: y2 = 0, top = 0, left = 0, width = 0, height = 0, className } = _ref2,
+    rest = _objectWithoutProperties$d(_ref2, _excluded$d);
+  var props = _objectSpread$r(
+    {
+      x: x2,
+      y: y2,
+      top,
+      left,
+      width,
+      height,
+    },
+    rest,
+  );
+  if (
+    !isNumber(x2) ||
+    !isNumber(y2) ||
+    !isNumber(width) ||
+    !isNumber(height) ||
+    !isNumber(top) ||
+    !isNumber(left)
+  ) {
     return null;
   }
-  return /* @__PURE__ */ reactExports.createElement("path", _extends$f({}, svgPropertiesAndEvents(props), {
-    className: clsx("recharts-cross", className),
-    d: getPath(x2, y2, width, height, top, left)
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    "path",
+    _extends$f({}, svgPropertiesAndEvents(props), {
+      className: clsx("recharts-cross", className),
+      d: getPath(x2, y2, width, height, top, left),
+    }),
+  );
 };
 function getCursorRectangle(layout, activeCoordinate, offset, tooltipAxisBandSize) {
   var halfSize = tooltipAxisBandSize / 2;
@@ -8255,32 +9165,48 @@ function getCursorRectangle(layout, activeCoordinate, offset, tooltipAxisBandSiz
     x: layout === "horizontal" ? activeCoordinate.x - halfSize : offset.left + 0.5,
     y: layout === "horizontal" ? offset.top + 0.5 : activeCoordinate.y - halfSize,
     width: layout === "horizontal" ? tooltipAxisBandSize : offset.width - 1,
-    height: layout === "horizontal" ? offset.height - 1 : tooltipAxisBandSize
+    height: layout === "horizontal" ? offset.height - 1 : tooltipAxisBandSize,
   };
 }
 function ownKeys$q(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$q(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$q(Object(t), true).forEach(function(r2) {
-      _defineProperty$s(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$q(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$q(Object(t), true).forEach(function (r2) {
+          _defineProperty$s(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$q(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$s(e, r, t) {
-  return (r = _toPropertyKey$s(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$s(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$s(t) {
   var i = _toPrimitive$s(t, "string");
@@ -8297,34 +9223,63 @@ function _toPrimitive$s(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 var getDashCase = (name) => name.replace(/([A-Z])/g, (v) => "-".concat(v.toLowerCase()));
-var getTransitionVal = (props, duration, easing) => props.map((prop) => "".concat(getDashCase(prop), " ").concat(duration, "ms ").concat(easing)).join(",");
-var getIntersectionKeys = (preObj, nextObj) => [Object.keys(preObj), Object.keys(nextObj)].reduce((a, b) => a.filter((c) => b.includes(c)));
-var mapObject = (fn, obj) => Object.keys(obj).reduce((res, key) => _objectSpread$q(_objectSpread$q({}, res), {}, {
-  [key]: fn(key, obj[key])
-}), {});
+var getTransitionVal = (props, duration, easing) =>
+  props
+    .map((prop) => "".concat(getDashCase(prop), " ").concat(duration, "ms ").concat(easing))
+    .join(",");
+var getIntersectionKeys = (preObj, nextObj) =>
+  [Object.keys(preObj), Object.keys(nextObj)].reduce((a, b) => a.filter((c) => b.includes(c)));
+var mapObject = (fn, obj) =>
+  Object.keys(obj).reduce(
+    (res, key) =>
+      _objectSpread$q(
+        _objectSpread$q({}, res),
+        {},
+        {
+          [key]: fn(key, obj[key]),
+        },
+      ),
+    {},
+  );
 function ownKeys$p(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$p(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$p(Object(t), true).forEach(function(r2) {
-      _defineProperty$r(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$p(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$p(Object(t), true).forEach(function (r2) {
+          _defineProperty$r(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$p(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$r(e, r, t) {
-  return (r = _toPropertyKey$r(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$r(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$r(t) {
   var i = _toPrimitive$r(t, "string");
@@ -8342,30 +9297,35 @@ function _toPrimitive$r(t, r) {
 }
 var alpha = (begin, end, k) => begin + (end - begin) * k;
 var needContinue = (_ref2) => {
-  var {
-    from: from2,
-    to: to2
-  } = _ref2;
+  var { from: from2, to: to2 } = _ref2;
   return from2 !== to2;
 };
 var calStepperVals = (easing, preVals, steps) => {
   var nextStepVals = mapObject((key, val) => {
     if (needContinue(val)) {
       var [newX, newV] = easing(val.from, val.to, val.velocity);
-      return _objectSpread$p(_objectSpread$p({}, val), {}, {
-        from: newX,
-        velocity: newV
-      });
+      return _objectSpread$p(
+        _objectSpread$p({}, val),
+        {},
+        {
+          from: newX,
+          velocity: newV,
+        },
+      );
     }
     return val;
   }, preVals);
   if (steps < 1) {
     return mapObject((key, val) => {
       if (needContinue(val) && nextStepVals[key] != null) {
-        return _objectSpread$p(_objectSpread$p({}, val), {}, {
-          velocity: alpha(val.velocity, nextStepVals[key].velocity, steps),
-          from: alpha(val.from, nextStepVals[key].from, steps)
-        });
+        return _objectSpread$p(
+          _objectSpread$p({}, val),
+          {},
+          {
+            velocity: alpha(val.velocity, nextStepVals[key].velocity, steps),
+            from: alpha(val.from, nextStepVals[key].from, steps),
+          },
+        );
       }
       return val;
     }, preVals);
@@ -8374,13 +9334,21 @@ var calStepperVals = (easing, preVals, steps) => {
 };
 function createStepperUpdate(from2, to2, easing, interKeys, render, timeoutController) {
   var preTime;
-  var stepperStyle = interKeys.reduce((res, key) => _objectSpread$p(_objectSpread$p({}, res), {}, {
-    [key]: {
-      from: from2[key],
-      velocity: 0,
-      to: to2[key]
-    }
-  }), {});
+  var stepperStyle = interKeys.reduce(
+    (res, key) =>
+      _objectSpread$p(
+        _objectSpread$p({}, res),
+        {},
+        {
+          [key]: {
+            from: from2[key],
+            velocity: 0,
+            to: to2[key],
+          },
+        },
+      ),
+    {},
+  );
   var getCurrStyle = () => mapObject((key, val) => val.from, stepperStyle);
   var shouldStopAnimation = () => !Object.values(stepperStyle).filter(needContinue).length;
   var stopAnimation = null;
@@ -8413,9 +9381,13 @@ function createTimingUpdate(from2, to2, easing, duration, interKeys, render, tim
     if (fromElement == null || toElement == null) {
       return res;
     }
-    return _objectSpread$p(_objectSpread$p({}, res), {}, {
-      [key]: [fromElement, toElement]
-    });
+    return _objectSpread$p(
+      _objectSpread$p({}, res),
+      {},
+      {
+        [key]: [fromElement, toElement],
+      },
+    );
   }, {});
   var beginTime;
   var timingUpdate = (now) => {
@@ -8445,15 +9417,17 @@ const configUpdate = (from2, to2, easing, duration, render, timeoutController) =
   if (easing == null) {
     return () => {
       render(_objectSpread$p(_objectSpread$p({}, from2), to2));
-      return () => {
-      };
+      return () => {};
     };
   }
-  return easing.isStepper === true ? createStepperUpdate(from2, to2, easing, interKeys, render, timeoutController) : createTimingUpdate(from2, to2, easing, duration, interKeys, render, timeoutController);
+  return easing.isStepper === true
+    ? createStepperUpdate(from2, to2, easing, interKeys, render, timeoutController)
+    : createTimingUpdate(from2, to2, easing, duration, interKeys, render, timeoutController);
 };
 var ACCURACY = 1e-4;
 var cubicBezierFactor = (c1, c2) => [0, 3 * c1, 3 * c2 - 6 * c1, 3 * c1 - 3 * c2 + 1];
-var evaluatePolynomial = (params, t) => params.map((param, i) => param * t ** i).reduce((pre, curr) => pre + curr);
+var evaluatePolynomial = (params, t) =>
+  params.map((param, i) => param * t ** i).reduce((pre, curr) => pre + curr);
 var cubicBezier = (c1, c2) => (t) => {
   var params = cubicBezierFactor(c1, c2);
   return evaluatePolynomial(params, t);
@@ -8469,7 +9443,13 @@ var parseCubicBezier = (easing) => {
   if (easingParts.length !== 2 || easingParts[0] !== "cubic-bezier") {
     return null;
   }
-  var numbers2 = (_easingParts$ = easingParts[1]) === null || _easingParts$ === void 0 || (_easingParts$ = _easingParts$.split(")")[0]) === null || _easingParts$ === void 0 ? void 0 : _easingParts$.split(",");
+  var numbers2 =
+    (_easingParts$ = easingParts[1]) === null ||
+    _easingParts$ === void 0 ||
+    (_easingParts$ = _easingParts$.split(")")[0]) === null ||
+    _easingParts$ === void 0
+      ? void 0
+      : _easingParts$.split(",");
   if (numbers2 == null || numbers2.length !== 4) {
     return null;
   }
@@ -8539,16 +9519,12 @@ var configBezier = function configBezier2() {
 };
 var configSpring = function configSpring2() {
   var config2 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-  var {
-    stiff = 100,
-    damping = 8,
-    dt = 17
-  } = config2;
+  var { stiff = 100, damping = 8, dt = 17 } = config2;
   var stepper = (currX, destX, currV) => {
     var FSpring = -(currX - destX) * stiff;
     var FDamping = currV * damping;
-    var newV = currV + (FSpring - FDamping) * dt / 1e3;
-    var newX = currV * dt / 1e3 + currX;
+    var newV = currV + ((FSpring - FDamping) * dt) / 1e3;
+    var newX = (currV * dt) / 1e3 + currX;
     if (Math.abs(newX - destX) < ACCURACY && Math.abs(newV) < ACCURACY) {
       return [destX, 0];
     }
@@ -8633,7 +9609,7 @@ function createAnimateManager(timeoutController) {
         handleChange = () => null;
       };
     },
-    getTimeoutController: () => timeoutController
+    getTimeoutController: () => timeoutController,
   };
 }
 class RequestAnimationFrameTimeoutController {
@@ -8659,10 +9635,18 @@ class RequestAnimationFrameTimeoutController {
 function createDefaultAnimationManager() {
   return createAnimateManager(new RequestAnimationFrameTimeoutController());
 }
-var AnimationManagerContext = /* @__PURE__ */ reactExports.createContext(createDefaultAnimationManager);
+var AnimationManagerContext = /* @__PURE__ */ reactExports.createContext(
+  createDefaultAnimationManager,
+);
 function useAnimationManager(animationId, animationManagerFromProps) {
   var contextAnimationManager = reactExports.useContext(AnimationManagerContext);
-  return reactExports.useMemo(() => animationManagerFromProps !== null && animationManagerFromProps !== void 0 ? animationManagerFromProps : contextAnimationManager(animationId), [animationId, animationManagerFromProps, contextAnimationManager]);
+  return reactExports.useMemo(
+    () =>
+      animationManagerFromProps !== null && animationManagerFromProps !== void 0
+        ? animationManagerFromProps
+        : contextAnimationManager(animationId),
+    [animationId, animationManagerFromProps, contextAnimationManager],
+  );
 }
 var defaultJavascriptAnimateProps = {
   begin: 0,
@@ -8670,16 +9654,14 @@ var defaultJavascriptAnimateProps = {
   easing: "ease",
   isActive: true,
   canBegin: true,
-  onAnimationEnd: () => {
-  },
-  onAnimationStart: () => {
-  }
+  onAnimationEnd: () => {},
+  onAnimationStart: () => {},
 };
 var from = {
-  t: 0
+  t: 0,
 };
 var to = {
-  t: 1
+  t: 1,
 };
 function JavascriptAnimate(outsideProps) {
   var props = resolveDefaultProps(outsideProps, defaultJavascriptAnimateProps);
@@ -8691,7 +9673,7 @@ function JavascriptAnimate(outsideProps) {
     begin,
     onAnimationEnd,
     onAnimationStart,
-    children
+    children,
   } = props;
   var prefersReducedMotion = usePrefersReducedMotion();
   var isActive = isActiveProp === "auto" ? !Global.isSsr && !prefersReducedMotion : isActiveProp;
@@ -8707,7 +9689,14 @@ function JavascriptAnimate(outsideProps) {
     if (!isActive || !canBegin) {
       return noop$2;
     }
-    var startAnimation = configUpdate(from, to, configEasing(easing), duration, setStyle, animationManager.getTimeoutController());
+    var startAnimation = configUpdate(
+      from,
+      to,
+      configEasing(easing),
+      duration,
+      setStyle,
+      animationManager.getTimeoutController(),
+    );
     var onAnimationActive = () => {
       stopJSAnimation.current = startAnimation();
     };
@@ -8719,7 +9708,16 @@ function JavascriptAnimate(outsideProps) {
       }
       onAnimationEnd();
     };
-  }, [isActive, canBegin, duration, easing, begin, onAnimationStart, onAnimationEnd, animationManager]);
+  }, [
+    isActive,
+    canBegin,
+    duration,
+    easing,
+    begin,
+    onAnimationStart,
+    onAnimationEnd,
+    animationManager,
+  ]);
   return children(style.t);
 }
 function useAnimationId(input) {
@@ -8732,31 +9730,57 @@ function useAnimationId(input) {
   }
   return animationId.current;
 }
-var _excluded$c = ["radius"], _excluded2$7 = ["radius"];
-var _templateObject$1, _templateObject2$1, _templateObject3$1, _templateObject4$1, _templateObject5$1, _templateObject6$1, _templateObject7$1, _templateObject8, _templateObject9, _templateObject0;
+var _excluded$c = ["radius"],
+  _excluded2$7 = ["radius"];
+var _templateObject$1,
+  _templateObject2$1,
+  _templateObject3$1,
+  _templateObject4$1,
+  _templateObject5$1,
+  _templateObject6$1,
+  _templateObject7$1,
+  _templateObject8,
+  _templateObject9,
+  _templateObject0;
 function ownKeys$o(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$o(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$o(Object(t), true).forEach(function(r2) {
-      _defineProperty$q(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$o(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$o(Object(t), true).forEach(function (r2) {
+          _defineProperty$q(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$o(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$q(e, r, t) {
-  return (r = _toPropertyKey$q(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$q(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$q(t) {
   var i = _toPrimitive$q(t, "string");
@@ -8773,34 +9797,46 @@ function _toPrimitive$q(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 function _extends$e() {
-  return _extends$e = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$e.apply(null, arguments);
+  return (
+    (_extends$e = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$e.apply(null, arguments)
+  );
 }
 function _objectWithoutProperties$c(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$c(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$c(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$c(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function _taggedTemplateLiteral$1(e, t) {
-  return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
+  return (
+    t || (t = e.slice(0)),
+    Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }))
+  );
 }
 var getRectanglePath = (x2, y2, width, height, radius) => {
   var roundedWidth = round$1(width);
@@ -8808,7 +9844,8 @@ var getRectanglePath = (x2, y2, width, height, radius) => {
   var maxRadius = Math.min(Math.abs(roundedWidth) / 2, Math.abs(roundedHeight) / 2);
   var ySign = roundedHeight >= 0 ? 1 : -1;
   var xSign = roundedWidth >= 0 ? 1 : -1;
-  var clockWise = roundedHeight >= 0 && roundedWidth >= 0 || roundedHeight < 0 && roundedWidth < 0 ? 1 : 0;
+  var clockWise =
+    (roundedHeight >= 0 && roundedWidth >= 0) || (roundedHeight < 0 && roundedWidth < 0) ? 1 : 0;
   var path;
   if (maxRadius > 0 && Array.isArray(radius)) {
     var newRadius = [0, 0, 0, 0];
@@ -8817,28 +9854,166 @@ var getRectanglePath = (x2, y2, width, height, radius) => {
       var r = (_radius$i = radius[i]) !== null && _radius$i !== void 0 ? _radius$i : 0;
       newRadius[i] = r > maxRadius ? maxRadius : r;
     }
-    path = roundTemplateLiteral(_templateObject$1 || (_templateObject$1 = _taggedTemplateLiteral$1(["M", ",", ""])), x2, y2 + ySign * newRadius[0]);
+    path = roundTemplateLiteral(
+      _templateObject$1 || (_templateObject$1 = _taggedTemplateLiteral$1(["M", ",", ""])),
+      x2,
+      y2 + ySign * newRadius[0],
+    );
     if (newRadius[0] > 0) {
-      path += roundTemplateLiteral(_templateObject2$1 || (_templateObject2$1 = _taggedTemplateLiteral$1(["A ", ",", ",0,0,", ",", ",", ""])), newRadius[0], newRadius[0], clockWise, x2 + xSign * newRadius[0], y2);
+      path += roundTemplateLiteral(
+        _templateObject2$1 ||
+          (_templateObject2$1 = _taggedTemplateLiteral$1(["A ", ",", ",0,0,", ",", ",", ""])),
+        newRadius[0],
+        newRadius[0],
+        clockWise,
+        x2 + xSign * newRadius[0],
+        y2,
+      );
     }
-    path += roundTemplateLiteral(_templateObject3$1 || (_templateObject3$1 = _taggedTemplateLiteral$1(["L ", ",", ""])), x2 + width - xSign * newRadius[1], y2);
+    path += roundTemplateLiteral(
+      _templateObject3$1 || (_templateObject3$1 = _taggedTemplateLiteral$1(["L ", ",", ""])),
+      x2 + width - xSign * newRadius[1],
+      y2,
+    );
     if (newRadius[1] > 0) {
-      path += roundTemplateLiteral(_templateObject4$1 || (_templateObject4$1 = _taggedTemplateLiteral$1(["A ", ",", ",0,0,", ",\n        ", ",", ""])), newRadius[1], newRadius[1], clockWise, x2 + width, y2 + ySign * newRadius[1]);
+      path += roundTemplateLiteral(
+        _templateObject4$1 ||
+          (_templateObject4$1 = _taggedTemplateLiteral$1([
+            "A ",
+            ",",
+            ",0,0,",
+            ",\n        ",
+            ",",
+            "",
+          ])),
+        newRadius[1],
+        newRadius[1],
+        clockWise,
+        x2 + width,
+        y2 + ySign * newRadius[1],
+      );
     }
-    path += roundTemplateLiteral(_templateObject5$1 || (_templateObject5$1 = _taggedTemplateLiteral$1(["L ", ",", ""])), x2 + width, y2 + height - ySign * newRadius[2]);
+    path += roundTemplateLiteral(
+      _templateObject5$1 || (_templateObject5$1 = _taggedTemplateLiteral$1(["L ", ",", ""])),
+      x2 + width,
+      y2 + height - ySign * newRadius[2],
+    );
     if (newRadius[2] > 0) {
-      path += roundTemplateLiteral(_templateObject6$1 || (_templateObject6$1 = _taggedTemplateLiteral$1(["A ", ",", ",0,0,", ",\n        ", ",", ""])), newRadius[2], newRadius[2], clockWise, x2 + width - xSign * newRadius[2], y2 + height);
+      path += roundTemplateLiteral(
+        _templateObject6$1 ||
+          (_templateObject6$1 = _taggedTemplateLiteral$1([
+            "A ",
+            ",",
+            ",0,0,",
+            ",\n        ",
+            ",",
+            "",
+          ])),
+        newRadius[2],
+        newRadius[2],
+        clockWise,
+        x2 + width - xSign * newRadius[2],
+        y2 + height,
+      );
     }
-    path += roundTemplateLiteral(_templateObject7$1 || (_templateObject7$1 = _taggedTemplateLiteral$1(["L ", ",", ""])), x2 + xSign * newRadius[3], y2 + height);
+    path += roundTemplateLiteral(
+      _templateObject7$1 || (_templateObject7$1 = _taggedTemplateLiteral$1(["L ", ",", ""])),
+      x2 + xSign * newRadius[3],
+      y2 + height,
+    );
     if (newRadius[3] > 0) {
-      path += roundTemplateLiteral(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral$1(["A ", ",", ",0,0,", ",\n        ", ",", ""])), newRadius[3], newRadius[3], clockWise, x2, y2 + height - ySign * newRadius[3]);
+      path += roundTemplateLiteral(
+        _templateObject8 ||
+          (_templateObject8 = _taggedTemplateLiteral$1([
+            "A ",
+            ",",
+            ",0,0,",
+            ",\n        ",
+            ",",
+            "",
+          ])),
+        newRadius[3],
+        newRadius[3],
+        clockWise,
+        x2,
+        y2 + height - ySign * newRadius[3],
+      );
     }
     path += "Z";
   } else if (maxRadius > 0 && radius === +radius && radius > 0) {
     var _newRadius = Math.min(maxRadius, radius);
-    path = roundTemplateLiteral(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral$1(["M ", ",", "\n            A ", ",", ",0,0,", ",", ",", "\n            L ", ",", "\n            A ", ",", ",0,0,", ",", ",", "\n            L ", ",", "\n            A ", ",", ",0,0,", ",", ",", "\n            L ", ",", "\n            A ", ",", ",0,0,", ",", ",", " Z"])), x2, y2 + ySign * _newRadius, _newRadius, _newRadius, clockWise, x2 + xSign * _newRadius, y2, x2 + width - xSign * _newRadius, y2, _newRadius, _newRadius, clockWise, x2 + width, y2 + ySign * _newRadius, x2 + width, y2 + height - ySign * _newRadius, _newRadius, _newRadius, clockWise, x2 + width - xSign * _newRadius, y2 + height, x2 + xSign * _newRadius, y2 + height, _newRadius, _newRadius, clockWise, x2, y2 + height - ySign * _newRadius);
+    path = roundTemplateLiteral(
+      _templateObject9 ||
+        (_templateObject9 = _taggedTemplateLiteral$1([
+          "M ",
+          ",",
+          "\n            A ",
+          ",",
+          ",0,0,",
+          ",",
+          ",",
+          "\n            L ",
+          ",",
+          "\n            A ",
+          ",",
+          ",0,0,",
+          ",",
+          ",",
+          "\n            L ",
+          ",",
+          "\n            A ",
+          ",",
+          ",0,0,",
+          ",",
+          ",",
+          "\n            L ",
+          ",",
+          "\n            A ",
+          ",",
+          ",0,0,",
+          ",",
+          ",",
+          " Z",
+        ])),
+      x2,
+      y2 + ySign * _newRadius,
+      _newRadius,
+      _newRadius,
+      clockWise,
+      x2 + xSign * _newRadius,
+      y2,
+      x2 + width - xSign * _newRadius,
+      y2,
+      _newRadius,
+      _newRadius,
+      clockWise,
+      x2 + width,
+      y2 + ySign * _newRadius,
+      x2 + width,
+      y2 + height - ySign * _newRadius,
+      _newRadius,
+      _newRadius,
+      clockWise,
+      x2 + width - xSign * _newRadius,
+      y2 + height,
+      x2 + xSign * _newRadius,
+      y2 + height,
+      _newRadius,
+      _newRadius,
+      clockWise,
+      x2,
+      y2 + height - ySign * _newRadius,
+    );
   } else {
-    path = roundTemplateLiteral(_templateObject0 || (_templateObject0 = _taggedTemplateLiteral$1(["M ", ",", " h ", " v ", " h ", " Z"])), x2, y2, width, height, -width);
+    path = roundTemplateLiteral(
+      _templateObject0 ||
+        (_templateObject0 = _taggedTemplateLiteral$1(["M ", ",", " h ", " v ", " h ", " Z"])),
+      x2,
+      y2,
+      width,
+      height,
+      -width,
+    );
   }
   return path;
 };
@@ -8852,7 +10027,7 @@ var defaultRectangleProps = {
   isUpdateAnimationActive: false,
   animationBegin: 0,
   animationDuration: 1500,
-  animationEasing: "ease"
+  animationEasing: "ease",
 };
 var Rectangle = (rectangleProps) => {
   var props = resolveDefaultProps(rectangleProps, defaultRectangleProps);
@@ -8865,54 +10040,59 @@ var Rectangle = (rectangleProps) => {
         if (pathTotalLength) {
           setTotalLength(pathTotalLength);
         }
-      } catch (_unused) {
-      }
+      } catch (_unused) {}
     }
   }, []);
-  var {
-    x: x2,
-    y: y2,
-    width,
-    height,
-    radius,
-    className
-  } = props;
+  var { x: x2, y: y2, width, height, radius, className } = props;
   var {
     animationEasing,
     animationDuration,
     animationBegin,
     isAnimationActive,
-    isUpdateAnimationActive
+    isUpdateAnimationActive,
   } = props;
   var prevWidthRef = reactExports.useRef(width);
   var prevHeightRef = reactExports.useRef(height);
   var prevXRef = reactExports.useRef(x2);
   var prevYRef = reactExports.useRef(y2);
-  var animationIdInput = reactExports.useMemo(() => ({
-    x: x2,
-    y: y2,
-    width,
-    height,
-    radius
-  }), [x2, y2, width, height, radius]);
+  var animationIdInput = reactExports.useMemo(
+    () => ({
+      x: x2,
+      y: y2,
+      width,
+      height,
+      radius,
+    }),
+    [x2, y2, width, height, radius],
+  );
   var animationId = useAnimationId(animationIdInput, "rectangle-");
-  if (x2 !== +x2 || y2 !== +y2 || width !== +width || height !== +height || width === 0 || height === 0) {
+  if (
+    x2 !== +x2 ||
+    y2 !== +y2 ||
+    width !== +width ||
+    height !== +height ||
+    width === 0 ||
+    height === 0
+  ) {
     return null;
   }
   var layerClass = clsx("recharts-rectangle", className);
   if (!isUpdateAnimationActive) {
-    var _svgPropertiesAndEven = svgPropertiesAndEvents(props), {
-      radius: _
-    } = _svgPropertiesAndEven, otherPathProps = _objectWithoutProperties$c(_svgPropertiesAndEven, _excluded$c);
-    return /* @__PURE__ */ reactExports.createElement("path", _extends$e({}, otherPathProps, {
-      x: round$1(x2),
-      y: round$1(y2),
-      width: round$1(width),
-      height: round$1(height),
-      radius: typeof radius === "number" ? radius : void 0,
-      className: layerClass,
-      d: getRectanglePath(x2, y2, width, height, radius)
-    }));
+    var _svgPropertiesAndEven = svgPropertiesAndEvents(props),
+      { radius: _ } = _svgPropertiesAndEven,
+      otherPathProps = _objectWithoutProperties$c(_svgPropertiesAndEven, _excluded$c);
+    return /* @__PURE__ */ reactExports.createElement(
+      "path",
+      _extends$e({}, otherPathProps, {
+        x: round$1(x2),
+        y: round$1(y2),
+        width: round$1(width),
+        height: round$1(height),
+        radius: typeof radius === "number" ? radius : void 0,
+        className: layerClass,
+        d: getRectanglePath(x2, y2, width, height, radius),
+      }),
+    );
   }
   var prevWidth = prevWidthRef.current;
   var prevHeight = prevHeightRef.current;
@@ -8920,76 +10100,103 @@ var Rectangle = (rectangleProps) => {
   var prevY = prevYRef.current;
   var from2 = "0px ".concat(totalLength === -1 ? 1 : totalLength, "px");
   var to2 = "".concat(totalLength, "px ").concat(totalLength, "px");
-  var transition = getTransitionVal(["strokeDasharray"], animationDuration, typeof animationEasing === "string" ? animationEasing : defaultRectangleProps.animationEasing);
-  return /* @__PURE__ */ reactExports.createElement(JavascriptAnimate, {
-    animationId,
-    key: animationId,
-    canBegin: totalLength > 0,
-    duration: animationDuration,
-    easing: animationEasing,
-    isActive: isUpdateAnimationActive,
-    begin: animationBegin
-  }, (t) => {
-    var currWidth = interpolate$1(prevWidth, width, t);
-    var currHeight = interpolate$1(prevHeight, height, t);
-    var currX = interpolate$1(prevX, x2, t);
-    var currY = interpolate$1(prevY, y2, t);
-    if (pathRef.current) {
-      prevWidthRef.current = currWidth;
-      prevHeightRef.current = currHeight;
-      prevXRef.current = currX;
-      prevYRef.current = currY;
-    }
-    var animationStyle;
-    if (!isAnimationActive) {
-      animationStyle = {
-        strokeDasharray: to2
-      };
-    } else if (t > 0) {
-      animationStyle = {
-        transition,
-        strokeDasharray: to2
-      };
-    } else {
-      animationStyle = {
-        strokeDasharray: from2
-      };
-    }
-    var _svgPropertiesAndEven2 = svgPropertiesAndEvents(props), {
-      radius: _2
-    } = _svgPropertiesAndEven2, otherPathProps2 = _objectWithoutProperties$c(_svgPropertiesAndEven2, _excluded2$7);
-    return /* @__PURE__ */ reactExports.createElement("path", _extends$e({}, otherPathProps2, {
-      radius: typeof radius === "number" ? radius : void 0,
-      className: layerClass,
-      d: getRectanglePath(currX, currY, currWidth, currHeight, radius),
-      ref: pathRef,
-      style: _objectSpread$o(_objectSpread$o({}, animationStyle), props.style)
-    }));
-  });
+  var transition = getTransitionVal(
+    ["strokeDasharray"],
+    animationDuration,
+    typeof animationEasing === "string" ? animationEasing : defaultRectangleProps.animationEasing,
+  );
+  return /* @__PURE__ */ reactExports.createElement(
+    JavascriptAnimate,
+    {
+      animationId,
+      key: animationId,
+      canBegin: totalLength > 0,
+      duration: animationDuration,
+      easing: animationEasing,
+      isActive: isUpdateAnimationActive,
+      begin: animationBegin,
+    },
+    (t) => {
+      var currWidth = interpolate$1(prevWidth, width, t);
+      var currHeight = interpolate$1(prevHeight, height, t);
+      var currX = interpolate$1(prevX, x2, t);
+      var currY = interpolate$1(prevY, y2, t);
+      if (pathRef.current) {
+        prevWidthRef.current = currWidth;
+        prevHeightRef.current = currHeight;
+        prevXRef.current = currX;
+        prevYRef.current = currY;
+      }
+      var animationStyle;
+      if (!isAnimationActive) {
+        animationStyle = {
+          strokeDasharray: to2,
+        };
+      } else if (t > 0) {
+        animationStyle = {
+          transition,
+          strokeDasharray: to2,
+        };
+      } else {
+        animationStyle = {
+          strokeDasharray: from2,
+        };
+      }
+      var _svgPropertiesAndEven2 = svgPropertiesAndEvents(props),
+        { radius: _2 } = _svgPropertiesAndEven2,
+        otherPathProps2 = _objectWithoutProperties$c(_svgPropertiesAndEven2, _excluded2$7);
+      return /* @__PURE__ */ reactExports.createElement(
+        "path",
+        _extends$e({}, otherPathProps2, {
+          radius: typeof radius === "number" ? radius : void 0,
+          className: layerClass,
+          d: getRectanglePath(currX, currY, currWidth, currHeight, radius),
+          ref: pathRef,
+          style: _objectSpread$o(_objectSpread$o({}, animationStyle), props.style),
+        }),
+      );
+    },
+  );
 };
 function ownKeys$n(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$n(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$n(Object(t), true).forEach(function(r2) {
-      _defineProperty$p(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$n(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$n(Object(t), true).forEach(function (r2) {
+          _defineProperty$p(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$n(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$p(e, r, t) {
-  return (r = _toPropertyKey$p(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$p(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$p(t) {
   var i = _toPrimitive$p(t, "string");
@@ -9006,51 +10213,50 @@ function _toPrimitive$p(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 var RADIAN = Math.PI / 180;
-var radianToDegree = (angleInRadian) => angleInRadian * 180 / Math.PI;
+var radianToDegree = (angleInRadian) => (angleInRadian * 180) / Math.PI;
 var polarToCartesian = (cx, cy, radius, angle) => ({
   x: cx + Math.cos(-RADIAN * angle) * radius,
-  y: cy + Math.sin(-RADIAN * angle) * radius
+  y: cy + Math.sin(-RADIAN * angle) * radius,
 });
 var getMaxRadius = function getMaxRadius2(width, height) {
-  var offset = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0
-  };
-  return Math.min(Math.abs(width - (offset.left || 0) - (offset.right || 0)), Math.abs(height - (offset.top || 0) - (offset.bottom || 0))) / 2;
+  var offset =
+    arguments.length > 2 && arguments[2] !== void 0
+      ? arguments[2]
+      : {
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+        };
+  return (
+    Math.min(
+      Math.abs(width - (offset.left || 0) - (offset.right || 0)),
+      Math.abs(height - (offset.top || 0) - (offset.bottom || 0)),
+    ) / 2
+  );
 };
 var distanceBetweenPoints = (point2, anotherPoint) => {
-  var {
-    x: x1,
-    y: y1
-  } = point2;
-  var {
-    x: x2,
-    y: y2
-  } = anotherPoint;
+  var { x: x1, y: y1 } = point2;
+  var { x: x2, y: y2 } = anotherPoint;
   return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
 };
 var getAngleOfPoint = (_ref2, _ref22) => {
-  var {
-    x: x2,
-    y: y2
-  } = _ref2;
-  var {
-    cx,
-    cy
-  } = _ref22;
-  var radius = distanceBetweenPoints({
-    x: x2,
-    y: y2
-  }, {
-    x: cx,
-    y: cy
-  });
+  var { x: x2, y: y2 } = _ref2;
+  var { cx, cy } = _ref22;
+  var radius = distanceBetweenPoints(
+    {
+      x: x2,
+      y: y2,
+    },
+    {
+      x: cx,
+      y: cy,
+    },
+  );
   if (radius <= 0) {
     return {
       radius,
-      angle: 0
+      angle: 0,
     };
   }
   var cos = (x2 - cx) / radius;
@@ -9061,58 +10267,43 @@ var getAngleOfPoint = (_ref2, _ref22) => {
   return {
     radius,
     angle: radianToDegree(angleInRadian),
-    angleInRadian
+    angleInRadian,
   };
 };
 var formatAngleOfSector = (_ref3) => {
-  var {
-    startAngle,
-    endAngle
-  } = _ref3;
+  var { startAngle, endAngle } = _ref3;
   var startCnt = Math.floor(startAngle / 360);
   var endCnt = Math.floor(endAngle / 360);
   var min2 = Math.min(startCnt, endCnt);
   return {
     startAngle: startAngle - min2 * 360,
-    endAngle: endAngle - min2 * 360
+    endAngle: endAngle - min2 * 360,
   };
 };
 var reverseFormatAngleOfSector = (angle, _ref4) => {
-  var {
-    startAngle,
-    endAngle
-  } = _ref4;
+  var { startAngle, endAngle } = _ref4;
   var startCnt = Math.floor(startAngle / 360);
   var endCnt = Math.floor(endAngle / 360);
   var min2 = Math.min(startCnt, endCnt);
   return angle + min2 * 360;
 };
 var inRangeOfSector = (_ref5, viewBox) => {
-  var {
-    relativeX: x2,
-    relativeY: y2
-  } = _ref5;
-  var {
-    radius,
-    angle
-  } = getAngleOfPoint({
-    x: x2,
-    y: y2
-  }, viewBox);
-  var {
-    innerRadius,
-    outerRadius
-  } = viewBox;
+  var { relativeX: x2, relativeY: y2 } = _ref5;
+  var { radius, angle } = getAngleOfPoint(
+    {
+      x: x2,
+      y: y2,
+    },
+    viewBox,
+  );
+  var { innerRadius, outerRadius } = viewBox;
   if (radius < innerRadius || radius > outerRadius) {
     return null;
   }
   if (radius === 0) {
     return null;
   }
-  var {
-    startAngle,
-    endAngle
-  } = formatAngleOfSector(viewBox);
+  var { startAngle, endAngle } = formatAngleOfSector(viewBox);
   var formatAngle = angle;
   var inRange;
   if (startAngle <= endAngle) {
@@ -9133,21 +10324,19 @@ var inRangeOfSector = (_ref5, viewBox) => {
     inRange = formatAngle >= endAngle && formatAngle <= startAngle;
   }
   if (inRange) {
-    return _objectSpread$n(_objectSpread$n({}, viewBox), {}, {
-      radius,
-      angle: reverseFormatAngleOfSector(formatAngle, viewBox)
-    });
+    return _objectSpread$n(
+      _objectSpread$n({}, viewBox),
+      {},
+      {
+        radius,
+        angle: reverseFormatAngleOfSector(formatAngle, viewBox),
+      },
+    );
   }
   return null;
 };
 function getRadialCursorPoints(activeCoordinate) {
-  var {
-    cx,
-    cy,
-    radius,
-    startAngle,
-    endAngle
-  } = activeCoordinate;
+  var { cx, cy, radius, startAngle, endAngle } = activeCoordinate;
   var startPoint = polarToCartesian(cx, cy, radius, startAngle);
   var endPoint = polarToCartesian(cx, cy, radius, endAngle);
   return {
@@ -9156,21 +10345,35 @@ function getRadialCursorPoints(activeCoordinate) {
     cy,
     radius,
     startAngle,
-    endAngle
+    endAngle,
   };
 }
-var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7;
+var _templateObject,
+  _templateObject2,
+  _templateObject3,
+  _templateObject4,
+  _templateObject5,
+  _templateObject6,
+  _templateObject7;
 function _extends$d() {
-  return _extends$d = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$d.apply(null, arguments);
+  return (
+    (_extends$d = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$d.apply(null, arguments)
+  );
 }
 function _taggedTemplateLiteral(e, t) {
-  return t || (t = e.slice(0)), Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }));
+  return (
+    t || (t = e.slice(0)),
+    Object.freeze(Object.defineProperties(e, { raw: { value: Object.freeze(t) } }))
+  );
 }
 var getDeltaAngle$1 = (startAngle, endAngle) => {
   var sign2 = mathSign(endAngle - startAngle);
@@ -9178,50 +10381,85 @@ var getDeltaAngle$1 = (startAngle, endAngle) => {
   return sign2 * deltaAngle;
 };
 var getTangentCircle = (_ref2) => {
-  var {
-    cx,
-    cy,
-    radius,
-    angle,
-    sign: sign2,
-    isExternal,
-    cornerRadius,
-    cornerIsExternal
-  } = _ref2;
+  var { cx, cy, radius, angle, sign: sign2, isExternal, cornerRadius, cornerIsExternal } = _ref2;
   var centerRadius = cornerRadius * (isExternal ? 1 : -1) + radius;
   var theta = Math.asin(cornerRadius / centerRadius) / RADIAN;
   var centerAngle = cornerIsExternal ? angle : angle + sign2 * theta;
   var center = polarToCartesian(cx, cy, centerRadius, centerAngle);
   var circleTangency = polarToCartesian(cx, cy, radius, centerAngle);
   var lineTangencyAngle = cornerIsExternal ? angle - sign2 * theta : angle;
-  var lineTangency = polarToCartesian(cx, cy, centerRadius * Math.cos(theta * RADIAN), lineTangencyAngle);
+  var lineTangency = polarToCartesian(
+    cx,
+    cy,
+    centerRadius * Math.cos(theta * RADIAN),
+    lineTangencyAngle,
+  );
   return {
     center,
     circleTangency,
     lineTangency,
-    theta
+    theta,
   };
 };
 var getSectorPath = (_ref2) => {
-  var {
-    cx,
-    cy,
-    innerRadius,
-    outerRadius,
-    startAngle,
-    endAngle
-  } = _ref2;
+  var { cx, cy, innerRadius, outerRadius, startAngle, endAngle } = _ref2;
   var angle = getDeltaAngle$1(startAngle, endAngle);
   var tempEndAngle = startAngle + angle;
   var outerStartPoint = polarToCartesian(cx, cy, outerRadius, startAngle);
   var outerEndPoint = polarToCartesian(cx, cy, outerRadius, tempEndAngle);
-  var path = roundTemplateLiteral(_templateObject || (_templateObject = _taggedTemplateLiteral(["M ", ",", "\n    A ", ",", ",0,\n    ", ",", ",\n    ", ",", "\n  "])), outerStartPoint.x, outerStartPoint.y, outerRadius, outerRadius, +(Math.abs(angle) > 180), +(startAngle > tempEndAngle), outerEndPoint.x, outerEndPoint.y);
+  var path = roundTemplateLiteral(
+    _templateObject ||
+      (_templateObject = _taggedTemplateLiteral([
+        "M ",
+        ",",
+        "\n    A ",
+        ",",
+        ",0,\n    ",
+        ",",
+        ",\n    ",
+        ",",
+        "\n  ",
+      ])),
+    outerStartPoint.x,
+    outerStartPoint.y,
+    outerRadius,
+    outerRadius,
+    +(Math.abs(angle) > 180),
+    +(startAngle > tempEndAngle),
+    outerEndPoint.x,
+    outerEndPoint.y,
+  );
   if (innerRadius > 0) {
     var innerStartPoint = polarToCartesian(cx, cy, innerRadius, startAngle);
     var innerEndPoint = polarToCartesian(cx, cy, innerRadius, tempEndAngle);
-    path += roundTemplateLiteral(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["L ", ",", "\n            A ", ",", ",0,\n            ", ",", ",\n            ", ",", " Z"])), innerEndPoint.x, innerEndPoint.y, innerRadius, innerRadius, +(Math.abs(angle) > 180), +(startAngle <= tempEndAngle), innerStartPoint.x, innerStartPoint.y);
+    path += roundTemplateLiteral(
+      _templateObject2 ||
+        (_templateObject2 = _taggedTemplateLiteral([
+          "L ",
+          ",",
+          "\n            A ",
+          ",",
+          ",0,\n            ",
+          ",",
+          ",\n            ",
+          ",",
+          " Z",
+        ])),
+      innerEndPoint.x,
+      innerEndPoint.y,
+      innerRadius,
+      innerRadius,
+      +(Math.abs(angle) > 180),
+      +(startAngle <= tempEndAngle),
+      innerStartPoint.x,
+      innerStartPoint.y,
+    );
   } else {
-    path += roundTemplateLiteral(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["L ", ",", " Z"])), cx, cy);
+    path += roundTemplateLiteral(
+      _templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["L ", ",", " Z"])),
+      cx,
+      cy,
+    );
   }
   return path;
 };
@@ -9235,13 +10473,13 @@ var getSectorWithCorner = (_ref3) => {
     forceCornerRadius,
     cornerIsExternal,
     startAngle,
-    endAngle
+    endAngle,
   } = _ref3;
   var sign2 = mathSign(endAngle - startAngle);
   var {
     circleTangency: soct,
     lineTangency: solt,
-    theta: sot
+    theta: sot,
   } = getTangentCircle({
     cx,
     cy,
@@ -9249,12 +10487,12 @@ var getSectorWithCorner = (_ref3) => {
     angle: startAngle,
     sign: sign2,
     cornerRadius,
-    cornerIsExternal
+    cornerIsExternal,
   });
   var {
     circleTangency: eoct,
     lineTangency: eolt,
-    theta: eot
+    theta: eot,
   } = getTangentCircle({
     cx,
     cy,
@@ -9262,12 +10500,35 @@ var getSectorWithCorner = (_ref3) => {
     angle: endAngle,
     sign: -sign2,
     cornerRadius,
-    cornerIsExternal
+    cornerIsExternal,
   });
-  var outerArcAngle = cornerIsExternal ? Math.abs(startAngle - endAngle) : Math.abs(startAngle - endAngle) - sot - eot;
+  var outerArcAngle = cornerIsExternal
+    ? Math.abs(startAngle - endAngle)
+    : Math.abs(startAngle - endAngle) - sot - eot;
   if (outerArcAngle < 0) {
     if (forceCornerRadius) {
-      return roundTemplateLiteral(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["M ", ",", "\n        a", ",", ",0,0,1,", ",0\n        a", ",", ",0,0,1,", ",0\n      "])), solt.x, solt.y, cornerRadius, cornerRadius, cornerRadius * 2, cornerRadius, cornerRadius, -cornerRadius * 2);
+      return roundTemplateLiteral(
+        _templateObject4 ||
+          (_templateObject4 = _taggedTemplateLiteral([
+            "M ",
+            ",",
+            "\n        a",
+            ",",
+            ",0,0,1,",
+            ",0\n        a",
+            ",",
+            ",0,0,1,",
+            ",0\n      ",
+          ])),
+        solt.x,
+        solt.y,
+        cornerRadius,
+        cornerRadius,
+        cornerRadius * 2,
+        cornerRadius,
+        cornerRadius,
+        -cornerRadius * 2,
+      );
     }
     return getSectorPath({
       cx,
@@ -9275,15 +10536,56 @@ var getSectorWithCorner = (_ref3) => {
       innerRadius,
       outerRadius,
       startAngle,
-      endAngle
+      endAngle,
     });
   }
-  var path = roundTemplateLiteral(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["M ", ",", "\n    A", ",", ",0,0,", ",", ",", "\n    A", ",", ",0,", ",", ",", ",", "\n    A", ",", ",0,0,", ",", ",", "\n  "])), solt.x, solt.y, cornerRadius, cornerRadius, +(sign2 < 0), soct.x, soct.y, outerRadius, outerRadius, +(outerArcAngle > 180), +(sign2 < 0), eoct.x, eoct.y, cornerRadius, cornerRadius, +(sign2 < 0), eolt.x, eolt.y);
+  var path = roundTemplateLiteral(
+    _templateObject5 ||
+      (_templateObject5 = _taggedTemplateLiteral([
+        "M ",
+        ",",
+        "\n    A",
+        ",",
+        ",0,0,",
+        ",",
+        ",",
+        "\n    A",
+        ",",
+        ",0,",
+        ",",
+        ",",
+        ",",
+        "\n    A",
+        ",",
+        ",0,0,",
+        ",",
+        ",",
+        "\n  ",
+      ])),
+    solt.x,
+    solt.y,
+    cornerRadius,
+    cornerRadius,
+    +(sign2 < 0),
+    soct.x,
+    soct.y,
+    outerRadius,
+    outerRadius,
+    +(outerArcAngle > 180),
+    +(sign2 < 0),
+    eoct.x,
+    eoct.y,
+    cornerRadius,
+    cornerRadius,
+    +(sign2 < 0),
+    eolt.x,
+    eolt.y,
+  );
   if (innerRadius > 0) {
     var {
       circleTangency: sict,
       lineTangency: silt,
-      theta: sit
+      theta: sit,
     } = getTangentCircle({
       cx,
       cy,
@@ -9292,12 +10594,12 @@ var getSectorWithCorner = (_ref3) => {
       sign: sign2,
       isExternal: true,
       cornerRadius,
-      cornerIsExternal
+      cornerIsExternal,
     });
     var {
       circleTangency: eict,
       lineTangency: eilt,
-      theta: eit
+      theta: eit,
     } = getTangentCircle({
       cx,
       cy,
@@ -9306,15 +10608,62 @@ var getSectorWithCorner = (_ref3) => {
       sign: -sign2,
       isExternal: true,
       cornerRadius,
-      cornerIsExternal
+      cornerIsExternal,
     });
-    var innerArcAngle = cornerIsExternal ? Math.abs(startAngle - endAngle) : Math.abs(startAngle - endAngle) - sit - eit;
+    var innerArcAngle = cornerIsExternal
+      ? Math.abs(startAngle - endAngle)
+      : Math.abs(startAngle - endAngle) - sit - eit;
     if (innerArcAngle < 0 && cornerRadius === 0) {
       return "".concat(path, "L").concat(cx, ",").concat(cy, "Z");
     }
-    path += roundTemplateLiteral(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["L", ",", "\n      A", ",", ",0,0,", ",", ",", "\n      A", ",", ",0,", ",", ",", ",", "\n      A", ",", ",0,0,", ",", ",", "Z"])), eilt.x, eilt.y, cornerRadius, cornerRadius, +(sign2 < 0), eict.x, eict.y, innerRadius, innerRadius, +(innerArcAngle > 180), +(sign2 > 0), sict.x, sict.y, cornerRadius, cornerRadius, +(sign2 < 0), silt.x, silt.y);
+    path += roundTemplateLiteral(
+      _templateObject6 ||
+        (_templateObject6 = _taggedTemplateLiteral([
+          "L",
+          ",",
+          "\n      A",
+          ",",
+          ",0,0,",
+          ",",
+          ",",
+          "\n      A",
+          ",",
+          ",0,",
+          ",",
+          ",",
+          ",",
+          "\n      A",
+          ",",
+          ",0,0,",
+          ",",
+          ",",
+          "Z",
+        ])),
+      eilt.x,
+      eilt.y,
+      cornerRadius,
+      cornerRadius,
+      +(sign2 < 0),
+      eict.x,
+      eict.y,
+      innerRadius,
+      innerRadius,
+      +(innerArcAngle > 180),
+      +(sign2 > 0),
+      sict.x,
+      sict.y,
+      cornerRadius,
+      cornerRadius,
+      +(sign2 < 0),
+      silt.x,
+      silt.y,
+    );
   } else {
-    path += roundTemplateLiteral(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["L", ",", "Z"])), cx, cy);
+    path += roundTemplateLiteral(
+      _templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["L", ",", "Z"])),
+      cx,
+      cy,
+    );
   }
   return path;
 };
@@ -9327,7 +10676,7 @@ var defaultSectorProps = {
   endAngle: 0,
   cornerRadius: 0,
   forceCornerRadius: false,
-  cornerIsExternal: false
+  cornerIsExternal: false,
 };
 var Sector = (sectorProps) => {
   var props = resolveDefaultProps(sectorProps, defaultSectorProps);
@@ -9341,7 +10690,7 @@ var Sector = (sectorProps) => {
     cornerIsExternal,
     startAngle,
     endAngle,
-    className
+    className,
   } = props;
   if (outerRadius < innerRadius || startAngle === endAngle) {
     return null;
@@ -9360,7 +10709,7 @@ var Sector = (sectorProps) => {
       forceCornerRadius,
       cornerIsExternal,
       startAngle,
-      endAngle
+      endAngle,
     });
   } else {
     path = getSectorPath({
@@ -9369,51 +10718,57 @@ var Sector = (sectorProps) => {
       innerRadius,
       outerRadius,
       startAngle,
-      endAngle
+      endAngle,
     });
   }
-  return /* @__PURE__ */ reactExports.createElement("path", _extends$d({}, svgPropertiesAndEvents(props), {
-    className: layerClass,
-    d: path
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    "path",
+    _extends$d({}, svgPropertiesAndEvents(props), {
+      className: layerClass,
+      d: path,
+    }),
+  );
 };
 function getCursorPoints(layout, activeCoordinate, offset) {
   if (layout === "horizontal") {
-    return [{
-      x: activeCoordinate.x,
-      y: offset.top
-    }, {
-      x: activeCoordinate.x,
-      y: offset.top + offset.height
-    }];
+    return [
+      {
+        x: activeCoordinate.x,
+        y: offset.top,
+      },
+      {
+        x: activeCoordinate.x,
+        y: offset.top + offset.height,
+      },
+    ];
   }
   if (layout === "vertical") {
-    return [{
-      x: offset.left,
-      y: activeCoordinate.y
-    }, {
-      x: offset.left + offset.width,
-      y: activeCoordinate.y
-    }];
+    return [
+      {
+        x: offset.left,
+        y: activeCoordinate.y,
+      },
+      {
+        x: offset.left + offset.width,
+        y: activeCoordinate.y,
+      },
+    ];
   }
   if (isPolarCoordinate(activeCoordinate)) {
     if (layout === "centric") {
-      var {
-        cx,
-        cy,
-        innerRadius,
-        outerRadius,
-        angle
-      } = activeCoordinate;
+      var { cx, cy, innerRadius, outerRadius, angle } = activeCoordinate;
       var innerPoint = polarToCartesian(cx, cy, innerRadius, angle);
       var outerPoint = polarToCartesian(cx, cy, outerRadius, angle);
-      return [{
-        x: innerPoint.x,
-        y: innerPoint.y
-      }, {
-        x: outerPoint.x,
-        y: outerPoint.y
-      }];
+      return [
+        {
+          x: innerPoint.x,
+          y: innerPoint.y,
+        },
+        {
+          x: outerPoint.x,
+          y: outerPoint.y,
+        },
+      ];
     }
     return getRadialCursorPoints(activeCoordinate);
   }
@@ -9426,7 +10781,7 @@ var hasRequiredToNumber;
 function requireToNumber() {
   if (hasRequiredToNumber) return toNumber;
   hasRequiredToNumber = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isSymbol2 = /* @__PURE__ */ requireIsSymbol();
     function toNumber2(value) {
@@ -9443,7 +10798,7 @@ var hasRequiredToFinite;
 function requireToFinite() {
   if (hasRequiredToFinite) return toFinite;
   hasRequiredToFinite = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const toNumber2 = /* @__PURE__ */ requireToNumber();
     function toFinite2(value) {
@@ -9465,7 +10820,7 @@ var hasRequiredRange$1;
 function requireRange$1() {
   if (hasRequiredRange$1) return range$3;
   hasRequiredRange$1 = 1;
-  (function(exports$1) {
+  (function (exports$1) {
     Object.defineProperty(exports$1, Symbol.toStringTag, { value: "Module" });
     const isIterateeCall2 = /* @__PURE__ */ requireIsIterateeCall();
     const toFinite2 = /* @__PURE__ */ requireToFinite();
@@ -9480,7 +10835,7 @@ function requireRange$1() {
       } else {
         end = toFinite2.toFinite(end);
       }
-      step = step === void 0 ? start < end ? 1 : -1 : toFinite2.toFinite(step);
+      step = step === void 0 ? (start < end ? 1 : -1) : toFinite2.toFinite(step);
       const length = Math.max(Math.ceil((end - start) / (step || 1)), 0);
       const result = new Array(length);
       for (let index = 0; index < length; index++) {
@@ -9504,16 +10859,24 @@ function requireRange() {
 var rangeExports = /* @__PURE__ */ requireRange();
 const range$1 = /* @__PURE__ */ getDefaultExportFromCjs(rangeExports);
 var selectChartDataWithIndexes = (state) => state.chartData;
-var selectChartDataAndAlwaysIgnoreIndexes = createSelector([selectChartDataWithIndexes], (dataState) => {
-  var dataEndIndex = dataState.chartData != null ? dataState.chartData.length - 1 : 0;
-  return {
-    chartData: dataState.chartData,
-    computedData: dataState.computedData,
-    dataEndIndex,
-    dataStartIndex: 0
-  };
-});
-var selectChartDataWithIndexesIfNotInPanoramaPosition4 = (state, _unused1, _unused2, isPanorama) => {
+var selectChartDataAndAlwaysIgnoreIndexes = createSelector(
+  [selectChartDataWithIndexes],
+  (dataState) => {
+    var dataEndIndex = dataState.chartData != null ? dataState.chartData.length - 1 : 0;
+    return {
+      chartData: dataState.chartData,
+      computedData: dataState.computedData,
+      dataEndIndex,
+      dataStartIndex: 0,
+    };
+  },
+);
+var selectChartDataWithIndexesIfNotInPanoramaPosition4 = (
+  state,
+  _unused1,
+  _unused2,
+  isPanorama,
+) => {
   if (isPanorama) {
     return selectChartDataAndAlwaysIgnoreIndexes(state);
   }
@@ -9525,28 +10888,19 @@ var selectChartDataWithIndexesIfNotInPanoramaPosition3 = (state, _unused1, isPan
   }
   return selectChartDataWithIndexes(state);
 };
-var selectChartDataSliceIfNotInPanorama = createSelector([selectChartDataWithIndexesIfNotInPanoramaPosition4], (_ref2) => {
-  var {
-    chartData,
-    dataStartIndex,
-    dataEndIndex
-  } = _ref2;
-  return chartData != null ? chartData.slice(dataStartIndex, dataEndIndex + 1) : [];
-});
+var selectChartDataSliceIfNotInPanorama = createSelector(
+  [selectChartDataWithIndexesIfNotInPanoramaPosition4],
+  (_ref2) => {
+    var { chartData, dataStartIndex, dataEndIndex } = _ref2;
+    return chartData != null ? chartData.slice(dataStartIndex, dataEndIndex + 1) : [];
+  },
+);
 createSelector([selectChartDataAndAlwaysIgnoreIndexes], (_ref2) => {
-  var {
-    chartData,
-    dataStartIndex,
-    dataEndIndex
-  } = _ref2;
+  var { chartData, dataStartIndex, dataEndIndex } = _ref2;
   return chartData != null ? chartData.slice(dataStartIndex, dataEndIndex + 1) : [];
 });
 var selectChartDataSliceWithIndexes = createSelector([selectChartDataWithIndexes], (_ref3) => {
-  var {
-    chartData,
-    dataStartIndex,
-    dataEndIndex
-  } = _ref3;
+  var { chartData, dataStartIndex, dataEndIndex } = _ref3;
   return chartData != null ? chartData.slice(dataStartIndex, dataEndIndex + 1) : [];
 });
 function isWellFormedNumberDomain(v) {
@@ -9562,7 +10916,10 @@ function extendDomain(providedDomain, boundaryDomain, allowDataOverflow) {
   if (allowDataOverflow) {
     return providedDomain;
   }
-  return [Math.min(providedDomain[0], boundaryDomain[0]), Math.max(providedDomain[1], boundaryDomain[1])];
+  return [
+    Math.min(providedDomain[0], boundaryDomain[0]),
+    Math.max(providedDomain[1], boundaryDomain[1]),
+  ];
 }
 function numericalDomainSpecifiedWithoutRequiringData(userDomain, allowDataOverflow) {
   if (!allowDataOverflow) {
@@ -9601,8 +10958,7 @@ function parseNumericalUserDomain(userDomain, dataDomain, allowDataOverflow) {
       if (isWellFormedNumberDomain(result)) {
         return extendDomain(result, dataDomain, allowDataOverflow);
       }
-    } catch (_unused) {
-    }
+    } catch (_unused) {}
   }
   if (Array.isArray(userDomain) && userDomain.length === 2) {
     var [providedMin, providedMax] = userDomain;
@@ -9616,10 +10972,11 @@ function parseNumericalUserDomain(userDomain, dataDomain, allowDataOverflow) {
     } else if (typeof providedMin === "function") {
       try {
         if (dataDomain != null) {
-          finalMin = providedMin(dataDomain === null || dataDomain === void 0 ? void 0 : dataDomain[0]);
+          finalMin = providedMin(
+            dataDomain === null || dataDomain === void 0 ? void 0 : dataDomain[0],
+          );
         }
-      } catch (_unused2) {
-      }
+      } catch (_unused2) {}
     } else if (typeof providedMin === "string" && MIN_VALUE_REG.test(providedMin)) {
       var match = MIN_VALUE_REG.exec(providedMin);
       if (match == null || match[1] == null || dataDomain == null) {
@@ -9640,10 +10997,11 @@ function parseNumericalUserDomain(userDomain, dataDomain, allowDataOverflow) {
     } else if (typeof providedMax === "function") {
       try {
         if (dataDomain != null) {
-          finalMax = providedMax(dataDomain === null || dataDomain === void 0 ? void 0 : dataDomain[1]);
+          finalMax = providedMax(
+            dataDomain === null || dataDomain === void 0 ? void 0 : dataDomain[1],
+          );
         }
-      } catch (_unused3) {
-      }
+      } catch (_unused3) {}
     } else if (typeof providedMax === "string" && MAX_VALUE_REG.test(providedMax)) {
       var _match = MAX_VALUE_REG.exec(providedMax);
       if (_match == null || _match[1] == null || dataDomain == null) {
@@ -9665,105 +11023,131 @@ function parseNumericalUserDomain(userDomain, dataDomain, allowDataOverflow) {
   }
   return void 0;
 }
-var MAX_DIGITS = 1e9, defaults = {
-  // These values must be integers within the stated ranges (inclusive).
-  // Most of these values can be changed during run-time using `Decimal.config`.
-  // The maximum number of significant digits of the result of a calculation or base conversion.
-  // E.g. `Decimal.config({ precision: 20 });`
-  precision: 20,
-  // 1 to MAX_DIGITS
-  // The rounding mode used by default by `toInteger`, `toDecimalPlaces`, `toExponential`,
-  // `toFixed`, `toPrecision` and `toSignificantDigits`.
-  //
-  // ROUND_UP         0 Away from zero.
-  // ROUND_DOWN       1 Towards zero.
-  // ROUND_CEIL       2 Towards +Infinity.
-  // ROUND_FLOOR      3 Towards -Infinity.
-  // ROUND_HALF_UP    4 Towards nearest neighbour. If equidistant, up.
-  // ROUND_HALF_DOWN  5 Towards nearest neighbour. If equidistant, down.
-  // ROUND_HALF_EVEN  6 Towards nearest neighbour. If equidistant, towards even neighbour.
-  // ROUND_HALF_CEIL  7 Towards nearest neighbour. If equidistant, towards +Infinity.
-  // ROUND_HALF_FLOOR 8 Towards nearest neighbour. If equidistant, towards -Infinity.
-  //
-  // E.g.
-  // `Decimal.rounding = 4;`
-  // `Decimal.rounding = Decimal.ROUND_HALF_UP;`
-  rounding: 4,
-  // 0 to 8
-  // The exponent value at and beneath which `toString` returns exponential notation.
-  // JavaScript numbers: -7
-  toExpNeg: -7,
-  // 0 to -MAX_E
-  // The exponent value at and above which `toString` returns exponential notation.
-  // JavaScript numbers: 21
-  toExpPos: 21,
-  // 0 to MAX_E
-  // The natural logarithm of 10.
-  // 115 digits
-  LN10: "2.302585092994045684017991454684364207601101488628772976033327900967572609677352480235997205089598298341967784042286"
-}, Decimal, external = true, decimalError = "[DecimalError] ", invalidArgument = decimalError + "Invalid argument: ", exponentOutOfRange = decimalError + "Exponent out of range: ", mathfloor = Math.floor, mathpow = Math.pow, isDecimal = /^(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i, ONE, BASE = 1e7, LOG_BASE = 7, MAX_SAFE_INTEGER = 9007199254740991, MAX_E = mathfloor(MAX_SAFE_INTEGER / LOG_BASE), P = {};
-P.absoluteValue = P.abs = function() {
+var MAX_DIGITS = 1e9,
+  defaults = {
+    // These values must be integers within the stated ranges (inclusive).
+    // Most of these values can be changed during run-time using `Decimal.config`.
+    // The maximum number of significant digits of the result of a calculation or base conversion.
+    // E.g. `Decimal.config({ precision: 20 });`
+    precision: 20,
+    // 1 to MAX_DIGITS
+    // The rounding mode used by default by `toInteger`, `toDecimalPlaces`, `toExponential`,
+    // `toFixed`, `toPrecision` and `toSignificantDigits`.
+    //
+    // ROUND_UP         0 Away from zero.
+    // ROUND_DOWN       1 Towards zero.
+    // ROUND_CEIL       2 Towards +Infinity.
+    // ROUND_FLOOR      3 Towards -Infinity.
+    // ROUND_HALF_UP    4 Towards nearest neighbour. If equidistant, up.
+    // ROUND_HALF_DOWN  5 Towards nearest neighbour. If equidistant, down.
+    // ROUND_HALF_EVEN  6 Towards nearest neighbour. If equidistant, towards even neighbour.
+    // ROUND_HALF_CEIL  7 Towards nearest neighbour. If equidistant, towards +Infinity.
+    // ROUND_HALF_FLOOR 8 Towards nearest neighbour. If equidistant, towards -Infinity.
+    //
+    // E.g.
+    // `Decimal.rounding = 4;`
+    // `Decimal.rounding = Decimal.ROUND_HALF_UP;`
+    rounding: 4,
+    // 0 to 8
+    // The exponent value at and beneath which `toString` returns exponential notation.
+    // JavaScript numbers: -7
+    toExpNeg: -7,
+    // 0 to -MAX_E
+    // The exponent value at and above which `toString` returns exponential notation.
+    // JavaScript numbers: 21
+    toExpPos: 21,
+    // 0 to MAX_E
+    // The natural logarithm of 10.
+    // 115 digits
+    LN10: "2.302585092994045684017991454684364207601101488628772976033327900967572609677352480235997205089598298341967784042286",
+  },
+  Decimal,
+  external = true,
+  decimalError = "[DecimalError] ",
+  invalidArgument = decimalError + "Invalid argument: ",
+  exponentOutOfRange = decimalError + "Exponent out of range: ",
+  mathfloor = Math.floor,
+  mathpow = Math.pow,
+  isDecimal = /^(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i,
+  ONE,
+  BASE = 1e7,
+  LOG_BASE = 7,
+  MAX_SAFE_INTEGER = 9007199254740991,
+  MAX_E = mathfloor(MAX_SAFE_INTEGER / LOG_BASE),
+  P = {};
+P.absoluteValue = P.abs = function () {
   var x2 = new this.constructor(this);
   if (x2.s) x2.s = 1;
   return x2;
 };
-P.comparedTo = P.cmp = function(y2) {
-  var i, j, xdL, ydL, x2 = this;
+P.comparedTo = P.cmp = function (y2) {
+  var i,
+    j,
+    xdL,
+    ydL,
+    x2 = this;
   y2 = new x2.constructor(y2);
   if (x2.s !== y2.s) return x2.s || -y2.s;
-  if (x2.e !== y2.e) return x2.e > y2.e ^ x2.s < 0 ? 1 : -1;
+  if (x2.e !== y2.e) return (x2.e > y2.e) ^ (x2.s < 0) ? 1 : -1;
   xdL = x2.d.length;
   ydL = y2.d.length;
   for (i = 0, j = xdL < ydL ? xdL : ydL; i < j; ++i) {
-    if (x2.d[i] !== y2.d[i]) return x2.d[i] > y2.d[i] ^ x2.s < 0 ? 1 : -1;
+    if (x2.d[i] !== y2.d[i]) return (x2.d[i] > y2.d[i]) ^ (x2.s < 0) ? 1 : -1;
   }
-  return xdL === ydL ? 0 : xdL > ydL ^ x2.s < 0 ? 1 : -1;
+  return xdL === ydL ? 0 : (xdL > ydL) ^ (x2.s < 0) ? 1 : -1;
 };
-P.decimalPlaces = P.dp = function() {
-  var x2 = this, w = x2.d.length - 1, dp = (w - x2.e) * LOG_BASE;
+P.decimalPlaces = P.dp = function () {
+  var x2 = this,
+    w = x2.d.length - 1,
+    dp = (w - x2.e) * LOG_BASE;
   w = x2.d[w];
   if (w) for (; w % 10 == 0; w /= 10) dp--;
   return dp < 0 ? 0 : dp;
 };
-P.dividedBy = P.div = function(y2) {
+P.dividedBy = P.div = function (y2) {
   return divide(this, new this.constructor(y2));
 };
-P.dividedToIntegerBy = P.idiv = function(y2) {
-  var x2 = this, Ctor = x2.constructor;
+P.dividedToIntegerBy = P.idiv = function (y2) {
+  var x2 = this,
+    Ctor = x2.constructor;
   return round(divide(x2, new Ctor(y2), 0, 1), Ctor.precision);
 };
-P.equals = P.eq = function(y2) {
+P.equals = P.eq = function (y2) {
   return !this.cmp(y2);
 };
-P.exponent = function() {
+P.exponent = function () {
   return getBase10Exponent(this);
 };
-P.greaterThan = P.gt = function(y2) {
+P.greaterThan = P.gt = function (y2) {
   return this.cmp(y2) > 0;
 };
-P.greaterThanOrEqualTo = P.gte = function(y2) {
+P.greaterThanOrEqualTo = P.gte = function (y2) {
   return this.cmp(y2) >= 0;
 };
-P.isInteger = P.isint = function() {
+P.isInteger = P.isint = function () {
   return this.e > this.d.length - 2;
 };
-P.isNegative = P.isneg = function() {
+P.isNegative = P.isneg = function () {
   return this.s < 0;
 };
-P.isPositive = P.ispos = function() {
+P.isPositive = P.ispos = function () {
   return this.s > 0;
 };
-P.isZero = function() {
+P.isZero = function () {
   return this.s === 0;
 };
-P.lessThan = P.lt = function(y2) {
+P.lessThan = P.lt = function (y2) {
   return this.cmp(y2) < 0;
 };
-P.lessThanOrEqualTo = P.lte = function(y2) {
+P.lessThanOrEqualTo = P.lte = function (y2) {
   return this.cmp(y2) < 1;
 };
-P.logarithm = P.log = function(base) {
-  var r, x2 = this, Ctor = x2.constructor, pr = Ctor.precision, wpr = pr + 5;
+P.logarithm = P.log = function (base) {
+  var r,
+    x2 = this,
+    Ctor = x2.constructor,
+    pr = Ctor.precision,
+    wpr = pr + 5;
   if (base === void 0) {
     base = new Ctor(10);
   } else {
@@ -9777,13 +11161,16 @@ P.logarithm = P.log = function(base) {
   external = true;
   return round(r, pr);
 };
-P.minus = P.sub = function(y2) {
+P.minus = P.sub = function (y2) {
   var x2 = this;
   y2 = new x2.constructor(y2);
-  return x2.s == y2.s ? subtract(x2, y2) : add(x2, (y2.s = -y2.s, y2));
+  return x2.s == y2.s ? subtract(x2, y2) : add(x2, ((y2.s = -y2.s), y2));
 };
-P.modulo = P.mod = function(y2) {
-  var q, x2 = this, Ctor = x2.constructor, pr = Ctor.precision;
+P.modulo = P.mod = function (y2) {
+  var q,
+    x2 = this,
+    Ctor = x2.constructor,
+    pr = Ctor.precision;
   y2 = new Ctor(y2);
   if (!y2.s) throw Error(decimalError + "NaN");
   if (!x2.s) return round(new Ctor(x2), pr);
@@ -9792,24 +11179,27 @@ P.modulo = P.mod = function(y2) {
   external = true;
   return x2.minus(q);
 };
-P.naturalExponential = P.exp = function() {
+P.naturalExponential = P.exp = function () {
   return exp(this);
 };
-P.naturalLogarithm = P.ln = function() {
+P.naturalLogarithm = P.ln = function () {
   return ln(this);
 };
-P.negated = P.neg = function() {
+P.negated = P.neg = function () {
   var x2 = new this.constructor(this);
   x2.s = -x2.s || 0;
   return x2;
 };
-P.plus = P.add = function(y2) {
+P.plus = P.add = function (y2) {
   var x2 = this;
   y2 = new x2.constructor(y2);
-  return x2.s == y2.s ? add(x2, y2) : subtract(x2, (y2.s = -y2.s, y2));
+  return x2.s == y2.s ? add(x2, y2) : subtract(x2, ((y2.s = -y2.s), y2));
 };
-P.precision = P.sd = function(z) {
-  var e, sd, w, x2 = this;
+P.precision = P.sd = function (z) {
+  var e,
+    sd,
+    w,
+    x2 = this;
   if (z !== void 0 && z !== !!z && z !== 1 && z !== 0) throw Error(invalidArgument + z);
   e = getBase10Exponent(x2) + 1;
   w = x2.d.length - 1;
@@ -9821,8 +11211,16 @@ P.precision = P.sd = function(z) {
   }
   return z && e > sd ? e : sd;
 };
-P.squareRoot = P.sqrt = function() {
-  var e, n, pr, r, s, t, wpr, x2 = this, Ctor = x2.constructor;
+P.squareRoot = P.sqrt = function () {
+  var e,
+    n,
+    pr,
+    r,
+    s,
+    t,
+    wpr,
+    x2 = this,
+    Ctor = x2.constructor;
   if (x2.s < 1) {
     if (!x2.s) return new Ctor(0);
     throw Error(decimalError + "NaN");
@@ -9847,7 +11245,7 @@ P.squareRoot = P.sqrt = function() {
   }
   pr = Ctor.precision;
   s = wpr = pr + 3;
-  for (; ; ) {
+  for (;;) {
     t = r;
     r = t.plus(divide(x2, t, wpr + 2)).times(0.5);
     if (digitsToString(t.d).slice(0, wpr) === (n = digitsToString(r.d)).slice(0, wpr)) {
@@ -9867,8 +11265,20 @@ P.squareRoot = P.sqrt = function() {
   external = true;
   return round(r, pr);
 };
-P.times = P.mul = function(y2) {
-  var carry, e, i, k, r, rL, t, xdL, ydL, x2 = this, Ctor = x2.constructor, xd = x2.d, yd = (y2 = new Ctor(y2)).d;
+P.times = P.mul = function (y2) {
+  var carry,
+    e,
+    i,
+    k,
+    r,
+    rL,
+    t,
+    xdL,
+    ydL,
+    x2 = this,
+    Ctor = x2.constructor,
+    xd = x2.d,
+    yd = (y2 = new Ctor(y2)).d;
   if (!x2.s || !y2.s) return new Ctor(0);
   y2.s *= x2.s;
   e = x2.e + y2.e;
@@ -9889,10 +11299,10 @@ P.times = P.mul = function(y2) {
     carry = 0;
     for (k = xdL + i; k > i; ) {
       t = r[k] + yd[i] * xd[k - i - 1] + carry;
-      r[k--] = t % BASE | 0;
-      carry = t / BASE | 0;
+      r[k--] = (t % BASE) | 0;
+      carry = (t / BASE) | 0;
     }
-    r[k] = (r[k] + carry) % BASE | 0;
+    r[k] = ((r[k] + carry) % BASE) | 0;
   }
   for (; !r[--rL]; ) r.pop();
   if (carry) ++e;
@@ -9901,8 +11311,9 @@ P.times = P.mul = function(y2) {
   y2.e = e;
   return external ? round(y2, Ctor.precision) : y2;
 };
-P.toDecimalPlaces = P.todp = function(dp, rm) {
-  var x2 = this, Ctor = x2.constructor;
+P.toDecimalPlaces = P.todp = function (dp, rm) {
+  var x2 = this,
+    Ctor = x2.constructor;
   x2 = new Ctor(x2);
   if (dp === void 0) return x2;
   checkInt32(dp, 0, MAX_DIGITS);
@@ -9910,8 +11321,10 @@ P.toDecimalPlaces = P.todp = function(dp, rm) {
   else checkInt32(rm, 0, 8);
   return round(x2, dp + getBase10Exponent(x2) + 1, rm);
 };
-P.toExponential = function(dp, rm) {
-  var str, x2 = this, Ctor = x2.constructor;
+P.toExponential = function (dp, rm) {
+  var str,
+    x2 = this,
+    Ctor = x2.constructor;
   if (dp === void 0) {
     str = toString(x2, true);
   } else {
@@ -9923,8 +11336,11 @@ P.toExponential = function(dp, rm) {
   }
   return str;
 };
-P.toFixed = function(dp, rm) {
-  var str, y2, x2 = this, Ctor = x2.constructor;
+P.toFixed = function (dp, rm) {
+  var str,
+    y2,
+    x2 = this,
+    Ctor = x2.constructor;
   if (dp === void 0) return toString(x2);
   checkInt32(dp, 0, MAX_DIGITS);
   if (rm === void 0) rm = Ctor.rounding;
@@ -9933,15 +11349,25 @@ P.toFixed = function(dp, rm) {
   str = toString(y2.abs(), false, dp + getBase10Exponent(y2) + 1);
   return x2.isneg() && !x2.isZero() ? "-" + str : str;
 };
-P.toInteger = P.toint = function() {
-  var x2 = this, Ctor = x2.constructor;
+P.toInteger = P.toint = function () {
+  var x2 = this,
+    Ctor = x2.constructor;
   return round(new Ctor(x2), getBase10Exponent(x2) + 1, Ctor.rounding);
 };
-P.toNumber = function() {
+P.toNumber = function () {
   return +this;
 };
-P.toPower = P.pow = function(y2) {
-  var e, k, pr, r, sign2, yIsInt, x2 = this, Ctor = x2.constructor, guard = 12, yn = +(y2 = new Ctor(y2));
+P.toPower = P.pow = function (y2) {
+  var e,
+    k,
+    pr,
+    r,
+    sign2,
+    yIsInt,
+    x2 = this,
+    Ctor = x2.constructor,
+    guard = 12,
+    yn = +(y2 = new Ctor(y2));
   if (!y2.s) return new Ctor(ONE);
   x2 = new Ctor(x2);
   if (!x2.s) {
@@ -9961,7 +11387,7 @@ P.toPower = P.pow = function(y2) {
     r = new Ctor(ONE);
     e = Math.ceil(pr / LOG_BASE + 4);
     external = false;
-    for (; ; ) {
+    for (;;) {
       if (k % 2) {
         r = r.times(x2);
         truncate(r.d, e);
@@ -9983,8 +11409,11 @@ P.toPower = P.pow = function(y2) {
   r.s = sign2;
   return r;
 };
-P.toPrecision = function(sd, rm) {
-  var e, str, x2 = this, Ctor = x2.constructor;
+P.toPrecision = function (sd, rm) {
+  var e,
+    str,
+    x2 = this,
+    Ctor = x2.constructor;
   if (sd === void 0) {
     e = getBase10Exponent(x2);
     str = toString(x2, e <= Ctor.toExpNeg || e >= Ctor.toExpPos);
@@ -9998,8 +11427,9 @@ P.toPrecision = function(sd, rm) {
   }
   return str;
 };
-P.toSignificantDigits = P.tosd = function(sd, rm) {
-  var x2 = this, Ctor = x2.constructor;
+P.toSignificantDigits = P.tosd = function (sd, rm) {
+  var x2 = this,
+    Ctor = x2.constructor;
   if (sd === void 0) {
     sd = Ctor.precision;
     rm = Ctor.rounding;
@@ -10010,12 +11440,28 @@ P.toSignificantDigits = P.tosd = function(sd, rm) {
   }
   return round(new Ctor(x2), sd, rm);
 };
-P.toString = P.valueOf = P.val = P.toJSON = P[/* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom")] = function() {
-  var x2 = this, e = getBase10Exponent(x2), Ctor = x2.constructor;
-  return toString(x2, e <= Ctor.toExpNeg || e >= Ctor.toExpPos);
-};
+P.toString =
+  P.valueOf =
+  P.val =
+  P.toJSON =
+  P[/* @__PURE__ */ Symbol.for("nodejs.util.inspect.custom")] =
+    function () {
+      var x2 = this,
+        e = getBase10Exponent(x2),
+        Ctor = x2.constructor;
+      return toString(x2, e <= Ctor.toExpNeg || e >= Ctor.toExpPos);
+    };
 function add(x2, y2) {
-  var carry, d, e, i, k, len, xd, yd, Ctor = x2.constructor, pr = Ctor.precision;
+  var carry,
+    d,
+    e,
+    i,
+    k,
+    len,
+    xd,
+    yd,
+    Ctor = x2.constructor,
+    pr = Ctor.precision;
   if (!x2.s || !y2.s) {
     if (!y2.s) y2 = new Ctor(x2);
     return external ? round(y2, pr) : y2;
@@ -10055,7 +11501,7 @@ function add(x2, y2) {
     xd = d;
   }
   for (carry = 0; i; ) {
-    carry = (xd[--i] = xd[i] + yd[i] + carry) / BASE | 0;
+    carry = ((xd[--i] = xd[i] + yd[i] + carry) / BASE) | 0;
     xd[i] %= BASE;
   }
   if (carry) {
@@ -10073,7 +11519,12 @@ function checkInt32(i, min2, max2) {
   }
 }
 function digitsToString(d) {
-  var i, k, ws, indexOfLastWord = d.length - 1, str = "", w = d[0];
+  var i,
+    k,
+    ws,
+    indexOfLastWord = d.length - 1,
+    str = "",
+    w = d[0];
   if (indexOfLastWord > 0) {
     str += w;
     for (i = 1; i < indexOfLastWord; i++) {
@@ -10092,13 +11543,15 @@ function digitsToString(d) {
   for (; w % 10 === 0; ) w /= 10;
   return str + w;
 }
-var divide = /* @__PURE__ */ (function() {
+var divide = /* @__PURE__ */ (function () {
   function multiplyInteger(x2, k) {
-    var temp, carry = 0, i = x2.length;
+    var temp,
+      carry = 0,
+      i = x2.length;
     for (x2 = x2.slice(); i--; ) {
       temp = x2[i] * k + carry;
-      x2[i] = temp % BASE | 0;
-      carry = temp / BASE | 0;
+      x2[i] = (temp % BASE) | 0;
+      carry = (temp / BASE) | 0;
     }
     if (carry) x2.unshift(carry);
     return x2;
@@ -10126,8 +11579,29 @@ var divide = /* @__PURE__ */ (function() {
     }
     for (; !a[0] && a.length > 1; ) a.shift();
   }
-  return function(x2, y2, pr, dp) {
-    var cmp, e, i, k, prod, prodL, q, qd, rem, remL, rem0, sd, t, xi, xL, yd0, yL, yz, Ctor = x2.constructor, sign2 = x2.s == y2.s ? 1 : -1, xd = x2.d, yd = y2.d;
+  return function (x2, y2, pr, dp) {
+    var cmp,
+      e,
+      i,
+      k,
+      prod,
+      prodL,
+      q,
+      qd,
+      rem,
+      remL,
+      rem0,
+      sd,
+      t,
+      xi,
+      xL,
+      yd0,
+      yL,
+      yz,
+      Ctor = x2.constructor,
+      sign2 = x2.s == y2.s ? 1 : -1,
+      xd = x2.d,
+      yd = y2.d;
     if (!x2.s) return new Ctor(x2);
     if (!y2.s) throw Error(decimalError + "Division by zero");
     e = x2.e - y2.e;
@@ -10145,7 +11619,7 @@ var divide = /* @__PURE__ */ (function() {
       sd = pr;
     }
     if (sd < 0) return new Ctor(0);
-    sd = sd / LOG_BASE + 2 | 0;
+    sd = (sd / LOG_BASE + 2) | 0;
     i = 0;
     if (yL == 1) {
       k = 0;
@@ -10153,11 +11627,11 @@ var divide = /* @__PURE__ */ (function() {
       sd++;
       for (; (i < xL || k) && sd--; i++) {
         t = k * BASE + (xd[i] || 0);
-        qd[i] = t / yd | 0;
-        k = t % yd | 0;
+        qd[i] = (t / yd) | 0;
+        k = (t % yd) | 0;
       }
     } else {
-      k = BASE / (yd[0] + 1) | 0;
+      k = (BASE / (yd[0] + 1)) | 0;
       if (k > 1) {
         yd = multiplyInteger(yd, k);
         xd = multiplyInteger(xd, k);
@@ -10178,7 +11652,7 @@ var divide = /* @__PURE__ */ (function() {
         if (cmp < 0) {
           rem0 = rem[0];
           if (yL != remL) rem0 = rem0 * BASE + (rem[1] || 0);
-          k = rem0 / yd0 | 0;
+          k = (rem0 / yd0) | 0;
           if (k > 1) {
             if (k >= BASE) k = BASE - 1;
             prod = multiplyInteger(yd, k);
@@ -10224,7 +11698,16 @@ var divide = /* @__PURE__ */ (function() {
   };
 })();
 function exp(x2, sd) {
-  var denominator, guard, pow2, sum, t, wpr, i = 0, k = 0, Ctor = x2.constructor, pr = Ctor.precision;
+  var denominator,
+    guard,
+    pow2,
+    sum,
+    t,
+    wpr,
+    i = 0,
+    k = 0,
+    Ctor = x2.constructor,
+    pr = Ctor.precision;
   if (getBase10Exponent(x2) > 16) throw Error(exponentOutOfRange + getBase10Exponent(x2));
   if (!x2.s) return new Ctor(ONE);
   {
@@ -10236,24 +11719,25 @@ function exp(x2, sd) {
     x2 = x2.times(t);
     k += 5;
   }
-  guard = Math.log(mathpow(2, k)) / Math.LN10 * 2 + 5 | 0;
+  guard = ((Math.log(mathpow(2, k)) / Math.LN10) * 2 + 5) | 0;
   wpr += guard;
   denominator = pow2 = sum = new Ctor(ONE);
   Ctor.precision = wpr;
-  for (; ; ) {
+  for (;;) {
     pow2 = round(pow2.times(x2), wpr);
     denominator = denominator.times(++i);
     t = sum.plus(divide(pow2, denominator, wpr));
     if (digitsToString(t.d).slice(0, wpr) === digitsToString(sum.d).slice(0, wpr)) {
       while (k--) sum = round(sum.times(sum), wpr);
       Ctor.precision = pr;
-      return sd == null ? (external = true, round(sum, pr)) : sum;
+      return sd == null ? ((external = true), round(sum, pr)) : sum;
     }
     sum = t;
   }
 }
 function getBase10Exponent(x2) {
-  var e = x2.e * LOG_BASE, w = x2.d[0];
+  var e = x2.e * LOG_BASE,
+    w = x2.d[0];
   for (; w >= 10; w /= 10) e++;
   return e;
 }
@@ -10271,7 +11755,21 @@ function getZeroString(k) {
   return zs;
 }
 function ln(y2, sd) {
-  var c, c0, denominator, e, numerator, sum, t, wpr, x2, n = 1, guard = 10, x3 = y2, xd = x3.d, Ctor = x3.constructor, pr = Ctor.precision;
+  var c,
+    c0,
+    denominator,
+    e,
+    numerator,
+    sum,
+    t,
+    wpr,
+    x2,
+    n = 1,
+    guard = 10,
+    x3 = y2,
+    xd = x3.d,
+    Ctor = x3.constructor,
+    pr = Ctor.precision;
   if (x3.s < 1) throw Error(decimalError + (x3.s ? "NaN" : "-Infinity"));
   if (x3.eq(ONE)) return new Ctor(0);
   if (sd == null) {
@@ -10290,7 +11788,7 @@ function ln(y2, sd) {
   c0 = c.charAt(0);
   e = getBase10Exponent(x3);
   if (Math.abs(e) < 15e14) {
-    while (c0 < 7 && c0 != 1 || c0 == 1 && c.charAt(1) > 3) {
+    while ((c0 < 7 && c0 != 1) || (c0 == 1 && c.charAt(1) > 3)) {
       x3 = x3.times(y2);
       c = digitsToString(x3.d);
       c0 = c.charAt(0);
@@ -10307,12 +11805,12 @@ function ln(y2, sd) {
     t = getLn10(Ctor, wpr + 2, pr).times(e + "");
     x3 = ln(new Ctor(c0 + "." + c.slice(1)), wpr - guard).plus(t);
     Ctor.precision = pr;
-    return sd == null ? (external = true, round(x3, pr)) : x3;
+    return sd == null ? ((external = true), round(x3, pr)) : x3;
   }
   sum = numerator = x3 = divide(x3.minus(ONE), x3.plus(ONE), wpr);
   x2 = round(x3.times(x3), wpr);
   denominator = 3;
-  for (; ; ) {
+  for (;;) {
     numerator = round(numerator.times(x2), wpr);
     t = sum.plus(divide(numerator, new Ctor(denominator), wpr));
     if (digitsToString(t.d).slice(0, wpr) === digitsToString(sum.d).slice(0, wpr)) {
@@ -10320,7 +11818,7 @@ function ln(y2, sd) {
       if (e !== 0) sum = sum.plus(getLn10(Ctor, wpr + 2, pr).times(e + ""));
       sum = divide(sum, new Ctor(n), wpr);
       Ctor.precision = pr;
-      return sd == null ? (external = true, round(sum, pr)) : sum;
+      return sd == null ? ((external = true), round(sum, pr)) : sum;
     }
     sum = t;
     denominator += 2;
@@ -10348,7 +11846,7 @@ function parseDecimal(x2, str) {
     if (e < 0) i += LOG_BASE;
     if (i < len) {
       if (i) x2.d.push(+str.slice(0, i));
-      for (len -= LOG_BASE; i < len; ) x2.d.push(+str.slice(i, i += LOG_BASE));
+      for (len -= LOG_BASE; i < len; ) x2.d.push(+str.slice(i, (i += LOG_BASE)));
       str = str.slice(i);
       i = LOG_BASE - str.length;
     } else {
@@ -10365,13 +11863,21 @@ function parseDecimal(x2, str) {
   return x2;
 }
 function round(x2, sd, rm) {
-  var i, j, k, n, rd, doRound, w, xdi, xd = x2.d;
+  var i,
+    j,
+    k,
+    n,
+    rd,
+    doRound,
+    w,
+    xdi,
+    xd = x2.d;
   for (n = 1, k = xd[0]; k >= 10; k /= 10) n++;
   i = sd - n;
   if (i < 0) {
     i += LOG_BASE;
     j = sd;
-    w = xd[xdi = 0];
+    w = xd[(xdi = 0)];
   } else {
     xdi = Math.ceil((i + 1) / LOG_BASE);
     k = xd.length;
@@ -10383,17 +11889,25 @@ function round(x2, sd, rm) {
   }
   if (rm !== void 0) {
     k = mathpow(10, n - j - 1);
-    rd = w / k % 10 | 0;
+    rd = ((w / k) % 10) | 0;
     doRound = sd < 0 || xd[xdi + 1] !== void 0 || w % k;
-    doRound = rm < 4 ? (rd || doRound) && (rm == 0 || rm == (x2.s < 0 ? 3 : 2)) : rd > 5 || rd == 5 && (rm == 4 || doRound || rm == 6 && // Check whether the digit to the left of the rounding digit is odd.
-    (i > 0 ? j > 0 ? w / mathpow(10, n - j) : 0 : xd[xdi - 1]) % 10 & 1 || rm == (x2.s < 0 ? 8 : 7));
+    doRound =
+      rm < 4
+        ? (rd || doRound) && (rm == 0 || rm == (x2.s < 0 ? 3 : 2))
+        : rd > 5 ||
+          (rd == 5 &&
+            (rm == 4 ||
+              doRound ||
+              (rm == 6 && // Check whether the digit to the left of the rounding digit is odd.
+                ((i > 0 ? (j > 0 ? w / mathpow(10, n - j) : 0) : xd[xdi - 1]) % 10) & 1) ||
+              rm == (x2.s < 0 ? 8 : 7)));
   }
   if (sd < 1 || !xd[0]) {
     if (doRound) {
       k = getBase10Exponent(x2);
       xd.length = 1;
       sd = sd - k - 1;
-      xd[0] = mathpow(10, (LOG_BASE - sd % LOG_BASE) % LOG_BASE);
+      xd[0] = mathpow(10, (LOG_BASE - (sd % LOG_BASE)) % LOG_BASE);
       x2.e = mathfloor(-sd / LOG_BASE) || 0;
     } else {
       xd.length = 1;
@@ -10408,10 +11922,10 @@ function round(x2, sd, rm) {
   } else {
     xd.length = xdi + 1;
     k = mathpow(10, LOG_BASE - i);
-    xd[xdi] = j > 0 ? (w / mathpow(10, n - j) % mathpow(10, j) | 0) * k : 0;
+    xd[xdi] = j > 0 ? (((w / mathpow(10, n - j)) % mathpow(10, j)) | 0) * k : 0;
   }
   if (doRound) {
-    for (; ; ) {
+    for (;;) {
       if (xdi == 0) {
         if ((xd[0] += k) == BASE) {
           xd[0] = 1;
@@ -10433,7 +11947,18 @@ function round(x2, sd, rm) {
   return x2;
 }
 function subtract(x2, y2) {
-  var d, e, i, j, k, len, xd, xe, xLTy, yd, Ctor = x2.constructor, pr = Ctor.precision;
+  var d,
+    e,
+    i,
+    j,
+    k,
+    len,
+    xd,
+    xe,
+    xLTy,
+    yd,
+    Ctor = x2.constructor,
+    pr = Ctor.precision;
   if (!x2.s || !y2.s) {
     if (y2.s) y2.s = -y2.s;
     else y2 = new Ctor(x2);
@@ -10501,7 +12026,10 @@ function subtract(x2, y2) {
   return external ? round(y2, pr) : y2;
 }
 function toString(x2, isExp, sd) {
-  var k, e = getBase10Exponent(x2), str = digitsToString(x2.d), len = str.length;
+  var k,
+    e = getBase10Exponent(x2),
+    str = digitsToString(x2.d),
+    len = str.length;
   if (isExp) {
     if (sd && (k = sd - len) > 0) {
       str = str.charAt(0) + "." + str.slice(1) + getZeroString(k);
@@ -10590,7 +12118,7 @@ function clone(obj) {
   if (obj === void 0) obj = {};
   if (obj) {
     ps = ["precision", "rounding", "toExpNeg", "toExpPos", "LN10"];
-    for (i = 0; i < ps.length; ) if (!obj.hasOwnProperty(p = ps[i++])) obj[p] = this[p];
+    for (i = 0; i < ps.length; ) if (!obj.hasOwnProperty((p = ps[i++]))) obj[p] = this[p];
   }
   Decimal2.config(obj);
   return Decimal2;
@@ -10599,27 +12127,30 @@ function config(obj) {
   if (!obj || typeof obj !== "object") {
     throw Error(decimalError + "Object expected");
   }
-  var i, p, v, ps = [
-    "precision",
-    1,
-    MAX_DIGITS,
-    "rounding",
-    0,
-    8,
-    "toExpNeg",
-    -1 / 0,
-    0,
-    "toExpPos",
-    0,
-    1 / 0
-  ];
+  var i,
+    p,
+    v,
+    ps = [
+      "precision",
+      1,
+      MAX_DIGITS,
+      "rounding",
+      0,
+      8,
+      "toExpNeg",
+      -1 / 0,
+      0,
+      "toExpPos",
+      0,
+      1 / 0,
+    ];
   for (i = 0; i < ps.length; i += 3) {
-    if ((v = obj[p = ps[i]]) !== void 0) {
+    if ((v = obj[(p = ps[i])]) !== void 0) {
       if (mathfloor(v) === v && v >= ps[i + 1] && v <= ps[i + 2]) this[p] = v;
       else throw Error(invalidArgument + p + ": " + v);
     }
   }
-  if ((v = obj[p = "LN10"]) !== void 0) {
+  if ((v = obj[(p = "LN10")]) !== void 0) {
     if (v == Math.LN10) this[p] = new this(v);
     else throw Error(invalidArgument + p + ": " + v);
   }
@@ -10664,9 +12195,13 @@ var getAdaptiveStep = (roughStep, allowDecimals, correctionFactor) => {
   var digitCountValue = new Decimal$1(10).pow(digitCount);
   var stepRatio = roughStep.div(digitCountValue);
   var stepRatioScale = digitCount !== 1 ? 0.05 : 0.1;
-  var amendStepRatio = new Decimal$1(Math.ceil(stepRatio.div(stepRatioScale).toNumber())).add(correctionFactor).mul(stepRatioScale);
+  var amendStepRatio = new Decimal$1(Math.ceil(stepRatio.div(stepRatioScale).toNumber()))
+    .add(correctionFactor)
+    .mul(stepRatioScale);
   var formatStep = amendStepRatio.mul(digitCountValue);
-  return allowDecimals ? new Decimal$1(formatStep.toNumber()) : new Decimal$1(Math.ceil(formatStep.toNumber()));
+  return allowDecimals
+    ? new Decimal$1(formatStep.toNumber())
+    : new Decimal$1(Math.ceil(formatStep.toNumber()));
 };
 var getSnap125Step = (roughStep, allowDecimals, correctionFactor) => {
   var _NICE_STEPS$niceIdx;
@@ -10689,7 +12224,10 @@ var getSnap125Step = (roughStep, allowDecimals, correctionFactor) => {
     niceIdx %= NICE_STEPS.length;
     magnitude = magnitude.mul(new Decimal$1(10).pow(extraMag));
   }
-  var niceStep = (_NICE_STEPS$niceIdx = NICE_STEPS[niceIdx]) !== null && _NICE_STEPS$niceIdx !== void 0 ? _NICE_STEPS$niceIdx : 1;
+  var niceStep =
+    (_NICE_STEPS$niceIdx = NICE_STEPS[niceIdx]) !== null && _NICE_STEPS$niceIdx !== void 0
+      ? _NICE_STEPS$niceIdx
+      : 1;
   var formatStep = new Decimal$1(niceStep).mul(magnitude);
   return allowDecimals ? formatStep : new Decimal$1(Math.ceil(formatStep.toNumber()));
 };
@@ -10723,10 +12261,14 @@ var _calculateStep = function calculateStep(min2, max2, tickCount, allowDecimals
     return {
       step: new Decimal$1(0),
       tickMin: new Decimal$1(0),
-      tickMax: new Decimal$1(0)
+      tickMax: new Decimal$1(0),
     };
   }
-  var step = stepFn(new Decimal$1(max2).sub(min2).div(tickCount - 1), allowDecimals, correctionFactor);
+  var step = stepFn(
+    new Decimal$1(max2).sub(min2).div(tickCount - 1),
+    allowDecimals,
+    correctionFactor,
+  );
   var middle;
   if (min2 <= 0 && max2 >= 0) {
     middle = new Decimal$1(0);
@@ -10747,7 +12289,7 @@ var _calculateStep = function calculateStep(min2, max2, tickCount, allowDecimals
   return {
     step,
     tickMin: middle.sub(new Decimal$1(belowCount).mul(step)),
-    tickMax: middle.add(new Decimal$1(upCount).mul(step))
+    tickMax: middle.add(new Decimal$1(upCount).mul(step)),
   };
 };
 var getNiceTickValues = function getNiceTickValues2(_ref2) {
@@ -10758,18 +12300,17 @@ var getNiceTickValues = function getNiceTickValues2(_ref2) {
   var count = Math.max(tickCount, 2);
   var [cormin, cormax] = getValidInterval([min2, max2]);
   if (cormin === -Infinity || cormax === Infinity) {
-    var _values = cormax === Infinity ? [cormin, ...Array(tickCount - 1).fill(Infinity)] : [...Array(tickCount - 1).fill(-Infinity), cormax];
+    var _values =
+      cormax === Infinity
+        ? [cormin, ...Array(tickCount - 1).fill(Infinity)]
+        : [...Array(tickCount - 1).fill(-Infinity), cormax];
     return min2 > max2 ? _values.reverse() : _values;
   }
   if (cormin === cormax) {
     return getTickOfSingleValue(cormin, tickCount, allowDecimals);
   }
   var stepFn = niceTicksMode === "snap125" ? getSnap125Step : getAdaptiveStep;
-  var {
-    step,
-    tickMin,
-    tickMax
-  } = _calculateStep(cormin, cormax, count, allowDecimals, 0, stepFn);
+  var { step, tickMin, tickMax } = _calculateStep(cormin, cormax, count, allowDecimals, 0, stepFn);
   var values = rangeStep(tickMin, tickMax.add(new Decimal$1(0.1).mul(step)), step);
   return min2 > max2 ? values.reverse() : values;
 };
@@ -10869,7 +12410,7 @@ var DefaultZIndexes = {
   /**
    * LabelList and Label, including Axis labels
    */
-  label: 2e3
+  label: 2e3,
 };
 var defaultPolarAngleAxisProps = {
   allowDecimals: false,
@@ -10879,7 +12420,7 @@ var defaultPolarAngleAxisProps = {
   reversed: false,
   scale: "auto",
   tick: true,
-  type: "auto"
+  type: "auto",
 };
 var defaultPolarRadiusAxisProps = {
   allowDataOverflow: false,
@@ -10891,7 +12432,7 @@ var defaultPolarRadiusAxisProps = {
   scale: "auto",
   tick: true,
   tickCount: 5,
-  type: "auto"
+  type: "auto",
 };
 var combineAxisRangeWithReverse = (axisSettings, axisRange) => {
   if (!axisSettings || !axisRange) {
@@ -10915,25 +12456,41 @@ function ownKeys$m(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$m(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$m(Object(t), true).forEach(function(r2) {
-      _defineProperty$o(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$m(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$m(Object(t), true).forEach(function (r2) {
+          _defineProperty$o(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$m(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$o(e, r, t) {
-  return (r = _toPropertyKey$o(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$o(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$o(t) {
   var i = _toPrimitive$o(t, "string");
@@ -10966,7 +12523,7 @@ var implicitAngleAxis = {
   ticks: void 0,
   type: defaultPolarAngleAxisProps.type,
   unit: void 0,
-  niceTicks: "auto"
+  niceTicks: "auto",
 };
 var implicitRadiusAxis = {
   allowDataOverflow: defaultPolarRadiusAxisProps.allowDataOverflow,
@@ -10984,7 +12541,7 @@ var implicitRadiusAxis = {
   ticks: void 0,
   type: defaultPolarRadiusAxisProps.type,
   unit: void 0,
-  niceTicks: "auto"
+  niceTicks: "auto",
 };
 var selectAngleAxisNoDefaults = (state, angleAxisId) => {
   if (angleAxisId == null) {
@@ -10992,106 +12549,152 @@ var selectAngleAxisNoDefaults = (state, angleAxisId) => {
   }
   return state.polarAxis.angleAxis[angleAxisId];
 };
-var selectAngleAxis = createSelector([selectAngleAxisNoDefaults, selectPolarChartLayout], (angleAxisSettings, layout) => {
-  var _getAxisTypeBasedOnLa;
-  if (angleAxisSettings != null) {
-    return angleAxisSettings;
-  }
-  var evaluatedType = (_getAxisTypeBasedOnLa = getAxisTypeBasedOnLayout(layout, "angleAxis", implicitAngleAxis.type)) !== null && _getAxisTypeBasedOnLa !== void 0 ? _getAxisTypeBasedOnLa : "category";
-  return _objectSpread$m(_objectSpread$m({}, implicitAngleAxis), {}, {
-    type: evaluatedType
-  });
-});
+var selectAngleAxis = createSelector(
+  [selectAngleAxisNoDefaults, selectPolarChartLayout],
+  (angleAxisSettings, layout) => {
+    var _getAxisTypeBasedOnLa;
+    if (angleAxisSettings != null) {
+      return angleAxisSettings;
+    }
+    var evaluatedType =
+      (_getAxisTypeBasedOnLa = getAxisTypeBasedOnLayout(
+        layout,
+        "angleAxis",
+        implicitAngleAxis.type,
+      )) !== null && _getAxisTypeBasedOnLa !== void 0
+        ? _getAxisTypeBasedOnLa
+        : "category";
+    return _objectSpread$m(
+      _objectSpread$m({}, implicitAngleAxis),
+      {},
+      {
+        type: evaluatedType,
+      },
+    );
+  },
+);
 var selectRadiusAxisNoDefaults = (state, radiusAxisId) => {
   return state.polarAxis.radiusAxis[radiusAxisId];
 };
-var selectRadiusAxis = createSelector([selectRadiusAxisNoDefaults, selectPolarChartLayout], (radiusAxisSettings, layout) => {
-  var _getAxisTypeBasedOnLa2;
-  if (radiusAxisSettings != null) {
-    return radiusAxisSettings;
-  }
-  var evaluatedType = (_getAxisTypeBasedOnLa2 = getAxisTypeBasedOnLayout(layout, "radiusAxis", implicitRadiusAxis.type)) !== null && _getAxisTypeBasedOnLa2 !== void 0 ? _getAxisTypeBasedOnLa2 : "category";
-  return _objectSpread$m(_objectSpread$m({}, implicitRadiusAxis), {}, {
-    type: evaluatedType
-  });
-});
+var selectRadiusAxis = createSelector(
+  [selectRadiusAxisNoDefaults, selectPolarChartLayout],
+  (radiusAxisSettings, layout) => {
+    var _getAxisTypeBasedOnLa2;
+    if (radiusAxisSettings != null) {
+      return radiusAxisSettings;
+    }
+    var evaluatedType =
+      (_getAxisTypeBasedOnLa2 = getAxisTypeBasedOnLayout(
+        layout,
+        "radiusAxis",
+        implicitRadiusAxis.type,
+      )) !== null && _getAxisTypeBasedOnLa2 !== void 0
+        ? _getAxisTypeBasedOnLa2
+        : "category";
+    return _objectSpread$m(
+      _objectSpread$m({}, implicitRadiusAxis),
+      {},
+      {
+        type: evaluatedType,
+      },
+    );
+  },
+);
 var selectPolarOptions = (state) => state.polarOptions;
-var selectMaxRadius = createSelector([selectChartWidth, selectChartHeight, selectChartOffsetInternal], getMaxRadius);
-var selectInnerRadius = createSelector([selectPolarOptions, selectMaxRadius], (polarChartOptions, maxRadius) => {
-  if (polarChartOptions == null) {
-    return void 0;
-  }
-  return getPercentValue(polarChartOptions.innerRadius, maxRadius, 0);
-});
-var selectOuterRadius = createSelector([selectPolarOptions, selectMaxRadius], (polarChartOptions, maxRadius) => {
-  if (polarChartOptions == null) {
-    return void 0;
-  }
-  return getPercentValue(polarChartOptions.outerRadius, maxRadius, maxRadius * 0.8);
-});
+var selectMaxRadius = createSelector(
+  [selectChartWidth, selectChartHeight, selectChartOffsetInternal],
+  getMaxRadius,
+);
+var selectInnerRadius = createSelector(
+  [selectPolarOptions, selectMaxRadius],
+  (polarChartOptions, maxRadius) => {
+    if (polarChartOptions == null) {
+      return void 0;
+    }
+    return getPercentValue(polarChartOptions.innerRadius, maxRadius, 0);
+  },
+);
+var selectOuterRadius = createSelector(
+  [selectPolarOptions, selectMaxRadius],
+  (polarChartOptions, maxRadius) => {
+    if (polarChartOptions == null) {
+      return void 0;
+    }
+    return getPercentValue(polarChartOptions.outerRadius, maxRadius, maxRadius * 0.8);
+  },
+);
 var combineAngleAxisRange = (polarOptions) => {
   if (polarOptions == null) {
     return [0, 0];
   }
-  var {
-    startAngle,
-    endAngle
-  } = polarOptions;
+  var { startAngle, endAngle } = polarOptions;
   return [startAngle, endAngle];
 };
 var selectAngleAxisRange = createSelector([selectPolarOptions], combineAngleAxisRange);
 createSelector([selectAngleAxis, selectAngleAxisRange], combineAxisRangeWithReverse);
-var selectRadiusAxisRange = createSelector([selectMaxRadius, selectInnerRadius, selectOuterRadius], (maxRadius, innerRadius, outerRadius) => {
-  if (maxRadius == null || innerRadius == null || outerRadius == null) {
-    return void 0;
-  }
-  return [innerRadius, outerRadius];
-});
+var selectRadiusAxisRange = createSelector(
+  [selectMaxRadius, selectInnerRadius, selectOuterRadius],
+  (maxRadius, innerRadius, outerRadius) => {
+    if (maxRadius == null || innerRadius == null || outerRadius == null) {
+      return void 0;
+    }
+    return [innerRadius, outerRadius];
+  },
+);
 createSelector([selectRadiusAxis, selectRadiusAxisRange], combineAxisRangeWithReverse);
-var selectPolarViewBox = createSelector([selectChartLayout, selectPolarOptions, selectInnerRadius, selectOuterRadius, selectChartWidth, selectChartHeight], (layout, polarOptions, innerRadius, outerRadius, width, height) => {
-  if (layout !== "centric" && layout !== "radial" || polarOptions == null || innerRadius == null || outerRadius == null) {
-    return void 0;
-  }
-  var {
-    cx,
-    cy,
-    startAngle,
-    endAngle
-  } = polarOptions;
-  return {
-    cx: getPercentValue(cx, width, width / 2),
-    cy: getPercentValue(cy, height, height / 2),
-    innerRadius,
-    outerRadius,
-    startAngle,
-    endAngle,
-    clockWise: false
-    // this property look useful, why not use it?
-  };
-});
+var selectPolarViewBox = createSelector(
+  [
+    selectChartLayout,
+    selectPolarOptions,
+    selectInnerRadius,
+    selectOuterRadius,
+    selectChartWidth,
+    selectChartHeight,
+  ],
+  (layout, polarOptions, innerRadius, outerRadius, width, height) => {
+    if (
+      (layout !== "centric" && layout !== "radial") ||
+      polarOptions == null ||
+      innerRadius == null ||
+      outerRadius == null
+    ) {
+      return void 0;
+    }
+    var { cx, cy, startAngle, endAngle } = polarOptions;
+    return {
+      cx: getPercentValue(cx, width, width / 2),
+      cy: getPercentValue(cy, height, height / 2),
+      innerRadius,
+      outerRadius,
+      startAngle,
+      endAngle,
+      clockWise: false,
+      // this property look useful, why not use it?
+    };
+  },
+);
 var pickAxisType = (_state, axisType) => axisType;
 var pickAxisId = (_state, _axisType, axisId) => axisId;
 function getStackSeriesIdentifier(graphicalItem) {
   return graphicalItem === null || graphicalItem === void 0 ? void 0 : graphicalItem.id;
 }
 function combineDisplayedStackedData(stackedGraphicalItems, _ref2, tooltipAxisSettings) {
-  var {
-    chartData = []
-  } = _ref2;
-  var {
-    allowDuplicatedCategory,
-    dataKey: tooltipDataKey
-  } = tooltipAxisSettings;
+  var { chartData = [] } = _ref2;
+  var { allowDuplicatedCategory, dataKey: tooltipDataKey } = tooltipAxisSettings;
   var knownItemsByDataKey = /* @__PURE__ */ new Map();
   stackedGraphicalItems.forEach((item) => {
     var _item$data;
-    var resolvedData = (_item$data = item.data) !== null && _item$data !== void 0 ? _item$data : chartData;
+    var resolvedData =
+      (_item$data = item.data) !== null && _item$data !== void 0 ? _item$data : chartData;
     if (resolvedData == null || resolvedData.length === 0) {
       return;
     }
     var stackIdentifier = getStackSeriesIdentifier(item);
     resolvedData.forEach((entry, index) => {
-      var tooltipValue = tooltipDataKey == null || allowDuplicatedCategory ? index : String(getValueByDataKey(entry, tooltipDataKey, null));
+      var tooltipValue =
+        tooltipDataKey == null || allowDuplicatedCategory
+          ? index
+          : String(getValueByDataKey(entry, tooltipDataKey, null));
       var numericValue = getValueByDataKey(entry, item.dataKey, 0);
       var curr;
       if (knownItemsByDataKey.has(tooltipValue)) {
@@ -11100,7 +12703,7 @@ function combineDisplayedStackedData(stackedGraphicalItems, _ref2, tooltipAxisSe
         curr = {};
       }
       Object.assign(curr, {
-        [stackIdentifier]: numericValue
+        [stackIdentifier]: numericValue,
       });
       knownItemsByDataKey.set(tooltipValue, curr);
     });
@@ -11108,7 +12711,9 @@ function combineDisplayedStackedData(stackedGraphicalItems, _ref2, tooltipAxisSe
   return Array.from(knownItemsByDataKey.values());
 }
 function isStacked(graphicalItem) {
-  return "stackId" in graphicalItem && graphicalItem.stackId != null && graphicalItem.dataKey != null;
+  return (
+    "stackId" in graphicalItem && graphicalItem.stackId != null && graphicalItem.dataKey != null
+  );
 }
 var numberDomainEqualityCheck = (a, b) => {
   if (a === b) {
@@ -11160,11 +12765,11 @@ function rechartsScaleFactory(d3Scale) {
   var range2 = [Math.min(...d3Range), Math.max(...d3Range)];
   return {
     domain: () => d3Scale.domain(),
-    range: (function(_range) {
+    range: (function (_range) {
       function range3() {
         return _range.apply(this, arguments);
       }
-      range3.toString = function() {
+      range3.toString = function () {
         return _range.toString();
       };
       return range3;
@@ -11195,7 +12800,7 @@ function rechartsScaleFactory(d3Scale) {
         }
       }
       return baseValue;
-    }
+    },
   };
 }
 var combineCheckedDomain = (realScaleType, axisDomain) => {
@@ -11250,7 +12855,7 @@ function bisector(f) {
     if (lo < hi) {
       if (compare1(x2, x2) !== 0) return hi;
       do {
-        const mid = lo + hi >>> 1;
+        const mid = (lo + hi) >>> 1;
         if (compare2(a[mid], x2) < 0) lo = mid + 1;
         else hi = mid;
       } while (lo < hi);
@@ -11261,7 +12866,7 @@ function bisector(f) {
     if (lo < hi) {
       if (compare1(x2, x2) !== 0) return hi;
       do {
-        const mid = lo + hi >>> 1;
+        const mid = (lo + hi) >>> 1;
         if (compare2(a[mid], x2) <= 0) lo = mid + 1;
         else hi = mid;
       } while (lo < hi);
@@ -11295,7 +12900,10 @@ bisector(number$2).center;
 class InternMap extends Map {
   constructor(entries, key = keyof) {
     super();
-    Object.defineProperties(this, { _intern: { value: /* @__PURE__ */ new Map() }, _key: { value: key } });
+    Object.defineProperties(this, {
+      _intern: { value: /* @__PURE__ */ new Map() },
+      _key: { value: key },
+    });
     if (entries != null) for (const [key2, value] of entries) this.set(key2, value);
   }
   get(key) {
@@ -11344,9 +12952,14 @@ function compareDefined(compare = ascending) {
 function ascendingDefined(a, b) {
   return (a == null || !(a >= a)) - (b == null || !(b >= b)) || (a < b ? -1 : a > b ? 1 : 0);
 }
-const e10 = Math.sqrt(50), e5 = Math.sqrt(10), e2 = Math.sqrt(2);
+const e10 = Math.sqrt(50),
+  e5 = Math.sqrt(10),
+  e2 = Math.sqrt(2);
 function tickSpec(start, stop, count) {
-  const step = (stop - start) / Math.max(0, count), power = Math.floor(Math.log10(step)), error = step / Math.pow(10, power), factor = error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1;
+  const step = (stop - start) / Math.max(0, count),
+    power = Math.floor(Math.log10(step)),
+    error = step / Math.pow(10, power),
+    factor = error >= e10 ? 10 : error >= e5 ? 5 : error >= e2 ? 2 : 1;
   let i1, i2, inc;
   if (power < 0) {
     inc = Math.pow(10, -power) / factor;
@@ -11366,12 +12979,14 @@ function tickSpec(start, stop, count) {
   return [i1, i2, inc];
 }
 function ticks(start, stop, count) {
-  stop = +stop, start = +start, count = +count;
+  ((stop = +stop), (start = +start), (count = +count));
   if (!(count > 0)) return [];
   if (start === stop) return [start];
-  const reverse = stop < start, [i1, i2, inc] = reverse ? tickSpec(stop, start, count) : tickSpec(start, stop, count);
+  const reverse = stop < start,
+    [i1, i2, inc] = reverse ? tickSpec(stop, start, count) : tickSpec(start, stop, count);
   if (!(i2 >= i1)) return [];
-  const n = i2 - i1 + 1, ticks2 = new Array(n);
+  const n = i2 - i1 + 1,
+    ticks2 = new Array(n);
   if (reverse) {
     if (inc < 0) for (let i = 0; i < n; ++i) ticks2[i] = (i2 - i) / -inc;
     else for (let i = 0; i < n; ++i) ticks2[i] = (i2 - i) * inc;
@@ -11382,19 +12997,20 @@ function ticks(start, stop, count) {
   return ticks2;
 }
 function tickIncrement(start, stop, count) {
-  stop = +stop, start = +start, count = +count;
+  ((stop = +stop), (start = +start), (count = +count));
   return tickSpec(start, stop, count)[2];
 }
 function tickStep(start, stop, count) {
-  stop = +stop, start = +start, count = +count;
-  const reverse = stop < start, inc = reverse ? tickIncrement(stop, start, count) : tickIncrement(start, stop, count);
+  ((stop = +stop), (start = +start), (count = +count));
+  const reverse = stop < start,
+    inc = reverse ? tickIncrement(stop, start, count) : tickIncrement(start, stop, count);
   return (reverse ? -1 : 1) * (inc < 0 ? 1 / -inc : inc);
 }
 function max(values, valueof) {
   let max2;
   {
     for (const value of values) {
-      if (value != null && (max2 < value || max2 === void 0 && value >= value)) {
+      if (value != null && (max2 < value || (max2 === void 0 && value >= value))) {
         max2 = value;
       }
     }
@@ -11405,7 +13021,7 @@ function min(values, valueof) {
   let min2;
   {
     for (const value of values) {
-      if (value != null && (min2 > value || min2 === void 0 && value >= value)) {
+      if (value != null && (min2 > value || (min2 === void 0 && value >= value))) {
         min2 = value;
       }
     }
@@ -11423,10 +13039,10 @@ function quickselect(array2, k, left = 0, right = Infinity, compare) {
       const n = right - left + 1;
       const m = k - left + 1;
       const z = Math.log(n);
-      const s = 0.5 * Math.exp(2 * z / 3);
-      const sd = 0.5 * Math.sqrt(z * s * (n - s) / n) * (m - n / 2 < 0 ? -1 : 1);
-      const newLeft = Math.max(left, Math.floor(k - m * s / n + sd));
-      const newRight = Math.min(right, Math.floor(k + (n - m) * s / n + sd));
+      const s = 0.5 * Math.exp((2 * z) / 3);
+      const sd = 0.5 * Math.sqrt((z * s * (n - s)) / n) * (m - n / 2 < 0 ? -1 : 1);
+      const newLeft = Math.max(left, Math.floor(k - (m * s) / n + sd));
+      const newRight = Math.min(right, Math.floor(k + ((n - m) * s) / n + sd));
       quickselect(array2, k, newLeft, newRight, compare);
     }
     const t = array2[k];
@@ -11435,12 +13051,12 @@ function quickselect(array2, k, left = 0, right = Infinity, compare) {
     swap(array2, left, k);
     if (compare(array2[right], t) > 0) swap(array2, left, right);
     while (i < j) {
-      swap(array2, i, j), ++i, --j;
+      (swap(array2, i, j), ++i, --j);
       while (compare(array2[i], t) < 0) ++i;
       while (compare(array2[j], t) > 0) --j;
     }
     if (compare(array2[left], t) === 0) swap(array2, left, j);
-    else ++j, swap(array2, j, right);
+    else (++j, swap(array2, j, right));
     if (j <= k) left = j + 1;
     if (k <= j) right = j - 1;
   }
@@ -11453,22 +13069,34 @@ function swap(array2, i, j) {
 }
 function quantile$1(values, p, valueof) {
   values = Float64Array.from(numbers(values));
-  if (!(n = values.length) || isNaN(p = +p)) return;
+  if (!(n = values.length) || isNaN((p = +p))) return;
   if (p <= 0 || n < 2) return min(values);
   if (p >= 1) return max(values);
-  var n, i = (n - 1) * p, i0 = Math.floor(i), value0 = max(quickselect(values, i0).subarray(0, i0 + 1)), value1 = min(values.subarray(i0 + 1));
+  var n,
+    i = (n - 1) * p,
+    i0 = Math.floor(i),
+    value0 = max(quickselect(values, i0).subarray(0, i0 + 1)),
+    value1 = min(values.subarray(i0 + 1));
   return value0 + (value1 - value0) * (i - i0);
 }
 function quantileSorted(values, p, valueof = number$2) {
-  if (!(n = values.length) || isNaN(p = +p)) return;
+  if (!(n = values.length) || isNaN((p = +p))) return;
   if (p <= 0 || n < 2) return +valueof(values[0], 0, values);
   if (p >= 1) return +valueof(values[n - 1], n - 1, values);
-  var n, i = (n - 1) * p, i0 = Math.floor(i), value0 = +valueof(values[i0], i0, values), value1 = +valueof(values[i0 + 1], i0 + 1, values);
+  var n,
+    i = (n - 1) * p,
+    i0 = Math.floor(i),
+    value0 = +valueof(values[i0], i0, values),
+    value1 = +valueof(values[i0 + 1], i0 + 1, values);
   return value0 + (value1 - value0) * (i - i0);
 }
 function range(start, stop, step) {
-  start = +start, stop = +stop, step = (n = arguments.length) < 2 ? (stop = start, start = 0, 1) : n < 3 ? 1 : +step;
-  var i = -1, n = Math.max(0, Math.ceil((stop - start) / step)) | 0, range2 = new Array(n);
+  ((start = +start),
+    (stop = +stop),
+    (step = (n = arguments.length) < 2 ? ((stop = start), (start = 0), 1) : n < 3 ? 1 : +step));
+  var i = -1,
+    n = Math.max(0, Math.ceil((stop - start) / step)) | 0,
+    range2 = new Array(n);
   while (++i < n) {
     range2[i] = start + i * step;
   }
@@ -11507,83 +13135,105 @@ function initInterpolator(domain, interpolator) {
 }
 const implicit = /* @__PURE__ */ Symbol("implicit");
 function ordinal() {
-  var index = new InternMap(), domain = [], range2 = [], unknown = implicit;
+  var index = new InternMap(),
+    domain = [],
+    range2 = [],
+    unknown = implicit;
   function scale(d) {
     let i = index.get(d);
     if (i === void 0) {
       if (unknown !== implicit) return unknown;
-      index.set(d, i = domain.push(d) - 1);
+      index.set(d, (i = domain.push(d) - 1));
     }
     return range2[i % range2.length];
   }
-  scale.domain = function(_) {
+  scale.domain = function (_) {
     if (!arguments.length) return domain.slice();
-    domain = [], index = new InternMap();
+    ((domain = []), (index = new InternMap()));
     for (const value of _) {
       if (index.has(value)) continue;
       index.set(value, domain.push(value) - 1);
     }
     return scale;
   };
-  scale.range = function(_) {
-    return arguments.length ? (range2 = Array.from(_), scale) : range2.slice();
+  scale.range = function (_) {
+    return arguments.length ? ((range2 = Array.from(_)), scale) : range2.slice();
   };
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  scale.copy = function() {
+  scale.copy = function () {
     return ordinal(domain, range2).unknown(unknown);
   };
   initRange.apply(scale, arguments);
   return scale;
 }
 function band() {
-  var scale = ordinal().unknown(void 0), domain = scale.domain, ordinalRange = scale.range, r0 = 0, r1 = 1, step, bandwidth, round2 = false, paddingInner = 0, paddingOuter = 0, align = 0.5;
+  var scale = ordinal().unknown(void 0),
+    domain = scale.domain,
+    ordinalRange = scale.range,
+    r0 = 0,
+    r1 = 1,
+    step,
+    bandwidth,
+    round2 = false,
+    paddingInner = 0,
+    paddingOuter = 0,
+    align = 0.5;
   delete scale.unknown;
   function rescale() {
-    var n = domain().length, reverse = r1 < r0, start = reverse ? r1 : r0, stop = reverse ? r0 : r1;
+    var n = domain().length,
+      reverse = r1 < r0,
+      start = reverse ? r1 : r0,
+      stop = reverse ? r0 : r1;
     step = (stop - start) / Math.max(1, n - paddingInner + paddingOuter * 2);
     if (round2) step = Math.floor(step);
     start += (stop - start - step * (n - paddingInner)) * align;
     bandwidth = step * (1 - paddingInner);
-    if (round2) start = Math.round(start), bandwidth = Math.round(bandwidth);
-    var values = range(n).map(function(i) {
+    if (round2) ((start = Math.round(start)), (bandwidth = Math.round(bandwidth)));
+    var values = range(n).map(function (i) {
       return start + step * i;
     });
     return ordinalRange(reverse ? values.reverse() : values);
   }
-  scale.domain = function(_) {
+  scale.domain = function (_) {
     return arguments.length ? (domain(_), rescale()) : domain();
   };
-  scale.range = function(_) {
-    return arguments.length ? ([r0, r1] = _, r0 = +r0, r1 = +r1, rescale()) : [r0, r1];
+  scale.range = function (_) {
+    return arguments.length ? (([r0, r1] = _), (r0 = +r0), (r1 = +r1), rescale()) : [r0, r1];
   };
-  scale.rangeRound = function(_) {
-    return [r0, r1] = _, r0 = +r0, r1 = +r1, round2 = true, rescale();
+  scale.rangeRound = function (_) {
+    return (([r0, r1] = _), (r0 = +r0), (r1 = +r1), (round2 = true), rescale());
   };
-  scale.bandwidth = function() {
+  scale.bandwidth = function () {
     return bandwidth;
   };
-  scale.step = function() {
+  scale.step = function () {
     return step;
   };
-  scale.round = function(_) {
-    return arguments.length ? (round2 = !!_, rescale()) : round2;
+  scale.round = function (_) {
+    return arguments.length ? ((round2 = !!_), rescale()) : round2;
   };
-  scale.padding = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, paddingOuter = +_), rescale()) : paddingInner;
+  scale.padding = function (_) {
+    return arguments.length
+      ? ((paddingInner = Math.min(1, (paddingOuter = +_))), rescale())
+      : paddingInner;
   };
-  scale.paddingInner = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, _), rescale()) : paddingInner;
+  scale.paddingInner = function (_) {
+    return arguments.length ? ((paddingInner = Math.min(1, _)), rescale()) : paddingInner;
   };
-  scale.paddingOuter = function(_) {
-    return arguments.length ? (paddingOuter = +_, rescale()) : paddingOuter;
+  scale.paddingOuter = function (_) {
+    return arguments.length ? ((paddingOuter = +_), rescale()) : paddingOuter;
   };
-  scale.align = function(_) {
-    return arguments.length ? (align = Math.max(0, Math.min(1, _)), rescale()) : align;
+  scale.align = function (_) {
+    return arguments.length ? ((align = Math.max(0, Math.min(1, _))), rescale()) : align;
   };
-  scale.copy = function() {
-    return band(domain(), [r0, r1]).round(round2).paddingInner(paddingInner).paddingOuter(paddingOuter).align(align);
+  scale.copy = function () {
+    return band(domain(), [r0, r1])
+      .round(round2)
+      .paddingInner(paddingInner)
+      .paddingOuter(paddingOuter)
+      .align(align);
   };
   return initRange.apply(rescale(), arguments);
 }
@@ -11592,7 +13242,7 @@ function pointish(scale) {
   scale.padding = scale.paddingOuter;
   delete scale.paddingInner;
   delete scale.paddingOuter;
-  scale.copy = function() {
+  scale.copy = function () {
     return pointish(copy2());
   };
   return scale;
@@ -11609,11 +13259,19 @@ function extend(parent, definition) {
   for (var key in definition) prototype[key] = definition[key];
   return prototype;
 }
-function Color() {
-}
+function Color() {}
 var darker = 0.7;
 var brighter = 1 / darker;
-var reI = "\\s*([+-]?\\d+)\\s*", reN = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)\\s*", reP = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)%\\s*", reHex = /^#([0-9a-f]{3,8})$/, reRgbInteger = new RegExp(`^rgb\\(${reI},${reI},${reI}\\)$`), reRgbPercent = new RegExp(`^rgb\\(${reP},${reP},${reP}\\)$`), reRgbaInteger = new RegExp(`^rgba\\(${reI},${reI},${reI},${reN}\\)$`), reRgbaPercent = new RegExp(`^rgba\\(${reP},${reP},${reP},${reN}\\)$`), reHslPercent = new RegExp(`^hsl\\(${reN},${reP},${reP}\\)$`), reHslaPercent = new RegExp(`^hsla\\(${reN},${reP},${reP},${reN}\\)$`);
+var reI = "\\s*([+-]?\\d+)\\s*",
+  reN = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)\\s*",
+  reP = "\\s*([+-]?(?:\\d*\\.)?\\d+(?:[eE][+-]?\\d+)?)%\\s*",
+  reHex = /^#([0-9a-f]{3,8})$/,
+  reRgbInteger = new RegExp(`^rgb\\(${reI},${reI},${reI}\\)$`),
+  reRgbPercent = new RegExp(`^rgb\\(${reP},${reP},${reP}\\)$`),
+  reRgbaInteger = new RegExp(`^rgba\\(${reI},${reI},${reI},${reN}\\)$`),
+  reRgbaPercent = new RegExp(`^rgba\\(${reP},${reP},${reP},${reN}\\)$`),
+  reHslPercent = new RegExp(`^hsl\\(${reN},${reP},${reP}\\)$`),
+  reHslaPercent = new RegExp(`^hsla\\(${reN},${reP},${reP},${reN}\\)$`);
 var named = {
   aliceblue: 15792383,
   antiquewhite: 16444375,
@@ -11762,7 +13420,7 @@ var named = {
   white: 16777215,
   whitesmoke: 16119285,
   yellow: 16776960,
-  yellowgreen: 10145074
+  yellowgreen: 10145074,
 };
 define(Color, color, {
   copy(channels) {
@@ -11777,7 +13435,7 @@ define(Color, color, {
   formatHex8: color_formatHex8,
   formatHsl: color_formatHsl,
   formatRgb: color_formatRgb,
-  toString: color_formatRgb
+  toString: color_formatRgb,
 });
 function color_formatHex() {
   return this.rgb().formatHex();
@@ -11794,10 +13452,48 @@ function color_formatRgb() {
 function color(format2) {
   var m, l;
   format2 = (format2 + "").trim().toLowerCase();
-  return (m = reHex.exec(format2)) ? (l = m[1].length, m = parseInt(m[1], 16), l === 6 ? rgbn(m) : l === 3 ? new Rgb(m >> 8 & 15 | m >> 4 & 240, m >> 4 & 15 | m & 240, (m & 15) << 4 | m & 15, 1) : l === 8 ? rgba(m >> 24 & 255, m >> 16 & 255, m >> 8 & 255, (m & 255) / 255) : l === 4 ? rgba(m >> 12 & 15 | m >> 8 & 240, m >> 8 & 15 | m >> 4 & 240, m >> 4 & 15 | m & 240, ((m & 15) << 4 | m & 15) / 255) : null) : (m = reRgbInteger.exec(format2)) ? new Rgb(m[1], m[2], m[3], 1) : (m = reRgbPercent.exec(format2)) ? new Rgb(m[1] * 255 / 100, m[2] * 255 / 100, m[3] * 255 / 100, 1) : (m = reRgbaInteger.exec(format2)) ? rgba(m[1], m[2], m[3], m[4]) : (m = reRgbaPercent.exec(format2)) ? rgba(m[1] * 255 / 100, m[2] * 255 / 100, m[3] * 255 / 100, m[4]) : (m = reHslPercent.exec(format2)) ? hsla(m[1], m[2] / 100, m[3] / 100, 1) : (m = reHslaPercent.exec(format2)) ? hsla(m[1], m[2] / 100, m[3] / 100, m[4]) : named.hasOwnProperty(format2) ? rgbn(named[format2]) : format2 === "transparent" ? new Rgb(NaN, NaN, NaN, 0) : null;
+  return (m = reHex.exec(format2))
+    ? ((l = m[1].length),
+      (m = parseInt(m[1], 16)),
+      l === 6
+        ? rgbn(m)
+        : l === 3
+          ? new Rgb(
+              ((m >> 8) & 15) | ((m >> 4) & 240),
+              ((m >> 4) & 15) | (m & 240),
+              ((m & 15) << 4) | (m & 15),
+              1,
+            )
+          : l === 8
+            ? rgba((m >> 24) & 255, (m >> 16) & 255, (m >> 8) & 255, (m & 255) / 255)
+            : l === 4
+              ? rgba(
+                  ((m >> 12) & 15) | ((m >> 8) & 240),
+                  ((m >> 8) & 15) | ((m >> 4) & 240),
+                  ((m >> 4) & 15) | (m & 240),
+                  (((m & 15) << 4) | (m & 15)) / 255,
+                )
+              : null)
+    : (m = reRgbInteger.exec(format2))
+      ? new Rgb(m[1], m[2], m[3], 1)
+      : (m = reRgbPercent.exec(format2))
+        ? new Rgb((m[1] * 255) / 100, (m[2] * 255) / 100, (m[3] * 255) / 100, 1)
+        : (m = reRgbaInteger.exec(format2))
+          ? rgba(m[1], m[2], m[3], m[4])
+          : (m = reRgbaPercent.exec(format2))
+            ? rgba((m[1] * 255) / 100, (m[2] * 255) / 100, (m[3] * 255) / 100, m[4])
+            : (m = reHslPercent.exec(format2))
+              ? hsla(m[1], m[2] / 100, m[3] / 100, 1)
+              : (m = reHslaPercent.exec(format2))
+                ? hsla(m[1], m[2] / 100, m[3] / 100, m[4])
+                : named.hasOwnProperty(format2)
+                  ? rgbn(named[format2])
+                  : format2 === "transparent"
+                    ? new Rgb(NaN, NaN, NaN, 0)
+                    : null;
 }
 function rgbn(n) {
-  return new Rgb(n >> 16 & 255, n >> 8 & 255, n & 255, 1);
+  return new Rgb((n >> 16) & 255, (n >> 8) & 255, n & 255, 1);
 }
 function rgba(r, g, b, a) {
   if (a <= 0) r = g = b = NaN;
@@ -11818,31 +13514,44 @@ function Rgb(r, g, b, opacity) {
   this.b = +b;
   this.opacity = +opacity;
 }
-define(Rgb, rgb$1, extend(Color, {
-  brighter(k) {
-    k = k == null ? brighter : Math.pow(brighter, k);
-    return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
-  },
-  darker(k) {
-    k = k == null ? darker : Math.pow(darker, k);
-    return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
-  },
-  rgb() {
-    return this;
-  },
-  clamp() {
-    return new Rgb(clampi(this.r), clampi(this.g), clampi(this.b), clampa(this.opacity));
-  },
-  displayable() {
-    return -0.5 <= this.r && this.r < 255.5 && (-0.5 <= this.g && this.g < 255.5) && (-0.5 <= this.b && this.b < 255.5) && (0 <= this.opacity && this.opacity <= 1);
-  },
-  hex: rgb_formatHex,
-  // Deprecated! Use color.formatHex.
-  formatHex: rgb_formatHex,
-  formatHex8: rgb_formatHex8,
-  formatRgb: rgb_formatRgb,
-  toString: rgb_formatRgb
-}));
+define(
+  Rgb,
+  rgb$1,
+  extend(Color, {
+    brighter(k) {
+      k = k == null ? brighter : Math.pow(brighter, k);
+      return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
+    },
+    darker(k) {
+      k = k == null ? darker : Math.pow(darker, k);
+      return new Rgb(this.r * k, this.g * k, this.b * k, this.opacity);
+    },
+    rgb() {
+      return this;
+    },
+    clamp() {
+      return new Rgb(clampi(this.r), clampi(this.g), clampi(this.b), clampa(this.opacity));
+    },
+    displayable() {
+      return (
+        -0.5 <= this.r &&
+        this.r < 255.5 &&
+        -0.5 <= this.g &&
+        this.g < 255.5 &&
+        -0.5 <= this.b &&
+        this.b < 255.5 &&
+        0 <= this.opacity &&
+        this.opacity <= 1
+      );
+    },
+    hex: rgb_formatHex,
+    // Deprecated! Use color.formatHex.
+    formatHex: rgb_formatHex,
+    formatHex8: rgb_formatHex8,
+    formatRgb: rgb_formatRgb,
+    toString: rgb_formatRgb,
+  }),
+);
 function rgb_formatHex() {
   return `#${hex(this.r)}${hex(this.g)}${hex(this.b)}`;
 }
@@ -11875,7 +13584,14 @@ function hslConvert(o) {
   if (!o) return new Hsl();
   if (o instanceof Hsl) return o;
   o = o.rgb();
-  var r = o.r / 255, g = o.g / 255, b = o.b / 255, min2 = Math.min(r, g, b), max2 = Math.max(r, g, b), h = NaN, s = max2 - min2, l = (max2 + min2) / 2;
+  var r = o.r / 255,
+    g = o.g / 255,
+    b = o.b / 255,
+    min2 = Math.min(r, g, b),
+    max2 = Math.max(r, g, b),
+    h = NaN,
+    s = max2 - min2,
+    l = (max2 + min2) / 2;
   if (s) {
     if (r === max2) h = (g - b) / s + (g < b) * 6;
     else if (g === max2) h = (b - r) / s + 2;
@@ -11896,35 +13612,49 @@ function Hsl(h, s, l, opacity) {
   this.l = +l;
   this.opacity = +opacity;
 }
-define(Hsl, hsl, extend(Color, {
-  brighter(k) {
-    k = k == null ? brighter : Math.pow(brighter, k);
-    return new Hsl(this.h, this.s, this.l * k, this.opacity);
-  },
-  darker(k) {
-    k = k == null ? darker : Math.pow(darker, k);
-    return new Hsl(this.h, this.s, this.l * k, this.opacity);
-  },
-  rgb() {
-    var h = this.h % 360 + (this.h < 0) * 360, s = isNaN(h) || isNaN(this.s) ? 0 : this.s, l = this.l, m2 = l + (l < 0.5 ? l : 1 - l) * s, m1 = 2 * l - m2;
-    return new Rgb(
-      hsl2rgb(h >= 240 ? h - 240 : h + 120, m1, m2),
-      hsl2rgb(h, m1, m2),
-      hsl2rgb(h < 120 ? h + 240 : h - 120, m1, m2),
-      this.opacity
-    );
-  },
-  clamp() {
-    return new Hsl(clamph(this.h), clampt(this.s), clampt(this.l), clampa(this.opacity));
-  },
-  displayable() {
-    return (0 <= this.s && this.s <= 1 || isNaN(this.s)) && (0 <= this.l && this.l <= 1) && (0 <= this.opacity && this.opacity <= 1);
-  },
-  formatHsl() {
-    const a = clampa(this.opacity);
-    return `${a === 1 ? "hsl(" : "hsla("}${clamph(this.h)}, ${clampt(this.s) * 100}%, ${clampt(this.l) * 100}%${a === 1 ? ")" : `, ${a})`}`;
-  }
-}));
+define(
+  Hsl,
+  hsl,
+  extend(Color, {
+    brighter(k) {
+      k = k == null ? brighter : Math.pow(brighter, k);
+      return new Hsl(this.h, this.s, this.l * k, this.opacity);
+    },
+    darker(k) {
+      k = k == null ? darker : Math.pow(darker, k);
+      return new Hsl(this.h, this.s, this.l * k, this.opacity);
+    },
+    rgb() {
+      var h = (this.h % 360) + (this.h < 0) * 360,
+        s = isNaN(h) || isNaN(this.s) ? 0 : this.s,
+        l = this.l,
+        m2 = l + (l < 0.5 ? l : 1 - l) * s,
+        m1 = 2 * l - m2;
+      return new Rgb(
+        hsl2rgb(h >= 240 ? h - 240 : h + 120, m1, m2),
+        hsl2rgb(h, m1, m2),
+        hsl2rgb(h < 120 ? h + 240 : h - 120, m1, m2),
+        this.opacity,
+      );
+    },
+    clamp() {
+      return new Hsl(clamph(this.h), clampt(this.s), clampt(this.l), clampa(this.opacity));
+    },
+    displayable() {
+      return (
+        ((0 <= this.s && this.s <= 1) || isNaN(this.s)) &&
+        0 <= this.l &&
+        this.l <= 1 &&
+        0 <= this.opacity &&
+        this.opacity <= 1
+      );
+    },
+    formatHsl() {
+      const a = clampa(this.opacity);
+      return `${a === 1 ? "hsl(" : "hsla("}${clamph(this.h)}, ${clampt(this.s) * 100}%, ${clampt(this.l) * 100}%${a === 1 ? ")" : `, ${a})`}`;
+    },
+  }),
+);
 function clamph(value) {
   value = (value || 0) % 360;
   return value < 0 ? value + 360 : value;
@@ -11933,23 +13663,38 @@ function clampt(value) {
   return Math.max(0, Math.min(1, value || 0));
 }
 function hsl2rgb(h, m1, m2) {
-  return (h < 60 ? m1 + (m2 - m1) * h / 60 : h < 180 ? m2 : h < 240 ? m1 + (m2 - m1) * (240 - h) / 60 : m1) * 255;
+  return (
+    (h < 60
+      ? m1 + ((m2 - m1) * h) / 60
+      : h < 180
+        ? m2
+        : h < 240
+          ? m1 + ((m2 - m1) * (240 - h)) / 60
+          : m1) * 255
+  );
 }
 const constant = (x2) => () => x2;
 function linear$1(a, d) {
-  return function(t) {
+  return function (t) {
     return a + t * d;
   };
 }
 function exponential(a, b, y2) {
-  return a = Math.pow(a, y2), b = Math.pow(b, y2) - a, y2 = 1 / y2, function(t) {
-    return Math.pow(a + t * b, y2);
-  };
+  return (
+    (a = Math.pow(a, y2)),
+    (b = Math.pow(b, y2) - a),
+    (y2 = 1 / y2),
+    function (t) {
+      return Math.pow(a + t * b, y2);
+    }
+  );
 }
 function gamma(y2) {
-  return (y2 = +y2) === 1 ? nogamma : function(a, b) {
-    return b - a ? exponential(a, b, y2) : constant(isNaN(a) ? b : a);
-  };
+  return (y2 = +y2) === 1
+    ? nogamma
+    : function (a, b) {
+        return b - a ? exponential(a, b, y2) : constant(isNaN(a) ? b : a);
+      };
 }
 function nogamma(a, b) {
   var d = b - a;
@@ -11958,8 +13703,11 @@ function nogamma(a, b) {
 const rgb = (function rgbGamma(y2) {
   var color2 = gamma(y2);
   function rgb2(start, end) {
-    var r = color2((start = rgb$1(start)).r, (end = rgb$1(end)).r), g = color2(start.g, end.g), b = color2(start.b, end.b), opacity = nogamma(start.opacity, end.opacity);
-    return function(t) {
+    var r = color2((start = rgb$1(start)).r, (end = rgb$1(end)).r),
+      g = color2(start.g, end.g),
+      b = color2(start.b, end.b),
+      opacity = nogamma(start.opacity, end.opacity);
+    return function (t) {
       start.r = r(t);
       start.g = g(t);
       start.b = b(t);
@@ -11972,8 +13720,10 @@ const rgb = (function rgbGamma(y2) {
 })(1);
 function numberArray(a, b) {
   if (!b) b = [];
-  var n = a ? Math.min(b.length, a.length) : 0, c = b.slice(), i;
-  return function(t) {
+  var n = a ? Math.min(b.length, a.length) : 0,
+    c = b.slice(),
+    i;
+  return function (t) {
     for (i = 0; i < n; ++i) c[i] = a[i] * (1 - t) + b[i] * t;
     return c;
   };
@@ -11982,27 +13732,41 @@ function isNumberArray(x2) {
   return ArrayBuffer.isView(x2) && !(x2 instanceof DataView);
 }
 function genericArray(a, b) {
-  var nb = b ? b.length : 0, na = a ? Math.min(nb, a.length) : 0, x2 = new Array(na), c = new Array(nb), i;
+  var nb = b ? b.length : 0,
+    na = a ? Math.min(nb, a.length) : 0,
+    x2 = new Array(na),
+    c = new Array(nb),
+    i;
   for (i = 0; i < na; ++i) x2[i] = interpolate(a[i], b[i]);
   for (; i < nb; ++i) c[i] = b[i];
-  return function(t) {
+  return function (t) {
     for (i = 0; i < na; ++i) c[i] = x2[i](t);
     return c;
   };
 }
 function date$1(a, b) {
   var d = /* @__PURE__ */ new Date();
-  return a = +a, b = +b, function(t) {
-    return d.setTime(a * (1 - t) + b * t), d;
-  };
+  return (
+    (a = +a),
+    (b = +b),
+    function (t) {
+      return (d.setTime(a * (1 - t) + b * t), d);
+    }
+  );
 }
 function interpolateNumber(a, b) {
-  return a = +a, b = +b, function(t) {
-    return a * (1 - t) + b * t;
-  };
+  return (
+    (a = +a),
+    (b = +b),
+    function (t) {
+      return a * (1 - t) + b * t;
+    }
+  );
 }
 function object(a, b) {
-  var i = {}, c = {}, k;
+  var i = {},
+    c = {},
+    k;
   if (a === null || typeof a !== "object") a = {};
   if (b === null || typeof b !== "object") b = {};
   for (k in b) {
@@ -12012,25 +13776,32 @@ function object(a, b) {
       c[k] = b[k];
     }
   }
-  return function(t) {
+  return function (t) {
     for (k in i) c[k] = i[k](t);
     return c;
   };
 }
-var reA = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g, reB = new RegExp(reA.source, "g");
+var reA = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g,
+  reB = new RegExp(reA.source, "g");
 function zero(b) {
-  return function() {
+  return function () {
     return b;
   };
 }
 function one(b) {
-  return function(t) {
+  return function (t) {
     return b(t) + "";
   };
 }
 function string(a, b) {
-  var bi = reA.lastIndex = reB.lastIndex = 0, am, bm, bs, i = -1, s = [], q = [];
-  a = a + "", b = b + "";
+  var bi = (reA.lastIndex = reB.lastIndex = 0),
+    am,
+    bm,
+    bs,
+    i = -1,
+    s = [],
+    q = [];
+  ((a = a + ""), (b = b + ""));
   while ((am = reA.exec(a)) && (bm = reB.exec(b))) {
     if ((bs = bm.index) > bi) {
       bs = b.slice(bi, bs);
@@ -12051,31 +13822,63 @@ function string(a, b) {
     if (s[i]) s[i] += bs;
     else s[++i] = bs;
   }
-  return s.length < 2 ? q[0] ? one(q[0].x) : zero(b) : (b = q.length, function(t) {
-    for (var i2 = 0, o; i2 < b; ++i2) s[(o = q[i2]).i] = o.x(t);
-    return s.join("");
-  });
+  return s.length < 2
+    ? q[0]
+      ? one(q[0].x)
+      : zero(b)
+    : ((b = q.length),
+      function (t) {
+        for (var i2 = 0, o; i2 < b; ++i2) s[(o = q[i2]).i] = o.x(t);
+        return s.join("");
+      });
 }
 function interpolate(a, b) {
-  var t = typeof b, c;
-  return b == null || t === "boolean" ? constant(b) : (t === "number" ? interpolateNumber : t === "string" ? (c = color(b)) ? (b = c, rgb) : string : b instanceof color ? rgb : b instanceof Date ? date$1 : isNumberArray(b) ? numberArray : Array.isArray(b) ? genericArray : typeof b.valueOf !== "function" && typeof b.toString !== "function" || isNaN(b) ? object : interpolateNumber)(a, b);
+  var t = typeof b,
+    c;
+  return b == null || t === "boolean"
+    ? constant(b)
+    : (t === "number"
+        ? interpolateNumber
+        : t === "string"
+          ? (c = color(b))
+            ? ((b = c), rgb)
+            : string
+          : b instanceof color
+            ? rgb
+            : b instanceof Date
+              ? date$1
+              : isNumberArray(b)
+                ? numberArray
+                : Array.isArray(b)
+                  ? genericArray
+                  : (typeof b.valueOf !== "function" && typeof b.toString !== "function") ||
+                      isNaN(b)
+                    ? object
+                    : interpolateNumber)(a, b);
 }
 function interpolateRound(a, b) {
-  return a = +a, b = +b, function(t) {
-    return Math.round(a * (1 - t) + b * t);
-  };
+  return (
+    (a = +a),
+    (b = +b),
+    function (t) {
+      return Math.round(a * (1 - t) + b * t);
+    }
+  );
 }
 function piecewise(interpolate$12, values) {
-  if (values === void 0) values = interpolate$12, interpolate$12 = interpolate;
-  var i = 0, n = values.length - 1, v = values[0], I = new Array(n < 0 ? 0 : n);
-  while (i < n) I[i] = interpolate$12(v, v = values[++i]);
-  return function(t) {
-    var i2 = Math.max(0, Math.min(n - 1, Math.floor(t *= n)));
+  if (values === void 0) ((values = interpolate$12), (interpolate$12 = interpolate));
+  var i = 0,
+    n = values.length - 1,
+    v = values[0],
+    I = new Array(n < 0 ? 0 : n);
+  while (i < n) I[i] = interpolate$12(v, (v = values[++i]));
+  return function (t) {
+    var i2 = Math.max(0, Math.min(n - 1, Math.floor((t *= n))));
     return I[i2](t - i2);
   };
 }
 function constants(x2) {
-  return function() {
+  return function () {
     return x2;
   };
 }
@@ -12087,27 +13890,35 @@ function identity$2(x2) {
   return x2;
 }
 function normalize(a, b) {
-  return (b -= a = +a) ? function(x2) {
-    return (x2 - a) / b;
-  } : constants(isNaN(b) ? NaN : 0.5);
+  return (b -= a = +a)
+    ? function (x2) {
+        return (x2 - a) / b;
+      }
+    : constants(isNaN(b) ? NaN : 0.5);
 }
 function clamper(a, b) {
   var t;
-  if (a > b) t = a, a = b, b = t;
-  return function(x2) {
+  if (a > b) ((t = a), (a = b), (b = t));
+  return function (x2) {
     return Math.max(a, Math.min(b, x2));
   };
 }
 function bimap(domain, range2, interpolate2) {
-  var d0 = domain[0], d1 = domain[1], r0 = range2[0], r1 = range2[1];
-  if (d1 < d0) d0 = normalize(d1, d0), r0 = interpolate2(r1, r0);
-  else d0 = normalize(d0, d1), r0 = interpolate2(r0, r1);
-  return function(x2) {
+  var d0 = domain[0],
+    d1 = domain[1],
+    r0 = range2[0],
+    r1 = range2[1];
+  if (d1 < d0) ((d0 = normalize(d1, d0)), (r0 = interpolate2(r1, r0)));
+  else ((d0 = normalize(d0, d1)), (r0 = interpolate2(r0, r1)));
+  return function (x2) {
     return r0(d0(x2));
   };
 }
 function polymap(domain, range2, interpolate2) {
-  var j = Math.min(domain.length, range2.length) - 1, d = new Array(j), r = new Array(j), i = -1;
+  var j = Math.min(domain.length, range2.length) - 1,
+    d = new Array(j),
+    r = new Array(j),
+    i = -1;
   if (domain[j] < domain[0]) {
     domain = domain.slice().reverse();
     range2 = range2.slice().reverse();
@@ -12116,16 +13927,30 @@ function polymap(domain, range2, interpolate2) {
     d[i] = normalize(domain[i], domain[i + 1]);
     r[i] = interpolate2(range2[i], range2[i + 1]);
   }
-  return function(x2) {
+  return function (x2) {
     var i2 = bisectRight(domain, x2, 1, j) - 1;
     return r[i2](d[i2](x2));
   };
 }
 function copy$1(source, target) {
-  return target.domain(source.domain()).range(source.range()).interpolate(source.interpolate()).clamp(source.clamp()).unknown(source.unknown());
+  return target
+    .domain(source.domain())
+    .range(source.range())
+    .interpolate(source.interpolate())
+    .clamp(source.clamp())
+    .unknown(source.unknown());
 }
 function transformer$2() {
-  var domain = unit, range2 = unit, interpolate$12 = interpolate, transform, untransform, unknown, clamp = identity$2, piecewise2, output, input;
+  var domain = unit,
+    range2 = unit,
+    interpolate$12 = interpolate,
+    transform,
+    untransform,
+    unknown,
+    clamp = identity$2,
+    piecewise2,
+    output,
+    input;
   function rescale() {
     var n = Math.min(domain.length, range2.length);
     if (clamp !== identity$2) clamp = clamper(domain[0], domain[n - 1]);
@@ -12134,31 +13959,39 @@ function transformer$2() {
     return scale;
   }
   function scale(x2) {
-    return x2 == null || isNaN(x2 = +x2) ? unknown : (output || (output = piecewise2(domain.map(transform), range2, interpolate$12)))(transform(clamp(x2)));
+    return x2 == null || isNaN((x2 = +x2))
+      ? unknown
+      : (output || (output = piecewise2(domain.map(transform), range2, interpolate$12)))(
+          transform(clamp(x2)),
+        );
   }
-  scale.invert = function(y2) {
-    return clamp(untransform((input || (input = piecewise2(range2, domain.map(transform), interpolateNumber)))(y2)));
+  scale.invert = function (y2) {
+    return clamp(
+      untransform(
+        (input || (input = piecewise2(range2, domain.map(transform), interpolateNumber)))(y2),
+      ),
+    );
   };
-  scale.domain = function(_) {
-    return arguments.length ? (domain = Array.from(_, number$1), rescale()) : domain.slice();
+  scale.domain = function (_) {
+    return arguments.length ? ((domain = Array.from(_, number$1)), rescale()) : domain.slice();
   };
-  scale.range = function(_) {
-    return arguments.length ? (range2 = Array.from(_), rescale()) : range2.slice();
+  scale.range = function (_) {
+    return arguments.length ? ((range2 = Array.from(_)), rescale()) : range2.slice();
   };
-  scale.rangeRound = function(_) {
-    return range2 = Array.from(_), interpolate$12 = interpolateRound, rescale();
+  scale.rangeRound = function (_) {
+    return ((range2 = Array.from(_)), (interpolate$12 = interpolateRound), rescale());
   };
-  scale.clamp = function(_) {
-    return arguments.length ? (clamp = _ ? true : identity$2, rescale()) : clamp !== identity$2;
+  scale.clamp = function (_) {
+    return arguments.length ? ((clamp = _ ? true : identity$2), rescale()) : clamp !== identity$2;
   };
-  scale.interpolate = function(_) {
-    return arguments.length ? (interpolate$12 = _, rescale()) : interpolate$12;
+  scale.interpolate = function (_) {
+    return arguments.length ? ((interpolate$12 = _), rescale()) : interpolate$12;
   };
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  return function(t, u) {
-    transform = t, untransform = u;
+  return function (t, u) {
+    ((transform = t), (untransform = u));
     return rescale();
   };
 }
@@ -12166,34 +13999,41 @@ function continuous() {
   return transformer$2()(identity$2, identity$2);
 }
 function formatDecimal(x2) {
-  return Math.abs(x2 = Math.round(x2)) >= 1e21 ? x2.toLocaleString("en").replace(/,/g, "") : x2.toString(10);
+  return Math.abs((x2 = Math.round(x2))) >= 1e21
+    ? x2.toLocaleString("en").replace(/,/g, "")
+    : x2.toString(10);
 }
 function formatDecimalParts(x2, p) {
   if (!isFinite(x2) || x2 === 0) return null;
-  var i = (x2 = p ? x2.toExponential(p - 1) : x2.toExponential()).indexOf("e"), coefficient = x2.slice(0, i);
+  var i = (x2 = p ? x2.toExponential(p - 1) : x2.toExponential()).indexOf("e"),
+    coefficient = x2.slice(0, i);
   return [
     coefficient.length > 1 ? coefficient[0] + coefficient.slice(2) : coefficient,
-    +x2.slice(i + 1)
+    +x2.slice(i + 1),
   ];
 }
 function exponent(x2) {
-  return x2 = formatDecimalParts(Math.abs(x2)), x2 ? x2[1] : NaN;
+  return ((x2 = formatDecimalParts(Math.abs(x2))), x2 ? x2[1] : NaN);
 }
 function formatGroup(grouping, thousands) {
-  return function(value, width) {
-    var i = value.length, t = [], j = 0, g = grouping[0], length = 0;
+  return function (value, width) {
+    var i = value.length,
+      t = [],
+      j = 0,
+      g = grouping[0],
+      length = 0;
     while (i > 0 && g > 0) {
       if (length + g + 1 > width) g = Math.max(1, width - length);
-      t.push(value.substring(i -= g, i + g));
+      t.push(value.substring((i -= g), i + g));
       if ((length += g + 1) > width) break;
-      g = grouping[j = (j + 1) % grouping.length];
+      g = grouping[(j = (j + 1) % grouping.length)];
     }
     return t.reverse().join(thousands);
   };
 }
 function formatNumerals(numerals) {
-  return function(value) {
-    return value.replace(/[0-9]/g, function(i) {
+  return function (value) {
+    return value.replace(/[0-9]/g, function (i) {
       return numerals[+i];
     });
   };
@@ -12212,7 +14052,7 @@ function formatSpecifier(specifier) {
     comma: match[7],
     precision: match[8] && match[8].slice(1),
     trim: match[9],
-    type: match[10]
+    type: match[10],
   });
 }
 formatSpecifier.prototype = FormatSpecifier.prototype;
@@ -12228,8 +14068,19 @@ function FormatSpecifier(specifier) {
   this.trim = !!specifier.trim;
   this.type = specifier.type === void 0 ? "" : specifier.type + "";
 }
-FormatSpecifier.prototype.toString = function() {
-  return this.fill + this.align + this.sign + this.symbol + (this.zero ? "0" : "") + (this.width === void 0 ? "" : Math.max(1, this.width | 0)) + (this.comma ? "," : "") + (this.precision === void 0 ? "" : "." + Math.max(0, this.precision | 0)) + (this.trim ? "~" : "") + this.type;
+FormatSpecifier.prototype.toString = function () {
+  return (
+    this.fill +
+    this.align +
+    this.sign +
+    this.symbol +
+    (this.zero ? "0" : "") +
+    (this.width === void 0 ? "" : Math.max(1, this.width | 0)) +
+    (this.comma ? "," : "") +
+    (this.precision === void 0 ? "" : "." + Math.max(0, this.precision | 0)) +
+    (this.trim ? "~" : "") +
+    this.type
+  );
 };
 function formatTrim(s) {
   out: for (var n = s.length, i = 1, i0 = -1, i1; i < n; ++i) {
@@ -12252,48 +14103,103 @@ function formatTrim(s) {
 var prefixExponent;
 function formatPrefixAuto(x2, p) {
   var d = formatDecimalParts(x2, p);
-  if (!d) return prefixExponent = void 0, x2.toPrecision(p);
-  var coefficient = d[0], exponent2 = d[1], i = exponent2 - (prefixExponent = Math.max(-8, Math.min(8, Math.floor(exponent2 / 3))) * 3) + 1, n = coefficient.length;
-  return i === n ? coefficient : i > n ? coefficient + new Array(i - n + 1).join("0") : i > 0 ? coefficient.slice(0, i) + "." + coefficient.slice(i) : "0." + new Array(1 - i).join("0") + formatDecimalParts(x2, Math.max(0, p + i - 1))[0];
+  if (!d) return ((prefixExponent = void 0), x2.toPrecision(p));
+  var coefficient = d[0],
+    exponent2 = d[1],
+    i = exponent2 - (prefixExponent = Math.max(-8, Math.min(8, Math.floor(exponent2 / 3))) * 3) + 1,
+    n = coefficient.length;
+  return i === n
+    ? coefficient
+    : i > n
+      ? coefficient + new Array(i - n + 1).join("0")
+      : i > 0
+        ? coefficient.slice(0, i) + "." + coefficient.slice(i)
+        : "0." + new Array(1 - i).join("0") + formatDecimalParts(x2, Math.max(0, p + i - 1))[0];
 }
 function formatRounded(x2, p) {
   var d = formatDecimalParts(x2, p);
   if (!d) return x2 + "";
-  var coefficient = d[0], exponent2 = d[1];
-  return exponent2 < 0 ? "0." + new Array(-exponent2).join("0") + coefficient : coefficient.length > exponent2 + 1 ? coefficient.slice(0, exponent2 + 1) + "." + coefficient.slice(exponent2 + 1) : coefficient + new Array(exponent2 - coefficient.length + 2).join("0");
+  var coefficient = d[0],
+    exponent2 = d[1];
+  return exponent2 < 0
+    ? "0." + new Array(-exponent2).join("0") + coefficient
+    : coefficient.length > exponent2 + 1
+      ? coefficient.slice(0, exponent2 + 1) + "." + coefficient.slice(exponent2 + 1)
+      : coefficient + new Array(exponent2 - coefficient.length + 2).join("0");
 }
 const formatTypes = {
   "%": (x2, p) => (x2 * 100).toFixed(p),
-  "b": (x2) => Math.round(x2).toString(2),
-  "c": (x2) => x2 + "",
-  "d": formatDecimal,
-  "e": (x2, p) => x2.toExponential(p),
-  "f": (x2, p) => x2.toFixed(p),
-  "g": (x2, p) => x2.toPrecision(p),
-  "o": (x2) => Math.round(x2).toString(8),
-  "p": (x2, p) => formatRounded(x2 * 100, p),
-  "r": formatRounded,
-  "s": formatPrefixAuto,
-  "X": (x2) => Math.round(x2).toString(16).toUpperCase(),
-  "x": (x2) => Math.round(x2).toString(16)
+  b: (x2) => Math.round(x2).toString(2),
+  c: (x2) => x2 + "",
+  d: formatDecimal,
+  e: (x2, p) => x2.toExponential(p),
+  f: (x2, p) => x2.toFixed(p),
+  g: (x2, p) => x2.toPrecision(p),
+  o: (x2) => Math.round(x2).toString(8),
+  p: (x2, p) => formatRounded(x2 * 100, p),
+  r: formatRounded,
+  s: formatPrefixAuto,
+  X: (x2) => Math.round(x2).toString(16).toUpperCase(),
+  x: (x2) => Math.round(x2).toString(16),
 };
 function identity$1(x2) {
   return x2;
 }
-var map = Array.prototype.map, prefixes = ["y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y"];
+var map = Array.prototype.map,
+  prefixes = ["y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y"];
 function formatLocale$1(locale2) {
-  var group = locale2.grouping === void 0 || locale2.thousands === void 0 ? identity$1 : formatGroup(map.call(locale2.grouping, Number), locale2.thousands + ""), currencyPrefix = locale2.currency === void 0 ? "" : locale2.currency[0] + "", currencySuffix = locale2.currency === void 0 ? "" : locale2.currency[1] + "", decimal = locale2.decimal === void 0 ? "." : locale2.decimal + "", numerals = locale2.numerals === void 0 ? identity$1 : formatNumerals(map.call(locale2.numerals, String)), percent = locale2.percent === void 0 ? "%" : locale2.percent + "", minus = locale2.minus === void 0 ? "−" : locale2.minus + "", nan = locale2.nan === void 0 ? "NaN" : locale2.nan + "";
+  var group =
+      locale2.grouping === void 0 || locale2.thousands === void 0
+        ? identity$1
+        : formatGroup(map.call(locale2.grouping, Number), locale2.thousands + ""),
+    currencyPrefix = locale2.currency === void 0 ? "" : locale2.currency[0] + "",
+    currencySuffix = locale2.currency === void 0 ? "" : locale2.currency[1] + "",
+    decimal = locale2.decimal === void 0 ? "." : locale2.decimal + "",
+    numerals =
+      locale2.numerals === void 0 ? identity$1 : formatNumerals(map.call(locale2.numerals, String)),
+    percent = locale2.percent === void 0 ? "%" : locale2.percent + "",
+    minus = locale2.minus === void 0 ? "−" : locale2.minus + "",
+    nan = locale2.nan === void 0 ? "NaN" : locale2.nan + "";
   function newFormat(specifier, options) {
     specifier = formatSpecifier(specifier);
-    var fill = specifier.fill, align = specifier.align, sign2 = specifier.sign, symbol = specifier.symbol, zero2 = specifier.zero, width = specifier.width, comma = specifier.comma, precision = specifier.precision, trim = specifier.trim, type = specifier.type;
-    if (type === "n") comma = true, type = "g";
-    else if (!formatTypes[type]) precision === void 0 && (precision = 12), trim = true, type = "g";
-    if (zero2 || fill === "0" && align === "=") zero2 = true, fill = "0", align = "=";
-    var prefix = (options && options.prefix !== void 0 ? options.prefix : "") + (symbol === "$" ? currencyPrefix : symbol === "#" && /[boxX]/.test(type) ? "0" + type.toLowerCase() : ""), suffix2 = (symbol === "$" ? currencySuffix : /[%p]/.test(type) ? percent : "") + (options && options.suffix !== void 0 ? options.suffix : "");
-    var formatType = formatTypes[type], maybeSuffix = /[defgprs%]/.test(type);
-    precision = precision === void 0 ? 6 : /[gprs]/.test(type) ? Math.max(1, Math.min(21, precision)) : Math.max(0, Math.min(20, precision));
+    var fill = specifier.fill,
+      align = specifier.align,
+      sign2 = specifier.sign,
+      symbol = specifier.symbol,
+      zero2 = specifier.zero,
+      width = specifier.width,
+      comma = specifier.comma,
+      precision = specifier.precision,
+      trim = specifier.trim,
+      type = specifier.type;
+    if (type === "n") ((comma = true), (type = "g"));
+    else if (!formatTypes[type])
+      (precision === void 0 && (precision = 12), (trim = true), (type = "g"));
+    if (zero2 || (fill === "0" && align === "=")) ((zero2 = true), (fill = "0"), (align = "="));
+    var prefix =
+        (options && options.prefix !== void 0 ? options.prefix : "") +
+        (symbol === "$"
+          ? currencyPrefix
+          : symbol === "#" && /[boxX]/.test(type)
+            ? "0" + type.toLowerCase()
+            : ""),
+      suffix2 =
+        (symbol === "$" ? currencySuffix : /[%p]/.test(type) ? percent : "") +
+        (options && options.suffix !== void 0 ? options.suffix : "");
+    var formatType = formatTypes[type],
+      maybeSuffix = /[defgprs%]/.test(type);
+    precision =
+      precision === void 0
+        ? 6
+        : /[gprs]/.test(type)
+          ? Math.max(1, Math.min(21, precision))
+          : Math.max(0, Math.min(20, precision));
     function format2(value) {
-      var valuePrefix = prefix, valueSuffix = suffix2, i, n, c;
+      var valuePrefix = prefix,
+        valueSuffix = suffix2,
+        i,
+        n,
+        c;
       if (type === "c") {
         valueSuffix = formatType(value) + valueSuffix;
         value = "";
@@ -12303,13 +14209,26 @@ function formatLocale$1(locale2) {
         value = isNaN(value) ? nan : formatType(Math.abs(value), precision);
         if (trim) value = formatTrim(value);
         if (valueNegative && +value === 0 && sign2 !== "+") valueNegative = false;
-        valuePrefix = (valueNegative ? sign2 === "(" ? sign2 : minus : sign2 === "-" || sign2 === "(" ? "" : sign2) + valuePrefix;
-        valueSuffix = (type === "s" && !isNaN(value) && prefixExponent !== void 0 ? prefixes[8 + prefixExponent / 3] : "") + valueSuffix + (valueNegative && sign2 === "(" ? ")" : "");
+        valuePrefix =
+          (valueNegative
+            ? sign2 === "("
+              ? sign2
+              : minus
+            : sign2 === "-" || sign2 === "("
+              ? ""
+              : sign2) + valuePrefix;
+        valueSuffix =
+          (type === "s" && !isNaN(value) && prefixExponent !== void 0
+            ? prefixes[8 + prefixExponent / 3]
+            : "") +
+          valueSuffix +
+          (valueNegative && sign2 === "(" ? ")" : "");
         if (maybeSuffix) {
-          i = -1, n = value.length;
+          ((i = -1), (n = value.length));
           while (++i < n) {
-            if (c = value.charCodeAt(i), 48 > c || c > 57) {
-              valueSuffix = (c === 46 ? decimal + value.slice(i + 1) : value.slice(i)) + valueSuffix;
+            if (((c = value.charCodeAt(i)), 48 > c || c > 57)) {
+              valueSuffix =
+                (c === 46 ? decimal + value.slice(i + 1) : value.slice(i)) + valueSuffix;
               value = value.slice(0, i);
               break;
             }
@@ -12317,8 +14236,11 @@ function formatLocale$1(locale2) {
         }
       }
       if (comma && !zero2) value = group(value, Infinity);
-      var length = valuePrefix.length + value.length + valueSuffix.length, padding = length < width ? new Array(width - length + 1).join(fill) : "";
-      if (comma && zero2) value = group(padding + value, padding.length ? width - valueSuffix.length : Infinity), padding = "";
+      var length = valuePrefix.length + value.length + valueSuffix.length,
+        padding = length < width ? new Array(width - length + 1).join(fill) : "";
+      if (comma && zero2)
+        ((value = group(padding + value, padding.length ? width - valueSuffix.length : Infinity)),
+          (padding = ""));
       switch (align) {
         case "<":
           value = valuePrefix + value + valueSuffix + padding;
@@ -12327,7 +14249,12 @@ function formatLocale$1(locale2) {
           value = valuePrefix + padding + value + valueSuffix;
           break;
         case "^":
-          value = padding.slice(0, length = padding.length >> 1) + valuePrefix + value + valueSuffix + padding.slice(length);
+          value =
+            padding.slice(0, (length = padding.length >> 1)) +
+            valuePrefix +
+            value +
+            valueSuffix +
+            padding.slice(length);
           break;
         default:
           value = padding + valuePrefix + value + valueSuffix;
@@ -12335,20 +14262,24 @@ function formatLocale$1(locale2) {
       }
       return numerals(value);
     }
-    format2.toString = function() {
+    format2.toString = function () {
       return specifier + "";
     };
     return format2;
   }
   function formatPrefix2(specifier, value) {
-    var e = Math.max(-8, Math.min(8, Math.floor(exponent(value) / 3))) * 3, k = Math.pow(10, -e), f = newFormat((specifier = formatSpecifier(specifier), specifier.type = "f", specifier), { suffix: prefixes[8 + e / 3] });
-    return function(value2) {
+    var e = Math.max(-8, Math.min(8, Math.floor(exponent(value) / 3))) * 3,
+      k = Math.pow(10, -e),
+      f = newFormat(((specifier = formatSpecifier(specifier)), (specifier.type = "f"), specifier), {
+        suffix: prefixes[8 + e / 3],
+      });
+    return function (value2) {
       return f(k * value2);
     };
   }
   return {
     format: newFormat,
-    formatPrefix: formatPrefix2
+    formatPrefix: formatPrefix2,
   };
 }
 var locale$1;
@@ -12357,7 +14288,7 @@ var formatPrefix;
 defaultLocale$1({
   thousands: ",",
   grouping: [3],
-  currency: ["$", ""]
+  currency: ["$", ""],
 });
 function defaultLocale$1(definition) {
   locale$1 = formatLocale$1(definition);
@@ -12369,19 +14300,24 @@ function precisionFixed(step) {
   return Math.max(0, -exponent(Math.abs(step)));
 }
 function precisionPrefix(step, value) {
-  return Math.max(0, Math.max(-8, Math.min(8, Math.floor(exponent(value) / 3))) * 3 - exponent(Math.abs(step)));
+  return Math.max(
+    0,
+    Math.max(-8, Math.min(8, Math.floor(exponent(value) / 3))) * 3 - exponent(Math.abs(step)),
+  );
 }
 function precisionRound(step, max2) {
-  step = Math.abs(step), max2 = Math.abs(max2) - step;
+  ((step = Math.abs(step)), (max2 = Math.abs(max2) - step));
   return Math.max(0, exponent(max2) - exponent(step)) + 1;
 }
 function tickFormat(start, stop, count, specifier) {
-  var step = tickStep(start, stop, count), precision;
+  var step = tickStep(start, stop, count),
+    precision;
   specifier = formatSpecifier(specifier == null ? ",f" : specifier);
   switch (specifier.type) {
     case "s": {
       var value = Math.max(Math.abs(start), Math.abs(stop));
-      if (specifier.precision == null && !isNaN(precision = precisionPrefix(step, value))) specifier.precision = precision;
+      if (specifier.precision == null && !isNaN((precision = precisionPrefix(step, value))))
+        specifier.precision = precision;
       return formatPrefix(specifier, value);
     }
     case "":
@@ -12389,12 +14325,17 @@ function tickFormat(start, stop, count, specifier) {
     case "g":
     case "p":
     case "r": {
-      if (specifier.precision == null && !isNaN(precision = precisionRound(step, Math.max(Math.abs(start), Math.abs(stop))))) specifier.precision = precision - (specifier.type === "e");
+      if (
+        specifier.precision == null &&
+        !isNaN((precision = precisionRound(step, Math.max(Math.abs(start), Math.abs(stop)))))
+      )
+        specifier.precision = precision - (specifier.type === "e");
       break;
     }
     case "f":
     case "%": {
-      if (specifier.precision == null && !isNaN(precision = precisionFixed(step))) specifier.precision = precision - (specifier.type === "%") * 2;
+      if (specifier.precision == null && !isNaN((precision = precisionFixed(step))))
+        specifier.precision = precision - (specifier.type === "%") * 2;
       break;
     }
   }
@@ -12402,15 +14343,15 @@ function tickFormat(start, stop, count, specifier) {
 }
 function linearish(scale) {
   var domain = scale.domain;
-  scale.ticks = function(count) {
+  scale.ticks = function (count) {
     var d = domain();
     return ticks(d[0], d[d.length - 1], count == null ? 10 : count);
   };
-  scale.tickFormat = function(count, specifier) {
+  scale.tickFormat = function (count, specifier) {
     var d = domain();
     return tickFormat(d[0], d[d.length - 1], count == null ? 10 : count, specifier);
   };
-  scale.nice = function(count) {
+  scale.nice = function (count) {
     if (count == null) count = 10;
     var d = domain();
     var i0 = 0;
@@ -12421,8 +14362,8 @@ function linearish(scale) {
     var step;
     var maxIter = 10;
     if (stop < start) {
-      step = start, start = stop, stop = step;
-      step = i0, i0 = i1, i1 = step;
+      ((step = start), (start = stop), (stop = step));
+      ((step = i0), (i0 = i1), (i1 = step));
     }
     while (maxIter-- > 0) {
       step = tickIncrement(start, stop, count);
@@ -12447,7 +14388,7 @@ function linearish(scale) {
 }
 function linear() {
   var scale = continuous();
-  scale.copy = function() {
+  scale.copy = function () {
     return copy$1(scale, linear());
   };
   initRange.apply(scale, arguments);
@@ -12456,16 +14397,16 @@ function linear() {
 function identity(domain) {
   var unknown;
   function scale(x2) {
-    return x2 == null || isNaN(x2 = +x2) ? unknown : x2;
+    return x2 == null || isNaN((x2 = +x2)) ? unknown : x2;
   }
   scale.invert = scale;
-  scale.domain = scale.range = function(_) {
-    return arguments.length ? (domain = Array.from(_, number$1), scale) : domain.slice();
+  scale.domain = scale.range = function (_) {
+    return arguments.length ? ((domain = Array.from(_, number$1)), scale) : domain.slice();
   };
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  scale.copy = function() {
+  scale.copy = function () {
     return identity(domain).unknown(unknown);
   };
   domain = arguments.length ? Array.from(domain, number$1) : [0, 1];
@@ -12473,10 +14414,14 @@ function identity(domain) {
 }
 function nice(domain, interval) {
   domain = domain.slice();
-  var i0 = 0, i1 = domain.length - 1, x0 = domain[i0], x1 = domain[i1], t;
+  var i0 = 0,
+    i1 = domain.length - 1,
+    x0 = domain[i0],
+    x1 = domain[i1],
+    t;
   if (x1 < x0) {
-    t = i0, i0 = i1, i1 = t;
-    t = x0, x0 = x1, x1 = t;
+    ((t = i0), (i0 = i1), (i1 = t));
+    ((t = x0), (x0 = x1), (x1 = t));
   }
   domain[i0] = interval.floor(x0);
   domain[i1] = interval.ceil(x1);
@@ -12501,7 +14446,11 @@ function powp(base) {
   return base === 10 ? pow10 : base === Math.E ? Math.exp : (x2) => Math.pow(base, x2);
 }
 function logp(base) {
-  return base === Math.E ? Math.log : base === 10 && Math.log10 || base === 2 && Math.log2 || (base = Math.log(base), (x2) => Math.log(x2) / base);
+  return base === Math.E
+    ? Math.log
+    : (base === 10 && Math.log10) ||
+        (base === 2 && Math.log2) ||
+        ((base = Math.log(base)), (x2) => Math.log(x2) / base);
 }
 function reflect(f) {
   return (x2, k) => -f(-x2, k);
@@ -12513,19 +14462,19 @@ function loggish(transform) {
   let logs;
   let pows;
   function rescale() {
-    logs = logp(base), pows = powp(base);
+    ((logs = logp(base)), (pows = powp(base)));
     if (domain()[0] < 0) {
-      logs = reflect(logs), pows = reflect(pows);
+      ((logs = reflect(logs)), (pows = reflect(pows)));
       transform(transformLogn, transformExpn);
     } else {
       transform(transformLog, transformExp);
     }
     return scale;
   }
-  scale.base = function(_) {
-    return arguments.length ? (base = +_, rescale()) : base;
+  scale.base = function (_) {
+    return arguments.length ? ((base = +_), rescale()) : base;
   };
-  scale.domain = function(_) {
+  scale.domain = function (_) {
     return arguments.length ? (domain(_), rescale()) : domain();
   };
   scale.ticks = (count) => {
@@ -12541,23 +14490,25 @@ function loggish(transform) {
     const n = count == null ? 10 : +count;
     let z = [];
     if (!(base % 1) && j - i < n) {
-      i = Math.floor(i), j = Math.ceil(j);
-      if (u > 0) for (; i <= j; ++i) {
-        for (k = 1; k < base; ++k) {
-          t = i < 0 ? k / pows(-i) : k * pows(i);
-          if (t < u) continue;
-          if (t > v) break;
-          z.push(t);
+      ((i = Math.floor(i)), (j = Math.ceil(j)));
+      if (u > 0)
+        for (; i <= j; ++i) {
+          for (k = 1; k < base; ++k) {
+            t = i < 0 ? k / pows(-i) : k * pows(i);
+            if (t < u) continue;
+            if (t > v) break;
+            z.push(t);
+          }
         }
-      }
-      else for (; i <= j; ++i) {
-        for (k = base - 1; k >= 1; --k) {
-          t = i > 0 ? k / pows(-i) : k * pows(i);
-          if (t < u) continue;
-          if (t > v) break;
-          z.push(t);
+      else
+        for (; i <= j; ++i) {
+          for (k = base - 1; k >= 1; --k) {
+            t = i > 0 ? k / pows(-i) : k * pows(i);
+            if (t < u) continue;
+            if (t > v) break;
+            z.push(t);
+          }
         }
-      }
       if (z.length * 2 < n) z = ticks(u, v, n);
     } else {
       z = ticks(i, j, Math.min(j - i, n)).map(pows);
@@ -12568,11 +14519,12 @@ function loggish(transform) {
     if (count == null) count = 10;
     if (specifier == null) specifier = base === 10 ? "s" : ",";
     if (typeof specifier !== "function") {
-      if (!(base % 1) && (specifier = formatSpecifier(specifier)).precision == null) specifier.trim = true;
+      if (!(base % 1) && (specifier = formatSpecifier(specifier)).precision == null)
+        specifier.trim = true;
       specifier = format(specifier);
     }
     if (count === Infinity) return specifier;
-    const k = Math.max(1, base * count / scale.ticks().length);
+    const k = Math.max(1, (base * count) / scale.ticks().length);
     return (d) => {
       let i = d / pows(Math.round(logs(d)));
       if (i * base < base - 0.5) i *= base;
@@ -12580,10 +14532,12 @@ function loggish(transform) {
     };
   };
   scale.nice = () => {
-    return domain(nice(domain(), {
-      floor: (x2) => pows(Math.floor(logs(x2))),
-      ceil: (x2) => pows(Math.ceil(logs(x2)))
-    }));
+    return domain(
+      nice(domain(), {
+        floor: (x2) => pows(Math.floor(logs(x2))),
+        ceil: (x2) => pows(Math.ceil(logs(x2))),
+      }),
+    );
   };
   return scale;
 }
@@ -12594,31 +14548,32 @@ function log() {
   return scale;
 }
 function transformSymlog(c) {
-  return function(x2) {
+  return function (x2) {
     return Math.sign(x2) * Math.log1p(Math.abs(x2 / c));
   };
 }
 function transformSymexp(c) {
-  return function(x2) {
+  return function (x2) {
     return Math.sign(x2) * Math.expm1(Math.abs(x2)) * c;
   };
 }
 function symlogish(transform) {
-  var c = 1, scale = transform(transformSymlog(c), transformSymexp(c));
-  scale.constant = function(_) {
-    return arguments.length ? transform(transformSymlog(c = +_), transformSymexp(c)) : c;
+  var c = 1,
+    scale = transform(transformSymlog(c), transformSymexp(c));
+  scale.constant = function (_) {
+    return arguments.length ? transform(transformSymlog((c = +_)), transformSymexp(c)) : c;
   };
   return linearish(scale);
 }
 function symlog() {
   var scale = symlogish(transformer$2());
-  scale.copy = function() {
+  scale.copy = function () {
     return copy$1(scale, symlog()).constant(scale.constant());
   };
   return initRange.apply(scale, arguments);
 }
 function transformPow(exponent2) {
-  return function(x2) {
+  return function (x2) {
     return x2 < 0 ? -Math.pow(-x2, exponent2) : Math.pow(x2, exponent2);
   };
 }
@@ -12629,18 +14584,23 @@ function transformSquare(x2) {
   return x2 < 0 ? -x2 * x2 : x2 * x2;
 }
 function powish(transform) {
-  var scale = transform(identity$2, identity$2), exponent2 = 1;
+  var scale = transform(identity$2, identity$2),
+    exponent2 = 1;
   function rescale() {
-    return exponent2 === 1 ? transform(identity$2, identity$2) : exponent2 === 0.5 ? transform(transformSqrt, transformSquare) : transform(transformPow(exponent2), transformPow(1 / exponent2));
+    return exponent2 === 1
+      ? transform(identity$2, identity$2)
+      : exponent2 === 0.5
+        ? transform(transformSqrt, transformSquare)
+        : transform(transformPow(exponent2), transformPow(1 / exponent2));
   }
-  scale.exponent = function(_) {
-    return arguments.length ? (exponent2 = +_, rescale()) : exponent2;
+  scale.exponent = function (_) {
+    return arguments.length ? ((exponent2 = +_), rescale()) : exponent2;
   };
   return linearish(scale);
 }
 function pow() {
   var scale = powish(transformer$2());
-  scale.copy = function() {
+  scale.copy = function () {
     return copy$1(scale, pow()).exponent(scale.exponent());
   };
   initRange.apply(scale, arguments);
@@ -12656,79 +14616,95 @@ function unsquare(x2) {
   return Math.sign(x2) * Math.sqrt(Math.abs(x2));
 }
 function radial() {
-  var squared = continuous(), range2 = [0, 1], round2 = false, unknown;
+  var squared = continuous(),
+    range2 = [0, 1],
+    round2 = false,
+    unknown;
   function scale(x2) {
     var y2 = unsquare(squared(x2));
     return isNaN(y2) ? unknown : round2 ? Math.round(y2) : y2;
   }
-  scale.invert = function(y2) {
+  scale.invert = function (y2) {
     return squared.invert(square(y2));
   };
-  scale.domain = function(_) {
+  scale.domain = function (_) {
     return arguments.length ? (squared.domain(_), scale) : squared.domain();
   };
-  scale.range = function(_) {
-    return arguments.length ? (squared.range((range2 = Array.from(_, number$1)).map(square)), scale) : range2.slice();
+  scale.range = function (_) {
+    return arguments.length
+      ? (squared.range((range2 = Array.from(_, number$1)).map(square)), scale)
+      : range2.slice();
   };
-  scale.rangeRound = function(_) {
+  scale.rangeRound = function (_) {
     return scale.range(_).round(true);
   };
-  scale.round = function(_) {
-    return arguments.length ? (round2 = !!_, scale) : round2;
+  scale.round = function (_) {
+    return arguments.length ? ((round2 = !!_), scale) : round2;
   };
-  scale.clamp = function(_) {
+  scale.clamp = function (_) {
     return arguments.length ? (squared.clamp(_), scale) : squared.clamp();
   };
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  scale.copy = function() {
+  scale.copy = function () {
     return radial(squared.domain(), range2).round(round2).clamp(squared.clamp()).unknown(unknown);
   };
   initRange.apply(scale, arguments);
   return linearish(scale);
 }
 function quantile() {
-  var domain = [], range2 = [], thresholds = [], unknown;
+  var domain = [],
+    range2 = [],
+    thresholds = [],
+    unknown;
   function rescale() {
-    var i = 0, n = Math.max(1, range2.length);
+    var i = 0,
+      n = Math.max(1, range2.length);
     thresholds = new Array(n - 1);
     while (++i < n) thresholds[i - 1] = quantileSorted(domain, i / n);
     return scale;
   }
   function scale(x2) {
-    return x2 == null || isNaN(x2 = +x2) ? unknown : range2[bisectRight(thresholds, x2)];
+    return x2 == null || isNaN((x2 = +x2)) ? unknown : range2[bisectRight(thresholds, x2)];
   }
-  scale.invertExtent = function(y2) {
+  scale.invertExtent = function (y2) {
     var i = range2.indexOf(y2);
-    return i < 0 ? [NaN, NaN] : [
-      i > 0 ? thresholds[i - 1] : domain[0],
-      i < thresholds.length ? thresholds[i] : domain[domain.length - 1]
-    ];
+    return i < 0
+      ? [NaN, NaN]
+      : [
+          i > 0 ? thresholds[i - 1] : domain[0],
+          i < thresholds.length ? thresholds[i] : domain[domain.length - 1],
+        ];
   };
-  scale.domain = function(_) {
+  scale.domain = function (_) {
     if (!arguments.length) return domain.slice();
     domain = [];
-    for (let d of _) if (d != null && !isNaN(d = +d)) domain.push(d);
+    for (let d of _) if (d != null && !isNaN((d = +d))) domain.push(d);
     domain.sort(ascending);
     return rescale();
   };
-  scale.range = function(_) {
-    return arguments.length ? (range2 = Array.from(_), rescale()) : range2.slice();
+  scale.range = function (_) {
+    return arguments.length ? ((range2 = Array.from(_)), rescale()) : range2.slice();
   };
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  scale.quantiles = function() {
+  scale.quantiles = function () {
     return thresholds.slice();
   };
-  scale.copy = function() {
+  scale.copy = function () {
     return quantile().domain(domain).range(range2).unknown(unknown);
   };
   return initRange.apply(scale, arguments);
 }
 function quantize() {
-  var x0 = 0, x1 = 1, n = 1, domain = [0.5], range2 = [0, 1], unknown;
+  var x0 = 0,
+    x1 = 1,
+    n = 1,
+    domain = [0.5],
+    range2 = [0, 1],
+    unknown;
   function scale(x2) {
     return x2 != null && x2 <= x2 ? range2[bisectRight(domain, x2, 0, n)] : unknown;
   }
@@ -12738,67 +14714,93 @@ function quantize() {
     while (++i < n) domain[i] = ((i + 1) * x1 - (i - n) * x0) / (n + 1);
     return scale;
   }
-  scale.domain = function(_) {
-    return arguments.length ? ([x0, x1] = _, x0 = +x0, x1 = +x1, rescale()) : [x0, x1];
+  scale.domain = function (_) {
+    return arguments.length ? (([x0, x1] = _), (x0 = +x0), (x1 = +x1), rescale()) : [x0, x1];
   };
-  scale.range = function(_) {
-    return arguments.length ? (n = (range2 = Array.from(_)).length - 1, rescale()) : range2.slice();
+  scale.range = function (_) {
+    return arguments.length
+      ? ((n = (range2 = Array.from(_)).length - 1), rescale())
+      : range2.slice();
   };
-  scale.invertExtent = function(y2) {
+  scale.invertExtent = function (y2) {
     var i = range2.indexOf(y2);
-    return i < 0 ? [NaN, NaN] : i < 1 ? [x0, domain[0]] : i >= n ? [domain[n - 1], x1] : [domain[i - 1], domain[i]];
+    return i < 0
+      ? [NaN, NaN]
+      : i < 1
+        ? [x0, domain[0]]
+        : i >= n
+          ? [domain[n - 1], x1]
+          : [domain[i - 1], domain[i]];
   };
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : scale;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : scale;
   };
-  scale.thresholds = function() {
+  scale.thresholds = function () {
     return domain.slice();
   };
-  scale.copy = function() {
+  scale.copy = function () {
     return quantize().domain([x0, x1]).range(range2).unknown(unknown);
   };
   return initRange.apply(linearish(scale), arguments);
 }
 function threshold() {
-  var domain = [0.5], range2 = [0, 1], unknown, n = 1;
+  var domain = [0.5],
+    range2 = [0, 1],
+    unknown,
+    n = 1;
   function scale(x2) {
     return x2 != null && x2 <= x2 ? range2[bisectRight(domain, x2, 0, n)] : unknown;
   }
-  scale.domain = function(_) {
-    return arguments.length ? (domain = Array.from(_), n = Math.min(domain.length, range2.length - 1), scale) : domain.slice();
+  scale.domain = function (_) {
+    return arguments.length
+      ? ((domain = Array.from(_)), (n = Math.min(domain.length, range2.length - 1)), scale)
+      : domain.slice();
   };
-  scale.range = function(_) {
-    return arguments.length ? (range2 = Array.from(_), n = Math.min(domain.length, range2.length - 1), scale) : range2.slice();
+  scale.range = function (_) {
+    return arguments.length
+      ? ((range2 = Array.from(_)), (n = Math.min(domain.length, range2.length - 1)), scale)
+      : range2.slice();
   };
-  scale.invertExtent = function(y2) {
+  scale.invertExtent = function (y2) {
     var i = range2.indexOf(y2);
     return [domain[i - 1], domain[i]];
   };
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  scale.copy = function() {
+  scale.copy = function () {
     return threshold().domain(domain).range(range2).unknown(unknown);
   };
   return initRange.apply(scale, arguments);
 }
-const t0 = /* @__PURE__ */ new Date(), t1 = /* @__PURE__ */ new Date();
+const t0 = /* @__PURE__ */ new Date(),
+  t1 = /* @__PURE__ */ new Date();
 function timeInterval(floori, offseti, count, field) {
   function interval(date2) {
-    return floori(date2 = arguments.length === 0 ? /* @__PURE__ */ new Date() : /* @__PURE__ */ new Date(+date2)), date2;
+    return (
+      floori(
+        (date2 =
+          arguments.length === 0 ? /* @__PURE__ */ new Date() : /* @__PURE__ */ new Date(+date2)),
+      ),
+      date2
+    );
   }
   interval.floor = (date2) => {
-    return floori(date2 = /* @__PURE__ */ new Date(+date2)), date2;
+    return (floori((date2 = /* @__PURE__ */ new Date(+date2))), date2);
   };
   interval.ceil = (date2) => {
-    return floori(date2 = new Date(date2 - 1)), offseti(date2, 1), floori(date2), date2;
+    return (floori((date2 = new Date(date2 - 1))), offseti(date2, 1), floori(date2), date2);
   };
   interval.round = (date2) => {
-    const d0 = interval(date2), d1 = interval.ceil(date2);
+    const d0 = interval(date2),
+      d1 = interval.ceil(date2);
     return date2 - d0 < d1 - date2 ? d0 : d1;
   };
   interval.offset = (date2, step) => {
-    return offseti(date2 = /* @__PURE__ */ new Date(+date2), step == null ? 1 : Math.floor(step)), date2;
+    return (
+      offseti((date2 = /* @__PURE__ */ new Date(+date2)), step == null ? 1 : Math.floor(step)),
+      date2
+    );
   };
   interval.range = (start, stop, step) => {
     const range2 = [];
@@ -12807,56 +14809,74 @@ function timeInterval(floori, offseti, count, field) {
     if (!(start < stop) || !(step > 0)) return range2;
     let previous;
     do
-      range2.push(previous = /* @__PURE__ */ new Date(+start)), offseti(start, step), floori(start);
+      (range2.push((previous = /* @__PURE__ */ new Date(+start))),
+        offseti(start, step),
+        floori(start));
     while (previous < start && start < stop);
     return range2;
   };
   interval.filter = (test) => {
-    return timeInterval((date2) => {
-      if (date2 >= date2) while (floori(date2), !test(date2)) date2.setTime(date2 - 1);
-    }, (date2, step) => {
-      if (date2 >= date2) {
-        if (step < 0) while (++step <= 0) {
-          while (offseti(date2, -1), !test(date2)) {
-          }
+    return timeInterval(
+      (date2) => {
+        if (date2 >= date2) while ((floori(date2), !test(date2))) date2.setTime(date2 - 1);
+      },
+      (date2, step) => {
+        if (date2 >= date2) {
+          if (step < 0)
+            while (++step <= 0) {
+              while ((offseti(date2, -1), !test(date2))) {}
+            }
+          else
+            while (--step >= 0) {
+              while ((offseti(date2, 1), !test(date2))) {}
+            }
         }
-        else while (--step >= 0) {
-          while (offseti(date2, 1), !test(date2)) {
-          }
-        }
-      }
-    });
+      },
+    );
   };
   if (count) {
     interval.count = (start, end) => {
-      t0.setTime(+start), t1.setTime(+end);
-      floori(t0), floori(t1);
+      (t0.setTime(+start), t1.setTime(+end));
+      (floori(t0), floori(t1));
       return Math.floor(count(t0, t1));
     };
     interval.every = (step) => {
       step = Math.floor(step);
-      return !isFinite(step) || !(step > 0) ? null : !(step > 1) ? interval : interval.filter(field ? (d) => field(d) % step === 0 : (d) => interval.count(0, d) % step === 0);
+      return !isFinite(step) || !(step > 0)
+        ? null
+        : !(step > 1)
+          ? interval
+          : interval.filter(
+              field ? (d) => field(d) % step === 0 : (d) => interval.count(0, d) % step === 0,
+            );
     };
   }
   return interval;
 }
-const millisecond = timeInterval(() => {
-}, (date2, step) => {
-  date2.setTime(+date2 + step);
-}, (start, end) => {
-  return end - start;
-});
+const millisecond = timeInterval(
+  () => {},
+  (date2, step) => {
+    date2.setTime(+date2 + step);
+  },
+  (start, end) => {
+    return end - start;
+  },
+);
 millisecond.every = (k) => {
   k = Math.floor(k);
   if (!isFinite(k) || !(k > 0)) return null;
   if (!(k > 1)) return millisecond;
-  return timeInterval((date2) => {
-    date2.setTime(Math.floor(date2 / k) * k);
-  }, (date2, step) => {
-    date2.setTime(+date2 + step * k);
-  }, (start, end) => {
-    return (end - start) / k;
-  });
+  return timeInterval(
+    (date2) => {
+      date2.setTime(Math.floor(date2 / k) * k);
+    },
+    (date2, step) => {
+      date2.setTime(+date2 + step * k);
+    },
+    (start, end) => {
+      return (end - start) / k;
+    },
+  );
 };
 millisecond.range;
 const durationSecond = 1e3;
@@ -12866,92 +14886,141 @@ const durationDay = durationHour * 24;
 const durationWeek = durationDay * 7;
 const durationMonth = durationDay * 30;
 const durationYear = durationDay * 365;
-const second = timeInterval((date2) => {
-  date2.setTime(date2 - date2.getMilliseconds());
-}, (date2, step) => {
-  date2.setTime(+date2 + step * durationSecond);
-}, (start, end) => {
-  return (end - start) / durationSecond;
-}, (date2) => {
-  return date2.getUTCSeconds();
-});
+const second = timeInterval(
+  (date2) => {
+    date2.setTime(date2 - date2.getMilliseconds());
+  },
+  (date2, step) => {
+    date2.setTime(+date2 + step * durationSecond);
+  },
+  (start, end) => {
+    return (end - start) / durationSecond;
+  },
+  (date2) => {
+    return date2.getUTCSeconds();
+  },
+);
 second.range;
-const timeMinute = timeInterval((date2) => {
-  date2.setTime(date2 - date2.getMilliseconds() - date2.getSeconds() * durationSecond);
-}, (date2, step) => {
-  date2.setTime(+date2 + step * durationMinute);
-}, (start, end) => {
-  return (end - start) / durationMinute;
-}, (date2) => {
-  return date2.getMinutes();
-});
+const timeMinute = timeInterval(
+  (date2) => {
+    date2.setTime(date2 - date2.getMilliseconds() - date2.getSeconds() * durationSecond);
+  },
+  (date2, step) => {
+    date2.setTime(+date2 + step * durationMinute);
+  },
+  (start, end) => {
+    return (end - start) / durationMinute;
+  },
+  (date2) => {
+    return date2.getMinutes();
+  },
+);
 timeMinute.range;
-const utcMinute = timeInterval((date2) => {
-  date2.setUTCSeconds(0, 0);
-}, (date2, step) => {
-  date2.setTime(+date2 + step * durationMinute);
-}, (start, end) => {
-  return (end - start) / durationMinute;
-}, (date2) => {
-  return date2.getUTCMinutes();
-});
+const utcMinute = timeInterval(
+  (date2) => {
+    date2.setUTCSeconds(0, 0);
+  },
+  (date2, step) => {
+    date2.setTime(+date2 + step * durationMinute);
+  },
+  (start, end) => {
+    return (end - start) / durationMinute;
+  },
+  (date2) => {
+    return date2.getUTCMinutes();
+  },
+);
 utcMinute.range;
-const timeHour = timeInterval((date2) => {
-  date2.setTime(date2 - date2.getMilliseconds() - date2.getSeconds() * durationSecond - date2.getMinutes() * durationMinute);
-}, (date2, step) => {
-  date2.setTime(+date2 + step * durationHour);
-}, (start, end) => {
-  return (end - start) / durationHour;
-}, (date2) => {
-  return date2.getHours();
-});
+const timeHour = timeInterval(
+  (date2) => {
+    date2.setTime(
+      date2 -
+        date2.getMilliseconds() -
+        date2.getSeconds() * durationSecond -
+        date2.getMinutes() * durationMinute,
+    );
+  },
+  (date2, step) => {
+    date2.setTime(+date2 + step * durationHour);
+  },
+  (start, end) => {
+    return (end - start) / durationHour;
+  },
+  (date2) => {
+    return date2.getHours();
+  },
+);
 timeHour.range;
-const utcHour = timeInterval((date2) => {
-  date2.setUTCMinutes(0, 0, 0);
-}, (date2, step) => {
-  date2.setTime(+date2 + step * durationHour);
-}, (start, end) => {
-  return (end - start) / durationHour;
-}, (date2) => {
-  return date2.getUTCHours();
-});
+const utcHour = timeInterval(
+  (date2) => {
+    date2.setUTCMinutes(0, 0, 0);
+  },
+  (date2, step) => {
+    date2.setTime(+date2 + step * durationHour);
+  },
+  (start, end) => {
+    return (end - start) / durationHour;
+  },
+  (date2) => {
+    return date2.getUTCHours();
+  },
+);
 utcHour.range;
 const timeDay = timeInterval(
   (date2) => date2.setHours(0, 0, 0, 0),
   (date2, step) => date2.setDate(date2.getDate() + step),
-  (start, end) => (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) / durationDay,
-  (date2) => date2.getDate() - 1
+  (start, end) =>
+    (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) /
+    durationDay,
+  (date2) => date2.getDate() - 1,
 );
 timeDay.range;
-const utcDay = timeInterval((date2) => {
-  date2.setUTCHours(0, 0, 0, 0);
-}, (date2, step) => {
-  date2.setUTCDate(date2.getUTCDate() + step);
-}, (start, end) => {
-  return (end - start) / durationDay;
-}, (date2) => {
-  return date2.getUTCDate() - 1;
-});
+const utcDay = timeInterval(
+  (date2) => {
+    date2.setUTCHours(0, 0, 0, 0);
+  },
+  (date2, step) => {
+    date2.setUTCDate(date2.getUTCDate() + step);
+  },
+  (start, end) => {
+    return (end - start) / durationDay;
+  },
+  (date2) => {
+    return date2.getUTCDate() - 1;
+  },
+);
 utcDay.range;
-const unixDay = timeInterval((date2) => {
-  date2.setUTCHours(0, 0, 0, 0);
-}, (date2, step) => {
-  date2.setUTCDate(date2.getUTCDate() + step);
-}, (start, end) => {
-  return (end - start) / durationDay;
-}, (date2) => {
-  return Math.floor(date2 / durationDay);
-});
+const unixDay = timeInterval(
+  (date2) => {
+    date2.setUTCHours(0, 0, 0, 0);
+  },
+  (date2, step) => {
+    date2.setUTCDate(date2.getUTCDate() + step);
+  },
+  (start, end) => {
+    return (end - start) / durationDay;
+  },
+  (date2) => {
+    return Math.floor(date2 / durationDay);
+  },
+);
 unixDay.range;
 function timeWeekday(i) {
-  return timeInterval((date2) => {
-    date2.setDate(date2.getDate() - (date2.getDay() + 7 - i) % 7);
-    date2.setHours(0, 0, 0, 0);
-  }, (date2, step) => {
-    date2.setDate(date2.getDate() + step * 7);
-  }, (start, end) => {
-    return (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) / durationWeek;
-  });
+  return timeInterval(
+    (date2) => {
+      date2.setDate(date2.getDate() - ((date2.getDay() + 7 - i) % 7));
+      date2.setHours(0, 0, 0, 0);
+    },
+    (date2, step) => {
+      date2.setDate(date2.getDate() + step * 7);
+    },
+    (start, end) => {
+      return (
+        (end - start - (end.getTimezoneOffset() - start.getTimezoneOffset()) * durationMinute) /
+        durationWeek
+      );
+    },
+  );
 }
 const timeSunday = timeWeekday(0);
 const timeMonday = timeWeekday(1);
@@ -12968,14 +15037,18 @@ timeThursday.range;
 timeFriday.range;
 timeSaturday.range;
 function utcWeekday(i) {
-  return timeInterval((date2) => {
-    date2.setUTCDate(date2.getUTCDate() - (date2.getUTCDay() + 7 - i) % 7);
-    date2.setUTCHours(0, 0, 0, 0);
-  }, (date2, step) => {
-    date2.setUTCDate(date2.getUTCDate() + step * 7);
-  }, (start, end) => {
-    return (end - start) / durationWeek;
-  });
+  return timeInterval(
+    (date2) => {
+      date2.setUTCDate(date2.getUTCDate() - ((date2.getUTCDay() + 7 - i) % 7));
+      date2.setUTCHours(0, 0, 0, 0);
+    },
+    (date2, step) => {
+      date2.setUTCDate(date2.getUTCDate() + step * 7);
+    },
+    (start, end) => {
+      return (end - start) / durationWeek;
+    },
+  );
 }
 const utcSunday = utcWeekday(0);
 const utcMonday = utcWeekday(1);
@@ -12991,66 +15064,98 @@ utcWednesday.range;
 utcThursday.range;
 utcFriday.range;
 utcSaturday.range;
-const timeMonth = timeInterval((date2) => {
-  date2.setDate(1);
-  date2.setHours(0, 0, 0, 0);
-}, (date2, step) => {
-  date2.setMonth(date2.getMonth() + step);
-}, (start, end) => {
-  return end.getMonth() - start.getMonth() + (end.getFullYear() - start.getFullYear()) * 12;
-}, (date2) => {
-  return date2.getMonth();
-});
+const timeMonth = timeInterval(
+  (date2) => {
+    date2.setDate(1);
+    date2.setHours(0, 0, 0, 0);
+  },
+  (date2, step) => {
+    date2.setMonth(date2.getMonth() + step);
+  },
+  (start, end) => {
+    return end.getMonth() - start.getMonth() + (end.getFullYear() - start.getFullYear()) * 12;
+  },
+  (date2) => {
+    return date2.getMonth();
+  },
+);
 timeMonth.range;
-const utcMonth = timeInterval((date2) => {
-  date2.setUTCDate(1);
-  date2.setUTCHours(0, 0, 0, 0);
-}, (date2, step) => {
-  date2.setUTCMonth(date2.getUTCMonth() + step);
-}, (start, end) => {
-  return end.getUTCMonth() - start.getUTCMonth() + (end.getUTCFullYear() - start.getUTCFullYear()) * 12;
-}, (date2) => {
-  return date2.getUTCMonth();
-});
+const utcMonth = timeInterval(
+  (date2) => {
+    date2.setUTCDate(1);
+    date2.setUTCHours(0, 0, 0, 0);
+  },
+  (date2, step) => {
+    date2.setUTCMonth(date2.getUTCMonth() + step);
+  },
+  (start, end) => {
+    return (
+      end.getUTCMonth() - start.getUTCMonth() + (end.getUTCFullYear() - start.getUTCFullYear()) * 12
+    );
+  },
+  (date2) => {
+    return date2.getUTCMonth();
+  },
+);
 utcMonth.range;
-const timeYear = timeInterval((date2) => {
-  date2.setMonth(0, 1);
-  date2.setHours(0, 0, 0, 0);
-}, (date2, step) => {
-  date2.setFullYear(date2.getFullYear() + step);
-}, (start, end) => {
-  return end.getFullYear() - start.getFullYear();
-}, (date2) => {
-  return date2.getFullYear();
-});
-timeYear.every = (k) => {
-  return !isFinite(k = Math.floor(k)) || !(k > 0) ? null : timeInterval((date2) => {
-    date2.setFullYear(Math.floor(date2.getFullYear() / k) * k);
+const timeYear = timeInterval(
+  (date2) => {
     date2.setMonth(0, 1);
     date2.setHours(0, 0, 0, 0);
-  }, (date2, step) => {
-    date2.setFullYear(date2.getFullYear() + step * k);
-  });
+  },
+  (date2, step) => {
+    date2.setFullYear(date2.getFullYear() + step);
+  },
+  (start, end) => {
+    return end.getFullYear() - start.getFullYear();
+  },
+  (date2) => {
+    return date2.getFullYear();
+  },
+);
+timeYear.every = (k) => {
+  return !isFinite((k = Math.floor(k))) || !(k > 0)
+    ? null
+    : timeInterval(
+        (date2) => {
+          date2.setFullYear(Math.floor(date2.getFullYear() / k) * k);
+          date2.setMonth(0, 1);
+          date2.setHours(0, 0, 0, 0);
+        },
+        (date2, step) => {
+          date2.setFullYear(date2.getFullYear() + step * k);
+        },
+      );
 };
 timeYear.range;
-const utcYear = timeInterval((date2) => {
-  date2.setUTCMonth(0, 1);
-  date2.setUTCHours(0, 0, 0, 0);
-}, (date2, step) => {
-  date2.setUTCFullYear(date2.getUTCFullYear() + step);
-}, (start, end) => {
-  return end.getUTCFullYear() - start.getUTCFullYear();
-}, (date2) => {
-  return date2.getUTCFullYear();
-});
-utcYear.every = (k) => {
-  return !isFinite(k = Math.floor(k)) || !(k > 0) ? null : timeInterval((date2) => {
-    date2.setUTCFullYear(Math.floor(date2.getUTCFullYear() / k) * k);
+const utcYear = timeInterval(
+  (date2) => {
     date2.setUTCMonth(0, 1);
     date2.setUTCHours(0, 0, 0, 0);
-  }, (date2, step) => {
-    date2.setUTCFullYear(date2.getUTCFullYear() + step * k);
-  });
+  },
+  (date2, step) => {
+    date2.setUTCFullYear(date2.getUTCFullYear() + step);
+  },
+  (start, end) => {
+    return end.getUTCFullYear() - start.getUTCFullYear();
+  },
+  (date2) => {
+    return date2.getUTCFullYear();
+  },
+);
+utcYear.every = (k) => {
+  return !isFinite((k = Math.floor(k))) || !(k > 0)
+    ? null
+    : timeInterval(
+        (date2) => {
+          date2.setUTCFullYear(Math.floor(date2.getUTCFullYear() / k) * k);
+          date2.setUTCMonth(0, 1);
+          date2.setUTCHours(0, 0, 0, 0);
+        },
+        (date2, step) => {
+          date2.setUTCFullYear(date2.getUTCFullYear() + step * k);
+        },
+      );
 };
 utcYear.range;
 function ticker(year, month, week, day, hour, minute) {
@@ -13072,27 +15177,44 @@ function ticker(year, month, week, day, hour, minute) {
     [week, 1, durationWeek],
     [month, 1, durationMonth],
     [month, 3, 3 * durationMonth],
-    [year, 1, durationYear]
+    [year, 1, durationYear],
   ];
   function ticks2(start, stop, count) {
     const reverse = stop < start;
     if (reverse) [start, stop] = [stop, start];
-    const interval = count && typeof count.range === "function" ? count : tickInterval(start, stop, count);
+    const interval =
+      count && typeof count.range === "function" ? count : tickInterval(start, stop, count);
     const ticks3 = interval ? interval.range(start, +stop + 1) : [];
     return reverse ? ticks3.reverse() : ticks3;
   }
   function tickInterval(start, stop, count) {
     const target = Math.abs(stop - start) / count;
     const i = bisector(([, , step2]) => step2).right(tickIntervals, target);
-    if (i === tickIntervals.length) return year.every(tickStep(start / durationYear, stop / durationYear, count));
+    if (i === tickIntervals.length)
+      return year.every(tickStep(start / durationYear, stop / durationYear, count));
     if (i === 0) return millisecond.every(Math.max(tickStep(start, stop, count), 1));
-    const [t, step] = tickIntervals[target / tickIntervals[i - 1][2] < tickIntervals[i][2] / target ? i - 1 : i];
+    const [t, step] =
+      tickIntervals[target / tickIntervals[i - 1][2] < tickIntervals[i][2] / target ? i - 1 : i];
     return t.every(step);
   }
   return [ticks2, tickInterval];
 }
-const [utcTicks, utcTickInterval] = ticker(utcYear, utcMonth, utcSunday, unixDay, utcHour, utcMinute);
-const [timeTicks, timeTickInterval] = ticker(timeYear, timeMonth, timeSunday, timeDay, timeHour, timeMinute);
+const [utcTicks, utcTickInterval] = ticker(
+  utcYear,
+  utcMonth,
+  utcSunday,
+  unixDay,
+  utcHour,
+  utcMinute,
+);
+const [timeTicks, timeTickInterval] = ticker(
+  timeYear,
+  timeMonth,
+  timeSunday,
+  timeDay,
+  timeHour,
+  timeMinute,
+);
 function localDate(d) {
   if (0 <= d.y && d.y < 100) {
     var date2 = new Date(-1, d.m, d.d, d.H, d.M, d.S, d.L);
@@ -13113,109 +15235,125 @@ function newDate(y2, m, d) {
   return { y: y2, m, d, H: 0, M: 0, S: 0, L: 0 };
 }
 function formatLocale(locale2) {
-  var locale_dateTime = locale2.dateTime, locale_date = locale2.date, locale_time = locale2.time, locale_periods = locale2.periods, locale_weekdays = locale2.days, locale_shortWeekdays = locale2.shortDays, locale_months = locale2.months, locale_shortMonths = locale2.shortMonths;
-  var periodRe = formatRe(locale_periods), periodLookup = formatLookup(locale_periods), weekdayRe = formatRe(locale_weekdays), weekdayLookup = formatLookup(locale_weekdays), shortWeekdayRe = formatRe(locale_shortWeekdays), shortWeekdayLookup = formatLookup(locale_shortWeekdays), monthRe = formatRe(locale_months), monthLookup = formatLookup(locale_months), shortMonthRe = formatRe(locale_shortMonths), shortMonthLookup = formatLookup(locale_shortMonths);
+  var locale_dateTime = locale2.dateTime,
+    locale_date = locale2.date,
+    locale_time = locale2.time,
+    locale_periods = locale2.periods,
+    locale_weekdays = locale2.days,
+    locale_shortWeekdays = locale2.shortDays,
+    locale_months = locale2.months,
+    locale_shortMonths = locale2.shortMonths;
+  var periodRe = formatRe(locale_periods),
+    periodLookup = formatLookup(locale_periods),
+    weekdayRe = formatRe(locale_weekdays),
+    weekdayLookup = formatLookup(locale_weekdays),
+    shortWeekdayRe = formatRe(locale_shortWeekdays),
+    shortWeekdayLookup = formatLookup(locale_shortWeekdays),
+    monthRe = formatRe(locale_months),
+    monthLookup = formatLookup(locale_months),
+    shortMonthRe = formatRe(locale_shortMonths),
+    shortMonthLookup = formatLookup(locale_shortMonths);
   var formats = {
-    "a": formatShortWeekday,
-    "A": formatWeekday,
-    "b": formatShortMonth,
-    "B": formatMonth,
-    "c": null,
-    "d": formatDayOfMonth,
-    "e": formatDayOfMonth,
-    "f": formatMicroseconds,
-    "g": formatYearISO,
-    "G": formatFullYearISO,
-    "H": formatHour24,
-    "I": formatHour12,
-    "j": formatDayOfYear,
-    "L": formatMilliseconds,
-    "m": formatMonthNumber,
-    "M": formatMinutes,
-    "p": formatPeriod,
-    "q": formatQuarter,
-    "Q": formatUnixTimestamp,
-    "s": formatUnixTimestampSeconds,
-    "S": formatSeconds,
-    "u": formatWeekdayNumberMonday,
-    "U": formatWeekNumberSunday,
-    "V": formatWeekNumberISO,
-    "w": formatWeekdayNumberSunday,
-    "W": formatWeekNumberMonday,
-    "x": null,
-    "X": null,
-    "y": formatYear,
-    "Y": formatFullYear,
-    "Z": formatZone,
-    "%": formatLiteralPercent
+    a: formatShortWeekday,
+    A: formatWeekday,
+    b: formatShortMonth,
+    B: formatMonth,
+    c: null,
+    d: formatDayOfMonth,
+    e: formatDayOfMonth,
+    f: formatMicroseconds,
+    g: formatYearISO,
+    G: formatFullYearISO,
+    H: formatHour24,
+    I: formatHour12,
+    j: formatDayOfYear,
+    L: formatMilliseconds,
+    m: formatMonthNumber,
+    M: formatMinutes,
+    p: formatPeriod,
+    q: formatQuarter,
+    Q: formatUnixTimestamp,
+    s: formatUnixTimestampSeconds,
+    S: formatSeconds,
+    u: formatWeekdayNumberMonday,
+    U: formatWeekNumberSunday,
+    V: formatWeekNumberISO,
+    w: formatWeekdayNumberSunday,
+    W: formatWeekNumberMonday,
+    x: null,
+    X: null,
+    y: formatYear,
+    Y: formatFullYear,
+    Z: formatZone,
+    "%": formatLiteralPercent,
   };
   var utcFormats = {
-    "a": formatUTCShortWeekday,
-    "A": formatUTCWeekday,
-    "b": formatUTCShortMonth,
-    "B": formatUTCMonth,
-    "c": null,
-    "d": formatUTCDayOfMonth,
-    "e": formatUTCDayOfMonth,
-    "f": formatUTCMicroseconds,
-    "g": formatUTCYearISO,
-    "G": formatUTCFullYearISO,
-    "H": formatUTCHour24,
-    "I": formatUTCHour12,
-    "j": formatUTCDayOfYear,
-    "L": formatUTCMilliseconds,
-    "m": formatUTCMonthNumber,
-    "M": formatUTCMinutes,
-    "p": formatUTCPeriod,
-    "q": formatUTCQuarter,
-    "Q": formatUnixTimestamp,
-    "s": formatUnixTimestampSeconds,
-    "S": formatUTCSeconds,
-    "u": formatUTCWeekdayNumberMonday,
-    "U": formatUTCWeekNumberSunday,
-    "V": formatUTCWeekNumberISO,
-    "w": formatUTCWeekdayNumberSunday,
-    "W": formatUTCWeekNumberMonday,
-    "x": null,
-    "X": null,
-    "y": formatUTCYear,
-    "Y": formatUTCFullYear,
-    "Z": formatUTCZone,
-    "%": formatLiteralPercent
+    a: formatUTCShortWeekday,
+    A: formatUTCWeekday,
+    b: formatUTCShortMonth,
+    B: formatUTCMonth,
+    c: null,
+    d: formatUTCDayOfMonth,
+    e: formatUTCDayOfMonth,
+    f: formatUTCMicroseconds,
+    g: formatUTCYearISO,
+    G: formatUTCFullYearISO,
+    H: formatUTCHour24,
+    I: formatUTCHour12,
+    j: formatUTCDayOfYear,
+    L: formatUTCMilliseconds,
+    m: formatUTCMonthNumber,
+    M: formatUTCMinutes,
+    p: formatUTCPeriod,
+    q: formatUTCQuarter,
+    Q: formatUnixTimestamp,
+    s: formatUnixTimestampSeconds,
+    S: formatUTCSeconds,
+    u: formatUTCWeekdayNumberMonday,
+    U: formatUTCWeekNumberSunday,
+    V: formatUTCWeekNumberISO,
+    w: formatUTCWeekdayNumberSunday,
+    W: formatUTCWeekNumberMonday,
+    x: null,
+    X: null,
+    y: formatUTCYear,
+    Y: formatUTCFullYear,
+    Z: formatUTCZone,
+    "%": formatLiteralPercent,
   };
   var parses = {
-    "a": parseShortWeekday,
-    "A": parseWeekday,
-    "b": parseShortMonth,
-    "B": parseMonth,
-    "c": parseLocaleDateTime,
-    "d": parseDayOfMonth,
-    "e": parseDayOfMonth,
-    "f": parseMicroseconds,
-    "g": parseYear,
-    "G": parseFullYear,
-    "H": parseHour24,
-    "I": parseHour24,
-    "j": parseDayOfYear,
-    "L": parseMilliseconds,
-    "m": parseMonthNumber,
-    "M": parseMinutes,
-    "p": parsePeriod,
-    "q": parseQuarter,
-    "Q": parseUnixTimestamp,
-    "s": parseUnixTimestampSeconds,
-    "S": parseSeconds,
-    "u": parseWeekdayNumberMonday,
-    "U": parseWeekNumberSunday,
-    "V": parseWeekNumberISO,
-    "w": parseWeekdayNumberSunday,
-    "W": parseWeekNumberMonday,
-    "x": parseLocaleDate,
-    "X": parseLocaleTime,
-    "y": parseYear,
-    "Y": parseFullYear,
-    "Z": parseZone,
-    "%": parseLiteralPercent
+    a: parseShortWeekday,
+    A: parseWeekday,
+    b: parseShortMonth,
+    B: parseMonth,
+    c: parseLocaleDateTime,
+    d: parseDayOfMonth,
+    e: parseDayOfMonth,
+    f: parseMicroseconds,
+    g: parseYear,
+    G: parseFullYear,
+    H: parseHour24,
+    I: parseHour24,
+    j: parseDayOfYear,
+    L: parseMilliseconds,
+    m: parseMonthNumber,
+    M: parseMinutes,
+    p: parsePeriod,
+    q: parseQuarter,
+    Q: parseUnixTimestamp,
+    s: parseUnixTimestampSeconds,
+    S: parseSeconds,
+    u: parseWeekdayNumberMonday,
+    U: parseWeekNumberSunday,
+    V: parseWeekNumberISO,
+    w: parseWeekdayNumberSunday,
+    W: parseWeekNumberMonday,
+    x: parseLocaleDate,
+    X: parseLocaleTime,
+    y: parseYear,
+    Y: parseFullYear,
+    Z: parseZone,
+    "%": parseLiteralPercent,
   };
   formats.x = newFormat(locale_date, formats);
   formats.X = newFormat(locale_time, formats);
@@ -13224,15 +15362,21 @@ function formatLocale(locale2) {
   utcFormats.X = newFormat(locale_time, utcFormats);
   utcFormats.c = newFormat(locale_dateTime, utcFormats);
   function newFormat(specifier, formats2) {
-    return function(date2) {
-      var string2 = [], i = -1, j = 0, n = specifier.length, c, pad2, format2;
+    return function (date2) {
+      var string2 = [],
+        i = -1,
+        j = 0,
+        n = specifier.length,
+        c,
+        pad2,
+        format2;
       if (!(date2 instanceof Date)) date2 = /* @__PURE__ */ new Date(+date2);
       while (++i < n) {
         if (specifier.charCodeAt(i) === 37) {
           string2.push(specifier.slice(j, i));
-          if ((pad2 = pads[c = specifier.charAt(++i)]) != null) c = specifier.charAt(++i);
+          if ((pad2 = pads[(c = specifier.charAt(++i))]) != null) c = specifier.charAt(++i);
           else pad2 = c === "e" ? " " : "0";
-          if (format2 = formats2[c]) c = format2(date2, pad2);
+          if ((format2 = formats2[c])) c = format2(date2, pad2);
           string2.push(c);
           j = i + 1;
         }
@@ -13242,40 +15386,47 @@ function formatLocale(locale2) {
     };
   }
   function newParse(specifier, Z) {
-    return function(string2) {
-      var d = newDate(1900, void 0, 1), i = parseSpecifier(d, specifier, string2 += "", 0), week, day;
+    return function (string2) {
+      var d = newDate(1900, void 0, 1),
+        i = parseSpecifier(d, specifier, (string2 += ""), 0),
+        week,
+        day;
       if (i != string2.length) return null;
       if ("Q" in d) return new Date(d.Q);
       if ("s" in d) return new Date(d.s * 1e3 + ("L" in d ? d.L : 0));
       if (Z && !("Z" in d)) d.Z = 0;
-      if ("p" in d) d.H = d.H % 12 + d.p * 12;
+      if ("p" in d) d.H = (d.H % 12) + d.p * 12;
       if (d.m === void 0) d.m = "q" in d ? d.q : 0;
       if ("V" in d) {
         if (d.V < 1 || d.V > 53) return null;
         if (!("w" in d)) d.w = 1;
         if ("Z" in d) {
-          week = utcDate(newDate(d.y, 0, 1)), day = week.getUTCDay();
+          ((week = utcDate(newDate(d.y, 0, 1))), (day = week.getUTCDay()));
           week = day > 4 || day === 0 ? utcMonday.ceil(week) : utcMonday(week);
           week = utcDay.offset(week, (d.V - 1) * 7);
           d.y = week.getUTCFullYear();
           d.m = week.getUTCMonth();
-          d.d = week.getUTCDate() + (d.w + 6) % 7;
+          d.d = week.getUTCDate() + ((d.w + 6) % 7);
         } else {
-          week = localDate(newDate(d.y, 0, 1)), day = week.getDay();
+          ((week = localDate(newDate(d.y, 0, 1))), (day = week.getDay()));
           week = day > 4 || day === 0 ? timeMonday.ceil(week) : timeMonday(week);
           week = timeDay.offset(week, (d.V - 1) * 7);
           d.y = week.getFullYear();
           d.m = week.getMonth();
-          d.d = week.getDate() + (d.w + 6) % 7;
+          d.d = week.getDate() + ((d.w + 6) % 7);
         }
       } else if ("W" in d || "U" in d) {
         if (!("w" in d)) d.w = "u" in d ? d.u % 7 : "W" in d ? 1 : 0;
-        day = "Z" in d ? utcDate(newDate(d.y, 0, 1)).getUTCDay() : localDate(newDate(d.y, 0, 1)).getDay();
+        day =
+          "Z" in d
+            ? utcDate(newDate(d.y, 0, 1)).getUTCDay()
+            : localDate(newDate(d.y, 0, 1)).getDay();
         d.m = 0;
-        d.d = "W" in d ? (d.w + 6) % 7 + d.W * 7 - (day + 5) % 7 : d.w + d.U * 7 - (day + 6) % 7;
+        d.d =
+          "W" in d ? ((d.w + 6) % 7) + d.W * 7 - ((day + 5) % 7) : d.w + d.U * 7 - ((day + 6) % 7);
       }
       if ("Z" in d) {
-        d.H += d.Z / 100 | 0;
+        d.H += (d.Z / 100) | 0;
         d.M += d.Z % 100;
         return utcDate(d);
       }
@@ -13283,7 +15434,11 @@ function formatLocale(locale2) {
     };
   }
   function parseSpecifier(d, specifier, string2, j) {
-    var i = 0, n = specifier.length, m = string2.length, c, parse;
+    var i = 0,
+      n = specifier.length,
+      m = string2.length,
+      c,
+      parse;
     while (i < n) {
       if (j >= m) return -1;
       c = specifier.charCodeAt(i++);
@@ -13299,23 +15454,23 @@ function formatLocale(locale2) {
   }
   function parsePeriod(d, string2, i) {
     var n = periodRe.exec(string2.slice(i));
-    return n ? (d.p = periodLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+    return n ? ((d.p = periodLookup.get(n[0].toLowerCase())), i + n[0].length) : -1;
   }
   function parseShortWeekday(d, string2, i) {
     var n = shortWeekdayRe.exec(string2.slice(i));
-    return n ? (d.w = shortWeekdayLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+    return n ? ((d.w = shortWeekdayLookup.get(n[0].toLowerCase())), i + n[0].length) : -1;
   }
   function parseWeekday(d, string2, i) {
     var n = weekdayRe.exec(string2.slice(i));
-    return n ? (d.w = weekdayLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+    return n ? ((d.w = weekdayLookup.get(n[0].toLowerCase())), i + n[0].length) : -1;
   }
   function parseShortMonth(d, string2, i) {
     var n = shortMonthRe.exec(string2.slice(i));
-    return n ? (d.m = shortMonthLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+    return n ? ((d.m = shortMonthLookup.get(n[0].toLowerCase())), i + n[0].length) : -1;
   }
   function parseMonth(d, string2, i) {
     var n = monthRe.exec(string2.slice(i));
-    return n ? (d.m = monthLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
+    return n ? ((d.m = monthLookup.get(n[0].toLowerCase())), i + n[0].length) : -1;
   }
   function parseLocaleDateTime(d, string2, i) {
     return parseSpecifier(d, locale_dateTime, string2, i);
@@ -13363,39 +15518,44 @@ function formatLocale(locale2) {
     return 1 + ~~(d.getUTCMonth() / 3);
   }
   return {
-    format: function(specifier) {
-      var f = newFormat(specifier += "", formats);
-      f.toString = function() {
+    format: function (specifier) {
+      var f = newFormat((specifier += ""), formats);
+      f.toString = function () {
         return specifier;
       };
       return f;
     },
-    parse: function(specifier) {
-      var p = newParse(specifier += "", false);
-      p.toString = function() {
+    parse: function (specifier) {
+      var p = newParse((specifier += ""), false);
+      p.toString = function () {
         return specifier;
       };
       return p;
     },
-    utcFormat: function(specifier) {
-      var f = newFormat(specifier += "", utcFormats);
-      f.toString = function() {
+    utcFormat: function (specifier) {
+      var f = newFormat((specifier += ""), utcFormats);
+      f.toString = function () {
         return specifier;
       };
       return f;
     },
-    utcParse: function(specifier) {
-      var p = newParse(specifier += "", true);
-      p.toString = function() {
+    utcParse: function (specifier) {
+      var p = newParse((specifier += ""), true);
+      p.toString = function () {
         return specifier;
       };
       return p;
-    }
+    },
   };
 }
-var pads = { "-": "", "_": " ", "0": "0" }, numberRe = /^\s*\d+/, percentRe = /^%/, requoteRe = /[\\^$*+?|[\]().{}]/g;
+var pads = { "-": "", _: " ", 0: "0" },
+  numberRe = /^\s*\d+/,
+  percentRe = /^%/,
+  requoteRe = /[\\^$*+?|[\]().{}]/g;
 function pad(value, fill, width) {
-  var sign2 = value < 0 ? "-" : "", string2 = (sign2 ? -value : value) + "", length = string2.length;
+  var sign2 = value < 0 ? "-" : "",
+    string2 = (sign2 ? -value : value) + "",
+    length = string2.length;
   return sign2 + (length < width ? new Array(width - length + 1).join(fill) + string2 : string2);
 }
 function requote(s) {
@@ -13409,71 +15569,71 @@ function formatLookup(names) {
 }
 function parseWeekdayNumberSunday(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 1));
-  return n ? (d.w = +n[0], i + n[0].length) : -1;
+  return n ? ((d.w = +n[0]), i + n[0].length) : -1;
 }
 function parseWeekdayNumberMonday(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 1));
-  return n ? (d.u = +n[0], i + n[0].length) : -1;
+  return n ? ((d.u = +n[0]), i + n[0].length) : -1;
 }
 function parseWeekNumberSunday(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.U = +n[0], i + n[0].length) : -1;
+  return n ? ((d.U = +n[0]), i + n[0].length) : -1;
 }
 function parseWeekNumberISO(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.V = +n[0], i + n[0].length) : -1;
+  return n ? ((d.V = +n[0]), i + n[0].length) : -1;
 }
 function parseWeekNumberMonday(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.W = +n[0], i + n[0].length) : -1;
+  return n ? ((d.W = +n[0]), i + n[0].length) : -1;
 }
 function parseFullYear(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 4));
-  return n ? (d.y = +n[0], i + n[0].length) : -1;
+  return n ? ((d.y = +n[0]), i + n[0].length) : -1;
 }
 function parseYear(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.y = +n[0] + (+n[0] > 68 ? 1900 : 2e3), i + n[0].length) : -1;
+  return n ? ((d.y = +n[0] + (+n[0] > 68 ? 1900 : 2e3)), i + n[0].length) : -1;
 }
 function parseZone(d, string2, i) {
   var n = /^(Z)|([+-]\d\d)(?::?(\d\d))?/.exec(string2.slice(i, i + 6));
-  return n ? (d.Z = n[1] ? 0 : -(n[2] + (n[3] || "00")), i + n[0].length) : -1;
+  return n ? ((d.Z = n[1] ? 0 : -(n[2] + (n[3] || "00"))), i + n[0].length) : -1;
 }
 function parseQuarter(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 1));
-  return n ? (d.q = n[0] * 3 - 3, i + n[0].length) : -1;
+  return n ? ((d.q = n[0] * 3 - 3), i + n[0].length) : -1;
 }
 function parseMonthNumber(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.m = n[0] - 1, i + n[0].length) : -1;
+  return n ? ((d.m = n[0] - 1), i + n[0].length) : -1;
 }
 function parseDayOfMonth(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.d = +n[0], i + n[0].length) : -1;
+  return n ? ((d.d = +n[0]), i + n[0].length) : -1;
 }
 function parseDayOfYear(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 3));
-  return n ? (d.m = 0, d.d = +n[0], i + n[0].length) : -1;
+  return n ? ((d.m = 0), (d.d = +n[0]), i + n[0].length) : -1;
 }
 function parseHour24(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.H = +n[0], i + n[0].length) : -1;
+  return n ? ((d.H = +n[0]), i + n[0].length) : -1;
 }
 function parseMinutes(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.M = +n[0], i + n[0].length) : -1;
+  return n ? ((d.M = +n[0]), i + n[0].length) : -1;
 }
 function parseSeconds(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 2));
-  return n ? (d.S = +n[0], i + n[0].length) : -1;
+  return n ? ((d.S = +n[0]), i + n[0].length) : -1;
 }
 function parseMilliseconds(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 3));
-  return n ? (d.L = +n[0], i + n[0].length) : -1;
+  return n ? ((d.L = +n[0]), i + n[0].length) : -1;
 }
 function parseMicroseconds(d, string2, i) {
   var n = numberRe.exec(string2.slice(i, i + 6));
-  return n ? (d.L = Math.floor(n[0] / 1e3), i + n[0].length) : -1;
+  return n ? ((d.L = Math.floor(n[0] / 1e3)), i + n[0].length) : -1;
 }
 function parseLiteralPercent(d, string2, i) {
   var n = percentRe.exec(string2.slice(i, i + 1));
@@ -13481,11 +15641,11 @@ function parseLiteralPercent(d, string2, i) {
 }
 function parseUnixTimestamp(d, string2, i) {
   var n = numberRe.exec(string2.slice(i));
-  return n ? (d.Q = +n[0], i + n[0].length) : -1;
+  return n ? ((d.Q = +n[0]), i + n[0].length) : -1;
 }
 function parseUnixTimestampSeconds(d, string2, i) {
   var n = numberRe.exec(string2.slice(i));
-  return n ? (d.s = +n[0], i + n[0].length) : -1;
+  return n ? ((d.s = +n[0]), i + n[0].length) : -1;
 }
 function formatDayOfMonth(d, p) {
   return pad(d.getDate(), p, 2);
@@ -13552,7 +15712,7 @@ function formatFullYearISO(d, p) {
 }
 function formatZone(d) {
   var z = d.getTimezoneOffset();
-  return (z > 0 ? "-" : (z *= -1, "+")) + pad(z / 60 | 0, "0", 2) + pad(z % 60, "0", 2);
+  return (z > 0 ? "-" : ((z *= -1), "+")) + pad((z / 60) | 0, "0", 2) + pad(z % 60, "0", 2);
 }
 function formatUTCDayOfMonth(d, p) {
   return pad(d.getUTCDate(), p, 2);
@@ -13639,8 +15799,21 @@ defaultLocale({
   periods: ["AM", "PM"],
   days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
   shortDays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-  months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-  shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  months: [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ],
+  shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 });
 function defaultLocale(definition) {
   locale = formatLocale(definition);
@@ -13654,100 +15827,183 @@ function date(t) {
   return new Date(t);
 }
 function number(t) {
-  return t instanceof Date ? +t : +/* @__PURE__ */ new Date(+t);
+  return t instanceof Date ? +t : +(/* @__PURE__ */ new Date(+t));
 }
 function calendar(ticks2, tickInterval, year, month, week, day, hour, minute, second2, format2) {
-  var scale = continuous(), invert = scale.invert, domain = scale.domain;
-  var formatMillisecond = format2(".%L"), formatSecond = format2(":%S"), formatMinute = format2("%I:%M"), formatHour = format2("%I %p"), formatDay = format2("%a %d"), formatWeek = format2("%b %d"), formatMonth = format2("%B"), formatYear2 = format2("%Y");
+  var scale = continuous(),
+    invert = scale.invert,
+    domain = scale.domain;
+  var formatMillisecond = format2(".%L"),
+    formatSecond = format2(":%S"),
+    formatMinute = format2("%I:%M"),
+    formatHour = format2("%I %p"),
+    formatDay = format2("%a %d"),
+    formatWeek = format2("%b %d"),
+    formatMonth = format2("%B"),
+    formatYear2 = format2("%Y");
   function tickFormat2(date2) {
-    return (second2(date2) < date2 ? formatMillisecond : minute(date2) < date2 ? formatSecond : hour(date2) < date2 ? formatMinute : day(date2) < date2 ? formatHour : month(date2) < date2 ? week(date2) < date2 ? formatDay : formatWeek : year(date2) < date2 ? formatMonth : formatYear2)(date2);
+    return (
+      second2(date2) < date2
+        ? formatMillisecond
+        : minute(date2) < date2
+          ? formatSecond
+          : hour(date2) < date2
+            ? formatMinute
+            : day(date2) < date2
+              ? formatHour
+              : month(date2) < date2
+                ? week(date2) < date2
+                  ? formatDay
+                  : formatWeek
+                : year(date2) < date2
+                  ? formatMonth
+                  : formatYear2
+    )(date2);
   }
-  scale.invert = function(y2) {
+  scale.invert = function (y2) {
     return new Date(invert(y2));
   };
-  scale.domain = function(_) {
+  scale.domain = function (_) {
     return arguments.length ? domain(Array.from(_, number)) : domain().map(date);
   };
-  scale.ticks = function(interval) {
+  scale.ticks = function (interval) {
     var d = domain();
     return ticks2(d[0], d[d.length - 1], interval == null ? 10 : interval);
   };
-  scale.tickFormat = function(count, specifier) {
+  scale.tickFormat = function (count, specifier) {
     return specifier == null ? tickFormat2 : format2(specifier);
   };
-  scale.nice = function(interval) {
+  scale.nice = function (interval) {
     var d = domain();
-    if (!interval || typeof interval.range !== "function") interval = tickInterval(d[0], d[d.length - 1], interval == null ? 10 : interval);
+    if (!interval || typeof interval.range !== "function")
+      interval = tickInterval(d[0], d[d.length - 1], interval == null ? 10 : interval);
     return interval ? domain(nice(d, interval)) : scale;
   };
-  scale.copy = function() {
-    return copy$1(scale, calendar(ticks2, tickInterval, year, month, week, day, hour, minute, second2, format2));
+  scale.copy = function () {
+    return copy$1(
+      scale,
+      calendar(ticks2, tickInterval, year, month, week, day, hour, minute, second2, format2),
+    );
   };
   return scale;
 }
 function time() {
-  return initRange.apply(calendar(timeTicks, timeTickInterval, timeYear, timeMonth, timeSunday, timeDay, timeHour, timeMinute, second, timeFormat).domain([new Date(2e3, 0, 1), new Date(2e3, 0, 2)]), arguments);
+  return initRange.apply(
+    calendar(
+      timeTicks,
+      timeTickInterval,
+      timeYear,
+      timeMonth,
+      timeSunday,
+      timeDay,
+      timeHour,
+      timeMinute,
+      second,
+      timeFormat,
+    ).domain([new Date(2e3, 0, 1), new Date(2e3, 0, 2)]),
+    arguments,
+  );
 }
 function utcTime() {
-  return initRange.apply(calendar(utcTicks, utcTickInterval, utcYear, utcMonth, utcSunday, utcDay, utcHour, utcMinute, second, utcFormat).domain([Date.UTC(2e3, 0, 1), Date.UTC(2e3, 0, 2)]), arguments);
+  return initRange.apply(
+    calendar(
+      utcTicks,
+      utcTickInterval,
+      utcYear,
+      utcMonth,
+      utcSunday,
+      utcDay,
+      utcHour,
+      utcMinute,
+      second,
+      utcFormat,
+    ).domain([Date.UTC(2e3, 0, 1), Date.UTC(2e3, 0, 2)]),
+    arguments,
+  );
 }
 function transformer$1() {
-  var x0 = 0, x1 = 1, t02, t12, k10, transform, interpolator = identity$2, clamp = false, unknown;
+  var x0 = 0,
+    x1 = 1,
+    t02,
+    t12,
+    k10,
+    transform,
+    interpolator = identity$2,
+    clamp = false,
+    unknown;
   function scale(x2) {
-    return x2 == null || isNaN(x2 = +x2) ? unknown : interpolator(k10 === 0 ? 0.5 : (x2 = (transform(x2) - t02) * k10, clamp ? Math.max(0, Math.min(1, x2)) : x2));
+    return x2 == null || isNaN((x2 = +x2))
+      ? unknown
+      : interpolator(
+          k10 === 0
+            ? 0.5
+            : ((x2 = (transform(x2) - t02) * k10), clamp ? Math.max(0, Math.min(1, x2)) : x2),
+        );
   }
-  scale.domain = function(_) {
-    return arguments.length ? ([x0, x1] = _, t02 = transform(x0 = +x0), t12 = transform(x1 = +x1), k10 = t02 === t12 ? 0 : 1 / (t12 - t02), scale) : [x0, x1];
+  scale.domain = function (_) {
+    return arguments.length
+      ? (([x0, x1] = _),
+        (t02 = transform((x0 = +x0))),
+        (t12 = transform((x1 = +x1))),
+        (k10 = t02 === t12 ? 0 : 1 / (t12 - t02)),
+        scale)
+      : [x0, x1];
   };
-  scale.clamp = function(_) {
-    return arguments.length ? (clamp = !!_, scale) : clamp;
+  scale.clamp = function (_) {
+    return arguments.length ? ((clamp = !!_), scale) : clamp;
   };
-  scale.interpolator = function(_) {
-    return arguments.length ? (interpolator = _, scale) : interpolator;
+  scale.interpolator = function (_) {
+    return arguments.length ? ((interpolator = _), scale) : interpolator;
   };
   function range2(interpolate2) {
-    return function(_) {
+    return function (_) {
       var r0, r1;
-      return arguments.length ? ([r0, r1] = _, interpolator = interpolate2(r0, r1), scale) : [interpolator(0), interpolator(1)];
+      return arguments.length
+        ? (([r0, r1] = _), (interpolator = interpolate2(r0, r1)), scale)
+        : [interpolator(0), interpolator(1)];
     };
   }
   scale.range = range2(interpolate);
   scale.rangeRound = range2(interpolateRound);
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  return function(t) {
-    transform = t, t02 = t(x0), t12 = t(x1), k10 = t02 === t12 ? 0 : 1 / (t12 - t02);
+  return function (t) {
+    ((transform = t), (t02 = t(x0)), (t12 = t(x1)), (k10 = t02 === t12 ? 0 : 1 / (t12 - t02)));
     return scale;
   };
 }
 function copy(source, target) {
-  return target.domain(source.domain()).interpolator(source.interpolator()).clamp(source.clamp()).unknown(source.unknown());
+  return target
+    .domain(source.domain())
+    .interpolator(source.interpolator())
+    .clamp(source.clamp())
+    .unknown(source.unknown());
 }
 function sequential() {
   var scale = linearish(transformer$1()(identity$2));
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, sequential());
   };
   return initInterpolator.apply(scale, arguments);
 }
 function sequentialLog() {
   var scale = loggish(transformer$1()).domain([1, 10]);
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, sequentialLog()).base(scale.base());
   };
   return initInterpolator.apply(scale, arguments);
 }
 function sequentialSymlog() {
   var scale = symlogish(transformer$1());
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, sequentialSymlog()).constant(scale.constant());
   };
   return initInterpolator.apply(scale, arguments);
 }
 function sequentialPow() {
   var scale = powish(transformer$1());
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, sequentialPow()).exponent(scale.exponent());
   };
   return initInterpolator.apply(scale, arguments);
@@ -13756,85 +16012,119 @@ function sequentialSqrt() {
   return sequentialPow.apply(null, arguments).exponent(0.5);
 }
 function sequentialQuantile() {
-  var domain = [], interpolator = identity$2;
+  var domain = [],
+    interpolator = identity$2;
   function scale(x2) {
-    if (x2 != null && !isNaN(x2 = +x2)) return interpolator((bisectRight(domain, x2, 1) - 1) / (domain.length - 1));
+    if (x2 != null && !isNaN((x2 = +x2)))
+      return interpolator((bisectRight(domain, x2, 1) - 1) / (domain.length - 1));
   }
-  scale.domain = function(_) {
+  scale.domain = function (_) {
     if (!arguments.length) return domain.slice();
     domain = [];
-    for (let d of _) if (d != null && !isNaN(d = +d)) domain.push(d);
+    for (let d of _) if (d != null && !isNaN((d = +d))) domain.push(d);
     domain.sort(ascending);
     return scale;
   };
-  scale.interpolator = function(_) {
-    return arguments.length ? (interpolator = _, scale) : interpolator;
+  scale.interpolator = function (_) {
+    return arguments.length ? ((interpolator = _), scale) : interpolator;
   };
-  scale.range = function() {
+  scale.range = function () {
     return domain.map((d, i) => interpolator(i / (domain.length - 1)));
   };
-  scale.quantiles = function(n) {
+  scale.quantiles = function (n) {
     return Array.from({ length: n + 1 }, (_, i) => quantile$1(domain, i / n));
   };
-  scale.copy = function() {
+  scale.copy = function () {
     return sequentialQuantile(interpolator).domain(domain);
   };
   return initInterpolator.apply(scale, arguments);
 }
 function transformer() {
-  var x0 = 0, x1 = 0.5, x2 = 1, s = 1, t02, t12, t2, k10, k21, interpolator = identity$2, transform, clamp = false, unknown;
+  var x0 = 0,
+    x1 = 0.5,
+    x2 = 1,
+    s = 1,
+    t02,
+    t12,
+    t2,
+    k10,
+    k21,
+    interpolator = identity$2,
+    transform,
+    clamp = false,
+    unknown;
   function scale(x3) {
-    return isNaN(x3 = +x3) ? unknown : (x3 = 0.5 + ((x3 = +transform(x3)) - t12) * (s * x3 < s * t12 ? k10 : k21), interpolator(clamp ? Math.max(0, Math.min(1, x3)) : x3));
+    return isNaN((x3 = +x3))
+      ? unknown
+      : ((x3 = 0.5 + ((x3 = +transform(x3)) - t12) * (s * x3 < s * t12 ? k10 : k21)),
+        interpolator(clamp ? Math.max(0, Math.min(1, x3)) : x3));
   }
-  scale.domain = function(_) {
-    return arguments.length ? ([x0, x1, x2] = _, t02 = transform(x0 = +x0), t12 = transform(x1 = +x1), t2 = transform(x2 = +x2), k10 = t02 === t12 ? 0 : 0.5 / (t12 - t02), k21 = t12 === t2 ? 0 : 0.5 / (t2 - t12), s = t12 < t02 ? -1 : 1, scale) : [x0, x1, x2];
+  scale.domain = function (_) {
+    return arguments.length
+      ? (([x0, x1, x2] = _),
+        (t02 = transform((x0 = +x0))),
+        (t12 = transform((x1 = +x1))),
+        (t2 = transform((x2 = +x2))),
+        (k10 = t02 === t12 ? 0 : 0.5 / (t12 - t02)),
+        (k21 = t12 === t2 ? 0 : 0.5 / (t2 - t12)),
+        (s = t12 < t02 ? -1 : 1),
+        scale)
+      : [x0, x1, x2];
   };
-  scale.clamp = function(_) {
-    return arguments.length ? (clamp = !!_, scale) : clamp;
+  scale.clamp = function (_) {
+    return arguments.length ? ((clamp = !!_), scale) : clamp;
   };
-  scale.interpolator = function(_) {
-    return arguments.length ? (interpolator = _, scale) : interpolator;
+  scale.interpolator = function (_) {
+    return arguments.length ? ((interpolator = _), scale) : interpolator;
   };
   function range2(interpolate2) {
-    return function(_) {
+    return function (_) {
       var r0, r1, r2;
-      return arguments.length ? ([r0, r1, r2] = _, interpolator = piecewise(interpolate2, [r0, r1, r2]), scale) : [interpolator(0), interpolator(0.5), interpolator(1)];
+      return arguments.length
+        ? (([r0, r1, r2] = _), (interpolator = piecewise(interpolate2, [r0, r1, r2])), scale)
+        : [interpolator(0), interpolator(0.5), interpolator(1)];
     };
   }
   scale.range = range2(interpolate);
   scale.rangeRound = range2(interpolateRound);
-  scale.unknown = function(_) {
-    return arguments.length ? (unknown = _, scale) : unknown;
+  scale.unknown = function (_) {
+    return arguments.length ? ((unknown = _), scale) : unknown;
   };
-  return function(t) {
-    transform = t, t02 = t(x0), t12 = t(x1), t2 = t(x2), k10 = t02 === t12 ? 0 : 0.5 / (t12 - t02), k21 = t12 === t2 ? 0 : 0.5 / (t2 - t12), s = t12 < t02 ? -1 : 1;
+  return function (t) {
+    ((transform = t),
+      (t02 = t(x0)),
+      (t12 = t(x1)),
+      (t2 = t(x2)),
+      (k10 = t02 === t12 ? 0 : 0.5 / (t12 - t02)),
+      (k21 = t12 === t2 ? 0 : 0.5 / (t2 - t12)),
+      (s = t12 < t02 ? -1 : 1));
     return scale;
   };
 }
 function diverging() {
   var scale = linearish(transformer()(identity$2));
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, diverging());
   };
   return initInterpolator.apply(scale, arguments);
 }
 function divergingLog() {
   var scale = loggish(transformer()).domain([0.1, 1, 10]);
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, divergingLog()).base(scale.base());
   };
   return initInterpolator.apply(scale, arguments);
 }
 function divergingSymlog() {
   var scale = symlogish(transformer());
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, divergingSymlog()).constant(scale.constant());
   };
   return initInterpolator.apply(scale, arguments);
 }
 function divergingPow() {
   var scale = powish(transformer());
-  scale.copy = function() {
+  scale.copy = function () {
     return copy(scale, divergingPow()).exponent(scale.exponent());
   };
   return initInterpolator.apply(scale, arguments);
@@ -13842,37 +16132,43 @@ function divergingPow() {
 function divergingSqrt() {
   return divergingPow.apply(null, arguments).exponent(0.5);
 }
-const d3Scales = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  scaleBand: band,
-  scaleDiverging: diverging,
-  scaleDivergingLog: divergingLog,
-  scaleDivergingPow: divergingPow,
-  scaleDivergingSqrt: divergingSqrt,
-  scaleDivergingSymlog: divergingSymlog,
-  scaleIdentity: identity,
-  scaleImplicit: implicit,
-  scaleLinear: linear,
-  scaleLog: log,
-  scaleOrdinal: ordinal,
-  scalePoint: point,
-  scalePow: pow,
-  scaleQuantile: quantile,
-  scaleQuantize: quantize,
-  scaleRadial: radial,
-  scaleSequential: sequential,
-  scaleSequentialLog: sequentialLog,
-  scaleSequentialPow: sequentialPow,
-  scaleSequentialQuantile: sequentialQuantile,
-  scaleSequentialSqrt: sequentialSqrt,
-  scaleSequentialSymlog: sequentialSymlog,
-  scaleSqrt: sqrt,
-  scaleSymlog: symlog,
-  scaleThreshold: threshold,
-  scaleTime: time,
-  scaleUtc: utcTime,
-  tickFormat
-}, Symbol.toStringTag, { value: "Module" }));
+const d3Scales = /* @__PURE__ */ Object.freeze(
+  /* @__PURE__ */ Object.defineProperty(
+    {
+      __proto__: null,
+      scaleBand: band,
+      scaleDiverging: diverging,
+      scaleDivergingLog: divergingLog,
+      scaleDivergingPow: divergingPow,
+      scaleDivergingSqrt: divergingSqrt,
+      scaleDivergingSymlog: divergingSymlog,
+      scaleIdentity: identity,
+      scaleImplicit: implicit,
+      scaleLinear: linear,
+      scaleLog: log,
+      scaleOrdinal: ordinal,
+      scalePoint: point,
+      scalePow: pow,
+      scaleQuantile: quantile,
+      scaleQuantize: quantize,
+      scaleRadial: radial,
+      scaleSequential: sequential,
+      scaleSequentialLog: sequentialLog,
+      scaleSequentialPow: sequentialPow,
+      scaleSequentialQuantile: sequentialQuantile,
+      scaleSequentialSqrt: sequentialSqrt,
+      scaleSequentialSymlog: sequentialSymlog,
+      scaleSqrt: sqrt,
+      scaleSymlog: symlog,
+      scaleThreshold: threshold,
+      scaleTime: time,
+      scaleUtc: utcTime,
+      tickFormat,
+    },
+    Symbol.toStringTag,
+    { value: "Module" },
+  ),
+);
 function getD3ScaleFromType(realScaleType) {
   var scales = d3Scales;
   if (realScaleType in scales && typeof scales[realScaleType] === "function") {
@@ -13917,12 +16213,15 @@ var combineRealScaleType = (axisConfig, hasBar, chartType) => {
   if (axisConfig == null) {
     return void 0;
   }
-  var {
-    scale,
-    type
-  } = axisConfig;
+  var { scale, type } = axisConfig;
   if (scale === "auto") {
-    if (type === "category" && chartType && (chartType.indexOf("LineChart") >= 0 || chartType.indexOf("AreaChart") >= 0 || chartType.indexOf("ComposedChart") >= 0 && !hasBar)) {
+    if (
+      type === "category" &&
+      chartType &&
+      (chartType.indexOf("LineChart") >= 0 ||
+        chartType.indexOf("AreaChart") >= 0 ||
+        (chartType.indexOf("ComposedChart") >= 0 && !hasBar))
+    ) {
       return "point";
     }
     if (type === "category") {
@@ -13953,7 +16252,10 @@ function createCategoricalInverse(scale, allDataPointsOnAxis) {
   if (!scale) {
     return void 0;
   }
-  var domain = allDataPointsOnAxis !== null && allDataPointsOnAxis !== void 0 ? allDataPointsOnAxis : scale.domain();
+  var domain =
+    allDataPointsOnAxis !== null && allDataPointsOnAxis !== void 0
+      ? allDataPointsOnAxis
+      : scale.domain();
   var pixelPositions = domain.map((d) => {
     var _scale;
     return (_scale = scale(d)) !== null && _scale !== void 0 ? _scale : 0;
@@ -13971,8 +16273,14 @@ function createCategoricalInverse(scale, allDataPointsOnAxis) {
     if (index >= domain.length) {
       return domain[domain.length - 1];
     }
-    var leftPixel = (_pixelPositions = pixelPositions[index - 1]) !== null && _pixelPositions !== void 0 ? _pixelPositions : 0;
-    var rightPixel = (_pixelPositions$index = pixelPositions[index]) !== null && _pixelPositions$index !== void 0 ? _pixelPositions$index : 0;
+    var leftPixel =
+      (_pixelPositions = pixelPositions[index - 1]) !== null && _pixelPositions !== void 0
+        ? _pixelPositions
+        : 0;
+    var rightPixel =
+      (_pixelPositions$index = pixelPositions[index]) !== null && _pixelPositions$index !== void 0
+        ? _pixelPositions$index
+        : 0;
     if (Math.abs(pixelValue - leftPixel) <= Math.abs(pixelValue - rightPixel)) {
       return domain[index - 1];
     }
@@ -13992,25 +16300,41 @@ function ownKeys$l(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$l(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$l(Object(t), true).forEach(function(r2) {
-      _defineProperty$n(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$l(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$l(Object(t), true).forEach(function (r2) {
+          _defineProperty$n(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$l(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$n(e, r, t) {
-  return (r = _toPropertyKey$n(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$n(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$n(t) {
   var i = _toPrimitive$n(t, "string");
@@ -14045,7 +16369,7 @@ var implicitXAxis = {
   orientation: "bottom",
   padding: {
     left: 0,
-    right: 0
+    right: 0,
   },
   reversed: false,
   scale: "auto",
@@ -14055,7 +16379,7 @@ var implicitXAxis = {
   ticks: void 0,
   type: "category",
   unit: void 0,
-  niceTicks: "auto"
+  niceTicks: "auto",
 };
 var selectXAxisSettingsNoDefaults = (state, axisId) => {
   return state.cartesianAxis.xAxis[axisId];
@@ -14084,7 +16408,7 @@ var implicitYAxis = {
   orientation: "left",
   padding: {
     top: 0,
-    bottom: 0
+    bottom: 0,
   },
   reversed: false,
   scale: "auto",
@@ -14095,7 +16419,7 @@ var implicitYAxis = {
   type: "number",
   unit: void 0,
   niceTicks: "auto",
-  width: DEFAULT_Y_AXIS_WIDTH
+  width: DEFAULT_Y_AXIS_WIDTH,
 };
 var selectYAxisSettingsNoDefaults = (state, axisId) => {
   return state.cartesianAxis.yAxis[axisId];
@@ -14119,7 +16443,7 @@ var implicitZAxis = {
   range: [64, 64],
   scale: "auto",
   type: "number",
-  unit: ""
+  unit: "",
 };
 var selectZAxisSettings = (state, axisId) => {
   var axis = state.cartesianAxis.zAxis[axisId];
@@ -14179,7 +16503,9 @@ var selectRenderableAxisSettings = (state, axisType, axisId) => {
       throw new Error("Unexpected axis type: ".concat(axisType));
   }
 };
-var selectHasBar = (state) => state.graphicalItems.cartesianItems.some((item) => item.type === "bar") || state.graphicalItems.polarItems.some((item) => item.type === "radialBar");
+var selectHasBar = (state) =>
+  state.graphicalItems.cartesianItems.some((item) => item.type === "bar") ||
+  state.graphicalItems.polarItems.some((item) => item.type === "radialBar");
 function itemAxisPredicate(axisType, axisId) {
   return (item) => {
     switch (axisType) {
@@ -14200,73 +16526,122 @@ function itemAxisPredicate(axisType, axisId) {
 }
 var selectUnfilteredCartesianItems = (state) => state.graphicalItems.cartesianItems;
 var selectAxisPredicate = createSelector([pickAxisType, pickAxisId], itemAxisPredicate);
-var combineGraphicalItemsSettings = (graphicalItems, axisSettings, axisPredicate) => graphicalItems.filter(axisPredicate).filter((item) => {
-  if ((axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.includeHidden) === true) {
-    return true;
-  }
-  return !item.hide;
-});
-var selectCartesianItemsSettings = createSelector([selectUnfilteredCartesianItems, selectBaseAxis, selectAxisPredicate], combineGraphicalItemsSettings, {
-  memoizeOptions: {
-    resultEqualityCheck: emptyArraysAreEqualCheck
-  }
-});
-var selectStackedCartesianItemsSettings = createSelector([selectCartesianItemsSettings], (cartesianItems) => {
-  return cartesianItems.filter((item) => item.type === "area" || item.type === "bar").filter(isStacked);
-});
-var filterGraphicalNotStackedItems = (cartesianItems) => cartesianItems.filter((item) => !("stackId" in item) || item.stackId === void 0);
-var selectCartesianItemsSettingsExceptStacked = createSelector([selectCartesianItemsSettings], filterGraphicalNotStackedItems);
-var combineGraphicalItemsData = (cartesianItems) => cartesianItems.map((item) => item.data).filter(Boolean).flat(1);
-var selectAnyCartesianItemsUsesChartData = createSelector([selectCartesianItemsSettings], (items) => items.some((item) => !item.data));
-var selectCartesianGraphicalItemsData = createSelector([selectCartesianItemsSettings], combineGraphicalItemsData, {
-  memoizeOptions: {
-    resultEqualityCheck: emptyArraysAreEqualCheck
-  }
-});
+var combineGraphicalItemsSettings = (graphicalItems, axisSettings, axisPredicate) =>
+  graphicalItems.filter(axisPredicate).filter((item) => {
+    if (
+      (axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.includeHidden) ===
+      true
+    ) {
+      return true;
+    }
+    return !item.hide;
+  });
+var selectCartesianItemsSettings = createSelector(
+  [selectUnfilteredCartesianItems, selectBaseAxis, selectAxisPredicate],
+  combineGraphicalItemsSettings,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: emptyArraysAreEqualCheck,
+    },
+  },
+);
+var selectStackedCartesianItemsSettings = createSelector(
+  [selectCartesianItemsSettings],
+  (cartesianItems) => {
+    return cartesianItems
+      .filter((item) => item.type === "area" || item.type === "bar")
+      .filter(isStacked);
+  },
+);
+var filterGraphicalNotStackedItems = (cartesianItems) =>
+  cartesianItems.filter((item) => !("stackId" in item) || item.stackId === void 0);
+var selectCartesianItemsSettingsExceptStacked = createSelector(
+  [selectCartesianItemsSettings],
+  filterGraphicalNotStackedItems,
+);
+var combineGraphicalItemsData = (cartesianItems) =>
+  cartesianItems
+    .map((item) => item.data)
+    .filter(Boolean)
+    .flat(1);
+var selectAnyCartesianItemsUsesChartData = createSelector([selectCartesianItemsSettings], (items) =>
+  items.some((item) => !item.data),
+);
+var selectCartesianGraphicalItemsData = createSelector(
+  [selectCartesianItemsSettings],
+  combineGraphicalItemsData,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: emptyArraysAreEqualCheck,
+    },
+  },
+);
 var combineDisplayedData = (graphicalItemsData, _ref2) => {
-  var {
-    chartData = [],
-    dataStartIndex,
-    dataEndIndex
-  } = _ref2;
+  var { chartData = [], dataStartIndex, dataEndIndex } = _ref2;
   if (graphicalItemsData.length > 0) {
     return graphicalItemsData;
   }
   return chartData.slice(dataStartIndex, dataEndIndex + 1);
 };
-var selectDisplayedData = createSelector([selectCartesianGraphicalItemsData, selectChartDataWithIndexesIfNotInPanoramaPosition4], combineDisplayedData);
+var selectDisplayedData = createSelector(
+  [selectCartesianGraphicalItemsData, selectChartDataWithIndexesIfNotInPanoramaPosition4],
+  combineDisplayedData,
+);
 var combineAppliedValues = (data, axisSettings, items) => {
   if ((axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.dataKey) != null) {
     return data.map((item) => ({
-      value: getValueByDataKey(item, axisSettings.dataKey)
+      value: getValueByDataKey(item, axisSettings.dataKey),
     }));
   }
   if (items.length > 0) {
-    return items.map((item) => item.dataKey).flatMap((dataKey) => data.map((entry) => ({
-      value: getValueByDataKey(entry, dataKey)
-    })));
+    return items
+      .map((item) => item.dataKey)
+      .flatMap((dataKey) =>
+        data.map((entry) => ({
+          value: getValueByDataKey(entry, dataKey),
+        })),
+      );
   }
   return data.map((entry) => ({
-    value: entry
+    value: entry,
   }));
 };
-var combineAllAppliedValues = (displayedData, axisSettings, items, _ref2, anyItemUsesChartData, graphicalItemsData) => {
-  var {
-    chartData = [],
-    dataStartIndex,
-    dataEndIndex
-  } = _ref2;
+var combineAllAppliedValues = (
+  displayedData,
+  axisSettings,
+  items,
+  _ref2,
+  anyItemUsesChartData,
+  graphicalItemsData,
+) => {
+  var { chartData = [], dataStartIndex, dataEndIndex } = _ref2;
   var appliedValues = combineAppliedValues(displayedData, axisSettings, items);
-  if (anyItemUsesChartData && (axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.dataKey) != null && graphicalItemsData.length > 0) {
+  if (
+    anyItemUsesChartData &&
+    (axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.dataKey) != null &&
+    graphicalItemsData.length > 0
+  ) {
     var chartDataSlice2 = chartData.slice(dataStartIndex, dataEndIndex + 1);
-    var chartAppliedValues = chartDataSlice2.map((item) => ({
-      value: getValueByDataKey(item, axisSettings.dataKey)
-    })).filter((av) => av.value != null);
+    var chartAppliedValues = chartDataSlice2
+      .map((item) => ({
+        value: getValueByDataKey(item, axisSettings.dataKey),
+      }))
+      .filter((av) => av.value != null);
     return [...chartAppliedValues, ...appliedValues];
   }
   return appliedValues;
 };
-var selectAllAppliedValues = createSelector([selectDisplayedData, selectBaseAxis, selectCartesianItemsSettings, selectChartDataWithIndexesIfNotInPanoramaPosition4, selectAnyCartesianItemsUsesChartData, selectCartesianGraphicalItemsData], combineAllAppliedValues);
+var selectAllAppliedValues = createSelector(
+  [
+    selectDisplayedData,
+    selectBaseAxis,
+    selectCartesianItemsSettings,
+    selectChartDataWithIndexesIfNotInPanoramaPosition4,
+    selectAnyCartesianItemsUsesChartData,
+    selectCartesianGraphicalItemsData,
+  ],
+  combineAllAppliedValues,
+);
 function makeNumber(val) {
   if (isNumOrStr(val) || val instanceof Date) {
     var n = Number(val);
@@ -14308,7 +16683,9 @@ function sortBy(a, b) {
   return aNum - bNum;
 }
 var selectSortedDataPoints = createSelector([selectAllAppliedValues], (appliedData) => {
-  return appliedData === null || appliedData === void 0 ? void 0 : appliedData.map((item) => item.value).sort(sortBy);
+  return appliedData === null || appliedData === void 0
+    ? void 0
+    : appliedData.map((item) => item.value).sort(sortBy);
 });
 function isErrorBarRelevantForAxisType(axisType, errorBar) {
   switch (axisType) {
@@ -14339,27 +16716,38 @@ function getErrorDomainByDataKey(entry, appliedValue, relevantErrorBars) {
   if (appliedNumericValue == null) {
     return [];
   }
-  return onlyAllowNumbers(relevantErrorBars.flatMap((eb) => {
-    var errorValue = getValueByDataKey(entry, eb.dataKey);
-    var lowBound, highBound;
-    if (Array.isArray(errorValue)) {
-      [lowBound, highBound] = errorValue;
-    } else {
-      lowBound = highBound = errorValue;
-    }
-    if (!isWellBehavedNumber(lowBound) || !isWellBehavedNumber(highBound)) {
-      return void 0;
-    }
-    return [appliedNumericValue - lowBound, appliedNumericValue + highBound];
-  }));
+  return onlyAllowNumbers(
+    relevantErrorBars.flatMap((eb) => {
+      var errorValue = getValueByDataKey(entry, eb.dataKey);
+      var lowBound, highBound;
+      if (Array.isArray(errorValue)) {
+        [lowBound, highBound] = errorValue;
+      } else {
+        lowBound = highBound = errorValue;
+      }
+      if (!isWellBehavedNumber(lowBound) || !isWellBehavedNumber(highBound)) {
+        return void 0;
+      }
+      return [appliedNumericValue - lowBound, appliedNumericValue + highBound];
+    }),
+  );
 }
 var selectTooltipAxis = (state) => {
   var axisType = selectTooltipAxisType(state);
   var axisId = selectTooltipAxisId(state);
   return selectRenderableAxisSettings(state, axisType, axisId);
 };
-var selectTooltipAxisDataKey = createSelector([selectTooltipAxis], (axis) => axis === null || axis === void 0 ? void 0 : axis.dataKey);
-var selectDisplayedStackedData = createSelector([selectStackedCartesianItemsSettings, selectChartDataWithIndexesIfNotInPanoramaPosition4, selectTooltipAxis], combineDisplayedStackedData);
+var selectTooltipAxisDataKey = createSelector([selectTooltipAxis], (axis) =>
+  axis === null || axis === void 0 ? void 0 : axis.dataKey,
+);
+var selectDisplayedStackedData = createSelector(
+  [
+    selectStackedCartesianItemsSettings,
+    selectChartDataWithIndexesIfNotInPanoramaPosition4,
+    selectTooltipAxis,
+  ],
+  combineDisplayedStackedData,
+);
 var combineStackGroups = (displayedData, items, stackOffsetType, reverseStackOrder) => {
   var initialItemsGroups = {};
   var itemsGroup = items.reduce((acc, item) => {
@@ -14374,23 +16762,35 @@ var combineStackGroups = (displayedData, items, stackOffsetType, reverseStackOrd
     acc[item.stackId] = stack;
     return acc;
   }, initialItemsGroups);
-  return Object.fromEntries(Object.entries(itemsGroup).map((_ref3) => {
-    var [stackId, graphicalItems] = _ref3;
-    var orderedGraphicalItems = reverseStackOrder ? [...graphicalItems].reverse() : graphicalItems;
-    var dataKeys = orderedGraphicalItems.map(getStackSeriesIdentifier);
-    return [stackId, {
-      // @ts-expect-error getStackedData requires that the input is array of objects, Recharts does not test for that
-      stackedData: getStackedData(displayedData, dataKeys, stackOffsetType),
-      graphicalItems: orderedGraphicalItems
-    }];
-  }));
+  return Object.fromEntries(
+    Object.entries(itemsGroup).map((_ref3) => {
+      var [stackId, graphicalItems] = _ref3;
+      var orderedGraphicalItems = reverseStackOrder
+        ? [...graphicalItems].reverse()
+        : graphicalItems;
+      var dataKeys = orderedGraphicalItems.map(getStackSeriesIdentifier);
+      return [
+        stackId,
+        {
+          // @ts-expect-error getStackedData requires that the input is array of objects, Recharts does not test for that
+          stackedData: getStackedData(displayedData, dataKeys, stackOffsetType),
+          graphicalItems: orderedGraphicalItems,
+        },
+      ];
+    }),
+  );
 };
-var selectStackGroups = createSelector([selectDisplayedStackedData, selectStackedCartesianItemsSettings, selectStackOffsetType, selectReverseStackOrder], combineStackGroups);
+var selectStackGroups = createSelector(
+  [
+    selectDisplayedStackedData,
+    selectStackedCartesianItemsSettings,
+    selectStackOffsetType,
+    selectReverseStackOrder,
+  ],
+  combineStackGroups,
+);
 var combineDomainOfStackGroups = (stackGroups, _ref4, axisType, domainFromUserPreference) => {
-  var {
-    dataStartIndex,
-    dataEndIndex
-  } = _ref4;
+  var { dataStartIndex, dataEndIndex } = _ref4;
   if (domainFromUserPreference != null) {
     return void 0;
   }
@@ -14403,7 +16803,10 @@ var combineDomainOfStackGroups = (stackGroups, _ref4, axisType, domainFromUserPr
   }
   return domainOfStackGroups;
 };
-var selectAllowsDataOverflow = createSelector([selectBaseAxis], (axisSettings) => axisSettings.allowDataOverflow);
+var selectAllowsDataOverflow = createSelector(
+  [selectBaseAxis],
+  (axisSettings) => axisSettings.allowDataOverflow,
+);
 var getDomainDefinition = (axisSettings) => {
   var _axisSettings$domain;
   if (axisSettings == null || !("domain" in axisSettings)) {
@@ -14421,22 +16824,36 @@ var getDomainDefinition = (axisSettings) => {
       return axisSettings.ticks.map(String);
     }
   }
-  return (_axisSettings$domain = axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.domain) !== null && _axisSettings$domain !== void 0 ? _axisSettings$domain : defaultNumericDomain;
+  return (_axisSettings$domain =
+    axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.domain) !== null &&
+    _axisSettings$domain !== void 0
+    ? _axisSettings$domain
+    : defaultNumericDomain;
 };
 var selectDomainDefinition = createSelector([selectBaseAxis], getDomainDefinition);
-var selectDomainFromUserPreference = createSelector([selectDomainDefinition, selectAllowsDataOverflow], numericalDomainSpecifiedWithoutRequiringData);
-var selectDomainOfStackGroups = createSelector([selectStackGroups, selectChartDataWithIndexes, pickAxisType, selectDomainFromUserPreference], combineDomainOfStackGroups, {
-  memoizeOptions: {
-    resultEqualityCheck: numberDomainEqualityCheck
-  }
-});
+var selectDomainFromUserPreference = createSelector(
+  [selectDomainDefinition, selectAllowsDataOverflow],
+  numericalDomainSpecifiedWithoutRequiringData,
+);
+var selectDomainOfStackGroups = createSelector(
+  [selectStackGroups, selectChartDataWithIndexes, pickAxisType, selectDomainFromUserPreference],
+  combineDomainOfStackGroups,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: numberDomainEqualityCheck,
+    },
+  },
+);
 var selectAllErrorBarSettings = (state) => state.errorBars;
 var combineRelevantErrorBarSettings = (cartesianItemsSettings, allErrorBarSettings, axisType) => {
-  return cartesianItemsSettings.flatMap((item) => {
-    return allErrorBarSettings[item.id];
-  }).filter(Boolean).filter((e) => {
-    return isErrorBarRelevantForAxisType(axisType, e);
-  });
+  return cartesianItemsSettings
+    .flatMap((item) => {
+      return allErrorBarSettings[item.id];
+    })
+    .filter(Boolean)
+    .filter((e) => {
+      return isErrorBarRelevantForAxisType(axisType, e);
+    });
 };
 var mergeDomains = function mergeDomains2() {
   for (var _len = arguments.length, domains = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -14451,67 +16868,105 @@ var mergeDomains = function mergeDomains2() {
   var max2 = Math.max(...allValues);
   return [min2, max2];
 };
-var combineDomainOfAllAppliedNumericalValuesIncludingErrorValues = function combineDomainOfAllAppliedNumericalValuesIncludingErrorValues2(displayedData, axisSettings, items, errorBars, axisType) {
-  var chartDataSlice2 = arguments.length > 5 && arguments[5] !== void 0 ? arguments[5] : [];
-  var lowerEnd, upperEnd;
-  if (items.length > 0) {
-    items.forEach((item) => {
-      var _errorBars$item$id;
-      var itemData = item.data != null ? [...item.data] : chartDataSlice2;
-      var relevantErrorBars = (_errorBars$item$id = errorBars[item.id]) === null || _errorBars$item$id === void 0 ? void 0 : _errorBars$item$id.filter((errorBar) => isErrorBarRelevantForAxisType(axisType, errorBar));
-      itemData.forEach((entry) => {
-        var _axisSettings$dataKey;
-        var valueByDataKey = getValueByDataKey(entry, (_axisSettings$dataKey = axisSettings.dataKey) !== null && _axisSettings$dataKey !== void 0 ? _axisSettings$dataKey : item.dataKey);
-        var errorDomain = getErrorDomainByDataKey(entry, valueByDataKey, relevantErrorBars);
-        if (errorDomain.length >= 2) {
-          var localLower = Math.min(...errorDomain);
-          var localUpper = Math.max(...errorDomain);
-          if (lowerEnd == null || localLower < lowerEnd) {
-            lowerEnd = localLower;
+var combineDomainOfAllAppliedNumericalValuesIncludingErrorValues =
+  function combineDomainOfAllAppliedNumericalValuesIncludingErrorValues2(
+    displayedData,
+    axisSettings,
+    items,
+    errorBars,
+    axisType,
+  ) {
+    var chartDataSlice2 = arguments.length > 5 && arguments[5] !== void 0 ? arguments[5] : [];
+    var lowerEnd, upperEnd;
+    if (items.length > 0) {
+      items.forEach((item) => {
+        var _errorBars$item$id;
+        var itemData = item.data != null ? [...item.data] : chartDataSlice2;
+        var relevantErrorBars =
+          (_errorBars$item$id = errorBars[item.id]) === null || _errorBars$item$id === void 0
+            ? void 0
+            : _errorBars$item$id.filter((errorBar) =>
+                isErrorBarRelevantForAxisType(axisType, errorBar),
+              );
+        itemData.forEach((entry) => {
+          var _axisSettings$dataKey;
+          var valueByDataKey = getValueByDataKey(
+            entry,
+            (_axisSettings$dataKey = axisSettings.dataKey) !== null &&
+              _axisSettings$dataKey !== void 0
+              ? _axisSettings$dataKey
+              : item.dataKey,
+          );
+          var errorDomain = getErrorDomainByDataKey(entry, valueByDataKey, relevantErrorBars);
+          if (errorDomain.length >= 2) {
+            var localLower = Math.min(...errorDomain);
+            var localUpper = Math.max(...errorDomain);
+            if (lowerEnd == null || localLower < lowerEnd) {
+              lowerEnd = localLower;
+            }
+            if (upperEnd == null || localUpper > upperEnd) {
+              upperEnd = localUpper;
+            }
           }
-          if (upperEnd == null || localUpper > upperEnd) {
-            upperEnd = localUpper;
+          var dataValueDomain = makeDomain(valueByDataKey);
+          if (dataValueDomain != null) {
+            lowerEnd =
+              lowerEnd == null ? dataValueDomain[0] : Math.min(lowerEnd, dataValueDomain[0]);
+            upperEnd =
+              upperEnd == null ? dataValueDomain[1] : Math.max(upperEnd, dataValueDomain[1]);
           }
-        }
-        var dataValueDomain = makeDomain(valueByDataKey);
+        });
+      });
+    }
+    if (
+      (axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.dataKey) != null &&
+      items.length === 0
+    ) {
+      displayedData.forEach((item) => {
+        var dataValueDomain = makeDomain(getValueByDataKey(item, axisSettings.dataKey));
         if (dataValueDomain != null) {
           lowerEnd = lowerEnd == null ? dataValueDomain[0] : Math.min(lowerEnd, dataValueDomain[0]);
           upperEnd = upperEnd == null ? dataValueDomain[1] : Math.max(upperEnd, dataValueDomain[1]);
         }
       });
-    });
-  }
-  if ((axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.dataKey) != null && items.length === 0) {
-    displayedData.forEach((item) => {
-      var dataValueDomain = makeDomain(getValueByDataKey(item, axisSettings.dataKey));
-      if (dataValueDomain != null) {
-        lowerEnd = lowerEnd == null ? dataValueDomain[0] : Math.min(lowerEnd, dataValueDomain[0]);
-        upperEnd = upperEnd == null ? dataValueDomain[1] : Math.max(upperEnd, dataValueDomain[1]);
-      }
-    });
-  }
-  if (isWellBehavedNumber(lowerEnd) && isWellBehavedNumber(upperEnd)) {
-    return [lowerEnd, upperEnd];
-  }
-  return void 0;
-};
-var selectDomainOfAllAppliedNumericalValuesIncludingErrorValues$1 = createSelector([selectDisplayedData, selectBaseAxis, selectCartesianItemsSettingsExceptStacked, selectAllErrorBarSettings, pickAxisType, selectChartDataSliceIfNotInPanorama], combineDomainOfAllAppliedNumericalValuesIncludingErrorValues, {
-  memoizeOptions: {
-    resultEqualityCheck: numberDomainEqualityCheck
-  }
-});
+    }
+    if (isWellBehavedNumber(lowerEnd) && isWellBehavedNumber(upperEnd)) {
+      return [lowerEnd, upperEnd];
+    }
+    return void 0;
+  };
+var selectDomainOfAllAppliedNumericalValuesIncludingErrorValues$1 = createSelector(
+  [
+    selectDisplayedData,
+    selectBaseAxis,
+    selectCartesianItemsSettingsExceptStacked,
+    selectAllErrorBarSettings,
+    pickAxisType,
+    selectChartDataSliceIfNotInPanorama,
+  ],
+  combineDomainOfAllAppliedNumericalValuesIncludingErrorValues,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: numberDomainEqualityCheck,
+    },
+  },
+);
 function onlyAllowNumbersAndStringsAndDates(item) {
-  var {
-    value
-  } = item;
+  var { value } = item;
   if (isNumOrStr(value) || value instanceof Date) {
     return value;
   }
   return void 0;
 }
 var computeDomainOfTypeCategory = (allDataSquished, axisSettings, isCategorical) => {
-  var categoricalDomain = allDataSquished.map(onlyAllowNumbersAndStringsAndDates).filter((v) => v != null);
-  if (isCategorical && (axisSettings.dataKey == null || axisSettings.allowDuplicatedCategory && hasDuplicate(categoricalDomain))) {
+  var categoricalDomain = allDataSquished
+    .map(onlyAllowNumbersAndStringsAndDates)
+    .filter((v) => v != null);
+  if (
+    isCategorical &&
+    (axisSettings.dataKey == null ||
+      (axisSettings.allowDuplicatedCategory && hasDuplicate(categoricalDomain)))
+  ) {
     return range$1(0, allDataSquished.length);
   }
   if (axisSettings.allowDuplicatedCategory) {
@@ -14521,46 +16976,72 @@ var computeDomainOfTypeCategory = (allDataSquished, axisSettings, isCategorical)
 };
 var selectReferenceDots = (state) => state.referenceElements.dots;
 var filterReferenceElements = (elements, axisType, axisId) => {
-  return elements.filter((el) => el.ifOverflow === "extendDomain").filter((el) => {
-    if (axisType === "xAxis") {
-      return el.xAxisId === axisId;
-    }
-    return el.yAxisId === axisId;
-  });
+  return elements
+    .filter((el) => el.ifOverflow === "extendDomain")
+    .filter((el) => {
+      if (axisType === "xAxis") {
+        return el.xAxisId === axisId;
+      }
+      return el.yAxisId === axisId;
+    });
 };
-var selectReferenceDotsByAxis = createSelector([selectReferenceDots, pickAxisType, pickAxisId], filterReferenceElements);
+var selectReferenceDotsByAxis = createSelector(
+  [selectReferenceDots, pickAxisType, pickAxisId],
+  filterReferenceElements,
+);
 var selectReferenceAreas = (state) => state.referenceElements.areas;
-var selectReferenceAreasByAxis = createSelector([selectReferenceAreas, pickAxisType, pickAxisId], filterReferenceElements);
+var selectReferenceAreasByAxis = createSelector(
+  [selectReferenceAreas, pickAxisType, pickAxisId],
+  filterReferenceElements,
+);
 var selectReferenceLines = (state) => state.referenceElements.lines;
-var selectReferenceLinesByAxis = createSelector([selectReferenceLines, pickAxisType, pickAxisId], filterReferenceElements);
+var selectReferenceLinesByAxis = createSelector(
+  [selectReferenceLines, pickAxisType, pickAxisId],
+  filterReferenceElements,
+);
 var combineDotsDomain = (dots, axisType) => {
   if (dots == null) {
     return void 0;
   }
-  var allCoords = onlyAllowNumbers(dots.map((dot) => axisType === "xAxis" ? dot.x : dot.y));
+  var allCoords = onlyAllowNumbers(dots.map((dot) => (axisType === "xAxis" ? dot.x : dot.y)));
   if (allCoords.length === 0) {
     return void 0;
   }
   return [Math.min(...allCoords), Math.max(...allCoords)];
 };
-var selectReferenceDotsDomain = createSelector(selectReferenceDotsByAxis, pickAxisType, combineDotsDomain);
+var selectReferenceDotsDomain = createSelector(
+  selectReferenceDotsByAxis,
+  pickAxisType,
+  combineDotsDomain,
+);
 var combineAreasDomain = (areas, axisType) => {
   if (areas == null) {
     return void 0;
   }
-  var allCoords = onlyAllowNumbers(areas.flatMap((area) => [axisType === "xAxis" ? area.x1 : area.y1, axisType === "xAxis" ? area.x2 : area.y2]));
+  var allCoords = onlyAllowNumbers(
+    areas.flatMap((area) => [
+      axisType === "xAxis" ? area.x1 : area.y1,
+      axisType === "xAxis" ? area.x2 : area.y2,
+    ]),
+  );
   if (allCoords.length === 0) {
     return void 0;
   }
   return [Math.min(...allCoords), Math.max(...allCoords)];
 };
-var selectReferenceAreasDomain = createSelector([selectReferenceAreasByAxis, pickAxisType], combineAreasDomain);
+var selectReferenceAreasDomain = createSelector(
+  [selectReferenceAreasByAxis, pickAxisType],
+  combineAreasDomain,
+);
 function extractXCoordinates(line) {
   var _line$segment;
   if (line.x != null) {
     return onlyAllowNumbers([line.x]);
   }
-  var segmentCoordinates = (_line$segment = line.segment) === null || _line$segment === void 0 ? void 0 : _line$segment.map((s) => s.x);
+  var segmentCoordinates =
+    (_line$segment = line.segment) === null || _line$segment === void 0
+      ? void 0
+      : _line$segment.map((s) => s.x);
   if (segmentCoordinates == null || segmentCoordinates.length === 0) {
     return [];
   }
@@ -14571,7 +17052,10 @@ function extractYCoordinates(line) {
   if (line.y != null) {
     return onlyAllowNumbers([line.y]);
   }
-  var segmentCoordinates = (_line$segment2 = line.segment) === null || _line$segment2 === void 0 ? void 0 : _line$segment2.map((s) => s.y);
+  var segmentCoordinates =
+    (_line$segment2 = line.segment) === null || _line$segment2 === void 0
+      ? void 0
+      : _line$segment2.map((s) => s.y);
   if (segmentCoordinates == null || segmentCoordinates.length === 0) {
     return [];
   }
@@ -14581,42 +17065,93 @@ var combineLinesDomain = (lines, axisType) => {
   if (lines == null) {
     return void 0;
   }
-  var allCoords = lines.flatMap((line) => axisType === "xAxis" ? extractXCoordinates(line) : extractYCoordinates(line));
+  var allCoords = lines.flatMap((line) =>
+    axisType === "xAxis" ? extractXCoordinates(line) : extractYCoordinates(line),
+  );
   if (allCoords.length === 0) {
     return void 0;
   }
   return [Math.min(...allCoords), Math.max(...allCoords)];
 };
-var selectReferenceLinesDomain = createSelector([selectReferenceLinesByAxis, pickAxisType], combineLinesDomain);
-var selectReferenceElementsDomain = createSelector(selectReferenceDotsDomain, selectReferenceLinesDomain, selectReferenceAreasDomain, (dotsDomain, linesDomain, areasDomain) => {
-  return mergeDomains(dotsDomain, areasDomain, linesDomain);
-});
-var combineNumericalDomain = (axisSettings, domainDefinition, domainFromUserPreference, domainOfStackGroups, dataAndErrorBarsDomain, referenceElementsDomain, layout, axisType) => {
+var selectReferenceLinesDomain = createSelector(
+  [selectReferenceLinesByAxis, pickAxisType],
+  combineLinesDomain,
+);
+var selectReferenceElementsDomain = createSelector(
+  selectReferenceDotsDomain,
+  selectReferenceLinesDomain,
+  selectReferenceAreasDomain,
+  (dotsDomain, linesDomain, areasDomain) => {
+    return mergeDomains(dotsDomain, areasDomain, linesDomain);
+  },
+);
+var combineNumericalDomain = (
+  axisSettings,
+  domainDefinition,
+  domainFromUserPreference,
+  domainOfStackGroups,
+  dataAndErrorBarsDomain,
+  referenceElementsDomain,
+  layout,
+  axisType,
+) => {
   if (domainFromUserPreference != null) {
     return domainFromUserPreference;
   }
-  var shouldIncludeDomainOfStackGroups = layout === "vertical" && axisType === "xAxis" || layout === "horizontal" && axisType === "yAxis";
-  var mergedDomains = shouldIncludeDomainOfStackGroups ? mergeDomains(domainOfStackGroups, referenceElementsDomain, dataAndErrorBarsDomain) : mergeDomains(referenceElementsDomain, dataAndErrorBarsDomain);
+  var shouldIncludeDomainOfStackGroups =
+    (layout === "vertical" && axisType === "xAxis") ||
+    (layout === "horizontal" && axisType === "yAxis");
+  var mergedDomains = shouldIncludeDomainOfStackGroups
+    ? mergeDomains(domainOfStackGroups, referenceElementsDomain, dataAndErrorBarsDomain)
+    : mergeDomains(referenceElementsDomain, dataAndErrorBarsDomain);
   return parseNumericalUserDomain(domainDefinition, mergedDomains, axisSettings.allowDataOverflow);
 };
-var selectNumericalDomain = createSelector([selectBaseAxis, selectDomainDefinition, selectDomainFromUserPreference, selectDomainOfStackGroups, selectDomainOfAllAppliedNumericalValuesIncludingErrorValues$1, selectReferenceElementsDomain, selectChartLayout, pickAxisType], combineNumericalDomain, {
-  memoizeOptions: {
-    resultEqualityCheck: numberDomainEqualityCheck
-  }
-});
+var selectNumericalDomain = createSelector(
+  [
+    selectBaseAxis,
+    selectDomainDefinition,
+    selectDomainFromUserPreference,
+    selectDomainOfStackGroups,
+    selectDomainOfAllAppliedNumericalValuesIncludingErrorValues$1,
+    selectReferenceElementsDomain,
+    selectChartLayout,
+    pickAxisType,
+  ],
+  combineNumericalDomain,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: numberDomainEqualityCheck,
+    },
+  },
+);
 var expandDomain = [0, 1];
-var combineAxisDomain = (axisSettings, layout, displayedData, allAppliedValues, stackOffsetType, axisType, numericalDomain) => {
-  if ((axisSettings == null || displayedData == null || displayedData.length === 0) && numericalDomain === void 0) {
+var combineAxisDomain = (
+  axisSettings,
+  layout,
+  displayedData,
+  allAppliedValues,
+  stackOffsetType,
+  axisType,
+  numericalDomain,
+) => {
+  if (
+    (axisSettings == null || displayedData == null || displayedData.length === 0) &&
+    numericalDomain === void 0
+  ) {
     return void 0;
   }
-  var {
-    dataKey,
-    type
-  } = axisSettings;
+  var { dataKey, type } = axisSettings;
   var isCategorical = isCategoricalAxis(layout, axisType);
   if (isCategorical && dataKey == null) {
     var _displayedData$length;
-    return range$1(0, (_displayedData$length = displayedData === null || displayedData === void 0 ? void 0 : displayedData.length) !== null && _displayedData$length !== void 0 ? _displayedData$length : 0);
+    return range$1(
+      0,
+      (_displayedData$length =
+        displayedData === null || displayedData === void 0 ? void 0 : displayedData.length) !==
+        null && _displayedData$length !== void 0
+        ? _displayedData$length
+        : 0,
+    );
   }
   if (type === "category") {
     return computeDomainOfTypeCategory(allAppliedValues, axisSettings, isCategorical);
@@ -14626,36 +17161,83 @@ var combineAxisDomain = (axisSettings, layout, displayedData, allAppliedValues, 
   }
   return numericalDomain;
 };
-var selectAxisDomain = createSelector([selectBaseAxis, selectChartLayout, selectDisplayedData, selectAllAppliedValues, selectStackOffsetType, pickAxisType, selectNumericalDomain], combineAxisDomain);
-var selectRealScaleType = createSelector([selectBaseAxis, selectHasBar, selectChartName], combineRealScaleType);
+var selectAxisDomain = createSelector(
+  [
+    selectBaseAxis,
+    selectChartLayout,
+    selectDisplayedData,
+    selectAllAppliedValues,
+    selectStackOffsetType,
+    pickAxisType,
+    selectNumericalDomain,
+  ],
+  combineAxisDomain,
+);
+var selectRealScaleType = createSelector(
+  [selectBaseAxis, selectHasBar, selectChartName],
+  combineRealScaleType,
+);
 var combineNiceTicks = (axisDomain, axisSettings, realScaleType) => {
-  var {
-    niceTicks
-  } = axisSettings;
+  var { niceTicks } = axisSettings;
   if (niceTicks === "none") {
     return void 0;
   }
   var domainDefinition = getDomainDefinition(axisSettings);
-  var hasDomainAutoKeyword = Array.isArray(domainDefinition) && (domainDefinition[0] === "auto" || domainDefinition[1] === "auto");
-  if ((niceTicks === "snap125" || niceTicks === "adaptive") && axisSettings != null && axisSettings.tickCount && isWellFormedNumberDomain(axisDomain)) {
+  var hasDomainAutoKeyword =
+    Array.isArray(domainDefinition) &&
+    (domainDefinition[0] === "auto" || domainDefinition[1] === "auto");
+  if (
+    (niceTicks === "snap125" || niceTicks === "adaptive") &&
+    axisSettings != null &&
+    axisSettings.tickCount &&
+    isWellFormedNumberDomain(axisDomain)
+  ) {
     if (hasDomainAutoKeyword) {
-      return getNiceTickValues(axisDomain, axisSettings.tickCount, axisSettings.allowDecimals, niceTicks);
+      return getNiceTickValues(
+        axisDomain,
+        axisSettings.tickCount,
+        axisSettings.allowDecimals,
+        niceTicks,
+      );
     }
     if (axisSettings.type === "number") {
-      return getTickValuesFixedDomain(axisDomain, axisSettings.tickCount, axisSettings.allowDecimals, niceTicks);
+      return getTickValuesFixedDomain(
+        axisDomain,
+        axisSettings.tickCount,
+        axisSettings.allowDecimals,
+        niceTicks,
+      );
     }
   }
-  if (niceTicks === "auto" && realScaleType === "linear" && axisSettings != null && axisSettings.tickCount) {
+  if (
+    niceTicks === "auto" &&
+    realScaleType === "linear" &&
+    axisSettings != null &&
+    axisSettings.tickCount
+  ) {
     if (hasDomainAutoKeyword && isWellFormedNumberDomain(axisDomain)) {
-      return getNiceTickValues(axisDomain, axisSettings.tickCount, axisSettings.allowDecimals, "adaptive");
+      return getNiceTickValues(
+        axisDomain,
+        axisSettings.tickCount,
+        axisSettings.allowDecimals,
+        "adaptive",
+      );
     }
     if (axisSettings.type === "number" && isWellFormedNumberDomain(axisDomain)) {
-      return getTickValuesFixedDomain(axisDomain, axisSettings.tickCount, axisSettings.allowDecimals, "adaptive");
+      return getTickValuesFixedDomain(
+        axisDomain,
+        axisSettings.tickCount,
+        axisSettings.allowDecimals,
+        "adaptive",
+      );
     }
   }
   return void 0;
 };
-var selectNiceTicks = createSelector([selectAxisDomain, selectRenderableAxisSettings, selectRealScaleType], combineNiceTicks);
+var selectNiceTicks = createSelector(
+  [selectAxisDomain, selectRenderableAxisSettings, selectRealScaleType],
+  combineNiceTicks,
+);
 var combineAxisDomainWithNiceTicks = (axisSettings, domain, niceTicks, axisType) => {
   if (
     /*
@@ -14664,59 +17246,83 @@ var combineAxisDomainWithNiceTicks = (axisSettings, domain, niceTicks, axisType)
      * Not really sure why? Is there a good reason,
      * or is it just because someone added support for nice ticks to the other axes and forgot this one?
      */
-    axisType !== "angleAxis" && (axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.type) === "number" && isWellFormedNumberDomain(domain) && Array.isArray(niceTicks) && niceTicks.length > 0
+    axisType !== "angleAxis" &&
+    (axisSettings === null || axisSettings === void 0 ? void 0 : axisSettings.type) === "number" &&
+    isWellFormedNumberDomain(domain) &&
+    Array.isArray(niceTicks) &&
+    niceTicks.length > 0
   ) {
     var _niceTicks$, _niceTicks;
     var minFromDomain = domain[0];
-    var minFromTicks = (_niceTicks$ = niceTicks[0]) !== null && _niceTicks$ !== void 0 ? _niceTicks$ : 0;
+    var minFromTicks =
+      (_niceTicks$ = niceTicks[0]) !== null && _niceTicks$ !== void 0 ? _niceTicks$ : 0;
     var maxFromDomain = domain[1];
-    var maxFromTicks = (_niceTicks = niceTicks[niceTicks.length - 1]) !== null && _niceTicks !== void 0 ? _niceTicks : 0;
+    var maxFromTicks =
+      (_niceTicks = niceTicks[niceTicks.length - 1]) !== null && _niceTicks !== void 0
+        ? _niceTicks
+        : 0;
     return [Math.min(minFromDomain, minFromTicks), Math.max(maxFromDomain, maxFromTicks)];
   }
   return domain;
 };
-var selectAxisDomainIncludingNiceTicks = createSelector([selectBaseAxis, selectAxisDomain, selectNiceTicks, pickAxisType], combineAxisDomainWithNiceTicks);
-var selectSmallestDistanceBetweenValues = createSelector(selectAllAppliedValues, selectBaseAxis, (allDataSquished, axisSettings) => {
-  if (!axisSettings || axisSettings.type !== "number") {
-    return void 0;
-  }
-  var smallestDistanceBetweenValues = Infinity;
-  var sortedValues = Array.from(onlyAllowNumbers(allDataSquished.map((d) => d.value))).sort((a, b) => a - b);
-  var first = sortedValues[0];
-  var last = sortedValues[sortedValues.length - 1];
-  if (first == null || last == null) {
-    return Infinity;
-  }
-  var diff = last - first;
-  if (diff === 0) {
-    return Infinity;
-  }
-  for (var i = 0; i < sortedValues.length - 1; i++) {
-    var curr = sortedValues[i];
-    var next = sortedValues[i + 1];
-    if (curr == null || next == null) {
-      continue;
+var selectAxisDomainIncludingNiceTicks = createSelector(
+  [selectBaseAxis, selectAxisDomain, selectNiceTicks, pickAxisType],
+  combineAxisDomainWithNiceTicks,
+);
+var selectSmallestDistanceBetweenValues = createSelector(
+  selectAllAppliedValues,
+  selectBaseAxis,
+  (allDataSquished, axisSettings) => {
+    if (!axisSettings || axisSettings.type !== "number") {
+      return void 0;
     }
-    var distance = next - curr;
-    smallestDistanceBetweenValues = Math.min(smallestDistanceBetweenValues, distance);
-  }
-  return smallestDistanceBetweenValues / diff;
-});
-var selectCalculatedPadding = createSelector(selectSmallestDistanceBetweenValues, selectChartLayout, selectBarCategoryGap, selectChartOffsetInternal, (_1, _2, _3, _4, padding) => padding, (smallestDistanceInPercent, layout, barCategoryGap, offset, padding) => {
-  if (!isWellBehavedNumber(smallestDistanceInPercent)) {
+    var smallestDistanceBetweenValues = Infinity;
+    var sortedValues = Array.from(onlyAllowNumbers(allDataSquished.map((d) => d.value))).sort(
+      (a, b) => a - b,
+    );
+    var first = sortedValues[0];
+    var last = sortedValues[sortedValues.length - 1];
+    if (first == null || last == null) {
+      return Infinity;
+    }
+    var diff = last - first;
+    if (diff === 0) {
+      return Infinity;
+    }
+    for (var i = 0; i < sortedValues.length - 1; i++) {
+      var curr = sortedValues[i];
+      var next = sortedValues[i + 1];
+      if (curr == null || next == null) {
+        continue;
+      }
+      var distance = next - curr;
+      smallestDistanceBetweenValues = Math.min(smallestDistanceBetweenValues, distance);
+    }
+    return smallestDistanceBetweenValues / diff;
+  },
+);
+var selectCalculatedPadding = createSelector(
+  selectSmallestDistanceBetweenValues,
+  selectChartLayout,
+  selectBarCategoryGap,
+  selectChartOffsetInternal,
+  (_1, _2, _3, _4, padding) => padding,
+  (smallestDistanceInPercent, layout, barCategoryGap, offset, padding) => {
+    if (!isWellBehavedNumber(smallestDistanceInPercent)) {
+      return 0;
+    }
+    var rangeWidth = layout === "vertical" ? offset.height : offset.width;
+    if (padding === "gap") {
+      return (smallestDistanceInPercent * rangeWidth) / 2;
+    }
+    if (padding === "no-gap") {
+      var gap = getPercentValue(barCategoryGap, smallestDistanceInPercent * rangeWidth);
+      var halfBand = (smallestDistanceInPercent * rangeWidth) / 2;
+      return halfBand - gap - ((halfBand - gap) / rangeWidth) * gap;
+    }
     return 0;
-  }
-  var rangeWidth = layout === "vertical" ? offset.height : offset.width;
-  if (padding === "gap") {
-    return smallestDistanceInPercent * rangeWidth / 2;
-  }
-  if (padding === "no-gap") {
-    var gap = getPercentValue(barCategoryGap, smallestDistanceInPercent * rangeWidth);
-    var halfBand = smallestDistanceInPercent * rangeWidth / 2;
-    return halfBand - gap - (halfBand - gap) / rangeWidth * gap;
-  }
-  return 0;
-});
+  },
+);
 var selectCalculatedXAxisPadding = (state, axisId, isPanorama) => {
   var xAxisSettings = selectXAxisSettings(state, axisId);
   if (xAxisSettings == null || typeof xAxisSettings.padding !== "string") {
@@ -14731,71 +17337,100 @@ var selectCalculatedYAxisPadding = (state, axisId, isPanorama) => {
   }
   return selectCalculatedPadding(state, "yAxis", axisId, isPanorama, yAxisSettings.padding);
 };
-var selectXAxisPadding = createSelector(selectXAxisSettings, selectCalculatedXAxisPadding, (xAxisSettings, calculated) => {
-  var _padding$left, _padding$right;
-  if (xAxisSettings == null) {
+var selectXAxisPadding = createSelector(
+  selectXAxisSettings,
+  selectCalculatedXAxisPadding,
+  (xAxisSettings, calculated) => {
+    var _padding$left, _padding$right;
+    if (xAxisSettings == null) {
+      return {
+        left: 0,
+        right: 0,
+      };
+    }
+    var { padding } = xAxisSettings;
+    if (typeof padding === "string") {
+      return {
+        left: calculated,
+        right: calculated,
+      };
+    }
     return {
-      left: 0,
-      right: 0
+      left:
+        ((_padding$left = padding.left) !== null && _padding$left !== void 0 ? _padding$left : 0) +
+        calculated,
+      right:
+        ((_padding$right = padding.right) !== null && _padding$right !== void 0
+          ? _padding$right
+          : 0) + calculated,
     };
-  }
-  var {
-    padding
-  } = xAxisSettings;
-  if (typeof padding === "string") {
+  },
+);
+var selectYAxisPadding = createSelector(
+  selectYAxisSettings,
+  selectCalculatedYAxisPadding,
+  (yAxisSettings, calculated) => {
+    var _padding$top, _padding$bottom;
+    if (yAxisSettings == null) {
+      return {
+        top: 0,
+        bottom: 0,
+      };
+    }
+    var { padding } = yAxisSettings;
+    if (typeof padding === "string") {
+      return {
+        top: calculated,
+        bottom: calculated,
+      };
+    }
     return {
-      left: calculated,
-      right: calculated
+      top:
+        ((_padding$top = padding.top) !== null && _padding$top !== void 0 ? _padding$top : 0) +
+        calculated,
+      bottom:
+        ((_padding$bottom = padding.bottom) !== null && _padding$bottom !== void 0
+          ? _padding$bottom
+          : 0) + calculated,
     };
-  }
-  return {
-    left: ((_padding$left = padding.left) !== null && _padding$left !== void 0 ? _padding$left : 0) + calculated,
-    right: ((_padding$right = padding.right) !== null && _padding$right !== void 0 ? _padding$right : 0) + calculated
-  };
-});
-var selectYAxisPadding = createSelector(selectYAxisSettings, selectCalculatedYAxisPadding, (yAxisSettings, calculated) => {
-  var _padding$top, _padding$bottom;
-  if (yAxisSettings == null) {
-    return {
-      top: 0,
-      bottom: 0
-    };
-  }
-  var {
-    padding
-  } = yAxisSettings;
-  if (typeof padding === "string") {
-    return {
-      top: calculated,
-      bottom: calculated
-    };
-  }
-  return {
-    top: ((_padding$top = padding.top) !== null && _padding$top !== void 0 ? _padding$top : 0) + calculated,
-    bottom: ((_padding$bottom = padding.bottom) !== null && _padding$bottom !== void 0 ? _padding$bottom : 0) + calculated
-  };
-});
-var selectXAxisRange = createSelector([selectChartOffsetInternal, selectXAxisPadding, selectBrushDimensions, selectBrushSettings, (_state, _axisId, isPanorama) => isPanorama], (offset, padding, brushDimensions, _ref5, isPanorama) => {
-  var {
-    padding: brushPadding
-  } = _ref5;
-  if (isPanorama) {
-    return [brushPadding.left, brushDimensions.width - brushPadding.right];
-  }
-  return [offset.left + padding.left, offset.left + offset.width - padding.right];
-});
-var selectYAxisRange = createSelector([selectChartOffsetInternal, selectChartLayout, selectYAxisPadding, selectBrushDimensions, selectBrushSettings, (_state, _axisId, isPanorama) => isPanorama], (offset, layout, padding, brushDimensions, _ref6, isPanorama) => {
-  var {
-    padding: brushPadding
-  } = _ref6;
-  if (isPanorama) {
-    return [brushDimensions.height - brushPadding.bottom, brushPadding.top];
-  }
-  if (layout === "horizontal") {
-    return [offset.top + offset.height - padding.bottom, offset.top + padding.top];
-  }
-  return [offset.top + padding.top, offset.top + offset.height - padding.bottom];
-});
+  },
+);
+var selectXAxisRange = createSelector(
+  [
+    selectChartOffsetInternal,
+    selectXAxisPadding,
+    selectBrushDimensions,
+    selectBrushSettings,
+    (_state, _axisId, isPanorama) => isPanorama,
+  ],
+  (offset, padding, brushDimensions, _ref5, isPanorama) => {
+    var { padding: brushPadding } = _ref5;
+    if (isPanorama) {
+      return [brushPadding.left, brushDimensions.width - brushPadding.right];
+    }
+    return [offset.left + padding.left, offset.left + offset.width - padding.right];
+  },
+);
+var selectYAxisRange = createSelector(
+  [
+    selectChartOffsetInternal,
+    selectChartLayout,
+    selectYAxisPadding,
+    selectBrushDimensions,
+    selectBrushSettings,
+    (_state, _axisId, isPanorama) => isPanorama,
+  ],
+  (offset, layout, padding, brushDimensions, _ref6, isPanorama) => {
+    var { padding: brushPadding } = _ref6;
+    if (isPanorama) {
+      return [brushDimensions.height - brushPadding.bottom, brushPadding.top];
+    }
+    if (layout === "horizontal") {
+      return [offset.top + offset.height - padding.bottom, offset.top + padding.top];
+    }
+    return [offset.top + padding.top, offset.top + offset.height - padding.bottom];
+  },
+);
 var selectAxisRange = (state, axisType, axisId, isPanorama) => {
   var _selectZAxisSettings;
   switch (axisType) {
@@ -14804,7 +17439,10 @@ var selectAxisRange = (state, axisType, axisId, isPanorama) => {
     case "yAxis":
       return selectYAxisRange(state, axisId, isPanorama);
     case "zAxis":
-      return (_selectZAxisSettings = selectZAxisSettings(state, axisId)) === null || _selectZAxisSettings === void 0 ? void 0 : _selectZAxisSettings.range;
+      return (_selectZAxisSettings = selectZAxisSettings(state, axisId)) === null ||
+        _selectZAxisSettings === void 0
+        ? void 0
+        : _selectZAxisSettings.range;
     case "angleAxis":
       return selectAngleAxisRange(state);
     case "radiusAxis":
@@ -14813,28 +17451,40 @@ var selectAxisRange = (state, axisType, axisId, isPanorama) => {
       return void 0;
   }
 };
-var selectAxisRangeWithReverse = createSelector([selectBaseAxis, selectAxisRange], combineAxisRangeWithReverse);
-var selectCheckedAxisDomain = createSelector([selectRealScaleType, selectAxisDomainIncludingNiceTicks], combineCheckedDomain);
-var selectConfiguredScale = createSelector([selectBaseAxis, selectRealScaleType, selectCheckedAxisDomain, selectAxisRangeWithReverse], combineConfiguredScale);
+var selectAxisRangeWithReverse = createSelector(
+  [selectBaseAxis, selectAxisRange],
+  combineAxisRangeWithReverse,
+);
+var selectCheckedAxisDomain = createSelector(
+  [selectRealScaleType, selectAxisDomainIncludingNiceTicks],
+  combineCheckedDomain,
+);
+var selectConfiguredScale = createSelector(
+  [selectBaseAxis, selectRealScaleType, selectCheckedAxisDomain, selectAxisRangeWithReverse],
+  combineConfiguredScale,
+);
 var combineCategoricalDomain = (layout, appliedValues, axis, axisType) => {
   if (axis == null || axis.dataKey == null) {
     return void 0;
   }
-  var {
-    type,
-    scale
-  } = axis;
+  var { type, scale } = axis;
   var isCategorical = isCategoricalAxis(layout, axisType);
   if (isCategorical && (type === "number" || scale !== "auto")) {
     return appliedValues.map((d) => d.value);
   }
   return void 0;
 };
-var selectCategoricalDomain = createSelector([selectChartLayout, selectAllAppliedValues, selectRenderableAxisSettings, pickAxisType], combineCategoricalDomain);
+var selectCategoricalDomain = createSelector(
+  [selectChartLayout, selectAllAppliedValues, selectRenderableAxisSettings, pickAxisType],
+  combineCategoricalDomain,
+);
 var selectAxisScale = createSelector([selectConfiguredScale], rechartsScaleFactory);
 createSelector([selectConfiguredScale], combineInverseScaleFunction);
 createSelector([selectConfiguredScale, selectSortedDataPoints], createCategoricalInverse);
-createSelector([selectCartesianItemsSettings, selectAllErrorBarSettings, pickAxisType], combineRelevantErrorBarSettings);
+createSelector(
+  [selectCartesianItemsSettings, selectAllErrorBarSettings, pickAxisType],
+  combineRelevantErrorBarSettings,
+);
 function compareIds(a, b) {
   if (a.id < b.id) {
     return -1;
@@ -14846,19 +17496,37 @@ function compareIds(a, b) {
 }
 var pickAxisOrientation = (_state, orientation) => orientation;
 var pickMirror = (_state, _orientation, mirror) => mirror;
-var selectAllXAxesWithOffsetType = createSelector(selectAllXAxes, pickAxisOrientation, pickMirror, (allAxes, orientation, mirror) => allAxes.filter((axis) => axis.orientation === orientation).filter((axis) => axis.mirror === mirror).sort(compareIds));
-var selectAllYAxesWithOffsetType = createSelector(selectAllYAxes, pickAxisOrientation, pickMirror, (allAxes, orientation, mirror) => allAxes.filter((axis) => axis.orientation === orientation).filter((axis) => axis.mirror === mirror).sort(compareIds));
+var selectAllXAxesWithOffsetType = createSelector(
+  selectAllXAxes,
+  pickAxisOrientation,
+  pickMirror,
+  (allAxes, orientation, mirror) =>
+    allAxes
+      .filter((axis) => axis.orientation === orientation)
+      .filter((axis) => axis.mirror === mirror)
+      .sort(compareIds),
+);
+var selectAllYAxesWithOffsetType = createSelector(
+  selectAllYAxes,
+  pickAxisOrientation,
+  pickMirror,
+  (allAxes, orientation, mirror) =>
+    allAxes
+      .filter((axis) => axis.orientation === orientation)
+      .filter((axis) => axis.mirror === mirror)
+      .sort(compareIds),
+);
 var getXAxisSize = (offset, axisSettings) => {
   return {
     width: offset.width,
-    height: axisSettings.height
+    height: axisSettings.height,
   };
 };
 var getYAxisSize = (offset, axisSettings) => {
   var width = typeof axisSettings.width === "number" ? axisSettings.width : DEFAULT_Y_AXIS_WIDTH;
   return {
     width,
-    height: offset.height
+    height: offset.height,
   };
 };
 var selectXAxisSize = createSelector(selectChartOffsetInternal, selectXAxisSettings, getXAxisSize);
@@ -14882,34 +17550,48 @@ var combineYAxisPositionStartingPoint = (offset, orientation, chartWidth) => {
       return 0;
   }
 };
-var selectAllXAxesOffsetSteps = createSelector(selectChartHeight, selectChartOffsetInternal, selectAllXAxesWithOffsetType, pickAxisOrientation, pickMirror, (chartHeight, offset, allAxesWithSameOffsetType, orientation, mirror) => {
-  var steps = {};
-  var position;
-  allAxesWithSameOffsetType.forEach((axis) => {
-    var axisSize = getXAxisSize(offset, axis);
-    if (position == null) {
-      position = combineXAxisPositionStartingPoint(offset, orientation, chartHeight);
-    }
-    var needSpace = orientation === "top" && !mirror || orientation === "bottom" && mirror;
-    steps[axis.id] = position - Number(needSpace) * axisSize.height;
-    position += (needSpace ? -1 : 1) * axisSize.height;
-  });
-  return steps;
-});
-var selectAllYAxesOffsetSteps = createSelector(selectChartWidth, selectChartOffsetInternal, selectAllYAxesWithOffsetType, pickAxisOrientation, pickMirror, (chartWidth, offset, allAxesWithSameOffsetType, orientation, mirror) => {
-  var steps = {};
-  var position;
-  allAxesWithSameOffsetType.forEach((axis) => {
-    var axisSize = getYAxisSize(offset, axis);
-    if (position == null) {
-      position = combineYAxisPositionStartingPoint(offset, orientation, chartWidth);
-    }
-    var needSpace = orientation === "left" && !mirror || orientation === "right" && mirror;
-    steps[axis.id] = position - Number(needSpace) * axisSize.width;
-    position += (needSpace ? -1 : 1) * axisSize.width;
-  });
-  return steps;
-});
+var selectAllXAxesOffsetSteps = createSelector(
+  selectChartHeight,
+  selectChartOffsetInternal,
+  selectAllXAxesWithOffsetType,
+  pickAxisOrientation,
+  pickMirror,
+  (chartHeight, offset, allAxesWithSameOffsetType, orientation, mirror) => {
+    var steps = {};
+    var position;
+    allAxesWithSameOffsetType.forEach((axis) => {
+      var axisSize = getXAxisSize(offset, axis);
+      if (position == null) {
+        position = combineXAxisPositionStartingPoint(offset, orientation, chartHeight);
+      }
+      var needSpace = (orientation === "top" && !mirror) || (orientation === "bottom" && mirror);
+      steps[axis.id] = position - Number(needSpace) * axisSize.height;
+      position += (needSpace ? -1 : 1) * axisSize.height;
+    });
+    return steps;
+  },
+);
+var selectAllYAxesOffsetSteps = createSelector(
+  selectChartWidth,
+  selectChartOffsetInternal,
+  selectAllYAxesWithOffsetType,
+  pickAxisOrientation,
+  pickMirror,
+  (chartWidth, offset, allAxesWithSameOffsetType, orientation, mirror) => {
+    var steps = {};
+    var position;
+    allAxesWithSameOffsetType.forEach((axis) => {
+      var axisSize = getYAxisSize(offset, axis);
+      if (position == null) {
+        position = combineYAxisPositionStartingPoint(offset, orientation, chartWidth);
+      }
+      var needSpace = (orientation === "left" && !mirror) || (orientation === "right" && mirror);
+      steps[axis.id] = position - Number(needSpace) * axisSize.width;
+      position += (needSpace ? -1 : 1) * axisSize.width;
+    });
+    return steps;
+  },
+);
 var selectXAxisOffsetSteps = (state, axisId) => {
   var axisSettings = selectXAxisSettings(state, axisId);
   if (axisSettings == null) {
@@ -14917,22 +17599,25 @@ var selectXAxisOffsetSteps = (state, axisId) => {
   }
   return selectAllXAxesOffsetSteps(state, axisSettings.orientation, axisSettings.mirror);
 };
-var selectXAxisPosition = createSelector([selectChartOffsetInternal, selectXAxisSettings, selectXAxisOffsetSteps, (_, axisId) => axisId], (offset, axisSettings, allSteps, axisId) => {
-  if (axisSettings == null) {
-    return void 0;
-  }
-  var stepOfThisAxis = allSteps === null || allSteps === void 0 ? void 0 : allSteps[axisId];
-  if (stepOfThisAxis == null) {
+var selectXAxisPosition = createSelector(
+  [selectChartOffsetInternal, selectXAxisSettings, selectXAxisOffsetSteps, (_, axisId) => axisId],
+  (offset, axisSettings, allSteps, axisId) => {
+    if (axisSettings == null) {
+      return void 0;
+    }
+    var stepOfThisAxis = allSteps === null || allSteps === void 0 ? void 0 : allSteps[axisId];
+    if (stepOfThisAxis == null) {
+      return {
+        x: offset.left,
+        y: 0,
+      };
+    }
     return {
       x: offset.left,
-      y: 0
+      y: stepOfThisAxis,
     };
-  }
-  return {
-    x: offset.left,
-    y: stepOfThisAxis
-  };
-});
+  },
+);
 var selectYAxisOffsetSteps = (state, axisId) => {
   var axisSettings = selectYAxisSettings(state, axisId);
   if (axisSettings == null) {
@@ -14940,29 +17625,36 @@ var selectYAxisOffsetSteps = (state, axisId) => {
   }
   return selectAllYAxesOffsetSteps(state, axisSettings.orientation, axisSettings.mirror);
 };
-var selectYAxisPosition = createSelector([selectChartOffsetInternal, selectYAxisSettings, selectYAxisOffsetSteps, (_, axisId) => axisId], (offset, axisSettings, allSteps, axisId) => {
-  if (axisSettings == null) {
-    return void 0;
-  }
-  var stepOfThisAxis = allSteps === null || allSteps === void 0 ? void 0 : allSteps[axisId];
-  if (stepOfThisAxis == null) {
+var selectYAxisPosition = createSelector(
+  [selectChartOffsetInternal, selectYAxisSettings, selectYAxisOffsetSteps, (_, axisId) => axisId],
+  (offset, axisSettings, allSteps, axisId) => {
+    if (axisSettings == null) {
+      return void 0;
+    }
+    var stepOfThisAxis = allSteps === null || allSteps === void 0 ? void 0 : allSteps[axisId];
+    if (stepOfThisAxis == null) {
+      return {
+        x: 0,
+        y: offset.top,
+      };
+    }
     return {
-      x: 0,
-      y: offset.top
+      x: stepOfThisAxis,
+      y: offset.top,
     };
-  }
-  return {
-    x: stepOfThisAxis,
-    y: offset.top
-  };
-});
-var selectYAxisSize = createSelector(selectChartOffsetInternal, selectYAxisSettings, (offset, axisSettings) => {
-  var width = typeof axisSettings.width === "number" ? axisSettings.width : DEFAULT_Y_AXIS_WIDTH;
-  return {
-    width,
-    height: offset.height
-  };
-});
+  },
+);
+var selectYAxisSize = createSelector(
+  selectChartOffsetInternal,
+  selectYAxisSettings,
+  (offset, axisSettings) => {
+    var width = typeof axisSettings.width === "number" ? axisSettings.width : DEFAULT_Y_AXIS_WIDTH;
+    return {
+      width,
+      height: offset.height,
+    };
+  },
+);
 var selectCartesianAxisSize = (state, axisType, axisId) => {
   switch (axisType) {
     case "xAxis": {
@@ -14980,214 +17672,325 @@ var combineDuplicateDomain = (chartLayout, appliedValues, axis, axisType) => {
   if (axis == null) {
     return void 0;
   }
-  var {
-    allowDuplicatedCategory,
-    type,
-    dataKey
-  } = axis;
+  var { allowDuplicatedCategory, type, dataKey } = axis;
   var isCategorical = isCategoricalAxis(chartLayout, axisType);
   var allData = appliedValues.map((av) => av.value);
   var validData = allData.filter((v) => v != null);
-  if (dataKey && isCategorical && type === "category" && allowDuplicatedCategory && hasDuplicate(validData)) {
+  if (
+    dataKey &&
+    isCategorical &&
+    type === "category" &&
+    allowDuplicatedCategory &&
+    hasDuplicate(validData)
+  ) {
     return allData;
   }
   return void 0;
 };
-var selectDuplicateDomain = createSelector([selectChartLayout, selectAllAppliedValues, selectBaseAxis, pickAxisType], combineDuplicateDomain);
-var selectAxisPropsNeededForCartesianGridTicksGenerator = createSelector([selectChartLayout, selectCartesianAxisSettings, selectRealScaleType, selectAxisScale, selectDuplicateDomain, selectCategoricalDomain, selectAxisRange, selectNiceTicks, pickAxisType], (layout, axis, realScaleType, scale, duplicateDomain, categoricalDomain, axisRange, niceTicks, axisType) => {
-  if (axis == null) {
-    return void 0;
-  }
-  var isCategorical = isCategoricalAxis(layout, axisType);
-  return {
-    angle: axis.angle,
-    interval: axis.interval,
-    minTickGap: axis.minTickGap,
-    orientation: axis.orientation,
-    tick: axis.tick,
-    tickCount: axis.tickCount,
-    tickFormatter: axis.tickFormatter,
-    ticks: axis.ticks,
-    type: axis.type,
-    unit: axis.unit,
-    axisType,
-    categoricalDomain,
-    duplicateDomain,
-    isCategorical,
-    niceTicks,
-    range: axisRange,
+var selectDuplicateDomain = createSelector(
+  [selectChartLayout, selectAllAppliedValues, selectBaseAxis, pickAxisType],
+  combineDuplicateDomain,
+);
+var selectAxisPropsNeededForCartesianGridTicksGenerator = createSelector(
+  [
+    selectChartLayout,
+    selectCartesianAxisSettings,
+    selectRealScaleType,
+    selectAxisScale,
+    selectDuplicateDomain,
+    selectCategoricalDomain,
+    selectAxisRange,
+    selectNiceTicks,
+    pickAxisType,
+  ],
+  (
+    layout,
+    axis,
     realScaleType,
-    scale
-  };
-});
-var combineAxisTicks = (layout, axis, realScaleType, scale, niceTicks, axisRange, duplicateDomain, categoricalDomain, axisType) => {
+    scale,
+    duplicateDomain,
+    categoricalDomain,
+    axisRange,
+    niceTicks,
+    axisType,
+  ) => {
+    if (axis == null) {
+      return void 0;
+    }
+    var isCategorical = isCategoricalAxis(layout, axisType);
+    return {
+      angle: axis.angle,
+      interval: axis.interval,
+      minTickGap: axis.minTickGap,
+      orientation: axis.orientation,
+      tick: axis.tick,
+      tickCount: axis.tickCount,
+      tickFormatter: axis.tickFormatter,
+      ticks: axis.ticks,
+      type: axis.type,
+      unit: axis.unit,
+      axisType,
+      categoricalDomain,
+      duplicateDomain,
+      isCategorical,
+      niceTicks,
+      range: axisRange,
+      realScaleType,
+      scale,
+    };
+  },
+);
+var combineAxisTicks = (
+  layout,
+  axis,
+  realScaleType,
+  scale,
+  niceTicks,
+  axisRange,
+  duplicateDomain,
+  categoricalDomain,
+  axisType,
+) => {
   if (axis == null || scale == null) {
     return void 0;
   }
   var isCategorical = isCategoricalAxis(layout, axisType);
-  var {
-    type,
-    ticks: ticks2,
-    tickCount
-  } = axis;
-  var offsetForBand = (
+  var { type, ticks: ticks2, tickCount } = axis;
+  var offsetForBand =
     // @ts-expect-error This is testing for `scaleBand` but for band axis the type is reported as `band` so this looks like a dead code with a workaround elsewhere?
-    realScaleType === "scaleBand" && typeof scale.bandwidth === "function" ? scale.bandwidth() / 2 : 2
-  );
+    realScaleType === "scaleBand" && typeof scale.bandwidth === "function"
+      ? scale.bandwidth() / 2
+      : 2;
   var offset = type === "category" && scale.bandwidth ? scale.bandwidth() / offsetForBand : 0;
-  offset = axisType === "angleAxis" && axisRange != null && axisRange.length >= 2 ? mathSign(axisRange[0] - axisRange[1]) * 2 * offset : offset;
+  offset =
+    axisType === "angleAxis" && axisRange != null && axisRange.length >= 2
+      ? mathSign(axisRange[0] - axisRange[1]) * 2 * offset
+      : offset;
   var ticksOrNiceTicks = ticks2 || niceTicks;
   if (ticksOrNiceTicks) {
-    return ticksOrNiceTicks.map((entry, index) => {
-      var scaleContent = duplicateDomain ? duplicateDomain.indexOf(entry) : entry;
-      var scaled = scale.map(scaleContent);
-      if (!isWellBehavedNumber(scaled)) {
-        return null;
-      }
-      return {
-        index,
-        coordinate: scaled + offset,
-        value: entry,
-        offset
-      };
-    }).filter(isNotNil);
+    return ticksOrNiceTicks
+      .map((entry, index) => {
+        var scaleContent = duplicateDomain ? duplicateDomain.indexOf(entry) : entry;
+        var scaled = scale.map(scaleContent);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          index,
+          coordinate: scaled + offset,
+          value: entry,
+          offset,
+        };
+      })
+      .filter(isNotNil);
   }
   if (isCategorical && categoricalDomain) {
-    return categoricalDomain.map((entry, index) => {
-      var scaled = scale.map(entry);
-      if (!isWellBehavedNumber(scaled)) {
-        return null;
-      }
-      return {
-        coordinate: scaled + offset,
-        value: entry,
-        index,
-        offset
-      };
-    }).filter(isNotNil);
+    return categoricalDomain
+      .map((entry, index) => {
+        var scaled = scale.map(entry);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          coordinate: scaled + offset,
+          value: entry,
+          index,
+          offset,
+        };
+      })
+      .filter(isNotNil);
   }
   if (scale.ticks) {
-    return scale.ticks(tickCount).map((entry, index) => {
+    return scale
+      .ticks(tickCount)
+      .map((entry, index) => {
+        var scaled = scale.map(entry);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          coordinate: scaled + offset,
+          value: entry,
+          index,
+          offset,
+        };
+      })
+      .filter(isNotNil);
+  }
+  return scale
+    .domain()
+    .map((entry, index) => {
       var scaled = scale.map(entry);
       if (!isWellBehavedNumber(scaled)) {
         return null;
       }
       return {
         coordinate: scaled + offset,
-        value: entry,
+        // @ts-expect-error can't use Date as index
+        value: duplicateDomain ? duplicateDomain[entry] : entry,
         index,
-        offset
+        offset,
       };
-    }).filter(isNotNil);
-  }
-  return scale.domain().map((entry, index) => {
-    var scaled = scale.map(entry);
-    if (!isWellBehavedNumber(scaled)) {
-      return null;
-    }
-    return {
-      coordinate: scaled + offset,
-      // @ts-expect-error can't use Date as index
-      value: duplicateDomain ? duplicateDomain[entry] : entry,
-      index,
-      offset
-    };
-  }).filter(isNotNil);
+    })
+    .filter(isNotNil);
 };
-var selectTicksOfAxis = createSelector([selectChartLayout, selectRenderableAxisSettings, selectRealScaleType, selectAxisScale, selectNiceTicks, selectAxisRange, selectDuplicateDomain, selectCategoricalDomain, pickAxisType], combineAxisTicks);
-var combineGraphicalItemTicks = (layout, axis, scale, axisRange, duplicateDomain, categoricalDomain, axisType) => {
+var selectTicksOfAxis = createSelector(
+  [
+    selectChartLayout,
+    selectRenderableAxisSettings,
+    selectRealScaleType,
+    selectAxisScale,
+    selectNiceTicks,
+    selectAxisRange,
+    selectDuplicateDomain,
+    selectCategoricalDomain,
+    pickAxisType,
+  ],
+  combineAxisTicks,
+);
+var combineGraphicalItemTicks = (
+  layout,
+  axis,
+  scale,
+  axisRange,
+  duplicateDomain,
+  categoricalDomain,
+  axisType,
+) => {
   if (axis == null || scale == null || axisRange == null || axisRange[0] === axisRange[1]) {
     return void 0;
   }
   var isCategorical = isCategoricalAxis(layout, axisType);
-  var {
-    tickCount
-  } = axis;
+  var { tickCount } = axis;
   var offset = 0;
-  offset = axisType === "angleAxis" && (axisRange === null || axisRange === void 0 ? void 0 : axisRange.length) >= 2 ? mathSign(axisRange[0] - axisRange[1]) * 2 * offset : offset;
+  offset =
+    axisType === "angleAxis" &&
+    (axisRange === null || axisRange === void 0 ? void 0 : axisRange.length) >= 2
+      ? mathSign(axisRange[0] - axisRange[1]) * 2 * offset
+      : offset;
   if (isCategorical && categoricalDomain) {
-    return categoricalDomain.map((entry, index) => {
-      var scaled = scale.map(entry);
-      if (!isWellBehavedNumber(scaled)) {
-        return null;
-      }
-      return {
-        coordinate: scaled + offset,
-        value: entry,
-        index,
-        offset
-      };
-    }).filter(isNotNil);
+    return categoricalDomain
+      .map((entry, index) => {
+        var scaled = scale.map(entry);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          coordinate: scaled + offset,
+          value: entry,
+          index,
+          offset,
+        };
+      })
+      .filter(isNotNil);
   }
   if (scale.ticks) {
-    return scale.ticks(tickCount).map((entry, index) => {
+    return scale
+      .ticks(tickCount)
+      .map((entry, index) => {
+        var scaled = scale.map(entry);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          coordinate: scaled + offset,
+          value: entry,
+          index,
+          offset,
+        };
+      })
+      .filter(isNotNil);
+  }
+  return scale
+    .domain()
+    .map((entry, index) => {
       var scaled = scale.map(entry);
       if (!isWellBehavedNumber(scaled)) {
         return null;
       }
       return {
         coordinate: scaled + offset,
-        value: entry,
+        // @ts-expect-error can't use unknown as index
+        value: duplicateDomain ? duplicateDomain[entry] : entry,
         index,
-        offset
+        offset,
       };
-    }).filter(isNotNil);
-  }
-  return scale.domain().map((entry, index) => {
-    var scaled = scale.map(entry);
-    if (!isWellBehavedNumber(scaled)) {
-      return null;
-    }
-    return {
-      coordinate: scaled + offset,
-      // @ts-expect-error can't use unknown as index
-      value: duplicateDomain ? duplicateDomain[entry] : entry,
-      index,
-      offset
-    };
-  }).filter(isNotNil);
+    })
+    .filter(isNotNil);
 };
-var selectTicksOfGraphicalItem = createSelector([selectChartLayout, selectRenderableAxisSettings, selectAxisScale, selectAxisRange, selectDuplicateDomain, selectCategoricalDomain, pickAxisType], combineGraphicalItemTicks);
+var selectTicksOfGraphicalItem = createSelector(
+  [
+    selectChartLayout,
+    selectRenderableAxisSettings,
+    selectAxisScale,
+    selectAxisRange,
+    selectDuplicateDomain,
+    selectCategoricalDomain,
+    pickAxisType,
+  ],
+  combineGraphicalItemTicks,
+);
 var selectAxisWithScale = createSelector(selectBaseAxis, selectAxisScale, (axis, scale) => {
   if (axis == null || scale == null) {
     return void 0;
   }
-  return _objectSpread$l(_objectSpread$l({}, axis), {}, {
-    scale
-  });
+  return _objectSpread$l(
+    _objectSpread$l({}, axis),
+    {},
+    {
+      scale,
+    },
+  );
 });
-var selectZAxisConfiguredScale = createSelector([selectBaseAxis, selectRealScaleType, selectAxisDomain, selectAxisRangeWithReverse], combineConfiguredScale);
+var selectZAxisConfiguredScale = createSelector(
+  [selectBaseAxis, selectRealScaleType, selectAxisDomain, selectAxisRangeWithReverse],
+  combineConfiguredScale,
+);
 var selectZAxisScale = createSelector([selectZAxisConfiguredScale], rechartsScaleFactory);
-createSelector((state, _axisType, axisId) => selectZAxisSettings(state, axisId), selectZAxisScale, (axis, scale) => {
-  if (axis == null || scale == null) {
-    return void 0;
-  }
-  return _objectSpread$l(_objectSpread$l({}, axis), {}, {
-    scale
-  });
-});
-var selectChartDirection = createSelector([selectChartLayout, selectAllXAxes, selectAllYAxes], (layout, allXAxes, allYAxes) => {
-  switch (layout) {
-    case "horizontal": {
-      return allXAxes.some((axis) => axis.reversed) ? "right-to-left" : "left-to-right";
-    }
-    case "vertical": {
-      return allYAxes.some((axis) => axis.reversed) ? "bottom-to-top" : "top-to-bottom";
-    }
-    // TODO: make this better. For now, right arrow triggers "forward", left arrow "back"
-    // however, the tooltip moves an unintuitive direction because of how the indices are rendered
-    case "centric":
-    case "radial": {
-      return "left-to-right";
-    }
-    default: {
+createSelector(
+  (state, _axisType, axisId) => selectZAxisSettings(state, axisId),
+  selectZAxisScale,
+  (axis, scale) => {
+    if (axis == null || scale == null) {
       return void 0;
     }
-  }
-});
+    return _objectSpread$l(
+      _objectSpread$l({}, axis),
+      {},
+      {
+        scale,
+      },
+    );
+  },
+);
+var selectChartDirection = createSelector(
+  [selectChartLayout, selectAllXAxes, selectAllYAxes],
+  (layout, allXAxes, allYAxes) => {
+    switch (layout) {
+      case "horizontal": {
+        return allXAxes.some((axis) => axis.reversed) ? "right-to-left" : "left-to-right";
+      }
+      case "vertical": {
+        return allYAxes.some((axis) => axis.reversed) ? "bottom-to-top" : "top-to-bottom";
+      }
+      // TODO: make this better. For now, right arrow triggers "forward", left arrow "back"
+      // however, the tooltip moves an unintuitive direction because of how the indices are rendered
+      case "centric":
+      case "radial": {
+        return "left-to-right";
+      }
+      default: {
+        return void 0;
+      }
+    }
+  },
+);
 var selectRenderedTicksOfAxis = (state, axisType, axisId) => {
   var _state$renderedTicks$;
-  return (_state$renderedTicks$ = state.renderedTicks[axisType]) === null || _state$renderedTicks$ === void 0 ? void 0 : _state$renderedTicks$[axisId];
+  return (_state$renderedTicks$ = state.renderedTicks[axisType]) === null ||
+    _state$renderedTicks$ === void 0
+    ? void 0
+    : _state$renderedTicks$[axisId];
 };
 createSelector([selectRenderedTicksOfAxis], (ticks2) => {
   if (!ticks2 || ticks2.length === 0) {
@@ -15204,7 +18007,9 @@ createSelector([selectRenderedTicksOfAxis], (ticks2) => {
         closestTick = tick;
       }
     }
-    return (_closestTick = closestTick) === null || _closestTick === void 0 ? void 0 : _closestTick.value;
+    return (_closestTick = closestTick) === null || _closestTick === void 0
+      ? void 0
+      : _closestTick.value;
   };
 });
 var selectDefaultTooltipEventType = (state) => state.options.defaultTooltipEventType;
@@ -15233,7 +18038,14 @@ var combineActiveLabel = (tooltipTicks, activeIndex) => {
   if (isNan(n) || activeIndex == null) {
     return void 0;
   }
-  return n >= 0 ? tooltipTicks === null || tooltipTicks === void 0 || (_tooltipTicks$n = tooltipTicks[n]) === null || _tooltipTicks$n === void 0 ? void 0 : _tooltipTicks$n.value : void 0;
+  return n >= 0
+    ? tooltipTicks === null ||
+      tooltipTicks === void 0 ||
+      (_tooltipTicks$n = tooltipTicks[n]) === null ||
+      _tooltipTicks$n === void 0
+      ? void 0
+      : _tooltipTicks$n.value
+    : void 0;
 };
 var selectTooltipSettings = (state) => state.tooltip.settings;
 var noInteraction = {
@@ -15241,16 +18053,16 @@ var noInteraction = {
   index: null,
   dataKey: void 0,
   graphicalItemId: void 0,
-  coordinate: void 0
+  coordinate: void 0,
 };
 var initialState$b = {
   itemInteraction: {
     click: noInteraction,
-    hover: noInteraction
+    hover: noInteraction,
   },
   axisInteraction: {
     click: noInteraction,
-    hover: noInteraction
+    hover: noInteraction,
   },
   keyboardInteraction: noInteraction,
   syncInteraction: {
@@ -15260,7 +18072,7 @@ var initialState$b = {
     label: void 0,
     coordinate: void 0,
     sourceViewBox: void 0,
-    graphicalItemId: void 0
+    graphicalItemId: void 0,
   },
   tooltipItemPayloads: [],
   settings: {
@@ -15268,8 +18080,8 @@ var initialState$b = {
     trigger: "hover",
     axisId: 0,
     active: false,
-    defaultIndex: void 0
-  }
+    defaultIndex: void 0,
+  },
 };
 var tooltipSlice = createSlice({
   name: "tooltip",
@@ -15279,20 +18091,17 @@ var tooltipSlice = createSlice({
       reducer(state, action) {
         state.tooltipItemPayloads.push(castDraft(action.payload));
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     replaceTooltipEntrySettings: {
       reducer(state, action) {
-        var {
-          prev,
-          next
-        } = action.payload;
+        var { prev, next } = action.payload;
         var index = current$1(state).tooltipItemPayloads.indexOf(castDraft(prev));
         if (index > -1) {
           state.tooltipItemPayloads[index] = castDraft(next);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     removeTooltipEntrySettings: {
       reducer(state, action) {
@@ -15301,7 +18110,7 @@ var tooltipSlice = createSlice({
           state.tooltipItemPayloads.splice(index, 1);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     setTooltipSettingsState(state, action) {
       state.settings = action.payload;
@@ -15358,8 +18167,8 @@ var tooltipSlice = createSlice({
       state.keyboardInteraction.active = action.payload.active;
       state.keyboardInteraction.index = action.payload.activeIndex;
       state.keyboardInteraction.coordinate = action.payload.activeCoordinate;
-    }
-  }
+    },
+  },
 });
 var {
   addTooltipEntrySettings,
@@ -15373,32 +18182,48 @@ var {
   setMouseOverAxisIndex,
   setMouseClickAxisIndex,
   setSyncInteraction,
-  setKeyboardInteraction
+  setKeyboardInteraction,
 } = tooltipSlice.actions;
 var tooltipReducer = tooltipSlice.reducer;
 function ownKeys$k(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$k(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$k(Object(t), true).forEach(function(r2) {
-      _defineProperty$m(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$k(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$k(Object(t), true).forEach(function (r2) {
+          _defineProperty$m(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$k(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$m(e, r, t) {
-  return (r = _toPropertyKey$m(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$m(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$m(t) {
   var i = _toPrimitive$m(t, "string");
@@ -15433,7 +18258,11 @@ var combineTooltipInteractionState = (tooltipState, tooltipEventType, trigger, d
   if (tooltipEventType == null) {
     return noInteraction;
   }
-  var appropriateMouseInteraction = chooseAppropriateMouseInteraction(tooltipState, tooltipEventType, trigger);
+  var appropriateMouseInteraction = chooseAppropriateMouseInteraction(
+    tooltipState,
+    tooltipEventType,
+    trigger,
+  );
   if (appropriateMouseInteraction == null) {
     return noInteraction;
   }
@@ -15449,9 +18278,13 @@ var combineTooltipInteractionState = (tooltipState, tooltipEventType, trigger, d
   var activeFromProps = tooltipState.settings.active === true;
   if (hasBeenActivePreviously(appropriateMouseInteraction)) {
     if (activeFromProps) {
-      return _objectSpread$k(_objectSpread$k({}, appropriateMouseInteraction), {}, {
-        active: true
-      });
+      return _objectSpread$k(
+        _objectSpread$k({}, appropriateMouseInteraction),
+        {},
+        {
+          active: true,
+        },
+      );
     }
   } else if (defaultIndex != null) {
     return {
@@ -15459,12 +18292,16 @@ var combineTooltipInteractionState = (tooltipState, tooltipEventType, trigger, d
       coordinate: void 0,
       dataKey: void 0,
       index: defaultIndex,
-      graphicalItemId: void 0
+      graphicalItemId: void 0,
     };
   }
-  return _objectSpread$k(_objectSpread$k({}, noInteraction), {}, {
-    coordinate: appropriateMouseInteraction.coordinate
-  });
+  return _objectSpread$k(
+    _objectSpread$k({}, noInteraction),
+    {},
+    {
+      coordinate: appropriateMouseInteraction.coordinate,
+    },
+  );
 };
 function toFiniteNumber(value) {
   if (typeof value === "number") {
@@ -15502,7 +18339,10 @@ function isValueWithinDomain(entry, axisDataKey, domain) {
   return isValueWithinNumberDomain(value, domain);
 }
 var combineActiveTooltipIndex = (tooltipInteraction, chartData, axisDataKey, domain) => {
-  var desiredIndex = tooltipInteraction === null || tooltipInteraction === void 0 ? void 0 : tooltipInteraction.index;
+  var desiredIndex =
+    tooltipInteraction === null || tooltipInteraction === void 0
+      ? void 0
+      : tooltipInteraction.index;
   if (desiredIndex == null) {
     return null;
   }
@@ -15525,16 +18365,28 @@ var combineActiveTooltipIndex = (tooltipInteraction, chartData, axisDataKey, dom
   }
   return String(clampedIndex);
 };
-var combineCoordinateForDefaultIndex = (width, height, layout, offset, tooltipTicks, defaultIndex, tooltipConfigurations) => {
+var combineCoordinateForDefaultIndex = (
+  width,
+  height,
+  layout,
+  offset,
+  tooltipTicks,
+  defaultIndex,
+  tooltipConfigurations,
+) => {
   if (defaultIndex == null) {
     return void 0;
   }
   var firstConfiguration = tooltipConfigurations[0];
-  var maybePosition = firstConfiguration === null || firstConfiguration === void 0 ? void 0 : firstConfiguration.getPosition(defaultIndex);
+  var maybePosition =
+    firstConfiguration === null || firstConfiguration === void 0
+      ? void 0
+      : firstConfiguration.getPosition(defaultIndex);
   if (maybePosition != null) {
     return maybePosition;
   }
-  var tick = tooltipTicks === null || tooltipTicks === void 0 ? void 0 : tooltipTicks[Number(defaultIndex)];
+  var tick =
+    tooltipTicks === null || tooltipTicks === void 0 ? void 0 : tooltipTicks[Number(defaultIndex)];
   if (!tick) {
     return void 0;
   }
@@ -15542,18 +18394,23 @@ var combineCoordinateForDefaultIndex = (width, height, layout, offset, tooltipTi
     case "horizontal": {
       return {
         x: tick.coordinate,
-        y: (offset.top + height) / 2
+        y: (offset.top + height) / 2,
       };
     }
     default: {
       return {
         x: (offset.left + width) / 2,
-        y: tick.coordinate
+        y: tick.coordinate,
       };
     }
   }
 };
-var combineTooltipPayloadConfigurations = (tooltipState, tooltipEventType, trigger, defaultIndex) => {
+var combineTooltipPayloadConfigurations = (
+  tooltipState,
+  tooltipEventType,
+  trigger,
+  defaultIndex,
+) => {
   if (tooltipEventType === "axis") {
     return tooltipState.tooltipItemPayloads;
   }
@@ -15569,7 +18426,10 @@ var combineTooltipPayloadConfigurations = (tooltipState, tooltipEventType, trigg
   if (tooltipState.syncInteraction.active && filterByGraphicalItemId == null) {
     return tooltipState.tooltipItemPayloads;
   }
-  if (filterByGraphicalItemId == null && (defaultIndex != null || tooltipState.keyboardInteraction.active)) {
+  if (
+    filterByGraphicalItemId == null &&
+    (defaultIndex != null || tooltipState.keyboardInteraction.active)
+  ) {
     var firstItemPayload = tooltipState.tooltipItemPayloads[0];
     if (firstItemPayload != null) {
       return [firstItemPayload];
@@ -15578,7 +18438,11 @@ var combineTooltipPayloadConfigurations = (tooltipState, tooltipEventType, trigg
   }
   return tooltipState.tooltipItemPayloads.filter((tpc) => {
     var _tpc$settings;
-    return ((_tpc$settings = tpc.settings) === null || _tpc$settings === void 0 ? void 0 : _tpc$settings.graphicalItemId) === filterByGraphicalItemId;
+    return (
+      ((_tpc$settings = tpc.settings) === null || _tpc$settings === void 0
+        ? void 0
+        : _tpc$settings.graphicalItemId) === filterByGraphicalItemId
+    );
   });
 };
 var selectTooltipPayloadSearcher = (state) => state.options.tooltipPayloadSearcher;
@@ -15587,25 +18451,41 @@ function ownKeys$j(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$j(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$j(Object(t), true).forEach(function(r2) {
-      _defineProperty$l(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$j(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$j(Object(t), true).forEach(function (r2) {
+          _defineProperty$l(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$j(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$l(e, r, t) {
-  return (r = _toPropertyKey$l(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$l(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$l(t) {
   var i = _toPrimitive$l(t, "string");
@@ -15664,7 +18544,7 @@ function parseTooltipPayloadItem(item) {
     dataKey,
     payload,
     color: color2,
-    fill
+    fill,
   };
 }
 function selectFinalData(dataDefinedOnItem, dataDefinedOnChart) {
@@ -15673,50 +18553,59 @@ function selectFinalData(dataDefinedOnItem, dataDefinedOnChart) {
   }
   return dataDefinedOnChart;
 }
-var combineTooltipPayload = (tooltipPayloadConfigurations, activeIndex, chartDataState, tooltipAxisDataKey, activeLabel, tooltipPayloadSearcher, tooltipEventType) => {
+var combineTooltipPayload = (
+  tooltipPayloadConfigurations,
+  activeIndex,
+  chartDataState,
+  tooltipAxisDataKey,
+  activeLabel,
+  tooltipPayloadSearcher,
+  tooltipEventType,
+) => {
   if (activeIndex == null || tooltipPayloadSearcher == null) {
     return void 0;
   }
-  var {
-    chartData,
-    computedData,
-    dataStartIndex,
-    dataEndIndex
-  } = chartDataState;
+  var { chartData, computedData, dataStartIndex, dataEndIndex } = chartDataState;
   var init = [];
   return tooltipPayloadConfigurations.reduce((agg, _ref2) => {
     var _settings$dataKey;
-    var {
-      dataDefinedOnItem,
-      settings
-    } = _ref2;
+    var { dataDefinedOnItem, settings } = _ref2;
     var finalData = selectFinalData(dataDefinedOnItem, chartData);
-    var sliced = Array.isArray(finalData) ? getSliced(finalData, dataStartIndex, dataEndIndex) : finalData;
-    var finalDataKey = (_settings$dataKey = settings === null || settings === void 0 ? void 0 : settings.dataKey) !== null && _settings$dataKey !== void 0 ? _settings$dataKey : tooltipAxisDataKey;
+    var sliced = Array.isArray(finalData)
+      ? getSliced(finalData, dataStartIndex, dataEndIndex)
+      : finalData;
+    var finalDataKey =
+      (_settings$dataKey = settings === null || settings === void 0 ? void 0 : settings.dataKey) !==
+        null && _settings$dataKey !== void 0
+        ? _settings$dataKey
+        : tooltipAxisDataKey;
     var finalNameKey = settings === null || settings === void 0 ? void 0 : settings.nameKey;
     var tooltipPayload;
-    if (tooltipAxisDataKey && Array.isArray(sliced) && /*
-     * findEntryInArray won't work for Scatter because Scatter provides an array of arrays
-     * as tooltip payloads and findEntryInArray is not prepared to handle that.
-     * Sad but also ScatterChart only allows 'item' tooltipEventType
-     * and also this is only a problem if there are multiple Scatters and each has its own data array
-     * so let's fix that some other time.
-     */
-    !Array.isArray(sliced[0]) && /*
-     * If the tooltipEventType is 'axis', we should search for the dataKey in the sliced data
-     * because thanks to allowDuplicatedCategory=false, the order of elements in the array
-     * no longer matches the order of elements in the original data
-     * and so we need to search by the active dataKey + label rather than by index.
-     *
-     * The same happens if multiple graphical items are present in the chart
-     * and each of them has its own data array. Those arrays get concatenated
-     * and again the tooltip index no longer matches the original data.
-     *
-     * On the other hand the tooltipEventType 'item' should always search by index
-     * because we get the index from interacting over the individual elements
-     * which is always accurate, irrespective of the allowDuplicatedCategory setting.
-     */
-    tooltipEventType === "axis") {
+    if (
+      tooltipAxisDataKey &&
+      Array.isArray(sliced) /*
+       * findEntryInArray won't work for Scatter because Scatter provides an array of arrays
+       * as tooltip payloads and findEntryInArray is not prepared to handle that.
+       * Sad but also ScatterChart only allows 'item' tooltipEventType
+       * and also this is only a problem if there are multiple Scatters and each has its own data array
+       * so let's fix that some other time.
+       */ &&
+      !Array.isArray(sliced[0]) /*
+       * If the tooltipEventType is 'axis', we should search for the dataKey in the sliced data
+       * because thanks to allowDuplicatedCategory=false, the order of elements in the array
+       * no longer matches the order of elements in the original data
+       * and so we need to search by the active dataKey + label rather than by index.
+       *
+       * The same happens if multiple graphical items are present in the chart
+       * and each of them has its own data array. Those arrays get concatenated
+       * and again the tooltip index no longer matches the original data.
+       *
+       * On the other hand the tooltipEventType 'item' should always search by index
+       * because we get the index from interacting over the individual elements
+       * which is always accurate, irrespective of the allowDuplicatedCategory setting.
+       */ &&
+      tooltipEventType === "axis"
+    ) {
       tooltipPayload = findEntryInArray(sliced, tooltipAxisDataKey, activeLabel);
     } else {
       tooltipPayload = tooltipPayloadSearcher(sliced, activeIndex, computedData, finalNameKey);
@@ -15726,164 +18615,435 @@ var combineTooltipPayload = (tooltipPayloadConfigurations, activeIndex, chartDat
         var _parsedItem$color, _parsedItem$fill;
         var parsedItem = parseTooltipPayloadItem(item);
         var itemName = parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.name;
-        var itemDataKey = parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.dataKey;
-        var itemPayload = parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.payload;
-        var newSettings = _objectSpread$j(_objectSpread$j({}, settings), {}, {
-          name: itemName,
-          unit: parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.unit,
-          // Preserve item-level color/fill from graphical items.
-          color: (_parsedItem$color = parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.color) !== null && _parsedItem$color !== void 0 ? _parsedItem$color : settings === null || settings === void 0 ? void 0 : settings.color,
-          fill: (_parsedItem$fill = parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.fill) !== null && _parsedItem$fill !== void 0 ? _parsedItem$fill : settings === null || settings === void 0 ? void 0 : settings.fill
-        });
-        agg.push(getTooltipEntry({
-          tooltipEntrySettings: newSettings,
-          dataKey: itemDataKey,
-          payload: itemPayload,
-          value: getValueByDataKey(itemPayload, itemDataKey),
-          name: itemName == null ? void 0 : String(itemName)
-        }));
+        var itemDataKey =
+          parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.dataKey;
+        var itemPayload =
+          parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.payload;
+        var newSettings = _objectSpread$j(
+          _objectSpread$j({}, settings),
+          {},
+          {
+            name: itemName,
+            unit: parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.unit,
+            // Preserve item-level color/fill from graphical items.
+            color:
+              (_parsedItem$color =
+                parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.color) !==
+                null && _parsedItem$color !== void 0
+                ? _parsedItem$color
+                : settings === null || settings === void 0
+                  ? void 0
+                  : settings.color,
+            fill:
+              (_parsedItem$fill =
+                parsedItem === null || parsedItem === void 0 ? void 0 : parsedItem.fill) !== null &&
+              _parsedItem$fill !== void 0
+                ? _parsedItem$fill
+                : settings === null || settings === void 0
+                  ? void 0
+                  : settings.fill,
+          },
+        );
+        agg.push(
+          getTooltipEntry({
+            tooltipEntrySettings: newSettings,
+            dataKey: itemDataKey,
+            payload: itemPayload,
+            value: getValueByDataKey(itemPayload, itemDataKey),
+            name: itemName == null ? void 0 : String(itemName),
+          }),
+        );
       });
     } else {
       var _getValueByDataKey;
-      agg.push(getTooltipEntry({
-        tooltipEntrySettings: settings,
-        dataKey: finalDataKey,
-        payload: tooltipPayload,
-        // getValueByDataKey does not validate the output type
-        value: getValueByDataKey(tooltipPayload, finalDataKey),
-        // getValueByDataKey does not validate the output type
-        name: (_getValueByDataKey = getValueByDataKey(tooltipPayload, finalNameKey)) !== null && _getValueByDataKey !== void 0 ? _getValueByDataKey : settings === null || settings === void 0 ? void 0 : settings.name
-      }));
+      agg.push(
+        getTooltipEntry({
+          tooltipEntrySettings: settings,
+          dataKey: finalDataKey,
+          payload: tooltipPayload,
+          // getValueByDataKey does not validate the output type
+          value: getValueByDataKey(tooltipPayload, finalDataKey),
+          // getValueByDataKey does not validate the output type
+          name:
+            (_getValueByDataKey = getValueByDataKey(tooltipPayload, finalNameKey)) !== null &&
+            _getValueByDataKey !== void 0
+              ? _getValueByDataKey
+              : settings === null || settings === void 0
+                ? void 0
+                : settings.name,
+        }),
+      );
     }
     return agg;
   }, init);
 };
-var selectTooltipAxisRealScaleType = createSelector([selectTooltipAxis, selectHasBar, selectChartName], combineRealScaleType);
-var selectAllUnfilteredGraphicalItems = createSelector([(state) => state.graphicalItems.cartesianItems, (state) => state.graphicalItems.polarItems], (cartesianItems, polarItems) => [...cartesianItems, ...polarItems]);
-var selectTooltipAxisPredicate = createSelector([selectTooltipAxisType, selectTooltipAxisId], itemAxisPredicate);
-var selectAllGraphicalItemsSettings = createSelector([selectAllUnfilteredGraphicalItems, selectTooltipAxis, selectTooltipAxisPredicate], combineGraphicalItemsSettings, {
-  memoizeOptions: {
-    resultEqualityCheck: emptyArraysAreEqualCheck
-  }
-});
-var selectAllStackedGraphicalItemsSettings = createSelector([selectAllGraphicalItemsSettings], (graphicalItems) => graphicalItems.filter(isStacked));
-var selectTooltipGraphicalItemsData = createSelector([selectAllGraphicalItemsSettings], combineGraphicalItemsData, {
-  memoizeOptions: {
-    resultEqualityCheck: emptyArraysAreEqualCheck
-  }
-});
-var selectAnyTooltipItemUsesChartData = createSelector([selectAllGraphicalItemsSettings], (items) => items.some((item) => !item.data));
-var selectTooltipDisplayedData = createSelector([selectTooltipGraphicalItemsData, selectChartDataWithIndexes], combineDisplayedData);
-var selectTooltipStackedData = createSelector([selectAllStackedGraphicalItemsSettings, selectChartDataWithIndexes, selectTooltipAxis], combineDisplayedStackedData);
-var selectAllTooltipAppliedValues = createSelector([selectTooltipDisplayedData, selectTooltipAxis, selectAllGraphicalItemsSettings, selectChartDataWithIndexes, selectAnyTooltipItemUsesChartData, selectTooltipGraphicalItemsData], combineAllAppliedValues);
+var selectTooltipAxisRealScaleType = createSelector(
+  [selectTooltipAxis, selectHasBar, selectChartName],
+  combineRealScaleType,
+);
+var selectAllUnfilteredGraphicalItems = createSelector(
+  [(state) => state.graphicalItems.cartesianItems, (state) => state.graphicalItems.polarItems],
+  (cartesianItems, polarItems) => [...cartesianItems, ...polarItems],
+);
+var selectTooltipAxisPredicate = createSelector(
+  [selectTooltipAxisType, selectTooltipAxisId],
+  itemAxisPredicate,
+);
+var selectAllGraphicalItemsSettings = createSelector(
+  [selectAllUnfilteredGraphicalItems, selectTooltipAxis, selectTooltipAxisPredicate],
+  combineGraphicalItemsSettings,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: emptyArraysAreEqualCheck,
+    },
+  },
+);
+var selectAllStackedGraphicalItemsSettings = createSelector(
+  [selectAllGraphicalItemsSettings],
+  (graphicalItems) => graphicalItems.filter(isStacked),
+);
+var selectTooltipGraphicalItemsData = createSelector(
+  [selectAllGraphicalItemsSettings],
+  combineGraphicalItemsData,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: emptyArraysAreEqualCheck,
+    },
+  },
+);
+var selectAnyTooltipItemUsesChartData = createSelector([selectAllGraphicalItemsSettings], (items) =>
+  items.some((item) => !item.data),
+);
+var selectTooltipDisplayedData = createSelector(
+  [selectTooltipGraphicalItemsData, selectChartDataWithIndexes],
+  combineDisplayedData,
+);
+var selectTooltipStackedData = createSelector(
+  [selectAllStackedGraphicalItemsSettings, selectChartDataWithIndexes, selectTooltipAxis],
+  combineDisplayedStackedData,
+);
+var selectAllTooltipAppliedValues = createSelector(
+  [
+    selectTooltipDisplayedData,
+    selectTooltipAxis,
+    selectAllGraphicalItemsSettings,
+    selectChartDataWithIndexes,
+    selectAnyTooltipItemUsesChartData,
+    selectTooltipGraphicalItemsData,
+  ],
+  combineAllAppliedValues,
+);
 var selectTooltipAxisDomainDefinition = createSelector([selectTooltipAxis], getDomainDefinition);
-var selectTooltipDataOverflow = createSelector([selectTooltipAxis], (axisSettings) => axisSettings.allowDataOverflow);
-var selectTooltipDomainFromUserPreferences = createSelector([selectTooltipAxisDomainDefinition, selectTooltipDataOverflow], numericalDomainSpecifiedWithoutRequiringData);
-var selectAllStackedGraphicalItems = createSelector([selectAllGraphicalItemsSettings], (graphicalItems) => graphicalItems.filter(isStacked));
-var selectTooltipStackGroups = createSelector([selectTooltipStackedData, selectAllStackedGraphicalItems, selectStackOffsetType, selectReverseStackOrder], combineStackGroups);
-var selectTooltipDomainOfStackGroups = createSelector([selectTooltipStackGroups, selectChartDataWithIndexes, selectTooltipAxisType, selectTooltipDomainFromUserPreferences], combineDomainOfStackGroups);
-var selectTooltipItemsSettingsExceptStacked = createSelector([selectAllGraphicalItemsSettings], filterGraphicalNotStackedItems);
-var selectDomainOfAllAppliedNumericalValuesIncludingErrorValues = createSelector([selectTooltipDisplayedData, selectTooltipAxis, selectTooltipItemsSettingsExceptStacked, selectAllErrorBarSettings, selectTooltipAxisType, selectChartDataSliceWithIndexes], combineDomainOfAllAppliedNumericalValuesIncludingErrorValues, {
-  memoizeOptions: {
-    resultEqualityCheck: numberDomainEqualityCheck
-  }
-});
-var selectReferenceDotsByTooltipAxis = createSelector([selectReferenceDots, selectTooltipAxisType, selectTooltipAxisId], filterReferenceElements);
-var selectTooltipReferenceDotsDomain = createSelector([selectReferenceDotsByTooltipAxis, selectTooltipAxisType], combineDotsDomain);
-var selectReferenceAreasByTooltipAxis = createSelector([selectReferenceAreas, selectTooltipAxisType, selectTooltipAxisId], filterReferenceElements);
-var selectTooltipReferenceAreasDomain = createSelector([selectReferenceAreasByTooltipAxis, selectTooltipAxisType], combineAreasDomain);
-var selectReferenceLinesByTooltipAxis = createSelector([selectReferenceLines, selectTooltipAxisType, selectTooltipAxisId], filterReferenceElements);
-var selectTooltipReferenceLinesDomain = createSelector([selectReferenceLinesByTooltipAxis, selectTooltipAxisType], combineLinesDomain);
-var selectTooltipReferenceElementsDomain = createSelector([selectTooltipReferenceDotsDomain, selectTooltipReferenceLinesDomain, selectTooltipReferenceAreasDomain], mergeDomains);
-var selectTooltipNumericalDomain = createSelector([selectTooltipAxis, selectTooltipAxisDomainDefinition, selectTooltipDomainFromUserPreferences, selectTooltipDomainOfStackGroups, selectDomainOfAllAppliedNumericalValuesIncludingErrorValues, selectTooltipReferenceElementsDomain, selectChartLayout, selectTooltipAxisType], combineNumericalDomain);
-var selectTooltipAxisDomain = createSelector([selectTooltipAxis, selectChartLayout, selectTooltipDisplayedData, selectAllTooltipAppliedValues, selectStackOffsetType, selectTooltipAxisType, selectTooltipNumericalDomain], combineAxisDomain);
-var selectTooltipNiceTicks = createSelector([selectTooltipAxisDomain, selectTooltipAxis, selectTooltipAxisRealScaleType], combineNiceTicks);
-var selectTooltipAxisDomainIncludingNiceTicks = createSelector([selectTooltipAxis, selectTooltipAxisDomain, selectTooltipNiceTicks, selectTooltipAxisType], combineAxisDomainWithNiceTicks);
+var selectTooltipDataOverflow = createSelector(
+  [selectTooltipAxis],
+  (axisSettings) => axisSettings.allowDataOverflow,
+);
+var selectTooltipDomainFromUserPreferences = createSelector(
+  [selectTooltipAxisDomainDefinition, selectTooltipDataOverflow],
+  numericalDomainSpecifiedWithoutRequiringData,
+);
+var selectAllStackedGraphicalItems = createSelector(
+  [selectAllGraphicalItemsSettings],
+  (graphicalItems) => graphicalItems.filter(isStacked),
+);
+var selectTooltipStackGroups = createSelector(
+  [
+    selectTooltipStackedData,
+    selectAllStackedGraphicalItems,
+    selectStackOffsetType,
+    selectReverseStackOrder,
+  ],
+  combineStackGroups,
+);
+var selectTooltipDomainOfStackGroups = createSelector(
+  [
+    selectTooltipStackGroups,
+    selectChartDataWithIndexes,
+    selectTooltipAxisType,
+    selectTooltipDomainFromUserPreferences,
+  ],
+  combineDomainOfStackGroups,
+);
+var selectTooltipItemsSettingsExceptStacked = createSelector(
+  [selectAllGraphicalItemsSettings],
+  filterGraphicalNotStackedItems,
+);
+var selectDomainOfAllAppliedNumericalValuesIncludingErrorValues = createSelector(
+  [
+    selectTooltipDisplayedData,
+    selectTooltipAxis,
+    selectTooltipItemsSettingsExceptStacked,
+    selectAllErrorBarSettings,
+    selectTooltipAxisType,
+    selectChartDataSliceWithIndexes,
+  ],
+  combineDomainOfAllAppliedNumericalValuesIncludingErrorValues,
+  {
+    memoizeOptions: {
+      resultEqualityCheck: numberDomainEqualityCheck,
+    },
+  },
+);
+var selectReferenceDotsByTooltipAxis = createSelector(
+  [selectReferenceDots, selectTooltipAxisType, selectTooltipAxisId],
+  filterReferenceElements,
+);
+var selectTooltipReferenceDotsDomain = createSelector(
+  [selectReferenceDotsByTooltipAxis, selectTooltipAxisType],
+  combineDotsDomain,
+);
+var selectReferenceAreasByTooltipAxis = createSelector(
+  [selectReferenceAreas, selectTooltipAxisType, selectTooltipAxisId],
+  filterReferenceElements,
+);
+var selectTooltipReferenceAreasDomain = createSelector(
+  [selectReferenceAreasByTooltipAxis, selectTooltipAxisType],
+  combineAreasDomain,
+);
+var selectReferenceLinesByTooltipAxis = createSelector(
+  [selectReferenceLines, selectTooltipAxisType, selectTooltipAxisId],
+  filterReferenceElements,
+);
+var selectTooltipReferenceLinesDomain = createSelector(
+  [selectReferenceLinesByTooltipAxis, selectTooltipAxisType],
+  combineLinesDomain,
+);
+var selectTooltipReferenceElementsDomain = createSelector(
+  [
+    selectTooltipReferenceDotsDomain,
+    selectTooltipReferenceLinesDomain,
+    selectTooltipReferenceAreasDomain,
+  ],
+  mergeDomains,
+);
+var selectTooltipNumericalDomain = createSelector(
+  [
+    selectTooltipAxis,
+    selectTooltipAxisDomainDefinition,
+    selectTooltipDomainFromUserPreferences,
+    selectTooltipDomainOfStackGroups,
+    selectDomainOfAllAppliedNumericalValuesIncludingErrorValues,
+    selectTooltipReferenceElementsDomain,
+    selectChartLayout,
+    selectTooltipAxisType,
+  ],
+  combineNumericalDomain,
+);
+var selectTooltipAxisDomain = createSelector(
+  [
+    selectTooltipAxis,
+    selectChartLayout,
+    selectTooltipDisplayedData,
+    selectAllTooltipAppliedValues,
+    selectStackOffsetType,
+    selectTooltipAxisType,
+    selectTooltipNumericalDomain,
+  ],
+  combineAxisDomain,
+);
+var selectTooltipNiceTicks = createSelector(
+  [selectTooltipAxisDomain, selectTooltipAxis, selectTooltipAxisRealScaleType],
+  combineNiceTicks,
+);
+var selectTooltipAxisDomainIncludingNiceTicks = createSelector(
+  [selectTooltipAxis, selectTooltipAxisDomain, selectTooltipNiceTicks, selectTooltipAxisType],
+  combineAxisDomainWithNiceTicks,
+);
 var selectTooltipAxisRange = (state) => {
   var axisType = selectTooltipAxisType(state);
   var axisId = selectTooltipAxisId(state);
   var isPanorama = false;
   return selectAxisRange(state, axisType, axisId, isPanorama);
 };
-var selectTooltipAxisRangeWithReverse = createSelector([selectTooltipAxis, selectTooltipAxisRange], combineAxisRangeWithReverse);
-var selectTooltipConfiguredScale = createSelector([selectTooltipAxis, selectTooltipAxisRealScaleType, selectTooltipAxisDomainIncludingNiceTicks, selectTooltipAxisRangeWithReverse], combineConfiguredScale);
+var selectTooltipAxisRangeWithReverse = createSelector(
+  [selectTooltipAxis, selectTooltipAxisRange],
+  combineAxisRangeWithReverse,
+);
+var selectTooltipConfiguredScale = createSelector(
+  [
+    selectTooltipAxis,
+    selectTooltipAxisRealScaleType,
+    selectTooltipAxisDomainIncludingNiceTicks,
+    selectTooltipAxisRangeWithReverse,
+  ],
+  combineConfiguredScale,
+);
 var selectTooltipAxisScale = createSelector([selectTooltipConfiguredScale], rechartsScaleFactory);
-var selectTooltipDuplicateDomain = createSelector([selectChartLayout, selectAllTooltipAppliedValues, selectTooltipAxis, selectTooltipAxisType], combineDuplicateDomain);
-var selectTooltipCategoricalDomain = createSelector([selectChartLayout, selectAllTooltipAppliedValues, selectTooltipAxis, selectTooltipAxisType], combineCategoricalDomain);
-var combineTicksOfTooltipAxis = (layout, axis, realScaleType, scale, range2, duplicateDomain, categoricalDomain, axisType) => {
+var selectTooltipDuplicateDomain = createSelector(
+  [selectChartLayout, selectAllTooltipAppliedValues, selectTooltipAxis, selectTooltipAxisType],
+  combineDuplicateDomain,
+);
+var selectTooltipCategoricalDomain = createSelector(
+  [selectChartLayout, selectAllTooltipAppliedValues, selectTooltipAxis, selectTooltipAxisType],
+  combineCategoricalDomain,
+);
+var combineTicksOfTooltipAxis = (
+  layout,
+  axis,
+  realScaleType,
+  scale,
+  range2,
+  duplicateDomain,
+  categoricalDomain,
+  axisType,
+) => {
   if (!axis) {
     return void 0;
   }
-  var {
-    type
-  } = axis;
+  var { type } = axis;
   var isCategorical = isCategoricalAxis(layout, axisType);
   if (!scale) {
     return void 0;
   }
   var offsetForBand = realScaleType === "scaleBand" && scale.bandwidth ? scale.bandwidth() / 2 : 2;
   var offset = type === "category" && scale.bandwidth ? scale.bandwidth() / offsetForBand : 0;
-  offset = axisType === "angleAxis" && range2 != null && (range2 === null || range2 === void 0 ? void 0 : range2.length) >= 2 ? mathSign(range2[0] - range2[1]) * 2 * offset : offset;
+  offset =
+    axisType === "angleAxis" &&
+    range2 != null &&
+    (range2 === null || range2 === void 0 ? void 0 : range2.length) >= 2
+      ? mathSign(range2[0] - range2[1]) * 2 * offset
+      : offset;
   if (isCategorical && categoricalDomain) {
-    return categoricalDomain.map((entry, index) => {
+    return categoricalDomain
+      .map((entry, index) => {
+        var scaled = scale.map(entry);
+        if (!isWellBehavedNumber(scaled)) {
+          return null;
+        }
+        return {
+          coordinate: scaled + offset,
+          value: entry,
+          index,
+          offset,
+        };
+      })
+      .filter(isNotNil);
+  }
+  return scale
+    .domain()
+    .map((entry, index) => {
       var scaled = scale.map(entry);
       if (!isWellBehavedNumber(scaled)) {
         return null;
       }
       return {
         coordinate: scaled + offset,
-        value: entry,
+        // @ts-expect-error can't use Date as an index
+        value: duplicateDomain ? duplicateDomain[entry] : entry,
         index,
-        offset
+        offset,
       };
-    }).filter(isNotNil);
-  }
-  return scale.domain().map((entry, index) => {
-    var scaled = scale.map(entry);
-    if (!isWellBehavedNumber(scaled)) {
-      return null;
-    }
-    return {
-      coordinate: scaled + offset,
-      // @ts-expect-error can't use Date as an index
-      value: duplicateDomain ? duplicateDomain[entry] : entry,
-      index,
-      offset
-    };
-  }).filter(isNotNil);
+    })
+    .filter(isNotNil);
 };
-var selectTooltipAxisTicks = createSelector([selectChartLayout, selectTooltipAxis, selectTooltipAxisRealScaleType, selectTooltipAxisScale, selectTooltipAxisRange, selectTooltipDuplicateDomain, selectTooltipCategoricalDomain, selectTooltipAxisType], combineTicksOfTooltipAxis);
-var selectTooltipEventType = createSelector([selectDefaultTooltipEventType, selectValidateTooltipEventTypes, selectTooltipSettings], (defaultTooltipEventType, validateTooltipEventType, settings) => combineTooltipEventType(settings.shared, defaultTooltipEventType, validateTooltipEventType));
+var selectTooltipAxisTicks = createSelector(
+  [
+    selectChartLayout,
+    selectTooltipAxis,
+    selectTooltipAxisRealScaleType,
+    selectTooltipAxisScale,
+    selectTooltipAxisRange,
+    selectTooltipDuplicateDomain,
+    selectTooltipCategoricalDomain,
+    selectTooltipAxisType,
+  ],
+  combineTicksOfTooltipAxis,
+);
+var selectTooltipEventType = createSelector(
+  [selectDefaultTooltipEventType, selectValidateTooltipEventTypes, selectTooltipSettings],
+  (defaultTooltipEventType, validateTooltipEventType, settings) =>
+    combineTooltipEventType(settings.shared, defaultTooltipEventType, validateTooltipEventType),
+);
 var selectTooltipTrigger = (state) => state.tooltip.settings.trigger;
 var selectDefaultIndex = (state) => state.tooltip.settings.defaultIndex;
-var selectTooltipInteractionState$1 = createSelector([selectTooltipState, selectTooltipEventType, selectTooltipTrigger, selectDefaultIndex], combineTooltipInteractionState);
-var selectActiveTooltipIndex = createSelector([selectTooltipInteractionState$1, selectTooltipDisplayedData, selectTooltipAxisDataKey, selectTooltipAxisDomain], combineActiveTooltipIndex);
-var selectActiveLabel$1 = createSelector([selectTooltipAxisTicks, selectActiveTooltipIndex], combineActiveLabel);
-var selectActiveTooltipDataKey = createSelector([selectTooltipInteractionState$1], (tooltipInteraction) => {
-  if (!tooltipInteraction) {
-    return void 0;
-  }
-  return tooltipInteraction.dataKey;
-});
-var selectActiveTooltipGraphicalItemId = createSelector([selectTooltipInteractionState$1], (tooltipInteraction) => {
-  if (!tooltipInteraction) {
-    return void 0;
-  }
-  return tooltipInteraction.graphicalItemId;
-});
-var selectTooltipPayloadConfigurations$1 = createSelector([selectTooltipState, selectTooltipEventType, selectTooltipTrigger, selectDefaultIndex], combineTooltipPayloadConfigurations);
-var selectTooltipCoordinateForDefaultIndex = createSelector([selectChartWidth, selectChartHeight, selectChartLayout, selectChartOffsetInternal, selectTooltipAxisTicks, selectDefaultIndex, selectTooltipPayloadConfigurations$1], combineCoordinateForDefaultIndex);
-var selectActiveTooltipCoordinate = createSelector([selectTooltipInteractionState$1, selectTooltipCoordinateForDefaultIndex], (tooltipInteractionState, defaultIndexCoordinate) => {
-  if (tooltipInteractionState !== null && tooltipInteractionState !== void 0 && tooltipInteractionState.coordinate) {
-    return tooltipInteractionState.coordinate;
-  }
-  return defaultIndexCoordinate;
-});
-var selectIsTooltipActive$1 = createSelector([selectTooltipInteractionState$1], (tooltipInteractionState) => {
-  var _tooltipInteractionSt;
-  return (_tooltipInteractionSt = tooltipInteractionState === null || tooltipInteractionState === void 0 ? void 0 : tooltipInteractionState.active) !== null && _tooltipInteractionSt !== void 0 ? _tooltipInteractionSt : false;
-});
-var selectActiveTooltipPayload = createSelector([selectTooltipPayloadConfigurations$1, selectActiveTooltipIndex, selectChartDataWithIndexes, selectTooltipAxisDataKey, selectActiveLabel$1, selectTooltipPayloadSearcher, selectTooltipEventType], combineTooltipPayload);
+var selectTooltipInteractionState$1 = createSelector(
+  [selectTooltipState, selectTooltipEventType, selectTooltipTrigger, selectDefaultIndex],
+  combineTooltipInteractionState,
+);
+var selectActiveTooltipIndex = createSelector(
+  [
+    selectTooltipInteractionState$1,
+    selectTooltipDisplayedData,
+    selectTooltipAxisDataKey,
+    selectTooltipAxisDomain,
+  ],
+  combineActiveTooltipIndex,
+);
+var selectActiveLabel$1 = createSelector(
+  [selectTooltipAxisTicks, selectActiveTooltipIndex],
+  combineActiveLabel,
+);
+var selectActiveTooltipDataKey = createSelector(
+  [selectTooltipInteractionState$1],
+  (tooltipInteraction) => {
+    if (!tooltipInteraction) {
+      return void 0;
+    }
+    return tooltipInteraction.dataKey;
+  },
+);
+var selectActiveTooltipGraphicalItemId = createSelector(
+  [selectTooltipInteractionState$1],
+  (tooltipInteraction) => {
+    if (!tooltipInteraction) {
+      return void 0;
+    }
+    return tooltipInteraction.graphicalItemId;
+  },
+);
+var selectTooltipPayloadConfigurations$1 = createSelector(
+  [selectTooltipState, selectTooltipEventType, selectTooltipTrigger, selectDefaultIndex],
+  combineTooltipPayloadConfigurations,
+);
+var selectTooltipCoordinateForDefaultIndex = createSelector(
+  [
+    selectChartWidth,
+    selectChartHeight,
+    selectChartLayout,
+    selectChartOffsetInternal,
+    selectTooltipAxisTicks,
+    selectDefaultIndex,
+    selectTooltipPayloadConfigurations$1,
+  ],
+  combineCoordinateForDefaultIndex,
+);
+var selectActiveTooltipCoordinate = createSelector(
+  [selectTooltipInteractionState$1, selectTooltipCoordinateForDefaultIndex],
+  (tooltipInteractionState, defaultIndexCoordinate) => {
+    if (
+      tooltipInteractionState !== null &&
+      tooltipInteractionState !== void 0 &&
+      tooltipInteractionState.coordinate
+    ) {
+      return tooltipInteractionState.coordinate;
+    }
+    return defaultIndexCoordinate;
+  },
+);
+var selectIsTooltipActive$1 = createSelector(
+  [selectTooltipInteractionState$1],
+  (tooltipInteractionState) => {
+    var _tooltipInteractionSt;
+    return (_tooltipInteractionSt =
+      tooltipInteractionState === null || tooltipInteractionState === void 0
+        ? void 0
+        : tooltipInteractionState.active) !== null && _tooltipInteractionSt !== void 0
+      ? _tooltipInteractionSt
+      : false;
+  },
+);
+var selectActiveTooltipPayload = createSelector(
+  [
+    selectTooltipPayloadConfigurations$1,
+    selectActiveTooltipIndex,
+    selectChartDataWithIndexes,
+    selectTooltipAxisDataKey,
+    selectActiveLabel$1,
+    selectTooltipPayloadSearcher,
+    selectTooltipEventType,
+  ],
+  combineTooltipPayload,
+);
 var selectActiveTooltipDataPoints = createSelector([selectActiveTooltipPayload], (payload) => {
   if (payload == null) {
     return void 0;
@@ -15895,25 +19055,41 @@ function ownKeys$i(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$i(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$i(Object(t), true).forEach(function(r2) {
-      _defineProperty$k(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$i(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$i(Object(t), true).forEach(function (r2) {
+          _defineProperty$k(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$i(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$k(e, r, t) {
-  return (r = _toPropertyKey$k(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$k(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$k(t) {
   var i = _toPrimitive$k(t, "string");
@@ -15937,33 +19113,56 @@ var useTooltipAxisBandSize = () => {
   if (!tooltipAxis || !tooltipAxisScale) {
     return getBandSizeOfAxis(void 0, tooltipTicks);
   }
-  return getBandSizeOfAxis(_objectSpread$i(_objectSpread$i({}, tooltipAxis), {}, {
-    scale: tooltipAxisScale
-  }), tooltipTicks);
+  return getBandSizeOfAxis(
+    _objectSpread$i(
+      _objectSpread$i({}, tooltipAxis),
+      {},
+      {
+        scale: tooltipAxisScale,
+      },
+    ),
+    tooltipTicks,
+  );
 };
 function ownKeys$h(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$h(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$h(Object(t), true).forEach(function(r2) {
-      _defineProperty$j(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$h(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$h(Object(t), true).forEach(function (r2) {
+          _defineProperty$j(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$h(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$j(e, r, t) {
-  return (r = _toPropertyKey$j(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$j(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$j(t) {
   var i = _toPrimitive$j(t, "string");
@@ -15985,19 +19184,19 @@ var getActiveCartesianCoordinate = (layout, tooltipTicks, activeIndex, pointer) 
     if (layout === "horizontal") {
       return {
         x: entry.coordinate,
-        y: pointer.relativeY
+        y: pointer.relativeY,
       };
     }
     if (layout === "vertical") {
       return {
         x: pointer.relativeX,
-        y: entry.coordinate
+        y: entry.coordinate,
       };
     }
   }
   return {
     x: 0,
-    y: 0
+    y: 0,
   };
 };
 var getActivePolarCoordinate = (layout, tooltipTicks, activeIndex, rangeObj) => {
@@ -16005,22 +19204,32 @@ var getActivePolarCoordinate = (layout, tooltipTicks, activeIndex, rangeObj) => 
   if (entry) {
     if (layout === "centric") {
       var _angle = entry.coordinate;
-      var {
-        radius: _radius
-      } = rangeObj;
-      return _objectSpread$h(_objectSpread$h(_objectSpread$h({}, rangeObj), polarToCartesian(rangeObj.cx, rangeObj.cy, _radius, _angle)), {}, {
-        angle: _angle,
-        radius: _radius
-      });
+      var { radius: _radius } = rangeObj;
+      return _objectSpread$h(
+        _objectSpread$h(
+          _objectSpread$h({}, rangeObj),
+          polarToCartesian(rangeObj.cx, rangeObj.cy, _radius, _angle),
+        ),
+        {},
+        {
+          angle: _angle,
+          radius: _radius,
+        },
+      );
     }
     var radius = entry.coordinate;
-    var {
-      angle
-    } = rangeObj;
-    return _objectSpread$h(_objectSpread$h(_objectSpread$h({}, rangeObj), polarToCartesian(rangeObj.cx, rangeObj.cy, radius, angle)), {}, {
-      angle,
-      radius
-    });
+    var { angle } = rangeObj;
+    return _objectSpread$h(
+      _objectSpread$h(
+        _objectSpread$h({}, rangeObj),
+        polarToCartesian(rangeObj.cx, rangeObj.cy, radius, angle),
+      ),
+      {},
+      {
+        angle,
+        radius,
+      },
+    );
   }
   return {
     angle: 0,
@@ -16033,28 +19242,55 @@ var getActivePolarCoordinate = (layout, tooltipTicks, activeIndex, rangeObj) => 
     radius: 0,
     startAngle: 0,
     x: 0,
-    y: 0
+    y: 0,
   };
 };
 function isInCartesianRange(pointer, offset) {
-  var {
-    relativeX: x2,
-    relativeY: y2
-  } = pointer;
-  return x2 >= offset.left && x2 <= offset.left + offset.width && y2 >= offset.top && y2 <= offset.top + offset.height;
+  var { relativeX: x2, relativeY: y2 } = pointer;
+  return (
+    x2 >= offset.left &&
+    x2 <= offset.left + offset.width &&
+    y2 >= offset.top &&
+    y2 <= offset.top + offset.height
+  );
 }
 var calculateActiveTickIndex = (coordinate, ticks2, unsortedTicks, axisType, range2) => {
   var _ticks$length;
-  var len = (_ticks$length = ticks2 === null || ticks2 === void 0 ? void 0 : ticks2.length) !== null && _ticks$length !== void 0 ? _ticks$length : 0;
+  var len =
+    (_ticks$length = ticks2 === null || ticks2 === void 0 ? void 0 : ticks2.length) !== null &&
+    _ticks$length !== void 0
+      ? _ticks$length
+      : 0;
   if (len <= 1 || coordinate == null) {
     return 0;
   }
-  if (axisType === "angleAxis" && range2 != null && Math.abs(Math.abs(range2[1] - range2[0]) - 360) <= 1e-6) {
+  if (
+    axisType === "angleAxis" &&
+    range2 != null &&
+    Math.abs(Math.abs(range2[1] - range2[0]) - 360) <= 1e-6
+  ) {
     for (var i = 0; i < len; i++) {
       var _unsortedTicks, _unsortedTicks2, _unsortedTicks$i, _unsortedTicks$, _unsortedTicks3;
-      var before = i > 0 ? (_unsortedTicks = unsortedTicks[i - 1]) === null || _unsortedTicks === void 0 ? void 0 : _unsortedTicks.coordinate : (_unsortedTicks2 = unsortedTicks[len - 1]) === null || _unsortedTicks2 === void 0 ? void 0 : _unsortedTicks2.coordinate;
-      var cur = (_unsortedTicks$i = unsortedTicks[i]) === null || _unsortedTicks$i === void 0 ? void 0 : _unsortedTicks$i.coordinate;
-      var after = i >= len - 1 ? (_unsortedTicks$ = unsortedTicks[0]) === null || _unsortedTicks$ === void 0 ? void 0 : _unsortedTicks$.coordinate : (_unsortedTicks3 = unsortedTicks[i + 1]) === null || _unsortedTicks3 === void 0 ? void 0 : _unsortedTicks3.coordinate;
+      var before =
+        i > 0
+          ? (_unsortedTicks = unsortedTicks[i - 1]) === null || _unsortedTicks === void 0
+            ? void 0
+            : _unsortedTicks.coordinate
+          : (_unsortedTicks2 = unsortedTicks[len - 1]) === null || _unsortedTicks2 === void 0
+            ? void 0
+            : _unsortedTicks2.coordinate;
+      var cur =
+        (_unsortedTicks$i = unsortedTicks[i]) === null || _unsortedTicks$i === void 0
+          ? void 0
+          : _unsortedTicks$i.coordinate;
+      var after =
+        i >= len - 1
+          ? (_unsortedTicks$ = unsortedTicks[0]) === null || _unsortedTicks$ === void 0
+            ? void 0
+            : _unsortedTicks$.coordinate
+          : (_unsortedTicks3 = unsortedTicks[i + 1]) === null || _unsortedTicks3 === void 0
+            ? void 0
+            : _unsortedTicks3.coordinate;
       var sameDirectionCoord = void 0;
       if (before == null || cur == null || after == null) {
         continue;
@@ -16072,17 +19308,27 @@ var calculateActiveTickIndex = (coordinate, ticks2, unsortedTicks, axisType, ran
           diffInterval[0] = Math.min(cur, (afterInRange + cur) / 2);
           diffInterval[1] = Math.max(cur, (afterInRange + cur) / 2);
         }
-        var sameInterval = [Math.min(cur, (sameDirectionCoord + cur) / 2), Math.max(cur, (sameDirectionCoord + cur) / 2)];
-        if (coordinate > sameInterval[0] && coordinate <= sameInterval[1] || coordinate >= diffInterval[0] && coordinate <= diffInterval[1]) {
+        var sameInterval = [
+          Math.min(cur, (sameDirectionCoord + cur) / 2),
+          Math.max(cur, (sameDirectionCoord + cur) / 2),
+        ];
+        if (
+          (coordinate > sameInterval[0] && coordinate <= sameInterval[1]) ||
+          (coordinate >= diffInterval[0] && coordinate <= diffInterval[1])
+        ) {
           var _unsortedTicks$i2;
-          return (_unsortedTicks$i2 = unsortedTicks[i]) === null || _unsortedTicks$i2 === void 0 ? void 0 : _unsortedTicks$i2.index;
+          return (_unsortedTicks$i2 = unsortedTicks[i]) === null || _unsortedTicks$i2 === void 0
+            ? void 0
+            : _unsortedTicks$i2.index;
         }
       } else {
         var minValue = Math.min(before, after);
         var maxValue = Math.max(before, after);
         if (coordinate > (minValue + cur) / 2 && coordinate <= (maxValue + cur) / 2) {
           var _unsortedTicks$i3;
-          return (_unsortedTicks$i3 = unsortedTicks[i]) === null || _unsortedTicks$i3 === void 0 ? void 0 : _unsortedTicks$i3.index;
+          return (_unsortedTicks$i3 = unsortedTicks[i]) === null || _unsortedTicks$i3 === void 0
+            ? void 0
+            : _unsortedTicks$i3.index;
         }
       }
     }
@@ -16100,7 +19346,14 @@ var calculateActiveTickIndex = (coordinate, ticks2, unsortedTicks, axisType, ran
       if (_i === len - 1 && prev != null && coordinate > (curr.coordinate + prev.coordinate) / 2) {
         return curr.index;
       }
-      if (_i > 0 && _i < len - 1 && prev != null && next != null && coordinate > (curr.coordinate + prev.coordinate) / 2 && coordinate <= (curr.coordinate + next.coordinate) / 2) {
+      if (
+        _i > 0 &&
+        _i < len - 1 &&
+        prev != null &&
+        next != null &&
+        coordinate > (curr.coordinate + prev.coordinate) / 2 &&
+        coordinate <= (curr.coordinate + next.coordinate) / 2
+      ) {
         return curr.index;
       }
     }
@@ -16113,9 +19366,22 @@ var useChartName = () => {
 var pickTooltipEventType = (_state, tooltipEventType) => tooltipEventType;
 var pickTrigger = (_state, _tooltipEventType, trigger) => trigger;
 var pickDefaultIndex = (_state, _tooltipEventType, _trigger, defaultIndex) => defaultIndex;
-var selectOrderedTooltipTicks = createSelector(selectTooltipAxisTicks, (ticks2) => sortBy$1(ticks2, (o) => o.coordinate));
-var selectTooltipInteractionState = createSelector([selectTooltipState, pickTooltipEventType, pickTrigger, pickDefaultIndex], combineTooltipInteractionState);
-var selectActiveIndex = createSelector([selectTooltipInteractionState, selectTooltipDisplayedData, selectTooltipAxisDataKey, selectTooltipAxisDomain], combineActiveTooltipIndex);
+var selectOrderedTooltipTicks = createSelector(selectTooltipAxisTicks, (ticks2) =>
+  sortBy$1(ticks2, (o) => o.coordinate),
+);
+var selectTooltipInteractionState = createSelector(
+  [selectTooltipState, pickTooltipEventType, pickTrigger, pickDefaultIndex],
+  combineTooltipInteractionState,
+);
+var selectActiveIndex = createSelector(
+  [
+    selectTooltipInteractionState,
+    selectTooltipDisplayedData,
+    selectTooltipAxisDataKey,
+    selectTooltipAxisDomain,
+  ],
+  combineActiveTooltipIndex,
+);
 var selectTooltipDataKey = (state, tooltipEventType, trigger) => {
   if (tooltipEventType == null) {
     return void 0;
@@ -16132,21 +19398,66 @@ var selectTooltipDataKey = (state, tooltipEventType, trigger) => {
   }
   return tooltipState.itemInteraction.click.dataKey;
 };
-var selectTooltipPayloadConfigurations = createSelector([selectTooltipState, pickTooltipEventType, pickTrigger, pickDefaultIndex], combineTooltipPayloadConfigurations);
-var selectCoordinateForDefaultIndex = createSelector([selectChartWidth, selectChartHeight, selectChartLayout, selectChartOffsetInternal, selectTooltipAxisTicks, pickDefaultIndex, selectTooltipPayloadConfigurations], combineCoordinateForDefaultIndex);
-var selectActiveCoordinate = createSelector([selectTooltipInteractionState, selectCoordinateForDefaultIndex], (tooltipInteractionState, defaultIndexCoordinate) => {
-  var _tooltipInteractionSt;
-  return (_tooltipInteractionSt = tooltipInteractionState.coordinate) !== null && _tooltipInteractionSt !== void 0 ? _tooltipInteractionSt : defaultIndexCoordinate;
-});
-var selectActiveLabel = createSelector([selectTooltipAxisTicks, selectActiveIndex], combineActiveLabel);
-var selectTooltipPayload = createSelector([selectTooltipPayloadConfigurations, selectActiveIndex, selectChartDataWithIndexes, selectTooltipAxisDataKey, selectActiveLabel, selectTooltipPayloadSearcher, pickTooltipEventType], combineTooltipPayload);
-var selectIsTooltipActive = createSelector([selectTooltipInteractionState, selectActiveIndex], (tooltipInteractionState, activeIndex) => {
-  return {
-    isActive: tooltipInteractionState.active && activeIndex != null,
-    activeIndex
-  };
-});
-var combineActiveCartesianProps = (chartEvent, layout, tooltipAxisType, tooltipAxisRange, tooltipTicks, orderedTooltipTicks, offset) => {
+var selectTooltipPayloadConfigurations = createSelector(
+  [selectTooltipState, pickTooltipEventType, pickTrigger, pickDefaultIndex],
+  combineTooltipPayloadConfigurations,
+);
+var selectCoordinateForDefaultIndex = createSelector(
+  [
+    selectChartWidth,
+    selectChartHeight,
+    selectChartLayout,
+    selectChartOffsetInternal,
+    selectTooltipAxisTicks,
+    pickDefaultIndex,
+    selectTooltipPayloadConfigurations,
+  ],
+  combineCoordinateForDefaultIndex,
+);
+var selectActiveCoordinate = createSelector(
+  [selectTooltipInteractionState, selectCoordinateForDefaultIndex],
+  (tooltipInteractionState, defaultIndexCoordinate) => {
+    var _tooltipInteractionSt;
+    return (_tooltipInteractionSt = tooltipInteractionState.coordinate) !== null &&
+      _tooltipInteractionSt !== void 0
+      ? _tooltipInteractionSt
+      : defaultIndexCoordinate;
+  },
+);
+var selectActiveLabel = createSelector(
+  [selectTooltipAxisTicks, selectActiveIndex],
+  combineActiveLabel,
+);
+var selectTooltipPayload = createSelector(
+  [
+    selectTooltipPayloadConfigurations,
+    selectActiveIndex,
+    selectChartDataWithIndexes,
+    selectTooltipAxisDataKey,
+    selectActiveLabel,
+    selectTooltipPayloadSearcher,
+    pickTooltipEventType,
+  ],
+  combineTooltipPayload,
+);
+var selectIsTooltipActive = createSelector(
+  [selectTooltipInteractionState, selectActiveIndex],
+  (tooltipInteractionState, activeIndex) => {
+    return {
+      isActive: tooltipInteractionState.active && activeIndex != null,
+      activeIndex,
+    };
+  },
+);
+var combineActiveCartesianProps = (
+  chartEvent,
+  layout,
+  tooltipAxisType,
+  tooltipAxisRange,
+  tooltipTicks,
+  orderedTooltipTicks,
+  offset,
+) => {
   if (!chartEvent || !tooltipAxisType || !tooltipAxisRange || !tooltipTicks) {
     return void 0;
   }
@@ -16154,14 +19465,33 @@ var combineActiveCartesianProps = (chartEvent, layout, tooltipAxisType, tooltipA
     return void 0;
   }
   var pos = calculateCartesianTooltipPos(chartEvent, layout);
-  var activeIndex = calculateActiveTickIndex(pos, orderedTooltipTicks, tooltipTicks, tooltipAxisType, tooltipAxisRange);
-  var activeCoordinate = getActiveCartesianCoordinate(layout, tooltipTicks, activeIndex, chartEvent);
+  var activeIndex = calculateActiveTickIndex(
+    pos,
+    orderedTooltipTicks,
+    tooltipTicks,
+    tooltipAxisType,
+    tooltipAxisRange,
+  );
+  var activeCoordinate = getActiveCartesianCoordinate(
+    layout,
+    tooltipTicks,
+    activeIndex,
+    chartEvent,
+  );
   return {
     activeIndex: String(activeIndex),
-    activeCoordinate
+    activeCoordinate,
   };
 };
-var combineActivePolarProps = (chartEvent, layout, polarViewBox, tooltipAxisType, tooltipAxisRange, tooltipTicks, orderedTooltipTicks) => {
+var combineActivePolarProps = (
+  chartEvent,
+  layout,
+  polarViewBox,
+  tooltipAxisType,
+  tooltipAxisRange,
+  tooltipTicks,
+  orderedTooltipTicks,
+) => {
   if (!chartEvent || !tooltipAxisType || !tooltipAxisRange || !tooltipTicks || !polarViewBox) {
     return void 0;
   }
@@ -16170,67 +19500,125 @@ var combineActivePolarProps = (chartEvent, layout, polarViewBox, tooltipAxisType
     return void 0;
   }
   var pos = calculatePolarTooltipPos(rangeObj, layout);
-  var activeIndex = calculateActiveTickIndex(pos, orderedTooltipTicks, tooltipTicks, tooltipAxisType, tooltipAxisRange);
+  var activeIndex = calculateActiveTickIndex(
+    pos,
+    orderedTooltipTicks,
+    tooltipTicks,
+    tooltipAxisType,
+    tooltipAxisRange,
+  );
   var activeCoordinate = getActivePolarCoordinate(layout, tooltipTicks, activeIndex, rangeObj);
   return {
     activeIndex: String(activeIndex),
-    activeCoordinate
+    activeCoordinate,
   };
 };
-var combineActiveProps = (chartEvent, layout, polarViewBox, tooltipAxisType, tooltipAxisRange, tooltipTicks, orderedTooltipTicks, offset) => {
+var combineActiveProps = (
+  chartEvent,
+  layout,
+  polarViewBox,
+  tooltipAxisType,
+  tooltipAxisRange,
+  tooltipTicks,
+  orderedTooltipTicks,
+  offset,
+) => {
   if (!chartEvent || !layout || !tooltipAxisType || !tooltipAxisRange || !tooltipTicks) {
     return void 0;
   }
   if (layout === "horizontal" || layout === "vertical") {
-    return combineActiveCartesianProps(chartEvent, layout, tooltipAxisType, tooltipAxisRange, tooltipTicks, orderedTooltipTicks, offset);
+    return combineActiveCartesianProps(
+      chartEvent,
+      layout,
+      tooltipAxisType,
+      tooltipAxisRange,
+      tooltipTicks,
+      orderedTooltipTicks,
+      offset,
+    );
   }
-  return combineActivePolarProps(chartEvent, layout, polarViewBox, tooltipAxisType, tooltipAxisRange, tooltipTicks, orderedTooltipTicks);
+  return combineActivePolarProps(
+    chartEvent,
+    layout,
+    polarViewBox,
+    tooltipAxisType,
+    tooltipAxisRange,
+    tooltipTicks,
+    orderedTooltipTicks,
+  );
 };
-var selectZIndexPortalElement = createSelector((state) => state.zIndex.zIndexMap, (_, zIndex) => zIndex, (_, _zIndex, isPanorama) => isPanorama, (zIndexMap, zIndex, isPanorama) => {
-  if (zIndex == null) {
-    return void 0;
-  }
-  var entry = zIndexMap[zIndex];
-  if (entry == null) {
-    return void 0;
-  }
-  if (isPanorama) {
-    return entry.panoramaElement;
-  }
-  return entry.element;
-});
-var selectAllRegisteredZIndexes = createSelector((state) => state.zIndex.zIndexMap, (zIndexMap) => {
-  var allNumbers = Object.keys(zIndexMap).map((zIndexStr) => parseInt(zIndexStr, 10)).concat(Object.values(DefaultZIndexes));
-  var uniqueNumbers = Array.from(new Set(allNumbers));
-  return uniqueNumbers.sort((a, b) => a - b);
-}, {
-  memoizeOptions: {
-    resultEqualityCheck: arrayContentsAreEqualCheck
-  }
-});
+var selectZIndexPortalElement = createSelector(
+  (state) => state.zIndex.zIndexMap,
+  (_, zIndex) => zIndex,
+  (_, _zIndex, isPanorama) => isPanorama,
+  (zIndexMap, zIndex, isPanorama) => {
+    if (zIndex == null) {
+      return void 0;
+    }
+    var entry = zIndexMap[zIndex];
+    if (entry == null) {
+      return void 0;
+    }
+    if (isPanorama) {
+      return entry.panoramaElement;
+    }
+    return entry.element;
+  },
+);
+var selectAllRegisteredZIndexes = createSelector(
+  (state) => state.zIndex.zIndexMap,
+  (zIndexMap) => {
+    var allNumbers = Object.keys(zIndexMap)
+      .map((zIndexStr) => parseInt(zIndexStr, 10))
+      .concat(Object.values(DefaultZIndexes));
+    var uniqueNumbers = Array.from(new Set(allNumbers));
+    return uniqueNumbers.sort((a, b) => a - b);
+  },
+  {
+    memoizeOptions: {
+      resultEqualityCheck: arrayContentsAreEqualCheck,
+    },
+  },
+);
 function ownKeys$g(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$g(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$g(Object(t), true).forEach(function(r2) {
-      _defineProperty$i(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$g(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$g(Object(t), true).forEach(function (r2) {
+          _defineProperty$i(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$g(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$i(e, r, t) {
-  return (r = _toPropertyKey$i(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$i(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$i(t) {
   var i = _toPrimitive$i(t, "string");
@@ -16248,13 +19636,21 @@ function _toPrimitive$i(t, r) {
 }
 var seed = {};
 var initialState$a = {
-  zIndexMap: Object.values(DefaultZIndexes).reduce((acc, current2) => _objectSpread$g(_objectSpread$g({}, acc), {}, {
-    [current2]: {
-      element: void 0,
-      panoramaElement: void 0,
-      consumers: 0
-    }
-  }), seed)
+  zIndexMap: Object.values(DefaultZIndexes).reduce(
+    (acc, current2) =>
+      _objectSpread$g(
+        _objectSpread$g({}, acc),
+        {},
+        {
+          [current2]: {
+            element: void 0,
+            panoramaElement: void 0,
+            consumers: 0,
+          },
+        },
+      ),
+    seed,
+  ),
 };
 var defaultZIndexSet = new Set(Object.values(DefaultZIndexes));
 function isDefaultZIndex(zIndex) {
@@ -16266,26 +19662,22 @@ var zIndexSlice = createSlice({
   reducers: {
     registerZIndexPortal: {
       reducer: (state, action) => {
-        var {
-          zIndex
-        } = action.payload;
+        var { zIndex } = action.payload;
         if (state.zIndexMap[zIndex]) {
           state.zIndexMap[zIndex].consumers += 1;
         } else {
           state.zIndexMap[zIndex] = {
             consumers: 1,
             element: void 0,
-            panoramaElement: void 0
+            panoramaElement: void 0,
           };
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     unregisterZIndexPortal: {
       reducer: (state, action) => {
-        var {
-          zIndex
-        } = action.payload;
+        var { zIndex } = action.payload;
         if (state.zIndexMap[zIndex]) {
           state.zIndexMap[zIndex].consumers -= 1;
           if (state.zIndexMap[zIndex].consumers <= 0 && !isDefaultZIndex(zIndex)) {
@@ -16293,15 +19685,11 @@ var zIndexSlice = createSlice({
           }
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     registerZIndexPortalElement: {
       reducer: (state, action) => {
-        var {
-          zIndex,
-          element,
-          isPanorama
-        } = action.payload;
+        var { zIndex, element, isPanorama } = action.payload;
         if (state.zIndexMap[zIndex]) {
           if (isPanorama) {
             state.zIndexMap[zIndex].panoramaElement = castDraft(element);
@@ -16312,17 +19700,15 @@ var zIndexSlice = createSlice({
           state.zIndexMap[zIndex] = {
             consumers: 0,
             element: isPanorama ? void 0 : castDraft(element),
-            panoramaElement: isPanorama ? castDraft(element) : void 0
+            panoramaElement: isPanorama ? castDraft(element) : void 0,
           };
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     unregisterZIndexPortalElement: {
       reducer: (state, action) => {
-        var {
-          zIndex
-        } = action.payload;
+        var { zIndex } = action.payload;
         if (state.zIndexMap[zIndex]) {
           if (action.payload.isPanorama) {
             state.zIndexMap[zIndex].panoramaElement = void 0;
@@ -16331,45 +19717,48 @@ var zIndexSlice = createSlice({
           }
         }
       },
-      prepare: prepareAutoBatched()
-    }
-  }
+      prepare: prepareAutoBatched(),
+    },
+  },
 });
 var {
   registerZIndexPortal,
   unregisterZIndexPortal,
   registerZIndexPortalElement,
-  unregisterZIndexPortalElement
+  unregisterZIndexPortalElement,
 } = zIndexSlice.actions;
 var zIndexReducer = zIndexSlice.reducer;
 function ZIndexLayer(_ref2) {
-  var {
-    zIndex,
-    children
-  } = _ref2;
+  var { zIndex, children } = _ref2;
   var isInChartContext = useIsInChartContext();
   var shouldRenderInPortal = isInChartContext && zIndex !== void 0 && zIndex !== 0;
   var isPanorama = useIsPanorama();
   var lastPortalElementRef = reactExports.useRef(void 0);
   var registeredZIndexesRef = reactExports.useRef(/* @__PURE__ */ new Set());
   var dispatch = useAppDispatch();
-  var portalElement = useAppSelector((state) => selectZIndexPortalElement(state, zIndex, isPanorama));
+  var portalElement = useAppSelector((state) =>
+    selectZIndexPortalElement(state, zIndex, isPanorama),
+  );
   reactExports.useLayoutEffect(() => {
     if (!shouldRenderInPortal) {
       var registered = registeredZIndexesRef.current;
       registered.forEach((z) => {
-        dispatch(unregisterZIndexPortal({
-          zIndex: z
-        }));
+        dispatch(
+          unregisterZIndexPortal({
+            zIndex: z,
+          }),
+        );
       });
       registered.clear();
       lastPortalElementRef.current = void 0;
       return;
     }
     if (!registeredZIndexesRef.current.has(zIndex)) {
-      dispatch(registerZIndexPortal({
-        zIndex
-      }));
+      dispatch(
+        registerZIndexPortal({
+          zIndex,
+        }),
+      );
       registeredZIndexesRef.current.add(zIndex);
     }
     if (portalElement) {
@@ -16377,9 +19766,11 @@ function ZIndexLayer(_ref2) {
       var _registered = registeredZIndexesRef.current;
       _registered.forEach((z) => {
         if (z !== zIndex) {
-          dispatch(unregisterZIndexPortal({
-            zIndex: z
-          }));
+          dispatch(
+            unregisterZIndexPortal({
+              zIndex: z,
+            }),
+          );
           _registered.delete(z);
         }
       });
@@ -16389,9 +19780,11 @@ function ZIndexLayer(_ref2) {
     var registered = registeredZIndexesRef.current;
     return () => {
       registered.forEach((z) => {
-        dispatch(unregisterZIndexPortal({
-          zIndex: z
-        }));
+        dispatch(
+          unregisterZIndexPortal({
+            zIndex: z,
+          }),
+        );
       });
       registered.clear();
     };
@@ -16399,44 +19792,68 @@ function ZIndexLayer(_ref2) {
   if (!shouldRenderInPortal) {
     return children;
   }
-  var targetElement = portalElement !== null && portalElement !== void 0 ? portalElement : lastPortalElementRef.current;
+  var targetElement =
+    portalElement !== null && portalElement !== void 0
+      ? portalElement
+      : lastPortalElementRef.current;
   if (!targetElement) {
     return null;
   }
   return /* @__PURE__ */ reactDomExports.createPortal(children, targetElement);
 }
 function _extends$c() {
-  return _extends$c = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$c.apply(null, arguments);
+  return (
+    (_extends$c = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$c.apply(null, arguments)
+  );
 }
 function ownKeys$f(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$f(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$f(Object(t), true).forEach(function(r2) {
-      _defineProperty$h(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$f(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$f(Object(t), true).forEach(function (r2) {
+          _defineProperty$h(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$f(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$h(e, r, t) {
-  return (r = _toPropertyKey$h(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$h(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$h(t) {
   var i = _toPrimitive$h(t, "string");
@@ -16453,11 +19870,7 @@ function _toPrimitive$h(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 function RenderCursor(_ref2) {
-  var {
-    cursor,
-    cursorComp,
-    cursorProps
-  } = _ref2;
+  var { cursor, cursorComp, cursorProps } = _ref2;
   if (/* @__PURE__ */ reactExports.isValidElement(cursor)) {
     return /* @__PURE__ */ reactExports.cloneElement(cursor, cursorProps);
   }
@@ -16474,12 +19887,16 @@ function CursorInternal(props) {
     layout,
     cursor,
     tooltipEventType,
-    chartName
+    chartName,
   } = props;
   var activeCoordinate = coordinate;
   var activePayload = payload;
   var activeTooltipIndex = index;
-  if (!cursor || !activeCoordinate || chartName !== "ScatterChart" && tooltipEventType !== "axis") {
+  if (
+    !cursor ||
+    !activeCoordinate ||
+    (chartName !== "ScatterChart" && tooltipEventType !== "axis")
+  ) {
     return null;
   }
   var restProps, cursorComp, preferredZIndex;
@@ -16492,46 +19909,61 @@ function CursorInternal(props) {
     cursorComp = Rectangle;
     preferredZIndex = DefaultZIndexes.cursorRectangle;
   } else if (layout === "radial" && isPolarCoordinate(activeCoordinate)) {
-    var {
-      cx,
-      cy,
-      radius,
-      startAngle,
-      endAngle
-    } = getRadialCursorPoints(activeCoordinate);
+    var { cx, cy, radius, startAngle, endAngle } = getRadialCursorPoints(activeCoordinate);
     restProps = {
       cx,
       cy,
       startAngle,
       endAngle,
       innerRadius: radius,
-      outerRadius: radius
+      outerRadius: radius,
     };
     cursorComp = Sector;
     preferredZIndex = DefaultZIndexes.cursorLine;
   } else {
     restProps = {
-      points: getCursorPoints(layout, activeCoordinate, offset)
+      points: getCursorPoints(layout, activeCoordinate, offset),
     };
     cursorComp = Curve;
     preferredZIndex = DefaultZIndexes.cursorLine;
   }
-  var extraClassName = typeof cursor === "object" && "className" in cursor ? cursor.className : void 0;
-  var cursorProps = _objectSpread$f(_objectSpread$f(_objectSpread$f(_objectSpread$f({
-    stroke: "#ccc",
-    pointerEvents: "none"
-  }, offset), restProps), svgPropertiesNoEventsFromUnknown(cursor)), {}, {
-    payload: activePayload,
-    payloadIndex: activeTooltipIndex,
-    className: clsx("recharts-tooltip-cursor", extraClassName)
-  });
-  return /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex: (_props$zIndex = props.zIndex) !== null && _props$zIndex !== void 0 ? _props$zIndex : preferredZIndex
-  }, /* @__PURE__ */ reactExports.createElement(RenderCursor, {
-    cursor,
-    cursorComp,
-    cursorProps
-  }));
+  var extraClassName =
+    typeof cursor === "object" && "className" in cursor ? cursor.className : void 0;
+  var cursorProps = _objectSpread$f(
+    _objectSpread$f(
+      _objectSpread$f(
+        _objectSpread$f(
+          {
+            stroke: "#ccc",
+            pointerEvents: "none",
+          },
+          offset,
+        ),
+        restProps,
+      ),
+      svgPropertiesNoEventsFromUnknown(cursor),
+    ),
+    {},
+    {
+      payload: activePayload,
+      payloadIndex: activeTooltipIndex,
+      className: clsx("recharts-tooltip-cursor", extraClassName),
+    },
+  );
+  return /* @__PURE__ */ reactExports.createElement(
+    ZIndexLayer,
+    {
+      zIndex:
+        (_props$zIndex = props.zIndex) !== null && _props$zIndex !== void 0
+          ? _props$zIndex
+          : preferredZIndex,
+    },
+    /* @__PURE__ */ reactExports.createElement(RenderCursor, {
+      cursor,
+      cursorComp,
+      cursorProps,
+    }),
+  );
 }
 function Cursor(props) {
   var tooltipAxisBandSize = useTooltipAxisBandSize();
@@ -16541,12 +19973,15 @@ function Cursor(props) {
   if (tooltipAxisBandSize == null || offset == null || layout == null || chartName == null) {
     return null;
   }
-  return /* @__PURE__ */ reactExports.createElement(CursorInternal, _extends$c({}, props, {
-    offset,
-    layout,
-    tooltipAxisBandSize,
-    chartName
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    CursorInternal,
+    _extends$c({}, props, {
+      offset,
+      layout,
+      tooltipAxisBandSize,
+      chartName,
+    }),
+  );
 }
 var TooltipPortalContext = /* @__PURE__ */ reactExports.createContext(null);
 var useTooltipPortal = () => reactExports.useContext(TooltipPortalContext);
@@ -16555,10 +19990,10 @@ var hasRequiredEventemitter3;
 function requireEventemitter3() {
   if (hasRequiredEventemitter3) return eventemitter3.exports;
   hasRequiredEventemitter3 = 1;
-  (function(module) {
-    var has2 = Object.prototype.hasOwnProperty, prefix = "~";
-    function Events() {
-    }
+  (function (module) {
+    var has2 = Object.prototype.hasOwnProperty,
+      prefix = "~";
+    function Events() {}
     if (Object.create) {
       Events.prototype = /* @__PURE__ */ Object.create(null);
       if (!new Events().__proto__) prefix = false;
@@ -16572,8 +20007,9 @@ function requireEventemitter3() {
       if (typeof fn !== "function") {
         throw new TypeError("The listener must be a function");
       }
-      var listener2 = new EE(fn, context || emitter, once), evt = prefix ? prefix + event : event;
-      if (!emitter._events[evt]) emitter._events[evt] = listener2, emitter._eventsCount++;
+      var listener2 = new EE(fn, context || emitter, once),
+        evt = prefix ? prefix + event : event;
+      if (!emitter._events[evt]) ((emitter._events[evt] = listener2), emitter._eventsCount++);
       else if (!emitter._events[evt].fn) emitter._events[evt].push(listener2);
       else emitter._events[evt] = [emitter._events[evt], listener2];
       return emitter;
@@ -16587,9 +20023,11 @@ function requireEventemitter3() {
       this._eventsCount = 0;
     }
     EventEmitter2.prototype.eventNames = function eventNames() {
-      var names = [], events, name;
+      var names = [],
+        events,
+        name;
       if (this._eventsCount === 0) return names;
-      for (name in events = this._events) {
+      for (name in (events = this._events)) {
         if (has2.call(events, name)) names.push(prefix ? name.slice(1) : name);
       }
       if (Object.getOwnPropertySymbols) {
@@ -16598,7 +20036,8 @@ function requireEventemitter3() {
       return names;
     };
     EventEmitter2.prototype.listeners = function listeners(event) {
-      var evt = prefix ? prefix + event : event, handlers = this._events[evt];
+      var evt = prefix ? prefix + event : event,
+        handlers = this._events[evt];
       if (!handlers) return [];
       if (handlers.fn) return [handlers.fn];
       for (var i = 0, l = handlers.length, ee = new Array(l); i < l; i++) {
@@ -16607,7 +20046,8 @@ function requireEventemitter3() {
       return ee;
     };
     EventEmitter2.prototype.listenerCount = function listenerCount(event) {
-      var evt = prefix ? prefix + event : event, listeners = this._events[evt];
+      var evt = prefix ? prefix + event : event,
+        listeners = this._events[evt];
       if (!listeners) return 0;
       if (listeners.fn) return 1;
       return listeners.length;
@@ -16615,29 +20055,33 @@ function requireEventemitter3() {
     EventEmitter2.prototype.emit = function emit(event, a1, a2, a3, a4, a5) {
       var evt = prefix ? prefix + event : event;
       if (!this._events[evt]) return false;
-      var listeners = this._events[evt], len = arguments.length, args, i;
+      var listeners = this._events[evt],
+        len = arguments.length,
+        args,
+        i;
       if (listeners.fn) {
         if (listeners.once) this.removeListener(event, listeners.fn, void 0, true);
         switch (len) {
           case 1:
-            return listeners.fn.call(listeners.context), true;
+            return (listeners.fn.call(listeners.context), true);
           case 2:
-            return listeners.fn.call(listeners.context, a1), true;
+            return (listeners.fn.call(listeners.context, a1), true);
           case 3:
-            return listeners.fn.call(listeners.context, a1, a2), true;
+            return (listeners.fn.call(listeners.context, a1, a2), true);
           case 4:
-            return listeners.fn.call(listeners.context, a1, a2, a3), true;
+            return (listeners.fn.call(listeners.context, a1, a2, a3), true);
           case 5:
-            return listeners.fn.call(listeners.context, a1, a2, a3, a4), true;
+            return (listeners.fn.call(listeners.context, a1, a2, a3, a4), true);
           case 6:
-            return listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true;
+            return (listeners.fn.call(listeners.context, a1, a2, a3, a4, a5), true);
         }
         for (i = 1, args = new Array(len - 1); i < len; i++) {
           args[i - 1] = arguments[i];
         }
         listeners.fn.apply(listeners.context, args);
       } else {
-        var length = listeners.length, j;
+        var length = listeners.length,
+          j;
         for (i = 0; i < length; i++) {
           if (listeners[i].once) this.removeListener(event, listeners[i].fn, void 0, true);
           switch (len) {
@@ -16654,9 +20098,10 @@ function requireEventemitter3() {
               listeners[i].fn.call(listeners[i].context, a1, a2, a3);
               break;
             default:
-              if (!args) for (j = 1, args = new Array(len - 1); j < len; j++) {
-                args[j - 1] = arguments[j];
-              }
+              if (!args)
+                for (j = 1, args = new Array(len - 1); j < len; j++) {
+                  args[j - 1] = arguments[j];
+                }
               listeners[i].fn.apply(listeners[i].context, args);
           }
         }
@@ -16678,12 +20123,20 @@ function requireEventemitter3() {
       }
       var listeners = this._events[evt];
       if (listeners.fn) {
-        if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
+        if (
+          listeners.fn === fn &&
+          (!once || listeners.once) &&
+          (!context || listeners.context === context)
+        ) {
           clearEvent(this, evt);
         }
       } else {
         for (var i = 0, events = [], length = listeners.length; i < length; i++) {
-          if (listeners[i].fn !== fn || once && !listeners[i].once || context && listeners[i].context !== context) {
+          if (
+            listeners[i].fn !== fn ||
+            (once && !listeners[i].once) ||
+            (context && listeners[i].context !== context)
+          ) {
             events.push(listeners[i]);
           }
         }
@@ -16731,7 +20184,7 @@ var initialState$9 = {
   chartName: "",
   tooltipPayloadSearcher: () => void 0,
   eventEmitter: void 0,
-  defaultTooltipEventType: "axis"
+  defaultTooltipEventType: "axis",
 };
 var optionsSlice = createSlice({
   name: "options",
@@ -16741,13 +20194,11 @@ var optionsSlice = createSlice({
       if (state.eventEmitter == null) {
         state.eventEmitter = /* @__PURE__ */ Symbol("rechartsEventEmitter");
       }
-    }
-  }
+    },
+  },
 });
 var optionsReducer = optionsSlice.reducer;
-var {
-  createEventEmitter
-} = optionsSlice.actions;
+var { createEventEmitter } = optionsSlice.actions;
 function selectSynchronisedTooltipState(state) {
   return state.tooltip.syncInteraction;
 }
@@ -16755,7 +20206,7 @@ var initialChartDataState = {
   chartData: void 0,
   computedData: void 0,
   dataStartIndex: 0,
-  dataEndIndex: 0
+  dataEndIndex: 0,
 };
 var chartDataSlice = createSlice({
   name: "chartData",
@@ -16776,49 +20227,58 @@ var chartDataSlice = createSlice({
       state.computedData = action.payload;
     },
     setDataStartEndIndexes(state, action) {
-      var {
-        startIndex,
-        endIndex
-      } = action.payload;
+      var { startIndex, endIndex } = action.payload;
       if (startIndex != null) {
         state.dataStartIndex = startIndex;
       }
       if (endIndex != null) {
         state.dataEndIndex = endIndex;
       }
-    }
-  }
+    },
+  },
 });
-var {
-  setChartData,
-  setDataStartEndIndexes,
-  setComputedData
-} = chartDataSlice.actions;
+var { setChartData, setDataStartEndIndexes, setComputedData } = chartDataSlice.actions;
 var chartDataReducer = chartDataSlice.reducer;
 var _excluded$b = ["x", "y"];
 function ownKeys$e(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$e(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$e(Object(t), true).forEach(function(r2) {
-      _defineProperty$g(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$e(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$e(Object(t), true).forEach(function (r2) {
+          _defineProperty$g(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$e(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$g(e, r, t) {
-  return (r = _toPropertyKey$g(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$g(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$g(t) {
   var i = _toPrimitive$g(t, "string");
@@ -16836,20 +20296,24 @@ function _toPrimitive$g(t, r) {
 }
 function _objectWithoutProperties$b(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$b(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$b(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$b(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function useTooltipSyncEventsListener() {
@@ -16873,39 +20337,62 @@ function useTooltipSyncEventsListener() {
         return;
       }
       if (action.payload.active === false) {
-        dispatch(setSyncInteraction({
-          active: false,
-          coordinate: void 0,
-          dataKey: void 0,
-          index: null,
-          label: void 0,
-          sourceViewBox: void 0,
-          graphicalItemId: void 0
-        }));
+        dispatch(
+          setSyncInteraction({
+            active: false,
+            coordinate: void 0,
+            dataKey: void 0,
+            index: null,
+            label: void 0,
+            sourceViewBox: void 0,
+            graphicalItemId: void 0,
+          }),
+        );
         return;
       }
       if (syncMethod === "index") {
         var _action$payload;
-        if (viewBox && action !== null && action !== void 0 && (_action$payload = action.payload) !== null && _action$payload !== void 0 && _action$payload.coordinate && action.payload.sourceViewBox) {
-          var _action$payload$coord = action.payload.coordinate, {
-            x: _x,
-            y: _y
-          } = _action$payload$coord, otherCoordinateProps = _objectWithoutProperties$b(_action$payload$coord, _excluded$b);
+        if (
+          viewBox &&
+          action !== null &&
+          action !== void 0 &&
+          (_action$payload = action.payload) !== null &&
+          _action$payload !== void 0 &&
+          _action$payload.coordinate &&
+          action.payload.sourceViewBox
+        ) {
+          var _action$payload$coord = action.payload.coordinate,
+            { x: _x, y: _y } = _action$payload$coord,
+            otherCoordinateProps = _objectWithoutProperties$b(_action$payload$coord, _excluded$b);
           var {
             x: sourceX,
             y: sourceY,
             width: sourceWidth,
-            height: sourceHeight
+            height: sourceHeight,
           } = action.payload.sourceViewBox;
-          var scaledCoordinate = _objectSpread$e(_objectSpread$e({}, otherCoordinateProps), {}, {
-            x: viewBox.x + (sourceWidth ? (_x - sourceX) / sourceWidth : 0) * viewBox.width,
-            y: viewBox.y + (sourceHeight ? (_y - sourceY) / sourceHeight : 0) * viewBox.height
-          });
-          dispatch(_objectSpread$e(_objectSpread$e({}, action), {}, {
-            payload: _objectSpread$e(_objectSpread$e({}, action.payload), {}, {
-              coordinate: scaledCoordinate
-            })
-          }));
+          var scaledCoordinate = _objectSpread$e(
+            _objectSpread$e({}, otherCoordinateProps),
+            {},
+            {
+              x: viewBox.x + (sourceWidth ? (_x - sourceX) / sourceWidth : 0) * viewBox.width,
+              y: viewBox.y + (sourceHeight ? (_y - sourceY) / sourceHeight : 0) * viewBox.height,
+            },
+          );
+          dispatch(
+            _objectSpread$e(
+              _objectSpread$e({}, action),
+              {},
+              {
+                payload: _objectSpread$e(
+                  _objectSpread$e({}, action.payload),
+                  {},
+                  {
+                    coordinate: scaledCoordinate,
+                  },
+                ),
+              },
+            ),
+          );
         } else {
           dispatch(action);
         }
@@ -16922,49 +20409,48 @@ function useTooltipSyncEventsListener() {
           activeIndex: action.payload.index == null ? void 0 : Number(action.payload.index),
           activeLabel: action.payload.label,
           activeDataKey: action.payload.dataKey,
-          activeCoordinate: action.payload.coordinate
+          activeCoordinate: action.payload.coordinate,
         };
         var activeTooltipIndex = syncMethod(tooltipTicks, syncMethodParam);
         activeTick = tooltipTicks[activeTooltipIndex];
       } else if (syncMethod === "value") {
         activeTick = tooltipTicks.find((tick) => String(tick.value) === action.payload.label);
       }
-      var {
-        coordinate
-      } = action.payload;
+      var { coordinate } = action.payload;
       if (coordinate == null || viewBox == null) {
-        dispatch(setSyncInteraction({
-          active: false,
-          coordinate: void 0,
-          dataKey: void 0,
-          index: null,
-          label: void 0,
-          sourceViewBox: void 0,
-          graphicalItemId: void 0
-        }));
+        dispatch(
+          setSyncInteraction({
+            active: false,
+            coordinate: void 0,
+            dataKey: void 0,
+            index: null,
+            label: void 0,
+            sourceViewBox: void 0,
+            graphicalItemId: void 0,
+          }),
+        );
         return;
       }
       if (activeTick == null) {
-        dispatch(setSyncInteraction({
-          active: false,
-          coordinate: void 0,
-          dataKey: void 0,
-          index: null,
-          label: void 0,
-          sourceViewBox: action.payload.sourceViewBox,
-          graphicalItemId: void 0
-        }));
+        dispatch(
+          setSyncInteraction({
+            active: false,
+            coordinate: void 0,
+            dataKey: void 0,
+            index: null,
+            label: void 0,
+            sourceViewBox: action.payload.sourceViewBox,
+            graphicalItemId: void 0,
+          }),
+        );
         return;
       }
-      var {
-        x: x2,
-        y: y2
-      } = coordinate;
+      var { x: x2, y: y2 } = coordinate;
       var validateChartX = Math.min(x2, viewBox.x + viewBox.width);
       var validateChartY = Math.min(y2, viewBox.y + viewBox.height);
       var activeCoordinate = {
         x: layout === "horizontal" ? activeTick.coordinate : validateChartX,
-        y: layout === "horizontal" ? validateChartY : activeTick.coordinate
+        y: layout === "horizontal" ? validateChartY : activeTick.coordinate,
       };
       var syncAction = setSyncInteraction({
         active: action.payload.active,
@@ -16973,7 +20459,7 @@ function useTooltipSyncEventsListener() {
         index: String(activeTick.index),
         label: action.payload.label,
         sourceViewBox: action.payload.sourceViewBox,
-        graphicalItemId: action.payload.graphicalItemId
+        graphicalItemId: action.payload.graphicalItemId,
       });
       dispatch(syncAction);
     };
@@ -17013,14 +20499,25 @@ function useSynchronisedEventsFromOtherCharts() {
   useTooltipSyncEventsListener();
   useBrushSyncEventsListener();
 }
-function useTooltipChartSynchronisation(tooltipEventType, trigger, activeCoordinate, activeLabel, activeIndex, isTooltipActive) {
-  var activeDataKey = useAppSelector((state) => selectTooltipDataKey(state, tooltipEventType, trigger));
+function useTooltipChartSynchronisation(
+  tooltipEventType,
+  trigger,
+  activeCoordinate,
+  activeLabel,
+  activeIndex,
+  isTooltipActive,
+) {
+  var activeDataKey = useAppSelector((state) =>
+    selectTooltipDataKey(state, tooltipEventType, trigger),
+  );
   var activeGraphicalItemId = useAppSelector(selectActiveTooltipGraphicalItemId);
   var eventEmitterSymbol = useAppSelector(selectEventEmitter);
   var syncId = useAppSelector(selectSyncId);
   var syncMethod = useAppSelector(selectSyncMethod);
   var tooltipState = useAppSelector(selectSynchronisedTooltipState);
-  var isReceivingSynchronisation = (tooltipState === null || tooltipState === void 0 ? void 0 : tooltipState.sourceViewBox) != null;
+  var isReceivingSynchronisation =
+    (tooltipState === null || tooltipState === void 0 ? void 0 : tooltipState.sourceViewBox) !=
+    null;
   var viewBox = useViewBox();
   reactExports.useEffect(() => {
     if (isReceivingSynchronisation) {
@@ -17039,34 +20536,62 @@ function useTooltipChartSynchronisation(tooltipEventType, trigger, activeCoordin
       index: activeIndex,
       label: typeof activeLabel === "number" ? String(activeLabel) : activeLabel,
       sourceViewBox: viewBox,
-      graphicalItemId: activeGraphicalItemId
+      graphicalItemId: activeGraphicalItemId,
     });
     eventCenter.emit(TOOLTIP_SYNC_EVENT, syncId, syncAction, eventEmitterSymbol);
-  }, [isReceivingSynchronisation, activeCoordinate, activeDataKey, activeGraphicalItemId, activeIndex, activeLabel, eventEmitterSymbol, syncId, syncMethod, isTooltipActive, viewBox]);
+  }, [
+    isReceivingSynchronisation,
+    activeCoordinate,
+    activeDataKey,
+    activeGraphicalItemId,
+    activeIndex,
+    activeLabel,
+    eventEmitterSymbol,
+    syncId,
+    syncMethod,
+    isTooltipActive,
+    viewBox,
+  ]);
 }
 function ownKeys$d(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$d(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$d(Object(t), true).forEach(function(r2) {
-      _defineProperty$f(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$d(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$d(Object(t), true).forEach(function (r2) {
+          _defineProperty$f(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$d(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$f(e, r, t) {
-  return (r = _toPropertyKey$f(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$f(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$f(t) {
   var i = _toPrimitive$f(t, "string");
@@ -17098,7 +20623,7 @@ var emptyPayload = [];
 var defaultTooltipProps = {
   allowEscapeViewBox: {
     x: false,
-    y: false
+    y: false,
   },
   animationDuration: 400,
   animationEasing: "ease",
@@ -17114,12 +20639,12 @@ var defaultTooltipProps = {
   offset: 10,
   reverseDirection: {
     x: false,
-    y: false
+    y: false,
   },
   separator: " : ",
   trigger: "hover",
   useTranslate3d: false,
-  wrapperStyle: {}
+  wrapperStyle: {},
 };
 function Tooltip(outsideProps) {
   var _useAppSelector, _ref2;
@@ -17143,36 +20668,61 @@ function Tooltip(outsideProps) {
     trigger,
     defaultIndex,
     portal: portalFromProps,
-    axisId
+    axisId,
   } = props;
   var dispatch = useAppDispatch();
   var defaultIndexAsString = typeof defaultIndex === "number" ? String(defaultIndex) : defaultIndex;
   reactExports.useEffect(() => {
-    dispatch(setTooltipSettingsState({
-      shared,
-      trigger,
-      axisId,
-      active: activeFromProps,
-      defaultIndex: defaultIndexAsString
-    }));
+    dispatch(
+      setTooltipSettingsState({
+        shared,
+        trigger,
+        axisId,
+        active: activeFromProps,
+        defaultIndex: defaultIndexAsString,
+      }),
+    );
   }, [dispatch, shared, trigger, axisId, activeFromProps, defaultIndexAsString]);
   var viewBox = useViewBox();
   var accessibilityLayer = useAccessibilityLayer();
   var tooltipEventType = useTooltipEventType(shared);
-  var {
-    activeIndex,
-    isActive
-  } = (_useAppSelector = useAppSelector((state) => selectIsTooltipActive(state, tooltipEventType, trigger, defaultIndexAsString))) !== null && _useAppSelector !== void 0 ? _useAppSelector : {};
-  var payloadFromRedux = useAppSelector((state) => selectTooltipPayload(state, tooltipEventType, trigger, defaultIndexAsString));
-  var labelFromRedux = useAppSelector((state) => selectActiveLabel(state, tooltipEventType, trigger, defaultIndexAsString));
-  var coordinate = useAppSelector((state) => selectActiveCoordinate(state, tooltipEventType, trigger, defaultIndexAsString));
+  var { activeIndex, isActive } =
+    (_useAppSelector = useAppSelector((state) =>
+      selectIsTooltipActive(state, tooltipEventType, trigger, defaultIndexAsString),
+    )) !== null && _useAppSelector !== void 0
+      ? _useAppSelector
+      : {};
+  var payloadFromRedux = useAppSelector((state) =>
+    selectTooltipPayload(state, tooltipEventType, trigger, defaultIndexAsString),
+  );
+  var labelFromRedux = useAppSelector((state) =>
+    selectActiveLabel(state, tooltipEventType, trigger, defaultIndexAsString),
+  );
+  var coordinate = useAppSelector((state) =>
+    selectActiveCoordinate(state, tooltipEventType, trigger, defaultIndexAsString),
+  );
   var payload = payloadFromRedux;
   var tooltipPortalFromContext = useTooltipPortal();
-  var finalIsActive = (_ref2 = activeFromProps !== null && activeFromProps !== void 0 ? activeFromProps : isActive) !== null && _ref2 !== void 0 ? _ref2 : false;
+  var finalIsActive =
+    (_ref2 =
+      activeFromProps !== null && activeFromProps !== void 0 ? activeFromProps : isActive) !==
+      null && _ref2 !== void 0
+      ? _ref2
+      : false;
   var [lastBoundingBox, updateBoundingBox] = useElementOffset([payload, finalIsActive]);
   var finalLabel = tooltipEventType === "axis" ? labelFromRedux : void 0;
-  useTooltipChartSynchronisation(tooltipEventType, trigger, coordinate, finalLabel, activeIndex, finalIsActive);
-  var tooltipPortal = portalFromProps !== null && portalFromProps !== void 0 ? portalFromProps : tooltipPortalFromContext;
+  useTooltipChartSynchronisation(
+    tooltipEventType,
+    trigger,
+    coordinate,
+    finalLabel,
+    activeIndex,
+    finalIsActive,
+  );
+  var tooltipPortal =
+    portalFromProps !== null && portalFromProps !== void 0
+      ? portalFromProps
+      : tooltipPortalFromContext;
   if (tooltipPortal == null || viewBox == null || tooltipEventType == null) {
     return null;
   }
@@ -17181,45 +20731,75 @@ function Tooltip(outsideProps) {
     finalPayload = emptyPayload;
   }
   if (filterNull && finalPayload.length) {
-    finalPayload = getUniqPayload(finalPayload.filter((entry) => entry.value != null && (entry.hide !== true || props.includeHidden)), payloadUniqBy, defaultUniqBy);
+    finalPayload = getUniqPayload(
+      finalPayload.filter(
+        (entry) => entry.value != null && (entry.hide !== true || props.includeHidden),
+      ),
+      payloadUniqBy,
+      defaultUniqBy,
+    );
   }
   var hasPayload = finalPayload.length > 0;
-  var tooltipContentProps = _objectSpread$d(_objectSpread$d({}, props), {}, {
-    payload: finalPayload,
-    label: finalLabel,
-    active: finalIsActive,
-    activeIndex,
-    coordinate,
-    accessibilityLayer
-  });
-  var tooltipElement = /* @__PURE__ */ reactExports.createElement(TooltipBoundingBox, {
-    allowEscapeViewBox,
-    animationDuration,
-    animationEasing,
-    isAnimationActive,
-    active: finalIsActive,
-    coordinate,
-    hasPayload,
-    offset,
-    position,
-    reverseDirection,
-    useTranslate3d,
-    viewBox,
-    wrapperStyle,
-    lastBoundingBox,
-    innerRef: updateBoundingBox,
-    hasPortalFromProps: Boolean(portalFromProps)
-  }, renderContent(content, tooltipContentProps));
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactDomExports.createPortal(tooltipElement, tooltipPortal), finalIsActive && /* @__PURE__ */ reactExports.createElement(Cursor, {
-    cursor,
-    tooltipEventType,
-    coordinate,
-    payload: finalPayload,
-    index: activeIndex
-  }));
+  var tooltipContentProps = _objectSpread$d(
+    _objectSpread$d({}, props),
+    {},
+    {
+      payload: finalPayload,
+      label: finalLabel,
+      active: finalIsActive,
+      activeIndex,
+      coordinate,
+      accessibilityLayer,
+    },
+  );
+  var tooltipElement = /* @__PURE__ */ reactExports.createElement(
+    TooltipBoundingBox,
+    {
+      allowEscapeViewBox,
+      animationDuration,
+      animationEasing,
+      isAnimationActive,
+      active: finalIsActive,
+      coordinate,
+      hasPayload,
+      offset,
+      position,
+      reverseDirection,
+      useTranslate3d,
+      viewBox,
+      wrapperStyle,
+      lastBoundingBox,
+      innerRef: updateBoundingBox,
+      hasPortalFromProps: Boolean(portalFromProps),
+    },
+    renderContent(content, tooltipContentProps),
+  );
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    /* @__PURE__ */ reactDomExports.createPortal(tooltipElement, tooltipPortal),
+    finalIsActive &&
+      /* @__PURE__ */ reactExports.createElement(Cursor, {
+        cursor,
+        tooltipEventType,
+        coordinate,
+        payload: finalPayload,
+        index: activeIndex,
+      }),
+  );
 }
 function _defineProperty$e(e, r, t) {
-  return (r = _toPropertyKey$e(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$e(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$e(t) {
   var i = _toPrimitive$e(t, "string");
@@ -17270,25 +20850,41 @@ function ownKeys$c(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$c(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$c(Object(t), true).forEach(function(r2) {
-      _defineProperty$d(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$c(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$c(Object(t), true).forEach(function (r2) {
+          _defineProperty$d(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$c(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$d(e, r, t) {
-  return (r = _toPropertyKey$d(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$d(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$d(t) {
   var i = _toPrimitive$d(t, "string");
@@ -17306,7 +20902,7 @@ function _toPrimitive$d(t, r) {
 }
 var defaultConfig = {
   cacheSize: 2e3,
-  enableCache: true
+  enableCache: true,
 };
 var currentConfig = _objectSpread$c({}, defaultConfig);
 var stringCache = new LRUCache(currentConfig.cacheSize);
@@ -17317,7 +20913,7 @@ var SPAN_STYLE = {
   padding: 0,
   margin: 0,
   border: "none",
-  whiteSpace: "pre"
+  whiteSpace: "pre",
 };
 var MEASUREMENT_SPAN_ID = "recharts_measurement_span";
 function createCacheKey(text, style) {
@@ -17327,7 +20923,14 @@ function createCacheKey(text, style) {
   var fontStyle = style.fontStyle || "";
   var letterSpacing = style.letterSpacing || "";
   var textTransform = style.textTransform || "";
-  return "".concat(text, "|").concat(fontSize, "|").concat(fontFamily, "|").concat(fontWeight, "|").concat(fontStyle, "|").concat(letterSpacing, "|").concat(textTransform);
+  return ""
+    .concat(text, "|")
+    .concat(fontSize, "|")
+    .concat(fontFamily, "|")
+    .concat(fontWeight, "|")
+    .concat(fontStyle, "|")
+    .concat(letterSpacing, "|")
+    .concat(textTransform);
 }
 var measureTextWithDOM = (text, style) => {
   try {
@@ -17343,12 +20946,12 @@ var measureTextWithDOM = (text, style) => {
     var rect = measurementSpan.getBoundingClientRect();
     return {
       width: rect.width,
-      height: rect.height
+      height: rect.height,
     };
   } catch (_unused) {
     return {
       width: 0,
-      height: 0
+      height: 0,
     };
   }
 };
@@ -17357,7 +20960,7 @@ var getStringSize = function getStringSize2(text) {
   if (text === void 0 || text === null || Global.isSsr) {
     return {
       width: 0,
-      height: 0
+      height: 0,
     };
   }
   if (!currentConfig.enableCache) {
@@ -17374,7 +20977,17 @@ var getStringSize = function getStringSize2(text) {
 };
 var _DecimalCSS;
 function _defineProperty$c(e, r, t) {
-  return (r = _toPropertyKey$c(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$c(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$c(t) {
   var i = _toPrimitive$c(t, "string");
@@ -17401,7 +21014,7 @@ var CONVERSION_RATES = {
   pc: 96 / 6,
   in: 96,
   Q: 96 / (2.54 * 40),
-  px: 1
+  px: 1,
 };
 var FIXED_CSS_LENGTH_UNITS = ["cm", "mm", "pt", "pc", "in", "Q", "px"];
 function isSupportedUnit(unit2) {
@@ -17414,7 +21027,11 @@ function convertToPx(value, unit2) {
 class DecimalCSS {
   static parse(str) {
     var _NUM_SPLIT_REGEX$exec;
-    var [, numStr, unit2] = (_NUM_SPLIT_REGEX$exec = NUM_SPLIT_REGEX.exec(str)) !== null && _NUM_SPLIT_REGEX$exec !== void 0 ? _NUM_SPLIT_REGEX$exec : [];
+    var [, numStr, unit2] =
+      (_NUM_SPLIT_REGEX$exec = NUM_SPLIT_REGEX.exec(str)) !== null &&
+      _NUM_SPLIT_REGEX$exec !== void 0
+        ? _NUM_SPLIT_REGEX$exec
+        : [];
     if (numStr == null) {
       return DecimalCSS.NaN;
     }
@@ -17477,9 +21094,15 @@ function calculateArithmetic(expr) {
   var newExpr = expr;
   while (newExpr.includes("*") || newExpr.includes("/")) {
     var _MULTIPLY_OR_DIVIDE_R;
-    var [, leftOperand, operator, rightOperand] = (_MULTIPLY_OR_DIVIDE_R = MULTIPLY_OR_DIVIDE_REGEX.exec(newExpr)) !== null && _MULTIPLY_OR_DIVIDE_R !== void 0 ? _MULTIPLY_OR_DIVIDE_R : [];
+    var [, leftOperand, operator, rightOperand] =
+      (_MULTIPLY_OR_DIVIDE_R = MULTIPLY_OR_DIVIDE_REGEX.exec(newExpr)) !== null &&
+      _MULTIPLY_OR_DIVIDE_R !== void 0
+        ? _MULTIPLY_OR_DIVIDE_R
+        : [];
     var lTs = DecimalCSS.parse(leftOperand !== null && leftOperand !== void 0 ? leftOperand : "");
-    var rTs = DecimalCSS.parse(rightOperand !== null && rightOperand !== void 0 ? rightOperand : "");
+    var rTs = DecimalCSS.parse(
+      rightOperand !== null && rightOperand !== void 0 ? rightOperand : "",
+    );
     var result = operator === "*" ? lTs.multiply(rTs) : lTs.divide(rTs);
     if (result.isNaN()) {
       return STR_NAN;
@@ -17488,9 +21111,17 @@ function calculateArithmetic(expr) {
   }
   while (newExpr.includes("+") || /.-\d+(?:\.\d+)?/.test(newExpr)) {
     var _ADD_OR_SUBTRACT_REGE;
-    var [, _leftOperand, _operator, _rightOperand] = (_ADD_OR_SUBTRACT_REGE = ADD_OR_SUBTRACT_REGEX.exec(newExpr)) !== null && _ADD_OR_SUBTRACT_REGE !== void 0 ? _ADD_OR_SUBTRACT_REGE : [];
-    var _lTs = DecimalCSS.parse(_leftOperand !== null && _leftOperand !== void 0 ? _leftOperand : "");
-    var _rTs = DecimalCSS.parse(_rightOperand !== null && _rightOperand !== void 0 ? _rightOperand : "");
+    var [, _leftOperand, _operator, _rightOperand] =
+      (_ADD_OR_SUBTRACT_REGE = ADD_OR_SUBTRACT_REGEX.exec(newExpr)) !== null &&
+      _ADD_OR_SUBTRACT_REGE !== void 0
+        ? _ADD_OR_SUBTRACT_REGE
+        : [];
+    var _lTs = DecimalCSS.parse(
+      _leftOperand !== null && _leftOperand !== void 0 ? _leftOperand : "",
+    );
+    var _rTs = DecimalCSS.parse(
+      _rightOperand !== null && _rightOperand !== void 0 ? _rightOperand : "",
+    );
     var _result = _operator === "+" ? _lTs.add(_rTs) : _lTs.subtract(_rTs);
     if (_result.isNaN()) {
       return STR_NAN;
@@ -17529,41 +21160,56 @@ function reduceCSSCalc(expression) {
   }
   return result;
 }
-var _excluded$a = ["x", "y", "lineHeight", "capHeight", "fill", "scaleToFit", "textAnchor", "verticalAnchor"], _excluded2$6 = ["dx", "dy", "angle", "className", "breakAll"];
+var _excluded$a = [
+    "x",
+    "y",
+    "lineHeight",
+    "capHeight",
+    "fill",
+    "scaleToFit",
+    "textAnchor",
+    "verticalAnchor",
+  ],
+  _excluded2$6 = ["dx", "dy", "angle", "className", "breakAll"];
 function _extends$b() {
-  return _extends$b = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$b.apply(null, arguments);
+  return (
+    (_extends$b = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$b.apply(null, arguments)
+  );
 }
 function _objectWithoutProperties$a(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$a(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$a(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$a(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 var BREAKING_SPACES = /[ \f\n\r\t\v\u2028\u2029]+/;
 var calculateWordWidths = (_ref2) => {
-  var {
-    children,
-    breakAll,
-    style
-  } = _ref2;
+  var { children, breakAll, style } = _ref2;
   try {
     var words = [];
     if (!isNullish(children)) {
@@ -17575,12 +21221,12 @@ var calculateWordWidths = (_ref2) => {
     }
     var wordsWithComputedWidth = words.map((word) => ({
       word,
-      width: getStringSize(word, style).width
+      width: getStringSize(word, style).width,
     }));
     var spaceWidth = breakAll ? 0 : getStringSize(" ", style).width;
     return {
       wordsWithComputedWidth,
-      spaceWidth
+      spaceWidth,
     };
   } catch (_unused) {
     return null;
@@ -17590,34 +21236,40 @@ function isValidTextAnchor(value) {
   return value === "start" || value === "middle" || value === "end" || value === "inherit";
 }
 function isRenderableText(val) {
-  return isNullish(val) || typeof val === "string" || typeof val === "number" || typeof val === "boolean";
+  return (
+    isNullish(val) || typeof val === "string" || typeof val === "number" || typeof val === "boolean"
+  );
 }
-var calculate = (words, lineWidth, spaceWidth, scaleToFit) => words.reduce((result, _ref2) => {
-  var {
-    word,
-    width
-  } = _ref2;
-  var currentLine = result[result.length - 1];
-  if (currentLine && width != null && (lineWidth == null || scaleToFit || currentLine.width + width + spaceWidth < Number(lineWidth))) {
-    currentLine.words.push(word);
-    currentLine.width += width + spaceWidth;
-  } else {
-    var newLine = {
-      words: [word],
-      width
-    };
-    result.push(newLine);
-  }
-  return result;
-}, []);
-var findLongestLine = (words) => words.reduce((a, b) => a.width > b.width ? a : b);
+var calculate = (words, lineWidth, spaceWidth, scaleToFit) =>
+  words.reduce((result, _ref2) => {
+    var { word, width } = _ref2;
+    var currentLine = result[result.length - 1];
+    if (
+      currentLine &&
+      width != null &&
+      (lineWidth == null ||
+        scaleToFit ||
+        currentLine.width + width + spaceWidth < Number(lineWidth))
+    ) {
+      currentLine.words.push(word);
+      currentLine.width += width + spaceWidth;
+    } else {
+      var newLine = {
+        words: [word],
+        width,
+      };
+      result.push(newLine);
+    }
+    return result;
+  }, []);
+var findLongestLine = (words) => words.reduce((a, b) => (a.width > b.width ? a : b));
 var suffix = "…";
 var checkOverflow = (text, index, breakAll, style, maxLines, lineWidth, spaceWidth, scaleToFit) => {
   var tempText = text.slice(0, index);
   var words = calculateWordWidths({
     breakAll,
     style,
-    children: tempText + suffix
+    children: tempText + suffix,
   });
   if (!words) {
     return [false, []];
@@ -17626,20 +21278,22 @@ var checkOverflow = (text, index, breakAll, style, maxLines, lineWidth, spaceWid
   var doesOverflow = result.length > maxLines || findLongestLine(result).width > Number(lineWidth);
   return [doesOverflow, result];
 };
-var calculateWordsByLines = (_ref3, initialWordsWithComputedWith, spaceWidth, lineWidth, scaleToFit) => {
-  var {
-    maxLines,
-    children,
-    style,
-    breakAll
-  } = _ref3;
+var calculateWordsByLines = (
+  _ref3,
+  initialWordsWithComputedWith,
+  spaceWidth,
+  lineWidth,
+  scaleToFit,
+) => {
+  var { maxLines, children, style, breakAll } = _ref3;
   var shouldLimitLines = isNumber(maxLines);
   var text = String(children);
   var originalResult = calculate(initialWordsWithComputedWith, lineWidth, spaceWidth, scaleToFit);
   if (!shouldLimitLines || scaleToFit) {
     return originalResult;
   }
-  var overflows = originalResult.length > maxLines || findLongestLine(originalResult).width > Number(lineWidth);
+  var overflows =
+    originalResult.length > maxLines || findLongestLine(originalResult).width > Number(lineWidth);
   if (!overflows) {
     return originalResult;
   }
@@ -17650,8 +21304,26 @@ var calculateWordsByLines = (_ref3, initialWordsWithComputedWith, spaceWidth, li
   while (start <= end && iterations <= text.length - 1) {
     var middle = Math.floor((start + end) / 2);
     var prev = middle - 1;
-    var [doesPrevOverflow, result] = checkOverflow(text, prev, breakAll, style, maxLines, lineWidth, spaceWidth, scaleToFit);
-    var [doesMiddleOverflow] = checkOverflow(text, middle, breakAll, style, maxLines, lineWidth, spaceWidth, scaleToFit);
+    var [doesPrevOverflow, result] = checkOverflow(
+      text,
+      prev,
+      breakAll,
+      style,
+      maxLines,
+      lineWidth,
+      spaceWidth,
+      scaleToFit,
+    );
+    var [doesMiddleOverflow] = checkOverflow(
+      text,
+      middle,
+      breakAll,
+      style,
+      maxLines,
+      lineWidth,
+      spaceWidth,
+      scaleToFit,
+    );
     if (!doesPrevOverflow && !doesMiddleOverflow) {
       start = middle + 1;
     }
@@ -17668,43 +21340,41 @@ var calculateWordsByLines = (_ref3, initialWordsWithComputedWith, spaceWidth, li
 };
 var getWordsWithoutCalculate = (children) => {
   var words = !isNullish(children) ? children.toString().split(BREAKING_SPACES) : [];
-  return [{
-    words,
-    width: void 0
-  }];
+  return [
+    {
+      words,
+      width: void 0,
+    },
+  ];
 };
 var getWordsByLines = (_ref4) => {
-  var {
-    width,
-    scaleToFit,
-    children,
-    style,
-    breakAll,
-    maxLines
-  } = _ref4;
+  var { width, scaleToFit, children, style, breakAll, maxLines } = _ref4;
   if ((width || scaleToFit) && !Global.isSsr) {
     var wordsWithComputedWidth, spaceWidth;
     var wordWidths = calculateWordWidths({
       breakAll,
       children,
-      style
+      style,
     });
     if (wordWidths) {
-      var {
-        wordsWithComputedWidth: wcw,
-        spaceWidth: sw
-      } = wordWidths;
+      var { wordsWithComputedWidth: wcw, spaceWidth: sw } = wordWidths;
       wordsWithComputedWidth = wcw;
       spaceWidth = sw;
     } else {
       return getWordsWithoutCalculate(children);
     }
-    return calculateWordsByLines({
-      breakAll,
-      children,
-      maxLines,
-      style
-    }, wordsWithComputedWidth, spaceWidth, width, Boolean(scaleToFit));
+    return calculateWordsByLines(
+      {
+        breakAll,
+        children,
+        maxLines,
+        style,
+      },
+      wordsWithComputedWidth,
+      spaceWidth,
+      width,
+      Boolean(scaleToFit),
+    );
   }
   return getWordsWithoutCalculate(children);
 };
@@ -17721,19 +21391,21 @@ var textDefaultProps = {
   // Maintain compat with existing charts / default SVG behavior
   verticalAnchor: "end",
   x: 0,
-  y: 0
+  y: 0,
 };
 var Text = /* @__PURE__ */ reactExports.forwardRef((outsideProps, ref) => {
-  var _resolveDefaultProps = resolveDefaultProps(outsideProps, textDefaultProps), {
-    x: propsX,
-    y: propsY,
-    lineHeight,
-    capHeight,
-    fill,
-    scaleToFit,
-    textAnchor,
-    verticalAnchor
-  } = _resolveDefaultProps, props = _objectWithoutProperties$a(_resolveDefaultProps, _excluded$a);
+  var _resolveDefaultProps = resolveDefaultProps(outsideProps, textDefaultProps),
+    {
+      x: propsX,
+      y: propsY,
+      lineHeight,
+      capHeight,
+      fill,
+      scaleToFit,
+      textAnchor,
+      verticalAnchor,
+    } = _resolveDefaultProps,
+    props = _objectWithoutProperties$a(_resolveDefaultProps, _excluded$a);
   var wordsByLines = reactExports.useMemo(() => {
     return getWordsByLines({
       breakAll: props.breakAll,
@@ -17741,16 +21413,11 @@ var Text = /* @__PURE__ */ reactExports.forwardRef((outsideProps, ref) => {
       maxLines: props.maxLines,
       scaleToFit,
       style: props.style,
-      width: props.width
+      width: props.width,
     });
   }, [props.breakAll, props.children, props.maxLines, scaleToFit, props.style, props.width]);
-  var {
-    dx,
-    dy,
-    angle,
-    className,
-    breakAll
-  } = props, textProps = _objectWithoutProperties$a(props, _excluded2$6);
+  var { dx, dy, angle, className, breakAll } = props,
+    textProps = _objectWithoutProperties$a(props, _excluded2$6);
   if (!isNumOrStr(propsX) || !isNumOrStr(propsY) || wordsByLines.length === 0) {
     return null;
   }
@@ -17765,20 +21432,27 @@ var Text = /* @__PURE__ */ reactExports.forwardRef((outsideProps, ref) => {
       startDy = reduceCSSCalc("calc(".concat(capHeight, ")"));
       break;
     case "middle":
-      startDy = reduceCSSCalc("calc(".concat((wordsByLines.length - 1) / 2, " * -").concat(lineHeight, " + (").concat(capHeight, " / 2))"));
+      startDy = reduceCSSCalc(
+        "calc("
+          .concat((wordsByLines.length - 1) / 2, " * -")
+          .concat(lineHeight, " + (")
+          .concat(capHeight, " / 2))"),
+      );
       break;
     default:
-      startDy = reduceCSSCalc("calc(".concat(wordsByLines.length - 1, " * -").concat(lineHeight, ")"));
+      startDy = reduceCSSCalc(
+        "calc(".concat(wordsByLines.length - 1, " * -").concat(lineHeight, ")"),
+      );
       break;
   }
   var transforms = [];
   var firstLine = wordsByLines[0];
   if (scaleToFit && firstLine != null) {
     var lineWidth = firstLine.width;
-    var {
-      width
-    } = props;
-    transforms.push("scale(".concat(isNumber(width) && isNumber(lineWidth) ? width / lineWidth : 1, ")"));
+    var { width } = props;
+    transforms.push(
+      "scale(".concat(isNumber(width) && isNumber(lineWidth) ? width / lineWidth : 1, ")"),
+    );
   }
   if (angle) {
     transforms.push("rotate(".concat(angle, ", ").concat(x2, ", ").concat(y2, ")"));
@@ -17786,49 +21460,73 @@ var Text = /* @__PURE__ */ reactExports.forwardRef((outsideProps, ref) => {
   if (transforms.length) {
     textProps.transform = transforms.join(" ");
   }
-  return /* @__PURE__ */ reactExports.createElement("text", _extends$b({}, svgPropertiesAndEvents(textProps), {
-    ref,
-    x: x2,
-    y: y2,
-    className: clsx("recharts-text", className),
-    textAnchor,
-    fill: fill.includes("url") ? DEFAULT_FILL : fill
-  }), wordsByLines.map((line, index) => {
-    var words = line.words.join(breakAll ? "" : " ");
-    return (
-      // duplicate words will cause duplicate keys which is why we add the array index here
-      /* @__PURE__ */ reactExports.createElement("tspan", {
-        x: x2,
-        dy: index === 0 ? startDy : lineHeight,
-        key: "".concat(words, "-").concat(index)
-      }, words)
-    );
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    "text",
+    _extends$b({}, svgPropertiesAndEvents(textProps), {
+      ref,
+      x: x2,
+      y: y2,
+      className: clsx("recharts-text", className),
+      textAnchor,
+      fill: fill.includes("url") ? DEFAULT_FILL : fill,
+    }),
+    wordsByLines.map((line, index) => {
+      var words = line.words.join(breakAll ? "" : " ");
+      return (
+        // duplicate words will cause duplicate keys which is why we add the array index here
+        /* @__PURE__ */ reactExports.createElement(
+          "tspan",
+          {
+            x: x2,
+            dy: index === 0 ? startDy : lineHeight,
+            key: "".concat(words, "-").concat(index),
+          },
+          words,
+        )
+      );
+    }),
+  );
 });
 Text.displayName = "Text";
 function ownKeys$b(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$b(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$b(Object(t), true).forEach(function(r2) {
-      _defineProperty$b(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$b(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$b(Object(t), true).forEach(function (r2) {
+          _defineProperty$b(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$b(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$b(e, r, t) {
-  return (r = _toPropertyKey$b(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$b(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$b(t) {
   var i = _toPrimitive$b(t, "string");
@@ -17845,19 +21543,8 @@ function _toPrimitive$b(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 var getCartesianPosition = (options) => {
-  var {
-    viewBox,
-    position,
-    offset = 0,
-    parentViewBox: parentViewBoxFromOptions
-  } = options;
-  var {
-    x: x2,
-    y: y2,
-    height,
-    upperWidth,
-    lowerWidth
-  } = cartesianViewBoxToTrapezoid(viewBox);
+  var { viewBox, position, offset = 0, parentViewBox: parentViewBoxFromOptions } = options;
+  var { x: x2, y: y2, height, upperWidth, lowerWidth } = cartesianViewBoxToTrapezoid(viewBox);
   var upperX = x2;
   var lowerX = x2 + (upperWidth - lowerWidth) / 2;
   var middleX = (upperX + lowerX) / 2;
@@ -17877,7 +21564,7 @@ var getCartesianPosition = (options) => {
       x: upperX + upperWidth / 2,
       y: y2 - verticalOffset,
       horizontalAnchor: "middle",
-      verticalAnchor: verticalEnd
+      verticalAnchor: verticalEnd,
     };
     if (parentViewBox) {
       result.height = Math.max(y2 - parentViewBox.y, 0);
@@ -17890,7 +21577,7 @@ var getCartesianPosition = (options) => {
       x: lowerX + lowerWidth / 2,
       y: y2 + height + verticalOffset,
       horizontalAnchor: "middle",
-      verticalAnchor: verticalStart
+      verticalAnchor: verticalStart,
     };
     if (parentViewBox) {
       _result.height = Math.max(parentViewBox.y + parentViewBox.height - (y2 + height), 0);
@@ -17903,7 +21590,7 @@ var getCartesianPosition = (options) => {
       x: middleX - horizontalOffset,
       y: y2 + height / 2,
       horizontalAnchor: horizontalEnd,
-      verticalAnchor: "middle"
+      verticalAnchor: "middle",
     };
     if (parentViewBox) {
       _result2.width = Math.max(_result2.x - parentViewBox.x, 0);
@@ -17916,7 +21603,7 @@ var getCartesianPosition = (options) => {
       x: middleX + midHeightWidth + horizontalOffset,
       y: y2 + height / 2,
       horizontalAnchor: horizontalStart,
-      verticalAnchor: "middle"
+      verticalAnchor: "middle",
     };
     if (parentViewBox) {
       _result3.width = Math.max(parentViewBox.x + parentViewBox.width - _result3.x, 0);
@@ -17924,131 +21611,189 @@ var getCartesianPosition = (options) => {
     }
     return _result3;
   }
-  var sizeAttrs = parentViewBox ? {
-    width: midHeightWidth,
-    height
-  } : {};
+  var sizeAttrs = parentViewBox
+    ? {
+        width: midHeightWidth,
+        height,
+      }
+    : {};
   if (position === "insideLeft") {
-    return _objectSpread$b({
-      x: middleX + horizontalOffset,
-      y: y2 + height / 2,
-      horizontalAnchor: horizontalStart,
-      verticalAnchor: "middle"
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: middleX + horizontalOffset,
+        y: y2 + height / 2,
+        horizontalAnchor: horizontalStart,
+        verticalAnchor: "middle",
+      },
+      sizeAttrs,
+    );
   }
   if (position === "insideRight") {
-    return _objectSpread$b({
-      x: middleX + midHeightWidth - horizontalOffset,
-      y: y2 + height / 2,
-      horizontalAnchor: horizontalEnd,
-      verticalAnchor: "middle"
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: middleX + midHeightWidth - horizontalOffset,
+        y: y2 + height / 2,
+        horizontalAnchor: horizontalEnd,
+        verticalAnchor: "middle",
+      },
+      sizeAttrs,
+    );
   }
   if (position === "insideTop") {
-    return _objectSpread$b({
-      x: upperX + upperWidth / 2,
-      y: y2 + verticalOffset,
-      horizontalAnchor: "middle",
-      verticalAnchor: verticalStart
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: upperX + upperWidth / 2,
+        y: y2 + verticalOffset,
+        horizontalAnchor: "middle",
+        verticalAnchor: verticalStart,
+      },
+      sizeAttrs,
+    );
   }
   if (position === "insideBottom") {
-    return _objectSpread$b({
-      x: lowerX + lowerWidth / 2,
-      y: y2 + height - verticalOffset,
-      horizontalAnchor: "middle",
-      verticalAnchor: verticalEnd
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: lowerX + lowerWidth / 2,
+        y: y2 + height - verticalOffset,
+        horizontalAnchor: "middle",
+        verticalAnchor: verticalEnd,
+      },
+      sizeAttrs,
+    );
   }
   if (position === "insideTopLeft") {
-    return _objectSpread$b({
-      x: upperX + horizontalOffset,
-      y: y2 + verticalOffset,
-      horizontalAnchor: horizontalStart,
-      verticalAnchor: verticalStart
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: upperX + horizontalOffset,
+        y: y2 + verticalOffset,
+        horizontalAnchor: horizontalStart,
+        verticalAnchor: verticalStart,
+      },
+      sizeAttrs,
+    );
   }
   if (position === "insideTopRight") {
-    return _objectSpread$b({
-      x: upperX + upperWidth - horizontalOffset,
-      y: y2 + verticalOffset,
-      horizontalAnchor: horizontalEnd,
-      verticalAnchor: verticalStart
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: upperX + upperWidth - horizontalOffset,
+        y: y2 + verticalOffset,
+        horizontalAnchor: horizontalEnd,
+        verticalAnchor: verticalStart,
+      },
+      sizeAttrs,
+    );
   }
   if (position === "insideBottomLeft") {
-    return _objectSpread$b({
-      x: lowerX + horizontalOffset,
-      y: y2 + height - verticalOffset,
-      horizontalAnchor: horizontalStart,
-      verticalAnchor: verticalEnd
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: lowerX + horizontalOffset,
+        y: y2 + height - verticalOffset,
+        horizontalAnchor: horizontalStart,
+        verticalAnchor: verticalEnd,
+      },
+      sizeAttrs,
+    );
   }
   if (position === "insideBottomRight") {
-    return _objectSpread$b({
-      x: lowerX + lowerWidth - horizontalOffset,
-      y: y2 + height - verticalOffset,
-      horizontalAnchor: horizontalEnd,
-      verticalAnchor: verticalEnd
-    }, sizeAttrs);
+    return _objectSpread$b(
+      {
+        x: lowerX + lowerWidth - horizontalOffset,
+        y: y2 + height - verticalOffset,
+        horizontalAnchor: horizontalEnd,
+        verticalAnchor: verticalEnd,
+      },
+      sizeAttrs,
+    );
   }
-  if (!!position && typeof position === "object" && (isNumber(position.x) || isPercent(position.x)) && (isNumber(position.y) || isPercent(position.y))) {
-    return _objectSpread$b({
-      x: x2 + getPercentValue(position.x, midHeightWidth),
-      y: y2 + getPercentValue(position.y, height),
-      horizontalAnchor: "end",
-      verticalAnchor: "end"
-    }, sizeAttrs);
+  if (
+    !!position &&
+    typeof position === "object" &&
+    (isNumber(position.x) || isPercent(position.x)) &&
+    (isNumber(position.y) || isPercent(position.y))
+  ) {
+    return _objectSpread$b(
+      {
+        x: x2 + getPercentValue(position.x, midHeightWidth),
+        y: y2 + getPercentValue(position.y, height),
+        horizontalAnchor: "end",
+        verticalAnchor: "end",
+      },
+      sizeAttrs,
+    );
   }
-  return _objectSpread$b({
-    x: centerX,
-    y: y2 + height / 2,
-    horizontalAnchor: "middle",
-    verticalAnchor: "middle"
-  }, sizeAttrs);
+  return _objectSpread$b(
+    {
+      x: centerX,
+      y: y2 + height / 2,
+      horizontalAnchor: "middle",
+      verticalAnchor: "middle",
+    },
+    sizeAttrs,
+  );
 };
-var _excluded$9 = ["labelRef"], _excluded2$5 = ["content"];
+var _excluded$9 = ["labelRef"],
+  _excluded2$5 = ["content"];
 function _objectWithoutProperties$9(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$9(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$9(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$9(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function ownKeys$a(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$a(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$a(Object(t), true).forEach(function(r2) {
-      _defineProperty$a(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$a(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$a(Object(t), true).forEach(function (r2) {
+          _defineProperty$a(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$a(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$a(e, r, t) {
-  return (r = _toPropertyKey$a(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$a(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$a(t) {
   var i = _toPrimitive$a(t, "string");
@@ -18065,36 +21810,40 @@ function _toPrimitive$a(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 function _extends$a() {
-  return _extends$a = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$a.apply(null, arguments);
+  return (
+    (_extends$a = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$a.apply(null, arguments)
+  );
 }
 var CartesianLabelContext = /* @__PURE__ */ reactExports.createContext(null);
 var CartesianLabelContextProvider = (_ref2) => {
-  var {
-    x: x2,
-    y: y2,
-    upperWidth,
-    lowerWidth,
-    width,
-    height,
-    children
-  } = _ref2;
-  var viewBox = reactExports.useMemo(() => ({
-    x: x2,
-    y: y2,
-    upperWidth,
-    lowerWidth,
-    width,
-    height
-  }), [x2, y2, upperWidth, lowerWidth, width, height]);
-  return /* @__PURE__ */ reactExports.createElement(CartesianLabelContext.Provider, {
-    value: viewBox
-  }, children);
+  var { x: x2, y: y2, upperWidth, lowerWidth, width, height, children } = _ref2;
+  var viewBox = reactExports.useMemo(
+    () => ({
+      x: x2,
+      y: y2,
+      upperWidth,
+      lowerWidth,
+      width,
+      height,
+    }),
+    [x2, y2, upperWidth, lowerWidth, width, height],
+  );
+  return /* @__PURE__ */ reactExports.createElement(
+    CartesianLabelContext.Provider,
+    {
+      value: viewBox,
+    },
+    children,
+  );
 };
 var useCartesianLabelContext = () => {
   var labelChildContext = reactExports.useContext(CartesianLabelContext);
@@ -18108,10 +21857,7 @@ var usePolarLabelContext = () => {
   return labelChildContext || chartContext;
 };
 var getLabel = (props) => {
-  var {
-    value,
-    formatter
-  } = props;
+  var { value, formatter } = props;
   var label = isNullish(props.children) ? value : props.children;
   if (typeof formatter === "function") {
     return formatter(label);
@@ -18127,19 +21873,8 @@ var getDeltaAngle = (startAngle, endAngle) => {
   return sign2 * deltaAngle;
 };
 var renderRadialLabel = (labelProps, position, label, attrs, viewBox) => {
-  var {
-    offset,
-    className
-  } = labelProps;
-  var {
-    cx,
-    cy,
-    innerRadius,
-    outerRadius,
-    startAngle,
-    endAngle,
-    clockWise
-  } = viewBox;
+  var { offset, className } = labelProps;
+  var { cx, cy, innerRadius, outerRadius, startAngle, endAngle, clockWise } = viewBox;
   var radius = (innerRadius + outerRadius) / 2;
   var deltaAngle = getDeltaAngle(startAngle, endAngle);
   var sign2 = deltaAngle >= 0 ? 1 : -1;
@@ -18163,38 +21898,48 @@ var renderRadialLabel = (labelProps, position, label, attrs, viewBox) => {
   direction = deltaAngle <= 0 ? direction : !direction;
   var startPoint = polarToCartesian(cx, cy, radius, labelAngle);
   var endPoint = polarToCartesian(cx, cy, radius, labelAngle + (direction ? 1 : -1) * 359);
-  var path = "M".concat(startPoint.x, ",").concat(startPoint.y, "\n    A").concat(radius, ",").concat(radius, ",0,1,").concat(direction ? 0 : 1, ",\n    ").concat(endPoint.x, ",").concat(endPoint.y);
+  var path = "M"
+    .concat(startPoint.x, ",")
+    .concat(startPoint.y, "\n    A")
+    .concat(radius, ",")
+    .concat(radius, ",0,1,")
+    .concat(direction ? 0 : 1, ",\n    ")
+    .concat(endPoint.x, ",")
+    .concat(endPoint.y);
   var id = isNullish(labelProps.id) ? uniqueId("recharts-radial-line-") : labelProps.id;
-  return /* @__PURE__ */ reactExports.createElement("text", _extends$a({}, attrs, {
-    dominantBaseline: "central",
-    className: clsx("recharts-radial-bar-label", className)
-  }), /* @__PURE__ */ reactExports.createElement("defs", null, /* @__PURE__ */ reactExports.createElement("path", {
-    id,
-    d: path
-  })), /* @__PURE__ */ reactExports.createElement("textPath", {
-    xlinkHref: "#".concat(id)
-  }, label));
+  return /* @__PURE__ */ reactExports.createElement(
+    "text",
+    _extends$a({}, attrs, {
+      dominantBaseline: "central",
+      className: clsx("recharts-radial-bar-label", className),
+    }),
+    /* @__PURE__ */ reactExports.createElement(
+      "defs",
+      null,
+      /* @__PURE__ */ reactExports.createElement("path", {
+        id,
+        d: path,
+      }),
+    ),
+    /* @__PURE__ */ reactExports.createElement(
+      "textPath",
+      {
+        xlinkHref: "#".concat(id),
+      },
+      label,
+    ),
+  );
 };
 var getAttrsOfPolarLabel = (viewBox, offset, position) => {
-  var {
-    cx,
-    cy,
-    innerRadius,
-    outerRadius,
-    startAngle,
-    endAngle
-  } = viewBox;
+  var { cx, cy, innerRadius, outerRadius, startAngle, endAngle } = viewBox;
   var midAngle = (startAngle + endAngle) / 2;
   if (position === "outside") {
-    var {
-      x: _x,
-      y: _y
-    } = polarToCartesian(cx, cy, outerRadius + offset, midAngle);
+    var { x: _x, y: _y } = polarToCartesian(cx, cy, outerRadius + offset, midAngle);
     return {
       x: _x,
       y: _y,
       textAnchor: _x >= cx ? "start" : "end",
-      verticalAnchor: "middle"
+      verticalAnchor: "middle",
     };
   }
   if (position === "center") {
@@ -18202,7 +21947,7 @@ var getAttrsOfPolarLabel = (viewBox, offset, position) => {
       x: cx,
       y: cy,
       textAnchor: "middle",
-      verticalAnchor: "middle"
+      verticalAnchor: "middle",
     };
   }
   if (position === "centerTop") {
@@ -18210,7 +21955,7 @@ var getAttrsOfPolarLabel = (viewBox, offset, position) => {
       x: cx,
       y: cy,
       textAnchor: "middle",
-      verticalAnchor: "start"
+      verticalAnchor: "start",
     };
   }
   if (position === "centerBottom") {
@@ -18218,19 +21963,16 @@ var getAttrsOfPolarLabel = (viewBox, offset, position) => {
       x: cx,
       y: cy,
       textAnchor: "middle",
-      verticalAnchor: "end"
+      verticalAnchor: "end",
     };
   }
   var r = (innerRadius + outerRadius) / 2;
-  var {
-    x: x2,
-    y: y2
-  } = polarToCartesian(cx, cy, r, midAngle);
+  var { x: x2, y: y2 } = polarToCartesian(cx, cy, r, midAngle);
   return {
     x: x2,
     y: y2,
     textAnchor: "middle",
-    verticalAnchor: "middle"
+    verticalAnchor: "middle",
   };
 };
 var isPolar = (viewBox) => viewBox != null && "cx" in viewBox && isNumber(viewBox.cx);
@@ -18239,17 +21981,13 @@ var defaultLabelProps = {
   offset: 5,
   zIndex: DefaultZIndexes.label,
   position: "middle",
-  textBreakAll: false
+  textBreakAll: false,
 };
 function polarViewBoxToTrapezoid(viewBox) {
   if (!isPolar(viewBox)) {
     return viewBox;
   }
-  var {
-    cx,
-    cy,
-    outerRadius
-  } = viewBox;
+  var { cx, cy, outerRadius } = viewBox;
   var diameter = outerRadius * 2;
   return {
     x: cx - outerRadius,
@@ -18257,7 +21995,7 @@ function polarViewBoxToTrapezoid(viewBox) {
     width: diameter,
     upperWidth: diameter,
     lowerWidth: diameter,
-    height: diameter
+    height: diameter,
   };
 }
 function Label(outerProps) {
@@ -18271,11 +22009,16 @@ function Label(outerProps) {
     content,
     className = "",
     textBreakAll,
-    labelRef
+    labelRef,
   } = props;
   var polarViewBox = usePolarLabelContext();
   var cartesianViewBox = useCartesianLabelContext();
-  var resolvedViewBox = position === "center" ? cartesianViewBox : polarViewBox !== null && polarViewBox !== void 0 ? polarViewBox : cartesianViewBox;
+  var resolvedViewBox =
+    position === "center"
+      ? cartesianViewBox
+      : polarViewBox !== null && polarViewBox !== void 0
+        ? polarViewBox
+        : cartesianViewBox;
   var viewBox, label, positionAttrs;
   if (viewBoxFromProps == null) {
     viewBox = resolvedViewBox;
@@ -18285,22 +22028,30 @@ function Label(outerProps) {
     viewBox = cartesianViewBoxToTrapezoid(viewBoxFromProps);
   }
   var cartesianBox = polarViewBoxToTrapezoid(viewBox);
-  if (!viewBox || isNullish(value) && isNullish(children) && !/* @__PURE__ */ reactExports.isValidElement(content) && typeof content !== "function") {
+  if (
+    !viewBox ||
+    (isNullish(value) &&
+      isNullish(children) &&
+      !(/* @__PURE__ */ reactExports.isValidElement(content)) &&
+      typeof content !== "function")
+  ) {
     return null;
   }
-  var propsWithViewBox = _objectSpread$a(_objectSpread$a({}, props), {}, {
-    viewBox
-  });
+  var propsWithViewBox = _objectSpread$a(
+    _objectSpread$a({}, props),
+    {},
+    {
+      viewBox,
+    },
+  );
   if (/* @__PURE__ */ reactExports.isValidElement(content)) {
-    var {
-      labelRef: _
-    } = propsWithViewBox, propsWithoutLabelRef = _objectWithoutProperties$9(propsWithViewBox, _excluded$9);
+    var { labelRef: _ } = propsWithViewBox,
+      propsWithoutLabelRef = _objectWithoutProperties$9(propsWithViewBox, _excluded$9);
     return /* @__PURE__ */ reactExports.cloneElement(content, propsWithoutLabelRef);
   }
   if (typeof content === "function") {
-    var {
-      content: _2
-    } = propsWithViewBox, propsForContent = _objectWithoutProperties$9(propsWithViewBox, _excluded2$5);
+    var { content: _2 } = propsWithViewBox,
+      propsForContent = _objectWithoutProperties$9(propsWithViewBox, _excluded2$5);
     label = /* @__PURE__ */ reactExports.createElement(content, propsForContent);
     if (/* @__PURE__ */ reactExports.isValidElement(label)) {
       return label;
@@ -18322,32 +22073,57 @@ function Label(outerProps) {
       viewBox: cartesianBox,
       position,
       offset: props.offset,
-      parentViewBox: isPolar(parentViewBox) ? void 0 : parentViewBox
+      parentViewBox: isPolar(parentViewBox) ? void 0 : parentViewBox,
     });
-    positionAttrs = _objectSpread$a(_objectSpread$a({
-      x: cartesianResult.x,
-      y: cartesianResult.y,
-      textAnchor: cartesianResult.horizontalAnchor,
-      verticalAnchor: cartesianResult.verticalAnchor
-    }, cartesianResult.width !== void 0 ? {
-      width: cartesianResult.width
-    } : {}), cartesianResult.height !== void 0 ? {
-      height: cartesianResult.height
-    } : {});
+    positionAttrs = _objectSpread$a(
+      _objectSpread$a(
+        {
+          x: cartesianResult.x,
+          y: cartesianResult.y,
+          textAnchor: cartesianResult.horizontalAnchor,
+          verticalAnchor: cartesianResult.verticalAnchor,
+        },
+        cartesianResult.width !== void 0
+          ? {
+              width: cartesianResult.width,
+            }
+          : {},
+      ),
+      cartesianResult.height !== void 0
+        ? {
+            height: cartesianResult.height,
+          }
+        : {},
+    );
   }
-  return /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex: props.zIndex
-  }, /* @__PURE__ */ reactExports.createElement(Text, _extends$a({
-    ref: labelRef,
-    className: clsx("recharts-label", className)
-  }, attrs, positionAttrs, {
-    /*
-     * textAnchor is decided by default based on the `position`
-     * but we allow overriding via props for precise control.
-     */
-    textAnchor: isValidTextAnchor(attrs.textAnchor) ? attrs.textAnchor : positionAttrs.textAnchor,
-    breakAll: textBreakAll
-  }), label));
+  return /* @__PURE__ */ reactExports.createElement(
+    ZIndexLayer,
+    {
+      zIndex: props.zIndex,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      Text,
+      _extends$a(
+        {
+          ref: labelRef,
+          className: clsx("recharts-label", className),
+        },
+        attrs,
+        positionAttrs,
+        {
+          /*
+           * textAnchor is decided by default based on the `position`
+           * but we allow overriding via props for precise control.
+           */
+          textAnchor: isValidTextAnchor(attrs.textAnchor)
+            ? attrs.textAnchor
+            : positionAttrs.textAnchor,
+          breakAll: textBreakAll,
+        },
+      ),
+      label,
+    ),
+  );
 }
 Label.displayName = "Label";
 var parseLabel = (label, viewBox, labelRef) => {
@@ -18356,77 +22132,122 @@ var parseLabel = (label, viewBox, labelRef) => {
   }
   var commonProps = {
     viewBox,
-    labelRef
+    labelRef,
   };
   if (label === true) {
-    return /* @__PURE__ */ reactExports.createElement(Label, _extends$a({
-      key: "label-implicit"
-    }, commonProps));
+    return /* @__PURE__ */ reactExports.createElement(
+      Label,
+      _extends$a(
+        {
+          key: "label-implicit",
+        },
+        commonProps,
+      ),
+    );
   }
   if (isNumOrStr(label)) {
-    return /* @__PURE__ */ reactExports.createElement(Label, _extends$a({
-      key: "label-implicit",
-      value: label
-    }, commonProps));
+    return /* @__PURE__ */ reactExports.createElement(
+      Label,
+      _extends$a(
+        {
+          key: "label-implicit",
+          value: label,
+        },
+        commonProps,
+      ),
+    );
   }
   if (/* @__PURE__ */ reactExports.isValidElement(label)) {
     if (label.type === Label) {
-      return /* @__PURE__ */ reactExports.cloneElement(label, _objectSpread$a({
-        key: "label-implicit"
-      }, commonProps));
+      return /* @__PURE__ */ reactExports.cloneElement(
+        label,
+        _objectSpread$a(
+          {
+            key: "label-implicit",
+          },
+          commonProps,
+        ),
+      );
     }
-    return /* @__PURE__ */ reactExports.createElement(Label, _extends$a({
-      key: "label-implicit",
-      content: label
-    }, commonProps));
+    return /* @__PURE__ */ reactExports.createElement(
+      Label,
+      _extends$a(
+        {
+          key: "label-implicit",
+          content: label,
+        },
+        commonProps,
+      ),
+    );
   }
   if (isLabelContentAFunction(label)) {
-    return /* @__PURE__ */ reactExports.createElement(Label, _extends$a({
-      key: "label-implicit",
-      content: label
-    }, commonProps));
+    return /* @__PURE__ */ reactExports.createElement(
+      Label,
+      _extends$a(
+        {
+          key: "label-implicit",
+          content: label,
+        },
+        commonProps,
+      ),
+    );
   }
   if (label && typeof label === "object") {
-    return /* @__PURE__ */ reactExports.createElement(Label, _extends$a({}, label, {
-      key: "label-implicit"
-    }, commonProps));
+    return /* @__PURE__ */ reactExports.createElement(
+      Label,
+      _extends$a(
+        {},
+        label,
+        {
+          key: "label-implicit",
+        },
+        commonProps,
+      ),
+    );
   }
   return null;
 };
 function CartesianLabelFromLabelProp(_ref3) {
-  var {
-    label,
-    labelRef
-  } = _ref3;
+  var { label, labelRef } = _ref3;
   var viewBox = useCartesianLabelContext();
   return parseLabel(label, viewBox, labelRef) || null;
 }
-var _excluded$8 = ["valueAccessor"], _excluded2$4 = ["dataKey", "clockWise", "id", "textBreakAll", "zIndex"];
+var _excluded$8 = ["valueAccessor"],
+  _excluded2$4 = ["dataKey", "clockWise", "id", "textBreakAll", "zIndex"];
 function _extends$9() {
-  return _extends$9 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$9.apply(null, arguments);
+  return (
+    (_extends$9 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$9.apply(null, arguments)
+  );
 }
 function _objectWithoutProperties$8(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$8(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$8(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$8(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 var defaultAccessor = (entry) => {
@@ -18447,109 +22268,135 @@ function usePolarLabelListContext() {
   return reactExports.useContext(PolarLabelListContext);
 }
 function LabelList(_ref2) {
-  var {
-    valueAccessor = defaultAccessor
-  } = _ref2, restProps = _objectWithoutProperties$8(_ref2, _excluded$8);
-  var {
-    dataKey,
-    clockWise,
-    id,
-    textBreakAll,
-    zIndex
-  } = restProps, others = _objectWithoutProperties$8(restProps, _excluded2$4);
+  var { valueAccessor = defaultAccessor } = _ref2,
+    restProps = _objectWithoutProperties$8(_ref2, _excluded$8);
+  var { dataKey, clockWise, id, textBreakAll, zIndex } = restProps,
+    others = _objectWithoutProperties$8(restProps, _excluded2$4);
   var cartesianData = useCartesianLabelListContext();
   var polarData = usePolarLabelListContext();
   var data = cartesianData || polarData;
   if (!data || !data.length) {
     return null;
   }
-  return /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex: zIndex !== null && zIndex !== void 0 ? zIndex : DefaultZIndexes.label
-  }, /* @__PURE__ */ reactExports.createElement(Layer, {
-    className: "recharts-label-list"
-  }, data.map((entry, index) => {
-    var _restProps$fill;
-    var value = isNullish(dataKey) ? valueAccessor(entry, index) : getValueByDataKey(entry.payload, dataKey);
-    var idProps = isNullish(id) ? {} : {
-      id: "".concat(id, "-").concat(index)
-    };
-    return /* @__PURE__ */ reactExports.createElement(Label, _extends$9({
-      key: "label-".concat(index)
-    }, svgPropertiesAndEvents(entry), others, idProps, {
-      /*
-       * Prefer to use the explicit fill from LabelList props.
-       * Only in an absence of that, fall back to the fill of the entry.
-       * The entry fill can be quite difficult to see especially in Bar, Pie, RadialBar in inside positions.
-       * On the other hand it's quite convenient in Scatter, Line, or when the position is outside the Bar, Pie filled shapes.
-       */
-      fill: (_restProps$fill = restProps.fill) !== null && _restProps$fill !== void 0 ? _restProps$fill : entry.fill,
-      parentViewBox: entry.parentViewBox,
-      value,
-      textBreakAll,
-      viewBox: entry.viewBox,
-      index,
-      zIndex: 0
-    }));
-  })));
+  return /* @__PURE__ */ reactExports.createElement(
+    ZIndexLayer,
+    {
+      zIndex: zIndex !== null && zIndex !== void 0 ? zIndex : DefaultZIndexes.label,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      Layer,
+      {
+        className: "recharts-label-list",
+      },
+      data.map((entry, index) => {
+        var _restProps$fill;
+        var value = isNullish(dataKey)
+          ? valueAccessor(entry, index)
+          : getValueByDataKey(entry.payload, dataKey);
+        var idProps = isNullish(id)
+          ? {}
+          : {
+              id: "".concat(id, "-").concat(index),
+            };
+        return /* @__PURE__ */ reactExports.createElement(
+          Label,
+          _extends$9(
+            {
+              key: "label-".concat(index),
+            },
+            svgPropertiesAndEvents(entry),
+            others,
+            idProps,
+            {
+              /*
+               * Prefer to use the explicit fill from LabelList props.
+               * Only in an absence of that, fall back to the fill of the entry.
+               * The entry fill can be quite difficult to see especially in Bar, Pie, RadialBar in inside positions.
+               * On the other hand it's quite convenient in Scatter, Line, or when the position is outside the Bar, Pie filled shapes.
+               */
+              fill:
+                (_restProps$fill = restProps.fill) !== null && _restProps$fill !== void 0
+                  ? _restProps$fill
+                  : entry.fill,
+              parentViewBox: entry.parentViewBox,
+              value,
+              textBreakAll,
+              viewBox: entry.viewBox,
+              index,
+              zIndex: 0,
+            },
+          ),
+        );
+      }),
+    ),
+  );
 }
 LabelList.displayName = "LabelList";
 function LabelListFromLabelProp(_ref2) {
-  var {
-    label
-  } = _ref2;
+  var { label } = _ref2;
   if (!label) {
     return null;
   }
   if (label === true) {
     return /* @__PURE__ */ reactExports.createElement(LabelList, {
-      key: "labelList-implicit"
+      key: "labelList-implicit",
     });
   }
   if (/* @__PURE__ */ reactExports.isValidElement(label) || isLabelContentAFunction(label)) {
     return /* @__PURE__ */ reactExports.createElement(LabelList, {
       key: "labelList-implicit",
-      content: label
+      content: label,
     });
   }
   if (typeof label === "object") {
-    return /* @__PURE__ */ reactExports.createElement(LabelList, _extends$9({
-      key: "labelList-implicit"
-    }, label, {
-      type: String(label.type)
-    }));
+    return /* @__PURE__ */ reactExports.createElement(
+      LabelList,
+      _extends$9(
+        {
+          key: "labelList-implicit",
+        },
+        label,
+        {
+          type: String(label.type),
+        },
+      ),
+    );
   }
   return null;
 }
 function _extends$8() {
-  return _extends$8 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$8.apply(null, arguments);
+  return (
+    (_extends$8 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$8.apply(null, arguments)
+  );
 }
 var Dot = (props) => {
-  var {
-    cx,
-    cy,
-    r,
-    className
-  } = props;
+  var { cx, cy, r, className } = props;
   var layerClass = clsx("recharts-dot", className);
   if (isNumber(cx) && isNumber(cy) && isNumber(r)) {
-    return /* @__PURE__ */ reactExports.createElement("circle", _extends$8({}, svgPropertiesNoEvents(props), adaptEventHandlers(props), {
-      className: layerClass,
-      cx,
-      cy,
-      r
-    }));
+    return /* @__PURE__ */ reactExports.createElement(
+      "circle",
+      _extends$8({}, svgPropertiesNoEvents(props), adaptEventHandlers(props), {
+        className: layerClass,
+        cx,
+        cy,
+        r,
+      }),
+    );
   }
   return null;
 };
 var initialState$8 = {
   radiusAxis: {},
-  angleAxis: {}
+  angleAxis: {},
 };
 var polarAxisSlice = createSlice({
   name: "polarAxis",
@@ -18566,15 +22413,10 @@ var polarAxisSlice = createSlice({
     },
     removeAngleAxis(state, action) {
       delete state.angleAxis[action.payload.id];
-    }
-  }
+    },
+  },
 });
-var {
-  addRadiusAxis,
-  removeRadiusAxis,
-  addAngleAxis,
-  removeAngleAxis
-} = polarAxisSlice.actions;
+var { addRadiusAxis, removeRadiusAxis, addAngleAxis, removeAngleAxis } = polarAxisSlice.actions;
 var polarAxisReducer = polarAxisSlice.reducer;
 function getClassNameFromUnknown(u) {
   if (u && typeof u === "object" && "className" in u && typeof u.className === "string") {
@@ -18588,14 +22430,28 @@ var hasRequiredReactIs_production_min;
 function requireReactIs_production_min() {
   if (hasRequiredReactIs_production_min) return reactIs_production_min;
   hasRequiredReactIs_production_min = 1;
-  var b = /* @__PURE__ */ Symbol.for("react.element"), c = /* @__PURE__ */ Symbol.for("react.portal"), d = /* @__PURE__ */ Symbol.for("react.fragment"), e = /* @__PURE__ */ Symbol.for("react.strict_mode"), f = /* @__PURE__ */ Symbol.for("react.profiler"), g = /* @__PURE__ */ Symbol.for("react.provider"), h = /* @__PURE__ */ Symbol.for("react.context"), k = /* @__PURE__ */ Symbol.for("react.server_context"), l = /* @__PURE__ */ Symbol.for("react.forward_ref"), m = /* @__PURE__ */ Symbol.for("react.suspense"), n = /* @__PURE__ */ Symbol.for("react.suspense_list"), p = /* @__PURE__ */ Symbol.for("react.memo"), q = /* @__PURE__ */ Symbol.for("react.lazy"), t = /* @__PURE__ */ Symbol.for("react.offscreen"), u;
+  var b = /* @__PURE__ */ Symbol.for("react.element"),
+    c = /* @__PURE__ */ Symbol.for("react.portal"),
+    d = /* @__PURE__ */ Symbol.for("react.fragment"),
+    e = /* @__PURE__ */ Symbol.for("react.strict_mode"),
+    f = /* @__PURE__ */ Symbol.for("react.profiler"),
+    g = /* @__PURE__ */ Symbol.for("react.provider"),
+    h = /* @__PURE__ */ Symbol.for("react.context"),
+    k = /* @__PURE__ */ Symbol.for("react.server_context"),
+    l = /* @__PURE__ */ Symbol.for("react.forward_ref"),
+    m = /* @__PURE__ */ Symbol.for("react.suspense"),
+    n = /* @__PURE__ */ Symbol.for("react.suspense_list"),
+    p = /* @__PURE__ */ Symbol.for("react.memo"),
+    q = /* @__PURE__ */ Symbol.for("react.lazy"),
+    t = /* @__PURE__ */ Symbol.for("react.offscreen"),
+    u;
   u = /* @__PURE__ */ Symbol.for("react.module.reference");
   function v(a) {
     if ("object" === typeof a && null !== a) {
       var r = a.$$typeof;
       switch (r) {
         case b:
-          switch (a = a.type, a) {
+          switch (((a = a.type), a)) {
             case d:
             case f:
             case e:
@@ -18603,7 +22459,7 @@ function requireReactIs_production_min() {
             case n:
               return a;
             default:
-              switch (a = a && a.$$typeof, a) {
+              switch (((a = a && a.$$typeof), a)) {
                 case k:
                 case h:
                 case l:
@@ -18632,50 +22488,68 @@ function requireReactIs_production_min() {
   reactIs_production_min.StrictMode = e;
   reactIs_production_min.Suspense = m;
   reactIs_production_min.SuspenseList = n;
-  reactIs_production_min.isAsyncMode = function() {
+  reactIs_production_min.isAsyncMode = function () {
     return false;
   };
-  reactIs_production_min.isConcurrentMode = function() {
+  reactIs_production_min.isConcurrentMode = function () {
     return false;
   };
-  reactIs_production_min.isContextConsumer = function(a) {
+  reactIs_production_min.isContextConsumer = function (a) {
     return v(a) === h;
   };
-  reactIs_production_min.isContextProvider = function(a) {
+  reactIs_production_min.isContextProvider = function (a) {
     return v(a) === g;
   };
-  reactIs_production_min.isElement = function(a) {
+  reactIs_production_min.isElement = function (a) {
     return "object" === typeof a && null !== a && a.$$typeof === b;
   };
-  reactIs_production_min.isForwardRef = function(a) {
+  reactIs_production_min.isForwardRef = function (a) {
     return v(a) === l;
   };
-  reactIs_production_min.isFragment = function(a) {
+  reactIs_production_min.isFragment = function (a) {
     return v(a) === d;
   };
-  reactIs_production_min.isLazy = function(a) {
+  reactIs_production_min.isLazy = function (a) {
     return v(a) === q;
   };
-  reactIs_production_min.isMemo = function(a) {
+  reactIs_production_min.isMemo = function (a) {
     return v(a) === p;
   };
-  reactIs_production_min.isPortal = function(a) {
+  reactIs_production_min.isPortal = function (a) {
     return v(a) === c;
   };
-  reactIs_production_min.isProfiler = function(a) {
+  reactIs_production_min.isProfiler = function (a) {
     return v(a) === f;
   };
-  reactIs_production_min.isStrictMode = function(a) {
+  reactIs_production_min.isStrictMode = function (a) {
     return v(a) === e;
   };
-  reactIs_production_min.isSuspense = function(a) {
+  reactIs_production_min.isSuspense = function (a) {
     return v(a) === m;
   };
-  reactIs_production_min.isSuspenseList = function(a) {
+  reactIs_production_min.isSuspenseList = function (a) {
     return v(a) === n;
   };
-  reactIs_production_min.isValidElementType = function(a) {
-    return "string" === typeof a || "function" === typeof a || a === d || a === f || a === e || a === m || a === n || a === t || "object" === typeof a && null !== a && (a.$$typeof === q || a.$$typeof === p || a.$$typeof === g || a.$$typeof === h || a.$$typeof === l || a.$$typeof === u || void 0 !== a.getModuleId) ? true : false;
+  reactIs_production_min.isValidElementType = function (a) {
+    return "string" === typeof a ||
+      "function" === typeof a ||
+      a === d ||
+      a === f ||
+      a === e ||
+      a === m ||
+      a === n ||
+      a === t ||
+      ("object" === typeof a &&
+        null !== a &&
+        (a.$$typeof === q ||
+          a.$$typeof === p ||
+          a.$$typeof === g ||
+          a.$$typeof === h ||
+          a.$$typeof === l ||
+          a.$$typeof === u ||
+          void 0 !== a.getModuleId))
+      ? true
+      : false;
   };
   reactIs_production_min.typeOf = v;
   return reactIs_production_min;
@@ -18741,9 +22615,7 @@ var isClipDot = (dot) => {
   return true;
 };
 function SetTooltipEntrySettings(_ref2) {
-  var {
-    tooltipEntrySettings
-  } = _ref2;
+  var { tooltipEntrySettings } = _ref2;
   var dispatch = useAppDispatch();
   var isPanorama = useIsPanorama();
   var prevSettingsRef = reactExports.useRef(null);
@@ -18754,10 +22626,12 @@ function SetTooltipEntrySettings(_ref2) {
     if (prevSettingsRef.current === null) {
       dispatch(addTooltipEntrySettings(tooltipEntrySettings));
     } else if (prevSettingsRef.current !== tooltipEntrySettings) {
-      dispatch(replaceTooltipEntrySettings({
-        prev: prevSettingsRef.current,
-        next: tooltipEntrySettings
-      }));
+      dispatch(
+        replaceTooltipEntrySettings({
+          prev: prevSettingsRef.current,
+          next: tooltipEntrySettings,
+        }),
+      );
     }
     prevSettingsRef.current = tooltipEntrySettings;
   }, [tooltipEntrySettings, dispatch, isPanorama]);
@@ -18772,9 +22646,7 @@ function SetTooltipEntrySettings(_ref2) {
   return null;
 }
 function SetLegendPayload(_ref2) {
-  var {
-    legendPayload
-  } = _ref2;
+  var { legendPayload } = _ref2;
   var dispatch = useAppDispatch();
   var isPanorama = useIsPanorama();
   var prevPayloadRef = reactExports.useRef(null);
@@ -18785,10 +22657,12 @@ function SetLegendPayload(_ref2) {
     if (prevPayloadRef.current === null) {
       dispatch(addLegendPayload(legendPayload));
     } else if (prevPayloadRef.current !== legendPayload) {
-      dispatch(replaceLegendPayload({
-        prev: prevPayloadRef.current,
-        next: legendPayload
-      }));
+      dispatch(
+        replaceLegendPayload({
+          prev: prevPayloadRef.current,
+          next: legendPayload,
+        }),
+      );
     }
     prevPayloadRef.current = legendPayload;
   }, [dispatch, isPanorama, legendPayload]);
@@ -18817,19 +22691,19 @@ function useUniqueId(prefix, customId) {
 }
 var GraphicalItemIdContext = /* @__PURE__ */ reactExports.createContext(void 0);
 var RegisterGraphicalItemId = (_ref2) => {
-  var {
-    id,
-    type,
-    children
-  } = _ref2;
+  var { id, type, children } = _ref2;
   var resolvedId = useUniqueId("recharts-".concat(type), id);
-  return /* @__PURE__ */ reactExports.createElement(GraphicalItemIdContext.Provider, {
-    value: resolvedId
-  }, children(resolvedId));
+  return /* @__PURE__ */ reactExports.createElement(
+    GraphicalItemIdContext.Provider,
+    {
+      value: resolvedId,
+    },
+    children(resolvedId),
+  );
 };
 var initialState$7 = {
   cartesianItems: [],
-  polarItems: []
+  polarItems: [],
 };
 var graphicalItemsSlice = createSlice({
   name: "graphicalItems",
@@ -18839,20 +22713,17 @@ var graphicalItemsSlice = createSlice({
       reducer(state, action) {
         state.cartesianItems.push(castDraft(action.payload));
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     replaceCartesianGraphicalItem: {
       reducer(state, action) {
-        var {
-          prev,
-          next
-        } = action.payload;
+        var { prev, next } = action.payload;
         var index = current$1(state).cartesianItems.indexOf(castDraft(prev));
         if (index > -1) {
           state.cartesianItems[index] = castDraft(next);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     removeCartesianGraphicalItem: {
       reducer(state, action) {
@@ -18861,13 +22732,13 @@ var graphicalItemsSlice = createSlice({
           state.cartesianItems.splice(index, 1);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     addPolarGraphicalItem: {
       reducer(state, action) {
         state.polarItems.push(castDraft(action.payload));
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     removePolarGraphicalItem: {
       reducer(state, action) {
@@ -18876,22 +22747,19 @@ var graphicalItemsSlice = createSlice({
           state.polarItems.splice(index, 1);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     replacePolarGraphicalItem: {
       reducer(state, action) {
-        var {
-          prev,
-          next
-        } = action.payload;
+        var { prev, next } = action.payload;
         var index = current$1(state).polarItems.indexOf(castDraft(prev));
         if (index > -1) {
           state.polarItems[index] = castDraft(next);
         }
       },
-      prepare: prepareAutoBatched()
-    }
-  }
+      prepare: prepareAutoBatched(),
+    },
+  },
 });
 var {
   addCartesianGraphicalItem,
@@ -18899,7 +22767,7 @@ var {
   removeCartesianGraphicalItem,
   addPolarGraphicalItem,
   removePolarGraphicalItem,
-  replacePolarGraphicalItem
+  replacePolarGraphicalItem,
 } = graphicalItemsSlice.actions;
 var graphicalItemsReducer = graphicalItemsSlice.reducer;
 var SetCartesianGraphicalItemImpl = (props) => {
@@ -18909,10 +22777,12 @@ var SetCartesianGraphicalItemImpl = (props) => {
     if (prevPropsRef.current === null) {
       dispatch(addCartesianGraphicalItem(props));
     } else if (prevPropsRef.current !== props) {
-      dispatch(replaceCartesianGraphicalItem({
-        prev: prevPropsRef.current,
-        next: props
-      }));
+      dispatch(
+        replaceCartesianGraphicalItem({
+          prev: prevPropsRef.current,
+          next: props,
+        }),
+      );
     }
     prevPropsRef.current = props;
   }, [dispatch, props]);
@@ -18932,25 +22802,41 @@ function ownKeys$9(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$9(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$9(Object(t), true).forEach(function(r2) {
-      _defineProperty$9(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$9(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$9(Object(t), true).forEach(function (r2) {
+          _defineProperty$9(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$9(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$9(e, r, t) {
-  return (r = _toPropertyKey$9(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$9(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$9(t) {
   var i = _toPrimitive$9(t, "string");
@@ -18967,38 +22853,43 @@ function _toPrimitive$9(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 function _extends$7() {
-  return _extends$7 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$7.apply(null, arguments);
+  return (
+    (_extends$7 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$7.apply(null, arguments)
+  );
 }
 function _objectWithoutProperties$7(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$7(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$7(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$7(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function DotItem(_ref2) {
-  var {
-    option,
-    dotProps,
-    className
-  } = _ref2;
+  var { option, dotProps, className } = _ref2;
   if (/* @__PURE__ */ reactExports.isValidElement(option)) {
     return /* @__PURE__ */ reactExports.cloneElement(option, dotProps);
   }
@@ -19006,12 +22897,15 @@ function DotItem(_ref2) {
     return option(dotProps);
   }
   var finalClassName = clsx(className, typeof option !== "boolean" ? option.className : "");
-  var _ref22 = dotProps !== null && dotProps !== void 0 ? dotProps : {}, {
-    points
-  } = _ref22, props = _objectWithoutProperties$7(_ref22, _excluded$7);
-  return /* @__PURE__ */ reactExports.createElement(Dot, _extends$7({}, props, {
-    className: finalClassName
-  }));
+  var _ref22 = dotProps !== null && dotProps !== void 0 ? dotProps : {},
+    { points } = _ref22,
+    props = _objectWithoutProperties$7(_ref22, _excluded$7);
+  return /* @__PURE__ */ reactExports.createElement(
+    Dot,
+    _extends$7({}, props, {
+      className: finalClassName,
+    }),
+  );
 }
 function shouldRenderDots(points, dot) {
   if (points == null) {
@@ -19032,7 +22926,7 @@ function Dots(_ref3) {
     baseProps,
     needClip,
     clipPathId,
-    zIndex = DefaultZIndexes.scatter
+    zIndex = DefaultZIndexes.scatter,
   } = _ref3;
   if (!shouldRenderDots(points, dot)) {
     return null;
@@ -19041,57 +22935,94 @@ function Dots(_ref3) {
   var customDotProps = svgPropertiesAndEventsFromUnknown(dot);
   var dots = points.map((entry, i) => {
     var _entry$x, _entry$y;
-    var dotProps = _objectSpread$9(_objectSpread$9(_objectSpread$9({
-      r: 3
-    }, baseProps), customDotProps), {}, {
-      index: i,
-      cx: (_entry$x = entry.x) !== null && _entry$x !== void 0 ? _entry$x : void 0,
-      cy: (_entry$y = entry.y) !== null && _entry$y !== void 0 ? _entry$y : void 0,
-      dataKey,
-      value: entry.value,
-      payload: entry.payload,
-      points
-    });
+    var dotProps = _objectSpread$9(
+      _objectSpread$9(
+        _objectSpread$9(
+          {
+            r: 3,
+          },
+          baseProps,
+        ),
+        customDotProps,
+      ),
+      {},
+      {
+        index: i,
+        cx: (_entry$x = entry.x) !== null && _entry$x !== void 0 ? _entry$x : void 0,
+        cy: (_entry$y = entry.y) !== null && _entry$y !== void 0 ? _entry$y : void 0,
+        dataKey,
+        value: entry.value,
+        payload: entry.payload,
+        points,
+      },
+    );
     return /* @__PURE__ */ reactExports.createElement(DotItem, {
       key: "dot-".concat(i),
       option: dot,
       dotProps,
-      className: dotClassName
+      className: dotClassName,
     });
   });
   var layerProps = {};
   if (needClip && clipPathId != null) {
     layerProps.clipPath = "url(#clipPath-".concat(clipDot ? "" : "dots-").concat(clipPathId, ")");
   }
-  return /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex
-  }, /* @__PURE__ */ reactExports.createElement(Layer, _extends$7({
-    className
-  }, layerProps), dots));
+  return /* @__PURE__ */ reactExports.createElement(
+    ZIndexLayer,
+    {
+      zIndex,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      Layer,
+      _extends$7(
+        {
+          className,
+        },
+        layerProps,
+      ),
+      dots,
+    ),
+  );
 }
 function ownKeys$8(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$8(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$8(Object(t), true).forEach(function(r2) {
-      _defineProperty$8(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$8(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$8(Object(t), true).forEach(function (r2) {
+          _defineProperty$8(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$8(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$8(e, r, t) {
-  return (r = _toPropertyKey$8(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$8(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$8(t) {
   var i = _toPrimitive$8(t, "string");
@@ -19111,7 +23042,7 @@ var defaultAxisId = 0;
 var initialState$6 = {
   xAxis: {},
   yAxis: {},
-  zAxis: {}
+  zAxis: {},
 };
 var cartesianAxisSlice = createSlice({
   name: "cartesianAxis",
@@ -19121,14 +23052,11 @@ var cartesianAxisSlice = createSlice({
       reducer(state, action) {
         state.xAxis[action.payload.id] = castDraft(action.payload);
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     replaceXAxis: {
       reducer(state, action) {
-        var {
-          prev,
-          next
-        } = action.payload;
+        var { prev, next } = action.payload;
         if (state.xAxis[prev.id] !== void 0) {
           if (prev.id !== next.id) {
             delete state.xAxis[prev.id];
@@ -19136,26 +23064,23 @@ var cartesianAxisSlice = createSlice({
           state.xAxis[next.id] = castDraft(next);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     removeXAxis: {
       reducer(state, action) {
         delete state.xAxis[action.payload.id];
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     addYAxis: {
       reducer(state, action) {
         state.yAxis[action.payload.id] = castDraft(action.payload);
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     replaceYAxis: {
       reducer(state, action) {
-        var {
-          prev,
-          next
-        } = action.payload;
+        var { prev, next } = action.payload;
         if (state.yAxis[prev.id] !== void 0) {
           if (prev.id !== next.id) {
             delete state.yAxis[prev.id];
@@ -19163,26 +23088,23 @@ var cartesianAxisSlice = createSlice({
           state.yAxis[next.id] = castDraft(next);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     removeYAxis: {
       reducer(state, action) {
         delete state.yAxis[action.payload.id];
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     addZAxis: {
       reducer(state, action) {
         state.zAxis[action.payload.id] = castDraft(action.payload);
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     replaceZAxis: {
       reducer(state, action) {
-        var {
-          prev,
-          next
-        } = action.payload;
+        var { prev, next } = action.payload;
         if (state.zAxis[prev.id] !== void 0) {
           if (prev.id !== next.id) {
             delete state.zAxis[prev.id];
@@ -19190,34 +23112,43 @@ var cartesianAxisSlice = createSlice({
           state.zAxis[next.id] = castDraft(next);
         }
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     removeZAxis: {
       reducer(state, action) {
         delete state.zAxis[action.payload.id];
       },
-      prepare: prepareAutoBatched()
+      prepare: prepareAutoBatched(),
     },
     updateYAxisWidth(state, action) {
-      var {
-        id,
-        width
-      } = action.payload;
+      var { id, width } = action.payload;
       var axis = state.yAxis[id];
       if (axis) {
         var _history$;
         var history = axis.widthHistory || [];
-        if (history.length === 3 && history[0] === history[2] && width === history[1] && width !== axis.width && Math.abs(width - ((_history$ = history[0]) !== null && _history$ !== void 0 ? _history$ : 0)) <= 1) {
+        if (
+          history.length === 3 &&
+          history[0] === history[2] &&
+          width === history[1] &&
+          width !== axis.width &&
+          Math.abs(
+            width - ((_history$ = history[0]) !== null && _history$ !== void 0 ? _history$ : 0),
+          ) <= 1
+        ) {
           return;
         }
         var newHistory = [...history, width].slice(-3);
-        state.yAxis[id] = _objectSpread$8(_objectSpread$8({}, axis), {}, {
-          width,
-          widthHistory: newHistory
-        });
+        state.yAxis[id] = _objectSpread$8(
+          _objectSpread$8({}, axis),
+          {},
+          {
+            width,
+            widthHistory: newHistory,
+          },
+        );
       }
-    }
-  }
+    },
+  },
 });
 var {
   addXAxis,
@@ -19229,7 +23160,7 @@ var {
   addZAxis,
   replaceZAxis,
   removeZAxis,
-  updateYAxisWidth
+  updateYAxisWidth,
 } = cartesianAxisSlice.actions;
 var cartesianAxisReducer = cartesianAxisSlice.reducer;
 var selectChartOffset = createSelector([selectChartOffsetInternal], (offsetInternal) => {
@@ -19237,20 +23168,23 @@ var selectChartOffset = createSelector([selectChartOffsetInternal], (offsetInter
     top: offsetInternal.top,
     bottom: offsetInternal.bottom,
     left: offsetInternal.left,
-    right: offsetInternal.right
+    right: offsetInternal.right,
   };
 });
-var selectPlotArea = createSelector([selectChartOffset, selectChartWidth, selectChartHeight], (offset, chartWidth, chartHeight) => {
-  if (!offset || chartWidth == null || chartHeight == null) {
-    return void 0;
-  }
-  return {
-    x: offset.left,
-    y: offset.top,
-    width: Math.max(0, chartWidth - offset.left - offset.right),
-    height: Math.max(0, chartHeight - offset.top - offset.bottom)
-  };
-});
+var selectPlotArea = createSelector(
+  [selectChartOffset, selectChartWidth, selectChartHeight],
+  (offset, chartWidth, chartHeight) => {
+    if (!offset || chartWidth == null || chartHeight == null) {
+      return void 0;
+    }
+    return {
+      x: offset.left,
+      y: offset.top,
+      width: Math.max(0, chartWidth - offset.left - offset.right),
+      height: Math.max(0, chartHeight - offset.top - offset.bottom),
+    };
+  },
+);
 var usePlotArea = () => {
   return useAppSelector(selectPlotArea);
 };
@@ -19261,25 +23195,41 @@ function ownKeys$7(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$7(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$7(Object(t), true).forEach(function(r2) {
-      _defineProperty$7(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$7(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$7(Object(t), true).forEach(function (r2) {
+          _defineProperty$7(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$7(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$7(e, r, t) {
-  return (r = _toPropertyKey$7(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$7(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$7(t) {
   var i = _toPrimitive$7(t, "string");
@@ -19296,14 +23246,7 @@ function _toPrimitive$7(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 var ActivePoint = (_ref2) => {
-  var {
-    point: point2,
-    childIndex,
-    mainColor,
-    activeDot,
-    dataKey,
-    clipPath
-  } = _ref2;
+  var { point: point2, childIndex, mainColor, activeDot, dataKey, clipPath } = _ref2;
   if (activeDot === false || point2.x == null || point2.y == null) {
     return null;
   }
@@ -19317,9 +23260,15 @@ var ActivePoint = (_ref2) => {
     strokeWidth: 2,
     stroke: "#fff",
     payload: point2.payload,
-    value: point2.value
+    value: point2.value,
   };
-  var dotProps = _objectSpread$7(_objectSpread$7(_objectSpread$7({}, dotPropsTyped), svgPropertiesNoEventsFromUnknown(activeDot)), adaptEventHandlers(activeDot));
+  var dotProps = _objectSpread$7(
+    _objectSpread$7(
+      _objectSpread$7({}, dotPropsTyped),
+      svgPropertiesNoEventsFromUnknown(activeDot),
+    ),
+    adaptEventHandlers(activeDot),
+  );
   var dot;
   if (/* @__PURE__ */ reactExports.isValidElement(activeDot)) {
     dot = /* @__PURE__ */ reactExports.cloneElement(activeDot, dotProps);
@@ -19328,10 +23277,14 @@ var ActivePoint = (_ref2) => {
   } else {
     dot = /* @__PURE__ */ reactExports.createElement(Dot, dotProps);
   }
-  return /* @__PURE__ */ reactExports.createElement(Layer, {
-    className: "recharts-active-dot",
-    clipPath
-  }, dot);
+  return /* @__PURE__ */ reactExports.createElement(
+    Layer,
+    {
+      className: "recharts-active-dot",
+      clipPath,
+    },
+    dot,
+  );
 };
 function ActivePoints(_ref2) {
   var {
@@ -19340,7 +23293,7 @@ function ActivePoints(_ref2) {
     activeDot,
     itemDataKey,
     clipPath,
-    zIndex = DefaultZIndexes.activeDot
+    zIndex = DefaultZIndexes.activeDot,
   } = _ref2;
   var activeTooltipIndex = useAppSelector(selectActiveTooltipIndex);
   var activeDataPoints = useActiveTooltipDataPoints();
@@ -19351,27 +23304,28 @@ function ActivePoints(_ref2) {
   if (isNullish(activePoint)) {
     return null;
   }
-  return /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex
-  }, /* @__PURE__ */ reactExports.createElement(ActivePoint, {
-    point: activePoint,
-    childIndex: Number(activeTooltipIndex),
-    mainColor,
-    dataKey: itemDataKey,
-    activeDot,
-    clipPath
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    ZIndexLayer,
+    {
+      zIndex,
+    },
+    /* @__PURE__ */ reactExports.createElement(ActivePoint, {
+      point: activePoint,
+      childIndex: Number(activeTooltipIndex),
+      mainColor,
+      dataKey: itemDataKey,
+      activeDot,
+      clipPath,
+    }),
+  );
 }
 var ChartDataContextProvider = (props) => {
-  var {
-    chartData
-  } = props;
+  var { chartData } = props;
   var dispatch = useAppDispatch();
   var isPanorama = useIsPanorama();
   reactExports.useEffect(() => {
     if (isPanorama) {
-      return () => {
-      };
+      return () => {};
     }
     dispatch(setChartData(chartData));
     return () => {
@@ -19389,8 +23343,8 @@ var initialState$5 = {
     top: 0,
     right: 0,
     bottom: 0,
-    left: 0
-  }
+    left: 0,
+  },
 };
 var brushSlice = createSlice({
   name: "brush",
@@ -19401,32 +23355,30 @@ var brushSlice = createSlice({
         return initialState$5;
       }
       return action.payload;
-    }
-  }
+    },
+  },
 });
-var {
-  setBrushSettings
-} = brushSlice.actions;
+var { setBrushSettings } = brushSlice.actions;
 var brushReducer = brushSlice.reducer;
 function normalizeAngle(angle) {
-  return (angle % 180 + 180) % 180;
+  return ((angle % 180) + 180) % 180;
 }
 var getAngledRectangleWidth = function getAngledRectangleWidth2(_ref4) {
-  var {
-    width,
-    height
-  } = _ref4;
+  var { width, height } = _ref4;
   var angle = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0;
   var normalizedAngle = normalizeAngle(angle);
-  var angleRadians = normalizedAngle * Math.PI / 180;
+  var angleRadians = (normalizedAngle * Math.PI) / 180;
   var angleThreshold = Math.atan(height / width);
-  var angledWidth = angleRadians > angleThreshold && angleRadians < Math.PI - angleThreshold ? height / Math.sin(angleRadians) : width / Math.cos(angleRadians);
+  var angledWidth =
+    angleRadians > angleThreshold && angleRadians < Math.PI - angleThreshold
+      ? height / Math.sin(angleRadians)
+      : width / Math.cos(angleRadians);
   return Math.abs(angledWidth);
 };
 var initialState$4 = {
   dots: [],
   areas: [],
-  lines: []
+  lines: [],
 };
 var referenceElementsSlice = createSlice({
   name: "referenceElements",
@@ -19458,44 +23410,44 @@ var referenceElementsSlice = createSlice({
       if (index !== -1) {
         state.lines.splice(index, 1);
       }
-    }
-  }
+    },
+  },
 });
-var {
-  addDot,
-  removeDot,
-  addArea,
-  removeArea,
-  addLine,
-  removeLine
-} = referenceElementsSlice.actions;
+var { addDot, removeDot, addArea, removeArea, addLine, removeLine } =
+  referenceElementsSlice.actions;
 var referenceElementsReducer = referenceElementsSlice.reducer;
 var ClipPathIdContext = /* @__PURE__ */ reactExports.createContext(void 0);
 var ClipPathProvider = (_ref2) => {
-  var {
-    children
-  } = _ref2;
+  var { children } = _ref2;
   var [clipPathId] = reactExports.useState("".concat(uniqueId("recharts"), "-clip"));
   var plotArea = usePlotArea();
   if (plotArea == null) {
     return null;
   }
-  var {
-    x: x2,
-    y: y2,
-    width,
-    height
-  } = plotArea;
-  return /* @__PURE__ */ reactExports.createElement(ClipPathIdContext.Provider, {
-    value: clipPathId
-  }, /* @__PURE__ */ reactExports.createElement("defs", null, /* @__PURE__ */ reactExports.createElement("clipPath", {
-    id: clipPathId
-  }, /* @__PURE__ */ reactExports.createElement("rect", {
-    x: x2,
-    y: y2,
-    height,
-    width
-  }))), children);
+  var { x: x2, y: y2, width, height } = plotArea;
+  return /* @__PURE__ */ reactExports.createElement(
+    ClipPathIdContext.Provider,
+    {
+      value: clipPathId,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      "defs",
+      null,
+      /* @__PURE__ */ reactExports.createElement(
+        "clipPath",
+        {
+          id: clipPathId,
+        },
+        /* @__PURE__ */ reactExports.createElement("rect", {
+          x: x2,
+          y: y2,
+          height,
+          width,
+        }),
+      ),
+    ),
+    children,
+  );
 };
 function getEveryNth(array2, n) {
   if (n < 1) {
@@ -19516,27 +23468,22 @@ function getEveryNth(array2, n) {
 function getAngledTickWidth(contentSize, unitSize, angle) {
   var size = {
     width: contentSize.width + unitSize.width,
-    height: contentSize.height + unitSize.height
+    height: contentSize.height + unitSize.height,
   };
   return getAngledRectangleWidth(size, angle);
 }
 function getTickBoundaries(viewBox, sign2, sizeKey) {
   var isWidth = sizeKey === "width";
-  var {
-    x: x2,
-    y: y2,
-    width,
-    height
-  } = viewBox;
+  var { x: x2, y: y2, width, height } = viewBox;
   if (sign2 === 1) {
     return {
       start: isWidth ? x2 : y2,
-      end: isWidth ? x2 + width : y2 + height
+      end: isWidth ? x2 + width : y2 + height,
     };
   }
   return {
     start: isWidth ? x2 + width : y2 + height,
-    end: isWidth ? x2 : y2
+    end: isWidth ? x2 : y2,
   };
 }
 function isVisible(sign2, tickPosition, getSize, start, end) {
@@ -19544,47 +23491,48 @@ function isVisible(sign2, tickPosition, getSize, start, end) {
     return false;
   }
   var size = getSize();
-  return sign2 * (tickPosition - sign2 * size / 2 - start) >= 0 && sign2 * (tickPosition + sign2 * size / 2 - end) <= 0;
+  return (
+    sign2 * (tickPosition - (sign2 * size) / 2 - start) >= 0 &&
+    sign2 * (tickPosition + (sign2 * size) / 2 - end) <= 0
+  );
 }
 function getNumberIntervalTicks(ticks2, interval) {
   return getEveryNth(ticks2, interval + 1);
 }
 function getEquidistantTicks(sign2, boundaries, getTickSize, ticks2, minTickGap) {
   var result = (ticks2 || []).slice();
-  var {
-    start: initialStart,
-    end
-  } = boundaries;
+  var { start: initialStart, end } = boundaries;
   var index = 0;
   var stepsize = 1;
   var start = initialStart;
   var _loop = function _loop2() {
-    var entry = ticks2 === null || ticks2 === void 0 ? void 0 : ticks2[index];
-    if (entry === void 0) {
-      return {
-        v: getEveryNth(ticks2, stepsize)
-      };
-    }
-    var i = index;
-    var size;
-    var getSize = () => {
-      if (size === void 0) {
-        size = getTickSize(entry, i);
+      var entry = ticks2 === null || ticks2 === void 0 ? void 0 : ticks2[index];
+      if (entry === void 0) {
+        return {
+          v: getEveryNth(ticks2, stepsize),
+        };
       }
-      return size;
-    };
-    var tickCoord = entry.coordinate;
-    var isShow = index === 0 || isVisible(sign2, tickCoord, getSize, start, end);
-    if (!isShow) {
-      index = 0;
-      start = initialStart;
-      stepsize += 1;
-    }
-    if (isShow) {
-      start = tickCoord + sign2 * (getSize() / 2 + minTickGap);
-      index += stepsize;
-    }
-  }, _ret;
+      var i = index;
+      var size;
+      var getSize = () => {
+        if (size === void 0) {
+          size = getTickSize(entry, i);
+        }
+        return size;
+      };
+      var tickCoord = entry.coordinate;
+      var isShow = index === 0 || isVisible(sign2, tickCoord, getSize, start, end);
+      if (!isShow) {
+        index = 0;
+        start = initialStart;
+        stepsize += 1;
+      }
+      if (isShow) {
+        start = tickCoord + sign2 * (getSize() / 2 + minTickGap);
+        index += stepsize;
+      }
+    },
+    _ret;
   while (stepsize <= result.length) {
     _ret = _loop();
     if (_ret) return _ret.v;
@@ -19597,37 +23545,35 @@ function getEquidistantPreserveEndTicks(sign2, boundaries, getTickSize, ticks2, 
   if (len === 0) {
     return [];
   }
-  var {
-    start: initialStart,
-    end
-  } = boundaries;
+  var { start: initialStart, end } = boundaries;
   for (var stepsize = 1; stepsize <= len; stepsize++) {
     var offset = (len - 1) % stepsize;
     var start = initialStart;
     var ok = true;
     var _loop2 = function _loop22() {
-      var entry = ticks2[index];
-      if (entry == null) {
-        return 0;
-      }
-      var i = index;
-      var size;
-      var getSize = () => {
-        if (size === void 0) {
-          size = getTickSize(entry, i);
+        var entry = ticks2[index];
+        if (entry == null) {
+          return 0;
         }
-        return size;
-      };
-      var tickCoord = entry.coordinate;
-      var isShow = index === offset || isVisible(sign2, tickCoord, getSize, start, end);
-      if (!isShow) {
-        ok = false;
-        return 1;
-      }
-      if (isShow) {
-        start = tickCoord + sign2 * (getSize() / 2 + minTickGap);
-      }
-    }, _ret2;
+        var i = index;
+        var size;
+        var getSize = () => {
+          if (size === void 0) {
+            size = getTickSize(entry, i);
+          }
+          return size;
+        };
+        var tickCoord = entry.coordinate;
+        var isShow = index === offset || isVisible(sign2, tickCoord, getSize, start, end);
+        if (!isShow) {
+          ok = false;
+          return 1;
+        }
+        if (isShow) {
+          start = tickCoord + sign2 * (getSize() / 2 + minTickGap);
+        }
+      },
+      _ret2;
     for (var index = offset; index < len; index += stepsize) {
       _ret2 = _loop2();
       if (_ret2 === 0) continue;
@@ -19650,25 +23596,41 @@ function ownKeys$6(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$6(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$6(Object(t), true).forEach(function(r2) {
-      _defineProperty$6(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$6(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$6(Object(t), true).forEach(function (r2) {
+          _defineProperty$6(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$6(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$6(e, r, t) {
-  return (r = _toPropertyKey$6(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$6(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$6(t) {
   var i = _toPrimitive$6(t, "string");
@@ -19687,12 +23649,8 @@ function _toPrimitive$6(t, r) {
 function getTicksEnd(sign2, boundaries, getTickSize, ticks2, minTickGap) {
   var result = (ticks2 || []).slice();
   var len = result.length;
-  var {
-    start
-  } = boundaries;
-  var {
-    end
-  } = boundaries;
+  var { start } = boundaries;
+  var { end } = boundaries;
   var _loop = function _loop2(i2) {
     var initialEntry = result[i2];
     if (initialEntry == null) {
@@ -19707,22 +23665,34 @@ function getTicksEnd(sign2, boundaries, getTickSize, ticks2, minTickGap) {
       return size;
     };
     if (i2 === len - 1) {
-      var gap = sign2 * (entry.coordinate + sign2 * getSize() / 2 - end);
-      result[i2] = entry = _objectSpread$6(_objectSpread$6({}, entry), {}, {
-        tickCoord: gap > 0 ? entry.coordinate - gap * sign2 : entry.coordinate
-      });
+      var gap = sign2 * (entry.coordinate + (sign2 * getSize()) / 2 - end);
+      result[i2] = entry = _objectSpread$6(
+        _objectSpread$6({}, entry),
+        {},
+        {
+          tickCoord: gap > 0 ? entry.coordinate - gap * sign2 : entry.coordinate,
+        },
+      );
     } else {
-      result[i2] = entry = _objectSpread$6(_objectSpread$6({}, entry), {}, {
-        tickCoord: entry.coordinate
-      });
+      result[i2] = entry = _objectSpread$6(
+        _objectSpread$6({}, entry),
+        {},
+        {
+          tickCoord: entry.coordinate,
+        },
+      );
     }
     if (entry.tickCoord != null) {
       var isShow = isVisible(sign2, entry.tickCoord, getSize, start, end);
       if (isShow) {
         end = entry.tickCoord - sign2 * (getSize() / 2 + minTickGap);
-        result[i2] = _objectSpread$6(_objectSpread$6({}, entry), {}, {
-          isShow: true
-        });
+        result[i2] = _objectSpread$6(
+          _objectSpread$6({}, entry),
+          {},
+          {
+            isShow: true,
+          },
+        );
       }
     }
   };
@@ -19734,25 +23704,30 @@ function getTicksEnd(sign2, boundaries, getTickSize, ticks2, minTickGap) {
 function getTicksStart(sign2, boundaries, getTickSize, ticks2, minTickGap, preserveEnd) {
   var result = (ticks2 || []).slice();
   var len = result.length;
-  var {
-    start,
-    end
-  } = boundaries;
+  var { start, end } = boundaries;
   if (preserveEnd) {
     var tail = ticks2[len - 1];
     if (tail != null) {
       var tailSize = getTickSize(tail, len - 1);
-      var tailGap = sign2 * (tail.coordinate + sign2 * tailSize / 2 - end);
-      result[len - 1] = tail = _objectSpread$6(_objectSpread$6({}, tail), {}, {
-        tickCoord: tailGap > 0 ? tail.coordinate - tailGap * sign2 : tail.coordinate
-      });
+      var tailGap = sign2 * (tail.coordinate + (sign2 * tailSize) / 2 - end);
+      result[len - 1] = tail = _objectSpread$6(
+        _objectSpread$6({}, tail),
+        {},
+        {
+          tickCoord: tailGap > 0 ? tail.coordinate - tailGap * sign2 : tail.coordinate,
+        },
+      );
       if (tail.tickCoord != null) {
         var isTailShow = isVisible(sign2, tail.tickCoord, () => tailSize, start, end);
         if (isTailShow) {
           end = tail.tickCoord - sign2 * (tailSize / 2 + minTickGap);
-          result[len - 1] = _objectSpread$6(_objectSpread$6({}, tail), {}, {
-            isShow: true
-          });
+          result[len - 1] = _objectSpread$6(
+            _objectSpread$6({}, tail),
+            {},
+            {
+              isShow: true,
+            },
+          );
         }
       }
     }
@@ -19772,22 +23747,34 @@ function getTicksStart(sign2, boundaries, getTickSize, ticks2, minTickGap, prese
       return size;
     };
     if (i2 === 0) {
-      var gap = sign2 * (entry.coordinate - sign2 * getSize() / 2 - start);
-      result[i2] = entry = _objectSpread$6(_objectSpread$6({}, entry), {}, {
-        tickCoord: gap < 0 ? entry.coordinate - gap * sign2 : entry.coordinate
-      });
+      var gap = sign2 * (entry.coordinate - (sign2 * getSize()) / 2 - start);
+      result[i2] = entry = _objectSpread$6(
+        _objectSpread$6({}, entry),
+        {},
+        {
+          tickCoord: gap < 0 ? entry.coordinate - gap * sign2 : entry.coordinate,
+        },
+      );
     } else {
-      result[i2] = entry = _objectSpread$6(_objectSpread$6({}, entry), {}, {
-        tickCoord: entry.coordinate
-      });
+      result[i2] = entry = _objectSpread$6(
+        _objectSpread$6({}, entry),
+        {},
+        {
+          tickCoord: entry.coordinate,
+        },
+      );
     }
     if (entry.tickCoord != null) {
       var isShow = isVisible(sign2, entry.tickCoord, getSize, start, end);
       if (isShow) {
         start = entry.tickCoord + sign2 * (getSize() / 2 + minTickGap);
-        result[i2] = _objectSpread$6(_objectSpread$6({}, entry), {}, {
-          isShow: true
-        });
+        result[i2] = _objectSpread$6(
+          _objectSpread$6({}, entry),
+          {},
+          {
+            isShow: true,
+          },
+        );
       }
     }
   };
@@ -19806,37 +23793,55 @@ function getTicks(props, fontSize, letterSpacing) {
     interval,
     tickFormatter,
     unit: unit2,
-    angle
+    angle,
   } = props;
   if (!ticks2 || !ticks2.length || !tick) {
     return [];
   }
   if (isNumber(interval) || Global.isSsr) {
     var _getNumberIntervalTic;
-    return (_getNumberIntervalTic = getNumberIntervalTicks(ticks2, isNumber(interval) ? interval : 0)) !== null && _getNumberIntervalTic !== void 0 ? _getNumberIntervalTic : [];
+    return (_getNumberIntervalTic = getNumberIntervalTicks(
+      ticks2,
+      isNumber(interval) ? interval : 0,
+    )) !== null && _getNumberIntervalTic !== void 0
+      ? _getNumberIntervalTic
+      : [];
   }
   var candidates = [];
   var sizeKey = orientation === "top" || orientation === "bottom" ? "width" : "height";
-  var unitSize = unit2 && sizeKey === "width" ? getStringSize(unit2, {
-    fontSize,
-    letterSpacing
-  }) : {
-    width: 0,
-    height: 0
-  };
+  var unitSize =
+    unit2 && sizeKey === "width"
+      ? getStringSize(unit2, {
+          fontSize,
+          letterSpacing,
+        })
+      : {
+          width: 0,
+          height: 0,
+        };
   var getTickSize = (content, index) => {
-    var value = typeof tickFormatter === "function" ? tickFormatter(content.value, index) : content.value;
-    return sizeKey === "width" ? getAngledTickWidth(getStringSize(value, {
-      fontSize,
-      letterSpacing
-    }), unitSize, angle) : getStringSize(value, {
-      fontSize,
-      letterSpacing
-    })[sizeKey];
+    var value =
+      typeof tickFormatter === "function" ? tickFormatter(content.value, index) : content.value;
+    return sizeKey === "width"
+      ? getAngledTickWidth(
+          getStringSize(value, {
+            fontSize,
+            letterSpacing,
+          }),
+          unitSize,
+          angle,
+        )
+      : getStringSize(value, {
+          fontSize,
+          letterSpacing,
+        })[sizeKey];
   };
   var tick0 = ticks2[0];
   var tick1 = ticks2[1];
-  var sign2 = ticks2.length >= 2 && tick0 != null && tick1 != null ? mathSign(tick1.coordinate - tick0.coordinate) : 1;
+  var sign2 =
+    ticks2.length >= 2 && tick0 != null && tick1 != null
+      ? mathSign(tick1.coordinate - tick0.coordinate)
+      : 1;
   var boundaries = getTickBoundaries(viewBox, sign2, sizeKey);
   if (interval === "equidistantPreserveStart") {
     return getEquidistantTicks(sign2, boundaries, getTickSize, ticks2, minTickGap);
@@ -19845,7 +23850,14 @@ function getTicks(props, fontSize, letterSpacing) {
     return getEquidistantPreserveEndTicks(sign2, boundaries, getTickSize, ticks2, minTickGap);
   }
   if (interval === "preserveStart" || interval === "preserveStartEnd") {
-    candidates = getTicksStart(sign2, boundaries, getTickSize, ticks2, minTickGap, interval === "preserveStartEnd");
+    candidates = getTicksStart(
+      sign2,
+      boundaries,
+      getTickSize,
+      ticks2,
+      minTickGap,
+      interval === "preserveStartEnd",
+    );
   } else {
     candidates = getTicksEnd(sign2, boundaries, getTickSize, ticks2, minTickGap);
   }
@@ -19858,7 +23870,7 @@ var getCalculatedYAxisWidth = (_ref2) => {
     labelGapWithTick = 5,
     // Default gap between label and tick
     tickSize = 0,
-    tickMargin = 0
+    tickMargin = 0,
   } = _ref2;
   var maxTickWidth = 0;
   if (ticks2) {
@@ -19879,85 +23891,109 @@ var getCalculatedYAxisWidth = (_ref2) => {
 };
 var initialState$3 = {
   xAxis: {},
-  yAxis: {}
+  yAxis: {},
 };
 var renderedTicksSlice = createSlice({
   name: "renderedTicks",
   initialState: initialState$3,
   reducers: {
     setRenderedTicks: (state, action) => {
-      var {
-        axisType,
-        axisId,
-        ticks: ticks2
-      } = action.payload;
+      var { axisType, axisId, ticks: ticks2 } = action.payload;
       state[axisType][axisId] = castDraft(ticks2);
     },
     removeRenderedTicks: (state, action) => {
-      var {
-        axisType,
-        axisId
-      } = action.payload;
+      var { axisType, axisId } = action.payload;
       delete state[axisType][axisId];
-    }
-  }
+    },
+  },
 });
-var {
-  setRenderedTicks,
-  removeRenderedTicks
-} = renderedTicksSlice.actions;
+var { setRenderedTicks, removeRenderedTicks } = renderedTicksSlice.actions;
 var renderedTicksReducer = renderedTicksSlice.reducer;
-var _excluded$6 = ["axisLine", "width", "height", "className", "hide", "ticks", "axisType", "axisId"];
+var _excluded$6 = [
+  "axisLine",
+  "width",
+  "height",
+  "className",
+  "hide",
+  "ticks",
+  "axisType",
+  "axisId",
+];
 function _objectWithoutProperties$6(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$6(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$6(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$6(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function _extends$6() {
-  return _extends$6 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$6.apply(null, arguments);
+  return (
+    (_extends$6 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$6.apply(null, arguments)
+  );
 }
 function ownKeys$5(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$5(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$5(Object(t), true).forEach(function(r2) {
-      _defineProperty$5(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$5(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$5(Object(t), true).forEach(function (r2) {
+          _defineProperty$5(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$5(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$5(e, r, t) {
-  return (r = _toPropertyKey$5(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$5(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$5(t) {
   var i = _toPrimitive$5(t, "string");
@@ -19982,7 +24018,7 @@ var defaultCartesianAxisProps = {
     x: 0,
     y: 0,
     width: 0,
-    height: 0
+    height: 0,
   },
   // The orientation of axis
   orientation: "bottom",
@@ -19998,45 +24034,51 @@ var defaultCartesianAxisProps = {
   tickSize: 6,
   tickMargin: 2,
   interval: "preserveEnd",
-  zIndex: DefaultZIndexes.axis
+  zIndex: DefaultZIndexes.axis,
 };
 function AxisLine(axisLineProps) {
-  var {
-    x: x2,
-    y: y2,
-    width,
-    height,
-    orientation,
-    mirror,
-    axisLine,
-    otherSvgProps
-  } = axisLineProps;
+  var { x: x2, y: y2, width, height, orientation, mirror, axisLine, otherSvgProps } = axisLineProps;
   if (!axisLine) {
     return null;
   }
-  var props = _objectSpread$5(_objectSpread$5(_objectSpread$5({}, otherSvgProps), svgPropertiesNoEvents(axisLine)), {}, {
-    fill: "none"
-  });
+  var props = _objectSpread$5(
+    _objectSpread$5(_objectSpread$5({}, otherSvgProps), svgPropertiesNoEvents(axisLine)),
+    {},
+    {
+      fill: "none",
+    },
+  );
   if (orientation === "top" || orientation === "bottom") {
-    var needHeight = +(orientation === "top" && !mirror || orientation === "bottom" && mirror);
-    props = _objectSpread$5(_objectSpread$5({}, props), {}, {
-      x1: x2,
-      y1: y2 + needHeight * height,
-      x2: x2 + width,
-      y2: y2 + needHeight * height
-    });
+    var needHeight = +((orientation === "top" && !mirror) || (orientation === "bottom" && mirror));
+    props = _objectSpread$5(
+      _objectSpread$5({}, props),
+      {},
+      {
+        x1: x2,
+        y1: y2 + needHeight * height,
+        x2: x2 + width,
+        y2: y2 + needHeight * height,
+      },
+    );
   } else {
-    var needWidth = +(orientation === "left" && !mirror || orientation === "right" && mirror);
-    props = _objectSpread$5(_objectSpread$5({}, props), {}, {
-      x1: x2 + needWidth * width,
-      y1: y2,
-      x2: x2 + needWidth * width,
-      y2: y2 + height
-    });
+    var needWidth = +((orientation === "left" && !mirror) || (orientation === "right" && mirror));
+    props = _objectSpread$5(
+      _objectSpread$5({}, props),
+      {},
+      {
+        x1: x2 + needWidth * width,
+        y1: y2,
+        x2: x2 + needWidth * width,
+        y2: y2 + height,
+      },
+    );
   }
-  return /* @__PURE__ */ reactExports.createElement("line", _extends$6({}, props, {
-    className: clsx("recharts-cartesian-axis-line", get$1(axisLine, "className"))
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    "line",
+    _extends$6({}, props, {
+      className: clsx("recharts-cartesian-axis-line", get$1(axisLine, "className")),
+    }),
+  );
 }
 function getTickLineCoord(data, x2, y2, width, height, orientation, tickSize, mirror, tickMargin) {
   var x1, x22, y1, y22, tx, ty;
@@ -20078,12 +24120,12 @@ function getTickLineCoord(data, x2, y2, width, height, orientation, tickSize, mi
       x1,
       y1,
       x2: x22,
-      y2: y22
+      y2: y22,
     },
     tick: {
       x: tx,
-      y: ty
-    }
+      y: ty,
+    },
   };
 }
 function getTickTextAnchor(orientation, mirror) {
@@ -20108,38 +24150,47 @@ function getTickVerticalAnchor(orientation, mirror) {
   }
 }
 function TickItem(props) {
-  var {
-    option,
-    tickProps,
-    value
-  } = props;
+  var { option, tickProps, value } = props;
   var tickItem;
   var combinedClassName = clsx(tickProps.className, "recharts-cartesian-axis-tick-value");
   if (/* @__PURE__ */ reactExports.isValidElement(option)) {
-    tickItem = /* @__PURE__ */ reactExports.cloneElement(option, _objectSpread$5(_objectSpread$5({}, tickProps), {}, {
-      className: combinedClassName
-    }));
+    tickItem = /* @__PURE__ */ reactExports.cloneElement(
+      option,
+      _objectSpread$5(
+        _objectSpread$5({}, tickProps),
+        {},
+        {
+          className: combinedClassName,
+        },
+      ),
+    );
   } else if (typeof option === "function") {
-    tickItem = option(_objectSpread$5(_objectSpread$5({}, tickProps), {}, {
-      className: combinedClassName
-    }));
+    tickItem = option(
+      _objectSpread$5(
+        _objectSpread$5({}, tickProps),
+        {},
+        {
+          className: combinedClassName,
+        },
+      ),
+    );
   } else {
     var className = "recharts-cartesian-axis-tick-value";
     if (typeof option !== "boolean") {
       className = clsx(className, getClassNameFromUnknown(option));
     }
-    tickItem = /* @__PURE__ */ reactExports.createElement(Text, _extends$6({}, tickProps, {
-      className
-    }), value);
+    tickItem = /* @__PURE__ */ reactExports.createElement(
+      Text,
+      _extends$6({}, tickProps, {
+        className,
+      }),
+      value,
+    );
   }
   return tickItem;
 }
 function RenderedTicksReporter(_ref2) {
-  var {
-    ticks: ticks2,
-    axisType,
-    axisId
-  } = _ref2;
+  var { ticks: ticks2, axisType, axisId } = _ref2;
   var dispatch = useAppDispatch();
   reactExports.useEffect(() => {
     if (axisId == null || axisType == null) {
@@ -20149,18 +24200,22 @@ function RenderedTicksReporter(_ref2) {
       value: tick.value,
       coordinate: tick.coordinate,
       offset: tick.offset,
-      index: tick.index
+      index: tick.index,
     }));
-    dispatch(setRenderedTicks({
-      ticks: tickItems,
-      axisId,
-      axisType
-    }));
-    return () => {
-      dispatch(removeRenderedTicks({
+    dispatch(
+      setRenderedTicks({
+        ticks: tickItems,
         axisId,
-        axisType
-      }));
+        axisType,
+      }),
+    );
+    return () => {
+      dispatch(
+        removeRenderedTicks({
+          axisId,
+          axisType,
+        }),
+      );
     };
   }, [dispatch, ticks2, axisId, axisType]);
   return null;
@@ -20188,94 +24243,171 @@ var Ticks = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     getTicksConfig,
     events,
     axisType,
-    axisId
+    axisId,
   } = props;
-  var finalTicks = getTicks(_objectSpread$5(_objectSpread$5({}, getTicksConfig), {}, {
-    ticks: ticks2
-  }), fontSize, letterSpacing);
+  var finalTicks = getTicks(
+    _objectSpread$5(
+      _objectSpread$5({}, getTicksConfig),
+      {},
+      {
+        ticks: ticks2,
+      },
+    ),
+    fontSize,
+    letterSpacing,
+  );
   var axisProps = svgPropertiesNoEvents(getTicksConfig);
   var customTickProps = svgPropertiesNoEventsFromUnknown(tick);
-  var textAnchor = isValidTextAnchor(axisProps.textAnchor) ? axisProps.textAnchor : getTickTextAnchor(orientation, mirror);
+  var textAnchor = isValidTextAnchor(axisProps.textAnchor)
+    ? axisProps.textAnchor
+    : getTickTextAnchor(orientation, mirror);
   var verticalAnchor = getTickVerticalAnchor(orientation, mirror);
   var tickLinePropsObject = {};
   if (typeof tickLine === "object") {
     tickLinePropsObject = tickLine;
   }
-  var tickLineProps = _objectSpread$5(_objectSpread$5({}, axisProps), {}, {
-    fill: "none"
-  }, tickLinePropsObject);
-  var tickLineCoords = finalTicks.map((entry) => _objectSpread$5({
-    entry
-  }, getTickLineCoord(entry, x2, y2, width, height, orientation, tickSize, mirror, tickMargin)));
+  var tickLineProps = _objectSpread$5(
+    _objectSpread$5({}, axisProps),
+    {},
+    {
+      fill: "none",
+    },
+    tickLinePropsObject,
+  );
+  var tickLineCoords = finalTicks.map((entry) =>
+    _objectSpread$5(
+      {
+        entry,
+      },
+      getTickLineCoord(entry, x2, y2, width, height, orientation, tickSize, mirror, tickMargin),
+    ),
+  );
   var tickLines = tickLineCoords.map((_ref2) => {
-    var {
-      entry,
-      line: lineCoord
-    } = _ref2;
-    return /* @__PURE__ */ reactExports.createElement(Layer, {
-      className: "recharts-cartesian-axis-tick",
-      key: "tick-".concat(entry.value, "-").concat(entry.coordinate, "-").concat(entry.tickCoord)
-    }, tickLine && /* @__PURE__ */ reactExports.createElement("line", _extends$6({}, tickLineProps, lineCoord, {
-      className: clsx("recharts-cartesian-axis-tick-line", get$1(tickLine, "className"))
-    })));
+    var { entry, line: lineCoord } = _ref2;
+    return /* @__PURE__ */ reactExports.createElement(
+      Layer,
+      {
+        className: "recharts-cartesian-axis-tick",
+        key: "tick-".concat(entry.value, "-").concat(entry.coordinate, "-").concat(entry.tickCoord),
+      },
+      tickLine &&
+        /* @__PURE__ */ reactExports.createElement(
+          "line",
+          _extends$6({}, tickLineProps, lineCoord, {
+            className: clsx("recharts-cartesian-axis-tick-line", get$1(tickLine, "className")),
+          }),
+        ),
+    );
   });
   var tickLabels = tickLineCoords.map((_ref3, i) => {
     var _ref4, _tickTextProps$angle;
-    var {
-      entry,
-      tick: tickCoord
-    } = _ref3;
-    var tickProps = _objectSpread$5(_objectSpread$5(_objectSpread$5(_objectSpread$5({
-      verticalAnchor
-    }, axisProps), {}, {
-      textAnchor,
-      stroke: "none",
-      fill: stroke
-    }, tickCoord), {}, {
-      index: i,
-      payload: entry,
-      visibleTicksCount: finalTicks.length,
-      tickFormatter,
-      padding
-    }, tickTextProps), {}, {
-      angle: (_ref4 = (_tickTextProps$angle = tickTextProps === null || tickTextProps === void 0 ? void 0 : tickTextProps.angle) !== null && _tickTextProps$angle !== void 0 ? _tickTextProps$angle : axisProps.angle) !== null && _ref4 !== void 0 ? _ref4 : 0
-    });
+    var { entry, tick: tickCoord } = _ref3;
+    var tickProps = _objectSpread$5(
+      _objectSpread$5(
+        _objectSpread$5(
+          _objectSpread$5(
+            {
+              verticalAnchor,
+            },
+            axisProps,
+          ),
+          {},
+          {
+            textAnchor,
+            stroke: "none",
+            fill: stroke,
+          },
+          tickCoord,
+        ),
+        {},
+        {
+          index: i,
+          payload: entry,
+          visibleTicksCount: finalTicks.length,
+          tickFormatter,
+          padding,
+        },
+        tickTextProps,
+      ),
+      {},
+      {
+        angle:
+          (_ref4 =
+            (_tickTextProps$angle =
+              tickTextProps === null || tickTextProps === void 0 ? void 0 : tickTextProps.angle) !==
+              null && _tickTextProps$angle !== void 0
+              ? _tickTextProps$angle
+              : axisProps.angle) !== null && _ref4 !== void 0
+            ? _ref4
+            : 0,
+      },
+    );
     var finalTickProps = _objectSpread$5(_objectSpread$5({}, tickProps), customTickProps);
-    return /* @__PURE__ */ reactExports.createElement(Layer, _extends$6({
-      className: "recharts-cartesian-axis-tick-label",
-      key: "tick-label-".concat(entry.value, "-").concat(entry.coordinate, "-").concat(entry.tickCoord)
-    }, adaptEventsOfChild(events, entry, i)), tick && /* @__PURE__ */ reactExports.createElement(TickItem, {
-      option: tick,
-      tickProps: finalTickProps,
-      value: "".concat(typeof tickFormatter === "function" ? tickFormatter(entry.value, i) : entry.value).concat(unit2 || "")
-    }));
+    return /* @__PURE__ */ reactExports.createElement(
+      Layer,
+      _extends$6(
+        {
+          className: "recharts-cartesian-axis-tick-label",
+          key: "tick-label-"
+            .concat(entry.value, "-")
+            .concat(entry.coordinate, "-")
+            .concat(entry.tickCoord),
+        },
+        adaptEventsOfChild(events, entry, i),
+      ),
+      tick &&
+        /* @__PURE__ */ reactExports.createElement(TickItem, {
+          option: tick,
+          tickProps: finalTickProps,
+          value: ""
+            .concat(
+              typeof tickFormatter === "function" ? tickFormatter(entry.value, i) : entry.value,
+            )
+            .concat(unit2 || ""),
+        }),
+    );
   });
-  return /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-axis-ticks recharts-".concat(axisType, "-ticks")
-  }, /* @__PURE__ */ reactExports.createElement(RenderedTicksReporter, {
-    ticks: finalTicks,
-    axisId,
-    axisType
-  }), tickLabels.length > 0 && /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex: DefaultZIndexes.label
-  }, /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-axis-tick-labels recharts-".concat(axisType, "-tick-labels"),
-    ref
-  }, tickLabels)), tickLines.length > 0 && /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-axis-tick-lines recharts-".concat(axisType, "-tick-lines")
-  }, tickLines));
+  return /* @__PURE__ */ reactExports.createElement(
+    "g",
+    {
+      className: "recharts-cartesian-axis-ticks recharts-".concat(axisType, "-ticks"),
+    },
+    /* @__PURE__ */ reactExports.createElement(RenderedTicksReporter, {
+      ticks: finalTicks,
+      axisId,
+      axisType,
+    }),
+    tickLabels.length > 0 &&
+      /* @__PURE__ */ reactExports.createElement(
+        ZIndexLayer,
+        {
+          zIndex: DefaultZIndexes.label,
+        },
+        /* @__PURE__ */ reactExports.createElement(
+          "g",
+          {
+            className: "recharts-cartesian-axis-tick-labels recharts-".concat(
+              axisType,
+              "-tick-labels",
+            ),
+            ref,
+          },
+          tickLabels,
+        ),
+      ),
+    tickLines.length > 0 &&
+      /* @__PURE__ */ reactExports.createElement(
+        "g",
+        {
+          className: "recharts-cartesian-axis-tick-lines recharts-".concat(axisType, "-tick-lines"),
+        },
+        tickLines,
+      ),
+  );
 });
 var CartesianAxisComponent = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  var {
-    axisLine,
-    width,
-    height,
-    className,
-    hide,
-    ticks: ticks2,
-    axisType,
-    axisId
-  } = props, rest = _objectWithoutProperties$6(props, _excluded$6);
+  var { axisLine, width, height, className, hide, ticks: ticks2, axisType, axisId } = props,
+    rest = _objectWithoutProperties$6(props, _excluded$6);
   var [fontSize, setFontSize] = reactExports.useState("");
   var [letterSpacing, setLetterSpacing] = reactExports.useState("");
   var tickRefs = reactExports.useRef(null);
@@ -20284,115 +24416,158 @@ var CartesianAxisComponent = /* @__PURE__ */ reactExports.forwardRef((props, ref
       var _props$labelRef;
       return getCalculatedYAxisWidth({
         ticks: tickRefs.current,
-        label: (_props$labelRef = props.labelRef) === null || _props$labelRef === void 0 ? void 0 : _props$labelRef.current,
+        label:
+          (_props$labelRef = props.labelRef) === null || _props$labelRef === void 0
+            ? void 0
+            : _props$labelRef.current,
         labelGapWithTick: 5,
         tickSize: props.tickSize,
-        tickMargin: props.tickMargin
+        tickMargin: props.tickMargin,
       });
-    }
+    },
   }));
-  var layerRef = reactExports.useCallback((el) => {
-    if (el) {
-      var tickNodes = el.getElementsByClassName("recharts-cartesian-axis-tick-value");
-      tickRefs.current = tickNodes;
-      var tick = tickNodes[0];
-      if (tick) {
-        var computedStyle = window.getComputedStyle(tick);
-        var calculatedFontSize = computedStyle.fontSize;
-        var calculatedLetterSpacing = computedStyle.letterSpacing;
-        if (calculatedFontSize !== fontSize || calculatedLetterSpacing !== letterSpacing) {
-          setFontSize(calculatedFontSize);
-          setLetterSpacing(calculatedLetterSpacing);
+  var layerRef = reactExports.useCallback(
+    (el) => {
+      if (el) {
+        var tickNodes = el.getElementsByClassName("recharts-cartesian-axis-tick-value");
+        tickRefs.current = tickNodes;
+        var tick = tickNodes[0];
+        if (tick) {
+          var computedStyle = window.getComputedStyle(tick);
+          var calculatedFontSize = computedStyle.fontSize;
+          var calculatedLetterSpacing = computedStyle.letterSpacing;
+          if (calculatedFontSize !== fontSize || calculatedLetterSpacing !== letterSpacing) {
+            setFontSize(calculatedFontSize);
+            setLetterSpacing(calculatedLetterSpacing);
+          }
         }
       }
-    }
-  }, [fontSize, letterSpacing]);
+    },
+    [fontSize, letterSpacing],
+  );
   if (hide) {
     return null;
   }
-  if (width != null && width <= 0 || height != null && height <= 0) {
+  if ((width != null && width <= 0) || (height != null && height <= 0)) {
     return null;
   }
-  return /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex: props.zIndex
-  }, /* @__PURE__ */ reactExports.createElement(Layer, {
-    className: clsx("recharts-cartesian-axis", className)
-  }, /* @__PURE__ */ reactExports.createElement(AxisLine, {
-    x: props.x,
-    y: props.y,
-    width,
-    height,
-    orientation: props.orientation,
-    mirror: props.mirror,
-    axisLine,
-    otherSvgProps: svgPropertiesNoEvents(props)
-  }), /* @__PURE__ */ reactExports.createElement(Ticks, {
-    ref: layerRef,
-    axisType,
-    events: rest,
-    fontSize,
-    getTicksConfig: props,
-    height: props.height,
-    letterSpacing,
-    mirror: props.mirror,
-    orientation: props.orientation,
-    padding: props.padding,
-    stroke: props.stroke,
-    tick: props.tick,
-    tickFormatter: props.tickFormatter,
-    tickLine: props.tickLine,
-    tickMargin: props.tickMargin,
-    tickSize: props.tickSize,
-    tickTextProps: props.tickTextProps,
-    ticks: ticks2,
-    unit: props.unit,
-    width: props.width,
-    x: props.x,
-    y: props.y,
-    axisId
-  }), /* @__PURE__ */ reactExports.createElement(CartesianLabelContextProvider, {
-    x: props.x,
-    y: props.y,
-    width: props.width,
-    height: props.height,
-    lowerWidth: props.width,
-    upperWidth: props.width
-  }, /* @__PURE__ */ reactExports.createElement(CartesianLabelFromLabelProp, {
-    label: props.label,
-    labelRef: props.labelRef
-  }), props.children)));
+  return /* @__PURE__ */ reactExports.createElement(
+    ZIndexLayer,
+    {
+      zIndex: props.zIndex,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      Layer,
+      {
+        className: clsx("recharts-cartesian-axis", className),
+      },
+      /* @__PURE__ */ reactExports.createElement(AxisLine, {
+        x: props.x,
+        y: props.y,
+        width,
+        height,
+        orientation: props.orientation,
+        mirror: props.mirror,
+        axisLine,
+        otherSvgProps: svgPropertiesNoEvents(props),
+      }),
+      /* @__PURE__ */ reactExports.createElement(Ticks, {
+        ref: layerRef,
+        axisType,
+        events: rest,
+        fontSize,
+        getTicksConfig: props,
+        height: props.height,
+        letterSpacing,
+        mirror: props.mirror,
+        orientation: props.orientation,
+        padding: props.padding,
+        stroke: props.stroke,
+        tick: props.tick,
+        tickFormatter: props.tickFormatter,
+        tickLine: props.tickLine,
+        tickMargin: props.tickMargin,
+        tickSize: props.tickSize,
+        tickTextProps: props.tickTextProps,
+        ticks: ticks2,
+        unit: props.unit,
+        width: props.width,
+        x: props.x,
+        y: props.y,
+        axisId,
+      }),
+      /* @__PURE__ */ reactExports.createElement(
+        CartesianLabelContextProvider,
+        {
+          x: props.x,
+          y: props.y,
+          width: props.width,
+          height: props.height,
+          lowerWidth: props.width,
+          upperWidth: props.width,
+        },
+        /* @__PURE__ */ reactExports.createElement(CartesianLabelFromLabelProp, {
+          label: props.label,
+          labelRef: props.labelRef,
+        }),
+        props.children,
+      ),
+    ),
+  );
 });
 var CartesianAxis = /* @__PURE__ */ reactExports.forwardRef((outsideProps, ref) => {
   var props = resolveDefaultProps(outsideProps, defaultCartesianAxisProps);
-  return /* @__PURE__ */ reactExports.createElement(CartesianAxisComponent, _extends$6({}, props, {
-    ref
-  }));
+  return /* @__PURE__ */ reactExports.createElement(
+    CartesianAxisComponent,
+    _extends$6({}, props, {
+      ref,
+    }),
+  );
 });
 CartesianAxis.displayName = "CartesianAxis";
-var _excluded$5 = ["x1", "y1", "x2", "y2", "key"], _excluded2$3 = ["offset"], _excluded3$2 = ["xAxisId", "yAxisId"], _excluded4 = ["xAxisId", "yAxisId"];
+var _excluded$5 = ["x1", "y1", "x2", "y2", "key"],
+  _excluded2$3 = ["offset"],
+  _excluded3$2 = ["xAxisId", "yAxisId"],
+  _excluded4 = ["xAxisId", "yAxisId"];
 function ownKeys$4(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$4(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$4(Object(t), true).forEach(function(r2) {
-      _defineProperty$4(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$4(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$4(Object(t), true).forEach(function (r2) {
+          _defineProperty$4(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$4(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$4(e, r, t) {
-  return (r = _toPropertyKey$4(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$4(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$4(t) {
   var i = _toPrimitive$4(t, "string");
@@ -20409,47 +24584,47 @@ function _toPrimitive$4(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 function _extends$5() {
-  return _extends$5 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$5.apply(null, arguments);
+  return (
+    (_extends$5 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$5.apply(null, arguments)
+  );
 }
 function _objectWithoutProperties$5(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$5(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$5(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$5(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 var Background = (props) => {
-  var {
-    fill
-  } = props;
+  var { fill } = props;
   if (!fill || fill === "none") {
     return null;
   }
-  var {
-    fillOpacity,
-    x: x2,
-    y: y2,
-    width,
-    height,
-    ry
-  } = props;
+  var { fillOpacity, x: x2, y: y2, width, height, ry } = props;
   return /* @__PURE__ */ reactExports.createElement("rect", {
     x: x2,
     y: y2,
@@ -20459,14 +24634,11 @@ var Background = (props) => {
     stroke: "none",
     fill,
     fillOpacity,
-    className: "recharts-cartesian-grid-bg"
+    className: "recharts-cartesian-grid-bg",
   });
 };
 function LineItem(_ref2) {
-  var {
-    option,
-    lineItemProps
-  } = _ref2;
+  var { option, lineItemProps } = _ref2;
   var lineItem;
   if (/* @__PURE__ */ reactExports.isValidElement(option)) {
     lineItem = /* @__PURE__ */ reactExports.cloneElement(option, lineItemProps);
@@ -20474,92 +24646,96 @@ function LineItem(_ref2) {
     lineItem = option(lineItemProps);
   } else {
     var _svgPropertiesNoEvent;
-    var {
-      x1,
-      y1,
-      x2,
-      y2,
-      key
-    } = lineItemProps, others = _objectWithoutProperties$5(lineItemProps, _excluded$5);
-    var _ref22 = (_svgPropertiesNoEvent = svgPropertiesNoEvents(others)) !== null && _svgPropertiesNoEvent !== void 0 ? _svgPropertiesNoEvent : {}, {
-      offset: __
-    } = _ref22, restOfFilteredProps = _objectWithoutProperties$5(_ref22, _excluded2$3);
-    lineItem = /* @__PURE__ */ reactExports.createElement("line", _extends$5({}, restOfFilteredProps, {
-      x1,
-      y1,
-      x2,
-      y2,
-      fill: "none",
-      key
-    }));
+    var { x1, y1, x2, y2, key } = lineItemProps,
+      others = _objectWithoutProperties$5(lineItemProps, _excluded$5);
+    var _ref22 =
+        (_svgPropertiesNoEvent = svgPropertiesNoEvents(others)) !== null &&
+        _svgPropertiesNoEvent !== void 0
+          ? _svgPropertiesNoEvent
+          : {},
+      { offset: __ } = _ref22,
+      restOfFilteredProps = _objectWithoutProperties$5(_ref22, _excluded2$3);
+    lineItem = /* @__PURE__ */ reactExports.createElement(
+      "line",
+      _extends$5({}, restOfFilteredProps, {
+        x1,
+        y1,
+        x2,
+        y2,
+        fill: "none",
+        key,
+      }),
+    );
   }
   return lineItem;
 }
 function HorizontalGridLines(props) {
-  var {
-    x: x2,
-    width,
-    horizontal = true,
-    horizontalPoints
-  } = props;
+  var { x: x2, width, horizontal = true, horizontalPoints } = props;
   if (!horizontal || !horizontalPoints || !horizontalPoints.length) {
     return null;
   }
-  var {
-    xAxisId,
-    yAxisId
-  } = props, otherLineItemProps = _objectWithoutProperties$5(props, _excluded3$2);
+  var { xAxisId, yAxisId } = props,
+    otherLineItemProps = _objectWithoutProperties$5(props, _excluded3$2);
   var items = horizontalPoints.map((entry, i) => {
-    var lineItemProps = _objectSpread$4(_objectSpread$4({}, otherLineItemProps), {}, {
-      x1: x2,
-      y1: entry,
-      x2: x2 + width,
-      y2: entry,
-      key: "line-".concat(i),
-      index: i
-    });
+    var lineItemProps = _objectSpread$4(
+      _objectSpread$4({}, otherLineItemProps),
+      {},
+      {
+        x1: x2,
+        y1: entry,
+        x2: x2 + width,
+        y2: entry,
+        key: "line-".concat(i),
+        index: i,
+      },
+    );
     return /* @__PURE__ */ reactExports.createElement(LineItem, {
       key: "line-".concat(i),
       option: horizontal,
-      lineItemProps
+      lineItemProps,
     });
   });
-  return /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-grid-horizontal"
-  }, items);
+  return /* @__PURE__ */ reactExports.createElement(
+    "g",
+    {
+      className: "recharts-cartesian-grid-horizontal",
+    },
+    items,
+  );
 }
 function VerticalGridLines(props) {
-  var {
-    y: y2,
-    height,
-    vertical = true,
-    verticalPoints
-  } = props;
+  var { y: y2, height, vertical = true, verticalPoints } = props;
   if (!vertical || !verticalPoints || !verticalPoints.length) {
     return null;
   }
-  var {
-    xAxisId,
-    yAxisId
-  } = props, otherLineItemProps = _objectWithoutProperties$5(props, _excluded4);
+  var { xAxisId, yAxisId } = props,
+    otherLineItemProps = _objectWithoutProperties$5(props, _excluded4);
   var items = verticalPoints.map((entry, i) => {
-    var lineItemProps = _objectSpread$4(_objectSpread$4({}, otherLineItemProps), {}, {
-      x1: entry,
-      y1: y2,
-      x2: entry,
-      y2: y2 + height,
-      key: "line-".concat(i),
-      index: i
-    });
+    var lineItemProps = _objectSpread$4(
+      _objectSpread$4({}, otherLineItemProps),
+      {},
+      {
+        x1: entry,
+        y1: y2,
+        x2: entry,
+        y2: y2 + height,
+        key: "line-".concat(i),
+        index: i,
+      },
+    );
     return /* @__PURE__ */ reactExports.createElement(LineItem, {
       option: vertical,
       lineItemProps,
-      key: "line-".concat(i)
+      key: "line-".concat(i),
     });
   });
-  return /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-grid-vertical"
-  }, items);
+  return /* @__PURE__ */ reactExports.createElement(
+    "g",
+    {
+      className: "recharts-cartesian-grid-vertical",
+    },
+    items,
+  );
 }
 function HorizontalStripes(props) {
   var {
@@ -20570,12 +24746,14 @@ function HorizontalStripes(props) {
     width,
     height,
     horizontalPoints,
-    horizontal = true
+    horizontal = true,
   } = props;
   if (!horizontal || !horizontalFill || !horizontalFill.length || horizontalPoints == null) {
     return null;
   }
-  var roundedSortedHorizontalPoints = horizontalPoints.map((e) => Math.round(e + y2 - y2)).sort((a, b) => a - b);
+  var roundedSortedHorizontalPoints = horizontalPoints
+    .map((e) => Math.round(e + y2 - y2))
+    .sort((a, b) => a - b);
   if (y2 !== roundedSortedHorizontalPoints[0]) {
     roundedSortedHorizontalPoints.unshift(0);
   }
@@ -20596,12 +24774,16 @@ function HorizontalStripes(props) {
       stroke: "none",
       fill: horizontalFill[colorIndex],
       fillOpacity,
-      className: "recharts-cartesian-grid-bg"
+      className: "recharts-cartesian-grid-bg",
     });
   });
-  return /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-gridstripes-horizontal"
-  }, items);
+  return /* @__PURE__ */ reactExports.createElement(
+    "g",
+    {
+      className: "recharts-cartesian-gridstripes-horizontal",
+    },
+    items,
+  );
 }
 function VerticalStripes(props) {
   var {
@@ -20612,12 +24794,14 @@ function VerticalStripes(props) {
     y: y2,
     width,
     height,
-    verticalPoints
+    verticalPoints,
   } = props;
   if (!vertical || !verticalFill || !verticalFill.length) {
     return null;
   }
-  var roundedSortedVerticalPoints = verticalPoints.map((e) => Math.round(e + x2 - x2)).sort((a, b) => a - b);
+  var roundedSortedVerticalPoints = verticalPoints
+    .map((e) => Math.round(e + x2 - x2))
+    .sort((a, b) => a - b);
   if (x2 !== roundedSortedVerticalPoints[0]) {
     roundedSortedVerticalPoints.unshift(0);
   }
@@ -20638,46 +24822,62 @@ function VerticalStripes(props) {
       stroke: "none",
       fill: verticalFill[colorIndex],
       fillOpacity,
-      className: "recharts-cartesian-grid-bg"
+      className: "recharts-cartesian-grid-bg",
     });
   });
-  return /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-gridstripes-vertical"
-  }, items);
+  return /* @__PURE__ */ reactExports.createElement(
+    "g",
+    {
+      className: "recharts-cartesian-gridstripes-vertical",
+    },
+    items,
+  );
 }
 var defaultVerticalCoordinatesGenerator = (_ref3, syncWithTicks) => {
-  var {
-    xAxis,
-    width,
-    height,
-    offset
-  } = _ref3;
-  return getCoordinatesOfGrid(getTicks(_objectSpread$4(_objectSpread$4(_objectSpread$4({}, defaultCartesianAxisProps), xAxis), {}, {
-    ticks: getTicksOfAxis(xAxis),
-    viewBox: {
-      x: 0,
-      y: 0,
-      width,
-      height
-    }
-  })), offset.left, offset.left + offset.width, syncWithTicks);
+  var { xAxis, width, height, offset } = _ref3;
+  return getCoordinatesOfGrid(
+    getTicks(
+      _objectSpread$4(
+        _objectSpread$4(_objectSpread$4({}, defaultCartesianAxisProps), xAxis),
+        {},
+        {
+          ticks: getTicksOfAxis(xAxis),
+          viewBox: {
+            x: 0,
+            y: 0,
+            width,
+            height,
+          },
+        },
+      ),
+    ),
+    offset.left,
+    offset.left + offset.width,
+    syncWithTicks,
+  );
 };
 var defaultHorizontalCoordinatesGenerator = (_ref4, syncWithTicks) => {
-  var {
-    yAxis,
-    width,
-    height,
-    offset
-  } = _ref4;
-  return getCoordinatesOfGrid(getTicks(_objectSpread$4(_objectSpread$4(_objectSpread$4({}, defaultCartesianAxisProps), yAxis), {}, {
-    ticks: getTicksOfAxis(yAxis),
-    viewBox: {
-      x: 0,
-      y: 0,
-      width,
-      height
-    }
-  })), offset.top, offset.top + offset.height, syncWithTicks);
+  var { yAxis, width, height, offset } = _ref4;
+  return getCoordinatesOfGrid(
+    getTicks(
+      _objectSpread$4(
+        _objectSpread$4(_objectSpread$4({}, defaultCartesianAxisProps), yAxis),
+        {},
+        {
+          ticks: getTicksOfAxis(yAxis),
+          viewBox: {
+            x: 0,
+            y: 0,
+            width,
+            height,
+          },
+        },
+      ),
+    ),
+    offset.top,
+    offset.top + offset.height,
+    syncWithTicks,
+  );
 };
 var defaultCartesianGridProps = {
   horizontal: true,
@@ -20694,18 +24894,22 @@ var defaultCartesianGridProps = {
   xAxisId: 0,
   yAxisId: 0,
   syncWithTicks: false,
-  zIndex: DefaultZIndexes.grid
+  zIndex: DefaultZIndexes.grid,
 };
 function CartesianGrid(props) {
   var chartWidth = useChartWidth();
   var chartHeight = useChartHeight();
   var offset = useOffsetInternal();
-  var propsIncludingDefaults = _objectSpread$4(_objectSpread$4({}, resolveDefaultProps(props, defaultCartesianGridProps)), {}, {
-    x: isNumber(props.x) ? props.x : offset.left,
-    y: isNumber(props.y) ? props.y : offset.top,
-    width: isNumber(props.width) ? props.width : offset.width,
-    height: isNumber(props.height) ? props.height : offset.height
-  });
+  var propsIncludingDefaults = _objectSpread$4(
+    _objectSpread$4({}, resolveDefaultProps(props, defaultCartesianGridProps)),
+    {},
+    {
+      x: isNumber(props.x) ? props.x : offset.left,
+      y: isNumber(props.y) ? props.y : offset.top,
+      width: isNumber(props.width) ? props.width : offset.width,
+      height: isNumber(props.height) ? props.height : offset.height,
+    },
+  );
   var {
     xAxisId,
     yAxisId,
@@ -20715,77 +24919,140 @@ function CartesianGrid(props) {
     height,
     syncWithTicks,
     horizontalValues,
-    verticalValues
+    verticalValues,
   } = propsIncludingDefaults;
   var isPanorama = useIsPanorama();
-  var xAxis = useAppSelector((state) => selectAxisPropsNeededForCartesianGridTicksGenerator(state, "xAxis", xAxisId, isPanorama));
-  var yAxis = useAppSelector((state) => selectAxisPropsNeededForCartesianGridTicksGenerator(state, "yAxis", yAxisId, isPanorama));
+  var xAxis = useAppSelector((state) =>
+    selectAxisPropsNeededForCartesianGridTicksGenerator(state, "xAxis", xAxisId, isPanorama),
+  );
+  var yAxis = useAppSelector((state) =>
+    selectAxisPropsNeededForCartesianGridTicksGenerator(state, "yAxis", yAxisId, isPanorama),
+  );
   if (!isPositiveNumber(width) || !isPositiveNumber(height) || !isNumber(x2) || !isNumber(y2)) {
     return null;
   }
-  var verticalCoordinatesGenerator = propsIncludingDefaults.verticalCoordinatesGenerator || defaultVerticalCoordinatesGenerator;
-  var horizontalCoordinatesGenerator = propsIncludingDefaults.horizontalCoordinatesGenerator || defaultHorizontalCoordinatesGenerator;
-  var {
-    horizontalPoints,
-    verticalPoints
-  } = propsIncludingDefaults;
-  if ((!horizontalPoints || !horizontalPoints.length) && typeof horizontalCoordinatesGenerator === "function") {
+  var verticalCoordinatesGenerator =
+    propsIncludingDefaults.verticalCoordinatesGenerator || defaultVerticalCoordinatesGenerator;
+  var horizontalCoordinatesGenerator =
+    propsIncludingDefaults.horizontalCoordinatesGenerator || defaultHorizontalCoordinatesGenerator;
+  var { horizontalPoints, verticalPoints } = propsIncludingDefaults;
+  if (
+    (!horizontalPoints || !horizontalPoints.length) &&
+    typeof horizontalCoordinatesGenerator === "function"
+  ) {
     var isHorizontalValues = horizontalValues && horizontalValues.length;
-    var generatorResult = horizontalCoordinatesGenerator({
-      yAxis: yAxis ? _objectSpread$4(_objectSpread$4({}, yAxis), {}, {
-        ticks: isHorizontalValues ? horizontalValues : yAxis.ticks
-      }) : void 0,
-      width: chartWidth !== null && chartWidth !== void 0 ? chartWidth : width,
-      height: chartHeight !== null && chartHeight !== void 0 ? chartHeight : height,
-      offset
-    }, isHorizontalValues ? true : syncWithTicks);
-    warn(Array.isArray(generatorResult), "horizontalCoordinatesGenerator should return Array but instead it returned [".concat(typeof generatorResult, "]"));
+    var generatorResult = horizontalCoordinatesGenerator(
+      {
+        yAxis: yAxis
+          ? _objectSpread$4(
+              _objectSpread$4({}, yAxis),
+              {},
+              {
+                ticks: isHorizontalValues ? horizontalValues : yAxis.ticks,
+              },
+            )
+          : void 0,
+        width: chartWidth !== null && chartWidth !== void 0 ? chartWidth : width,
+        height: chartHeight !== null && chartHeight !== void 0 ? chartHeight : height,
+        offset,
+      },
+      isHorizontalValues ? true : syncWithTicks,
+    );
+    warn(
+      Array.isArray(generatorResult),
+      "horizontalCoordinatesGenerator should return Array but instead it returned [".concat(
+        typeof generatorResult,
+        "]",
+      ),
+    );
     if (Array.isArray(generatorResult)) {
       horizontalPoints = generatorResult;
     }
   }
-  if ((!verticalPoints || !verticalPoints.length) && typeof verticalCoordinatesGenerator === "function") {
+  if (
+    (!verticalPoints || !verticalPoints.length) &&
+    typeof verticalCoordinatesGenerator === "function"
+  ) {
     var isVerticalValues = verticalValues && verticalValues.length;
-    var _generatorResult = verticalCoordinatesGenerator({
-      xAxis: xAxis ? _objectSpread$4(_objectSpread$4({}, xAxis), {}, {
-        ticks: isVerticalValues ? verticalValues : xAxis.ticks
-      }) : void 0,
-      width: chartWidth !== null && chartWidth !== void 0 ? chartWidth : width,
-      height: chartHeight !== null && chartHeight !== void 0 ? chartHeight : height,
-      offset
-    }, isVerticalValues ? true : syncWithTicks);
-    warn(Array.isArray(_generatorResult), "verticalCoordinatesGenerator should return Array but instead it returned [".concat(typeof _generatorResult, "]"));
+    var _generatorResult = verticalCoordinatesGenerator(
+      {
+        xAxis: xAxis
+          ? _objectSpread$4(
+              _objectSpread$4({}, xAxis),
+              {},
+              {
+                ticks: isVerticalValues ? verticalValues : xAxis.ticks,
+              },
+            )
+          : void 0,
+        width: chartWidth !== null && chartWidth !== void 0 ? chartWidth : width,
+        height: chartHeight !== null && chartHeight !== void 0 ? chartHeight : height,
+        offset,
+      },
+      isVerticalValues ? true : syncWithTicks,
+    );
+    warn(
+      Array.isArray(_generatorResult),
+      "verticalCoordinatesGenerator should return Array but instead it returned [".concat(
+        typeof _generatorResult,
+        "]",
+      ),
+    );
     if (Array.isArray(_generatorResult)) {
       verticalPoints = _generatorResult;
     }
   }
-  return /* @__PURE__ */ reactExports.createElement(ZIndexLayer, {
-    zIndex: propsIncludingDefaults.zIndex
-  }, /* @__PURE__ */ reactExports.createElement("g", {
-    className: "recharts-cartesian-grid"
-  }, /* @__PURE__ */ reactExports.createElement(Background, {
-    fill: propsIncludingDefaults.fill,
-    fillOpacity: propsIncludingDefaults.fillOpacity,
-    x: propsIncludingDefaults.x,
-    y: propsIncludingDefaults.y,
-    width: propsIncludingDefaults.width,
-    height: propsIncludingDefaults.height,
-    ry: propsIncludingDefaults.ry
-  }), /* @__PURE__ */ reactExports.createElement(HorizontalStripes, _extends$5({}, propsIncludingDefaults, {
-    horizontalPoints
-  })), /* @__PURE__ */ reactExports.createElement(VerticalStripes, _extends$5({}, propsIncludingDefaults, {
-    verticalPoints
-  })), /* @__PURE__ */ reactExports.createElement(HorizontalGridLines, _extends$5({}, propsIncludingDefaults, {
-    offset,
-    horizontalPoints,
-    xAxis,
-    yAxis
-  })), /* @__PURE__ */ reactExports.createElement(VerticalGridLines, _extends$5({}, propsIncludingDefaults, {
-    offset,
-    verticalPoints,
-    xAxis,
-    yAxis
-  }))));
+  return /* @__PURE__ */ reactExports.createElement(
+    ZIndexLayer,
+    {
+      zIndex: propsIncludingDefaults.zIndex,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      "g",
+      {
+        className: "recharts-cartesian-grid",
+      },
+      /* @__PURE__ */ reactExports.createElement(Background, {
+        fill: propsIncludingDefaults.fill,
+        fillOpacity: propsIncludingDefaults.fillOpacity,
+        x: propsIncludingDefaults.x,
+        y: propsIncludingDefaults.y,
+        width: propsIncludingDefaults.width,
+        height: propsIncludingDefaults.height,
+        ry: propsIncludingDefaults.ry,
+      }),
+      /* @__PURE__ */ reactExports.createElement(
+        HorizontalStripes,
+        _extends$5({}, propsIncludingDefaults, {
+          horizontalPoints,
+        }),
+      ),
+      /* @__PURE__ */ reactExports.createElement(
+        VerticalStripes,
+        _extends$5({}, propsIncludingDefaults, {
+          verticalPoints,
+        }),
+      ),
+      /* @__PURE__ */ reactExports.createElement(
+        HorizontalGridLines,
+        _extends$5({}, propsIncludingDefaults, {
+          offset,
+          horizontalPoints,
+          xAxis,
+          yAxis,
+        }),
+      ),
+      /* @__PURE__ */ reactExports.createElement(
+        VerticalGridLines,
+        _extends$5({}, propsIncludingDefaults, {
+          offset,
+          verticalPoints,
+          xAxis,
+          yAxis,
+        }),
+      ),
+    ),
+  );
 }
 CartesianGrid.displayName = "CartesianGrid";
 var initialState$2 = {};
@@ -20794,94 +25061,82 @@ var errorBarSlice = createSlice({
   initialState: initialState$2,
   reducers: {
     addErrorBar: (state, action) => {
-      var {
-        itemId,
-        errorBar
-      } = action.payload;
+      var { itemId, errorBar } = action.payload;
       if (!state[itemId]) {
         state[itemId] = [];
       }
       state[itemId].push(errorBar);
     },
     replaceErrorBar: (state, action) => {
-      var {
-        itemId,
-        prev,
-        next
-      } = action.payload;
+      var { itemId, prev, next } = action.payload;
       if (state[itemId]) {
-        state[itemId] = state[itemId].map((e) => e.dataKey === prev.dataKey && e.direction === prev.direction ? next : e);
+        state[itemId] = state[itemId].map((e) =>
+          e.dataKey === prev.dataKey && e.direction === prev.direction ? next : e,
+        );
       }
     },
     removeErrorBar: (state, action) => {
-      var {
-        itemId,
-        errorBar
-      } = action.payload;
+      var { itemId, errorBar } = action.payload;
       if (state[itemId]) {
-        state[itemId] = state[itemId].filter((e) => e.dataKey !== errorBar.dataKey || e.direction !== errorBar.direction);
+        state[itemId] = state[itemId].filter(
+          (e) => e.dataKey !== errorBar.dataKey || e.direction !== errorBar.direction,
+        );
       }
-    }
-  }
+    },
+  },
 });
-var {
-  addErrorBar,
-  replaceErrorBar,
-  removeErrorBar
-} = errorBarSlice.actions;
+var { addErrorBar, replaceErrorBar, removeErrorBar } = errorBarSlice.actions;
 var errorBarReducer = errorBarSlice.reducer;
 function useNeedsClip(xAxisId, yAxisId) {
   var _xAxis$allowDataOverf, _yAxis$allowDataOverf;
   var xAxis = useAppSelector((state) => selectXAxisSettings(state, xAxisId));
   var yAxis = useAppSelector((state) => selectYAxisSettings(state, yAxisId));
-  var needClipX = (_xAxis$allowDataOverf = xAxis === null || xAxis === void 0 ? void 0 : xAxis.allowDataOverflow) !== null && _xAxis$allowDataOverf !== void 0 ? _xAxis$allowDataOverf : implicitXAxis.allowDataOverflow;
-  var needClipY = (_yAxis$allowDataOverf = yAxis === null || yAxis === void 0 ? void 0 : yAxis.allowDataOverflow) !== null && _yAxis$allowDataOverf !== void 0 ? _yAxis$allowDataOverf : implicitYAxis.allowDataOverflow;
+  var needClipX =
+    (_xAxis$allowDataOverf =
+      xAxis === null || xAxis === void 0 ? void 0 : xAxis.allowDataOverflow) !== null &&
+    _xAxis$allowDataOverf !== void 0
+      ? _xAxis$allowDataOverf
+      : implicitXAxis.allowDataOverflow;
+  var needClipY =
+    (_yAxis$allowDataOverf =
+      yAxis === null || yAxis === void 0 ? void 0 : yAxis.allowDataOverflow) !== null &&
+    _yAxis$allowDataOverf !== void 0
+      ? _yAxis$allowDataOverf
+      : implicitYAxis.allowDataOverflow;
   var needClip = needClipX || needClipY;
   return {
     needClip,
     needClipX,
-    needClipY
+    needClipY,
   };
 }
 function GraphicalItemClipPath(_ref2) {
-  var {
-    xAxisId,
-    yAxisId,
-    clipPathId
-  } = _ref2;
+  var { xAxisId, yAxisId, clipPathId } = _ref2;
   var plotArea = usePlotArea();
-  var {
-    needClipX,
-    needClipY,
-    needClip
-  } = useNeedsClip(xAxisId, yAxisId);
+  var { needClipX, needClipY, needClip } = useNeedsClip(xAxisId, yAxisId);
   if (!needClip || !plotArea) {
     return null;
   }
-  var {
-    x: x2,
-    y: y2,
-    width,
-    height
-  } = plotArea;
-  return /* @__PURE__ */ reactExports.createElement("clipPath", {
-    id: "clipPath-".concat(clipPathId)
-  }, /* @__PURE__ */ reactExports.createElement("rect", {
-    x: needClipX ? x2 : x2 - width / 2,
-    y: needClipY ? y2 : y2 - height / 2,
-    width: needClipX ? width : width * 2,
-    height: needClipY ? height : height * 2
-  }));
+  var { x: x2, y: y2, width, height } = plotArea;
+  return /* @__PURE__ */ reactExports.createElement(
+    "clipPath",
+    {
+      id: "clipPath-".concat(clipPathId),
+    },
+    /* @__PURE__ */ reactExports.createElement("rect", {
+      x: needClipX ? x2 : x2 - width / 2,
+      y: needClipY ? y2 : y2 - height / 2,
+      width: needClipX ? width : width * 2,
+      height: needClipY ? height : height * 2,
+    }),
+  );
 }
 function getRadiusAndStrokeWidthFromDot(dot) {
   var props = svgPropertiesNoEventsFromUnknown(dot);
   var defaultR = 3;
   var defaultStrokeWidth = 2;
   if (props != null) {
-    var {
-      r,
-      strokeWidth
-    } = props;
+    var { r, strokeWidth } = props;
     var realR = Number(r);
     var realStrokeWidth = Number(strokeWidth);
     if (Number.isNaN(realR) || realR < 0) {
@@ -20892,39 +25147,58 @@ function getRadiusAndStrokeWidthFromDot(dot) {
     }
     return {
       r: realR,
-      strokeWidth: realStrokeWidth
+      strokeWidth: realStrokeWidth,
     };
   }
   return {
     r: defaultR,
-    strokeWidth: defaultStrokeWidth
+    strokeWidth: defaultStrokeWidth,
   };
 }
 function selectXAxisIdFromGraphicalItemId(state, id) {
   var _state$graphicalItems, _state$graphicalItems2;
-  return (_state$graphicalItems = (_state$graphicalItems2 = state.graphicalItems.cartesianItems.find((item) => item.id === id)) === null || _state$graphicalItems2 === void 0 ? void 0 : _state$graphicalItems2.xAxisId) !== null && _state$graphicalItems !== void 0 ? _state$graphicalItems : defaultAxisId;
+  return (_state$graphicalItems =
+    (_state$graphicalItems2 = state.graphicalItems.cartesianItems.find(
+      (item) => item.id === id,
+    )) === null || _state$graphicalItems2 === void 0
+      ? void 0
+      : _state$graphicalItems2.xAxisId) !== null && _state$graphicalItems !== void 0
+    ? _state$graphicalItems
+    : defaultAxisId;
 }
 function selectYAxisIdFromGraphicalItemId(state, id) {
   var _state$graphicalItems3, _state$graphicalItems4;
-  return (_state$graphicalItems3 = (_state$graphicalItems4 = state.graphicalItems.cartesianItems.find((item) => item.id === id)) === null || _state$graphicalItems4 === void 0 ? void 0 : _state$graphicalItems4.yAxisId) !== null && _state$graphicalItems3 !== void 0 ? _state$graphicalItems3 : defaultAxisId;
+  return (_state$graphicalItems3 =
+    (_state$graphicalItems4 = state.graphicalItems.cartesianItems.find(
+      (item) => item.id === id,
+    )) === null || _state$graphicalItems4 === void 0
+      ? void 0
+      : _state$graphicalItems4.yAxisId) !== null && _state$graphicalItems3 !== void 0
+    ? _state$graphicalItems3
+    : defaultAxisId;
 }
-var _excluded$4 = ["domain", "range"], _excluded2$2 = ["domain", "range"];
+var _excluded$4 = ["domain", "range"],
+  _excluded2$2 = ["domain", "range"];
 function _objectWithoutProperties$4(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$4(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$4(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$4(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function shortArraysAreEqual(arr1, arr2) {
@@ -20940,14 +25214,10 @@ function axisPropsAreEqual(prevProps, nextProps) {
   if (prevProps === nextProps) {
     return true;
   }
-  var {
-    domain: prevDomain,
-    range: prevRange
-  } = prevProps, prevRest = _objectWithoutProperties$4(prevProps, _excluded$4);
-  var {
-    domain: nextDomain,
-    range: nextRange
-  } = nextProps, nextRest = _objectWithoutProperties$4(nextProps, _excluded2$2);
+  var { domain: prevDomain, range: prevRange } = prevProps,
+    prevRest = _objectWithoutProperties$4(prevProps, _excluded$4);
+  var { domain: nextDomain, range: nextRange } = nextProps,
+    nextRest = _objectWithoutProperties$4(nextProps, _excluded2$2);
   if (!shortArraysAreEqual(prevDomain, nextDomain)) {
     return false;
   }
@@ -20956,39 +25226,62 @@ function axisPropsAreEqual(prevProps, nextProps) {
   }
   return propsAreEqual(prevRest, nextRest);
 }
-var _excluded$3 = ["type"], _excluded2$1 = ["dangerouslySetInnerHTML", "ticks", "scale"], _excluded3$1 = ["id", "scale"];
+var _excluded$3 = ["type"],
+  _excluded2$1 = ["dangerouslySetInnerHTML", "ticks", "scale"],
+  _excluded3$1 = ["id", "scale"];
 function _extends$4() {
-  return _extends$4 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$4.apply(null, arguments);
+  return (
+    (_extends$4 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$4.apply(null, arguments)
+  );
 }
 function ownKeys$3(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$3(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$3(Object(t), true).forEach(function(r2) {
-      _defineProperty$3(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$3(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$3(Object(t), true).forEach(function (r2) {
+          _defineProperty$3(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$3(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$3(e, r, t) {
-  return (r = _toPropertyKey$3(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$3(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$3(t) {
   var i = _toPrimitive$3(t, "string");
@@ -21006,37 +25299,44 @@ function _toPrimitive$3(t, r) {
 }
 function _objectWithoutProperties$3(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$3(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$3(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$3(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function SetXAxisSettings(props) {
   var dispatch = useAppDispatch();
   var prevSettingsRef = reactExports.useRef(null);
   var layout = useCartesianChartLayout();
-  var {
-    type: typeFromProps
-  } = props, restProps = _objectWithoutProperties$3(props, _excluded$3);
+  var { type: typeFromProps } = props,
+    restProps = _objectWithoutProperties$3(props, _excluded$3);
   var evaluatedType = getAxisTypeBasedOnLayout(layout, "xAxis", typeFromProps);
   var settings = reactExports.useMemo(() => {
     if (evaluatedType == null) {
       return void 0;
     }
-    return _objectSpread$3(_objectSpread$3({}, restProps), {}, {
-      type: evaluatedType
-    });
+    return _objectSpread$3(
+      _objectSpread$3({}, restProps),
+      {},
+      {
+        type: evaluatedType,
+      },
+    );
   }, [restProps, evaluatedType]);
   reactExports.useLayoutEffect(() => {
     if (settings == null) {
@@ -21045,10 +25345,12 @@ function SetXAxisSettings(props) {
     if (prevSettingsRef.current === null) {
       dispatch(addXAxis(settings));
     } else if (prevSettingsRef.current !== settings) {
-      dispatch(replaceXAxis({
-        prev: prevSettingsRef.current,
-        next: settings
-      }));
+      dispatch(
+        replaceXAxis({
+          prev: prevSettingsRef.current,
+          next: settings,
+        }),
+      );
     }
     prevSettingsRef.current = settings;
   }, [settings, dispatch]);
@@ -21063,40 +25365,39 @@ function SetXAxisSettings(props) {
   return null;
 }
 var XAxisImpl = (props) => {
-  var {
-    xAxisId,
-    className
-  } = props;
+  var { xAxisId, className } = props;
   var viewBox = useAppSelector(selectAxisViewBox);
   var isPanorama = useIsPanorama();
   var axisType = "xAxis";
-  var cartesianTickItems = useAppSelector((state) => selectTicksOfAxis(state, axisType, xAxisId, isPanorama));
+  var cartesianTickItems = useAppSelector((state) =>
+    selectTicksOfAxis(state, axisType, xAxisId, isPanorama),
+  );
   var axisSize = useAppSelector((state) => selectXAxisSize(state, xAxisId));
   var position = useAppSelector((state) => selectXAxisPosition(state, xAxisId));
-  var synchronizedSettings = useAppSelector((state) => selectXAxisSettingsNoDefaults(state, xAxisId));
+  var synchronizedSettings = useAppSelector((state) =>
+    selectXAxisSettingsNoDefaults(state, xAxisId),
+  );
   if (axisSize == null || position == null || synchronizedSettings == null) {
     return null;
   }
-  var {
-    dangerouslySetInnerHTML,
-    ticks: ticks2,
-    scale: del
-  } = props, allOtherProps = _objectWithoutProperties$3(props, _excluded2$1);
-  var {
-    id,
-    scale: del2
-  } = synchronizedSettings, restSynchronizedSettings = _objectWithoutProperties$3(synchronizedSettings, _excluded3$1);
-  return /* @__PURE__ */ reactExports.createElement(CartesianAxis, _extends$4({}, allOtherProps, restSynchronizedSettings, {
-    x: position.x,
-    y: position.y,
-    width: axisSize.width,
-    height: axisSize.height,
-    className: clsx("recharts-".concat(axisType, " ").concat(axisType), className),
-    viewBox,
-    ticks: cartesianTickItems,
-    axisType,
-    axisId: xAxisId
-  }));
+  var { dangerouslySetInnerHTML, ticks: ticks2, scale: del } = props,
+    allOtherProps = _objectWithoutProperties$3(props, _excluded2$1);
+  var { id, scale: del2 } = synchronizedSettings,
+    restSynchronizedSettings = _objectWithoutProperties$3(synchronizedSettings, _excluded3$1);
+  return /* @__PURE__ */ reactExports.createElement(
+    CartesianAxis,
+    _extends$4({}, allOtherProps, restSynchronizedSettings, {
+      x: position.x,
+      y: position.y,
+      width: axisSize.width,
+      height: axisSize.height,
+      className: clsx("recharts-".concat(axisType, " ").concat(axisType), className),
+      viewBox,
+      ticks: cartesianTickItems,
+      axisType,
+      axisId: xAxisId,
+    }),
+  );
 };
 var xAxisDefaultProps = {
   allowDataOverflow: implicitXAxis.allowDataOverflow,
@@ -21121,73 +25422,101 @@ var xAxisDefaultProps = {
   tickSize: defaultCartesianAxisProps.tickSize,
   type: implicitXAxis.type,
   niceTicks: implicitXAxis.niceTicks,
-  xAxisId: 0
+  xAxisId: 0,
 };
 var XAxisSettingsDispatcher = (outsideProps) => {
   var props = resolveDefaultProps(outsideProps, xAxisDefaultProps);
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactExports.createElement(SetXAxisSettings, {
-    allowDataOverflow: props.allowDataOverflow,
-    allowDecimals: props.allowDecimals,
-    allowDuplicatedCategory: props.allowDuplicatedCategory,
-    angle: props.angle,
-    dataKey: props.dataKey,
-    domain: props.domain,
-    height: props.height,
-    hide: props.hide,
-    id: props.xAxisId,
-    includeHidden: props.includeHidden,
-    interval: props.interval,
-    minTickGap: props.minTickGap,
-    mirror: props.mirror,
-    name: props.name,
-    orientation: props.orientation,
-    padding: props.padding,
-    reversed: props.reversed,
-    scale: props.scale,
-    tick: props.tick,
-    tickCount: props.tickCount,
-    tickFormatter: props.tickFormatter,
-    ticks: props.ticks,
-    type: props.type,
-    unit: props.unit,
-    niceTicks: props.niceTicks
-  }), /* @__PURE__ */ reactExports.createElement(XAxisImpl, props));
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    /* @__PURE__ */ reactExports.createElement(SetXAxisSettings, {
+      allowDataOverflow: props.allowDataOverflow,
+      allowDecimals: props.allowDecimals,
+      allowDuplicatedCategory: props.allowDuplicatedCategory,
+      angle: props.angle,
+      dataKey: props.dataKey,
+      domain: props.domain,
+      height: props.height,
+      hide: props.hide,
+      id: props.xAxisId,
+      includeHidden: props.includeHidden,
+      interval: props.interval,
+      minTickGap: props.minTickGap,
+      mirror: props.mirror,
+      name: props.name,
+      orientation: props.orientation,
+      padding: props.padding,
+      reversed: props.reversed,
+      scale: props.scale,
+      tick: props.tick,
+      tickCount: props.tickCount,
+      tickFormatter: props.tickFormatter,
+      ticks: props.ticks,
+      type: props.type,
+      unit: props.unit,
+      niceTicks: props.niceTicks,
+    }),
+    /* @__PURE__ */ reactExports.createElement(XAxisImpl, props),
+  );
 };
 var XAxis = /* @__PURE__ */ reactExports.memo(XAxisSettingsDispatcher, axisPropsAreEqual);
 XAxis.displayName = "XAxis";
-var _excluded$2 = ["type"], _excluded2 = ["dangerouslySetInnerHTML", "ticks", "scale"], _excluded3 = ["id", "scale"];
+var _excluded$2 = ["type"],
+  _excluded2 = ["dangerouslySetInnerHTML", "ticks", "scale"],
+  _excluded3 = ["id", "scale"];
 function _extends$3() {
-  return _extends$3 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$3.apply(null, arguments);
+  return (
+    (_extends$3 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$3.apply(null, arguments)
+  );
 }
 function ownKeys$2(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$2(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$2(Object(t), true).forEach(function(r2) {
-      _defineProperty$2(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$2(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$2(Object(t), true).forEach(function (r2) {
+          _defineProperty$2(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$2(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$2(e, r, t) {
-  return (r = _toPropertyKey$2(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$2(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$2(t) {
   var i = _toPrimitive$2(t, "string");
@@ -21205,37 +25534,44 @@ function _toPrimitive$2(t, r) {
 }
 function _objectWithoutProperties$2(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$2(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$2(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$2(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function SetYAxisSettings(props) {
   var dispatch = useAppDispatch();
   var prevSettingsRef = reactExports.useRef(null);
   var layout = useCartesianChartLayout();
-  var {
-    type: typeFromProps
-  } = props, restProps = _objectWithoutProperties$2(props, _excluded$2);
+  var { type: typeFromProps } = props,
+    restProps = _objectWithoutProperties$2(props, _excluded$2);
   var evaluatedType = getAxisTypeBasedOnLayout(layout, "yAxis", typeFromProps);
   var settings = reactExports.useMemo(() => {
     if (evaluatedType == null) {
       return void 0;
     }
-    return _objectSpread$2(_objectSpread$2({}, restProps), {}, {
-      type: evaluatedType
-    });
+    return _objectSpread$2(
+      _objectSpread$2({}, restProps),
+      {},
+      {
+        type: evaluatedType,
+      },
+    );
   }, [evaluatedType, restProps]);
   reactExports.useLayoutEffect(() => {
     if (settings == null) {
@@ -21244,10 +25580,12 @@ function SetYAxisSettings(props) {
     if (prevSettingsRef.current === null) {
       dispatch(addYAxis(settings));
     } else if (prevSettingsRef.current !== settings) {
-      dispatch(replaceYAxis({
-        prev: prevSettingsRef.current,
-        next: settings
-      }));
+      dispatch(
+        replaceYAxis({
+          prev: prevSettingsRef.current,
+          next: settings,
+        }),
+      );
     }
     prevSettingsRef.current = settings;
   }, [settings, dispatch]);
@@ -21262,12 +25600,7 @@ function SetYAxisSettings(props) {
   return null;
 }
 function YAxisImpl(props) {
-  var {
-    yAxisId,
-    className,
-    width,
-    label
-  } = props;
+  var { yAxisId, className, width, label } = props;
   var cartesianAxisRef = reactExports.useRef(null);
   var labelRef = reactExports.useRef(null);
   var viewBox = useAppSelector(selectAxisViewBox);
@@ -21276,10 +25609,20 @@ function YAxisImpl(props) {
   var axisType = "yAxis";
   var axisSize = useAppSelector((state) => selectYAxisSize(state, yAxisId));
   var position = useAppSelector((state) => selectYAxisPosition(state, yAxisId));
-  var cartesianTickItems = useAppSelector((state) => selectTicksOfAxis(state, axisType, yAxisId, isPanorama));
-  var synchronizedSettings = useAppSelector((state) => selectYAxisSettingsNoDefaults(state, yAxisId));
+  var cartesianTickItems = useAppSelector((state) =>
+    selectTicksOfAxis(state, axisType, yAxisId, isPanorama),
+  );
+  var synchronizedSettings = useAppSelector((state) =>
+    selectYAxisSettingsNoDefaults(state, yAxisId),
+  );
   reactExports.useLayoutEffect(() => {
-    if (width !== "auto" || !axisSize || isLabelContentAFunction(label) || /* @__PURE__ */ reactExports.isValidElement(label) || synchronizedSettings == null) {
+    if (
+      width !== "auto" ||
+      !axisSize ||
+      isLabelContentAFunction(label) ||
+      /* @__PURE__ */ reactExports.isValidElement(label) ||
+      synchronizedSettings == null
+    ) {
       return;
     }
     var axisComponent = cartesianAxisRef.current;
@@ -21288,10 +25631,12 @@ function YAxisImpl(props) {
     }
     var updatedYAxisWidth = axisComponent.getCalculatedWidth();
     if (Math.round(axisSize.width) !== Math.round(updatedYAxisWidth)) {
-      dispatch(updateYAxisWidth({
-        id: yAxisId,
-        width: updatedYAxisWidth
-      }));
+      dispatch(
+        updateYAxisWidth({
+          id: yAxisId,
+          width: updatedYAxisWidth,
+        }),
+      );
     }
   }, [
     // The dependency on cartesianAxisRef.current is not needed because useLayoutEffect will run after every render.
@@ -21303,38 +25648,39 @@ function YAxisImpl(props) {
     label,
     yAxisId,
     width,
-    synchronizedSettings
+    synchronizedSettings,
   ]);
   if (axisSize == null || position == null || synchronizedSettings == null) {
     return null;
   }
-  var {
-    dangerouslySetInnerHTML,
-    ticks: ticks2,
-    scale: del
-  } = props, allOtherProps = _objectWithoutProperties$2(props, _excluded2);
-  var {
-    id,
-    scale: del2
-  } = synchronizedSettings, restSynchronizedSettings = _objectWithoutProperties$2(synchronizedSettings, _excluded3);
-  return /* @__PURE__ */ reactExports.createElement(CartesianAxis, _extends$3({}, allOtherProps, restSynchronizedSettings, {
-    ref: cartesianAxisRef,
-    labelRef,
-    x: position.x,
-    y: position.y,
-    tickTextProps: width === "auto" ? {
-      width: void 0
-    } : {
-      width
-    },
-    width: axisSize.width,
-    height: axisSize.height,
-    className: clsx("recharts-".concat(axisType, " ").concat(axisType), className),
-    viewBox,
-    ticks: cartesianTickItems,
-    axisType,
-    axisId: yAxisId
-  }));
+  var { dangerouslySetInnerHTML, ticks: ticks2, scale: del } = props,
+    allOtherProps = _objectWithoutProperties$2(props, _excluded2);
+  var { id, scale: del2 } = synchronizedSettings,
+    restSynchronizedSettings = _objectWithoutProperties$2(synchronizedSettings, _excluded3);
+  return /* @__PURE__ */ reactExports.createElement(
+    CartesianAxis,
+    _extends$3({}, allOtherProps, restSynchronizedSettings, {
+      ref: cartesianAxisRef,
+      labelRef,
+      x: position.x,
+      y: position.y,
+      tickTextProps:
+        width === "auto"
+          ? {
+              width: void 0,
+            }
+          : {
+              width,
+            },
+      width: axisSize.width,
+      height: axisSize.height,
+      className: clsx("recharts-".concat(axisType, " ").concat(axisType), className),
+      viewBox,
+      ticks: cartesianTickItems,
+      axisType,
+      axisId: yAxisId,
+    }),
+  );
 }
 var yAxisDefaultProps = {
   allowDataOverflow: implicitYAxis.allowDataOverflow,
@@ -21359,42 +25705,59 @@ var yAxisDefaultProps = {
   type: implicitYAxis.type,
   niceTicks: implicitYAxis.niceTicks,
   width: implicitYAxis.width,
-  yAxisId: 0
+  yAxisId: 0,
 };
 var YAxisSettingsDispatcher = (outsideProps) => {
   var props = resolveDefaultProps(outsideProps, yAxisDefaultProps);
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactExports.createElement(SetYAxisSettings, {
-    interval: props.interval,
-    id: props.yAxisId,
-    scale: props.scale,
-    type: props.type,
-    domain: props.domain,
-    allowDataOverflow: props.allowDataOverflow,
-    dataKey: props.dataKey,
-    allowDuplicatedCategory: props.allowDuplicatedCategory,
-    allowDecimals: props.allowDecimals,
-    tickCount: props.tickCount,
-    padding: props.padding,
-    includeHidden: props.includeHidden,
-    reversed: props.reversed,
-    ticks: props.ticks,
-    width: props.width,
-    orientation: props.orientation,
-    mirror: props.mirror,
-    hide: props.hide,
-    unit: props.unit,
-    name: props.name,
-    angle: props.angle,
-    minTickGap: props.minTickGap,
-    tick: props.tick,
-    tickFormatter: props.tickFormatter,
-    niceTicks: props.niceTicks
-  }), /* @__PURE__ */ reactExports.createElement(YAxisImpl, props));
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    /* @__PURE__ */ reactExports.createElement(SetYAxisSettings, {
+      interval: props.interval,
+      id: props.yAxisId,
+      scale: props.scale,
+      type: props.type,
+      domain: props.domain,
+      allowDataOverflow: props.allowDataOverflow,
+      dataKey: props.dataKey,
+      allowDuplicatedCategory: props.allowDuplicatedCategory,
+      allowDecimals: props.allowDecimals,
+      tickCount: props.tickCount,
+      padding: props.padding,
+      includeHidden: props.includeHidden,
+      reversed: props.reversed,
+      ticks: props.ticks,
+      width: props.width,
+      orientation: props.orientation,
+      mirror: props.mirror,
+      hide: props.hide,
+      unit: props.unit,
+      name: props.name,
+      angle: props.angle,
+      minTickGap: props.minTickGap,
+      tick: props.tick,
+      tickFormatter: props.tickFormatter,
+      niceTicks: props.niceTicks,
+    }),
+    /* @__PURE__ */ reactExports.createElement(YAxisImpl, props),
+  );
 };
 var YAxis = /* @__PURE__ */ reactExports.memo(YAxisSettingsDispatcher, axisPropsAreEqual);
 YAxis.displayName = "YAxis";
 var pickChartPointer = (_state, chartPointer) => chartPointer;
-var selectActivePropsFromChartPointer = createSelector([pickChartPointer, selectChartLayout, selectPolarViewBox, selectTooltipAxisType, selectTooltipAxisRangeWithReverse, selectTooltipAxisTicks, selectOrderedTooltipTicks, selectChartOffsetInternal], combineActiveProps);
+var selectActivePropsFromChartPointer = createSelector(
+  [
+    pickChartPointer,
+    selectChartLayout,
+    selectPolarViewBox,
+    selectTooltipAxisType,
+    selectTooltipAxisRangeWithReverse,
+    selectTooltipAxisTicks,
+    selectOrderedTooltipTicks,
+    selectChartOffsetInternal,
+  ],
+  combineActiveProps,
+);
 function isSvgPointer(pointer) {
   return "getBBox" in pointer.currentTarget && typeof pointer.currentTarget.getBBox === "function";
 }
@@ -21422,7 +25785,7 @@ function getRelativeCoordinate(event) {
      * - scaleX and scaleY are necessary for when the chart element is scaled using CSS `transform: scale(N)`.
      */
     relativeX: Math.round((clientX - rect.left) / scaleX),
-    relativeY: Math.round((clientY - rect.top) / scaleY)
+    relativeY: Math.round((clientY - rect.top) / scaleY),
   });
   if ("touches" in event) {
     return Array.from(event.touches).map((touch) => getCoordinates(touch.clientX, touch.clientY));
@@ -21435,15 +25798,22 @@ mouseClickMiddleware.startListening({
   actionCreator: mouseClickAction,
   effect: (action, listenerApi) => {
     var mousePointer = action.payload;
-    var activeProps = selectActivePropsFromChartPointer(listenerApi.getState(), getRelativeCoordinate(mousePointer));
-    if ((activeProps === null || activeProps === void 0 ? void 0 : activeProps.activeIndex) != null) {
-      listenerApi.dispatch(setMouseClickAxisIndex({
-        activeIndex: activeProps.activeIndex,
-        activeDataKey: void 0,
-        activeCoordinate: activeProps.activeCoordinate
-      }));
+    var activeProps = selectActivePropsFromChartPointer(
+      listenerApi.getState(),
+      getRelativeCoordinate(mousePointer),
+    );
+    if (
+      (activeProps === null || activeProps === void 0 ? void 0 : activeProps.activeIndex) != null
+    ) {
+      listenerApi.dispatch(
+        setMouseClickAxisIndex({
+          activeIndex: activeProps.activeIndex,
+          activeDataKey: void 0,
+          activeCoordinate: activeProps.activeCoordinate,
+        }),
+      );
     }
-  }
+  },
 });
 var mouseMoveAction = createAction("mouseMove");
 var mouseMoveMiddleware = createListenerMiddleware();
@@ -21455,11 +25825,12 @@ mouseMoveMiddleware.startListening({
   effect: (action, listenerApi) => {
     var mousePointer = action.payload;
     var state = listenerApi.getState();
-    var {
-      throttleDelay,
-      throttledEvents
-    } = state.eventSettings;
-    var isThrottled = throttledEvents === "all" || (throttledEvents === null || throttledEvents === void 0 ? void 0 : throttledEvents.includes("mousemove"));
+    var { throttleDelay, throttledEvents } = state.eventSettings;
+    var isThrottled =
+      throttledEvents === "all" ||
+      (throttledEvents === null || throttledEvents === void 0
+        ? void 0
+        : throttledEvents.includes("mousemove"));
     if (rafId$2 !== null) {
       cancelAnimationFrame(rafId$2);
       rafId$2 = null;
@@ -21471,7 +25842,10 @@ mouseMoveMiddleware.startListening({
     latestChartPointer = getRelativeCoordinate(mousePointer);
     var callback = () => {
       var currentState = listenerApi.getState();
-      var tooltipEventType = selectTooltipEventType$1(currentState, currentState.tooltip.settings.shared);
+      var tooltipEventType = selectTooltipEventType$1(
+        currentState,
+        currentState.tooltip.settings.shared,
+      );
       if (!latestChartPointer) {
         rafId$2 = null;
         timeoutId$2 = null;
@@ -21479,12 +25853,17 @@ mouseMoveMiddleware.startListening({
       }
       if (tooltipEventType === "axis") {
         var activeProps = selectActivePropsFromChartPointer(currentState, latestChartPointer);
-        if ((activeProps === null || activeProps === void 0 ? void 0 : activeProps.activeIndex) != null) {
-          listenerApi.dispatch(setMouseOverAxisIndex({
-            activeIndex: activeProps.activeIndex,
-            activeDataKey: void 0,
-            activeCoordinate: activeProps.activeCoordinate
-          }));
+        if (
+          (activeProps === null || activeProps === void 0 ? void 0 : activeProps.activeIndex) !=
+          null
+        ) {
+          listenerApi.dispatch(
+            setMouseOverAxisIndex({
+              activeIndex: activeProps.activeIndex,
+              activeDataKey: void 0,
+              activeCoordinate: activeProps.activeCoordinate,
+            }),
+          );
         } else {
           listenerApi.dispatch(mouseLeaveChart());
         }
@@ -21503,7 +25882,7 @@ mouseMoveMiddleware.startListening({
         timeoutId$2 = setTimeout(callback, throttleDelay);
       }
     }
-  }
+  },
 });
 function reduxDevtoolsJsonStringifyReplacer(key, value) {
   if (value instanceof HTMLElement) {
@@ -21528,7 +25907,7 @@ var initialState$1 = {
   syncId: void 0,
   syncMethod: "index",
   baseValue: void 0,
-  reverseStackOrder: false
+  reverseStackOrder: false,
 };
 var rootPropsSlice = createSlice({
   name: "rootProps",
@@ -21538,7 +25917,10 @@ var rootPropsSlice = createSlice({
       var _action$payload$barGa;
       state.accessibilityLayer = action.payload.accessibilityLayer;
       state.barCategoryGap = action.payload.barCategoryGap;
-      state.barGap = (_action$payload$barGa = action.payload.barGap) !== null && _action$payload$barGa !== void 0 ? _action$payload$barGa : initialState$1.barGap;
+      state.barGap =
+        (_action$payload$barGa = action.payload.barGap) !== null && _action$payload$barGa !== void 0
+          ? _action$payload$barGa
+          : initialState$1.barGap;
       state.barSize = action.payload.barSize;
       state.maxBarSize = action.payload.maxBarSize;
       state.stackOffset = action.payload.stackOffset;
@@ -21547,13 +25929,11 @@ var rootPropsSlice = createSlice({
       state.className = action.payload.className;
       state.baseValue = action.payload.baseValue;
       state.reverseStackOrder = action.payload.reverseStackOrder;
-    }
-  }
+    },
+  },
 });
 var rootPropsReducer = rootPropsSlice.reducer;
-var {
-  updateOptions
-} = rootPropsSlice.actions;
+var { updateOptions } = rootPropsSlice.actions;
 var initialState = null;
 var reducers = {
   updatePolarOptions: (state, action) => {
@@ -21567,16 +25947,14 @@ var reducers = {
     state.innerRadius = action.payload.innerRadius;
     state.outerRadius = action.payload.outerRadius;
     return state;
-  }
+  },
 };
 var polarOptionsSlice = createSlice({
   name: "polarOptions",
   initialState,
-  reducers
+  reducers,
 });
-var {
-  updatePolarOptions
-} = polarOptionsSlice.actions;
+var { updatePolarOptions } = polarOptionsSlice.actions;
 var polarOptionsReducer = polarOptionsSlice.reducer;
 var keyDownAction = createAction("keyDown");
 var focusAction = createAction("focus");
@@ -21594,10 +25972,7 @@ keyboardEventsMiddleware.startListening({
       rafId$1 = null;
     }
     var state = listenerApi.getState();
-    var {
-      throttleDelay,
-      throttledEvents
-    } = state.eventSettings;
+    var { throttleDelay, throttledEvents } = state.eventSettings;
     var isThrottled = throttledEvents === "all" || throttledEvents.includes("keydown");
     if (timeoutId$1 !== null && (typeof throttleDelay !== "number" || !isThrottled)) {
       clearTimeout(timeoutId$1);
@@ -21610,29 +25985,42 @@ keyboardEventsMiddleware.startListening({
         if (!accessibilityLayerIsActive) {
           return;
         }
-        var {
-          keyboardInteraction
-        } = currentState.tooltip;
+        var { keyboardInteraction } = currentState.tooltip;
         var key = latestKeyboardActionPayload;
         if (key !== "ArrowRight" && key !== "ArrowLeft" && key !== "Enter") {
           return;
         }
-        var resolvedIndex = combineActiveTooltipIndex(keyboardInteraction, selectTooltipDisplayedData(currentState), selectTooltipAxisDataKey(currentState), selectTooltipAxisDomain(currentState));
+        var resolvedIndex = combineActiveTooltipIndex(
+          keyboardInteraction,
+          selectTooltipDisplayedData(currentState),
+          selectTooltipAxisDataKey(currentState),
+          selectTooltipAxisDomain(currentState),
+        );
         var currentIndex = resolvedIndex == null ? -1 : Number(resolvedIndex);
         var isOutsideDomain = !Number.isFinite(currentIndex) || currentIndex < 0;
         var tooltipTicks = selectTooltipAxisTicks(currentState);
         var displayedData = selectTooltipDisplayedData(currentState);
-        var tooltipEventType = selectTooltipEventType$1(currentState, currentState.tooltip.settings.shared);
+        var tooltipEventType = selectTooltipEventType$1(
+          currentState,
+          currentState.tooltip.settings.shared,
+        );
         if (key === "Enter") {
           if (isOutsideDomain) {
             return;
           }
-          var _coordinate = selectCoordinateForDefaultIndex(currentState, tooltipEventType, "hover", String(keyboardInteraction.index));
-          listenerApi.dispatch(setKeyboardInteraction({
-            active: !keyboardInteraction.active,
-            activeIndex: keyboardInteraction.index,
-            activeCoordinate: _coordinate
-          }));
+          var _coordinate = selectCoordinateForDefaultIndex(
+            currentState,
+            tooltipEventType,
+            "hover",
+            String(keyboardInteraction.index),
+          );
+          listenerApi.dispatch(
+            setKeyboardInteraction({
+              active: !keyboardInteraction.active,
+              activeIndex: keyboardInteraction.index,
+              activeCoordinate: _coordinate,
+            }),
+          );
           return;
         }
         var direction = selectChartDirection(currentState);
@@ -21648,19 +26036,25 @@ keyboardEventsMiddleware.startListening({
             index: String(i2),
             dataKey: void 0,
             graphicalItemId: void 0,
-            coordinate: void 0
+            coordinate: void 0,
           });
           nextIndex = -1;
           if (effectiveMovement > 0) {
             for (var i = 0; i < displayedData.length; i++) {
-              if (combineActiveTooltipIndex(mkInteraction(i), displayedData, axisDataKey, domain) != null) {
+              if (
+                combineActiveTooltipIndex(mkInteraction(i), displayedData, axisDataKey, domain) !=
+                null
+              ) {
                 nextIndex = i;
                 break;
               }
             }
           } else {
             for (var _i = displayedData.length - 1; _i >= 0; _i--) {
-              if (combineActiveTooltipIndex(mkInteraction(_i), displayedData, axisDataKey, domain) != null) {
+              if (
+                combineActiveTooltipIndex(mkInteraction(_i), displayedData, axisDataKey, domain) !=
+                null
+              ) {
                 nextIndex = _i;
                 break;
               }
@@ -21671,17 +26065,26 @@ keyboardEventsMiddleware.startListening({
           }
         } else {
           nextIndex = currentIndex + movement * directionMultiplier;
-          var dataLength = (tooltipTicks === null || tooltipTicks === void 0 ? void 0 : tooltipTicks.length) || displayedData.length;
+          var dataLength =
+            (tooltipTicks === null || tooltipTicks === void 0 ? void 0 : tooltipTicks.length) ||
+            displayedData.length;
           if (dataLength === 0 || nextIndex >= dataLength || nextIndex < 0) {
             return;
           }
         }
-        var coordinate = selectCoordinateForDefaultIndex(currentState, tooltipEventType, "hover", String(nextIndex));
-        listenerApi.dispatch(setKeyboardInteraction({
-          active: true,
-          activeIndex: nextIndex.toString(),
-          activeCoordinate: coordinate
-        }));
+        var coordinate = selectCoordinateForDefaultIndex(
+          currentState,
+          tooltipEventType,
+          "hover",
+          String(nextIndex),
+        );
+        listenerApi.dispatch(
+          setKeyboardInteraction({
+            active: true,
+            activeIndex: nextIndex.toString(),
+            activeCoordinate: coordinate,
+          }),
+        );
       } finally {
         rafId$1 = null;
         timeoutId$1 = null;
@@ -21707,7 +26110,7 @@ keyboardEventsMiddleware.startListening({
         }, throttleDelay);
       }
     }
-  }
+  },
 });
 keyboardEventsMiddleware.startListening({
   actionCreator: focusAction,
@@ -21717,23 +26120,28 @@ keyboardEventsMiddleware.startListening({
     if (!accessibilityLayerIsActive) {
       return;
     }
-    var {
-      keyboardInteraction
-    } = state.tooltip;
+    var { keyboardInteraction } = state.tooltip;
     if (keyboardInteraction.active) {
       return;
     }
     if (keyboardInteraction.index == null) {
       var nextIndex = "0";
       var tooltipEventType = selectTooltipEventType$1(state, state.tooltip.settings.shared);
-      var coordinate = selectCoordinateForDefaultIndex(state, tooltipEventType, "hover", String(nextIndex));
-      listenerApi.dispatch(setKeyboardInteraction({
-        active: true,
-        activeIndex: nextIndex,
-        activeCoordinate: coordinate
-      }));
+      var coordinate = selectCoordinateForDefaultIndex(
+        state,
+        tooltipEventType,
+        "hover",
+        String(nextIndex),
+      );
+      listenerApi.dispatch(
+        setKeyboardInteraction({
+          active: true,
+          activeIndex: nextIndex,
+          activeCoordinate: coordinate,
+        }),
+      );
     }
-  }
+  },
 });
 keyboardEventsMiddleware.startListening({
   actionCreator: blurAction,
@@ -21743,23 +26151,21 @@ keyboardEventsMiddleware.startListening({
     if (!accessibilityLayerIsActive) {
       return;
     }
-    var {
-      keyboardInteraction
-    } = state.tooltip;
+    var { keyboardInteraction } = state.tooltip;
     if (keyboardInteraction.active) {
-      listenerApi.dispatch(setKeyboardInteraction({
-        active: false,
-        activeIndex: keyboardInteraction.index,
-        activeCoordinate: keyboardInteraction.coordinate
-      }));
+      listenerApi.dispatch(
+        setKeyboardInteraction({
+          active: false,
+          activeIndex: keyboardInteraction.index,
+          activeCoordinate: keyboardInteraction.coordinate,
+        }),
+      );
     }
-  }
+  },
 });
 function createEventProxy(reactEvent) {
   reactEvent.persist();
-  var {
-    currentTarget
-  } = reactEvent;
+  var { currentTarget } = reactEvent;
   return new Proxy(reactEvent, {
     get: (target, prop) => {
       if (prop === "currentTarget") {
@@ -21770,7 +26176,7 @@ function createEventProxy(reactEvent) {
         return value.bind(target);
       }
       return value;
-    }
+    },
   });
 }
 var externalEventAction = createAction("externalEvent");
@@ -21781,10 +26187,7 @@ var latestEventMap = /* @__PURE__ */ new Map();
 externalEventsMiddleware.startListening({
   actionCreator: externalEventAction,
   effect: (action, listenerApi) => {
-    var {
-      handler,
-      reactEvent
-    } = action.payload;
+    var { handler, reactEvent } = action.payload;
     if (handler == null) {
       return;
     }
@@ -21792,7 +26195,7 @@ externalEventsMiddleware.startListening({
     var eventProxy = createEventProxy(reactEvent);
     latestEventMap.set(eventType, {
       handler,
-      reactEvent: eventProxy
+      reactEvent: eventProxy,
     });
     var existingRafId = rafIdMap.get(eventType);
     if (existingRafId !== void 0) {
@@ -21800,12 +26203,13 @@ externalEventsMiddleware.startListening({
       rafIdMap.delete(eventType);
     }
     var state = listenerApi.getState();
-    var {
-      throttleDelay,
-      throttledEvents
-    } = state.eventSettings;
+    var { throttleDelay, throttledEvents } = state.eventSettings;
     var eventListAsString = throttledEvents;
-    var isThrottled = eventListAsString === "all" || (eventListAsString === null || eventListAsString === void 0 ? void 0 : eventListAsString.includes(eventType));
+    var isThrottled =
+      eventListAsString === "all" ||
+      (eventListAsString === null || eventListAsString === void 0
+        ? void 0
+        : eventListAsString.includes(eventType));
     var existingTimeoutId = timeoutIdMap.get(eventType);
     if (existingTimeoutId !== void 0 && (typeof throttleDelay !== "number" || !isThrottled)) {
       clearTimeout(existingTimeoutId);
@@ -21817,10 +26221,7 @@ externalEventsMiddleware.startListening({
         if (!latestAction) {
           return;
         }
-        var {
-          handler: latestHandler,
-          reactEvent: latestEvent
-        } = latestAction;
+        var { handler: latestHandler, reactEvent: latestEvent } = latestAction;
         var currentState = listenerApi.getState();
         var nextState = {
           activeCoordinate: selectActiveTooltipCoordinate(currentState),
@@ -21828,7 +26229,7 @@ externalEventsMiddleware.startListening({
           activeIndex: selectActiveTooltipIndex(currentState),
           activeLabel: selectActiveLabel$1(currentState),
           activeTooltipIndex: selectActiveTooltipIndex(currentState),
-          isTooltipActive: selectIsTooltipActive$1(currentState)
+          isTooltipActive: selectIsTooltipActive$1(currentState),
         };
         if (latestHandler) {
           latestHandler(nextState, latestEvent);
@@ -21855,27 +26256,35 @@ externalEventsMiddleware.startListening({
     } else {
       callback();
     }
-  }
+  },
 });
-var selectAllTooltipPayloadConfiguration = createSelector([selectTooltipState], (tooltipState) => tooltipState.tooltipItemPayloads);
-var selectTooltipCoordinate = createSelector([selectAllTooltipPayloadConfiguration, (_state, tooltipIndex) => tooltipIndex, (_state, _tooltipIndex, graphicalItemId) => graphicalItemId], (allTooltipConfigurations, tooltipIndex, graphicalItemId) => {
-  if (tooltipIndex == null) {
-    return void 0;
-  }
-  var mostRelevantTooltipConfiguration = allTooltipConfigurations.find((tooltipConfiguration) => {
-    return tooltipConfiguration.settings.graphicalItemId === graphicalItemId;
-  });
-  if (mostRelevantTooltipConfiguration == null) {
-    return void 0;
-  }
-  var {
-    getPosition
-  } = mostRelevantTooltipConfiguration;
-  if (getPosition == null) {
-    return void 0;
-  }
-  return getPosition(tooltipIndex);
-});
+var selectAllTooltipPayloadConfiguration = createSelector(
+  [selectTooltipState],
+  (tooltipState) => tooltipState.tooltipItemPayloads,
+);
+var selectTooltipCoordinate = createSelector(
+  [
+    selectAllTooltipPayloadConfiguration,
+    (_state, tooltipIndex) => tooltipIndex,
+    (_state, _tooltipIndex, graphicalItemId) => graphicalItemId,
+  ],
+  (allTooltipConfigurations, tooltipIndex, graphicalItemId) => {
+    if (tooltipIndex == null) {
+      return void 0;
+    }
+    var mostRelevantTooltipConfiguration = allTooltipConfigurations.find((tooltipConfiguration) => {
+      return tooltipConfiguration.settings.graphicalItemId === graphicalItemId;
+    });
+    if (mostRelevantTooltipConfiguration == null) {
+      return void 0;
+    }
+    var { getPosition } = mostRelevantTooltipConfiguration;
+    if (getPosition == null) {
+      return void 0;
+    }
+    return getPosition(tooltipIndex);
+  },
+);
 var touchEventAction = createAction("touchMove");
 var touchEventMiddleware = createListenerMiddleware();
 var rafId = null;
@@ -21891,10 +26300,7 @@ touchEventMiddleware.startListening({
     }
     latestTouchEvent = createEventProxy(touchEvent);
     var state = listenerApi.getState();
-    var {
-      throttleDelay,
-      throttledEvents
-    } = state.eventSettings;
+    var { throttleDelay, throttledEvents } = state.eventSettings;
     var isThrottled = throttledEvents === "all" || throttledEvents.includes("touchmove");
     if (rafId !== null) {
       cancelAnimationFrame(rafId);
@@ -21904,32 +26310,45 @@ touchEventMiddleware.startListening({
       clearTimeout(timeoutId);
       timeoutId = null;
     }
-    latestChartPointers = Array.from(touchEvent.touches).map((touch) => getRelativeCoordinate({
-      clientX: touch.clientX,
-      clientY: touch.clientY,
-      currentTarget: touchEvent.currentTarget
-    }));
+    latestChartPointers = Array.from(touchEvent.touches).map((touch) =>
+      getRelativeCoordinate({
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+        currentTarget: touchEvent.currentTarget,
+      }),
+    );
     var callback = () => {
       if (latestTouchEvent == null) {
         return;
       }
       var currentState = listenerApi.getState();
-      var tooltipEventType = selectTooltipEventType$1(currentState, currentState.tooltip.settings.shared);
+      var tooltipEventType = selectTooltipEventType$1(
+        currentState,
+        currentState.tooltip.settings.shared,
+      );
       if (tooltipEventType === "axis") {
         var _latestChartPointers;
-        var latestTouchPointer = (_latestChartPointers = latestChartPointers) === null || _latestChartPointers === void 0 ? void 0 : _latestChartPointers[0];
+        var latestTouchPointer =
+          (_latestChartPointers = latestChartPointers) === null || _latestChartPointers === void 0
+            ? void 0
+            : _latestChartPointers[0];
         if (latestTouchPointer == null) {
           rafId = null;
           timeoutId = null;
           return;
         }
         var activeProps = selectActivePropsFromChartPointer(currentState, latestTouchPointer);
-        if ((activeProps === null || activeProps === void 0 ? void 0 : activeProps.activeIndex) != null) {
-          listenerApi.dispatch(setMouseOverAxisIndex({
-            activeIndex: activeProps.activeIndex,
-            activeDataKey: void 0,
-            activeCoordinate: activeProps.activeCoordinate
-          }));
+        if (
+          (activeProps === null || activeProps === void 0 ? void 0 : activeProps.activeIndex) !=
+          null
+        ) {
+          listenerApi.dispatch(
+            setMouseOverAxisIndex({
+              activeIndex: activeProps.activeIndex,
+              activeDataKey: void 0,
+              activeCoordinate: activeProps.activeCoordinate,
+            }),
+          );
         }
       } else if (tooltipEventType === "item") {
         var _target$getAttribute;
@@ -21942,21 +26361,28 @@ touchEventMiddleware.startListening({
           return;
         }
         var itemIndex = target.getAttribute(DATA_ITEM_INDEX_ATTRIBUTE_NAME);
-        var graphicalItemId = (_target$getAttribute = target.getAttribute(DATA_ITEM_GRAPHICAL_ITEM_ID_ATTRIBUTE_NAME)) !== null && _target$getAttribute !== void 0 ? _target$getAttribute : void 0;
-        var settings = selectAllGraphicalItemsSettings(currentState).find((item) => item.id === graphicalItemId);
+        var graphicalItemId =
+          (_target$getAttribute = target.getAttribute(
+            DATA_ITEM_GRAPHICAL_ITEM_ID_ATTRIBUTE_NAME,
+          )) !== null && _target$getAttribute !== void 0
+            ? _target$getAttribute
+            : void 0;
+        var settings = selectAllGraphicalItemsSettings(currentState).find(
+          (item) => item.id === graphicalItemId,
+        );
         if (itemIndex == null || settings == null || graphicalItemId == null) {
           return;
         }
-        var {
-          dataKey
-        } = settings;
+        var { dataKey } = settings;
         var coordinate = selectTooltipCoordinate(currentState, itemIndex, graphicalItemId);
-        listenerApi.dispatch(setActiveMouseOverItemIndex({
-          activeDataKey: dataKey,
-          activeIndex: itemIndex,
-          activeCoordinate: coordinate,
-          activeGraphicalItemId: graphicalItemId
-        }));
+        listenerApi.dispatch(
+          setActiveMouseOverItemIndex({
+            activeDataKey: dataKey,
+            activeIndex: itemIndex,
+            activeCoordinate: coordinate,
+            activeGraphicalItemId: graphicalItemId,
+          }),
+        );
       }
       rafId = null;
       timeoutId = null;
@@ -21981,11 +26407,11 @@ touchEventMiddleware.startListening({
         }, throttleDelay);
       }
     }
-  }
+  },
 });
 var initialEventSettingsState = {
   throttleDelay: "raf",
-  throttledEvents: ["mousemove", "touchmove", "pointermove", "scroll", "wheel"]
+  throttledEvents: ["mousemove", "touchmove", "pointermove", "scroll", "wheel"],
 };
 var eventSettingsSlice = createSlice({
   name: "eventSettings",
@@ -21998,12 +26424,10 @@ var eventSettingsSlice = createSlice({
       if (action.payload.throttledEvents != null) {
         state.throttledEvents = castDraft(action.payload.throttledEvents);
       }
-    }
-  }
+    },
+  },
 });
-var {
-  setEventSettings
-} = eventSettingsSlice.actions;
+var { setEventSettings } = eventSettingsSlice.actions;
 var eventSettingsReducer = eventSettingsSlice.reducer;
 var rootReducer = combineReducers({
   brush: brushReducer,
@@ -22021,7 +26445,7 @@ var rootReducer = combineReducers({
   renderedTicks: renderedTicksReducer,
   rootProps: rootPropsReducer,
   tooltip: tooltipReducer,
-  zIndex: zIndexReducer
+  zIndex: zIndexReducer,
 });
 var createRechartsStore = function createRechartsStore2(preloadedState) {
   var chartName = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "Chart";
@@ -22034,8 +26458,18 @@ var createRechartsStore = function createRechartsStore2(preloadedState) {
       var _process$env$NODE_ENV;
       return getDefaultMiddleware({
         serializableCheck: false,
-        immutableCheck: !["commonjs", "es6", "production"].includes((_process$env$NODE_ENV = "es6") !== null && _process$env$NODE_ENV !== void 0 ? _process$env$NODE_ENV : "")
-      }).concat([mouseClickMiddleware.middleware, mouseMoveMiddleware.middleware, keyboardEventsMiddleware.middleware, externalEventsMiddleware.middleware, touchEventMiddleware.middleware]);
+        immutableCheck: !["commonjs", "es6", "production"].includes(
+          (_process$env$NODE_ENV = "es6") !== null && _process$env$NODE_ENV !== void 0
+            ? _process$env$NODE_ENV
+            : "",
+        ),
+      }).concat([
+        mouseClickMiddleware.middleware,
+        mouseMoveMiddleware.middleware,
+        keyboardEventsMiddleware.middleware,
+        externalEventsMiddleware.middleware,
+        touchEventMiddleware.middleware,
+      ]);
     },
     /*
      * I can't find out how to satisfy typescript here.
@@ -22050,24 +26484,22 @@ var createRechartsStore = function createRechartsStore2(preloadedState) {
       if (typeof getDefaultEnhancers === "function") {
         enhancers = getDefaultEnhancers();
       }
-      return enhancers.concat(autoBatchEnhancer({
-        type: "raf"
-      }));
+      return enhancers.concat(
+        autoBatchEnhancer({
+          type: "raf",
+        }),
+      );
     },
     devTools: {
       serialize: {
-        replacer: reduxDevtoolsJsonStringifyReplacer
+        replacer: reduxDevtoolsJsonStringifyReplacer,
       },
-      name: "recharts-".concat(chartName)
-    }
+      name: "recharts-".concat(chartName),
+    },
   });
 };
 function RechartsStoreProvider(_ref2) {
-  var {
-    preloadedState,
-    children,
-    reduxStoreName
-  } = _ref2;
+  var { preloadedState, children, reduxStoreName } = _ref2;
   var isPanorama = useIsPanorama();
   var storeRef = reactExports.useRef(null);
   if (isPanorama) {
@@ -22077,16 +26509,17 @@ function RechartsStoreProvider(_ref2) {
     storeRef.current = createRechartsStore(preloadedState, reduxStoreName);
   }
   var nonNullContext = RechartsReduxContext;
-  return /* @__PURE__ */ reactExports.createElement(Provider_default, {
-    context: nonNullContext,
-    store: storeRef.current
-  }, children);
+  return /* @__PURE__ */ reactExports.createElement(
+    Provider_default,
+    {
+      context: nonNullContext,
+      store: storeRef.current,
+    },
+    children,
+  );
 }
 function ReportMainChartPropsImpl(_ref2) {
-  var {
-    layout,
-    margin
-  } = _ref2;
+  var { layout, margin } = _ref2;
   var dispatch = useAppDispatch();
   var isPanorama = useIsPanorama();
   reactExports.useEffect(() => {
@@ -22097,7 +26530,10 @@ function ReportMainChartPropsImpl(_ref2) {
   }, [dispatch, isPanorama, layout, margin]);
   return null;
 }
-var ReportMainChartProps = /* @__PURE__ */ reactExports.memo(ReportMainChartPropsImpl, propsAreEqual);
+var ReportMainChartProps = /* @__PURE__ */ reactExports.memo(
+  ReportMainChartPropsImpl,
+  propsAreEqual,
+);
 function ReportChartProps(props) {
   var dispatch = useAppDispatch();
   reactExports.useEffect(() => {
@@ -22114,81 +26550,98 @@ var ReportEventSettingsImpl = (props) => {
 };
 var ReportEventSettings = /* @__PURE__ */ reactExports.memo(ReportEventSettingsImpl, propsAreEqual);
 function ZIndexSvgPortal(_ref2) {
-  var {
-    zIndex,
-    isPanorama
-  } = _ref2;
+  var { zIndex, isPanorama } = _ref2;
   var ref = reactExports.useRef(null);
   var dispatch = useAppDispatch();
   reactExports.useLayoutEffect(() => {
     if (ref.current) {
-      dispatch(registerZIndexPortalElement({
-        zIndex,
-        element: ref.current,
-        isPanorama
-      }));
+      dispatch(
+        registerZIndexPortalElement({
+          zIndex,
+          element: ref.current,
+          isPanorama,
+        }),
+      );
     }
     return () => {
-      dispatch(unregisterZIndexPortalElement({
-        zIndex,
-        isPanorama
-      }));
+      dispatch(
+        unregisterZIndexPortalElement({
+          zIndex,
+          isPanorama,
+        }),
+      );
     };
   }, [dispatch, zIndex, isPanorama]);
   return /* @__PURE__ */ reactExports.createElement("g", {
     tabIndex: -1,
     ref,
-    className: "recharts-zIndex-layer_".concat(zIndex)
+    className: "recharts-zIndex-layer_".concat(zIndex),
   });
 }
 function AllZIndexPortals(_ref2) {
-  var {
-    children,
-    isPanorama
-  } = _ref2;
+  var { children, isPanorama } = _ref2;
   var allRegisteredZIndexes = useAppSelector(selectAllRegisteredZIndexes);
   if (!allRegisteredZIndexes || allRegisteredZIndexes.length === 0) {
     return children;
   }
   var allNegativeZIndexes = allRegisteredZIndexes.filter((zIndex) => zIndex < 0);
   var allPositiveZIndexes = allRegisteredZIndexes.filter((zIndex) => zIndex > 0);
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, allNegativeZIndexes.map((zIndex) => /* @__PURE__ */ reactExports.createElement(ZIndexSvgPortal, {
-    key: zIndex,
-    zIndex,
-    isPanorama
-  })), children, allPositiveZIndexes.map((zIndex) => /* @__PURE__ */ reactExports.createElement(ZIndexSvgPortal, {
-    key: zIndex,
-    zIndex,
-    isPanorama
-  })));
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    allNegativeZIndexes.map((zIndex) =>
+      /* @__PURE__ */ reactExports.createElement(ZIndexSvgPortal, {
+        key: zIndex,
+        zIndex,
+        isPanorama,
+      }),
+    ),
+    children,
+    allPositiveZIndexes.map((zIndex) =>
+      /* @__PURE__ */ reactExports.createElement(ZIndexSvgPortal, {
+        key: zIndex,
+        zIndex,
+        isPanorama,
+      }),
+    ),
+  );
 }
 var _excluded$1 = ["children"];
 function _objectWithoutProperties$1(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose$1(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose$1(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose$1(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 function _extends$2() {
-  return _extends$2 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$2.apply(null, arguments);
+  return (
+    (_extends$2 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$2.apply(null, arguments)
+  );
 }
 var FULL_WIDTH_AND_HEIGHT = {
   width: "100%",
@@ -22202,7 +26655,7 @@ var FULL_WIDTH_AND_HEIGHT = {
    *
    * Interestingly, Firefox does not have this problem, but it doesn't hurt to add the style anyway.
    */
-  display: "block"
+  display: "block",
 };
 var MainChartSurface = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   var width = useChartWidth();
@@ -22211,12 +26664,7 @@ var MainChartSurface = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   if (!isPositiveNumber(width) || !isPositiveNumber(height)) {
     return null;
   }
-  var {
-    children,
-    otherAttributes,
-    title,
-    desc
-  } = props;
+  var { children, otherAttributes, title, desc } = props;
   var tabIndex, role;
   if (otherAttributes != null) {
     if (typeof otherAttributes.tabIndex === "number") {
@@ -22230,53 +26678,72 @@ var MainChartSurface = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
       role = hasAccessibilityLayer ? "application" : void 0;
     }
   }
-  return /* @__PURE__ */ reactExports.createElement(Surface, _extends$2({}, otherAttributes, {
-    title,
-    desc,
-    role,
-    tabIndex,
-    width,
-    height,
-    style: FULL_WIDTH_AND_HEIGHT,
-    ref
-  }), children);
+  return /* @__PURE__ */ reactExports.createElement(
+    Surface,
+    _extends$2({}, otherAttributes, {
+      title,
+      desc,
+      role,
+      tabIndex,
+      width,
+      height,
+      style: FULL_WIDTH_AND_HEIGHT,
+      ref,
+    }),
+    children,
+  );
 });
 var BrushPanoramaSurface = (_ref2) => {
-  var {
-    children
-  } = _ref2;
+  var { children } = _ref2;
   var brushDimensions = useAppSelector(selectBrushDimensions);
   if (!brushDimensions) {
     return null;
   }
-  var {
-    width,
-    height,
-    y: y2,
-    x: x2
-  } = brushDimensions;
-  return /* @__PURE__ */ reactExports.createElement(Surface, {
-    width,
-    height,
-    x: x2,
-    y: y2
-  }, children);
+  var { width, height, y: y2, x: x2 } = brushDimensions;
+  return /* @__PURE__ */ reactExports.createElement(
+    Surface,
+    {
+      width,
+      height,
+      x: x2,
+      y: y2,
+    },
+    children,
+  );
 };
 var RootSurface = /* @__PURE__ */ reactExports.forwardRef((_ref2, ref) => {
-  var {
-    children
-  } = _ref2, rest = _objectWithoutProperties$1(_ref2, _excluded$1);
+  var { children } = _ref2,
+    rest = _objectWithoutProperties$1(_ref2, _excluded$1);
   var isPanorama = useIsPanorama();
   if (isPanorama) {
-    return /* @__PURE__ */ reactExports.createElement(BrushPanoramaSurface, null, /* @__PURE__ */ reactExports.createElement(AllZIndexPortals, {
-      isPanorama: true
-    }, children));
+    return /* @__PURE__ */ reactExports.createElement(
+      BrushPanoramaSurface,
+      null,
+      /* @__PURE__ */ reactExports.createElement(
+        AllZIndexPortals,
+        {
+          isPanorama: true,
+        },
+        children,
+      ),
+    );
   }
-  return /* @__PURE__ */ reactExports.createElement(MainChartSurface, _extends$2({
-    ref
-  }, rest), /* @__PURE__ */ reactExports.createElement(AllZIndexPortals, {
-    isPanorama: false
-  }, children));
+  return /* @__PURE__ */ reactExports.createElement(
+    MainChartSurface,
+    _extends$2(
+      {
+        ref,
+      },
+      rest,
+    ),
+    /* @__PURE__ */ reactExports.createElement(
+      AllZIndexPortals,
+      {
+        isPanorama: false,
+      },
+      children,
+    ),
+  );
 });
 function useReportScale() {
   var dispatch = useAppDispatch();
@@ -22298,25 +26765,41 @@ function ownKeys$1(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread$1(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys$1(Object(t), true).forEach(function(r2) {
-      _defineProperty$1(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys$1(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys$1(Object(t), true).forEach(function (r2) {
+          _defineProperty$1(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys$1(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty$1(e, r, t) {
-  return (r = _toPropertyKey$1(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey$1(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey$1(t) {
   var i = _toPrimitive$1(t, "string");
@@ -22333,13 +26816,18 @@ function _toPrimitive$1(t, r) {
   return ("string" === r ? String : Number)(t);
 }
 function _extends$1() {
-  return _extends$1 = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends$1.apply(null, arguments);
+  return (
+    (_extends$1 = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends$1.apply(null, arguments)
+  );
 }
 var EventSynchronizer = () => {
   useSynchronisedEventsFromOtherCharts();
@@ -22361,52 +26849,60 @@ var ResponsiveDiv = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   var _props$style, _props$style2;
   var observerRef = reactExports.useRef(null);
   var [sizes, setSizes] = reactExports.useState({
-    containerWidth: getNumberOrZero((_props$style = props.style) === null || _props$style === void 0 ? void 0 : _props$style.width),
-    containerHeight: getNumberOrZero((_props$style2 = props.style) === null || _props$style2 === void 0 ? void 0 : _props$style2.height)
+    containerWidth: getNumberOrZero(
+      (_props$style = props.style) === null || _props$style === void 0
+        ? void 0
+        : _props$style.width,
+    ),
+    containerHeight: getNumberOrZero(
+      (_props$style2 = props.style) === null || _props$style2 === void 0
+        ? void 0
+        : _props$style2.height,
+    ),
   });
   var setContainerSize = reactExports.useCallback((newWidth, newHeight) => {
     setSizes((prevState) => {
       var roundedWidth = Math.round(newWidth);
       var roundedHeight = Math.round(newHeight);
-      if (prevState.containerWidth === roundedWidth && prevState.containerHeight === roundedHeight) {
+      if (
+        prevState.containerWidth === roundedWidth &&
+        prevState.containerHeight === roundedHeight
+      ) {
         return prevState;
       }
       return {
         containerWidth: roundedWidth,
-        containerHeight: roundedHeight
+        containerHeight: roundedHeight,
       };
     });
   }, []);
-  var innerRef = reactExports.useCallback((node) => {
-    if (typeof ref === "function") {
-      ref(node);
-    }
-    if (observerRef.current != null) {
-      observerRef.current.disconnect();
-      observerRef.current = null;
-    }
-    if (node != null && typeof ResizeObserver !== "undefined") {
-      var {
-        width: containerWidth,
-        height: containerHeight
-      } = node.getBoundingClientRect();
-      setContainerSize(containerWidth, containerHeight);
-      var callback = (entries) => {
-        var entry = entries[0];
-        if (entry == null) {
-          return;
-        }
-        var {
-          width,
-          height
-        } = entry.contentRect;
-        setContainerSize(width, height);
-      };
-      var observer = new ResizeObserver(callback);
-      observer.observe(node);
-      observerRef.current = observer;
-    }
-  }, [ref, setContainerSize]);
+  var innerRef = reactExports.useCallback(
+    (node) => {
+      if (typeof ref === "function") {
+        ref(node);
+      }
+      if (observerRef.current != null) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+      if (node != null && typeof ResizeObserver !== "undefined") {
+        var { width: containerWidth, height: containerHeight } = node.getBoundingClientRect();
+        setContainerSize(containerWidth, containerHeight);
+        var callback = (entries) => {
+          var entry = entries[0];
+          if (entry == null) {
+            return;
+          }
+          var { width, height } = entry.contentRect;
+          setContainerSize(width, height);
+        };
+        var observer = new ResizeObserver(callback);
+        observer.observe(node);
+        observerRef.current = observer;
+      }
+    },
+    [ref, setContainerSize],
+  );
   reactExports.useEffect(() => {
     return () => {
       var observer = observerRef.current;
@@ -22415,89 +26911,133 @@ var ResponsiveDiv = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
       }
     };
   }, [setContainerSize]);
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
-    width: sizes.containerWidth,
-    height: sizes.containerHeight
-  }), /* @__PURE__ */ reactExports.createElement("div", _extends$1({
-    ref: innerRef
-  }, props)));
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
+      width: sizes.containerWidth,
+      height: sizes.containerHeight,
+    }),
+    /* @__PURE__ */ reactExports.createElement(
+      "div",
+      _extends$1(
+        {
+          ref: innerRef,
+        },
+        props,
+      ),
+    ),
+  );
 });
 var ReadSizeOnceDiv = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  var {
-    width,
-    height
-  } = props;
+  var { width, height } = props;
   var [sizes, setSizes] = reactExports.useState({
     containerWidth: getNumberOrZero(width),
-    containerHeight: getNumberOrZero(height)
+    containerHeight: getNumberOrZero(height),
   });
   var setContainerSize = reactExports.useCallback((newWidth, newHeight) => {
     setSizes((prevState) => {
       var roundedWidth = Math.round(newWidth);
       var roundedHeight = Math.round(newHeight);
-      if (prevState.containerWidth === roundedWidth && prevState.containerHeight === roundedHeight) {
+      if (
+        prevState.containerWidth === roundedWidth &&
+        prevState.containerHeight === roundedHeight
+      ) {
         return prevState;
       }
       return {
         containerWidth: roundedWidth,
-        containerHeight: roundedHeight
+        containerHeight: roundedHeight,
       };
     });
   }, []);
-  var innerRef = reactExports.useCallback((node) => {
-    if (typeof ref === "function") {
-      ref(node);
-    }
-    if (node != null) {
-      var {
-        width: containerWidth,
-        height: containerHeight
-      } = node.getBoundingClientRect();
-      setContainerSize(containerWidth, containerHeight);
-    }
-  }, [ref, setContainerSize]);
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
-    width: sizes.containerWidth,
-    height: sizes.containerHeight
-  }), /* @__PURE__ */ reactExports.createElement("div", _extends$1({
-    ref: innerRef
-  }, props)));
+  var innerRef = reactExports.useCallback(
+    (node) => {
+      if (typeof ref === "function") {
+        ref(node);
+      }
+      if (node != null) {
+        var { width: containerWidth, height: containerHeight } = node.getBoundingClientRect();
+        setContainerSize(containerWidth, containerHeight);
+      }
+    },
+    [ref, setContainerSize],
+  );
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
+      width: sizes.containerWidth,
+      height: sizes.containerHeight,
+    }),
+    /* @__PURE__ */ reactExports.createElement(
+      "div",
+      _extends$1(
+        {
+          ref: innerRef,
+        },
+        props,
+      ),
+    ),
+  );
 });
 var StaticDiv = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  var {
-    width,
-    height
-  } = props;
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
-    width,
-    height
-  }), /* @__PURE__ */ reactExports.createElement("div", _extends$1({
-    ref
-  }, props)));
-});
-var NonResponsiveDiv = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  var {
-    width,
-    height
-  } = props;
-  if (typeof width === "string" || typeof height === "string") {
-    return /* @__PURE__ */ reactExports.createElement(ReadSizeOnceDiv, _extends$1({}, props, {
-      ref
-    }));
-  }
-  if (typeof width === "number" && typeof height === "number") {
-    return /* @__PURE__ */ reactExports.createElement(StaticDiv, _extends$1({}, props, {
+  var { width, height } = props;
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
       width,
       height,
-      ref
-    }));
+    }),
+    /* @__PURE__ */ reactExports.createElement(
+      "div",
+      _extends$1(
+        {
+          ref,
+        },
+        props,
+      ),
+    ),
+  );
+});
+var NonResponsiveDiv = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
+  var { width, height } = props;
+  if (typeof width === "string" || typeof height === "string") {
+    return /* @__PURE__ */ reactExports.createElement(
+      ReadSizeOnceDiv,
+      _extends$1({}, props, {
+        ref,
+      }),
+    );
   }
-  return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
-    width,
-    height
-  }), /* @__PURE__ */ reactExports.createElement("div", _extends$1({
-    ref
-  }, props)));
+  if (typeof width === "number" && typeof height === "number") {
+    return /* @__PURE__ */ reactExports.createElement(
+      StaticDiv,
+      _extends$1({}, props, {
+        width,
+        height,
+        ref,
+      }),
+    );
+  }
+  return /* @__PURE__ */ reactExports.createElement(
+    reactExports.Fragment,
+    null,
+    /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
+      width,
+      height,
+    }),
+    /* @__PURE__ */ reactExports.createElement(
+      "div",
+      _extends$1(
+        {
+          ref,
+        },
+        props,
+      ),
+    ),
+  );
 });
 function getWrapperDivComponent(responsive) {
   return responsive ? ResponsiveDiv : NonResponsiveDiv;
@@ -22521,7 +27061,7 @@ var RechartsWrapper = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     style,
     width: widthFromProps,
     responsive,
-    dispatchTouchEvents = true
+    dispatchTouchEvents = true,
   } = props;
   var containerRef = reactExports.useRef(null);
   var dispatch = useAppDispatch();
@@ -22529,231 +27069,371 @@ var RechartsWrapper = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   var [legendPortal, setLegendPortal] = reactExports.useState(null);
   var setScaleRef = useReportScale();
   var responsiveContainerCalculations = useResponsiveContainerContext();
-  var width = (responsiveContainerCalculations === null || responsiveContainerCalculations === void 0 ? void 0 : responsiveContainerCalculations.width) > 0 ? responsiveContainerCalculations.width : widthFromProps;
-  var height = (responsiveContainerCalculations === null || responsiveContainerCalculations === void 0 ? void 0 : responsiveContainerCalculations.height) > 0 ? responsiveContainerCalculations.height : heightFromProps;
-  var innerRef = reactExports.useCallback((node) => {
-    setScaleRef(node);
-    if (typeof ref === "function") {
-      ref(node);
-    }
-    setTooltipPortal(node);
-    setLegendPortal(node);
-    if (node != null) {
-      containerRef.current = node;
-    }
-  }, [setScaleRef, ref, setTooltipPortal, setLegendPortal]);
-  var myOnClick = reactExports.useCallback((e) => {
-    dispatch(mouseClickAction(e));
-    dispatch(externalEventAction({
-      handler: onClick,
-      reactEvent: e
-    }));
-  }, [dispatch, onClick]);
-  var myOnMouseEnter = reactExports.useCallback((e) => {
-    dispatch(mouseMoveAction(e));
-    dispatch(externalEventAction({
-      handler: onMouseEnter,
-      reactEvent: e
-    }));
-  }, [dispatch, onMouseEnter]);
-  var myOnMouseLeave = reactExports.useCallback((e) => {
-    dispatch(mouseLeaveChart());
-    dispatch(externalEventAction({
-      handler: onMouseLeave,
-      reactEvent: e
-    }));
-  }, [dispatch, onMouseLeave]);
-  var myOnMouseMove = reactExports.useCallback((e) => {
-    dispatch(mouseMoveAction(e));
-    dispatch(externalEventAction({
-      handler: onMouseMove,
-      reactEvent: e
-    }));
-  }, [dispatch, onMouseMove]);
+  var width =
+    (responsiveContainerCalculations === null || responsiveContainerCalculations === void 0
+      ? void 0
+      : responsiveContainerCalculations.width) > 0
+      ? responsiveContainerCalculations.width
+      : widthFromProps;
+  var height =
+    (responsiveContainerCalculations === null || responsiveContainerCalculations === void 0
+      ? void 0
+      : responsiveContainerCalculations.height) > 0
+      ? responsiveContainerCalculations.height
+      : heightFromProps;
+  var innerRef = reactExports.useCallback(
+    (node) => {
+      setScaleRef(node);
+      if (typeof ref === "function") {
+        ref(node);
+      }
+      setTooltipPortal(node);
+      setLegendPortal(node);
+      if (node != null) {
+        containerRef.current = node;
+      }
+    },
+    [setScaleRef, ref, setTooltipPortal, setLegendPortal],
+  );
+  var myOnClick = reactExports.useCallback(
+    (e) => {
+      dispatch(mouseClickAction(e));
+      dispatch(
+        externalEventAction({
+          handler: onClick,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onClick],
+  );
+  var myOnMouseEnter = reactExports.useCallback(
+    (e) => {
+      dispatch(mouseMoveAction(e));
+      dispatch(
+        externalEventAction({
+          handler: onMouseEnter,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onMouseEnter],
+  );
+  var myOnMouseLeave = reactExports.useCallback(
+    (e) => {
+      dispatch(mouseLeaveChart());
+      dispatch(
+        externalEventAction({
+          handler: onMouseLeave,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onMouseLeave],
+  );
+  var myOnMouseMove = reactExports.useCallback(
+    (e) => {
+      dispatch(mouseMoveAction(e));
+      dispatch(
+        externalEventAction({
+          handler: onMouseMove,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onMouseMove],
+  );
   var onFocus = reactExports.useCallback(() => {
     dispatch(focusAction());
   }, [dispatch]);
   var onBlur = reactExports.useCallback(() => {
     dispatch(blurAction());
   }, [dispatch]);
-  var onKeyDown = reactExports.useCallback((e) => {
-    dispatch(keyDownAction(e.key));
-  }, [dispatch]);
-  var myOnContextMenu = reactExports.useCallback((e) => {
-    dispatch(externalEventAction({
-      handler: onContextMenu,
-      reactEvent: e
-    }));
-  }, [dispatch, onContextMenu]);
-  var myOnDoubleClick = reactExports.useCallback((e) => {
-    dispatch(externalEventAction({
-      handler: onDoubleClick,
-      reactEvent: e
-    }));
-  }, [dispatch, onDoubleClick]);
-  var myOnMouseDown = reactExports.useCallback((e) => {
-    dispatch(externalEventAction({
-      handler: onMouseDown,
-      reactEvent: e
-    }));
-  }, [dispatch, onMouseDown]);
-  var myOnMouseUp = reactExports.useCallback((e) => {
-    dispatch(externalEventAction({
-      handler: onMouseUp,
-      reactEvent: e
-    }));
-  }, [dispatch, onMouseUp]);
-  var myOnTouchStart = reactExports.useCallback((e) => {
-    dispatch(externalEventAction({
-      handler: onTouchStart,
-      reactEvent: e
-    }));
-  }, [dispatch, onTouchStart]);
-  var myOnTouchMove = reactExports.useCallback((e) => {
-    if (dispatchTouchEvents) {
-      dispatch(touchEventAction(e));
-    }
-    dispatch(externalEventAction({
-      handler: onTouchMove,
-      reactEvent: e
-    }));
-  }, [dispatch, dispatchTouchEvents, onTouchMove]);
-  var myOnTouchEnd = reactExports.useCallback((e) => {
-    dispatch(externalEventAction({
-      handler: onTouchEnd,
-      reactEvent: e
-    }));
-  }, [dispatch, onTouchEnd]);
+  var onKeyDown = reactExports.useCallback(
+    (e) => {
+      dispatch(keyDownAction(e.key));
+    },
+    [dispatch],
+  );
+  var myOnContextMenu = reactExports.useCallback(
+    (e) => {
+      dispatch(
+        externalEventAction({
+          handler: onContextMenu,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onContextMenu],
+  );
+  var myOnDoubleClick = reactExports.useCallback(
+    (e) => {
+      dispatch(
+        externalEventAction({
+          handler: onDoubleClick,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onDoubleClick],
+  );
+  var myOnMouseDown = reactExports.useCallback(
+    (e) => {
+      dispatch(
+        externalEventAction({
+          handler: onMouseDown,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onMouseDown],
+  );
+  var myOnMouseUp = reactExports.useCallback(
+    (e) => {
+      dispatch(
+        externalEventAction({
+          handler: onMouseUp,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onMouseUp],
+  );
+  var myOnTouchStart = reactExports.useCallback(
+    (e) => {
+      dispatch(
+        externalEventAction({
+          handler: onTouchStart,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onTouchStart],
+  );
+  var myOnTouchMove = reactExports.useCallback(
+    (e) => {
+      if (dispatchTouchEvents) {
+        dispatch(touchEventAction(e));
+      }
+      dispatch(
+        externalEventAction({
+          handler: onTouchMove,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, dispatchTouchEvents, onTouchMove],
+  );
+  var myOnTouchEnd = reactExports.useCallback(
+    (e) => {
+      dispatch(
+        externalEventAction({
+          handler: onTouchEnd,
+          reactEvent: e,
+        }),
+      );
+    },
+    [dispatch, onTouchEnd],
+  );
   var WrapperDiv = getWrapperDivComponent(responsive);
-  return /* @__PURE__ */ reactExports.createElement(TooltipPortalContext.Provider, {
-    value: tooltipPortal
-  }, /* @__PURE__ */ reactExports.createElement(LegendPortalContext.Provider, {
-    value: legendPortal
-  }, /* @__PURE__ */ reactExports.createElement(WrapperDiv, {
-    width: width !== null && width !== void 0 ? width : style === null || style === void 0 ? void 0 : style.width,
-    height: height !== null && height !== void 0 ? height : style === null || style === void 0 ? void 0 : style.height,
-    className: clsx("recharts-wrapper", className),
-    style: _objectSpread$1({
-      position: "relative",
-      cursor: "default",
-      width,
-      height
-    }, style),
-    onClick: myOnClick,
-    onContextMenu: myOnContextMenu,
-    onDoubleClick: myOnDoubleClick,
-    onFocus,
-    onBlur,
-    onKeyDown,
-    onMouseDown: myOnMouseDown,
-    onMouseEnter: myOnMouseEnter,
-    onMouseLeave: myOnMouseLeave,
-    onMouseMove: myOnMouseMove,
-    onMouseUp: myOnMouseUp,
-    onTouchEnd: myOnTouchEnd,
-    onTouchMove: myOnTouchMove,
-    onTouchStart: myOnTouchStart,
-    ref: innerRef
-  }, /* @__PURE__ */ reactExports.createElement(EventSynchronizer, null), children)));
+  return /* @__PURE__ */ reactExports.createElement(
+    TooltipPortalContext.Provider,
+    {
+      value: tooltipPortal,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      LegendPortalContext.Provider,
+      {
+        value: legendPortal,
+      },
+      /* @__PURE__ */ reactExports.createElement(
+        WrapperDiv,
+        {
+          width:
+            width !== null && width !== void 0
+              ? width
+              : style === null || style === void 0
+                ? void 0
+                : style.width,
+          height:
+            height !== null && height !== void 0
+              ? height
+              : style === null || style === void 0
+                ? void 0
+                : style.height,
+          className: clsx("recharts-wrapper", className),
+          style: _objectSpread$1(
+            {
+              position: "relative",
+              cursor: "default",
+              width,
+              height,
+            },
+            style,
+          ),
+          onClick: myOnClick,
+          onContextMenu: myOnContextMenu,
+          onDoubleClick: myOnDoubleClick,
+          onFocus,
+          onBlur,
+          onKeyDown,
+          onMouseDown: myOnMouseDown,
+          onMouseEnter: myOnMouseEnter,
+          onMouseLeave: myOnMouseLeave,
+          onMouseMove: myOnMouseMove,
+          onMouseUp: myOnMouseUp,
+          onTouchEnd: myOnTouchEnd,
+          onTouchMove: myOnTouchMove,
+          onTouchStart: myOnTouchStart,
+          ref: innerRef,
+        },
+        /* @__PURE__ */ reactExports.createElement(EventSynchronizer, null),
+        children,
+      ),
+    ),
+  );
 });
-var _excluded = ["width", "height", "responsive", "children", "className", "style", "compact", "title", "desc"];
+var _excluded = [
+  "width",
+  "height",
+  "responsive",
+  "children",
+  "className",
+  "style",
+  "compact",
+  "title",
+  "desc",
+];
 function _objectWithoutProperties(e, t) {
   if (null == e) return {};
-  var o, r, i = _objectWithoutPropertiesLoose(e, t);
+  var o,
+    r,
+    i = _objectWithoutPropertiesLoose(e, t);
   if (Object.getOwnPropertySymbols) {
     var n = Object.getOwnPropertySymbols(e);
-    for (r = 0; r < n.length; r++) o = n[r], -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]);
+    for (r = 0; r < n.length; r++)
+      ((o = n[r]), -1 === t.indexOf(o) && {}.propertyIsEnumerable.call(e, o) && (i[o] = e[o]));
   }
   return i;
 }
 function _objectWithoutPropertiesLoose(r, e) {
   if (null == r) return {};
   var t = {};
-  for (var n in r) if ({}.hasOwnProperty.call(r, n)) {
-    if (-1 !== e.indexOf(n)) continue;
-    t[n] = r[n];
-  }
+  for (var n in r)
+    if ({}.hasOwnProperty.call(r, n)) {
+      if (-1 !== e.indexOf(n)) continue;
+      t[n] = r[n];
+    }
   return t;
 }
 var CategoricalChart = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
-  var {
-    width,
-    height,
-    responsive,
-    children,
-    className,
-    style,
-    compact,
-    title,
-    desc
-  } = props, others = _objectWithoutProperties(props, _excluded);
+  var { width, height, responsive, children, className, style, compact, title, desc } = props,
+    others = _objectWithoutProperties(props, _excluded);
   var attrs = svgPropertiesNoEvents(others);
   if (compact) {
-    return /* @__PURE__ */ reactExports.createElement(reactExports.Fragment, null, /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
-      width,
-      height
-    }), /* @__PURE__ */ reactExports.createElement(RootSurface, {
-      otherAttributes: attrs,
-      title,
-      desc
-    }, children));
+    return /* @__PURE__ */ reactExports.createElement(
+      reactExports.Fragment,
+      null,
+      /* @__PURE__ */ reactExports.createElement(ReportChartSize, {
+        width,
+        height,
+      }),
+      /* @__PURE__ */ reactExports.createElement(
+        RootSurface,
+        {
+          otherAttributes: attrs,
+          title,
+          desc,
+        },
+        children,
+      ),
+    );
   }
-  return /* @__PURE__ */ reactExports.createElement(RechartsWrapper, {
-    className,
-    style,
-    width,
-    height,
-    responsive: responsive !== null && responsive !== void 0 ? responsive : false,
-    onClick: props.onClick,
-    onMouseLeave: props.onMouseLeave,
-    onMouseEnter: props.onMouseEnter,
-    onMouseMove: props.onMouseMove,
-    onMouseDown: props.onMouseDown,
-    onMouseUp: props.onMouseUp,
-    onContextMenu: props.onContextMenu,
-    onDoubleClick: props.onDoubleClick,
-    onTouchStart: props.onTouchStart,
-    onTouchMove: props.onTouchMove,
-    onTouchEnd: props.onTouchEnd
-  }, /* @__PURE__ */ reactExports.createElement(RootSurface, {
-    otherAttributes: attrs,
-    title,
-    desc,
-    ref
-  }, /* @__PURE__ */ reactExports.createElement(ClipPathProvider, null, children)));
+  return /* @__PURE__ */ reactExports.createElement(
+    RechartsWrapper,
+    {
+      className,
+      style,
+      width,
+      height,
+      responsive: responsive !== null && responsive !== void 0 ? responsive : false,
+      onClick: props.onClick,
+      onMouseLeave: props.onMouseLeave,
+      onMouseEnter: props.onMouseEnter,
+      onMouseMove: props.onMouseMove,
+      onMouseDown: props.onMouseDown,
+      onMouseUp: props.onMouseUp,
+      onContextMenu: props.onContextMenu,
+      onDoubleClick: props.onDoubleClick,
+      onTouchStart: props.onTouchStart,
+      onTouchMove: props.onTouchMove,
+      onTouchEnd: props.onTouchEnd,
+    },
+    /* @__PURE__ */ reactExports.createElement(
+      RootSurface,
+      {
+        otherAttributes: attrs,
+        title,
+        desc,
+        ref,
+      },
+      /* @__PURE__ */ reactExports.createElement(ClipPathProvider, null, children),
+    ),
+  );
 });
 function _extends() {
-  return _extends = Object.assign ? Object.assign.bind() : function(n) {
-    for (var e = 1; e < arguments.length; e++) {
-      var t = arguments[e];
-      for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
-    }
-    return n;
-  }, _extends.apply(null, arguments);
+  return (
+    (_extends = Object.assign
+      ? Object.assign.bind()
+      : function (n) {
+          for (var e = 1; e < arguments.length; e++) {
+            var t = arguments[e];
+            for (var r in t) ({}).hasOwnProperty.call(t, r) && (n[r] = t[r]);
+          }
+          return n;
+        }),
+    _extends.apply(null, arguments)
+  );
 }
 function ownKeys(e, r) {
   var t = Object.keys(e);
   if (Object.getOwnPropertySymbols) {
     var o = Object.getOwnPropertySymbols(e);
-    r && (o = o.filter(function(r2) {
-      return Object.getOwnPropertyDescriptor(e, r2).enumerable;
-    })), t.push.apply(t, o);
+    (r &&
+      (o = o.filter(function (r2) {
+        return Object.getOwnPropertyDescriptor(e, r2).enumerable;
+      })),
+      t.push.apply(t, o));
   }
   return t;
 }
 function _objectSpread(e) {
   for (var r = 1; r < arguments.length; r++) {
     var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ownKeys(Object(t), true).forEach(function(r2) {
-      _defineProperty(e, r2, t[r2]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function(r2) {
-      Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
-    });
+    r % 2
+      ? ownKeys(Object(t), true).forEach(function (r2) {
+          _defineProperty(e, r2, t[r2]);
+        })
+      : Object.getOwnPropertyDescriptors
+        ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t))
+        : ownKeys(Object(t)).forEach(function (r2) {
+            Object.defineProperty(e, r2, Object.getOwnPropertyDescriptor(t, r2));
+          });
   }
   return e;
 }
 function _defineProperty(e, r, t) {
-  return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: true, configurable: true, writable: true }) : e[r] = t, e;
+  return (
+    (r = _toPropertyKey(r)) in e
+      ? Object.defineProperty(e, r, {
+          value: t,
+          enumerable: true,
+          configurable: true,
+          writable: true,
+        })
+      : (e[r] = t),
+    e
+  );
 }
 function _toPropertyKey(t) {
   var i = _toPrimitive(t, "string");
@@ -22773,19 +27453,22 @@ var defaultMargin = {
   top: 5,
   right: 5,
   bottom: 5,
-  left: 5
+  left: 5,
 };
-var defaultCartesianChartProps = _objectSpread({
-  accessibilityLayer: true,
-  barCategoryGap: "10%",
-  barGap: 4,
-  layout: "horizontal",
-  margin: defaultMargin,
-  responsive: false,
-  reverseStackOrder: false,
-  stackOffset: "none",
-  syncMethod: "index"
-}, initialEventSettingsState);
+var defaultCartesianChartProps = _objectSpread(
+  {
+    accessibilityLayer: true,
+    barCategoryGap: "10%",
+    barGap: 4,
+    layout: "horizontal",
+    margin: defaultMargin,
+    responsive: false,
+    reverseStackOrder: false,
+    stackOffset: "none",
+    syncMethod: "index",
+  },
+  initialEventSettingsState,
+);
 var CartesianChart = /* @__PURE__ */ reactExports.forwardRef(function CartesianChart2(props, ref) {
   var _categoricalChartProp;
   var rootChartProps = resolveDefaultProps(props.categoricalChartProps, defaultCartesianChartProps);
@@ -22794,43 +27477,58 @@ var CartesianChart = /* @__PURE__ */ reactExports.forwardRef(function CartesianC
     defaultTooltipEventType,
     validateTooltipEventTypes,
     tooltipPayloadSearcher,
-    categoricalChartProps
+    categoricalChartProps,
   } = props;
   var options = {
     chartName,
     defaultTooltipEventType,
     validateTooltipEventTypes,
     tooltipPayloadSearcher,
-    eventEmitter: void 0
+    eventEmitter: void 0,
   };
-  return /* @__PURE__ */ reactExports.createElement(RechartsStoreProvider, {
-    preloadedState: {
-      options
+  return /* @__PURE__ */ reactExports.createElement(
+    RechartsStoreProvider,
+    {
+      preloadedState: {
+        options,
+      },
+      reduxStoreName:
+        (_categoricalChartProp = categoricalChartProps.id) !== null &&
+        _categoricalChartProp !== void 0
+          ? _categoricalChartProp
+          : chartName,
     },
-    reduxStoreName: (_categoricalChartProp = categoricalChartProps.id) !== null && _categoricalChartProp !== void 0 ? _categoricalChartProp : chartName
-  }, /* @__PURE__ */ reactExports.createElement(ChartDataContextProvider, {
-    chartData: categoricalChartProps.data
-  }), /* @__PURE__ */ reactExports.createElement(ReportMainChartProps, {
-    layout: rootChartProps.layout,
-    margin: rootChartProps.margin
-  }), /* @__PURE__ */ reactExports.createElement(ReportEventSettings, {
-    throttleDelay: rootChartProps.throttleDelay,
-    throttledEvents: rootChartProps.throttledEvents
-  }), /* @__PURE__ */ reactExports.createElement(ReportChartProps, {
-    baseValue: rootChartProps.baseValue,
-    accessibilityLayer: rootChartProps.accessibilityLayer,
-    barCategoryGap: rootChartProps.barCategoryGap,
-    maxBarSize: rootChartProps.maxBarSize,
-    stackOffset: rootChartProps.stackOffset,
-    barGap: rootChartProps.barGap,
-    barSize: rootChartProps.barSize,
-    syncId: rootChartProps.syncId,
-    syncMethod: rootChartProps.syncMethod,
-    className: rootChartProps.className,
-    reverseStackOrder: rootChartProps.reverseStackOrder
-  }), /* @__PURE__ */ reactExports.createElement(CategoricalChart, _extends({}, rootChartProps, {
-    ref
-  })));
+    /* @__PURE__ */ reactExports.createElement(ChartDataContextProvider, {
+      chartData: categoricalChartProps.data,
+    }),
+    /* @__PURE__ */ reactExports.createElement(ReportMainChartProps, {
+      layout: rootChartProps.layout,
+      margin: rootChartProps.margin,
+    }),
+    /* @__PURE__ */ reactExports.createElement(ReportEventSettings, {
+      throttleDelay: rootChartProps.throttleDelay,
+      throttledEvents: rootChartProps.throttledEvents,
+    }),
+    /* @__PURE__ */ reactExports.createElement(ReportChartProps, {
+      baseValue: rootChartProps.baseValue,
+      accessibilityLayer: rootChartProps.accessibilityLayer,
+      barCategoryGap: rootChartProps.barCategoryGap,
+      maxBarSize: rootChartProps.maxBarSize,
+      stackOffset: rootChartProps.stackOffset,
+      barGap: rootChartProps.barGap,
+      barSize: rootChartProps.barSize,
+      syncId: rootChartProps.syncId,
+      syncMethod: rootChartProps.syncMethod,
+      className: rootChartProps.className,
+      reverseStackOrder: rootChartProps.reverseStackOrder,
+    }),
+    /* @__PURE__ */ reactExports.createElement(
+      CategoricalChart,
+      _extends({}, rootChartProps, {
+        ref,
+      }),
+    ),
+  );
 });
 function addDays(date2, amount, options) {
   const _date = toDate(date2, options?.in);
@@ -22931,5 +27629,5 @@ export {
   useChartName as w,
   useNeedsClip as x,
   useAppSelector as y,
-  usePlotArea as z
+  usePlotArea as z,
 };

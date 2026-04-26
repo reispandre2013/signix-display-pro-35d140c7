@@ -84,7 +84,9 @@ function LicencasPage() {
                       {format(new Date(c.valid_from), "dd/MM/yy", { locale: ptBR })}
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
-                      {c.valid_until ? format(new Date(c.valid_until), "dd/MM/yy", { locale: ptBR }) : "—"}
+                      {c.valid_until
+                        ? format(new Date(c.valid_until), "dd/MM/yy", { locale: ptBR })
+                        : "—"}
                     </td>
                   </tr>
                 ))

@@ -3,7 +3,4 @@ import "node:events";
 import "node:async_hooks";
 import "node:stream/web";
 import "node:stream";
-export {
-  a5 as createServerEntry,
-  a6 as default
-};
+export { a5 as createServerEntry, a6 as default };

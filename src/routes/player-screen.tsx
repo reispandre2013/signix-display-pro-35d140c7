@@ -9,7 +9,12 @@ import {
 } from "@/lib/server/player.functions";
 import { getMediaUrlCandidates, applyMediaFallback } from "@/lib/media-url";
 import { initAndroidTvShell } from "@/player/capacitor/android-shell";
-import { PLAYER_LS_AUTH_TOKEN, PLAYER_LS_DEVICE_ID, PLAYER_LS_PAIRING_CODE, PLAYER_LS_SCREEN_ID } from "@/player/player-storage-keys";
+import {
+  PLAYER_LS_AUTH_TOKEN,
+  PLAYER_LS_DEVICE_ID,
+  PLAYER_LS_PAIRING_CODE,
+  PLAYER_LS_SCREEN_ID,
+} from "@/player/player-storage-keys";
 import { resetDevicePairing } from "@/player/services/player-api";
 import { Tv, Wifi, AlertCircle, Loader2, KeyRound } from "lucide-react";
 
@@ -274,7 +279,11 @@ function PlayerScreenPage() {
   const current = items[idx];
   const urls = current
     ? getMediaUrlCandidates(
-        { mediaTypeHint: (current?.mime_type ?? "").toLowerCase().includes("video") ? "video" : "image" },
+        {
+          mediaTypeHint: (current?.mime_type ?? "").toLowerCase().includes("video")
+            ? "video"
+            : "image",
+        },
         current.public_url,
         current.thumbnail_url,
       )
@@ -331,9 +340,9 @@ function PlayerScreenPage() {
           <Tv className="h-14 w-14 mx-auto text-white/40" />
           <p className="mt-4 text-lg">Sem conteúdo para esta tela</p>
           <p className="mt-2 text-sm text-white/60">
-            Crie uma campanha <strong>ativa</strong> com alvo nesta tela (ou na sua unidade) e associe uma playlist
-            com itens, ou adicione mídias na organização — enquanto não houver itens, usamos mídias ativas como
-            fallback.
+            Crie uma campanha <strong>ativa</strong> com alvo nesta tela (ou na sua unidade) e
+            associe uma playlist com itens, ou adicione mídias na organização — enquanto não houver
+            itens, usamos mídias ativas como fallback.
           </p>
           {!hideControls && <p className="mt-3 text-xs text-white/40">Origem: {source || "—"}</p>}
         </div>
@@ -406,7 +415,11 @@ function PlayerScreenPage() {
                 {rotateBusy ? "…" : "Novo código"}
               </button>
             ) : null}
-            <Link to="/pareamento" search={{ platform: platform === "tizen" ? "tizen" : undefined }} className="hover:text-white">
+            <Link
+              to="/pareamento"
+              search={{ platform: platform === "tizen" ? "tizen" : undefined }}
+              className="hover:text-white"
+            >
               Re-parear
             </Link>
           </span>

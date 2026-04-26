@@ -76,8 +76,7 @@ function PairingPage() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     const storedExp = localStorage.getItem(STORAGE_EXP_KEY);
-    const stillValid =
-      stored && storedExp && new Date(storedExp).getTime() > Date.now() + 30_000;
+    const stillValid = stored && storedExp && new Date(storedExp).getTime() > Date.now() + 30_000;
     if (stillValid) {
       setCode(stored);
       setLoading(false);
@@ -119,7 +118,7 @@ function PairingPage() {
   useEffect(() => {
     if (!paired || !code) return;
     let cancelled = false;
-    const fp = `web-${typeof window !== "undefined" ? window.screen?.width ?? 0 : 0}-${typeof navigator !== "undefined" ? navigator.userAgent : ""}`;
+    const fp = `web-${typeof window !== "undefined" ? (window.screen?.width ?? 0) : 0}-${typeof navigator !== "undefined" ? navigator.userAgent : ""}`;
     void import("@/player/services/player-api")
       .then(({ pairScreen }) => pairScreen(code, fp))
       .then((pr) => {
@@ -163,7 +162,8 @@ function PairingPage() {
               </div>
               <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
                 Tudo pronto!
-                <br />Abra o modo exibição para sincronizar a playlist.
+                <br />
+                Abra o modo exibição para sincronizar a playlist.
               </h1>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
@@ -181,14 +181,19 @@ function PairingPage() {
           ) : (
             <>
               <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs">
-                <span className="h-1.5 w-1.5 rounded-full bg-success pulse-dot" /> Aguardando confirmação no painel
+                <span className="h-1.5 w-1.5 rounded-full bg-success pulse-dot" /> Aguardando
+                confirmação no painel
               </div>
               <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
-                Use o código abaixo para parear<br />este dispositivo à sua conta
+                Use o código abaixo para parear
+                <br />
+                este dispositivo à sua conta
               </h1>
               <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">
-                Acesse <span className="text-foreground font-medium">Dispositivos › Novo dispositivo</span> no painel Signix e informe o código exibido
-                (o mesmo fluxo do <span className="text-foreground font-medium">player Tizen nativo</span>).
+                Acesse{" "}
+                <span className="text-foreground font-medium">Dispositivos › Novo dispositivo</span>{" "}
+                no painel Signix e informe o código exibido (o mesmo fluxo do{" "}
+                <span className="text-foreground font-medium">player Tizen nativo</span>).
               </p>
 
               <div className="mt-10 inline-flex items-center gap-3 rounded-2xl border border-border bg-card px-8 py-6 shadow-glow min-h-[120px]">
@@ -199,18 +204,27 @@ function PairingPage() {
                 ) : code ? (
                   code.split("").map((c, i) =>
                     c === "-" ? (
-                      <span key={i} className="font-display text-4xl text-muted-foreground">·</span>
+                      <span key={i} className="font-display text-4xl text-muted-foreground">
+                        ·
+                      </span>
                     ) : (
-                      <span key={i} className="font-mono text-5xl font-bold text-gradient w-10 text-center">
+                      <span
+                        key={i}
+                        className="font-mono text-5xl font-bold text-gradient w-10 text-center"
+                      >
                         {c}
                       </span>
-                    )
+                    ),
                   )
                 ) : null}
               </div>
 
               <div className="mt-8 grid sm:grid-cols-3 gap-3 max-w-md mx-auto text-left">
-                <Info icon={Monitor} label="Resolução" value={`${window.screen.width} × ${window.screen.height}`} />
+                <Info
+                  icon={Monitor}
+                  label="Resolução"
+                  value={`${window.screen.width} × ${window.screen.height}`}
+                />
                 <Info
                   icon={Cpu}
                   label="Plataforma"
@@ -240,7 +254,6 @@ function PairingPage() {
     </div>
   );
 }
-
 
 function Info({ icon: Icon, label, value }: { icon: typeof Wifi; label: string; value: string }) {
   return (

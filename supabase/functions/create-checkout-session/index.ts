@@ -67,7 +67,10 @@ async function resolveInvoiceUrlForSubscription(asaasSubId: string): Promise<str
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: cors });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: cors,
+    });
   }
   try {
     return await handle(req);
@@ -84,7 +87,10 @@ async function handle(req: Request): Promise<Response> {
   const url = Deno.env.get("SUPABASE_URL") ?? "";
   const anon = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
   if (!url || !anon) {
-    return new Response(JSON.stringify({ error: "Server misconfiguration" }), { status: 500, headers: cors });
+    return new Response(JSON.stringify({ error: "Server misconfiguration" }), {
+      status: 500,
+      headers: cors,
+    });
   }
   const auth = req.headers.get("Authorization");
   if (!auth) {
@@ -96,7 +102,10 @@ async function handle(req: Request): Promise<Response> {
   });
   const { data: u } = await supabase.auth.getUser();
   if (!u.user) {
-    return new Response(JSON.stringify({ error: "Invalid session" }), { status: 401, headers: cors });
+    return new Response(JSON.stringify({ error: "Invalid session" }), {
+      status: 401,
+      headers: cors,
+    });
   }
 
   let body: Body;
@@ -109,7 +118,10 @@ async function handle(req: Request): Promise<Response> {
     );
   }
   if (!body.plan_id) {
-    return new Response(JSON.stringify({ error: "plan_id required" }), { status: 400, headers: cors });
+    return new Response(JSON.stringify({ error: "plan_id required" }), {
+      status: 400,
+      headers: cors,
+    });
   }
 
   const { enabled: asaasOn } = getAsaasConfig();
@@ -160,7 +172,9 @@ async function handle(req: Request): Promise<Response> {
     .maybeSingle();
   if (pErr || !prof?.organization_id) {
     return new Response(
-      JSON.stringify({ error: "Perfil sem organização. Crie/associa uma organização ao utilizador." }),
+      JSON.stringify({
+        error: "Perfil sem organização. Crie/associa uma organização ao utilizador.",
+      }),
       { status: 400, headers: cors },
     );
   }
@@ -172,7 +186,10 @@ async function handle(req: Request): Promise<Response> {
     .eq("id", body.plan_id)
     .maybeSingle();
   if (plErr || !plan) {
-    return new Response(JSON.stringify({ error: "Plano não encontrado" }), { status: 400, headers: cors });
+    return new Response(JSON.stringify({ error: "Plano não encontrado" }), {
+      status: 400,
+      headers: cors,
+    });
   }
   const p = plan as PlanRow;
   if (!p.is_active) {
@@ -182,7 +199,10 @@ async function handle(req: Request): Promise<Response> {
   const amountCents =
     billingCycle === "yearly" ? Number(p.price_yearly_cents) : Number(p.price_monthly_cents);
   if (!Number.isFinite(amountCents) || amountCents < 0) {
-    return new Response(JSON.stringify({ error: "Valor de plano inválido" }), { status: 400, headers: cors });
+    return new Response(JSON.stringify({ error: "Valor de plano inválido" }), {
+      status: 400,
+      headers: cors,
+    });
   }
   const valueBrl = Number((amountCents / 100).toFixed(2));
 
@@ -192,7 +212,10 @@ async function handle(req: Request): Promise<Response> {
     .eq("id", orgId)
     .maybeSingle();
   if (oErr || !org) {
-    return new Response(JSON.stringify({ error: "Organização não encontrada" }), { status: 400, headers: cors });
+    return new Response(JSON.stringify({ error: "Organização não encontrada" }), {
+      status: 400,
+      headers: cors,
+    });
   }
 
   const { data: sessionRow, error: csErr } = await adminClient
@@ -218,10 +241,20 @@ async function handle(req: Request): Promise<Response> {
   let cus = (org as { asaas_customer_id?: string | null }).asaas_customer_id;
   if (!cus) {
     const customerBody = {
-      name: (body.company_name ?? (org as { name?: string }).name ?? (prof as { name?: string }).name ?? "Signix")
+      name: (
+        body.company_name ??
+        (org as { name?: string }).name ??
+        (prof as { name?: string }).name ??
+        "Signix"
+      )
         .toString()
         .slice(0, 200),
-      email: (body.buyer_email ?? u.user.email ?? (prof as { email?: string }).email ?? "")?.toString(),
+      email: (
+        body.buyer_email ??
+        u.user.email ??
+        (prof as { email?: string }).email ??
+        ""
+      )?.toString(),
       cpfCnpj: doc,
       externalReference: orgId,
     };
@@ -237,7 +270,9 @@ async function handle(req: Request): Promise<Response> {
         .update({ status: "failed", updated_at: new Date().toISOString() })
         .eq("id", checkoutId);
       return new Response(
-        JSON.stringify({ error: "Asaas (customer): " + (e instanceof Error ? e.message : String(e)) }),
+        JSON.stringify({
+          error: "Asaas (customer): " + (e instanceof Error ? e.message : String(e)),
+        }),
         { status: 502, headers: cors },
       );
     }
@@ -247,10 +282,13 @@ async function handle(req: Request): Promise<Response> {
       .update({ asaas_customer_id: cus })
       .eq("id", orgId);
     if (upOrg) {
-      return new Response(JSON.stringify({ error: "Falha a gravar asaas_customer_id: " + upOrg.message }), {
-        status: 500,
-        headers: cors,
-      });
+      return new Response(
+        JSON.stringify({ error: "Falha a gravar asaas_customer_id: " + upOrg.message }),
+        {
+          status: 500,
+          headers: cors,
+        },
+      );
     }
   }
 
@@ -276,10 +314,10 @@ async function handle(req: Request): Promise<Response> {
       .from("checkout_sessions")
       .update({ status: "failed", updated_at: new Date().toISOString() })
       .eq("id", checkoutId);
-    return new Response(
-      JSON.stringify({ error: e instanceof Error ? e.message : "Erro Asaas" }),
-      { status: 502, headers: cors },
-    );
+    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Erro Asaas" }), {
+      status: 502,
+      headers: cors,
+    });
   }
 
   let invoiceUrl: string | null = null;
@@ -298,7 +336,10 @@ async function handle(req: Request): Promise<Response> {
     })
     .eq("id", checkoutId);
   if (upCs) {
-    return new Response(JSON.stringify({ error: upCs.message, subscription_id: sub.id }), { status: 200, headers: cors });
+    return new Response(JSON.stringify({ error: upCs.message, subscription_id: sub.id }), {
+      status: 200,
+      headers: cors,
+    });
   }
 
   return new Response(
@@ -314,4 +355,3 @@ async function handle(req: Request): Promise<Response> {
     { status: 200, headers: cors },
   );
 }
-

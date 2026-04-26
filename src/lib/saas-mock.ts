@@ -76,8 +76,7 @@ export const MOCK_PLANS: Plan[] = [
 ];
 
 const now = new Date();
-const isoIn = (days: number) =>
-  new Date(now.getTime() + days * 86400000).toISOString();
+const isoIn = (days: number) => new Date(now.getTime() + days * 86400000).toISOString();
 
 export const MOCK_CURRENT_SUBSCRIPTION: Subscription = {
   id: "sub-current",
@@ -148,24 +147,78 @@ export const MOCK_SAAS_METRICS = {
 };
 
 export const MOCK_SAAS_CLIENTS: SaasClient[] = [
-  { organization_id: "o1", organization_name: "Padaria Central", master_email: "ana@padariacentral.com.br",
-    plan_name: "Professional", subscription_status: "active", screens_used: 7, screens_limit: 10,
-    created_at: isoIn(-180), last_payment_at: isoIn(-12), license_status: "active" },
-  { organization_id: "o2", organization_name: "Rede Farma+", master_email: "marcos@farmamais.com",
-    plan_name: "Business", subscription_status: "active", screens_used: 22, screens_limit: 30,
-    created_at: isoIn(-310), last_payment_at: isoIn(-3), license_status: "active" },
-  { organization_id: "o3", organization_name: "Posto Aurora", master_email: "felipe@aurora.com",
-    plan_name: "Starter", subscription_status: "past_due", screens_used: 2, screens_limit: 3,
-    created_at: isoIn(-90), last_payment_at: isoIn(-45), license_status: "suspended" },
-  { organization_id: "o4", organization_name: "Mall Plaza", master_email: "ti@mallplaza.com",
-    plan_name: "Enterprise", subscription_status: "active", screens_used: 154, screens_limit: 9999,
-    created_at: isoIn(-720), last_payment_at: isoIn(-1), license_status: "active" },
-  { organization_id: "o5", organization_name: "Cantina Bella", master_email: "luiza@cantinabella.com",
-    plan_name: "Professional", subscription_status: "trialing", screens_used: 1, screens_limit: 10,
-    created_at: isoIn(-7), last_payment_at: null, license_status: "trial" },
-  { organization_id: "o6", organization_name: "AutoCenter Sul", master_email: "rafael@autosul.com",
-    plan_name: "Business", subscription_status: "canceled", screens_used: 0, screens_limit: 30,
-    created_at: isoIn(-540), last_payment_at: isoIn(-90), license_status: "canceled" },
+  {
+    organization_id: "o1",
+    organization_name: "Padaria Central",
+    master_email: "ana@padariacentral.com.br",
+    plan_name: "Professional",
+    subscription_status: "active",
+    screens_used: 7,
+    screens_limit: 10,
+    created_at: isoIn(-180),
+    last_payment_at: isoIn(-12),
+    license_status: "active",
+  },
+  {
+    organization_id: "o2",
+    organization_name: "Rede Farma+",
+    master_email: "marcos@farmamais.com",
+    plan_name: "Business",
+    subscription_status: "active",
+    screens_used: 22,
+    screens_limit: 30,
+    created_at: isoIn(-310),
+    last_payment_at: isoIn(-3),
+    license_status: "active",
+  },
+  {
+    organization_id: "o3",
+    organization_name: "Posto Aurora",
+    master_email: "felipe@aurora.com",
+    plan_name: "Starter",
+    subscription_status: "past_due",
+    screens_used: 2,
+    screens_limit: 3,
+    created_at: isoIn(-90),
+    last_payment_at: isoIn(-45),
+    license_status: "suspended",
+  },
+  {
+    organization_id: "o4",
+    organization_name: "Mall Plaza",
+    master_email: "ti@mallplaza.com",
+    plan_name: "Enterprise",
+    subscription_status: "active",
+    screens_used: 154,
+    screens_limit: 9999,
+    created_at: isoIn(-720),
+    last_payment_at: isoIn(-1),
+    license_status: "active",
+  },
+  {
+    organization_id: "o5",
+    organization_name: "Cantina Bella",
+    master_email: "luiza@cantinabella.com",
+    plan_name: "Professional",
+    subscription_status: "trialing",
+    screens_used: 1,
+    screens_limit: 10,
+    created_at: isoIn(-7),
+    last_payment_at: null,
+    license_status: "trial",
+  },
+  {
+    organization_id: "o6",
+    organization_name: "AutoCenter Sul",
+    master_email: "rafael@autosul.com",
+    plan_name: "Business",
+    subscription_status: "canceled",
+    screens_used: 0,
+    screens_limit: 30,
+    created_at: isoIn(-540),
+    last_payment_at: isoIn(-90),
+    license_status: "canceled",
+  },
 ];
 
 export const MOCK_RECENT_PAYMENTS = MOCK_SAAS_CLIENTS.slice(0, 5).map((c, i) => ({
@@ -178,9 +231,39 @@ export const MOCK_RECENT_PAYMENTS = MOCK_SAAS_CLIENTS.slice(0, 5).map((c, i) => 
 }));
 
 export const MOCK_SAAS_LOGS = [
-  { id: "l1", actor: "ana@padariacentral.com.br", action: "subscription.upgraded", target: "Professional → Business", at: isoIn(-0.1) },
-  { id: "l2", actor: "felipe@aurora.com", action: "payment.failed", target: "Fatura #2026-1042", at: isoIn(-0.5) },
-  { id: "l3", actor: "system", action: "license.suspended", target: "Posto Aurora", at: isoIn(-0.6) },
-  { id: "l4", actor: "luiza@cantinabella.com", action: "trial.started", target: "Plano Professional", at: isoIn(-7) },
-  { id: "l5", actor: "marcos@farmamais.com", action: "user.created", target: "Operador: joao@farmamais.com", at: isoIn(-2) },
+  {
+    id: "l1",
+    actor: "ana@padariacentral.com.br",
+    action: "subscription.upgraded",
+    target: "Professional → Business",
+    at: isoIn(-0.1),
+  },
+  {
+    id: "l2",
+    actor: "felipe@aurora.com",
+    action: "payment.failed",
+    target: "Fatura #2026-1042",
+    at: isoIn(-0.5),
+  },
+  {
+    id: "l3",
+    actor: "system",
+    action: "license.suspended",
+    target: "Posto Aurora",
+    at: isoIn(-0.6),
+  },
+  {
+    id: "l4",
+    actor: "luiza@cantinabella.com",
+    action: "trial.started",
+    target: "Plano Professional",
+    at: isoIn(-7),
+  },
+  {
+    id: "l5",
+    actor: "marcos@farmamais.com",
+    action: "user.created",
+    target: "Operador: joao@farmamais.com",
+    at: isoIn(-2),
+  },
 ];

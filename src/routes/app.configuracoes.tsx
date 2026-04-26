@@ -9,7 +9,20 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { rotateEmployeeSignupToken } from "@/lib/server/public-signup.functions";
 import { toast } from "sonner";
-import { Bell, Shield, Globe, Palette, Save, Moon, Sun, LogOut, Copy, RefreshCw, Loader2, KeyRound } from "lucide-react";
+import {
+  Bell,
+  Shield,
+  Globe,
+  Palette,
+  Save,
+  Moon,
+  Sun,
+  LogOut,
+  Copy,
+  RefreshCw,
+  Loader2,
+  KeyRound,
+} from "lucide-react";
 
 export const Route = createFileRoute("/app/configuracoes")({
   head: () => ({ meta: [{ title: "Configurações — Signix" }] }),
@@ -90,10 +103,14 @@ function SettingsPage() {
       </Panel>
 
       {profile?.role === "admin_master" ? (
-        <Panel title="Cadastro público de colaboradores" actions={<KeyRound className="h-4 w-4 text-muted-foreground" />}>
+        <Panel
+          title="Cadastro público de colaboradores"
+          actions={<KeyRound className="h-4 w-4 text-muted-foreground" />}
+        >
           <p className="text-xs text-muted-foreground mb-3">
-            Compartilhe este código com quem deve criar conta pela página &quot;Criar nova conta&quot;. Só é possível
-            cadastrar perfis de Operador ou Visualizador com este código (nunca Admin Master).
+            Compartilhe este código com quem deve criar conta pela página &quot;Criar nova
+            conta&quot;. Só é possível cadastrar perfis de Operador ou Visualizador com este código
+            (nunca Admin Master).
           </p>
           {orgQuery.isLoading ? (
             <p className="text-sm text-muted-foreground">Carregando…</p>
@@ -119,19 +136,24 @@ function SettingsPage() {
                     onClick={() => void regenerateSignupToken()}
                     className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-xs font-medium hover:bg-accent disabled:opacity-60"
                   >
-                    {rotatingToken ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <RefreshCw className="h-3.5 w-3.5" />}
+                    {rotatingToken ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <RefreshCw className="h-3.5 w-3.5" />
+                    )}
                     Novo código
                   </button>
                 </div>
               </div>
               <p className="text-[11px] text-muted-foreground">
-                Ao gerar um novo código, convites antigos com o código anterior deixam de ser válidos.
+                Ao gerar um novo código, convites antigos com o código anterior deixam de ser
+                válidos.
               </p>
             </div>
           ) : (
             <p className="text-sm text-amber-600 dark:text-amber-400">
-              Coluna <code className="text-xs">employee_signup_token</code> não encontrada. Execute a migração
-              Supabase mais recente e recarregue esta página.
+              Coluna <code className="text-xs">employee_signup_token</code> não encontrada. Execute
+              a migração Supabase mais recente e recarregue esta página.
             </p>
           )}
         </Panel>
@@ -140,7 +162,9 @@ function SettingsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Panel title="Aparência" actions={<Palette className="h-4 w-4 text-muted-foreground" />}>
           <div className="space-y-4">
-            <p className="text-xs text-muted-foreground">Escolha o tema do painel (preferência local).</p>
+            <p className="text-xs text-muted-foreground">
+              Escolha o tema do painel (preferência local).
+            </p>
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => setTheme("dark")}
@@ -162,7 +186,12 @@ function SettingsPage() {
 
         <Panel title="Notificações" actions={<Bell className="h-4 w-4 text-muted-foreground" />}>
           <ul className="space-y-3">
-            {["Tela ficou offline", "Falha de sincronização", "Nova campanha agendada", "Resumo diário por e-mail"].map((n, i) => (
+            {[
+              "Tela ficou offline",
+              "Falha de sincronização",
+              "Nova campanha agendada",
+              "Resumo diário por e-mail",
+            ].map((n, i) => (
               <Toggle key={n} label={n} on={i % 2 === 0} />
             ))}
           </ul>
@@ -212,8 +241,13 @@ function Toggle({ label, on = false }: { label: string; on?: boolean }) {
   return (
     <div className="flex items-center justify-between rounded-md border border-border bg-surface/40 px-3 py-2">
       <span className="text-sm">{label}</span>
-      <button onClick={() => setV(!v)} className={`relative h-5 w-9 rounded-full transition-colors ${v ? "bg-primary" : "bg-muted"}`}>
-        <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-background transition-all ${v ? "left-4" : "left-0.5"}`} />
+      <button
+        onClick={() => setV(!v)}
+        className={`relative h-5 w-9 rounded-full transition-colors ${v ? "bg-primary" : "bg-muted"}`}
+      >
+        <span
+          className={`absolute top-0.5 h-4 w-4 rounded-full bg-background transition-all ${v ? "left-4" : "left-0.5"}`}
+        />
       </button>
     </div>
   );

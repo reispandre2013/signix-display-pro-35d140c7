@@ -88,11 +88,14 @@ function WebPlayerRoute() {
   const [payload, setPayload] = useState<WebPayload | null>(null);
   const [idx, setIdx] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [debug, setDebug] = useState(search.debug === "1" || localStorage.getItem(LS_WEB_DEBUG) === "1");
+  const [debug, setDebug] = useState(
+    search.debug === "1" || localStorage.getItem(LS_WEB_DEBUG) === "1",
+  );
   const logEventIdRef = useRef<string>("");
 
   const current = payload?.items?.[idx] ?? null;
-  const effectiveFit = current?.fit_mode_effective ?? current?.fit_mode ?? payload?.default_fit_mode ?? "cover";
+  const effectiveFit =
+    current?.fit_mode_effective ?? current?.fit_mode ?? payload?.default_fit_mode ?? "cover";
 
   useEffect(() => {
     const sid = search.screenId ?? localStorage.getItem(LS_WEB_SCREEN_ID);
@@ -135,7 +138,8 @@ function WebPlayerRoute() {
         playlist_id: typeof res.playlist_id === "string" ? res.playlist_id : null,
         campaign_id: typeof res.campaign_id === "string" ? res.campaign_id : null,
         sync_interval: typeof res.sync_interval === "number" ? res.sync_interval : 90,
-        heartbeat_interval: typeof res.heartbeat_interval === "number" ? res.heartbeat_interval : 60,
+        heartbeat_interval:
+          typeof res.heartbeat_interval === "number" ? res.heartbeat_interval : 60,
         etag: typeof res.etag === "string" ? res.etag : null,
         items: Array.isArray(res.items) ? (res.items as WebPayloadItem[]) : [],
       };
@@ -183,13 +187,24 @@ function WebPlayerRoute() {
     send();
     const hb = setInterval(() => send(), Math.max(20, payload?.heartbeat_interval ?? 60) * 1000);
     return () => clearInterval(hb);
-  }, [screenId, deviceToken, hbFn, payload?.heartbeat_interval, payload?.playlist_id, current?.media_asset_id, error]);
+  }, [
+    screenId,
+    deviceToken,
+    hbFn,
+    payload?.heartbeat_interval,
+    payload?.playlist_id,
+    current?.media_asset_id,
+    error,
+  ]);
 
   useEffect(() => {
     if (!payload?.items?.length || !current) return;
     if (current.media_type === "video") return;
     const sec = Math.max(4, Number(current.duration_seconds ?? 8));
-    const timer = setTimeout(() => setIdx((i) => (payload.items.length ? (i + 1) % payload.items.length : 0)), sec * 1000);
+    const timer = setTimeout(
+      () => setIdx((i) => (payload.items.length ? (i + 1) % payload.items.length : 0)),
+      sec * 1000,
+    );
     return () => clearTimeout(timer);
   }, [payload, current, idx]);
 
@@ -317,7 +332,10 @@ function WebPlayerRoute() {
         <div className="max-w-lg text-center">
           <AlertTriangle className="h-12 w-12 mx-auto text-amber-400" />
           <p className="mt-3">{error}</p>
-          <a href="/pair" className="mt-4 inline-block rounded-lg border border-white/20 px-4 py-2 text-sm">
+          <a
+            href="/pair"
+            className="mt-4 inline-block rounded-lg border border-white/20 px-4 py-2 text-sm"
+          >
             Ir para pareamento
           </a>
         </div>
@@ -349,7 +367,9 @@ function WebPlayerRoute() {
   return (
     <div className="min-h-screen w-screen bg-black text-white overflow-hidden">
       <div className="fixed inset-0">{mediaNode}</div>
-      {showOverlay && <div className="fixed inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />}
+      {showOverlay && (
+        <div className="fixed inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
+      )}
       {showControls && (
         <div className="fixed inset-x-0 bottom-0 px-4 py-3 text-xs text-white/80 flex items-center justify-between bg-black/30 backdrop-blur">
           <span>
@@ -361,13 +381,29 @@ function WebPlayerRoute() {
 
       {debug ? (
         <div className="fixed top-3 left-3 rounded-lg border border-white/20 bg-black/70 px-3 py-2 text-[11px] leading-relaxed">
-          <div><strong>screen_id:</strong> {screenId}</div>
-          <div><strong>playlist:</strong> {payload.playlist_id ?? "—"}</div>
-          <div><strong>campaign:</strong> {payload.campaign_id ?? "—"}</div>
-          <div><strong>sync:</strong> {payload.sync_interval ?? 90}s</div>
-          <div><strong>heartbeat:</strong> {payload.heartbeat_interval ?? 60}s</div>
-          <div><strong>conn:</strong> {navigator.onLine ? "online" : "offline"}</div>
-          {error ? <div className="text-amber-300"><strong>erro:</strong> {error}</div> : null}
+          <div>
+            <strong>screen_id:</strong> {screenId}
+          </div>
+          <div>
+            <strong>playlist:</strong> {payload.playlist_id ?? "—"}
+          </div>
+          <div>
+            <strong>campaign:</strong> {payload.campaign_id ?? "—"}
+          </div>
+          <div>
+            <strong>sync:</strong> {payload.sync_interval ?? 90}s
+          </div>
+          <div>
+            <strong>heartbeat:</strong> {payload.heartbeat_interval ?? 60}s
+          </div>
+          <div>
+            <strong>conn:</strong> {navigator.onLine ? "online" : "offline"}
+          </div>
+          {error ? (
+            <div className="text-amber-300">
+              <strong>erro:</strong> {error}
+            </div>
+          ) : null}
           <div className="mt-1 text-[10px] text-white/60">Ctrl+Shift+D para ocultar</div>
         </div>
       ) : null}

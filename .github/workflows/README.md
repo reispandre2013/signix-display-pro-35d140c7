@@ -20,10 +20,10 @@ Faz deploy automático das Edge Functions do Supabase relacionadas a pagamentos
 
 Configure em: **Settings → Secrets and variables → Actions → New repository secret**
 
-| Secret | Onde obter | Exemplo |
-|--------|------------|---------|
-| `SUPABASE_ACCESS_TOKEN` | https://supabase.com/dashboard/account/tokens → **Generate new token** | `sbp_xxx...` |
-| `SUPABASE_PROJECT_REF` | URL do dashboard: `dashboard/project/<REF>` | `auhwylnhqmdgphsvjszr` |
+| Secret                  | Onde obter                                                             | Exemplo                |
+| ----------------------- | ---------------------------------------------------------------------- | ---------------------- |
+| `SUPABASE_ACCESS_TOKEN` | https://supabase.com/dashboard/account/tokens → **Generate new token** | `sbp_xxx...`           |
+| `SUPABASE_PROJECT_REF`  | URL do dashboard: `dashboard/project/<REF>`                            | `auhwylnhqmdgphsvjszr` |
 
 > ⚠️ **`SUPABASE_ACCESS_TOKEN`** é um token pessoal da sua conta Supabase, **diferente** de `SERVICE_ROLE_KEY` ou `ANON_KEY`. Ele permite que a CLI faça deploy em seu nome.
 
