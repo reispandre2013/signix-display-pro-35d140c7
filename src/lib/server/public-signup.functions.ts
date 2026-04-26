@@ -65,11 +65,13 @@ export const registerPublicEmployee = createServerFn({ method: "POST" })
     const { data: org, error: orgErr } = await supabaseAdmin
       .from("organizations")
       .select("id, status")
-      .eq("employee_signup_token", data.org_token)
+      .eq("slug", DEFAULT_PUBLIC_SIGNUP_ORG_SLUG)
       .maybeSingle();
     if (orgErr) throw new Error(orgErr.message);
     if (!org || org.status !== "active") {
-      throw new Error("Código da organização inválido ou empresa inativa.");
+      throw new Error(
+        `Organização padrão "${DEFAULT_PUBLIC_SIGNUP_ORG_SLUG}" não encontrada ou inativa. Contate o administrador.`,
+      );
     }
 
     const orgId = org.id as string;
