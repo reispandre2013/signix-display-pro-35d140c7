@@ -19,11 +19,13 @@ const ANON_KEY =
 
 type PublicRole = "operador" | "visualizador";
 
+const DEFAULT_PUBLIC_SIGNUP_ORG_SLUG =
+  process.env.PUBLIC_SIGNUP_DEFAULT_ORG_SLUG ?? "signix";
+
 interface PublicSignupInput {
   email: string;
   password: string;
   name: string;
-  org_token: string;
   role: PublicRole;
 }
 
