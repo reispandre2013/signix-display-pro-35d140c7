@@ -6,8 +6,9 @@ O Signix cria assinaturas no Asaas via Edge Function `create-checkout-session` e
 
 | Variável | Descrição |
 |----------|-----------|
-| `ASAAS_API_KEY` | Chave da API (formato `$aact_...`). [Sandbox e produção](https://docs.asaas.com) são chaves e URLs diferentes. |
-| `ASAAS_API_BASE` | Opcional. Padrão `https://api-sandbox.asaas.com`. Em produção: `https://api.asaas.com`. |
+| `ASAAS_API_KEY` | Chave da API (formato `$aact_...`). [Sandbox e produção](https://docs.asaas.com) são chaves e URLs diferentes; se a chave for de **produção** e o padrão continuar sandbox, o Asaas devolve *«A chave de API informada não pertence a este ambiente»*. |
+| `ASAAS_API_BASE` | Opcional. Padrão `https://api-sandbox.asaas.com`. **Produção:** `https://api.asaas.com` (obrigatório alinhar com a chave). |
+| `ASAAS_ENV` | Opcional. Se `ASAAS_API_BASE` não estiver definido: `production` / `prod` / `live` → `https://api.asaas.com`; caso contrário mantém-se o sandbox. |
 | `ASAAS_WEBHOOK_TOKEN` | O mesmo valor que configurou no Asaas no webhook como **“Token de autenticação”**; o Asaas envia o header `asaas-access-token` em cada requisição. |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Já exigidos pelas funções. |
 
