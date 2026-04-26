@@ -69,7 +69,18 @@ serve(async (req) => {
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: cors });
   }
+  try {
+    return await handle(req);
+  } catch (e) {
+    console.error("[create-checkout-session] uncaught", e);
+    return new Response(
+      JSON.stringify({ error: e instanceof Error ? e.message : "Erro interno inesperado" }),
+      { status: 500, headers: cors },
+    );
+  }
+});
 
+async function handle(req: Request): Promise<Response> {
   const url = Deno.env.get("SUPABASE_URL") ?? "";
   const anon = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
   if (!url || !anon) {
