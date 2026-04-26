@@ -22,6 +22,10 @@ function PlanosPublic() {
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
   const { data: plans, isLoading, isError, error } = usePublicPlans();
   const list = plans ?? [];
+  const { user } = useAuth();
+  const requiresPlan = Boolean(
+    (user?.user_metadata as Record<string, unknown> | undefined)?.requires_plan,
+  );
 
   return (
     <div className="min-h-screen bg-background bg-mesh">
