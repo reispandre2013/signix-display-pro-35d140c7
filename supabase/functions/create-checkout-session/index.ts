@@ -296,4 +296,5 @@ async function handle(req: Request): Promise<Response> {
     }),
     { status: 200, headers: cors },
   );
-});
+}
+
