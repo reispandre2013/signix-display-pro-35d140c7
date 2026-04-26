@@ -225,10 +225,22 @@ async function handle(req: Request): Promise<Response> {
       cpfCnpj: doc,
       externalReference: orgId,
     };
-    const cusR = await asaasJson<{ id: string }>("/v3/customers", {
-      method: "POST",
-      body: JSON.stringify(customerBody),
-    });
+    let cusR: { id: string };
+    try {
+      cusR = await asaasJson<{ id: string }>("/v3/customers", {
+        method: "POST",
+        body: JSON.stringify(customerBody),
+      });
+    } catch (e) {
+      await adminClient
+        .from("checkout_sessions")
+        .update({ status: "failed", updated_at: new Date().toISOString() })
+        .eq("id", checkoutId);
+      return new Response(
+        JSON.stringify({ error: "Asaas (customer): " + (e instanceof Error ? e.message : String(e)) }),
+        { status: 502, headers: cors },
+      );
+    }
     cus = cusR.id;
     const { error: upOrg } = await adminClient
       .from("organizations")
