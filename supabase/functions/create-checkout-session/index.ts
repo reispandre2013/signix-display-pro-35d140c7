@@ -69,7 +69,18 @@ serve(async (req) => {
   if (req.method !== "POST") {
     return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: cors });
   }
+  try {
+    return await handle(req);
+  } catch (e) {
+    console.error("[create-checkout-session] uncaught", e);
+    return new Response(
+      JSON.stringify({ error: e instanceof Error ? e.message : "Erro interno inesperado" }),
+      { status: 500, headers: cors },
+    );
+  }
+});
 
+async function handle(req: Request): Promise<Response> {
   const url = Deno.env.get("SUPABASE_URL") ?? "";
   const anon = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
   if (!url || !anon) {
@@ -214,10 +225,22 @@ serve(async (req) => {
       cpfCnpj: doc,
       externalReference: orgId,
     };
-    const cusR = await asaasJson<{ id: string }>("/v3/customers", {
-      method: "POST",
-      body: JSON.stringify(customerBody),
-    });
+    let cusR: { id: string };
+    try {
+      cusR = await asaasJson<{ id: string }>("/v3/customers", {
+        method: "POST",
+        body: JSON.stringify(customerBody),
+      });
+    } catch (e) {
+      await adminClient
+        .from("checkout_sessions")
+        .update({ status: "failed", updated_at: new Date().toISOString() })
+        .eq("id", checkoutId);
+      return new Response(
+        JSON.stringify({ error: "Asaas (customer): " + (e instanceof Error ? e.message : String(e)) }),
+        { status: 502, headers: cors },
+      );
+    }
     cus = cusR.id;
     const { error: upOrg } = await adminClient
       .from("organizations")
@@ -259,7 +282,12 @@ serve(async (req) => {
     );
   }
 
-  const invoiceUrl = await resolveInvoiceUrlForSubscription(sub.id);
+  let invoiceUrl: string | null = null;
+  try {
+    invoiceUrl = await resolveInvoiceUrlForSubscription(sub.id);
+  } catch (e) {
+    console.warn("[create-checkout-session] resolveInvoiceUrl falhou:", e);
+  }
   const { error: upCs } = await adminClient
     .from("checkout_sessions")
     .update({
@@ -285,4 +313,5 @@ serve(async (req) => {
     }),
     { status: 200, headers: cors },
   );
-});
+}
+
