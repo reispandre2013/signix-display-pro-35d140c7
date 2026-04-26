@@ -62,19 +62,37 @@ export const registerPublicEmployee = createServerFn({ method: "POST" })
       );
     }
 
-    const { data: org, error: orgErr } = await supabaseAdmin
+    // Estratégia: tenta primeiro pelo slug padrão (configurável). Caso não exista
+    // ou esteja inativa, faz fallback para a primeira organização ativa por
+    // ordem de criação. Isso evita bloqueio do cadastro público em ambientes
+    // que ainda não criaram a org "signix".
+    let orgId: string | null = null;
+
+    const { data: orgBySlug, error: orgSlugErr } = await supabaseAdmin
       .from("organizations")
       .select("id, status")
       .eq("slug", DEFAULT_PUBLIC_SIGNUP_ORG_SLUG)
       .maybeSingle();
-    if (orgErr) throw new Error(orgErr.message);
-    if (!org || org.status !== "active") {
-      throw new Error(
-        `Organização padrão "${DEFAULT_PUBLIC_SIGNUP_ORG_SLUG}" não encontrada ou inativa. Contate o administrador.`,
-      );
-    }
+    if (orgSlugErr) throw new Error(orgSlugErr.message);
 
-    const orgId = org.id as string;
+    if (orgBySlug && orgBySlug.status === "active") {
+      orgId = orgBySlug.id as string;
+    } else {
+      const { data: firstActive, error: firstErr } = await supabaseAdmin
+        .from("organizations")
+        .select("id")
+        .eq("status", "active")
+        .order("created_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+      if (firstErr) throw new Error(firstErr.message);
+      if (!firstActive) {
+        throw new Error(
+          "Nenhuma organização ativa encontrada. Contate o administrador.",
+        );
+      }
+      orgId = firstActive.id as string;
+    }
 
     const { data: created, error: createErr } = await supabaseAdmin.auth.admin.createUser({
       email: data.email,
