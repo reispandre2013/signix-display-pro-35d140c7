@@ -98,7 +98,15 @@ export const registerPublicEmployee = createServerFn({ method: "POST" })
       email: data.email,
       password: data.password,
       email_confirm: true,
-      user_metadata: { name: data.name, organization_id: orgId, role: data.role },
+      user_metadata: {
+        name: data.name,
+        organization_id: orgId,
+        role: data.role,
+        // Flag: novo cadastro público precisa comprar um plano antes de acessar /app.
+        // Removida automaticamente após o webhook do Asaas confirmar pagamento ativo.
+        requires_plan: true,
+        signup_source: "public_signup",
+      },
     });
     if (createErr) {
       const msg = createErr.message ?? "";
