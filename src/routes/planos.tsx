@@ -1,9 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Star, Sparkles, ArrowRight, Tv, Loader2 } from "lucide-react";
+import { Check, Star, Sparkles, ArrowRight, Tv, Loader2, Lock } from "lucide-react";
 import { usePublicPlans } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
 
 export const Route = createFileRoute("/planos")({
   head: () => ({
