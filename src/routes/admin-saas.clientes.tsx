@@ -7,6 +7,16 @@ import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { useSaasDirectory } from "@/lib/hooks/use-saas-data";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import type { SaasClient } from "@/types/saas";
 
 export const Route = createFileRoute("/admin-saas/clientes")({
   head: () => ({ meta: [{ title: "Clientes — SaaS Signix" }] }),
@@ -15,6 +25,7 @@ export const Route = createFileRoute("/admin-saas/clientes")({
 
 function ClientesPage() {
   const [q, setQ] = useState("");
+  const [selected, setSelected] = useState<SaasClient | null>(null);
   const { data: clients = [], isLoading } = useSaasDirectory();
 
   const filtered = useMemo(
@@ -139,6 +150,7 @@ function ClientesPage() {
                     <td className="px-5 py-3 text-right">
                       <button
                         type="button"
+                        onClick={() => setSelected(c)}
                         className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:bg-surface"
                       >
                         <Eye className="h-3 w-3" /> Ver
@@ -151,6 +163,63 @@ function ClientesPage() {
           </table>
         </div>
       </Panel>
+
+      <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5 text-primary" />
+              {selected?.organization_name}
+            </DialogTitle>
+            <DialogDescription>Detalhes do cliente.</DialogDescription>
+          </DialogHeader>
+          {selected && (
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <DetailRow label="Master" value={selected.master_email ?? "—"} />
+              <DetailRow label="Plano" value={selected.plan_name ?? "—"} />
+              <DetailRow label="Status assinatura" value={selected.subscription_status ?? "—"} />
+              <DetailRow label="Status licença" value={selected.license_status ?? "—"} />
+              <DetailRow
+                label="Telas em uso"
+                value={`${selected.screens_used} / ${selected.screens_limit >= 9999 ? "∞" : selected.screens_limit}`}
+              />
+              <DetailRow
+                label="Cadastro"
+                value={format(new Date(selected.created_at), "dd/MM/yyyy", { locale: ptBR })}
+              />
+              <DetailRow
+                label="Último pagamento"
+                value={
+                  selected.last_payment_at
+                    ? format(new Date(selected.last_payment_at), "dd/MM/yyyy", { locale: ptBR })
+                    : "—"
+                }
+              />
+              <DetailRow label="ID da organização" value={selected.organization_id} mono />
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelected(null)}>
+              Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function DetailRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="space-y-0.5">
+      <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div
+        className={
+          mono ? "text-xs font-mono break-all" : "text-sm font-medium break-words"
+        }
+      >
+        {value}
+      </div>
     </div>
   );
 }
