@@ -136,8 +136,7 @@ export const reconcileAsaasPayments = createServerFn({ method: "POST" }).handler
     if (!asaasKey) {
       return {
         ok: false,
-        message:
-          "ASAAS_API_KEY não configurada no servidor. Configure em Lovable Cloud → Secrets.",
+        message: "ASAAS_API_KEY não configurada no servidor. Configure em Lovable Cloud → Secrets.",
         checkout_id: cs.id as string,
         asaas_subscription_id: subId,
       };
@@ -204,6 +203,8 @@ export const reconcileAsaasPayments = createServerFn({ method: "POST" }).handler
         };
         const asaasToken = process.env.ASAAS_WEBHOOK_TOKEN?.trim();
         if (asaasToken) headers["asaas-access-token"] = asaasToken;
+        const webhookSecret = process.env.PAYMENT_WEBHOOK_SECRET?.trim();
+        if (webhookSecret) headers["x-webhook-secret"] = webhookSecret;
 
         const r = await fetch(webhookUrl, {
           method: "POST",

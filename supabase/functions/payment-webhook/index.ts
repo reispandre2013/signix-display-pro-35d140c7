@@ -230,7 +230,11 @@ serve(async (req) => {
 
   const asaasToken = Deno.env.get("ASAAS_WEBHOOK_TOKEN")?.trim();
   const incomingAsaas = req.headers.get("asaas-access-token")?.trim();
-  if (asaasToken && asaasToken.length > 0) {
+  const paymentWebhookSecret = Deno.env.get("PAYMENT_WEBHOOK_SECRET")?.trim();
+  const incomingWebhookSecret = req.headers.get("x-webhook-secret")?.trim();
+  const internalAuthorized =
+    Boolean(paymentWebhookSecret) && incomingWebhookSecret === paymentWebhookSecret;
+  if (asaasToken && asaasToken.length > 0 && !internalAuthorized) {
     if (incomingAsaas !== asaasToken) {
       return new Response(JSON.stringify({ ok: false, error: "Invalid asaas-access-token" }), {
         status: 401,
@@ -244,8 +248,8 @@ serve(async (req) => {
     return handleAsaasPayload(asaas, rawBody);
   }
 
-  const secret = Deno.env.get("PAYMENT_WEBHOOK_SECRET");
-  const incoming = req.headers.get("x-webhook-secret");
+  const secret = paymentWebhookSecret;
+  const incoming = incomingWebhookSecret;
   if (secret && incoming !== secret) {
     return new Response(JSON.stringify({ ok: false, error: "Invalid secret" }), {
       status: 401,
