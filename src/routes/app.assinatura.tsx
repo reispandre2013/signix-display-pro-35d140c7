@@ -317,10 +317,15 @@ function AssinaturaPage() {
 
         <Panel title="Ações da assinatura">
           <div className="space-y-2">
+            <AsaasConfigCheck
+              validation={validation}
+              validating={validating}
+              onValidate={handleValidate}
+            />
             <button
               type="button"
               onClick={handleSync}
-              disabled={syncing}
+              disabled={syncing || validating}
               className="w-full flex items-center justify-between gap-2 rounded-md border border-primary/30 bg-primary/5 px-3 py-2.5 text-sm hover:bg-primary/10 disabled:opacity-60"
             >
               <span className="flex items-center gap-2">
@@ -335,6 +340,7 @@ function AssinaturaPage() {
             </button>
             <p className="px-1 text-[11px] text-muted-foreground">
               Use após pagar no Asaas se a assinatura ainda não apareceu aqui.
+              A configuração é validada automaticamente antes da sincronização.
             </p>
             <Link
               to="/planos"
