@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Tv, Maximize2, Volume2, Wifi, Image as ImageIcon } from "lucide-react";
+import { Tv, Maximize2, Volume2, Wifi } from "lucide-react";
 import { useMedia, useCampaigns } from "@/lib/hooks/use-supabase-data";
 import { applyMediaFallback, getMediaUrlCandidates } from "@/lib/media-url";
+import { PromoShowcase } from "@/components/player/PromoShowcase";
 
 export const Route = createFileRoute("/player")({
   head: () => ({ meta: [{ title: "Player — Signix" }] }),
