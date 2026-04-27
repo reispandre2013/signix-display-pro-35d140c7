@@ -191,6 +191,7 @@ function PagamentosPage() {
                     <td className="px-5 py-3 text-right">
                       <button
                         type="button"
+                        onClick={() => downloadReceipt(p)}
                         className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:bg-surface"
                       >
                         <Download className="h-3 w-3" /> Recibo
