@@ -38,6 +38,11 @@ import { revokeWebPlayerSession } from "@/lib/server/web-player.functions";
 import type { PlayerPlatform } from "@/lib/platform-capabilities";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  PlanLimitDialog,
+  parsePlanLimitError,
+  type PlanLimitInfo,
+} from "@/components/ui-kit/PlanLimitDialog";
 
 export const Route = createFileRoute("/app/telas")({
   head: () => ({ meta: [{ title: "Dispositivos — Signix" }] }),
