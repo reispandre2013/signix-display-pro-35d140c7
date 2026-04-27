@@ -7,6 +7,7 @@ import {
   normalizePlayerPlatform,
   type PlayerPlatform,
 } from "@/lib/platform-capabilities";
+import { assertCanAddScreen } from "@/lib/server/plan-limits.server";
 
 const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
 const FALLBACK_SUPABASE_ANON_KEY =
@@ -118,6 +119,9 @@ export const claimPairingCode = createServerFn({ method: "POST" })
       throw new Error("Sem permissão para parear telas.");
 
     const orgId = profile.organization_id as string;
+
+    // Bloqueio por plano: só pode parear se houver licença ativa e cota disponível.
+    await assertCanAddScreen(supabaseAdmin, orgId);
 
     // Busca o código (pode estar anônimo, sem organization_id)
     const { data: pairing, error: pairingErr } = await supabaseAdmin
