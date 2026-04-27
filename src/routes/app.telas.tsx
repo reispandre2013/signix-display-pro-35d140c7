@@ -394,7 +394,17 @@ function ScreensPage() {
         )}
       </Panel>
 
-      {pairOpen && <PairScreenModal onClose={() => setPairOpen(false)} units={units} />}
+      {pairOpen && (
+        <PairScreenModal
+          onClose={() => setPairOpen(false)}
+          units={units}
+          onPlanLimit={(info) => {
+            setPairOpen(false);
+            setPlanLimit(info);
+          }}
+        />
+      )}
+      <PlanLimitDialog info={planLimit} onClose={() => setPlanLimit(null)} />
       {detailScreen && (
         <ScreenDetailModal
           screen={detailScreen}
