@@ -12,6 +12,9 @@ import {
   AlertTriangle,
   Loader2,
   RefreshCw,
+  ShieldCheck,
+  ShieldAlert,
+  ShieldQuestion,
 } from "lucide-react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
@@ -23,7 +26,11 @@ import { ptBR } from "date-fns/locale";
 import { useState, type ComponentType } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { reconcileAsaasPayments } from "@/lib/server/billing.functions";
+import {
+  reconcileAsaasPayments,
+  validateAsaasConfig,
+  type AsaasValidationResult,
+} from "@/lib/server/billing.functions";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
 import { toast } from "sonner";
 
@@ -40,11 +47,51 @@ function AssinaturaPage() {
   const loading = loadingBundle || loadingInv;
   const queryClient = useQueryClient();
   const reconcileFn = useServerFn(reconcileAsaasPayments);
+  const validateFn = useServerFn(validateAsaasConfig);
   const [syncing, setSyncing] = useState(false);
+  const [validating, setValidating] = useState(false);
+  const [validation, setValidation] = useState<AsaasValidationResult | null>(null);
+
+  const runValidation = async (): Promise<AsaasValidationResult | null> => {
+    setValidating(true);
+    try {
+      const res = await withAuthHeader(() => validateFn());
+      setValidation(res);
+      return res;
+    } catch (e) {
+      const err: AsaasValidationResult = {
+        ok: false,
+        environment: "unknown",
+        base_url: "",
+        key_prefix: null,
+        key_set: false,
+        message: e instanceof Error ? e.message : "Falha na validação.",
+      };
+      setValidation(err);
+      return err;
+    } finally {
+      setValidating(false);
+    }
+  };
+
+  const handleValidate = async () => {
+    const r = await runValidation();
+    if (r?.ok) toast.success(r.message);
+    else if (r) toast.error(r.message, { duration: 8000 });
+  };
 
   const handleSync = async () => {
+    // Bloqueia se já houve validação e falhou; revalida antes de sincronizar.
     setSyncing(true);
     try {
+      const v = await runValidation();
+      if (!v?.ok) {
+        toast.error(
+          `Configuração Asaas inválida — ${v?.message ?? "erro desconhecido"}`,
+          { duration: 10000 },
+        );
+        return;
+      }
       const res = await withAuthHeader(() => reconcileFn());
       console.log("[reconcile] result", res);
       if (res.ok) {
@@ -270,10 +317,15 @@ function AssinaturaPage() {
 
         <Panel title="Ações da assinatura">
           <div className="space-y-2">
+            <AsaasConfigCheck
+              validation={validation}
+              validating={validating}
+              onValidate={handleValidate}
+            />
             <button
               type="button"
               onClick={handleSync}
-              disabled={syncing}
+              disabled={syncing || validating}
               className="w-full flex items-center justify-between gap-2 rounded-md border border-primary/30 bg-primary/5 px-3 py-2.5 text-sm hover:bg-primary/10 disabled:opacity-60"
             >
               <span className="flex items-center gap-2">
@@ -288,6 +340,7 @@ function AssinaturaPage() {
             </button>
             <p className="px-1 text-[11px] text-muted-foreground">
               Use após pagar no Asaas se a assinatura ainda não apareceu aqui.
+              A configuração é validada automaticamente antes da sincronização.
             </p>
             <Link
               to="/planos"
@@ -370,6 +423,80 @@ function UsageCard({
         <div className={`h-full ${colorClass}`} style={{ width: `${Math.min(pct, 100)}%` }} />
       </div>
       <p className="mt-1.5 text-[11px] text-muted-foreground">{Math.round(pct)}% utilizado</p>
+    </div>
+  );
+}
+
+function AsaasConfigCheck({
+  validation,
+  validating,
+  onValidate,
+}: {
+  validation: AsaasValidationResult | null;
+  validating: boolean;
+  onValidate: () => void;
+}) {
+  let Icon: ComponentType<{ className?: string }> = ShieldQuestion;
+  let tone = "border-border bg-muted/30 text-muted-foreground";
+  let title = "Configuração Asaas não verificada";
+  let detail = "Clique em “Validar” para checar ASAAS_API_KEY e ASAAS_API_BASE.";
+
+  if (validating) {
+    Icon = Loader2;
+    tone = "border-primary/30 bg-primary/5 text-foreground";
+    title = "Validando configuração…";
+    detail = "Consultando Asaas com as credenciais atuais.";
+  } else if (validation) {
+    if (validation.ok) {
+      Icon = ShieldCheck;
+      tone = "border-success/40 bg-success/10 text-foreground";
+      title = `Configuração Asaas OK — ambiente ${validation.environment}`;
+      detail = `${validation.base_url}${validation.account ? ` · conta: ${validation.account}` : ""}`;
+    } else {
+      Icon = ShieldAlert;
+      tone = "border-destructive/40 bg-destructive/10 text-foreground";
+      title = `Configuração inválida — ambiente ${validation.environment}`;
+      detail = validation.message;
+    }
+  }
+
+  return (
+    <div className={`rounded-md border ${tone} px-3 py-2.5`}>
+      <div className="flex items-start gap-2">
+        <Icon className={`h-4 w-4 mt-0.5 ${validating ? "animate-spin text-primary" : ""}`} />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium">{title}</p>
+          <p className="mt-0.5 text-[11px] text-muted-foreground break-words">{detail}</p>
+          {validation && !validating && (
+            <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+              <dt>Base URL</dt>
+              <dd className="font-mono break-all">{validation.base_url || "—"}</dd>
+              <dt>Origem</dt>
+              <dd className="font-mono">{validation.base_url_source ?? "—"}</dd>
+              <dt>API Key</dt>
+              <dd className="font-mono">
+                {validation.key_set ? (validation.key_prefix ?? "definida") : "não definida"}
+              </dd>
+              {validation.suggested_base_url && (
+                <>
+                  <dt>Sugestão</dt>
+                  <dd className="font-mono break-all text-warning">
+                    ASAAS_API_BASE = {validation.suggested_base_url}
+                  </dd>
+                </>
+              )}
+            </dl>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={onValidate}
+          disabled={validating}
+          className="shrink-0 text-[11px] rounded border border-border bg-background px-2 py-1 hover:bg-surface disabled:opacity-60"
+        >
+          {validating ? "…" : "Validar"}
+        </button>
+      </div>
     </div>
   );
 }

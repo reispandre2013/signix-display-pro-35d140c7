@@ -235,3 +235,62 @@ export const reconcileAsaasPayments = createServerFn({ method: "POST" }).handler
     };
   },
 );
+
+/**
+ * Valida ASAAS_API_KEY/ASAAS_API_BASE chamando a Edge Function
+ * `validate-asaas-config`. Use antes de qualquer fluxo de sincronização.
+ */
+export type AsaasValidationResult = {
+  ok: boolean;
+  environment: "sandbox" | "production" | "unknown";
+  base_url: string;
+  base_url_source?: "ASAAS_API_BASE" | "ASAAS_ENV" | "default";
+  key_prefix: string | null;
+  key_set: boolean;
+  account?: string | null;
+  suggested_base_url?: string;
+  message: string;
+  details?: string;
+};
+
+export const validateAsaasConfig = createServerFn({ method: "POST" }).handler(
+  async (): Promise<AsaasValidationResult> => {
+    const authHeader = getRequestHeader("authorization") ?? "";
+    const url = `${SUPABASE_URL}/functions/v1/validate-asaas-config`;
+    try {
+      const r = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: ANON_KEY,
+          Authorization: authHeader || `Bearer ${ANON_KEY}`,
+        },
+        body: "{}",
+      });
+      const text = await r.text();
+      try {
+        return JSON.parse(text) as AsaasValidationResult;
+      } catch {
+        return {
+          ok: false,
+          environment: "unknown",
+          base_url: "",
+          key_prefix: null,
+          key_set: false,
+          message: `Resposta inválida da função (HTTP ${r.status}).`,
+          details: text.slice(0, 300),
+        };
+      }
+    } catch (e) {
+      return {
+        ok: false,
+        environment: "unknown",
+        base_url: "",
+        key_prefix: null,
+        key_set: false,
+        message: "Falha ao chamar validate-asaas-config.",
+        details: e instanceof Error ? e.message : String(e),
+      };
+    }
+  },
+);
