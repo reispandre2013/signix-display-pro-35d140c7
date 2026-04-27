@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { assertCanAddUser } from "@/lib/server/plan-limits.server";
 
 const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
 const FALLBACK_SUPABASE_ANON_KEY =
@@ -86,6 +87,9 @@ export const createOrgUser = createServerFn({ method: "POST" })
       throw new Error("Apenas Admin Master pode criar usuários.");
 
     const orgId = callerProfile.organization_id as string;
+
+    // Bloqueio por plano: cota de usuários da licença ativa.
+    await assertCanAddUser(supabaseAdmin, orgId);
 
     // 3) Cria usuário no auth (password) ou envia convite
     let newAuthUserId: string;

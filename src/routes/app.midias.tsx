@@ -6,6 +6,7 @@ import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
 import { Modal, FormField, TextInput, PrimaryButton } from "@/components/ui-kit/FormControls";
 import { useMedia, useCreateMedia, useDeleteMedia } from "@/lib/hooks/use-supabase-data";
+import { useOrgBillingContext } from "@/lib/hooks/use-saas-data";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
 import { applyMediaFallback, getMediaUrlCandidates } from "@/lib/media-url";
@@ -138,6 +139,7 @@ function detectMediaFromFile(file: File): UploadDetectedMedia | null {
 function MediaPage() {
   const { profile } = useAuth();
   const { data: media = [], isLoading, error } = useMedia();
+  const { data: billing } = useOrgBillingContext();
   const create = useCreateMedia();
   const remove = useDeleteMedia();
   const [open, setOpen] = useState(false);
@@ -184,6 +186,25 @@ function MediaPage() {
         if (detectedFile.fileType === "video" && uploadFile.size > MAX_VIDEO_UPLOAD_BYTES) {
           setFormError("Vídeo acima do limite de 500MB.");
           return;
+        }
+
+        // Bloqueio por plano: storage usado + arquivo novo não pode exceder o limite.
+        const u = billing?.usage;
+        if (!u) {
+          setFormError(
+            "Sem assinatura ativa. Contrate um plano em /planos para enviar mídias.",
+          );
+          return;
+        }
+        if (u.storage_limit_mb > 0 && u.storage_limit_mb < 9999999) {
+          const incomingMb = uploadFile.size / (1024 * 1024);
+          const totalAfter = u.storage_used_mb + incomingMb;
+          if (totalAfter > u.storage_limit_mb) {
+            setFormError(
+              `Limite de armazenamento do plano excedido: ${u.storage_used_mb.toFixed(1)} MB usados + ${incomingMb.toFixed(1)} MB do novo arquivo > ${u.storage_limit_mb} MB. Faça upgrade em /planos.`,
+            );
+            return;
+          }
         }
 
         const cleaned = sanitizeFileName(form.name || uploadFile.name || "media");
