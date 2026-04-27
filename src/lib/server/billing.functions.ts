@@ -58,6 +58,7 @@ type ReconcileResult = {
   asaas_subscription_id?: string;
   payments_found?: number;
   events_dispatched?: number;
+  already_synced?: number;
   errors?: string[];
 };
 
@@ -183,10 +184,23 @@ export const reconcileAsaasPayments = createServerFn({ method: "POST" }).handler
     // Para cada pagamento, despacha o evento equivalente para o payment-webhook.
     const errors: string[] = [];
     let dispatched = 0;
+    let alreadySynced = 0;
 
     for (const pay of payments) {
       const event = asaasEventForStatus(pay.status ?? "");
       if (!event) continue;
+
+      const { data: existingPayment } = await supabaseAdmin
+        .from("payments")
+        .select("id")
+        .eq("payment_provider", "asaas")
+        .eq("external_payment_id", pay.id)
+        .maybeSingle();
+
+      if (existingPayment) {
+        alreadySynced++;
+        continue;
+      }
 
       const body = {
         id: `manual-reconcile-${pay.id}-${Date.now()}`,
@@ -226,12 +240,15 @@ export const reconcileAsaasPayments = createServerFn({ method: "POST" }).handler
       ok: errors.length === 0,
       message:
         errors.length === 0
-          ? `${dispatched} evento(s) sincronizado(s) com sucesso. Recarregue a página para ver as alterações.`
+          ? alreadySynced > 0 && dispatched === 0
+            ? `${alreadySynced} pagamento(s) já estavam sincronizados. Nenhuma ação necessária.`
+            : `${dispatched} evento(s) sincronizado(s) com sucesso${alreadySynced > 0 ? `; ${alreadySynced} já estavam sincronizados` : ""}. Recarregue a página para ver as alterações.`
           : `${dispatched} sincronizado(s), ${errors.length} com erro.`,
       checkout_id: cs.id as string,
       asaas_subscription_id: subId,
       payments_found: payments.length,
       events_dispatched: dispatched,
+      already_synced: alreadySynced,
       errors: errors.length ? errors : undefined,
     };
   },
