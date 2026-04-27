@@ -37,6 +37,26 @@ function AssinaturaPage() {
   const sub = bundle?.subscription;
   const u = bundle?.usage;
   const loading = loadingBundle || loadingInv;
+  const queryClient = useQueryClient();
+  const reconcileFn = useServerFn(reconcileAsaasPayments);
+  const [syncing, setSyncing] = useState(false);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    try {
+      const res = await reconcileFn();
+      if (res.ok) {
+        toast.success(res.message);
+        await queryClient.invalidateQueries({ queryKey: ["saas"] });
+      } else {
+        toast.error(res.message);
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao sincronizar.");
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const screensPct = u && u.screens_limit > 0 ? (u.screens_used / u.screens_limit) * 100 : 0;
   const usersPct = u && u.users_limit > 0 ? (u.users_used / u.users_limit) * 100 : 0;
