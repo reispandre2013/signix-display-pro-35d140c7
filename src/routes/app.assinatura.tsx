@@ -12,6 +12,9 @@ import {
   AlertTriangle,
   Loader2,
   RefreshCw,
+  ShieldCheck,
+  ShieldAlert,
+  ShieldQuestion,
 } from "lucide-react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
@@ -23,7 +26,11 @@ import { ptBR } from "date-fns/locale";
 import { useState, type ComponentType } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { reconcileAsaasPayments } from "@/lib/server/billing.functions";
+import {
+  reconcileAsaasPayments,
+  validateAsaasConfig,
+  type AsaasValidationResult,
+} from "@/lib/server/billing.functions";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
 import { toast } from "sonner";
 
