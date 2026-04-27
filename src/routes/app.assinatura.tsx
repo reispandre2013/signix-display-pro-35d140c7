@@ -24,6 +24,7 @@ import { useState, type ComponentType } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { reconcileAsaasPayments } from "@/lib/server/billing.functions";
+import { withAuthHeader } from "@/lib/server/with-auth-header";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/assinatura")({
@@ -44,7 +45,7 @@ function AssinaturaPage() {
   const handleSync = async () => {
     setSyncing(true);
     try {
-      const res = await reconcileFn();
+      const res = await withAuthHeader(() => reconcileFn());
       if (res.ok) {
         toast.success(res.message);
         await queryClient.invalidateQueries({ queryKey: ["saas"] });
