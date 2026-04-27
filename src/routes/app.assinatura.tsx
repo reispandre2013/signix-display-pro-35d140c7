@@ -426,3 +426,77 @@ function UsageCard({
     </div>
   );
 }
+
+function AsaasConfigCheck({
+  validation,
+  validating,
+  onValidate,
+}: {
+  validation: AsaasValidationResult | null;
+  validating: boolean;
+  onValidate: () => void;
+}) {
+  let Icon: ComponentType<{ className?: string }> = ShieldQuestion;
+  let tone = "border-border bg-muted/30 text-muted-foreground";
+  let title = "Configuração Asaas não verificada";
+  let detail = "Clique em “Validar” para checar ASAAS_API_KEY e ASAAS_API_BASE.";
+
+  if (validating) {
+    Icon = Loader2;
+    tone = "border-primary/30 bg-primary/5 text-foreground";
+    title = "Validando configuração…";
+    detail = "Consultando Asaas com as credenciais atuais.";
+  } else if (validation) {
+    if (validation.ok) {
+      Icon = ShieldCheck;
+      tone = "border-success/40 bg-success/10 text-foreground";
+      title = `Configuração Asaas OK — ambiente ${validation.environment}`;
+      detail = `${validation.base_url}${validation.account ? ` · conta: ${validation.account}` : ""}`;
+    } else {
+      Icon = ShieldAlert;
+      tone = "border-destructive/40 bg-destructive/10 text-foreground";
+      title = `Configuração inválida — ambiente ${validation.environment}`;
+      detail = validation.message;
+    }
+  }
+
+  return (
+    <div className={`rounded-md border ${tone} px-3 py-2.5`}>
+      <div className="flex items-start gap-2">
+        <Icon className={`h-4 w-4 mt-0.5 ${validating ? "animate-spin text-primary" : ""}`} />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium">{title}</p>
+          <p className="mt-0.5 text-[11px] text-muted-foreground break-words">{detail}</p>
+          {validation && !validating && (
+            <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+              <dt>Base URL</dt>
+              <dd className="font-mono break-all">{validation.base_url || "—"}</dd>
+              <dt>Origem</dt>
+              <dd className="font-mono">{validation.base_url_source ?? "—"}</dd>
+              <dt>API Key</dt>
+              <dd className="font-mono">
+                {validation.key_set ? (validation.key_prefix ?? "definida") : "não definida"}
+              </dd>
+              {validation.suggested_base_url && (
+                <>
+                  <dt>Sugestão</dt>
+                  <dd className="font-mono break-all text-warning">
+                    ASAAS_API_BASE = {validation.suggested_base_url}
+                  </dd>
+                </>
+              )}
+            </dl>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={onValidate}
+          disabled={validating}
+          className="shrink-0 text-[11px] rounded border border-border bg-background px-2 py-1 hover:bg-surface disabled:opacity-60"
+        >
+          {validating ? "…" : "Validar"}
+        </button>
+      </div>
+    </div>
+  );
+}
