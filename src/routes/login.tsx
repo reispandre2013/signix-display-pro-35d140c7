@@ -235,12 +235,6 @@ function LoginPage() {
             >
               Parear um novo player →
             </Link>
-            <Link
-              to="/configurar"
-              className="block w-full text-center text-xs text-muted-foreground hover:text-foreground transition-smooth"
-            >
-              Configurar Supabase ⚙
-            </Link>
           </form>
         </div>
       </div>
