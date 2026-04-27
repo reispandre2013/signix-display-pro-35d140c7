@@ -234,7 +234,13 @@ function CreateUserDialog({
       onOpenChange(false);
     },
     onError: (err: Error) => {
-      toast.error(err.message ?? "Não foi possível criar o usuário.");
+      const msg = err.message ?? "Não foi possível criar o usuário.";
+      const limit = parsePlanLimitError(msg);
+      if (limit && onPlanLimit) {
+        onPlanLimit(limit);
+      } else {
+        toast.error(msg);
+      }
     },
   });
 
