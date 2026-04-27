@@ -27,7 +27,7 @@ type FormState = {
   currency: string;
   max_screens: number;
   max_users: number;
-  max_storage_gb: number;
+  max_storage_mb: number;
   features: string; // textarea (uma feature por linha)
   support_level: string;
   is_recommended: boolean;
@@ -44,7 +44,7 @@ const EMPTY: FormState = {
   currency: "BRL",
   max_screens: 1,
   max_users: 1,
-  max_storage_gb: 1,
+  max_storage_mb: 1000,
   features: "",
   support_level: "email",
   is_recommended: false,
@@ -63,7 +63,7 @@ function planToForm(p: Plan): FormState {
     currency: p.currency,
     max_screens: p.max_screens,
     max_users: p.max_users,
-    max_storage_gb: p.max_storage_gb,
+    max_storage_mb: Math.round((p.max_storage_gb ?? 0) * 1000),
     features: (p.features ?? []).join("\n"),
     support_level: p.support_level ?? "",
     is_recommended: p.is_recommended,
@@ -94,7 +94,7 @@ function PlanosPage() {
             currency: form.currency || "BRL",
             max_screens: form.max_screens,
             max_users: form.max_users,
-            max_storage_gb: form.max_storage_gb,
+            max_storage_gb: form.max_storage_mb / 1000,
             features: form.features
               .split("\n")
               .map((s) => s.trim())
@@ -358,8 +358,8 @@ function PlanEditor({
             <Field label="Storage (MB)">
               <div className="relative">
                 <NumberInput
-                  value={form.max_storage_gb}
-                  onChange={(v) => set("max_storage_gb", v)}
+                  value={form.max_storage_mb}
+                  onChange={(v) => set("max_storage_mb", v)}
                 />
                 <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs text-muted-foreground">
                   MB
