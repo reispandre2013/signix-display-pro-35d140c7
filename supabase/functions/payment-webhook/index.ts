@@ -66,13 +66,10 @@ function parseAsaasDate(s: string | null | undefined): string | null {
   return isNaN(t.getTime()) ? null : t.toISOString();
 }
 
-const UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 /** Enriquece o pagamento (ex.: `subscription` por vezes só na API) e localiza a checkout_session. */
-async function resolveCheckoutContext(
-  p: AsaasPay,
-): Promise<{
+async function resolveCheckoutContext(p: AsaasPay): Promise<{
   pay: AsaasPay;
   asaasSubId: string;
   row: Record<string, unknown> | null;
@@ -97,7 +94,9 @@ async function resolveCheckoutContext(
         return { pay, asaasSubId: "", row: null, csErr: e0 };
       }
       if (byId) {
-        const eid = String((byId as { external_checkout_id?: string | null }).external_checkout_id ?? "").trim();
+        const eid = String(
+          (byId as { external_checkout_id?: string | null }).external_checkout_id ?? "",
+        ).trim();
         if (eid) {
           return { pay, asaasSubId: eid, row: byId as Record<string, unknown>, csErr: null };
         }
@@ -342,8 +341,8 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
         ok: true,
         message:
           "checkout_session não associada: subscription Asaas " +
-            (asaasSubId || "—") +
-            " (webhook sem subscription, sem externalReference ou API indisponível).",
+          (asaasSubId || "—") +
+          " (webhook sem subscription, sem externalReference ou API indisponível).",
       }),
       { status: 200, headers: cors },
     );

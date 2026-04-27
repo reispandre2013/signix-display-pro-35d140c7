@@ -11,6 +11,7 @@ export default tseslint.config(
       "dist",
       ".output",
       ".vinxi",
+      "www/**",
       "android/**",
       "player-tizen/**",
       "players/tizen-web/**",
