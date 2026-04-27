@@ -213,7 +213,7 @@ export const reconcileAsaasPayments = createServerFn({ method: "POST" }).handler
         const headers: Record<string, string> = {
           "Content-Type": "application/json",
           apikey: ANON_KEY,
-          Authorization: `Bearer ${ANON_KEY}`,
+          Authorization: authHeader || `Bearer ${ANON_KEY}`,
         };
         const asaasToken = process.env.ASAAS_WEBHOOK_TOKEN?.trim();
         if (asaasToken) headers["asaas-access-token"] = asaasToken;

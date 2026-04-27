@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
+import { createClient } from "npm:@supabase/supabase-js@2";
 import { adminClient } from "../_shared/client.ts";
 import { asaasJson, getAsaasConfig, reaisToCents } from "../_shared/asaas.ts";
 
@@ -33,6 +34,7 @@ type AsaasPay = {
 };
 
 type AsaasWebhookBody = { id?: string; event?: string; payment?: AsaasPay };
+type RequesterAuth = { userId: string; orgId: string | null; isPlatformAdmin: boolean } | null;
 
 function addPeriodEnd(isoStart: string, cycle: "monthly" | "yearly"): string {
   const d = new Date(isoStart);
@@ -208,6 +210,32 @@ async function ensureAsaasInvoiceLinkPayment(opts: {
   return invId;
 }
 
+async function resolveRequesterAuth(req: Request): Promise<RequesterAuth> {
+  const authHeader = req.headers.get("authorization") ?? "";
+  if (!authHeader.toLowerCase().startsWith("bearer ")) return null;
+  const supabaseUrl = (Deno.env.get("SUPABASE_URL") ?? "").trim();
+  const anonKey = (Deno.env.get("SUPABASE_ANON_KEY") ?? "").trim();
+  if (!supabaseUrl || !anonKey) return null;
+  const userClient = createClient(supabaseUrl, anonKey, {
+    global: { headers: { Authorization: authHeader } },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  const { data: u, error: uErr } = await userClient.auth.getUser();
+  if (uErr || !u.user) return null;
+  const { data: prof } = await userClient
+    .from("profiles")
+    .select("organization_id, role")
+    .eq("auth_user_id", u.user.id)
+    .maybeSingle();
+  const role = (prof as { role?: string } | null)?.role ?? null;
+  const isPlatformAdmin = role === "super_admin";
+  return {
+    userId: u.user.id,
+    orgId: (prof as { organization_id?: string } | null)?.organization_id ?? null,
+    isPlatformAdmin,
+  };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") {
@@ -234,18 +262,22 @@ serve(async (req) => {
   const incomingWebhookSecret = req.headers.get("x-webhook-secret")?.trim();
   const internalAuthorized =
     Boolean(paymentWebhookSecret) && incomingWebhookSecret === paymentWebhookSecret;
+  let requesterAuth: RequesterAuth = null;
   if (asaasToken && asaasToken.length > 0 && !internalAuthorized) {
     if (incomingAsaas !== asaasToken) {
-      return new Response(JSON.stringify({ ok: false, error: "Invalid asaas-access-token" }), {
-        status: 401,
-        headers: cors,
-      });
+      requesterAuth = await resolveRequesterAuth(req);
+      if (!requesterAuth) {
+        return new Response(JSON.stringify({ ok: false, error: "Invalid asaas-access-token" }), {
+          status: 401,
+          headers: cors,
+        });
+      }
     }
   }
 
   const asaas = payload as AsaasWebhookBody;
   if (asaas.event && asaas.payment?.id) {
-    return handleAsaasPayload(asaas, rawBody);
+    return handleAsaasPayload(asaas, rawBody, requesterAuth);
   }
 
   const secret = paymentWebhookSecret;
@@ -292,7 +324,11 @@ serve(async (req) => {
   });
 });
 
-async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Promise<Response> {
+async function handleAsaasPayload(
+  asaas: AsaasWebhookBody,
+  rawForDb: string,
+  requesterAuth: RequesterAuth = null,
+): Promise<Response> {
   const p = asaas.payment as AsaasPay;
   const payId = p.id;
   if (!payId) {
@@ -353,6 +389,12 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
   }
 
   const orgId = row.organization_id as string;
+  if (requesterAuth && !requesterAuth.isPlatformAdmin && requesterAuth.orgId !== orgId) {
+    return new Response(JSON.stringify({ ok: false, error: "Forbidden organization scope" }), {
+      status: 403,
+      headers: cors,
+    });
+  }
   const planId = row.plan_id as string;
   const valueCents = pay.value != null ? reaisToCents(Number(pay.value)) : 0;
   const payStatus =
