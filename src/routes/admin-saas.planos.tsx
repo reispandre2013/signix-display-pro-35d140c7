@@ -94,6 +94,7 @@ function PlanosPage() {
             currency: form.currency || "BRL",
             max_screens: form.max_screens,
             max_users: form.max_users,
+            max_storage_mb: form.max_storage_mb,
             max_storage_gb: form.max_storage_mb / 1000,
             features: form.features
               .split("\n")

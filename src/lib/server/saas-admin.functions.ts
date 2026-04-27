@@ -186,6 +186,7 @@ export type PlanUpsertInput = {
   currency?: string;
   max_screens: number;
   max_users: number;
+  max_storage_mb?: number;
   max_storage_gb: number;
   features: string[];
   support_level?: string | null;
@@ -225,6 +226,14 @@ export const upsertPlan = createServerFn({ method: "POST" })
     });
     await assertSuperAdmin(admin, user.id);
 
+    const resolvedStorageMb = Number.isFinite(data.max_storage_mb)
+      ? Math.max(0, Math.round(Number(data.max_storage_mb)))
+      : Number.isFinite(data.max_storage_gb)
+        ? Math.max(0, Math.round(Number(data.max_storage_gb) * 1000))
+        : 0;
+    const legacyStorageGbInt =
+      resolvedStorageMb > 0 ? Math.max(1, Math.ceil(resolvedStorageMb / 1000)) : 0;
+
     const payload = {
       code: data.code.trim(),
       name: data.name.trim(),
@@ -234,7 +243,8 @@ export const upsertPlan = createServerFn({ method: "POST" })
       currency: data.currency ?? "BRL",
       max_screens: Math.round(data.max_screens),
       max_users: Math.round(data.max_users),
-      max_storage_gb: Number.isFinite(data.max_storage_gb) ? Math.max(0, data.max_storage_gb) : 0,
+      max_storage_mb: resolvedStorageMb,
+      max_storage_gb: legacyStorageGbInt,
       features: data.features ?? [],
       support_level: data.support_level ?? null,
       is_recommended: !!data.is_recommended,
