@@ -225,7 +225,7 @@ function PlanosPage() {
                     users
                   </div>
                   <div>
-                    <div className="font-bold text-foreground text-sm">{p.max_storage_gb}MB</div>
+                    <div className="font-bold text-foreground text-sm">{`${Math.round((p.max_storage_gb ?? 0) * 1000).toLocaleString("pt-BR")} MB`}</div>
                     storage
                   </div>
                 </div>
