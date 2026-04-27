@@ -55,6 +55,7 @@ function UsersPage() {
   const { profile } = useAuth();
   const isMaster = profile?.role === "admin_master";
   const [open, setOpen] = useState(false);
+  const [planLimit, setPlanLimit] = useState<PlanLimitInfo | null>(null);
 
   return (
     <div className="space-y-6">
