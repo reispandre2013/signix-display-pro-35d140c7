@@ -45,7 +45,7 @@ function AssinaturaPage() {
   const handleSync = async () => {
     setSyncing(true);
     try {
-      const res = await reconcileFn();
+      const res = await withAuthHeader(() => reconcileFn());
       if (res.ok) {
         toast.success(res.message);
         await queryClient.invalidateQueries({ queryKey: ["saas"] });
