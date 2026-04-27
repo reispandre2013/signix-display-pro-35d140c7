@@ -110,13 +110,19 @@ function AssinaturaPage() {
 
   const screensPct = u && u.screens_limit > 0 ? (u.screens_used / u.screens_limit) * 100 : 0;
   const usersPct = u && u.users_limit > 0 ? (u.users_used / u.users_limit) * 100 : 0;
-  const storageInMb = u && u.storage_limit_mb > 0 && u.storage_limit_mb < 1024;
-  const storagePct =
+  const storageUsedMb =
     u && u.storage_limit_mb > 0
-      ? (u.storage_used_mb / u.storage_limit_mb) * 100
-      : u && u.storage_limit_gb > 0
-        ? (u.storage_used_gb / u.storage_limit_gb) * 100
+      ? u.storage_used_mb
+      : u
+        ? Math.round((u.storage_used_gb ?? 0) * 1000)
         : 0;
+  const storageLimitMb =
+    u && u.storage_limit_mb > 0
+      ? u.storage_limit_mb
+      : u
+        ? Math.round((u.storage_limit_gb ?? 0) * 1000)
+        : 0;
+  const storagePct = storageLimitMb > 0 ? (storageUsedMb / storageLimitMb) * 100 : 0;
 
   if (loading && !bundle) {
     return (
@@ -230,11 +236,11 @@ function AssinaturaPage() {
           />
           <UsageCard
             label="Armazenamento"
-            used={storageInMb ? u.storage_used_mb : u.storage_used_gb}
-            limit={storageInMb ? u.storage_limit_mb : u.storage_limit_gb}
+            used={storageUsedMb}
+            limit={storageLimitMb}
             pct={Number.isFinite(storagePct) ? storagePct : 0}
             icon={HardDrive}
-            unit={storageInMb ? "MB" : "GB"}
+            unit="MB"
           />
         </div>
       ) : null}

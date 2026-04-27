@@ -184,9 +184,7 @@ function PlanosPublic() {
                     </div>
                     <div>
                       <div className="font-bold text-foreground text-sm">
-                        {p.max_storage_gb < 1 && p.max_storage_gb > 0
-                          ? `${Math.round(p.max_storage_gb * 1000)} MB`
-                          : `${p.max_storage_gb} GB`}
+                        {`${Math.round((p.max_storage_gb ?? 0) * 1000).toLocaleString("pt-BR")} MB`}
                       </div>
                       storage
                     </div>
