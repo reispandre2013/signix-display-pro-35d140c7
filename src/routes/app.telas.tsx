@@ -38,6 +38,11 @@ import { revokeWebPlayerSession } from "@/lib/server/web-player.functions";
 import type { PlayerPlatform } from "@/lib/platform-capabilities";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  PlanLimitDialog,
+  parsePlanLimitError,
+  type PlanLimitInfo,
+} from "@/components/ui-kit/PlanLimitDialog";
 
 export const Route = createFileRoute("/app/telas")({
   head: () => ({ meta: [{ title: "Dispositivos — Signix" }] }),
@@ -115,6 +120,7 @@ function ScreensPage() {
   const [pairOpen, setPairOpen] = useState(false);
   const [detailScreen, setDetailScreen] = useState<Screen | null>(null);
   const [editScreen, setEditScreen] = useState<Screen | null>(null);
+  const [planLimit, setPlanLimit] = useState<PlanLimitInfo | null>(null);
 
   const screens = screensQ.data ?? [];
   const units = unitsQ.data ?? [];
@@ -388,7 +394,17 @@ function ScreensPage() {
         )}
       </Panel>
 
-      {pairOpen && <PairScreenModal onClose={() => setPairOpen(false)} units={units} />}
+      {pairOpen && (
+        <PairScreenModal
+          onClose={() => setPairOpen(false)}
+          units={units}
+          onPlanLimit={(info) => {
+            setPairOpen(false);
+            setPlanLimit(info);
+          }}
+        />
+      )}
+      <PlanLimitDialog info={planLimit} onClose={() => setPlanLimit(null)} />
       {detailScreen && (
         <ScreenDetailModal
           screen={detailScreen}
@@ -411,9 +427,11 @@ function ScreensPage() {
 function PairScreenModal({
   onClose,
   units,
+  onPlanLimit,
 }: {
   onClose: () => void;
   units: Array<{ id: string; name: string }>;
+  onPlanLimit?: (info: PlanLimitInfo) => void;
 }) {
   const qc = useQueryClient();
   const claimPairingCodeFn = useServerFn(claimPairingCode);
@@ -449,7 +467,13 @@ function PairScreenModal({
       qc.invalidateQueries({ queryKey: ["screens", profile?.organization_id] });
       onClose();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Falha ao parear.");
+      const msg = err instanceof Error ? err.message : "Falha ao parear.";
+      const limit = parsePlanLimitError(msg);
+      if (limit && onPlanLimit) {
+        onPlanLimit(limit);
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setSubmitting(false);
     }

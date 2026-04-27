@@ -21,6 +21,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  PlanLimitDialog,
+  parsePlanLimitError,
+  type PlanLimitInfo,
+} from "@/components/ui-kit/PlanLimitDialog";
 
 export const Route = createFileRoute("/app/usuarios")({
   head: () => ({ meta: [{ title: "Usuários e permissões — Signix" }] }),
@@ -50,6 +55,7 @@ function UsersPage() {
   const { profile } = useAuth();
   const isMaster = profile?.role === "admin_master";
   const [open, setOpen] = useState(false);
+  const [planLimit, setPlanLimit] = useState<PlanLimitInfo | null>(null);
 
   return (
     <div className="space-y-6">
@@ -134,7 +140,12 @@ function UsersPage() {
         open={open}
         onOpenChange={setOpen}
         organizationId={profile?.organization_id ?? null}
+        onPlanLimit={(info) => {
+          setOpen(false);
+          setPlanLimit(info);
+        }}
       />
+      <PlanLimitDialog info={planLimit} onClose={() => setPlanLimit(null)} />
     </div>
   );
 }
@@ -143,10 +154,12 @@ function CreateUserDialog({
   open,
   onOpenChange,
   organizationId,
+  onPlanLimit,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   organizationId: string | null;
+  onPlanLimit?: (info: PlanLimitInfo) => void;
 }) {
   const qc = useQueryClient();
   const createUserFn = useServerFn(createOrgUser);
@@ -221,7 +234,13 @@ function CreateUserDialog({
       onOpenChange(false);
     },
     onError: (err: Error) => {
-      toast.error(err.message ?? "Não foi possível criar o usuário.");
+      const msg = err.message ?? "Não foi possível criar o usuário.";
+      const limit = parsePlanLimitError(msg);
+      if (limit && onPlanLimit) {
+        onPlanLimit(limit);
+      } else {
+        toast.error(msg);
+      }
     },
   });
 
