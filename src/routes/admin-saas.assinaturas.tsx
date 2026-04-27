@@ -1,11 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { CreditCard, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
-import { useSaaSAllSubscriptions } from "@/lib/hooks/use-saas-data";
+import {
+  useSaaSAllSubscriptions,
+  type SubscriptionsTableRow,
+} from "@/lib/hooks/use-saas-data";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin-saas/assinaturas")({
   head: () => ({ meta: [{ title: "Assinaturas — SaaS Signix" }] }),
@@ -14,6 +27,7 @@ export const Route = createFileRoute("/admin-saas/assinaturas")({
 
 function AssinaturasPage() {
   const { data: rows = [], isLoading } = useSaaSAllSubscriptions();
+  const [selected, setSelected] = useState<SubscriptionsTableRow | null>(null);
 
   if (isLoading && rows.length === 0) {
     return (
@@ -28,6 +42,9 @@ function AssinaturasPage() {
       </div>
     );
   }
+
+  const fmtPrice = (cents: number) =>
+    new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
 
   return (
     <div className="space-y-6">
@@ -81,10 +98,7 @@ function AssinaturasPage() {
                     </td>
                     <td className="px-3 py-3 text-xs">{c.billing_cycle}</td>
                     <td className="px-3 py-3 text-xs font-mono tabular-nums">
-                      {new Intl.NumberFormat("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                      }).format(c.amount_cents / 100)}
+                      {fmtPrice(c.amount_cents)}
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
                       {format(new Date(c.current_period_start), "dd/MM/yy", { locale: ptBR })}
@@ -102,6 +116,7 @@ function AssinaturasPage() {
                     <td className="px-5 py-3 text-right">
                       <button
                         type="button"
+                        onClick={() => setSelected(c)}
                         className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[11px] hover:bg-surface"
                       >
                         <CreditCard className="h-3 w-3" /> Gerir
@@ -114,6 +129,73 @@ function AssinaturasPage() {
           </table>
         </div>
       </Panel>
+
+      <Dialog open={!!selected} onOpenChange={(open) => !open && setSelected(null)}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <CreditCard className="h-5 w-5 text-primary" />
+              Assinatura — {selected?.org_name}
+            </DialogTitle>
+            <DialogDescription>
+              Detalhes da assinatura. As ações de cobrança são gerenciadas pelo provedor de
+              pagamento.
+            </DialogDescription>
+          </DialogHeader>
+          {selected && (
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <DetailRow label="Plano" value={selected.plan_name ?? "—"} />
+              <DetailRow label="Status" value={selected.status} />
+              <DetailRow label="Ciclo" value={selected.billing_cycle} />
+              <DetailRow label="Valor" value={fmtPrice(selected.amount_cents)} />
+              <DetailRow
+                label="Início do período"
+                value={format(new Date(selected.current_period_start), "dd/MM/yyyy", {
+                  locale: ptBR,
+                })}
+              />
+              <DetailRow
+                label="Próxima cobrança"
+                value={
+                  selected.current_period_end
+                    ? format(new Date(selected.current_period_end), "dd/MM/yyyy", { locale: ptBR })
+                    : "—"
+                }
+              />
+              <DetailRow
+                label="Último pagamento"
+                value={
+                  selected.last_paid
+                    ? format(new Date(selected.last_paid), "dd/MM/yyyy", { locale: ptBR })
+                    : "—"
+                }
+              />
+              <DetailRow
+                label="Criada em"
+                value={format(new Date(selected.created_at), "dd/MM/yyyy", { locale: ptBR })}
+              />
+              <DetailRow label="ID da assinatura" value={selected.id} mono />
+              <DetailRow label="ID da organização" value={selected.org_id} mono />
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelected(null)}>
+              Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+function DetailRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="space-y-0.5">
+      <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div className={mono ? "text-xs font-mono break-all" : "text-sm font-medium break-words"}>
+        {value}
+      </div>
     </div>
   );
 }
