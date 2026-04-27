@@ -140,7 +140,12 @@ function UsersPage() {
         open={open}
         onOpenChange={setOpen}
         organizationId={profile?.organization_id ?? null}
+        onPlanLimit={(info) => {
+          setOpen(false);
+          setPlanLimit(info);
+        }}
       />
+      <PlanLimitDialog info={planLimit} onClose={() => setPlanLimit(null)} />
     </div>
   );
 }
