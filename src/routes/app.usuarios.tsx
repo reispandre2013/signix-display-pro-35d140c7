@@ -154,10 +154,12 @@ function CreateUserDialog({
   open,
   onOpenChange,
   organizationId,
+  onPlanLimit,
 }: {
   open: boolean;
   onOpenChange: (v: boolean) => void;
   organizationId: string | null;
+  onPlanLimit?: (info: PlanLimitInfo) => void;
 }) {
   const qc = useQueryClient();
   const createUserFn = useServerFn(createOrgUser);
