@@ -27,7 +27,7 @@ type FormState = {
   currency: string;
   max_screens: number;
   max_users: number;
-  max_storage_gb: number;
+  max_storage_mb: number;
   features: string; // textarea (uma feature por linha)
   support_level: string;
   is_recommended: boolean;
