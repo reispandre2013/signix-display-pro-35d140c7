@@ -183,7 +183,11 @@ function PlanosPublic() {
                       usuários
                     </div>
                     <div>
-                      <div className="font-bold text-foreground text-sm">{p.max_storage_gb}GB</div>
+                      <div className="font-bold text-foreground text-sm">
+                        {p.max_storage_gb < 1 && p.max_storage_gb > 0
+                          ? `${Math.round(p.max_storage_gb * 1000)} MB`
+                          : `${p.max_storage_gb} GB`}
+                      </div>
                       storage
                     </div>
                   </div>

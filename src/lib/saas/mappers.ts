@@ -17,12 +17,14 @@ export function mapPlanRow(row: any): Plan {
         })()
       : [];
 
-  const maxGb =
-    row.max_storage_gb != null
-      ? Number(row.max_storage_gb)
-      : row.max_storage_mb != null
-        ? Math.round((Number(row.max_storage_mb) / 1000) * 10) / 10
+  // `max_storage_mb` é a fonte de verdade; `max_storage_gb` legado/compat não deve esmagar 25 MB.
+  const maxMbFromRow =
+    row.max_storage_mb != null && String(row.max_storage_mb).length > 0
+      ? Number(row.max_storage_mb)
+      : row.max_storage_gb != null
+        ? Number(row.max_storage_gb) * 1000
         : 0;
+  const maxGb = maxMbFromRow > 0 ? maxMbFromRow / 1000 : 0;
 
   return {
     id: String(row.id),
@@ -123,6 +125,9 @@ export type SaasUsageDisplay = {
   users_limit: number;
   storage_used_gb: number;
   storage_limit_gb: number;
+  /** MB — exibir na UI e calcular % quando o limite for &lt; ~1 GB. */
+  storage_used_mb: number;
+  storage_limit_mb: number;
 };
 
 export function buildUsageDisplay(
@@ -138,13 +143,16 @@ export function buildUsageDisplay(
       : plan
         ? (plan.max_storage_gb ?? 0) * 1000
         : 100000;
+  const usedMb = (usage?.storage_used_mb as number) ?? 0;
   return {
     screens_used: usage?.total_screens ?? 0,
     screens_limit: screensLimit,
     users_used: usage?.total_users ?? 0,
     users_limit: usersLimit,
-    storage_used_gb: Math.round(((usage?.storage_used_mb as number) ?? 0) * 10) / 10,
-    storage_limit_gb: Math.max(0.1, Math.round((storageLimitMb / 1000) * 10) / 10),
+    storage_used_gb: Math.round((usedMb / 1000) * 1000) / 1000,
+    storage_limit_gb: Math.round((storageLimitMb / 1000) * 1000) / 1000,
+    storage_used_mb: usedMb,
+    storage_limit_mb: storageLimitMb,
   };
 }
 

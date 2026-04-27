@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { adminClient } from "../_shared/client.ts";
-import { reaisToCents } from "../_shared/asaas.ts";
+import { asaasJson, getAsaasConfig, reaisToCents } from "../_shared/asaas.ts";
 
 const cors: Record<string, string> = {
   "Content-Type": "application/json; charset=utf-8",
@@ -21,6 +21,8 @@ type AsaasPay = {
   customer?: string;
   description?: string;
   externalReference?: string | null;
+  /** Pode existir nalguns payloads; usamos como referência de sessão. */
+  externalRef?: string | null;
   dateCreated?: string;
   confirmedDate?: string;
   dueDate?: string | null;
@@ -62,6 +64,72 @@ function parseAsaasDate(s: string | null | undefined): string | null {
   if (s == null || s === "") return null;
   const t = new Date(s);
   return isNaN(t.getTime()) ? null : t.toISOString();
+}
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+/** Enriquece o pagamento (ex.: `subscription` por vezes só na API) e localiza a checkout_session. */
+async function resolveCheckoutContext(
+  p: AsaasPay,
+): Promise<{
+  pay: AsaasPay;
+  asaasSubId: string;
+  row: Record<string, unknown> | null;
+  csErr: { message: string } | null;
+}> {
+  let pay: AsaasPay = { ...p };
+  let asaasSubId = (pay.subscription ?? "").trim() || null;
+  if (!asaasSubId) {
+    const ext =
+      (pay.externalReference ?? (pay as { externalRef?: string }).externalRef ?? "")
+        .toString()
+        .trim() || null;
+    if (ext && UUID_RE.test(ext)) {
+      const { data: byId, error: e0 } = await adminClient
+        .from("checkout_sessions")
+        .select("id, organization_id, plan_id, status, external_checkout_id, billing_cycle")
+        .eq("id", ext)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (e0) {
+        return { pay, asaasSubId: "", row: null, csErr: e0 };
+      }
+      if (byId) {
+        const eid = String((byId as { external_checkout_id?: string | null }).external_checkout_id ?? "").trim();
+        if (eid) {
+          return { pay, asaasSubId: eid, row: byId as Record<string, unknown>, csErr: null };
+        }
+      }
+    }
+  }
+  const { enabled } = getAsaasConfig();
+  if (!asaasSubId && enabled && pay.id) {
+    try {
+      const full = await asaasJson<AsaasPay & { subscription?: string }>(
+        `/v3/payments/${encodeURIComponent(pay.id)}`,
+        { method: "GET" },
+      );
+      if (full && typeof full === "object") {
+        pay = { ...pay, ...full };
+        asaasSubId = (full.subscription ?? "").toString().trim() || asaasSubId;
+      }
+    } catch (e) {
+      console.error("[payment-webhook] fetch payment in API", (e as Error).message);
+    }
+  }
+  if (!asaasSubId) {
+    return { pay, asaasSubId: "", row: null, csErr: null };
+  }
+  const { data: row, error: csErr } = await adminClient
+    .from("checkout_sessions")
+    .select("id, organization_id, plan_id, status, external_checkout_id, billing_cycle")
+    .eq("external_checkout_id", asaasSubId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  return { pay, asaasSubId, row: (row as Record<string, unknown> | null) ?? null, csErr };
 }
 
 /**
@@ -261,32 +329,21 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
     .eq("payment_provider", "asaas")
     .maybeSingle();
 
-  const asaasSubId = p.subscription ?? null;
-  if (!asaasSubId) {
-    return new Response(JSON.stringify({ ok: true, skip: "no subscription on payment" }), {
-      status: 200,
-      headers: cors,
-    });
-  }
-
-  const { data: row, error: csErr } = await adminClient
-    .from("checkout_sessions")
-    .select("id, organization_id, plan_id, status, external_checkout_id, billing_cycle")
-    .eq("external_checkout_id", asaasSubId)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
+  const { pay, asaasSubId, row, csErr } = await resolveCheckoutContext(p);
   if (csErr) {
     return new Response(JSON.stringify({ ok: false, error: csErr.message }), {
       status: 500,
       headers: cors,
     });
   }
-  if (!row?.organization_id) {
+  if (!asaasSubId || !row?.organization_id) {
     return new Response(
       JSON.stringify({
         ok: true,
-        message: "checkout_session not found for subscription " + asaasSubId,
+        message:
+          "checkout_session não associada: subscription Asaas " +
+            (asaasSubId || "—") +
+            " (webhook sem subscription, sem externalReference ou API indisponível).",
       }),
       { status: 200, headers: cors },
     );
@@ -294,7 +351,7 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
 
   const orgId = row.organization_id as string;
   const planId = row.plan_id as string;
-  const valueCents = p.value != null ? reaisToCents(Number(p.value)) : 0;
+  const valueCents = pay.value != null ? reaisToCents(Number(pay.value)) : 0;
   const payStatus =
     event === "PAYMENT_REFUNDED"
       ? "failed"
@@ -318,12 +375,12 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
         subscription_id: ourSubId,
         amount_cents: valueCents,
         status: payStatus,
-        method: p.billingType?.toLowerCase() ?? "unknown",
+        method: pay.billingType?.toLowerCase() ?? "unknown",
         payment_provider: "asaas",
         external_payment_id: payId,
         paid_at:
           event === "PAYMENT_RECEIVED" || event === "PAYMENT_CONFIRMED"
-            ? (p.confirmedDate ?? p.dateCreated ?? new Date().toISOString())
+            ? (pay.confirmedDate ?? pay.dateCreated ?? new Date().toISOString())
             : null,
         raw_payload: { source: "asaas", event, body: asaas, raw: rawForDb } as never,
       })
@@ -350,7 +407,7 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
     await ensureAsaasInvoiceLinkPayment({
       orgId,
       ourSubscriptionId: ourSubId,
-      pay: p,
+      pay,
       payId,
       valueCents,
       event,
@@ -358,10 +415,12 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
     });
   }
 
-  const shouldProvision =
-    !ourSub &&
-    (event === "PAYMENT_RECEIVED" ||
-      (event === "PAYMENT_CONFIRMED" && p.billingType === "CREDIT_CARD"));
+  const stUp = String(pay.status ?? "").toUpperCase();
+  const paymentSettled =
+    event === "PAYMENT_RECEIVED" ||
+    (event === "PAYMENT_CONFIRMED" &&
+      ["RECEIVED", "CONFIRMED", "RECEIVED_IN_CASH", "DUNNING_RECEIVED"].includes(stUp));
+  const shouldProvision = !ourSub && paymentSettled;
 
   if (shouldProvision) {
     const { data: plan } = await adminClient
@@ -413,7 +472,7 @@ async function handleAsaasPayload(asaas: AsaasWebhookBody, rawForDb: string): Pr
           .from("licenses")
           .update({ status: "canceled" })
           .eq("organization_id", orgId)
-          .eq("status", "active");
+          .in("status", ["trial", "active"]);
         await adminClient.from("licenses").insert({
           organization_id: orgId,
           subscription_id: newSid,
