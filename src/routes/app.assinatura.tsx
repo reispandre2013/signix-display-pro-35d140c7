@@ -47,11 +47,51 @@ function AssinaturaPage() {
   const loading = loadingBundle || loadingInv;
   const queryClient = useQueryClient();
   const reconcileFn = useServerFn(reconcileAsaasPayments);
+  const validateFn = useServerFn(validateAsaasConfig);
   const [syncing, setSyncing] = useState(false);
+  const [validating, setValidating] = useState(false);
+  const [validation, setValidation] = useState<AsaasValidationResult | null>(null);
+
+  const runValidation = async (): Promise<AsaasValidationResult | null> => {
+    setValidating(true);
+    try {
+      const res = await withAuthHeader(() => validateFn());
+      setValidation(res);
+      return res;
+    } catch (e) {
+      const err: AsaasValidationResult = {
+        ok: false,
+        environment: "unknown",
+        base_url: "",
+        key_prefix: null,
+        key_set: false,
+        message: e instanceof Error ? e.message : "Falha na validação.",
+      };
+      setValidation(err);
+      return err;
+    } finally {
+      setValidating(false);
+    }
+  };
+
+  const handleValidate = async () => {
+    const r = await runValidation();
+    if (r?.ok) toast.success(r.message);
+    else if (r) toast.error(r.message, { duration: 8000 });
+  };
 
   const handleSync = async () => {
+    // Bloqueia se já houve validação e falhou; revalida antes de sincronizar.
     setSyncing(true);
     try {
+      const v = await runValidation();
+      if (!v?.ok) {
+        toast.error(
+          `Configuração Asaas inválida — ${v?.message ?? "erro desconhecido"}`,
+          { duration: 10000 },
+        );
+        return;
+      }
       const res = await withAuthHeader(() => reconcileFn());
       console.log("[reconcile] result", res);
       if (res.ok) {
