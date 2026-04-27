@@ -11,16 +11,20 @@ import {
   Receipt,
   AlertTriangle,
   Loader2,
+  RefreshCw,
 } from "lucide-react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
-import { KpiCard } from "@/components/ui-kit/KpiCard";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { useOrgBillingContext, useOrgInvoices } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import type { ComponentType } from "react";
+import { useState, type ComponentType } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { reconcileAsaasPayments } from "@/lib/server/billing.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/assinatura")({
   head: () => ({ meta: [{ title: "Minha assinatura — Signix" }] }),
@@ -33,6 +37,26 @@ function AssinaturaPage() {
   const sub = bundle?.subscription;
   const u = bundle?.usage;
   const loading = loadingBundle || loadingInv;
+  const queryClient = useQueryClient();
+  const reconcileFn = useServerFn(reconcileAsaasPayments);
+  const [syncing, setSyncing] = useState(false);
+
+  const handleSync = async () => {
+    setSyncing(true);
+    try {
+      const res = await reconcileFn();
+      if (res.ok) {
+        toast.success(res.message);
+        await queryClient.invalidateQueries({ queryKey: ["saas"] });
+      } else {
+        toast.error(res.message);
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao sincronizar.");
+    } finally {
+      setSyncing(false);
+    }
+  };
 
   const screensPct = u && u.screens_limit > 0 ? (u.screens_used / u.screens_limit) * 100 : 0;
   const usersPct = u && u.users_limit > 0 ? (u.users_used / u.users_limit) * 100 : 0;
@@ -243,6 +267,25 @@ function AssinaturaPage() {
 
         <Panel title="Ações da assinatura">
           <div className="space-y-2">
+            <button
+              type="button"
+              onClick={handleSync}
+              disabled={syncing}
+              className="w-full flex items-center justify-between gap-2 rounded-md border border-primary/30 bg-primary/5 px-3 py-2.5 text-sm hover:bg-primary/10 disabled:opacity-60"
+            >
+              <span className="flex items-center gap-2">
+                {syncing ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                ) : (
+                  <RefreshCw className="h-4 w-4 text-primary" />
+                )}
+                {syncing ? "Sincronizando…" : "Sincronizar pagamento"}
+              </span>
+              <span className="text-muted-foreground">→</span>
+            </button>
+            <p className="px-1 text-[11px] text-muted-foreground">
+              Use após pagar no Asaas se a assinatura ainda não apareceu aqui.
+            </p>
             <Link
               to="/planos"
               className="w-full flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2.5 text-sm hover:bg-surface"
