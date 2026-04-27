@@ -236,11 +236,11 @@ function AssinaturaPage() {
           />
           <UsageCard
             label="Armazenamento"
-            used={storageInMb ? u.storage_used_mb : u.storage_used_gb}
-            limit={storageInMb ? u.storage_limit_mb : u.storage_limit_gb}
+            used={storageUsedMb}
+            limit={storageLimitMb}
             pct={Number.isFinite(storagePct) ? storagePct : 0}
             icon={HardDrive}
-            unit={storageInMb ? "MB" : "GB"}
+            unit="MB"
           />
         </div>
       ) : null}
