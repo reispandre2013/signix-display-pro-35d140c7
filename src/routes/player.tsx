@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Tv, Maximize2, Volume2, Wifi, Image as ImageIcon } from "lucide-react";
+import { Tv, Maximize2, Volume2, Wifi } from "lucide-react";
 import { useMedia, useCampaigns } from "@/lib/hooks/use-supabase-data";
 import { applyMediaFallback, getMediaUrlCandidates } from "@/lib/media-url";
+import { PromoShowcase } from "@/components/player/PromoShowcase";
 
 export const Route = createFileRoute("/player")({
   head: () => ({ meta: [{ title: "Player — Signix" }] }),
@@ -50,17 +51,7 @@ function PlayerPage() {
     : [];
 
   if (items.length === 0) {
-    return (
-      <div className="min-h-screen w-screen bg-black text-white grid place-items-center">
-        <div className="text-center">
-          <ImageIcon className="h-16 w-16 mx-auto text-white/30" />
-          <p className="mt-4 text-lg">Nenhuma mídia disponível para reprodução</p>
-          <Link to="/app/midias" className="mt-6 inline-block text-primary hover:underline text-sm">
-            Adicionar mídias →
-          </Link>
-        </div>
-      </div>
-    );
+    return <PromoShowcase />;
   }
 
   return (
