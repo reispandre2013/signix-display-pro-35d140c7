@@ -120,6 +120,7 @@ function ScreensPage() {
   const [pairOpen, setPairOpen] = useState(false);
   const [detailScreen, setDetailScreen] = useState<Screen | null>(null);
   const [editScreen, setEditScreen] = useState<Screen | null>(null);
+  const [planLimit, setPlanLimit] = useState<PlanLimitInfo | null>(null);
 
   const screens = screensQ.data ?? [];
   const units = unitsQ.data ?? [];
