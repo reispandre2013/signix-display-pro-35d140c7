@@ -21,6 +21,11 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  PlanLimitDialog,
+  parsePlanLimitError,
+  type PlanLimitInfo,
+} from "@/components/ui-kit/PlanLimitDialog";
 
 export const Route = createFileRoute("/app/usuarios")({
   head: () => ({ meta: [{ title: "Usuários e permissões — Signix" }] }),
