@@ -267,6 +267,25 @@ function AssinaturaPage() {
 
         <Panel title="Ações da assinatura">
           <div className="space-y-2">
+            <button
+              type="button"
+              onClick={handleSync}
+              disabled={syncing}
+              className="w-full flex items-center justify-between gap-2 rounded-md border border-primary/30 bg-primary/5 px-3 py-2.5 text-sm hover:bg-primary/10 disabled:opacity-60"
+            >
+              <span className="flex items-center gap-2">
+                {syncing ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                ) : (
+                  <RefreshCw className="h-4 w-4 text-primary" />
+                )}
+                {syncing ? "Sincronizando…" : "Sincronizar pagamento"}
+              </span>
+              <span className="text-muted-foreground">→</span>
+            </button>
+            <p className="px-1 text-[11px] text-muted-foreground">
+              Use após pagar no Asaas se a assinatura ainda não apareceu aqui.
+            </p>
             <Link
               to="/planos"
               className="w-full flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2.5 text-sm hover:bg-surface"
