@@ -46,11 +46,13 @@ function AssinaturaPage() {
     setSyncing(true);
     try {
       const res = await withAuthHeader(() => reconcileFn());
+      console.log("[reconcile] result", res);
       if (res.ok) {
         toast.success(res.message);
         await queryClient.invalidateQueries({ queryKey: ["saas"] });
       } else {
-        toast.error(res.message);
+        const detail = res.errors?.length ? `${res.message} — ${res.errors.join(" | ")}` : res.message;
+        toast.error(detail, { duration: 10000 });
       }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Falha ao sincronizar.");
