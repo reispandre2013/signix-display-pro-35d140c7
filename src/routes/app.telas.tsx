@@ -427,9 +427,11 @@ function ScreensPage() {
 function PairScreenModal({
   onClose,
   units,
+  onPlanLimit,
 }: {
   onClose: () => void;
   units: Array<{ id: string; name: string }>;
+  onPlanLimit?: (info: PlanLimitInfo) => void;
 }) {
   const qc = useQueryClient();
   const claimPairingCodeFn = useServerFn(claimPairingCode);
@@ -465,7 +467,13 @@ function PairScreenModal({
       qc.invalidateQueries({ queryKey: ["screens", profile?.organization_id] });
       onClose();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Falha ao parear.");
+      const msg = err instanceof Error ? err.message : "Falha ao parear.";
+      const limit = parsePlanLimitError(msg);
+      if (limit && onPlanLimit) {
+        onPlanLimit(limit);
+      } else {
+        toast.error(msg);
+      }
     } finally {
       setSubmitting(false);
     }
