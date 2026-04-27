@@ -234,7 +234,7 @@ export const upsertPlan = createServerFn({ method: "POST" })
       currency: data.currency ?? "BRL",
       max_screens: Math.round(data.max_screens),
       max_users: Math.round(data.max_users),
-      max_storage_gb: Math.round(data.max_storage_gb),
+      max_storage_gb: Number.isFinite(data.max_storage_gb) ? Math.max(0, data.max_storage_gb) : 0,
       features: data.features ?? [],
       support_level: data.support_level ?? null,
       is_recommended: !!data.is_recommended,
