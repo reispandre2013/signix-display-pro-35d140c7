@@ -11,16 +11,20 @@ import {
   Receipt,
   AlertTriangle,
   Loader2,
+  RefreshCw,
 } from "lucide-react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
-import { KpiCard } from "@/components/ui-kit/KpiCard";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { useOrgBillingContext, useOrgInvoices } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import type { ComponentType } from "react";
+import { useState, type ComponentType } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { reconcileAsaasPayments } from "@/lib/server/billing.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/assinatura")({
   head: () => ({ meta: [{ title: "Minha assinatura — Signix" }] }),
