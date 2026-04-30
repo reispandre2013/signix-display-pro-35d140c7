@@ -201,7 +201,7 @@ function PlanosPublic() {
             {[
               {
                 q: "Posso trocar de plano depois?",
-                a: "Sim, você pode fazer upgrade ou downgrade a qualquer momento. A cobrança é prorrateada.",
+                a: "Sim, você pode fazer upgrade ou downgrade a qualquer momento.",
               },
               {
                 q: "Como funciona a garantia?",
