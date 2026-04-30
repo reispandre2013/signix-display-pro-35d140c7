@@ -211,7 +211,10 @@ function PlanosPublic() {
                 q: "Quais formas de pagamento?",
                 a: "Cartão de crédito, PIX e boleto bancário (anual).",
               },
-              { q: "Existe taxa de setup?", a: "Não. Você só paga o valor do plano escolhido." },
+              {
+                q: "Existe taxa de setup?",
+                a: "Sim — e ela é opcional. 🚀 Oferecemos um Setup Profissional Completo por R$ 300,00 (cobrança única), no qual nosso time configura todo o sistema para você: cadastro da empresa, criação de usuários, pareamento das telas, montagem das playlists, agendamentos e treinamento inicial. Você sai do zero e já começa exibindo conteúdo no mesmo dia, sem dor de cabeça. Já tem experiência com signage e quer configurar por conta própria? Sem problema: o setup NÃO é obrigatório e você paga apenas a mensalidade do plano escolhido.",
+              },
             ].map((f) => (
               <details
                 key={f.q}
