@@ -204,8 +204,8 @@ function PlanosPublic() {
                 a: "Sim, você pode fazer upgrade ou downgrade a qualquer momento. A cobrança é prorrateada.",
               },
               {
-                q: "Como funciona o trial?",
-                a: "14 dias grátis no plano Professional, sem cartão de crédito. Ao final, escolha um plano para continuar.",
+                q: "Como funciona a garantia?",
+                a: "Você tem 7 dias de garantia em todos os planos. Ao final, continue com seu plano ou faça um upgrade, se decidir que o SigPlayer não é para você, devolvemos seu dinheiro.",
               },
               {
                 q: "Quais formas de pagamento?",
