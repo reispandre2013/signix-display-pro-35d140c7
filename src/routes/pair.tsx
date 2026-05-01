@@ -11,7 +11,7 @@ const LS_WEB_PAIRING_CODE = "signix_web_pairing_code";
 const LS_WEB_PAIRING_EXP = "signix_web_pairing_exp";
 
 export const Route = createFileRoute("/pair")({
-  head: () => ({ meta: [{ title: "Pareamento Web Player — Signix" }] }),
+  head: () => ({ meta: [{ title: "Pareamento Web Player — SigPlayer" }] }),
   component: PairRouteComponent,
 });
 
@@ -163,7 +163,7 @@ function PairRouteComponent() {
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Tv className="h-5 w-5 text-primary" />
-          <span className="font-display text-lg font-bold">Signix Web Player</span>
+          <span className="font-display text-lg font-bold">SigPlayer Web Player</span>
         </div>
         <Link to="/login" className="text-xs text-muted-foreground hover:text-foreground">
           Painel administrativo

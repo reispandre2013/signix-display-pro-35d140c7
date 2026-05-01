@@ -68,7 +68,7 @@ const SLIDES: Slide[] = [
       </>
     ),
     subtitle:
-      "Varejo, food service e corporativo usam o Signix para transformar telas em canais de comunicação e venda.",
+      "Varejo, food service e corporativo usam o SigPlayer para transformar telas em canais de comunicação e venda.",
     bullets: [
       { icon: Store, label: "Varejo", desc: "Promoções e vitrines dinâmicas" },
       {
@@ -104,7 +104,7 @@ const SLIDES: Slide[] = [
       </>
     ),
     subtitle:
-      "Conheça o Signix e descubra como transformar cada display em um canal de comunicação inteligente.",
+      "Conheça o SigPlayer e descubra como transformar cada display em um canal de comunicação inteligente.",
     bullets: [
       { icon: Globe2, label: "signix-display-pro.lovable.app", desc: "Acesse e saiba mais" },
     ],
@@ -144,7 +144,7 @@ export function PromoShowcase() {
             <Tv className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <p className="font-display text-lg font-bold leading-none">Signix</p>
+            <p className="font-display text-lg font-bold leading-none">SigPlayer</p>
             <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
               Digital Signage Cloud
             </p>

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/recuperar-senha")({
-  head: () => ({ meta: [{ title: "Recuperar senha — Signix" }] }),
+  head: () => ({ meta: [{ title: "Recuperar senha — SigPlayer" }] }),
   component: RecoverPage,
 });
 
@@ -37,7 +37,7 @@ function RecoverPage() {
           <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
             <Tv className="h-5 w-5 text-primary-foreground" />
           </div>
-          <p className="font-display text-xl font-bold">Signix</p>
+          <p className="font-display text-xl font-bold">SigPlayer</p>
         </div>
         <h1 className="font-display text-2xl font-bold">Recuperar senha</h1>
         <p className="text-sm text-muted-foreground mt-1.5">

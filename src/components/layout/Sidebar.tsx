@@ -92,7 +92,7 @@ export function Sidebar() {
           <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-sidebar pulse-dot" />
         </div>
         <div className="flex flex-col leading-tight">
-          <span className="font-display text-lg font-bold tracking-tight">Signix</span>
+          <span className="font-display text-lg font-bold tracking-tight">SigPlayer</span>
           <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             Digital Signage
           </span>

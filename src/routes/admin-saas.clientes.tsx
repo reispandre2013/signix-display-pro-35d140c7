@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import type { SaasClient } from "@/types/saas";
 
 export const Route = createFileRoute("/admin-saas/clientes")({
-  head: () => ({ meta: [{ title: "Clientes — SaaS Signix" }] }),
+  head: () => ({ meta: [{ title: "Clientes — SaaS SigPlayer" }] }),
   component: ClientesPage,
 });
 

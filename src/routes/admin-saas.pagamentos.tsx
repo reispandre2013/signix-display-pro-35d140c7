@@ -36,7 +36,7 @@ function downloadReceipt(p: ReceiptPayment) {
     "",
     "------------------------------------------------",
     "Documento gerado automaticamente pela plataforma",
-    "Signix · " + format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR }),
+    "SigPlayer · " + format(new Date(), "dd/MM/yyyy HH:mm", { locale: ptBR }),
     "================================================",
     "",
   ].join("\n");
@@ -56,7 +56,7 @@ function downloadReceipt(p: ReceiptPayment) {
 const THIRTY_D = 30 * 86400000;
 
 export const Route = createFileRoute("/admin-saas/pagamentos")({
-  head: () => ({ meta: [{ title: "Pagamentos — SaaS Signix" }] }),
+  head: () => ({ meta: [{ title: "Pagamentos — SaaS SigPlayer" }] }),
   component: PagamentosPage,
 });
 

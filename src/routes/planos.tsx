@@ -9,13 +9,13 @@ import { useAuth } from "@/lib/auth-context";
 export const Route = createFileRoute("/planos")({
   head: () => ({
     meta: [
-      { title: "Planos — Signix Digital Signage" },
+      { title: "Planos — SigPlayer Digital Signage" },
       {
         name: "description",
         content:
           "Escolha o plano ideal para sua operação de digital signage. Telas, usuários e armazenamento sob medida.",
       },
-      { property: "og:title", content: "Planos — Signix Digital Signage" },
+      { property: "og:title", content: "Planos — SigPlayer Digital Signage" },
       {
         property: "og:description",
         content: "Escolha o plano ideal para sua operação de digital signage.",
@@ -42,7 +42,7 @@ function PlanosPublic() {
             <div className="h-9 w-9 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
               <Tv className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="font-display text-lg font-bold">Signix</span>
+            <span className="font-display text-lg font-bold">SigPlayer</span>
           </Link>
           <Link to="/login" className="text-sm font-medium hover:text-primary">
             Entrar
@@ -57,7 +57,7 @@ function PlanosPublic() {
             <div className="text-sm">
               <p className="font-semibold text-foreground">Falta um passo para acessar o painel.</p>
               <p className="text-muted-foreground mt-1">
-                A sua conta foi criada. Para entrar no painel e começar a usar o Signix, escolha um
+                A sua conta foi criada. Para entrar no painel e começar a usar o SigPlayer, escolha um
                 plano abaixo e conclua a assinatura.
               </p>
             </div>
@@ -235,7 +235,7 @@ function PlanosPublic() {
 
       <footer className="border-t border-border mt-16">
         <div className="max-w-6xl mx-auto px-6 py-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} Signix · Digital Signage SaaS
+          © {new Date().getFullYear()} SigPlayer · Digital Signage SaaS
         </div>
       </footer>
     </div>

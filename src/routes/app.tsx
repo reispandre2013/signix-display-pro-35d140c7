@@ -8,7 +8,7 @@ import { getCurrentSession } from "@/services/auth-service";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/app")({
-  head: () => ({ meta: [{ title: "Painel — Signix" }] }),
+  head: () => ({ meta: [{ title: "Painel — SigPlayer" }] }),
   beforeLoad: async () => {
     if (!hasSupabaseEnv) return;
 

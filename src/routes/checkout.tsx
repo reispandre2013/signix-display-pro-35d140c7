@@ -17,7 +17,7 @@ interface CheckoutSearch {
 }
 
 export const Route = createFileRoute("/checkout")({
-  head: () => ({ meta: [{ title: "Checkout — Signix" }] }),
+  head: () => ({ meta: [{ title: "Checkout — SigPlayer" }] }),
   validateSearch: (s: Record<string, unknown>): CheckoutSearch => ({
     plan: typeof s.plan === "string" ? s.plan : undefined,
     cycle: s.cycle === "yearly" ? "yearly" : "monthly",
@@ -156,7 +156,7 @@ function CheckoutPage() {
             <div className="h-8 w-8 rounded-lg bg-gradient-primary grid place-items-center shadow-glow">
               <Tv className="h-4 w-4 text-primary-foreground" />
             </div>
-            <span className="font-display font-bold">Signix</span>
+            <span className="font-display font-bold">SigPlayer</span>
           </div>
         </div>
       </header>

@@ -49,7 +49,7 @@ export const Route = createFileRoute("/player/web")({
     token: typeof raw.token === "string" ? raw.token : undefined,
     debug: raw.debug === "1" ? "1" : undefined,
   }),
-  head: () => ({ meta: [{ title: "Web Player — Signix" }] }),
+  head: () => ({ meta: [{ title: "Web Player — SigPlayer" }] }),
   component: WebPlayerRoute,
 });
 

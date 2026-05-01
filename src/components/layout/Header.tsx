@@ -34,7 +34,7 @@ const roleLabel: Record<string, string> = {
 
 export function Header() {
   const { pathname } = useLocation();
-  const title = breadcrumbs[pathname] ?? "Signix";
+  const title = breadcrumbs[pathname] ?? "SigPlayer";
   const { profile, user, signOut } = useAuth();
   const { role, label } = useRole();
   const navigate = useNavigate();
@@ -68,7 +68,7 @@ export function Header() {
       <div className="flex h-16 items-center gap-4 px-6">
         <div className="flex flex-col">
           <span className="text-[11px] uppercase tracking-widest text-muted-foreground">
-            Signix · Painel
+            SigPlayer · Painel
           </span>
           <h1 className="font-display text-base font-semibold leading-none">{title}</h1>
         </div>

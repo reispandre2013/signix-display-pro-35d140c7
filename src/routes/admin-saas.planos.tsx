@@ -13,7 +13,7 @@ import { formatPrice, type Plan } from "@/types/saas";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/admin-saas/planos")({
-  head: () => ({ meta: [{ title: "Planos — SaaS Signix" }] }),
+  head: () => ({ meta: [{ title: "Planos — SaaS SigPlayer" }] }),
   component: PlanosPage,
 });
 

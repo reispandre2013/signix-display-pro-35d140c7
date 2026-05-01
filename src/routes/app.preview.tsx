@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/app/preview")({
-  head: () => ({ meta: [{ title: "Preview de campanhas — Signix" }] }),
+  head: () => ({ meta: [{ title: "Preview de campanhas — SigPlayer" }] }),
   component: PreviewPage,
 });
 

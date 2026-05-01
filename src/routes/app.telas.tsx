@@ -45,7 +45,7 @@ import {
 } from "@/components/ui-kit/PlanLimitDialog";
 
 export const Route = createFileRoute("/app/telas")({
-  head: () => ({ meta: [{ title: "Dispositivos — Signix" }] }),
+  head: () => ({ meta: [{ title: "Dispositivos — SigPlayer" }] }),
   component: ScreensPage,
 });
 

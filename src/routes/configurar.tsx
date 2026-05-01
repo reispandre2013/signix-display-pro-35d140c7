@@ -12,7 +12,7 @@ import {
 export const Route = createFileRoute("/configurar")({
   head: () => ({
     meta: [
-      { title: "Configurar Supabase — Signix" },
+      { title: "Configurar Supabase — SigPlayer" },
       {
         name: "description",
         content: "Defina a URL e a anon key do Supabase para habilitar o login no preview.",
@@ -92,7 +92,7 @@ function ConfigurarPage() {
             <Tv className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <p className="font-display text-xl font-bold">Signix</p>
+            <p className="font-display text-xl font-bold">SigPlayer</p>
             <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
               Configuração de ambiente
             </p>

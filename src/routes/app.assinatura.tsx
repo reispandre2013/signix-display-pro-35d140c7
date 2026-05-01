@@ -35,7 +35,7 @@ import { withAuthHeader } from "@/lib/server/with-auth-header";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/assinatura")({
-  head: () => ({ meta: [{ title: "Minha assinatura — Signix" }] }),
+  head: () => ({ meta: [{ title: "Minha assinatura — SigPlayer" }] }),
   component: AssinaturaPage,
 });
 

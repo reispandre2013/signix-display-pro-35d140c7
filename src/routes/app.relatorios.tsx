@@ -19,7 +19,7 @@ import { Download, Filter, BarChart3 } from "lucide-react";
 import { format, subDays } from "date-fns";
 
 export const Route = createFileRoute("/app/relatorios")({
-  head: () => ({ meta: [{ title: "Relatórios — Signix" }] }),
+  head: () => ({ meta: [{ title: "Relatórios — SigPlayer" }] }),
   component: ReportsPage,
 });
 

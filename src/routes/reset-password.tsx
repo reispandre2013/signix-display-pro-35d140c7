@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/reset-password")({
-  head: () => ({ meta: [{ title: "Nova senha — Signix" }] }),
+  head: () => ({ meta: [{ title: "Nova senha — SigPlayer" }] }),
   component: ResetPasswordPage,
 });
 
@@ -38,7 +38,7 @@ function ResetPasswordPage() {
           <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
             <Tv className="h-5 w-5 text-primary-foreground" />
           </div>
-          <p className="font-display text-xl font-bold">Signix</p>
+          <p className="font-display text-xl font-bold">SigPlayer</p>
         </div>
         <h1 className="font-display text-2xl font-bold">Definir nova senha</h1>
         <p className="text-sm text-muted-foreground mt-1.5">

@@ -7,7 +7,7 @@ import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { useScreens, useCampaigns } from "@/lib/hooks/use-supabase-data";
 
 export const Route = createFileRoute("/app/visualizacao")({
-  head: () => ({ meta: [{ title: "Painel de Visualização — Signix" }] }),
+  head: () => ({ meta: [{ title: "Painel de Visualização — SigPlayer" }] }),
   component: VisualizacaoDashboard,
 });
 

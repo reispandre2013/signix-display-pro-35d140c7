@@ -28,7 +28,7 @@ import { getCurrentSession } from "@/services/auth-service";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin-saas")({
-  head: () => ({ meta: [{ title: "Painel SaaS — Signix" }] }),
+  head: () => ({ meta: [{ title: "Painel SaaS — SigPlayer" }] }),
   beforeLoad: async () => {
     if (!hasSupabaseEnv) return;
     const session = await getCurrentSession();
@@ -96,7 +96,7 @@ function AdminSaasLayout() {
             <Sparkles className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="font-display text-lg font-bold tracking-tight">Signix</span>
+            <span className="font-display text-lg font-bold tracking-tight">SigPlayer</span>
             <span className="text-[10px] uppercase tracking-[0.2em] text-primary">SaaS Admin</span>
           </div>
         </div>
@@ -146,7 +146,7 @@ function AdminSaasLayout() {
           <div className="flex h-16 items-center gap-4 px-6">
             <div className="flex flex-col">
               <span className="text-[11px] uppercase tracking-widest text-primary">
-                Signix · SaaS
+                SigPlayer · SaaS
               </span>
               <h1 className="font-display text-base font-semibold leading-none">
                 Administração da Plataforma

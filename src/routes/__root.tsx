@@ -62,11 +62,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Signix — Digital Signage Cloud" },
+      { title: "SigPlayer — Digital Signage Cloud" },
       {
         name: "description",
         content:
-          "Signix — plataforma SaaS de Digital Signage para gerenciar telas, playlists e campanhas em tempo real.",
+          "SigPlayer — plataforma SaaS de Digital Signage para gerenciar telas, playlists e campanhas em tempo real.",
       },
     ],
     links: [{ rel: "stylesheet", href: appCss }],

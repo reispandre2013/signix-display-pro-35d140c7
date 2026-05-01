@@ -15,8 +15,8 @@ export const Route = createFileRoute("/login")({
   }),
   head: () => ({
     meta: [
-      { title: "Entrar — Signix" },
-      { name: "description", content: "Acesse o painel Signix de Digital Signage." },
+      { title: "Entrar — SigPlayer" },
+      { name: "description", content: "Acesse o painel SigPlayer de Digital Signage." },
     ],
   }),
   component: LoginPage,
@@ -87,7 +87,7 @@ function LoginPage() {
             <Tv className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <p className="font-display text-xl font-bold">Signix</p>
+            <p className="font-display text-xl font-bold">SigPlayer</p>
             <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
               Digital Signage Cloud
             </p>
@@ -121,7 +121,7 @@ function LoginPage() {
         </div>
 
         <div className="relative text-xs text-muted-foreground">
-          © 2025 Signix · SaaS Enterprise
+          © 2025 SigPlayer · SaaS Enterprise
         </div>
       </div>
 
@@ -131,7 +131,7 @@ function LoginPage() {
             <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
               <Tv className="h-5 w-5 text-primary-foreground" />
             </div>
-            <p className="font-display text-xl font-bold">Signix</p>
+            <p className="font-display text-xl font-bold">SigPlayer</p>
           </div>
           <h2 className="font-display text-2xl font-bold">Bem-vindo de volta</h2>
           <p className="text-sm text-muted-foreground mt-1">Acesse seu painel administrativo.</p>

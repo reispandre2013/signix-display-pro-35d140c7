@@ -7,7 +7,7 @@ import { useCampaignSchedules } from "@/lib/hooks/use-supabase-data";
 import { CalendarClock, Clock, Repeat, Globe } from "lucide-react";
 
 export const Route = createFileRoute("/app/agendamentos")({
-  head: () => ({ meta: [{ title: "Agendamentos — Signix" }] }),
+  head: () => ({ meta: [{ title: "Agendamentos — SigPlayer" }] }),
   component: SchedulePage,
 });
 
