@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Tv, ArrowRight, Monitor, Activity, Megaphone, Shield } from "lucide-react";
+import { ArrowRight, Monitor, Activity, Megaphone, Shield } from "lucide-react";
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,8 +26,8 @@ function Landing() {
     <div className="min-h-screen bg-background bg-mesh flex flex-col">
       <header className="px-6 py-5 flex items-center justify-between max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2.5">
-          <div className="h-9 w-9 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
+          <div className="h-9 w-9 rounded-xl grid place-items-center shadow-glow overflow-hidden">
+            <img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" />
           </div>
           <span className="font-display text-lg font-bold">SigPlayer</span>
         </div>
