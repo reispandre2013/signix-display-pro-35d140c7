@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell } from "@/components/layout/AppShell";
+import { RouteGuard } from "@/components/auth/RouteGuard";
 import { useAuth } from "@/lib/auth-context";
 import { useRole } from "@/lib/use-role";
 import { hasSupabaseEnv } from "@/lib/supabase-client";
@@ -101,7 +102,9 @@ function AppLayout() {
 
   return (
     <AppShell>
-      <Outlet />
+      <RouteGuard>
+        <Outlet />
+      </RouteGuard>
     </AppShell>
   );
 }
