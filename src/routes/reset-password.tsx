@@ -1,6 +1,6 @@
 import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Tv, Lock, Loader2 } from "lucide-react";
+import { Lock, Loader2 } from "lucide-react";
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";

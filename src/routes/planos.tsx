@@ -1,7 +1,7 @@
 import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Star, Sparkles, ArrowRight, Tv, Loader2, Lock } from "lucide-react";
+import { Check, Star, Sparkles, ArrowRight, Loader2, Lock } from "lucide-react";
 import { usePublicPlans } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { cn } from "@/lib/utils";

@@ -1,7 +1,7 @@
 import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { RefreshCw, Tv, Wifi, Monitor, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
+import { RefreshCw, Wifi, Monitor, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
 import { activateWebPlayerByCode } from "@/lib/server/web-player.functions";
