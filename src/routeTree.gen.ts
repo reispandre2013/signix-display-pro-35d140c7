@@ -31,6 +31,7 @@ import { Route as AssinaturaRouteImport } from './routes/assinatura'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AdminSaasRouteImport } from './routes/admin-saas'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AcessoNegadoRouteImport } from './routes/acesso-negado'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AdminSaasIndexRouteImport } from './routes/admin-saas.index'
@@ -172,6 +173,11 @@ const AdminSaasRoute = AdminSaasRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AcessoNegadoRoute = AcessoNegadoRouteImport.update({
+  id: '/acesso-negado',
+  path: '/acesso-negado',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -337,6 +343,7 @@ const AdminSaasAssinaturasRoute = AdminSaasAssinaturasRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/acesso-negado': typeof AcessoNegadoRoute
   '/admin': typeof AdminRoute
   '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
@@ -393,6 +400,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acesso-negado': typeof AcessoNegadoRoute
   '/admin': typeof AdminRoute
   '/assinatura': typeof AssinaturaRoute
   '/assinaturas': typeof AssinaturasRoute
@@ -448,6 +456,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/acesso-negado': typeof AcessoNegadoRoute
   '/admin': typeof AdminRoute
   '/admin-saas': typeof AdminSaasRouteWithChildren
   '/app': typeof AppRouteWithChildren
@@ -506,6 +515,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/acesso-negado'
     | '/admin'
     | '/admin-saas'
     | '/app'
@@ -562,6 +572,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/acesso-negado'
     | '/admin'
     | '/assinatura'
     | '/assinaturas'
@@ -616,6 +627,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/acesso-negado'
     | '/admin'
     | '/admin-saas'
     | '/app'
@@ -673,6 +685,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AcessoNegadoRoute: typeof AcessoNegadoRoute
   AdminRoute: typeof AdminRoute
   AdminSaasRoute: typeof AdminSaasRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
@@ -852,6 +865,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acesso-negado': {
+      id: '/acesso-negado'
+      path: '/acesso-negado'
+      fullPath: '/acesso-negado'
+      preLoaderRoute: typeof AcessoNegadoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -1170,6 +1190,7 @@ const PlayerRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AcessoNegadoRoute: AcessoNegadoRoute,
   AdminRoute: AdminRoute,
   AdminSaasRoute: AdminSaasRouteWithChildren,
   AppRoute: AppRouteWithChildren,
