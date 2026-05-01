@@ -1,3 +1,4 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { useEffect, useState } from "react";
 import {
   Tv,

@@ -1,3 +1,4 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useEffect, useState } from "react";
 import { Tv, Database, Key, ArrowRight, Loader2, ExternalLink, Trash2 } from "lucide-react";

@@ -1,3 +1,4 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { RefreshCw, Tv, Wifi, Monitor, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
