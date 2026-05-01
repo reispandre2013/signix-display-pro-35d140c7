@@ -141,9 +141,9 @@ function PairingPage() {
     <div className="min-h-screen flex flex-col bg-background bg-mesh">
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
         <div className="flex items-center gap-2.5">
-          <div className="h-9 w-9 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <div className="h-9 w-9 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40">
+              <img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" />
+            </div>
           <span className="font-display text-lg font-bold">SigPlayer Player</span>
         </div>
         <Link

@@ -40,8 +40,8 @@ function PlanosPublic() {
       <header className="border-b border-border">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-              <Tv className="h-5 w-5 text-primary-foreground" />
+            <div className="h-9 w-9 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40">
+              <img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" />
             </div>
             <span className="font-display text-lg font-bold">SigPlayer</span>
           </Link>
