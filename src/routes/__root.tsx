@@ -69,7 +69,10 @@ export const Route = createRootRouteWithContext<RouterContext>()({
           "SigPlayer — plataforma SaaS de Digital Signage para gerenciar telas, playlists e campanhas em tempo real.",
       },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
+    links: [
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", type: "image/png", href: "/favicon.png" },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
