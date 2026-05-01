@@ -25,6 +25,7 @@ import {
 import { SidebarPlanCallout } from "./SidebarPlanCallout";
 import { cn } from "@/lib/utils";
 import { useRole, type ModuleKey } from "@/lib/use-role";
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 
 type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; module: ModuleKey };
 type Section = { title: string; items: NavItem[] };
@@ -87,12 +88,12 @@ export function Sidebar() {
   return (
     <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
       <div className="px-5 py-5 flex items-center gap-2.5 border-b border-sidebar-border">
-        <div className="relative h-9 w-9 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-          <Tv className="h-5 w-5 text-primary-foreground" />
+        <div className="relative h-9 w-9 rounded-xl grid place-items-center shadow-glow overflow-hidden">
+          <img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" />
           <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-success ring-2 ring-sidebar pulse-dot" />
         </div>
         <div className="flex flex-col leading-tight">
-          <span className="font-display text-lg font-bold tracking-tight">Signix</span>
+          <span className="font-display text-lg font-bold tracking-tight">SigPlayer</span>
           <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             Digital Signage
           </span>

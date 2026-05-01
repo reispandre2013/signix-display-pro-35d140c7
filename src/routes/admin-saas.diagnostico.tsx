@@ -22,7 +22,7 @@ import {
 } from "@/lib/server/saas-admin.functions";
 
 export const Route = createFileRoute("/admin-saas/diagnostico")({
-  head: () => ({ meta: [{ title: "Diagnóstico — SaaS Signix" }] }),
+  head: () => ({ meta: [{ title: "Diagnóstico — SaaS SigPlayer" }] }),
   component: DiagnosticoPage,
 });
 

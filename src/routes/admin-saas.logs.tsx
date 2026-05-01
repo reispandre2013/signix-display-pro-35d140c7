@@ -7,7 +7,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/admin-saas/logs")({
-  head: () => ({ meta: [{ title: "Logs — SaaS Signix" }] }),
+  head: () => ({ meta: [{ title: "Logs — SaaS SigPlayer" }] }),
   component: LogsPage,
 });
 

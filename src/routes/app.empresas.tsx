@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Building2, Globe, Save } from "lucide-react";
 
 export const Route = createFileRoute("/app/empresas")({
-  head: () => ({ meta: [{ title: "Empresa — Signix" }] }),
+  head: () => ({ meta: [{ title: "Empresa — SigPlayer" }] }),
   component: CompaniesPage,
 });
 

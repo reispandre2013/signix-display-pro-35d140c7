@@ -1,5 +1,6 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Tv, Mail, Lock, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Mail, Lock, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState, FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/auth-context";
@@ -15,8 +16,8 @@ export const Route = createFileRoute("/login")({
   }),
   head: () => ({
     meta: [
-      { title: "Entrar — Signix" },
-      { name: "description", content: "Acesse o painel Signix de Digital Signage." },
+      { title: "Entrar — SigPlayer" },
+      { name: "description", content: "Acesse o painel SigPlayer de Digital Signage." },
     ],
   }),
   component: LoginPage,
@@ -83,11 +84,9 @@ function LoginPage() {
       <div className="hidden lg:flex relative flex-col justify-between p-12 border-r border-border overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-transparent" />
         <div className="relative flex items-center gap-2.5">
-          <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
           <div>
-            <p className="font-display text-xl font-bold">Signix</p>
+            <p className="font-display text-xl font-bold">SigPlayer</p>
             <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
               Digital Signage Cloud
             </p>
@@ -121,17 +120,15 @@ function LoginPage() {
         </div>
 
         <div className="relative text-xs text-muted-foreground">
-          © 2025 Signix · SaaS Enterprise
+          © 2025 SigPlayer · SaaS Enterprise
         </div>
       </div>
 
       <div className="flex items-center justify-center p-6 lg:p-12">
         <div className="w-full max-w-sm">
           <div className="lg:hidden mb-8 flex items-center gap-2.5">
-            <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-              <Tv className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <p className="font-display text-xl font-bold">Signix</p>
+            <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
+            <p className="font-display text-xl font-bold">SigPlayer</p>
           </div>
           <h2 className="font-display text-2xl font-bold">Bem-vindo de volta</h2>
           <p className="text-sm text-muted-foreground mt-1">Acesse seu painel administrativo.</p>

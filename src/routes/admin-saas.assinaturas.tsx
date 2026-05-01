@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/admin-saas/assinaturas")({
-  head: () => ({ meta: [{ title: "Assinaturas — SaaS Signix" }] }),
+  head: () => ({ meta: [{ title: "Assinaturas — SaaS SigPlayer" }] }),
   component: AssinaturasPage,
 });
 

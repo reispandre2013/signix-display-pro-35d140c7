@@ -24,7 +24,7 @@ import { ptBR } from "date-fns/locale";
 import type { CampaignStatus } from "@/lib/db-types";
 
 export const Route = createFileRoute("/app/campanhas")({
-  head: () => ({ meta: [{ title: "Campanhas — Signix" }] }),
+  head: () => ({ meta: [{ title: "Campanhas — SigPlayer" }] }),
   component: CampaignsPage,
 });
 

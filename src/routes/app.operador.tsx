@@ -24,7 +24,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app/operador")({
-  head: () => ({ meta: [{ title: "Painel do Operador — Signix" }] }),
+  head: () => ({ meta: [{ title: "Painel do Operador — SigPlayer" }] }),
   component: OperadorDashboard,
 });
 

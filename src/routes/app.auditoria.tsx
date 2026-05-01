@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app/auditoria")({
-  head: () => ({ meta: [{ title: "Auditoria — Signix" }] }),
+  head: () => ({ meta: [{ title: "Auditoria — SigPlayer" }] }),
   component: AuditPage,
 });
 

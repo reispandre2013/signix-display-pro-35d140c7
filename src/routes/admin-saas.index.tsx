@@ -36,7 +36,7 @@ import { useMemo } from "react";
 import { CreateAdminMasterPanel } from "@/components/admin-saas/CreateAdminMasterPanel";
 
 export const Route = createFileRoute("/admin-saas/")({
-  head: () => ({ meta: [{ title: "Visão geral SaaS — Signix" }] }),
+  head: () => ({ meta: [{ title: "Visão geral SaaS — SigPlayer" }] }),
   component: SaasOverview,
 });
 

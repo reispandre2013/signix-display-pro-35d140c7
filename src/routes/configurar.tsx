@@ -1,6 +1,7 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { FormEvent, useEffect, useState } from "react";
-import { Tv, Database, Key, ArrowRight, Loader2, ExternalLink, Trash2 } from "lucide-react";
+import { Database, Key, ArrowRight, Loader2, ExternalLink, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   clearRuntimeSupabaseConfig,
@@ -12,7 +13,7 @@ import {
 export const Route = createFileRoute("/configurar")({
   head: () => ({
     meta: [
-      { title: "Configurar Supabase — Signix" },
+      { title: "Configurar Supabase — SigPlayer" },
       {
         name: "description",
         content: "Defina a URL e a anon key do Supabase para habilitar o login no preview.",
@@ -88,11 +89,9 @@ function ConfigurarPage() {
     <div className="min-h-screen bg-background bg-mesh flex items-center justify-center p-6">
       <div className="w-full max-w-xl">
         <div className="flex items-center gap-2.5 mb-8">
-          <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
           <div>
-            <p className="font-display text-xl font-bold">Signix</p>
+            <p className="font-display text-xl font-bold">SigPlayer</p>
             <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
               Configuração de ambiente
             </p>

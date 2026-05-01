@@ -1,3 +1,4 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
@@ -12,7 +13,7 @@ import {
 } from "@/player/player-storage-keys";
 
 export const Route = createFileRoute("/pareamento")({
-  head: () => ({ meta: [{ title: "Pareamento de Player — Signix" }] }),
+  head: () => ({ meta: [{ title: "Pareamento de Player — SigPlayer" }] }),
   validateSearch: (raw: Record<string, unknown>) => {
     const p = raw.platform;
     const platform = p === "tizen" || p === "android" ? p : undefined;
@@ -140,10 +141,10 @@ function PairingPage() {
     <div className="min-h-screen flex flex-col bg-background bg-mesh">
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
         <div className="flex items-center gap-2.5">
-          <div className="h-9 w-9 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <span className="font-display text-lg font-bold">Signix Player</span>
+          <div className="h-9 w-9 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40">
+              <img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" />
+            </div>
+          <span className="font-display text-lg font-bold">SigPlayer Player</span>
         </div>
         <Link
           to="/login"
@@ -192,7 +193,7 @@ function PairingPage() {
               <p className="mt-3 text-muted-foreground max-w-md mx-auto text-sm">
                 Acesse{" "}
                 <span className="text-foreground font-medium">Dispositivos › Novo dispositivo</span>{" "}
-                no painel Signix e informe o código exibido (o mesmo fluxo do{" "}
+                no painel SigPlayer e informe o código exibido (o mesmo fluxo do{" "}
                 <span className="text-foreground font-medium">player Tizen nativo</span>).
               </p>
 

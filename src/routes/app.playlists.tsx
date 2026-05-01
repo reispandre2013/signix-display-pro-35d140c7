@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/app/playlists")({
-  head: () => ({ meta: [{ title: "Playlists — Signix" }] }),
+  head: () => ({ meta: [{ title: "Playlists — SigPlayer" }] }),
   component: PlaylistsPage,
 });
 

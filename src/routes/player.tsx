@@ -6,7 +6,7 @@ import { applyMediaFallback, getMediaUrlCandidates } from "@/lib/media-url";
 import { PromoShowcase } from "@/components/player/PromoShowcase";
 
 export const Route = createFileRoute("/player")({
-  head: () => ({ meta: [{ title: "Player — Signix" }] }),
+  head: () => ({ meta: [{ title: "Player — SigPlayer" }] }),
   component: PlayerPage,
 });
 
@@ -86,7 +86,7 @@ function PlayerPage() {
       <div className="relative flex items-center justify-between p-6">
         <div className="flex items-center gap-2 rounded-full bg-black/40 backdrop-blur-md px-3 py-1.5 ring-1 ring-white/10">
           <Tv className="h-4 w-4 text-white/80" />
-          <span className="text-xs font-medium">Signix Player</span>
+          <span className="text-xs font-medium">SigPlayer Player</span>
           <span className="ml-2 inline-flex items-center gap-1 text-[10px] text-emerald-400">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 pulse-dot" /> ONLINE
           </span>

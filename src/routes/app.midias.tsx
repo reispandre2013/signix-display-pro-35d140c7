@@ -25,7 +25,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app/midias")({
-  head: () => ({ meta: [{ title: "Biblioteca de mídias — Signix" }] }),
+  head: () => ({ meta: [{ title: "Biblioteca de mídias — SigPlayer" }] }),
   component: MediaPage,
 });
 

@@ -1,3 +1,4 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Tv,
@@ -96,9 +97,7 @@ function SalesPage() {
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <a href="/" className="flex items-center gap-2.5">
-            <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-              <Tv className="h-5 w-5 text-primary-foreground" />
-            </div>
+            <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
             <div className="leading-tight">
               <span className="font-display text-lg font-bold block">SigPlayer</span>
               <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
@@ -590,9 +589,7 @@ function SalesPage() {
         <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-                <Tv className="h-5 w-5 text-primary-foreground" />
-              </div>
+              <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
               <span className="font-display text-lg font-bold">SigPlayer</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-md">

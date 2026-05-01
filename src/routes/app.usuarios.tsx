@@ -28,7 +28,7 @@ import {
 } from "@/components/ui-kit/PlanLimitDialog";
 
 export const Route = createFileRoute("/app/usuarios")({
-  head: () => ({ meta: [{ title: "Usuários e permissões — Signix" }] }),
+  head: () => ({ meta: [{ title: "Usuários e permissões — SigPlayer" }] }),
   component: UsersPage,
 });
 

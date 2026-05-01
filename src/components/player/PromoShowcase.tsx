@@ -1,3 +1,4 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { useEffect, useState } from "react";
 import {
   Tv,
@@ -68,7 +69,7 @@ const SLIDES: Slide[] = [
       </>
     ),
     subtitle:
-      "Varejo, food service e corporativo usam o Signix para transformar telas em canais de comunicação e venda.",
+      "Varejo, food service e corporativo usam o SigPlayer para transformar telas em canais de comunicação e venda.",
     bullets: [
       { icon: Store, label: "Varejo", desc: "Promoções e vitrines dinâmicas" },
       {
@@ -104,7 +105,7 @@ const SLIDES: Slide[] = [
       </>
     ),
     subtitle:
-      "Conheça o Signix e descubra como transformar cada display em um canal de comunicação inteligente.",
+      "Conheça o SigPlayer e descubra como transformar cada display em um canal de comunicação inteligente.",
     bullets: [
       { icon: Globe2, label: "signix-display-pro.lovable.app", desc: "Acesse e saiba mais" },
     ],
@@ -140,11 +141,9 @@ export function PromoShowcase() {
       {/* Top bar */}
       <div className="relative flex items-center justify-between p-6">
         <div className="flex items-center gap-2.5">
-          <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
           <div>
-            <p className="font-display text-lg font-bold leading-none">Signix</p>
+            <p className="font-display text-lg font-bold leading-none">SigPlayer</p>
             <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
               Digital Signage Cloud
             </p>

@@ -23,7 +23,7 @@ import { Plus, Layers, Trash2, ListVideo } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/grupos")({
-  head: () => ({ meta: [{ title: "Grupos de telas — Signix" }] }),
+  head: () => ({ meta: [{ title: "Grupos de telas — SigPlayer" }] }),
   component: GroupsPage,
 });
 

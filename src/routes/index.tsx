@@ -1,16 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Tv, ArrowRight, Monitor, Activity, Megaphone, Shield } from "lucide-react";
+import { ArrowRight, Monitor, Activity, Megaphone, Shield } from "lucide-react";
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Signix — Digital Signage Cloud para empresas" },
+      { title: "SigPlayer — Digital Signage Cloud para empresas" },
       {
         name: "description",
         content:
           "Gerencie Smart TVs, players e campanhas em todas as suas unidades a partir de um único painel premium.",
       },
-      { property: "og:title", content: "Signix — Digital Signage Cloud" },
+      { property: "og:title", content: "SigPlayer — Digital Signage Cloud" },
       {
         property: "og:description",
         content: "Plataforma SaaS para gestão de Indoor Smart TV e Digital Signage.",
@@ -25,10 +26,10 @@ function Landing() {
     <div className="min-h-screen bg-background bg-mesh flex flex-col">
       <header className="px-6 py-5 flex items-center justify-between max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2.5">
-          <div className="h-9 w-9 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
+          <div className="h-9 w-9 rounded-xl grid place-items-center shadow-glow overflow-hidden">
+            <img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" />
           </div>
-          <span className="font-display text-lg font-bold">Signix</span>
+          <span className="font-display text-lg font-bold">SigPlayer</span>
         </div>
         <div className="flex items-center gap-2">
           <Link
@@ -58,7 +59,7 @@ function Landing() {
             <span className="text-gradient">controlada em tempo real.</span>
           </h1>
           <p className="mt-5 text-base text-muted-foreground max-w-xl mx-auto">
-            Signix é a plataforma de Digital Signage para empresas que precisam orquestrar Smart
+            SigPlayer é a plataforma de Digital Signage para empresas que precisam orquestrar Smart
             TVs, Android TVs e players web em escala — com monitoramento, agendamento e relatórios.
           </p>
           <div className="mt-8 flex items-center justify-center gap-3">
@@ -97,7 +98,7 @@ function Landing() {
       </main>
 
       <footer className="px-6 py-6 text-center text-xs text-muted-foreground">
-        © 2025 Signix · Digital Signage Cloud
+        © 2025 SigPlayer · Digital Signage Cloud
       </footer>
     </div>
   );

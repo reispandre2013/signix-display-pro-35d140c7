@@ -1,6 +1,7 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { RefreshCw, Tv, Wifi, Monitor, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
+import { RefreshCw, Wifi, Monitor, CheckCircle2, AlertTriangle, Loader2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
 import { activateWebPlayerByCode } from "@/lib/server/web-player.functions";
@@ -11,7 +12,7 @@ const LS_WEB_PAIRING_CODE = "signix_web_pairing_code";
 const LS_WEB_PAIRING_EXP = "signix_web_pairing_exp";
 
 export const Route = createFileRoute("/pair")({
-  head: () => ({ meta: [{ title: "Pareamento Web Player — Signix" }] }),
+  head: () => ({ meta: [{ title: "Pareamento Web Player — SigPlayer" }] }),
   component: PairRouteComponent,
 });
 
@@ -162,8 +163,8 @@ function PairRouteComponent() {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Tv className="h-5 w-5 text-primary" />
-          <span className="font-display text-lg font-bold">Signix Web Player</span>
+          <img src={sigplayerLogo} alt="SigPlayer" className="h-7 w-7 object-contain" />
+          <span className="font-display text-lg font-bold">SigPlayer Web Player</span>
         </div>
         <Link to="/login" className="text-xs text-muted-foreground hover:text-foreground">
           Painel administrativo

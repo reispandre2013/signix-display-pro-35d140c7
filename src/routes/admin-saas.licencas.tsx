@@ -8,7 +8,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/admin-saas/licencas")({
-  head: () => ({ meta: [{ title: "Licenças — SaaS Signix" }] }),
+  head: () => ({ meta: [{ title: "Licenças — SaaS SigPlayer" }] }),
   component: LicencasPage,
 });
 

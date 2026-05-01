@@ -1,12 +1,13 @@
+import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Tv, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react";
 import { useState, FormEvent } from "react";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { registerPublicEmployee } from "@/lib/server/public-signup.functions";
 
 export const Route = createFileRoute("/signup")({
-  head: () => ({ meta: [{ title: "Criar conta — Signix" }] }),
+  head: () => ({ meta: [{ title: "Criar conta — SigPlayer" }] }),
   component: SignupPage,
 });
 
@@ -50,10 +51,8 @@ function SignupPage() {
     <div className="min-h-screen grid place-items-center bg-background bg-mesh p-6">
       <div className="w-full max-w-md">
         <div className="mb-8 flex items-center gap-2.5">
-          <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <p className="font-display text-xl font-bold">Signix</p>
+          <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
+          <p className="font-display text-xl font-bold">SigPlayer</p>
         </div>
         <h2 className="font-display text-2xl font-bold">Criar nova conta</h2>
         <p className="text-sm text-muted-foreground mt-1">

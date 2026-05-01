@@ -22,7 +22,7 @@ const LS_CODE = PLAYER_LS_PAIRING_CODE;
 const LS_SCREEN = PLAYER_LS_SCREEN_ID;
 
 export const Route = createFileRoute("/player-screen")({
-  head: () => ({ meta: [{ title: "Player — Signix" }] }),
+  head: () => ({ meta: [{ title: "Player — SigPlayer" }] }),
   validateSearch: (raw: Record<string, unknown>) => {
     const p = raw.platform;
     const platform = p === "tizen" || p === "android" ? p : undefined;
@@ -385,7 +385,7 @@ function PlayerScreenPage() {
         <div className="relative flex items-center justify-between p-4 md:p-6">
           <div className="flex items-center gap-2 rounded-full bg-black/50 backdrop-blur px-3 py-1.5 text-xs">
             <Tv className="h-4 w-4" />
-            <span className="font-medium">Signix</span>
+            <span className="font-medium">SigPlayer</span>
             <span className="text-white/50">·</span>
             <span className="truncate max-w-[40vw]">{campaignLabel || "Conteúdo"}</span>
           </div>

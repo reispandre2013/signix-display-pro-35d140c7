@@ -9,7 +9,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app/faturas")({
-  head: () => ({ meta: [{ title: "Faturas — Signix" }] }),
+  head: () => ({ meta: [{ title: "Faturas — SigPlayer" }] }),
   component: FaturasPage,
 });
 

@@ -16,7 +16,7 @@ import { useState, FormEvent } from "react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/unidades")({
-  head: () => ({ meta: [{ title: "Unidades — Signix" }] }),
+  head: () => ({ meta: [{ title: "Unidades — SigPlayer" }] }),
   component: UnitsPage,
 });
 

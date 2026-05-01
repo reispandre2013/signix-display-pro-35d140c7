@@ -10,7 +10,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app/alertas")({
-  head: () => ({ meta: [{ title: "Alertas e falhas — Signix" }] }),
+  head: () => ({ meta: [{ title: "Alertas e falhas — SigPlayer" }] }),
   component: AlertsPage,
 });
 

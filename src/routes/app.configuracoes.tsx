@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/app/configuracoes")({
-  head: () => ({ meta: [{ title: "Configurações — Signix" }] }),
+  head: () => ({ meta: [{ title: "Configurações — SigPlayer" }] }),
   component: SettingsPage,
 });
 

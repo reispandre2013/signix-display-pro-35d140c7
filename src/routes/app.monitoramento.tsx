@@ -22,7 +22,7 @@ import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app/monitoramento")({
-  head: () => ({ meta: [{ title: "Monitoramento — Signix" }] }),
+  head: () => ({ meta: [{ title: "Monitoramento — SigPlayer" }] }),
   component: MonitorPage,
 });
 

@@ -47,7 +47,7 @@ import { format, formatDistanceToNow, subDays } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/app/")({
-  head: () => ({ meta: [{ title: "Dashboard — Signix" }] }),
+  head: () => ({ meta: [{ title: "Dashboard — SigPlayer" }] }),
   component: Dashboard,
 });
 
