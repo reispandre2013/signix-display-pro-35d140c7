@@ -163,7 +163,7 @@ function PairRouteComponent() {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       <header className="border-b border-border px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Tv className="h-5 w-5 text-primary" />
+          <img src={sigplayerLogo} alt="SigPlayer" className="h-7 w-7 object-contain" />
           <span className="font-display text-lg font-bold">SigPlayer Web Player</span>
         </div>
         <Link to="/login" className="text-xs text-muted-foreground hover:text-foreground">
