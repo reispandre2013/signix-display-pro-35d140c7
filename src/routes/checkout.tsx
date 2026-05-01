@@ -154,9 +154,7 @@ function CheckoutPage() {
             <ArrowLeft className="h-4 w-4" /> Voltar para planos
           </Link>
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-gradient-primary grid place-items-center shadow-glow">
-              <Tv className="h-4 w-4 text-primary-foreground" />
-            </div>
+            <div className="h-8 w-8 rounded-lg grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
             <span className="font-display font-bold">SigPlayer</span>
           </div>
         </div>

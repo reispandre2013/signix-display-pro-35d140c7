@@ -36,9 +36,7 @@ function ResetPasswordPage() {
     <div className="min-h-screen grid place-items-center bg-background bg-mesh p-6">
       <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elegant">
         <div className="flex items-center gap-2.5 mb-6">
-          <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
           <p className="font-display text-xl font-bold">SigPlayer</p>
         </div>
         <h1 className="font-display text-2xl font-bold">Definir nova senha</h1>

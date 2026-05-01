@@ -89,9 +89,7 @@ function ConfigurarPage() {
     <div className="min-h-screen bg-background bg-mesh flex items-center justify-center p-6">
       <div className="w-full max-w-xl">
         <div className="flex items-center gap-2.5 mb-8">
-          <div className="h-10 w-10 rounded-xl bg-gradient-primary grid place-items-center shadow-glow">
-            <Tv className="h-5 w-5 text-primary-foreground" />
-          </div>
+          <div className="h-10 w-10 rounded-xl grid place-items-center shadow-glow overflow-hidden bg-background/40"><img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" /></div>
           <div>
             <p className="font-display text-xl font-bold">SigPlayer</p>
             <p className="text-[11px] uppercase tracking-widest text-muted-foreground">
