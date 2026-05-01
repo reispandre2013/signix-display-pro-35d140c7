@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { adminClient } from "../_shared/client.ts";
 import { readJson } from "../_shared/http.ts";
-import { sha256Hex } from "../_shared/device-auth.ts";
+import { assertDevicePlayerForScreen } from "../_shared/device-player-auth.ts";
 import { resolvePlaylistByScreenId } from "../_shared/resolve-playlist-edge.ts";
 
 const corsJsonHeaders: Record<string, string> = {
@@ -50,25 +50,20 @@ serve(async (req) => {
       return jsonResponse({ error: "device_id e auth_token são obrigatórios." }, 400);
     }
 
-    const { data: dev, error: devErr } = await adminClient
-      .from("player_devices")
-      .select("id, screen_id, auth_secret_hash, pairing_status")
-      .eq("id", deviceId)
-      .maybeSingle();
-
-    if (devErr) return jsonResponse({ error: devErr.message }, 400);
-    if (!dev?.screen_id) return jsonResponse({ error: "Dispositivo não encontrado." }, 404);
-
-    const presentedHash = await sha256Hex(authToken);
-    if (!dev.auth_secret_hash || dev.auth_secret_hash !== presentedHash) {
-      return jsonResponse({ error: "Token inválido ou revogado." }, 401);
-    }
-    if (dev.pairing_status !== "active") {
-      return jsonResponse({ error: "Dispositivo pendente de novo pareamento." }, 403);
+    let devRow: { screen_id: string; device_row_id: string };
+    try {
+      devRow = await assertDevicePlayerForScreen(adminClient, deviceId, authToken);
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : "Erro ao validar dispositivo.";
+      let st = 400;
+      if (msg.includes("inválido") || msg.includes("revogado")) st = 401;
+      else if (msg.includes("pendente")) st = 403;
+      else if (msg.includes("não encontrado")) st = 404;
+      return jsonResponse({ error: msg }, st);
     }
 
     const now = new Date().toISOString();
-    const result = await resolvePlaylistByScreenId(adminClient, dev.screen_id as string);
+    const result = await resolvePlaylistByScreenId(adminClient, devRow.screen_id);
     const playlistId =
       result.payload && typeof result.payload === "object" && "playlist_id" in result.payload
         ? ((result.payload as { playlist_id?: string | null }).playlist_id ?? null)
@@ -81,11 +76,11 @@ serve(async (req) => {
         playlist_id: playlistId,
         updated_at: now,
       })
-      .eq("id", dev.id);
+      .eq("id", devRow.device_row_id);
 
     return jsonResponse({
       ...result,
-      device_id: dev.id,
+      device_id: devRow.device_row_id,
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";

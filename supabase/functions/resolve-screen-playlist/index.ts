@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { adminClient } from "../_shared/client.ts";
 import { readJson } from "../_shared/http.ts";
+import { accessControlHeaders } from "../_shared/cors-env.ts";
+import { assertDevicePlayerForScreen } from "../_shared/device-player-auth.ts";
 import { resolvePlaylistByScreenId } from "../_shared/resolve-playlist-edge.ts";
 
 type ResolvePayload = {
@@ -9,16 +11,19 @@ type ResolvePayload = {
   pairingCode?: string | null;
   pairing_code?: string | null;
   code?: string | null;
+  device_id?: string | null;
+  deviceId?: string | null;
+  auth_token?: string | null;
+  authToken?: string | null;
 };
 
-const corsJsonHeaders: Record<string, string> = {
-  "Content-Type": "application/json; charset=utf-8",
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
+function jsonHeaders(req: Request): Record<string, string> {
+  const h = accessControlHeaders(req, "POST, OPTIONS");
+  return { ...h, "Content-Type": "application/json; charset=utf-8" };
+}
 
-function jsonResponse(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: corsJsonHeaders });
+function jsonResponse(req: Request, body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), { status, headers: jsonHeaders(req) });
 }
 
 function normalizeScreenId(raw: string | null | undefined): string {
@@ -76,26 +81,59 @@ async function resolveScreenIdFromInput(body: ResolvePayload): Promise<string> {
   return legacyScreenId;
 }
 
+function legacyScreenUuidBlocked(req: Request, body: ResolvePayload): boolean {
+  if (Deno.env.get("DENY_LEGACY_SCREEN_UUID_RESOLVE") !== "true") return false;
+
+  const hadDirectUuid = Boolean(normalizeScreenId(body.screenId ?? body.screen_id ?? null));
+  const hadPairingInput = Boolean(
+    normalizeCode(body.pairingCode ?? body.pairing_code ?? body.code ?? null),
+  );
+  const deviceId = String(body.device_id ?? body.deviceId ?? "").trim();
+  const authToken = String(body.auth_token ?? body.authToken ?? "").trim();
+  const hadDevice = Boolean(deviceId && authToken);
+
+  return hadDirectUuid && !hadPairingInput && !hadDevice;
+}
+
 serve(async (req) => {
+  const cors = accessControlHeaders(req, "POST, OPTIONS");
+
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-      },
-    });
+    return new Response(null, { status: 204, headers: cors });
   }
-  if (req.method !== "POST") return jsonResponse({ error: "Method not allowed" }, 405);
+  if (req.method !== "POST") {
+    return jsonResponse(req, { error: "Method not allowed" }, 405);
+  }
 
   try {
     const body = await readJson<ResolvePayload>(req).catch(() => ({}) as ResolvePayload);
-    const screenId = await resolveScreenIdFromInput(body);
+
+    const deviceId = String(body.device_id ?? body.deviceId ?? "").trim();
+    const authToken = String(body.auth_token ?? body.authToken ?? "").trim();
+
+    let screenId = "";
+
+    if (deviceId && authToken) {
+      const dev = await assertDevicePlayerForScreen(adminClient, deviceId, authToken);
+      screenId = dev.screen_id;
+    } else {
+      if (legacyScreenUuidBlocked(req, body)) {
+        return jsonResponse(
+          req,
+          {
+            error:
+              "Resolução só com screenId está desativada neste ambiente. Use pareamento/código ou device_id + auth_token.",
+          },
+          403,
+        );
+      }
+      screenId = await resolveScreenIdFromInput(body);
+    }
+
     const result = await resolvePlaylistByScreenId(adminClient, screenId);
-    return jsonResponse(result);
+    return jsonResponse(req, result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
-    return jsonResponse({ error: message }, 400);
+    return jsonResponse(req, { error: message }, 400);
   }
 });
