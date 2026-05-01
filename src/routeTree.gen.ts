@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VendasRouteImport } from './routes/vendas'
 import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
@@ -63,6 +64,11 @@ import { Route as AdminSaasDiagnosticoRouteImport } from './routes/admin-saas.di
 import { Route as AdminSaasClientesRouteImport } from './routes/admin-saas.clientes'
 import { Route as AdminSaasAssinaturasRouteImport } from './routes/admin-saas.assinaturas'
 
+const VendasRoute = VendasRouteImport.update({
+  id: '/vendas',
+  path: '/vendas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -352,6 +358,7 @@ export interface FileRoutesByFullPath {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/vendas': typeof VendasRoute
   '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
   '/admin-saas/clientes': typeof AdminSaasClientesRoute
   '/admin-saas/diagnostico': typeof AdminSaasDiagnosticoRoute
@@ -405,6 +412,7 @@ export interface FileRoutesByTo {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/vendas': typeof VendasRoute
   '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
   '/admin-saas/clientes': typeof AdminSaasClientesRoute
   '/admin-saas/diagnostico': typeof AdminSaasDiagnosticoRoute
@@ -461,6 +469,7 @@ export interface FileRoutesById {
   '/recuperar-senha': typeof RecuperarSenhaRoute
   '/reset-password': typeof ResetPasswordRoute
   '/signup': typeof SignupRoute
+  '/vendas': typeof VendasRoute
   '/admin-saas/assinaturas': typeof AdminSaasAssinaturasRoute
   '/admin-saas/clientes': typeof AdminSaasClientesRoute
   '/admin-saas/diagnostico': typeof AdminSaasDiagnosticoRoute
@@ -518,6 +527,7 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/vendas'
     | '/admin-saas/assinaturas'
     | '/admin-saas/clientes'
     | '/admin-saas/diagnostico'
@@ -571,6 +581,7 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/vendas'
     | '/admin-saas/assinaturas'
     | '/admin-saas/clientes'
     | '/admin-saas/diagnostico'
@@ -626,6 +637,7 @@ export interface FileRouteTypes {
     | '/recuperar-senha'
     | '/reset-password'
     | '/signup'
+    | '/vendas'
     | '/admin-saas/assinaturas'
     | '/admin-saas/clientes'
     | '/admin-saas/diagnostico'
@@ -682,11 +694,19 @@ export interface RootRouteChildren {
   RecuperarSenhaRoute: typeof RecuperarSenhaRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignupRoute: typeof SignupRoute
+  VendasRoute: typeof VendasRoute
   DisplayTokenRoute: typeof DisplayTokenRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vendas': {
+      id: '/vendas'
+      path: '/vendas'
+      fullPath: '/vendas'
+      preLoaderRoute: typeof VendasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/signup': {
       id: '/signup'
       path: '/signup'
@@ -1171,6 +1191,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecuperarSenhaRoute: RecuperarSenhaRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignupRoute: SignupRoute,
+  VendasRoute: VendasRoute,
   DisplayTokenRoute: DisplayTokenRoute,
 }
 export const routeTree = rootRouteImport

@@ -11,7 +11,6 @@ import {
   MonitorPlay,
   CalendarClock,
   CloudUpload,
-  Smartphone,
   Globe2,
   Sparkles,
   ShieldCheck,
