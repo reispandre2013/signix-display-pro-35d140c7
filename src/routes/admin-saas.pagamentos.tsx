@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { reconcileAllAsaasPayments } from "@/lib/server/saas-admin.functions";
+import { withAuthHeader } from "@/lib/server/with-auth-header";
 
 type ReceiptPayment = {
   id: string;
