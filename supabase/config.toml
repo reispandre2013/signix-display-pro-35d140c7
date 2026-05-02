@@ -6,3 +6,12 @@ enabled = true
 
 [db]
 major_version = 17
+
+# Webhook do Asaas: precisa ser publico (sem JWT). A propria funcao valida
+# `asaas-access-token` e/ou `x-webhook-secret`, alem de exigir Authorization
+# do utilizador quando o token nao bate (fluxo de reconciliacao manual).
+[functions.payment-webhook]
+verify_jwt = false
+
+# Validacao da config Asaas: chamada por utilizador autenticado a partir do app.
+# Mantem JWT activo por padrao (nao precisa de override).

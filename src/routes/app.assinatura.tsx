@@ -29,7 +29,9 @@ import { useServerFn } from "@tanstack/react-start";
 import {
   reconcileAsaasPayments,
   validateAsaasConfig,
+  checkPaymentWebhookHealth,
   type AsaasValidationResult,
+  type WebhookHealthResult,
 } from "@/lib/server/billing.functions";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
 import { toast } from "sonner";
@@ -48,9 +50,39 @@ function AssinaturaPage() {
   const queryClient = useQueryClient();
   const reconcileFn = useServerFn(reconcileAsaasPayments);
   const validateFn = useServerFn(validateAsaasConfig);
+  const webhookHealthFn = useServerFn(checkPaymentWebhookHealth);
   const [syncing, setSyncing] = useState(false);
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<AsaasValidationResult | null>(null);
+  const [checkingWebhook, setCheckingWebhook] = useState(false);
+  const [webhookHealth, setWebhookHealth] = useState<WebhookHealthResult | null>(null);
+
+  const runWebhookCheck = async (): Promise<WebhookHealthResult | null> => {
+    setCheckingWebhook(true);
+    try {
+      const r = await webhookHealthFn();
+      setWebhookHealth(r);
+      return r;
+    } catch (e) {
+      const err: WebhookHealthResult = {
+        ok: false,
+        status: 0,
+        publicly_accessible: false,
+        webhook_url: "",
+        message: e instanceof Error ? e.message : "Falha ao testar webhook.",
+      };
+      setWebhookHealth(err);
+      return err;
+    } finally {
+      setCheckingWebhook(false);
+    }
+  };
+
+  const handleCheckWebhook = async () => {
+    const r = await runWebhookCheck();
+    if (r?.ok) toast.success(r.message);
+    else if (r) toast.error(r.message, { duration: 12000 });
+  };
 
   const runValidation = async (): Promise<AsaasValidationResult | null> => {
     setValidating(true);
@@ -328,6 +360,11 @@ function AssinaturaPage() {
               validating={validating}
               onValidate={handleValidate}
             />
+            <WebhookHealthCheck
+              health={webhookHealth}
+              checking={checkingWebhook}
+              onCheck={handleCheckWebhook}
+            />
             <button
               type="button"
               onClick={handleSync}
@@ -501,6 +538,79 @@ function AsaasConfigCheck({
           className="shrink-0 text-[11px] rounded border border-border bg-background px-2 py-1 hover:bg-surface disabled:opacity-60"
         >
           {validating ? "…" : "Validar"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function WebhookHealthCheck({
+  health,
+  checking,
+  onCheck,
+}: {
+  health: WebhookHealthResult | null;
+  checking: boolean;
+  onCheck: () => void;
+}) {
+  let Icon: ComponentType<{ className?: string }> = ShieldQuestion;
+  let tone = "border-border bg-muted/30 text-muted-foreground";
+  let title = "Webhook Asaas não verificado";
+  let detail =
+    "Clique em “Testar” para confirmar se o Asaas consegue chamar o endpoint que registra os pagamentos.";
+
+  if (checking) {
+    Icon = Loader2;
+    tone = "border-primary/30 bg-primary/5 text-foreground";
+    title = "Testando webhook…";
+    detail = "Simulando uma chamada anônima como o Asaas faz.";
+  } else if (health) {
+    if (health.ok) {
+      Icon = ShieldCheck;
+      tone = "border-success/40 bg-success/10 text-foreground";
+      title = "Webhook acessível — Asaas consegue notificar";
+      detail = health.message;
+    } else {
+      Icon = ShieldAlert;
+      tone = "border-destructive/40 bg-destructive/10 text-foreground";
+      title = "Webhook BLOQUEADO — pagamentos não atualizam sozinhos";
+      detail = health.message;
+    }
+  }
+
+  return (
+    <div className={`rounded-md border ${tone} px-3 py-2.5`}>
+      <div className="flex items-start gap-2">
+        <Icon className={`h-4 w-4 mt-0.5 ${checking ? "animate-spin text-primary" : ""}`} />
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium">{title}</p>
+          <p className="mt-0.5 text-[11px] text-muted-foreground break-words">{detail}</p>
+          {health && !checking && (
+            <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+              <dt>URL</dt>
+              <dd className="font-mono break-all">{health.webhook_url || "—"}</dd>
+              <dt>HTTP</dt>
+              <dd className="font-mono">{health.status || "—"}</dd>
+              {!health.ok && (
+                <>
+                  <dt className="text-warning">Como corrigir</dt>
+                  <dd className="text-warning">
+                    Faça redeploy da Edge Function <code>payment-webhook</code> com{" "}
+                    <code>--no-verify-jwt</code>. Em paralelo, use “Sincronizar pagamento” abaixo
+                    para registar manualmente os pagamentos pendentes.
+                  </dd>
+                </>
+              )}
+            </dl>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={onCheck}
+          disabled={checking}
+          className="shrink-0 text-[11px] rounded border border-border bg-background px-2 py-1 hover:bg-surface disabled:opacity-60"
+        >
+          {checking ? "…" : "Testar"}
         </button>
       </div>
     </div>

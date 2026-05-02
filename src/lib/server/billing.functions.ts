@@ -312,3 +312,67 @@ export const validateAsaasConfig = createServerFn({ method: "POST" }).handler(
     }
   },
 );
+
+/**
+ * Verifica se o endpoint `payment-webhook` aceita chamadas anonimas
+ * (como faz o Asaas). Se devolver 401 do gateway, significa que a Edge
+ * Function ainda exige JWT — Asaas nao consegue chamar e o pagamento
+ * nunca e' registado automaticamente.
+ */
+export type WebhookHealthResult = {
+  ok: boolean;
+  status: number;
+  publicly_accessible: boolean;
+  message: string;
+  details?: string;
+  webhook_url: string;
+};
+
+export const checkPaymentWebhookHealth = createServerFn({ method: "POST" }).handler(
+  async (): Promise<WebhookHealthResult> => {
+    const url = `${SUPABASE_URL}/functions/v1/payment-webhook`;
+    try {
+      // Chamada anonima (sem Authorization, sem apikey) — exatamente como o Asaas faz.
+      const r = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ping: 1 }),
+      });
+      const text = await r.text();
+      const looksLikeGateway401 =
+        r.status === 401 &&
+        (text.includes("UNAUTHORIZED_NO_AUTH_HEADER") ||
+          text.includes("Missing authorization header") ||
+          text.includes("Invalid JWT"));
+      if (looksLikeGateway401) {
+        return {
+          ok: false,
+          status: r.status,
+          publicly_accessible: false,
+          webhook_url: url,
+          message:
+            "Webhook bloqueado pelo Supabase (exige JWT). O Asaas nao consegue chamar este endpoint, por isso os pagamentos nao sao registados automaticamente. Faca redeploy da funcao `payment-webhook` com `--no-verify-jwt` (o config.toml ja esta correto).",
+          details: text.slice(0, 240),
+        };
+      }
+      // Qualquer 2xx/4xx vindo da propria funcao (ex.: 400 'Invalid JSON' ou 200) significa que e' acessivel.
+      return {
+        ok: true,
+        status: r.status,
+        publicly_accessible: true,
+        webhook_url: url,
+        message: `Webhook acessivel publicamente (HTTP ${r.status}). Asaas consegue entregar eventos.`,
+        details: text.slice(0, 200),
+      };
+    } catch (e) {
+      return {
+        ok: false,
+        status: 0,
+        publicly_accessible: false,
+        webhook_url: url,
+        message: "Falha ao testar o webhook.",
+        details: e instanceof Error ? e.message : String(e),
+      };
+    }
+  },
+);
