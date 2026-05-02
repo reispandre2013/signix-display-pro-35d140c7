@@ -107,6 +107,7 @@ const DEFAULT_PERMISSIONS: Record<EffectiveRole, ModuleKey[]> = {
     "dashboard",
     "monitoramento",
     "telas",
+    "grupos",
     "midias",
     "playlists",
     "campanhas",
@@ -114,6 +115,7 @@ const DEFAULT_PERMISSIONS: Record<EffectiveRole, ModuleKey[]> = {
     "preview",
     "relatorios",
     "alertas",
+    "faturas",
   ],
   visualizador: ["dashboard", "monitoramento", "telas", "campanhas", "relatorios", "alertas"],
 };
@@ -138,7 +140,7 @@ export function useRole() {
       if (role === "visualizador") return false;
       if (role === "operador") {
         // operador edita apenas conteúdo operacional
-        return ["midias", "playlists", "campanhas", "agendamentos"].includes(m);
+        return ["telas", "grupos", "midias", "playlists", "campanhas", "agendamentos"].includes(m);
       }
       return allowed.has(m);
     },
