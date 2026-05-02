@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/midias")({
   head: () => ({ meta: [{ title: "Biblioteca de mídias — SigPlayer" }] }),
