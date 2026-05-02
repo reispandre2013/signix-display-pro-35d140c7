@@ -140,7 +140,7 @@ export function useRole() {
       if (role === "visualizador") return false;
       if (role === "operador") {
         // operador edita apenas conteúdo operacional
-        return ["midias", "playlists", "campanhas", "agendamentos"].includes(m);
+        return ["telas", "grupos", "midias", "playlists", "campanhas", "agendamentos"].includes(m);
       }
       return allowed.has(m);
     },
