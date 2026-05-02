@@ -115,7 +115,7 @@ export const claimPairingCode = createServerFn({ method: "POST" })
       .maybeSingle();
     if (profileErr) throw new Error(profileErr.message);
     if (!profile) throw new Error("Perfil não encontrado.");
-    if (profile.role !== "admin_master" && profile.role !== "gestor")
+    if (profile.role !== "admin_master" && profile.role !== "gestor" && profile.role !== "operador")
       throw new Error("Sem permissão para parear telas.");
 
     const orgId = profile.organization_id as string;
