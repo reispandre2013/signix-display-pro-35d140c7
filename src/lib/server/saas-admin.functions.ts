@@ -446,3 +446,239 @@ export const createAdminMaster = createServerFn({ method: "POST" })
       };
     },
   );
+
+// ============================================================================
+// Reconciliação GLOBAL de pagamentos Asaas (super_admin)
+// Itera sobre todas as organizações com checkout_session Asaas, lista os
+// pagamentos no Asaas e reenvia eventos pendentes ao payment-webhook.
+// ============================================================================
+
+type AsaasPaymentLite = {
+  id: string;
+  status?: string;
+  subscription?: string | null;
+  value?: number;
+  customer?: string;
+  dueDate?: string | null;
+  paymentDate?: string | null;
+  confirmedDate?: string;
+};
+
+function asaasEventForStatusGlobal(status: string): string | null {
+  const s = (status || "").toUpperCase();
+  if (s === "RECEIVED" || s === "RECEIVED_IN_CASH" || s === "DUNNING_RECEIVED")
+    return "PAYMENT_RECEIVED";
+  if (s === "CONFIRMED") return "PAYMENT_CONFIRMED";
+  if (s === "OVERDUE") return "PAYMENT_OVERDUE";
+  if (s === "REFUNDED" || s === "CHARGEBACK") return "PAYMENT_REFUNDED";
+  return null;
+}
+
+export type GlobalAsaasReconcileResult = {
+  ok: boolean;
+  message: string;
+  organizations_checked: number;
+  subscriptions_checked: number;
+  payments_found: number;
+  events_dispatched: number;
+  already_synced: number;
+  errors: string[];
+  per_org?: Array<{
+    organization_id: string;
+    asaas_subscription_id: string;
+    payments_found: number;
+    dispatched: number;
+    already_synced: number;
+    error?: string;
+  }>;
+};
+
+export const reconcileAllAsaasPayments = createServerFn({ method: "POST" }).handler(
+  async (): Promise<GlobalAsaasReconcileResult> => {
+    mustEnv();
+    const user = await getAuthedUser();
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    await assertSuperAdmin(admin, user.id);
+
+    const asaasKey = process.env.ASAAS_API_KEY?.trim();
+    const asaasBase =
+      (process.env.ASAAS_API_BASE?.trim() || "").replace(/\/$/, "") ||
+      ((process.env.ASAAS_ENV ?? "").toLowerCase() === "production"
+        ? "https://api.asaas.com"
+        : "https://api-sandbox.asaas.com");
+
+    if (!asaasKey) {
+      return {
+        ok: false,
+        message: "ASAAS_API_KEY não configurada no servidor.",
+        organizations_checked: 0,
+        subscriptions_checked: 0,
+        payments_found: 0,
+        events_dispatched: 0,
+        already_synced: 0,
+        errors: ["ASAAS_API_KEY ausente"],
+      };
+    }
+
+    // Pega a checkout_session mais recente de CADA organização que usa Asaas.
+    const { data: sessions, error: sErr } = await admin
+      .from("checkout_sessions")
+      .select("id, organization_id, external_checkout_id, created_at")
+      .eq("payment_provider", "asaas")
+      .not("external_checkout_id", "is", null)
+      .order("created_at", { ascending: false });
+
+    if (sErr) {
+      return {
+        ok: false,
+        message: `Erro ao listar checkout_sessions: ${sErr.message}`,
+        organizations_checked: 0,
+        subscriptions_checked: 0,
+        payments_found: 0,
+        events_dispatched: 0,
+        already_synced: 0,
+        errors: [sErr.message],
+      };
+    }
+
+    // Mantém apenas a subscription mais recente por organização
+    const latestByOrg = new Map<string, { subId: string; orgId: string }>();
+    for (const s of sessions ?? []) {
+      const orgId = (s as { organization_id?: string }).organization_id;
+      const subId = (s as { external_checkout_id?: string }).external_checkout_id;
+      if (!orgId || !subId) continue;
+      if (!latestByOrg.has(orgId)) latestByOrg.set(orgId, { subId, orgId });
+    }
+
+    const errors: string[] = [];
+    const perOrg: GlobalAsaasReconcileResult["per_org"] = [];
+    let paymentsFound = 0;
+    let dispatchedTotal = 0;
+    let alreadyTotal = 0;
+    let subsChecked = 0;
+
+    const webhookUrl = `${SUPABASE_URL}/functions/v1/payment-webhook`;
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+    };
+    if (ANON) {
+      headers.apikey = ANON;
+      headers.Authorization = `Bearer ${ANON}`;
+    }
+    const asaasToken = process.env.ASAAS_WEBHOOK_TOKEN?.trim();
+    if (asaasToken) headers["asaas-access-token"] = asaasToken;
+    const webhookSecret = process.env.PAYMENT_WEBHOOK_SECRET?.trim();
+    if (webhookSecret) headers["x-webhook-secret"] = webhookSecret;
+
+    for (const { subId, orgId } of latestByOrg.values()) {
+      subsChecked++;
+      let payments: AsaasPaymentLite[] = [];
+      try {
+        const r = await fetch(
+          `${asaasBase}/v3/subscriptions/${encodeURIComponent(subId)}/payments?limit=50&offset=0`,
+          { method: "GET", headers: { access_token: asaasKey } },
+        );
+        const text = await r.text();
+        if (!r.ok) {
+          const msg = `org ${orgId} sub ${subId}: HTTP ${r.status} ${text.slice(0, 120)}`;
+          errors.push(msg);
+          perOrg.push({
+            organization_id: orgId,
+            asaas_subscription_id: subId,
+            payments_found: 0,
+            dispatched: 0,
+            already_synced: 0,
+            error: msg,
+          });
+          continue;
+        }
+        const parsed = JSON.parse(text || "{}") as { data?: AsaasPaymentLite[] };
+        payments = parsed.data ?? [];
+      } catch (e) {
+        const msg = `org ${orgId} sub ${subId}: ${e instanceof Error ? e.message : String(e)}`;
+        errors.push(msg);
+        perOrg.push({
+          organization_id: orgId,
+          asaas_subscription_id: subId,
+          payments_found: 0,
+          dispatched: 0,
+          already_synced: 0,
+          error: msg,
+        });
+        continue;
+      }
+
+      paymentsFound += payments.length;
+      let dispatched = 0;
+      let alreadySynced = 0;
+
+      for (const pay of payments) {
+        const event = asaasEventForStatusGlobal(pay.status ?? "");
+        if (!event) continue;
+
+        const { data: existing } = await admin
+          .from("payments")
+          .select("id")
+          .eq("payment_provider", "asaas")
+          .eq("external_payment_id", pay.id)
+          .maybeSingle();
+
+        if (existing) {
+          alreadySynced++;
+          continue;
+        }
+
+        const body = {
+          id: `admin-global-reconcile-${pay.id}-${Date.now()}`,
+          event,
+          payment: { ...pay, subscription: pay.subscription ?? subId },
+        };
+
+        try {
+          const r = await fetch(webhookUrl, {
+            method: "POST",
+            headers,
+            body: JSON.stringify(body),
+          });
+          const txt = await r.text();
+          if (!r.ok) {
+            errors.push(`org ${orgId} pagto ${pay.id}: HTTP ${r.status} ${txt.slice(0, 120)}`);
+          } else {
+            dispatched++;
+          }
+        } catch (e) {
+          errors.push(
+            `org ${orgId} pagto ${pay.id}: ${e instanceof Error ? e.message : String(e)}`,
+          );
+        }
+      }
+
+      dispatchedTotal += dispatched;
+      alreadyTotal += alreadySynced;
+      perOrg.push({
+        organization_id: orgId,
+        asaas_subscription_id: subId,
+        payments_found: payments.length,
+        dispatched,
+        already_synced: alreadySynced,
+      });
+    }
+
+    return {
+      ok: errors.length === 0,
+      message:
+        errors.length === 0
+          ? `${subsChecked} subscription(s) verificada(s). ${dispatchedTotal} evento(s) sincronizado(s); ${alreadyTotal} já estavam ok.`
+          : `${subsChecked} subscription(s) verificada(s). ${dispatchedTotal} sincronizado(s), ${alreadyTotal} já ok, ${errors.length} erro(s).`,
+      organizations_checked: latestByOrg.size,
+      subscriptions_checked: subsChecked,
+      payments_found: paymentsFound,
+      events_dispatched: dispatchedTotal,
+      already_synced: alreadyTotal,
+      errors,
+      per_org: perOrg,
+    };
+  },
+);
