@@ -140,6 +140,8 @@ function PagamentosPage() {
     <div className="space-y-6">
       <PageHeader title="Pagamentos e faturas" subtitle="Movimentação financeira da plataforma." />
 
+      <GlobalAsaasSyncCard />
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <KpiCard
           label="Recebido (30d)"
