@@ -290,13 +290,13 @@ function GlobalAsaasSyncCard() {
             <strong>Já estavam ok:</strong> {result.already_synced}
           </div>
           {result.errors.length > 0 && (
-            <details className="mt-2">
+            <details className="mt-2" open>
               <summary className="cursor-pointer text-destructive">
                 {result.errors.length} erro(s)
               </summary>
-              <ul className="mt-1 space-y-0.5 text-[11px] text-muted-foreground">
+              <ul className="mt-1 space-y-1 text-[11px] text-muted-foreground break-all">
                 {result.errors.slice(0, 20).map((e, i) => (
-                  <li key={i}>• {e}</li>
+                  <li key={i} className="font-mono">• {e}</li>
                 ))}
               </ul>
             </details>
