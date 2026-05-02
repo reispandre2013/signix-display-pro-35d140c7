@@ -559,16 +559,21 @@ export const reconcileAllAsaasPayments = createServerFn({ method: "POST" }).hand
     let alreadyTotal = 0;
     let subsChecked = 0;
 
+    // Token do super_admin que disparou a sincronização — o webhook valida
+    // via resolveRequesterAuth (Authorization Bearer). Não enviamos
+    // asaas-access-token aqui porque o valor configurado serve para o Asaas,
+    // não para chamadas internas, e gera "Invalid asaas-access-token" no webhook.
+    const requesterAuth = getRequestHeader("authorization") ?? "";
     const webhookUrl = `${SUPABASE_URL}/functions/v1/payment-webhook`;
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
-    if (ANON) {
-      headers.apikey = ANON;
+    if (ANON) headers.apikey = ANON;
+    if (requesterAuth) {
+      headers.Authorization = requesterAuth;
+    } else if (ANON) {
       headers.Authorization = `Bearer ${ANON}`;
     }
-    const asaasToken = process.env.ASAAS_WEBHOOK_TOKEN?.trim();
-    if (asaasToken) headers["asaas-access-token"] = asaasToken;
     const webhookSecret = process.env.PAYMENT_WEBHOOK_SECRET?.trim();
     if (webhookSecret) headers["x-webhook-secret"] = webhookSecret;
 
