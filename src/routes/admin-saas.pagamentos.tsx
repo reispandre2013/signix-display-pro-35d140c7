@@ -240,7 +240,7 @@ function GlobalAsaasSyncCard() {
     setLoading(true);
     setResult(null);
     try {
-      const r = await sync();
+      const r = await withAuthHeader(() => sync());
       setResult(r);
       if (r.ok) {
         toast.success(r.message);
