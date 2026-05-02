@@ -107,6 +107,7 @@ const DEFAULT_PERMISSIONS: Record<EffectiveRole, ModuleKey[]> = {
     "dashboard",
     "monitoramento",
     "telas",
+    "grupos",
     "midias",
     "playlists",
     "campanhas",
@@ -114,6 +115,7 @@ const DEFAULT_PERMISSIONS: Record<EffectiveRole, ModuleKey[]> = {
     "preview",
     "relatorios",
     "alertas",
+    "faturas",
   ],
   visualizador: ["dashboard", "monitoramento", "telas", "campanhas", "relatorios", "alertas"],
 };
