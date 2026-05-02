@@ -456,7 +456,8 @@ function MediaPage() {
                     <div className="flex items-start justify-between gap-1.5">
                       <p className="text-xs font-medium truncate flex-1">{m.name}</p>
                       <button
-                        onClick={() => confirm("Remover mídia?") && remove.mutate(m.id)}
+                        onClick={() => handleDelete(m.id, m.name)}
+                        disabled={remove.isPending}
                         className="h-5 w-5 grid place-items-center rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive shrink-0"
                       >
                         <Trash2 className="h-3 w-3" />
