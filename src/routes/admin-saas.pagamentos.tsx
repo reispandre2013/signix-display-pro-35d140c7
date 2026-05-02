@@ -220,3 +220,88 @@ function PagamentosPage() {
     </div>
   );
 }
+
+function GlobalAsaasSyncCard() {
+  const sync = useServerFn(reconcileAllAsaasPayments);
+  const qc = useQueryClient();
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<{
+    message: string;
+    organizations_checked: number;
+    subscriptions_checked: number;
+    events_dispatched: number;
+    already_synced: number;
+    payments_found: number;
+    errors: string[];
+  } | null>(null);
+
+  async function run() {
+    setLoading(true);
+    setResult(null);
+    try {
+      const r = await sync();
+      setResult(r);
+      if (r.ok) {
+        toast.success(r.message);
+      } else {
+        toast.error(r.message);
+      }
+      await qc.invalidateQueries();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao sincronizar.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Panel title="Sincronização global Asaas">
+      <div className="flex flex-col md:flex-row md:items-center gap-4 justify-between">
+        <div className="text-sm text-muted-foreground max-w-2xl">
+          Consulta a API do Asaas para todas as organizações com checkout ativo e reenvia ao
+          webhook qualquer pagamento recebido/confirmado que ainda não tenha sido registrado na
+          plataforma. Use quando o webhook automático falhar.
+        </div>
+        <button
+          type="button"
+          onClick={run}
+          disabled={loading}
+          className="inline-flex items-center justify-center gap-2 rounded-md bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:opacity-90 disabled:opacity-50"
+        >
+          {loading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4" />
+          )}
+          {loading ? "Sincronizando…" : "Sincronizar todos os pagamentos"}
+        </button>
+      </div>
+
+      {result && (
+        <div className="mt-4 rounded-md border border-border bg-surface/50 p-3 text-xs space-y-1">
+          <div>
+            <strong>Organizações:</strong> {result.organizations_checked} ·{" "}
+            <strong>Subscriptions:</strong> {result.subscriptions_checked} ·{" "}
+            <strong>Pagamentos no Asaas:</strong> {result.payments_found}
+          </div>
+          <div>
+            <strong>Novos sincronizados:</strong> {result.events_dispatched} ·{" "}
+            <strong>Já estavam ok:</strong> {result.already_synced}
+          </div>
+          {result.errors.length > 0 && (
+            <details className="mt-2">
+              <summary className="cursor-pointer text-destructive">
+                {result.errors.length} erro(s)
+              </summary>
+              <ul className="mt-1 space-y-0.5 text-[11px] text-muted-foreground">
+                {result.errors.slice(0, 20).map((e, i) => (
+                  <li key={i}>• {e}</li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </div>
+      )}
+    </Panel>
+  );
+}
