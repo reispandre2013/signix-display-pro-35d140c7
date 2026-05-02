@@ -360,6 +360,11 @@ function AssinaturaPage() {
               validating={validating}
               onValidate={handleValidate}
             />
+            <WebhookHealthCheck
+              health={webhookHealth}
+              checking={checkingWebhook}
+              onCheck={handleCheckWebhook}
+            />
             <button
               type="button"
               onClick={handleSync}
