@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/app/midias")({
   head: () => ({ meta: [{ title: "Biblioteca de mídias — SigPlayer" }] }),
@@ -155,6 +156,52 @@ function MediaPage() {
   });
 
   const filtered = media.filter((m) => m.name.toLowerCase().includes(search.toLowerCase()));
+
+  const handleDelete = async (mediaId: string, mediaName: string) => {
+    // Verifica vínculos com playlists e campanhas
+    const [{ data: playlistRefs }, { data: campaignRefs }] = await Promise.all([
+      supabase
+        .from("playlist_items")
+        .select("id, playlist_id, playlists(name)")
+        .eq("media_asset_id", mediaId),
+      supabase
+        .from("campaigns")
+        .select("id, name")
+        .eq("media_asset_id", mediaId),
+    ]);
+
+    const playlistCount = playlistRefs?.length ?? 0;
+    const campaignCount = campaignRefs?.length ?? 0;
+
+    let message = `Remover a mídia "${mediaName}"?`;
+    if (playlistCount > 0 || campaignCount > 0) {
+      const parts: string[] = [];
+      if (playlistCount > 0) parts.push(`${playlistCount} playlist(s)`);
+      if (campaignCount > 0) parts.push(`${campaignCount} campanha(s)`);
+      message = `Esta mídia está sendo usada em ${parts.join(" e ")}.\n\nAo remover, ela também será desvinculada destes itens. Deseja continuar?`;
+    }
+
+    if (!confirm(message)) return;
+
+    try {
+      // Remove vínculos primeiro (playlist_items tem ON DELETE RESTRICT)
+      if (playlistCount > 0) {
+        const { error: plErr } = await supabase
+          .from("playlist_items")
+          .delete()
+          .eq("media_asset_id", mediaId);
+        if (plErr) throw plErr;
+      }
+      // Campanhas usam SET NULL automaticamente, mas garantimos
+      await remove.mutateAsync(mediaId);
+      toast.success("Mídia removida com sucesso.");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Erro desconhecido";
+      toast.error(`Falha ao remover mídia: ${msg}`);
+      console.error("Delete media error:", err);
+    }
+  };
+
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -409,7 +456,8 @@ function MediaPage() {
                     <div className="flex items-start justify-between gap-1.5">
                       <p className="text-xs font-medium truncate flex-1">{m.name}</p>
                       <button
-                        onClick={() => confirm("Remover mídia?") && remove.mutate(m.id)}
+                        onClick={() => handleDelete(m.id, m.name)}
+                        disabled={remove.isPending}
                         className="h-5 w-5 grid place-items-center rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive shrink-0"
                       >
                         <Trash2 className="h-3 w-3" />
