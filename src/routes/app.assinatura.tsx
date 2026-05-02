@@ -50,9 +50,39 @@ function AssinaturaPage() {
   const queryClient = useQueryClient();
   const reconcileFn = useServerFn(reconcileAsaasPayments);
   const validateFn = useServerFn(validateAsaasConfig);
+  const webhookHealthFn = useServerFn(checkPaymentWebhookHealth);
   const [syncing, setSyncing] = useState(false);
   const [validating, setValidating] = useState(false);
   const [validation, setValidation] = useState<AsaasValidationResult | null>(null);
+  const [checkingWebhook, setCheckingWebhook] = useState(false);
+  const [webhookHealth, setWebhookHealth] = useState<WebhookHealthResult | null>(null);
+
+  const runWebhookCheck = async (): Promise<WebhookHealthResult | null> => {
+    setCheckingWebhook(true);
+    try {
+      const r = await webhookHealthFn();
+      setWebhookHealth(r);
+      return r;
+    } catch (e) {
+      const err: WebhookHealthResult = {
+        ok: false,
+        status: 0,
+        publicly_accessible: false,
+        webhook_url: "",
+        message: e instanceof Error ? e.message : "Falha ao testar webhook.",
+      };
+      setWebhookHealth(err);
+      return err;
+    } finally {
+      setCheckingWebhook(false);
+    }
+  };
+
+  const handleCheckWebhook = async () => {
+    const r = await runWebhookCheck();
+    if (r?.ok) toast.success(r.message);
+    else if (r) toast.error(r.message, { duration: 12000 });
+  };
 
   const runValidation = async (): Promise<AsaasValidationResult | null> => {
     setValidating(true);
