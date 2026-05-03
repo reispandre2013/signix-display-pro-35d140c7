@@ -47,12 +47,11 @@ function FaturasPage() {
       <PageHeader title="Faturas" subtitle="Histórico completo de cobranças da sua assinatura." />
 
       {subscription && (
-        <Panel
-          title="Próxima renovação"
-          icon={<CalendarClock className="h-4 w-4 text-primary" />}
-        >
+        <Panel title="Próxima renovação">
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
+            <div className="flex items-start gap-3">
+              <CalendarClock className="h-5 w-5 text-primary mt-0.5" />
+              <div>
               <div className="text-xs text-muted-foreground">
                 Plano {subscription.plan?.name ?? "—"} ·{" "}
                 {subscription.billing_cycle === "yearly" ? "Anual" : "Mensal"}
