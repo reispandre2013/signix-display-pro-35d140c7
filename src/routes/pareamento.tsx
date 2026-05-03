@@ -189,18 +189,32 @@ function PairingPage() {
               <h1 className="mt-6 font-display text-3xl lg:text-4xl font-bold leading-tight">
                 Tudo pronto!
                 <br />
-                Abra o modo exibição para sincronizar a playlist.
+                {autoStartIn !== null && autoStartIn > 0 && !autoStartCancelled
+                  ? `Iniciando playlist em ${autoStartIn}s…`
+                  : "Abra o modo exibição para sincronizar a playlist."}
               </h1>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link
                   to="/player-screen"
+                  search={{ platform: playerPlatform === "tizen" ? "tizen" : undefined }}
                   className="inline-flex items-center gap-2 rounded-lg bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow"
                 >
-                  <Tv className="h-4 w-4" /> Abrir player (sync)
+                  <Tv className="h-4 w-4" /> Abrir player agora
                 </Link>
+                {autoStartIn !== null && autoStartIn > 0 && !autoStartCancelled && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAutoStartCancelled(true);
+                      setAutoStartIn(null);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm hover:bg-accent transition-smooth"
+                  >
+                    Cancelar autoarranque
+                  </button>
+                )}
                 <span className="text-xs text-muted-foreground max-w-xs">
-                  Android TV, Tizen ou browser: mesma URL. Tizen: use{" "}
-                  <code className="text-foreground">?platform=tizen</code> no pareamento.
+                  Android TV, Tizen ou browser: mesma URL.
                 </span>
               </div>
             </>
