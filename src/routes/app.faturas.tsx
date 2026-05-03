@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Receipt, Download, Loader2 } from "lucide-react";
+import { Receipt, Download, Loader2, CalendarClock } from "lucide-react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
+import { RenewalCountdown } from "@/components/ui-kit/RenewalCountdown";
 import { useOrgBillingContext, useOrgInvoices } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { format } from "date-fns";
@@ -14,9 +15,10 @@ export const Route = createFileRoute("/app/faturas")({
 });
 
 function FaturasPage() {
-  const { isMissingTables, isLoading: loadingCtx } = useOrgBillingContext();
+  const { data: bundle, isMissingTables, isLoading: loadingCtx } = useOrgBillingContext();
   const { data: invoices = [], isLoading: loadingInv } = useOrgInvoices();
   const loading = loadingCtx || loadingInv;
+  const subscription = bundle?.subscription ?? null;
 
   if (isMissingTables) {
     return (
