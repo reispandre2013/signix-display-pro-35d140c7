@@ -40,6 +40,8 @@ function PairingPage() {
   const [autoStartIn, setAutoStartIn] = useState<number | null>(null);
   const [autoStartCancelled, setAutoStartCancelled] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     void initAndroidTvShell();
   }, []);
@@ -77,6 +79,22 @@ function PairingPage() {
   };
 
   useEffect(() => {
+    // Se já existe pareamento concluído (credenciais persistentes), vai direto pro player.
+    // Estas credenciais NÃO expiram — só são apagadas com "Re-parear" / "Novo código".
+    const existingScreen = localStorage.getItem(PLAYER_LS_SCREEN_ID);
+    const existingDevice = localStorage.getItem(PLAYER_LS_DEVICE_ID);
+    const existingToken = localStorage.getItem(PLAYER_LS_AUTH_TOKEN);
+    if (existingScreen && existingDevice && existingToken) {
+      setLoading(false);
+      void navigate({
+        to: "/player-screen",
+        search: { platform: playerPlatform === "tizen" ? "tizen" : undefined },
+        replace: true,
+      });
+      return;
+    }
+
+    // Caso contrário, reaproveita código pendente (se ainda válido) ou gera novo.
     const stored = localStorage.getItem(STORAGE_KEY);
     const storedExp = localStorage.getItem(STORAGE_EXP_KEY);
     const stillValid = stored && storedExp && new Date(storedExp).getTime() > Date.now() + 30_000;
@@ -86,11 +104,9 @@ function PairingPage() {
     } else {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(STORAGE_EXP_KEY);
-      localStorage.removeItem(PLAYER_LS_SCREEN_ID);
-      localStorage.removeItem(PLAYER_LS_DEVICE_ID);
-      localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
       generateCode();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerPlatform]);
 
   // Polling: checa via server function (admin) se código foi vinculado.
@@ -138,8 +154,6 @@ function PairingPage() {
       cancelled = true;
     };
   }, [paired, code]);
-
-  const navigate = useNavigate();
 
   // Autoarranque: 5s após pareamento confirmado, abre o player automaticamente.
   useEffect(() => {
