@@ -218,8 +218,13 @@ function PlayerScreenPage() {
     const cur = items[idx];
     const mime = (cur?.mime_type ?? "").toLowerCase();
     const isVid = cur?.media_type === "video" || mime.includes("video");
-    if (isVid) return;
     const dur = Math.max(5, (cur?.duration_seconds ?? 8) as number);
+    if (isVid) {
+      // Watchdog: avança se o vídeo travar (não dispara onEnded por algum motivo).
+      const maxMs = Math.max(dur * 2, 60) * 1000;
+      const wd = setTimeout(() => setIdx((i) => (i + 1) % items.length), maxMs);
+      return () => clearTimeout(wd);
+    }
     const timer = setInterval(() => setIdx((i) => (i + 1) % items.length), dur * 1000);
     return () => clearInterval(timer);
   }, [items, idx, canSync]);
