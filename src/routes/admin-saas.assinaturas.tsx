@@ -66,6 +66,7 @@ function AssinaturasPage() {
                 <th className="px-3 py-2 font-medium">Valor</th>
                 <th className="px-3 py-2 font-medium">Início do período</th>
                 <th className="px-3 py-2 font-medium">Próxima cobrança</th>
+                <th className="px-3 py-2 font-medium">Faltam</th>
                 <th className="px-3 py-2 font-medium">Último pagamento</th>
                 <th className="px-5 py-2 font-medium text-right">Ações</th>
               </tr>
