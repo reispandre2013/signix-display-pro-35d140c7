@@ -356,13 +356,40 @@ function PlayerScreenPage() {
         {isVideo && urls[0] ? (
           <video
             key={current!.id}
+            ref={(el) => {
+              if (!el) return;
+              el.muted = true;
+              el.defaultMuted = true;
+              el.setAttribute("muted", "");
+              el.setAttribute("playsinline", "");
+              el.setAttribute("webkit-playsinline", "");
+              el.setAttribute("disablepictureinpicture", "");
+              el.setAttribute("disableremoteplayback", "");
+              const tryPlay = () => {
+                const p = el.play();
+                if (p && typeof p.catch === "function") {
+                  p.catch(() => {
+                    // tenta novamente após pequeno atraso (alguns WebViews exigem)
+                    setTimeout(() => void el.play().catch(() => undefined), 250);
+                  });
+                }
+              };
+              tryPlay();
+            }}
             className={`w-full h-full ${ofit}`}
             style={fitStyle}
             src={urls[0]}
             autoPlay
             muted
             playsInline
+            preload="auto"
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+            onCanPlay={(e) => void e.currentTarget.play().catch(() => undefined)}
+            onLoadedData={(e) => void e.currentTarget.play().catch(() => undefined)}
             onEnded={() => setIdx((i) => (i + 1) % items.length)}
+            onError={() => setIdx((i) => (i + 1) % items.length)}
           />
         ) : (
           <img
