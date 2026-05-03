@@ -180,11 +180,57 @@ export function useOrgInvoices() {
         .select("*")
         .eq("organization_id", orgId!)
         .order("issued_at", { ascending: false });
-      if (error) {
-        if (isMissingRelation(error, "invoices")) return [];
+      if (error && !isMissingRelation(error, "invoices")) {
         throw new Error(error.message);
       }
-      return (data ?? []).map((r) => mapInvoiceRow(r));
+      const invoices = (data ?? []).map((r) => mapInvoiceRow(r));
+
+      // Fallback: pagamentos pagos sem invoice associada (ainda não sincronizados).
+      const { data: pays } = await supabase
+        .from("payments")
+        .select(
+          "id, organization_id, subscription_id, amount_cents, status, paid_at, created_at, method, payment_provider, external_payment_id, invoice_id",
+        )
+        .eq("organization_id", orgId!)
+        .in("status", ["paid", "succeeded"])
+        .order("paid_at", { ascending: false });
+
+      const linkedExt = new Set(
+        invoices
+          .map((i) => i.number ?? "")
+          .filter((n) => n.startsWith("ASAAS-"))
+          .map((n) => n.replace(/^ASAAS-/, "")),
+      );
+
+      const synthetic: Invoice[] = (pays ?? [])
+        .filter((p) => {
+          const ext = String((p as { external_payment_id?: string }).external_payment_id ?? "");
+          const hasInvoice = (p as { invoice_id?: string | null }).invoice_id != null;
+          return !hasInvoice && (!ext || !linkedExt.has(ext));
+        })
+        .map((p) =>
+          mapInvoiceRow({
+            id: `pay-${(p as { id: string }).id}`,
+            organization_id: (p as { organization_id: string }).organization_id,
+            subscription_id: (p as { subscription_id?: string | null }).subscription_id ?? null,
+            number: (p as { external_payment_id?: string }).external_payment_id
+              ? `PAY-${(p as { external_payment_id: string }).external_payment_id}`
+              : null,
+            status: "paid",
+            amount_cents: Number((p as { amount_cents?: number }).amount_cents ?? 0),
+            currency: "BRL",
+            issued_at:
+              (p as { paid_at?: string }).paid_at ?? (p as { created_at?: string }).created_at,
+            due_at: null,
+            paid_at: (p as { paid_at?: string }).paid_at ?? null,
+            payment_method: (p as { method?: string }).method ?? null,
+            pdf_url: null,
+          }),
+        );
+
+      const all = [...invoices, ...synthetic];
+      all.sort((a, b) => new Date(b.issued_at).getTime() - new Date(a.issued_at).getTime());
+      return all;
     },
     staleTime: 30_000,
   });

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
+import { RenewalCountdown } from "@/components/ui-kit/RenewalCountdown";
 import {
   useSaaSAllSubscriptions,
   type SubscriptionsTableRow,
@@ -65,6 +66,7 @@ function AssinaturasPage() {
                 <th className="px-3 py-2 font-medium">Valor</th>
                 <th className="px-3 py-2 font-medium">Início do período</th>
                 <th className="px-3 py-2 font-medium">Próxima cobrança</th>
+                <th className="px-3 py-2 font-medium">Faltam</th>
                 <th className="px-3 py-2 font-medium">Último pagamento</th>
                 <th className="px-5 py-2 font-medium text-right">Ações</th>
               </tr>
@@ -72,7 +74,7 @@ function AssinaturasPage() {
             <tbody className="divide-y divide-border">
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-5 py-8 text-center text-sm text-muted-foreground">
+                  <td colSpan={10} className="px-5 py-8 text-center text-sm text-muted-foreground">
                     Nenhuma assinatura registrada.
                   </td>
                 </tr>
@@ -107,6 +109,9 @@ function AssinaturasPage() {
                       {c.current_period_end
                         ? format(new Date(c.current_period_end), "dd/MM/yy", { locale: ptBR })
                         : "—"}
+                    </td>
+                    <td className="px-3 py-3">
+                      <RenewalCountdown endsAt={c.current_period_end} compact />
                     </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
                       {c.last_paid
@@ -176,6 +181,12 @@ function AssinaturasPage() {
               />
               <DetailRow label="ID da assinatura" value={selected.id} mono />
               <DetailRow label="ID da organização" value={selected.org_id} mono />
+              <div className="col-span-2 rounded-md border border-border bg-surface/40 p-3">
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
+                  Tempo até a renovação
+                </div>
+                <RenewalCountdown endsAt={selected.current_period_end} />
+              </div>
             </div>
           )}
           <DialogFooter>

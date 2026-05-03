@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Receipt, Download, Loader2 } from "lucide-react";
+import { Receipt, Download, Loader2, CalendarClock } from "lucide-react";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { Panel } from "@/components/ui-kit/Panel";
 import { StatusBadge } from "@/components/ui-kit/StatusBadge";
+import { RenewalCountdown } from "@/components/ui-kit/RenewalCountdown";
 import { useOrgBillingContext, useOrgInvoices } from "@/lib/hooks/use-saas-data";
 import { formatPrice } from "@/types/saas";
 import { format } from "date-fns";
@@ -14,9 +15,10 @@ export const Route = createFileRoute("/app/faturas")({
 });
 
 function FaturasPage() {
-  const { isMissingTables, isLoading: loadingCtx } = useOrgBillingContext();
+  const { data: bundle, isMissingTables, isLoading: loadingCtx } = useOrgBillingContext();
   const { data: invoices = [], isLoading: loadingInv } = useOrgInvoices();
   const loading = loadingCtx || loadingInv;
+  const subscription = bundle?.subscription ?? null;
 
   if (isMissingTables) {
     return (
@@ -43,6 +45,31 @@ function FaturasPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Faturas" subtitle="Histórico completo de cobranças da sua assinatura." />
+
+      {subscription && (
+        <Panel title="Próxima renovação">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <CalendarClock className="h-5 w-5 text-primary mt-0.5" />
+              <div>
+              <div className="text-xs text-muted-foreground">
+                Plano {subscription.plan?.name ?? "—"} ·{" "}
+                {subscription.billing_cycle === "yearly" ? "Anual" : "Mensal"}
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground">
+                Renova em{" "}
+                <span className="font-medium text-foreground">
+                  {format(new Date(subscription.current_period_end), "dd/MM/yyyy", {
+                    locale: ptBR,
+                  })}
+                </span>
+              </div>
+              </div>
+            </div>
+            <RenewalCountdown endsAt={subscription.current_period_end} />
+          </div>
+        </Panel>
+      )}
 
       <Panel title={`${invoices.length} faturas`}>
         <div className="overflow-x-auto -mx-5">
