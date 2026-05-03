@@ -40,6 +40,8 @@ function PairingPage() {
   const [autoStartIn, setAutoStartIn] = useState<number | null>(null);
   const [autoStartCancelled, setAutoStartCancelled] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     void initAndroidTvShell();
   }, []);
