@@ -218,8 +218,13 @@ function PlayerScreenPage() {
     const cur = items[idx];
     const mime = (cur?.mime_type ?? "").toLowerCase();
     const isVid = cur?.media_type === "video" || mime.includes("video");
-    if (isVid) return;
     const dur = Math.max(5, (cur?.duration_seconds ?? 8) as number);
+    if (isVid) {
+      // Watchdog: avança se o vídeo travar (não dispara onEnded por algum motivo).
+      const maxMs = Math.max(dur * 2, 60) * 1000;
+      const wd = setTimeout(() => setIdx((i) => (i + 1) % items.length), maxMs);
+      return () => clearTimeout(wd);
+    }
     const timer = setInterval(() => setIdx((i) => (i + 1) % items.length), dur * 1000);
     return () => clearInterval(timer);
   }, [items, idx, canSync]);
@@ -356,13 +361,40 @@ function PlayerScreenPage() {
         {isVideo && urls[0] ? (
           <video
             key={current!.id}
+            ref={(el) => {
+              if (!el) return;
+              el.muted = true;
+              el.defaultMuted = true;
+              el.setAttribute("muted", "");
+              el.setAttribute("playsinline", "");
+              el.setAttribute("webkit-playsinline", "");
+              el.setAttribute("disablepictureinpicture", "");
+              el.setAttribute("disableremoteplayback", "");
+              const tryPlay = () => {
+                const p = el.play();
+                if (p && typeof p.catch === "function") {
+                  p.catch(() => {
+                    // tenta novamente após pequeno atraso (alguns WebViews exigem)
+                    setTimeout(() => void el.play().catch(() => undefined), 250);
+                  });
+                }
+              };
+              tryPlay();
+            }}
             className={`w-full h-full ${ofit}`}
             style={fitStyle}
             src={urls[0]}
             autoPlay
             muted
             playsInline
+            preload="auto"
+            controls={false}
+            disablePictureInPicture
+            disableRemotePlayback
+            onCanPlay={(e) => void e.currentTarget.play().catch(() => undefined)}
+            onLoadedData={(e) => void e.currentTarget.play().catch(() => undefined)}
             onEnded={() => setIdx((i) => (i + 1) % items.length)}
+            onError={() => setIdx((i) => (i + 1) % items.length)}
           />
         ) : (
           <img
