@@ -139,6 +139,29 @@ function PairingPage() {
     };
   }, [paired, code]);
 
+  const navigate = useNavigate();
+
+  // Autoarranque: 5s após pareamento confirmado, abre o player automaticamente.
+  useEffect(() => {
+    if (!paired || autoStartCancelled) return;
+    setAutoStartIn(5);
+    const tick = setInterval(() => {
+      setAutoStartIn((s) => {
+        if (s === null) return s;
+        if (s <= 1) {
+          clearInterval(tick);
+          void navigate({
+            to: "/player-screen",
+            search: { platform: playerPlatform === "tizen" ? "tizen" : undefined },
+          });
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => clearInterval(tick);
+  }, [paired, autoStartCancelled, navigate, playerPlatform]);
+
   return (
     <div className="min-h-screen flex flex-col bg-background bg-mesh">
       <div className="flex items-center justify-between px-6 py-4 border-b border-border">
