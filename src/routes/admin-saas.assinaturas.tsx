@@ -181,6 +181,12 @@ function AssinaturasPage() {
               />
               <DetailRow label="ID da assinatura" value={selected.id} mono />
               <DetailRow label="ID da organização" value={selected.org_id} mono />
+              <div className="col-span-2 rounded-md border border-border bg-surface/40 p-3">
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
+                  Tempo até a renovação
+                </div>
+                <RenewalCountdown endsAt={selected.current_period_end} />
+              </div>
             </div>
           )}
           <DialogFooter>
