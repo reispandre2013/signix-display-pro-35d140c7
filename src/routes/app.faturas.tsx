@@ -46,6 +46,31 @@ function FaturasPage() {
     <div className="space-y-6">
       <PageHeader title="Faturas" subtitle="Histórico completo de cobranças da sua assinatura." />
 
+      {subscription && (
+        <Panel
+          title="Próxima renovação"
+          icon={<CalendarClock className="h-4 w-4 text-primary" />}
+        >
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <div className="text-xs text-muted-foreground">
+                Plano {subscription.plan?.name ?? "—"} ·{" "}
+                {subscription.billing_cycle === "yearly" ? "Anual" : "Mensal"}
+              </div>
+              <div className="mt-1 text-xs text-muted-foreground">
+                Renova em{" "}
+                <span className="font-medium text-foreground">
+                  {format(new Date(subscription.current_period_end), "dd/MM/yyyy", {
+                    locale: ptBR,
+                  })}
+                </span>
+              </div>
+            </div>
+            <RenewalCountdown endsAt={subscription.current_period_end} />
+          </div>
+        </Panel>
+      )}
+
       <Panel title={`${invoices.length} faturas`}>
         <div className="overflow-x-auto -mx-5">
           <table className="w-full text-sm">
