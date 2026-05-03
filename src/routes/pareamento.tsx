@@ -37,6 +37,8 @@ function PairingPage() {
   const [loading, setLoading] = useState(true);
   const [paired, setPaired] = useState(false);
   const [codeError, setCodeError] = useState<string | null>(null);
+  const [autoStartIn, setAutoStartIn] = useState<number | null>(null);
+  const [autoStartCancelled, setAutoStartCancelled] = useState(false);
 
   useEffect(() => {
     void initAndroidTvShell();
