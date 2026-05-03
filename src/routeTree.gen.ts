@@ -22,6 +22,7 @@ import { Route as PagamentosRouteImport } from './routes/pagamentos'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LicencasRouteImport } from './routes/licencas'
 import { Route as FaturasRouteImport } from './routes/faturas'
+import { Route as DownloadRouteImport } from './routes/download'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConfigurarRouteImport } from './routes/configurar'
 import { Route as ClientesRouteImport } from './routes/clientes'
@@ -128,6 +129,11 @@ const LicencasRoute = LicencasRouteImport.update({
 const FaturasRoute = FaturasRouteImport.update({
   id: '/faturas',
   path: '/faturas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DownloadRoute = DownloadRouteImport.update({
+  id: '/download',
+  path: '/download',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -353,6 +359,7 @@ export interface FileRoutesByFullPath {
   '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
   '/dashboard': typeof DashboardRoute
+  '/download': typeof DownloadRoute
   '/faturas': typeof FaturasRoute
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
@@ -408,6 +415,7 @@ export interface FileRoutesByTo {
   '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
   '/dashboard': typeof DashboardRoute
+  '/download': typeof DownloadRoute
   '/faturas': typeof FaturasRoute
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
@@ -466,6 +474,7 @@ export interface FileRoutesById {
   '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
   '/dashboard': typeof DashboardRoute
+  '/download': typeof DownloadRoute
   '/faturas': typeof FaturasRoute
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
@@ -525,6 +534,7 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/configurar'
     | '/dashboard'
+    | '/download'
     | '/faturas'
     | '/licencas'
     | '/login'
@@ -580,6 +590,7 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/configurar'
     | '/dashboard'
+    | '/download'
     | '/faturas'
     | '/licencas'
     | '/login'
@@ -637,6 +648,7 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/configurar'
     | '/dashboard'
+    | '/download'
     | '/faturas'
     | '/licencas'
     | '/login'
@@ -695,6 +707,7 @@ export interface RootRouteChildren {
   ClientesRoute: typeof ClientesRoute
   ConfigurarRoute: typeof ConfigurarRoute
   DashboardRoute: typeof DashboardRoute
+  DownloadRoute: typeof DownloadRoute
   FaturasRoute: typeof FaturasRoute
   LicencasRoute: typeof LicencasRoute
   LoginRoute: typeof LoginRoute
@@ -802,6 +815,13 @@ declare module '@tanstack/react-router' {
       path: '/faturas'
       fullPath: '/faturas'
       preLoaderRoute: typeof FaturasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/download': {
+      id: '/download'
+      path: '/download'
+      fullPath: '/download'
+      preLoaderRoute: typeof DownloadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -1200,6 +1220,7 @@ const rootRouteChildren: RootRouteChildren = {
   ClientesRoute: ClientesRoute,
   ConfigurarRoute: ConfigurarRoute,
   DashboardRoute: DashboardRoute,
+  DownloadRoute: DownloadRoute,
   FaturasRoute: FaturasRoute,
   LicencasRoute: LicencasRoute,
   LoginRoute: LoginRoute,
