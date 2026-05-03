@@ -74,7 +74,7 @@ function AssinaturasPage() {
             <tbody className="divide-y divide-border">
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-5 py-8 text-center text-sm text-muted-foreground">
+                  <td colSpan={10} className="px-5 py-8 text-center text-sm text-muted-foreground">
                     Nenhuma assinatura registrada.
                   </td>
                 </tr>
