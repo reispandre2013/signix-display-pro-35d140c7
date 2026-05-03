@@ -110,6 +110,9 @@ function AssinaturasPage() {
                         ? format(new Date(c.current_period_end), "dd/MM/yy", { locale: ptBR })
                         : "—"}
                     </td>
+                    <td className="px-3 py-3">
+                      <RenewalCountdown endsAt={c.current_period_end} compact />
+                    </td>
                     <td className="px-3 py-3 text-xs text-muted-foreground">
                       {c.last_paid
                         ? format(new Date(c.last_paid), "dd/MM/yy", { locale: ptBR })
