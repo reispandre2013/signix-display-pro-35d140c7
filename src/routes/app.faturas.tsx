@@ -64,6 +64,7 @@ function FaturasPage() {
                   })}
                 </span>
               </div>
+              </div>
             </div>
             <RenewalCountdown endsAt={subscription.current_period_end} />
           </div>
