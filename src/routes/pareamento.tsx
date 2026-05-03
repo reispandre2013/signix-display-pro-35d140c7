@@ -155,8 +155,6 @@ function PairingPage() {
     };
   }, [paired, code]);
 
-  const navigate = useNavigate();
-
   // Autoarranque: 5s após pareamento confirmado, abre o player automaticamente.
   useEffect(() => {
     if (!paired || autoStartCancelled) return;
