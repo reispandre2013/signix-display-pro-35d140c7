@@ -16,6 +16,7 @@ import {
   PLAYER_LS_SCREEN_ID,
 } from "@/player/player-storage-keys";
 import { resetDevicePairing } from "@/player/services/player-api";
+import { BackgroundRadioPlayer } from "@/player/components/background-radio-player";
 import { Tv, Wifi, AlertCircle, Loader2, KeyRound } from "lucide-react";
 
 const LS_CODE = PLAYER_LS_PAIRING_CODE;
