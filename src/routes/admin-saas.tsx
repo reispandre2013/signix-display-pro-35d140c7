@@ -45,6 +45,7 @@ const nav = [
   { to: "/admin-saas/assinaturas", label: "Assinaturas", icon: CreditCard },
   { to: "/admin-saas/pagamentos", label: "Pagamentos", icon: Receipt },
   { to: "/admin-saas/licencas", label: "Licenças", icon: KeyRound },
+  { to: "/admin-saas/radio", label: "Rádio Online", icon: Radio },
   { to: "/admin-saas/logs", label: "Logs", icon: ScrollText },
   { to: "/admin-saas/diagnostico", label: "Diagnóstico", icon: Stethoscope },
 ];
