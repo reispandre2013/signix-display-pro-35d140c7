@@ -8,6 +8,8 @@ import { Modal, FormField, TextInput, PrimaryButton } from "@/components/ui-kit/
 import { useMedia, useCreateMedia, useDeleteMedia } from "@/lib/hooks/use-supabase-data";
 import { useOrgBillingContext } from "@/lib/hooks/use-saas-data";
 import { useAuth } from "@/lib/auth-context";
+import { useRole } from "@/lib/use-role";
+import { RadioOnlineSection } from "@/components/radio/RadioOnlineSection";
 import { supabase } from "@/integrations/supabase/client";
 import { applyMediaFallback, getMediaUrlCandidates } from "@/lib/media-url";
 import {
@@ -139,6 +141,7 @@ function detectMediaFromFile(file: File): UploadDetectedMedia | null {
 
 function MediaPage() {
   const { profile } = useAuth();
+  const { isSuperAdmin } = useRole();
   const { data: media = [], isLoading, error } = useMedia();
   const { data: billing } = useOrgBillingContext();
   const create = useCreateMedia();
@@ -473,6 +476,8 @@ function MediaPage() {
           </div>
         )}
       </Panel>
+
+      {isSuperAdmin && <RadioOnlineSection />}
 
       <Modal
         open={open}
