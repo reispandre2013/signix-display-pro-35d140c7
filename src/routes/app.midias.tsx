@@ -141,6 +141,7 @@ function detectMediaFromFile(file: File): UploadDetectedMedia | null {
 
 function MediaPage() {
   const { profile } = useAuth();
+  const { isSuperAdmin } = useRole();
   const { data: media = [], isLoading, error } = useMedia();
   const { data: billing } = useOrgBillingContext();
   const create = useCreateMedia();
