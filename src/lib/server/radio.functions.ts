@@ -1,0 +1,171 @@
+import { createServerFn } from "@tanstack/react-start";
+import { getRequestHeader } from "@tanstack/react-start/server";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+const SUPABASE_URL =
+  process.env.SUPABASE_URL ??
+  process.env.VITE_SUPABASE_URL ??
+  (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SUPABASE_URL ??
+  "";
+
+const SERVICE_ROLE = process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
+
+function adminClient() {
+  if (!SUPABASE_URL || !SERVICE_ROLE) throw new Error("Configuração Supabase incompleta no servidor.");
+  return createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
+}
+
+async function getAuthedUserId(): Promise<string> {
+  const authHeader = getRequestHeader("authorization") ?? "";
+  const token = authHeader.replace(/^Bearer\s+/i, "");
+  if (!token) throw new Error("Não autenticado.");
+  const admin = adminClient();
+  const { data, error } = await admin.auth.getUser(token);
+  if (error || !data.user) throw new Error("Sessão inválida.");
+  return data.user.id;
+}
+
+async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
+  const { data: profile } = await admin
+    .from("profiles")
+    .select("role")
+    .eq("auth_user_id", userId)
+    .maybeSingle();
+  const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
+  const ok =
+    (profile as { role?: string } | null)?.role === "super_admin" ||
+    (roles ?? []).some((r) => (r as { role?: string }).role === "super_admin");
+  if (!ok) throw new Error("Acesso restrito a super_admin.");
+}
+
+export type RadioStreamRow = {
+  id: string;
+  screen_id: string;
+  organization_id: string;
+  radio_name: string;
+  stream_url: string;
+  volume: number;
+  is_active: boolean;
+  updated_at: string;
+};
+
+export type ScreenWithRadio = {
+  screen_id: string;
+  screen_name: string;
+  organization_id: string;
+  organization_name: string | null;
+  radio: RadioStreamRow | null;
+};
+
+/** Lista todas as telas com sua rádio (se houver). Apenas Super Admin. */
+export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(async () => {
+  const userId = await getAuthedUserId();
+  const admin = adminClient();
+  await assertSuperAdmin(admin, userId);
+
+  const { data: screens, error: sErr } = await admin
+    .from("screens")
+    .select("id, name, organization_id, organizations(name)")
+    .order("name", { ascending: true });
+  if (sErr) throw new Error(sErr.message);
+
+  const { data: radios, error: rErr } = await admin.from("radio_streams").select("*");
+  if (rErr) throw new Error(rErr.message);
+
+  const radioByScreen = new Map<string, RadioStreamRow>();
+  for (const r of (radios ?? []) as RadioStreamRow[]) radioByScreen.set(r.screen_id, r);
+
+  const out: ScreenWithRadio[] = ((screens ?? []) as Array<{
+    id: string;
+    name: string;
+    organization_id: string;
+    organizations?: { name?: string | null } | null;
+  }>).map((s) => ({
+    screen_id: s.id,
+    screen_name: s.name,
+    organization_id: s.organization_id,
+    organization_name: s.organizations?.name ?? null,
+    radio: radioByScreen.get(s.id) ?? null,
+  }));
+
+  return out;
+});
+
+export type UpsertRadioInput = {
+  screen_id: string;
+  radio_name: string;
+  stream_url: string;
+  volume: number;
+  is_active: boolean;
+};
+
+export const upsertRadioStream = createServerFn({ method: "POST" })
+  .inputValidator((input: UpsertRadioInput) => {
+    if (!input.screen_id) throw new Error("screen_id obrigatório.");
+    if (!input.stream_url || !/^https?:\/\//i.test(input.stream_url))
+      throw new Error("URL inválida (use http:// ou https://).");
+    if (input.stream_url.length > 2000) throw new Error("URL muito longa.");
+    if (!input.radio_name || input.radio_name.length > 120)
+      throw new Error("Nome da rádio inválido.");
+    if (input.volume < 0 || input.volume > 1) throw new Error("Volume entre 0 e 1.");
+    return input;
+  })
+  .handler(async ({ data }) => {
+    const userId = await getAuthedUserId();
+    const admin = adminClient();
+    await assertSuperAdmin(admin, userId);
+
+    const { data: screen, error: sErr } = await admin
+      .from("screens")
+      .select("id, organization_id")
+      .eq("id", data.screen_id)
+      .maybeSingle();
+    if (sErr) throw new Error(sErr.message);
+    if (!screen) throw new Error("Tela não encontrada.");
+
+    const payload = {
+      screen_id: data.screen_id,
+      organization_id: (screen as { organization_id: string }).organization_id,
+      radio_name: data.radio_name.trim(),
+      stream_url: data.stream_url.trim(),
+      volume: Math.round(data.volume * 100) / 100,
+      is_active: data.is_active,
+      updated_by: userId,
+    };
+
+    const { data: row, error } = await admin
+      .from("radio_streams")
+      .upsert(payload, { onConflict: "screen_id" })
+      .select()
+      .single();
+    if (error) throw new Error(error.message);
+    return row as RadioStreamRow;
+  });
+
+export const deleteRadioStream = createServerFn({ method: "POST" })
+  .inputValidator((input: { screen_id: string }) => {
+    if (!input.screen_id) throw new Error("screen_id obrigatório.");
+    return input;
+  })
+  .handler(async ({ data }) => {
+    const userId = await getAuthedUserId();
+    const admin = adminClient();
+    await assertSuperAdmin(admin, userId);
+    const { error } = await admin.from("radio_streams").delete().eq("screen_id", data.screen_id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const toggleRadioActive = createServerFn({ method: "POST" })
+  .inputValidator((input: { screen_id: string; is_active: boolean }) => input)
+  .handler(async ({ data }) => {
+    const userId = await getAuthedUserId();
+    const admin = adminClient();
+    await assertSuperAdmin(admin, userId);
+    const { error } = await admin
+      .from("radio_streams")
+      .update({ is_active: data.is_active, updated_by: userId })
+      .eq("screen_id", data.screen_id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

@@ -16,6 +16,7 @@ import {
   PLAYER_LS_SCREEN_ID,
 } from "@/player/player-storage-keys";
 import { resetDevicePairing } from "@/player/services/player-api";
+import { BackgroundRadioPlayer } from "@/player/components/background-radio-player";
 import { Tv, Wifi, AlertCircle, Loader2, KeyRound } from "lucide-react";
 
 const LS_CODE = PLAYER_LS_PAIRING_CODE;
@@ -357,6 +358,7 @@ function PlayerScreenPage() {
 
   return (
     <div className="min-h-screen w-screen bg-black text-white flex flex-col overflow-hidden">
+      {screenId && <BackgroundRadioPlayer screenId={screenId} hideIndicator={hideControls} />}
       <div className="absolute inset-0">
         {isVideo && urls[0] ? (
           <video
