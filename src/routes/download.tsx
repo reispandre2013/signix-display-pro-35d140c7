@@ -3,7 +3,7 @@ import { Download, Smartphone, Tv } from "lucide-react";
 
 // URL pública do APK. Substitua pela URL final hospedada (ex.: storage Supabase, GitHub Releases, etc.).
 const APK_URL = "https://signix-display-pro.lovable.app/downloads/signix-player-tv.apk";
-const APK_VERSION = "1.0.17";
+const APK_VERSION = "1.0.19";
 const APK_SIZE = "~12 MB";
 
 export const Route = createFileRoute("/download")({
