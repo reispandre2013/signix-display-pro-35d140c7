@@ -687,3 +687,143 @@ export const reconcileAllAsaasPayments = createServerFn({ method: "POST" }).hand
     };
   },
 );
+
+// ============================================================================
+// Super Admin: alterar plano da assinatura e cota de armazenamento manual
+// ============================================================================
+
+export type ChangeSubscriptionPlanInput = {
+  subscription_id: string;
+  plan_id: string;
+  billing_cycle?: "monthly" | "yearly";
+};
+
+/** Altera o plano de uma assinatura manualmente (super_admin). */
+export const changeSubscriptionPlan = createServerFn({ method: "POST" })
+  .inputValidator((input: ChangeSubscriptionPlanInput) => {
+    if (!input?.subscription_id) throw new Error("subscription_id obrigatório.");
+    if (!input?.plan_id) throw new Error("plan_id obrigatório.");
+    return input;
+  })
+  .handler(async ({ data }): Promise<{ ok: true; amount_cents: number }> => {
+    mustEnv();
+    const user = await getAuthedUser();
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    await assertSuperAdmin(admin, user.id);
+
+    const { data: plan, error: pErr } = await admin
+      .from("plans")
+      .select("id, price_monthly_cents, price_yearly_cents, currency")
+      .eq("id", data.plan_id)
+      .maybeSingle();
+    if (pErr) throw new Error(`plans.get: ${pErr.message}`);
+    if (!plan) throw new Error("Plano não encontrado.");
+
+    const { data: sub, error: sErr } = await admin
+      .from("subscriptions")
+      .select("id, organization_id, billing_cycle")
+      .eq("id", data.subscription_id)
+      .maybeSingle();
+    if (sErr) throw new Error(`subscriptions.get: ${sErr.message}`);
+    if (!sub) throw new Error("Assinatura não encontrada.");
+
+    const cycle = data.billing_cycle ?? (sub as { billing_cycle: string }).billing_cycle;
+    const amount =
+      cycle === "yearly"
+        ? Number((plan as { price_yearly_cents: number }).price_yearly_cents)
+        : Number((plan as { price_monthly_cents: number }).price_monthly_cents);
+
+    const { error: uErr } = await admin
+      .from("subscriptions")
+      .update({
+        plan_id: data.plan_id,
+        billing_cycle: cycle,
+        amount_cents: amount,
+        currency: (plan as { currency?: string }).currency ?? "BRL",
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", data.subscription_id);
+    if (uErr) throw new Error(`subscriptions.update: ${uErr.message}`);
+
+    // Sincroniza license vigente com o novo plano (se existir)
+    await admin
+      .from("licenses")
+      .update({ plan_id: data.plan_id, updated_at: new Date().toISOString() })
+      .eq("organization_id", (sub as { organization_id: string }).organization_id)
+      .in("status", ["trial", "active"]);
+
+    return { ok: true, amount_cents: amount };
+  });
+
+export type SetOrgStorageQuotaInput = {
+  organization_id: string;
+  max_storage_mb: number;
+};
+
+/** Define manualmente a cota de armazenamento (MB) de uma organização via license override. */
+export const setOrgStorageQuota = createServerFn({ method: "POST" })
+  .inputValidator((input: SetOrgStorageQuotaInput) => {
+    if (!input?.organization_id) throw new Error("organization_id obrigatório.");
+    if (!Number.isFinite(input.max_storage_mb) || input.max_storage_mb < 0)
+      throw new Error("max_storage_mb inválido.");
+    return input;
+  })
+  .handler(async ({ data }): Promise<{ ok: true; license_id: string; max_storage_mb: number }> => {
+    mustEnv();
+    const user = await getAuthedUser();
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    await assertSuperAdmin(admin, user.id);
+
+    const mb = Math.max(0, Math.round(Number(data.max_storage_mb)));
+
+    // Busca licença ativa mais recente
+    const { data: lic } = await admin
+      .from("licenses")
+      .select("id")
+      .eq("organization_id", data.organization_id)
+      .in("status", ["trial", "active"])
+      .order("valid_from", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (lic?.id) {
+      const { error } = await admin
+        .from("licenses")
+        .update({ max_storage_mb: mb, updated_at: new Date().toISOString() })
+        .eq("id", lic.id);
+      if (error) throw new Error(`licenses.update: ${error.message}`);
+      return { ok: true, license_id: lic.id, max_storage_mb: mb };
+    }
+
+    // Cria license override mínima atrelada à assinatura mais recente (se houver)
+    const { data: sub } = await admin
+      .from("subscriptions")
+      .select("id, plan_id, plans(max_screens, max_users)")
+      .eq("organization_id", data.organization_id)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const planRow = (sub as { plans?: { max_screens?: number; max_users?: number } | null } | null)
+      ?.plans;
+    const insertPayload: Record<string, unknown> = {
+      organization_id: data.organization_id,
+      subscription_id: (sub as { id?: string } | null)?.id ?? null,
+      plan_id: (sub as { plan_id?: string } | null)?.plan_id ?? null,
+      status: "active",
+      max_storage_mb: mb,
+      max_screens: planRow?.max_screens ?? 1,
+      max_users: planRow?.max_users ?? 1,
+    };
+    const { data: ins, error } = await admin
+      .from("licenses")
+      .insert(insertPayload)
+      .select("id")
+      .single();
+    if (error) throw new Error(`licenses.insert: ${error.message}`);
+    return { ok: true, license_id: (ins as { id: string }).id, max_storage_mb: mb };
+  });
