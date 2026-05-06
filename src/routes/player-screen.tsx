@@ -358,6 +358,7 @@ function PlayerScreenPage() {
 
   return (
     <div className="min-h-screen w-screen bg-black text-white flex flex-col overflow-hidden">
+      {screenId && <BackgroundRadioPlayer screenId={screenId} hideIndicator={hideControls} />}
       <div className="absolute inset-0">
         {isVideo && urls[0] ? (
           <video
