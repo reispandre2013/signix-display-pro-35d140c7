@@ -58,6 +58,7 @@ import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
 import { Route as AppAssinaturaRouteImport } from './routes/app.assinatura'
 import { Route as AppAlertasRouteImport } from './routes/app.alertas'
 import { Route as AppAgendamentosRouteImport } from './routes/app.agendamentos'
+import { Route as AdminSaasRadioRouteImport } from './routes/admin-saas.radio'
 import { Route as AdminSaasPlanosRouteImport } from './routes/admin-saas.planos'
 import { Route as AdminSaasPagamentosRouteImport } from './routes/admin-saas.pagamentos'
 import { Route as AdminSaasLogsRouteImport } from './routes/admin-saas.logs'
@@ -311,6 +312,11 @@ const AppAgendamentosRoute = AppAgendamentosRouteImport.update({
   path: '/agendamentos',
   getParentRoute: () => AppRoute,
 } as any)
+const AdminSaasRadioRoute = AdminSaasRadioRouteImport.update({
+  id: '/radio',
+  path: '/radio',
+  getParentRoute: () => AdminSaasRoute,
+} as any)
 const AdminSaasPlanosRoute = AdminSaasPlanosRouteImport.update({
   id: '/planos',
   path: '/planos',
@@ -380,6 +386,7 @@ export interface FileRoutesByFullPath {
   '/admin-saas/logs': typeof AdminSaasLogsRoute
   '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
   '/admin-saas/planos': typeof AdminSaasPlanosRoute
+  '/admin-saas/radio': typeof AdminSaasRadioRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/assinatura': typeof AppAssinaturaRoute
@@ -436,6 +443,7 @@ export interface FileRoutesByTo {
   '/admin-saas/logs': typeof AdminSaasLogsRoute
   '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
   '/admin-saas/planos': typeof AdminSaasPlanosRoute
+  '/admin-saas/radio': typeof AdminSaasRadioRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/assinatura': typeof AppAssinaturaRoute
@@ -495,6 +503,7 @@ export interface FileRoutesById {
   '/admin-saas/logs': typeof AdminSaasLogsRoute
   '/admin-saas/pagamentos': typeof AdminSaasPagamentosRoute
   '/admin-saas/planos': typeof AdminSaasPlanosRoute
+  '/admin-saas/radio': typeof AdminSaasRadioRoute
   '/app/agendamentos': typeof AppAgendamentosRoute
   '/app/alertas': typeof AppAlertasRoute
   '/app/assinatura': typeof AppAssinaturaRoute
@@ -555,6 +564,7 @@ export interface FileRouteTypes {
     | '/admin-saas/logs'
     | '/admin-saas/pagamentos'
     | '/admin-saas/planos'
+    | '/admin-saas/radio'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/assinatura'
@@ -611,6 +621,7 @@ export interface FileRouteTypes {
     | '/admin-saas/logs'
     | '/admin-saas/pagamentos'
     | '/admin-saas/planos'
+    | '/admin-saas/radio'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/assinatura'
@@ -669,6 +680,7 @@ export interface FileRouteTypes {
     | '/admin-saas/logs'
     | '/admin-saas/pagamentos'
     | '/admin-saas/planos'
+    | '/admin-saas/radio'
     | '/app/agendamentos'
     | '/app/alertas'
     | '/app/assinatura'
@@ -1069,6 +1081,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAgendamentosRouteImport
       parentRoute: typeof AppRoute
     }
+    '/admin-saas/radio': {
+      id: '/admin-saas/radio'
+      path: '/radio'
+      fullPath: '/admin-saas/radio'
+      preLoaderRoute: typeof AdminSaasRadioRouteImport
+      parentRoute: typeof AdminSaasRoute
+    }
     '/admin-saas/planos': {
       id: '/admin-saas/planos'
       path: '/planos'
@@ -1129,6 +1148,7 @@ interface AdminSaasRouteChildren {
   AdminSaasLogsRoute: typeof AdminSaasLogsRoute
   AdminSaasPagamentosRoute: typeof AdminSaasPagamentosRoute
   AdminSaasPlanosRoute: typeof AdminSaasPlanosRoute
+  AdminSaasRadioRoute: typeof AdminSaasRadioRoute
   AdminSaasIndexRoute: typeof AdminSaasIndexRoute
 }
 
@@ -1140,6 +1160,7 @@ const AdminSaasRouteChildren: AdminSaasRouteChildren = {
   AdminSaasLogsRoute: AdminSaasLogsRoute,
   AdminSaasPagamentosRoute: AdminSaasPagamentosRoute,
   AdminSaasPlanosRoute: AdminSaasPlanosRoute,
+  AdminSaasRadioRoute: AdminSaasRadioRoute,
   AdminSaasIndexRoute: AdminSaasIndexRoute,
 }
 

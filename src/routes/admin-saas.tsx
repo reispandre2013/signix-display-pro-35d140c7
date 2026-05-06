@@ -19,6 +19,7 @@ import {
   ArrowLeft,
   LogOut,
   Stethoscope,
+  Radio,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/auth-context";
