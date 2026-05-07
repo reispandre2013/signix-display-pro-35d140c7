@@ -18,9 +18,8 @@ import {
 import { resetDevicePairing } from "@/player/services/player-api";
 import {
   isAndroidNative,
-  autoRegisterAndroid,
-  pollUntilActive,
   getStoredAndroidSession,
+  saveAndroidSession,
   clearStoredAndroidSession,
 } from "@/player/services/android-auto-pair";
 import { BackgroundRadioPlayer } from "@/player/components/background-radio-player";
