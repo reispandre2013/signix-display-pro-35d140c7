@@ -107,7 +107,7 @@ function RadioAdminPage() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar por tela, empresa ou rádio…"
+              placeholder="Buscar por dispositivo, tela, empresa ou rádio…"
               className="pl-9"
             />
           </div>
