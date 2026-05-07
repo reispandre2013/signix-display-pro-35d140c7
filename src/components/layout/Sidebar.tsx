@@ -82,12 +82,12 @@ const sections: Section[] = [
   },
 ];
 
-export function Sidebar() {
+export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   const { pathname } = useLocation();
   const { can, label, isSuperAdmin } = useRole();
 
   return (
-    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground">
+    <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       <div className="px-5 py-5 flex items-center gap-2.5 border-b border-sidebar-border">
         <div className="relative h-9 w-9 rounded-xl grid place-items-center shadow-glow overflow-hidden">
           <img src={sigplayerLogo} alt="SigPlayer" className="h-full w-full object-contain" />
@@ -117,6 +117,7 @@ export function Sidebar() {
             <div className="space-y-0.5">
               <Link
                 to="/admin-saas"
+                onClick={onNavigate}
                 className={cn(
                   "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-smooth bg-gradient-primary text-primary-foreground shadow-glow",
                 )}
@@ -145,6 +146,7 @@ export function Sidebar() {
                     <Link
                       key={it.to}
                       to={it.to}
+                      onClick={onNavigate}
                       className={cn(
                         "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-smooth",
                         "hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
@@ -169,6 +171,14 @@ export function Sidebar() {
       </nav>
 
       <SidebarPlanCallout />
+    </div>
+  );
+}
+
+export function Sidebar() {
+  return (
+    <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-sidebar-border">
+      <SidebarContent />
     </aside>
   );
 }
