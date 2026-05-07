@@ -258,30 +258,34 @@ export function useSaasDirectory() {
 
       const orgIds = orgs.map((o) => o.id);
 
-      const [subsQ, { data: usages }, { data: lics }, { data: profs }, payQ] = await Promise.all([
-        supabase
-          .from("subscriptions")
-          .select("id, organization_id, status, created_at, plans(name, max_screens)")
-          .in("organization_id", orgIds),
-        supabase
-          .from("usage_counters")
-          .select("organization_id, total_screens")
-          .in("organization_id", orgIds),
-        supabase
-          .from("licenses")
-          .select("organization_id, status, valid_from")
-          .in("organization_id", orgIds),
-        supabase
-          .from("profiles")
-          .select("organization_id, email, name, role, created_at")
-          .in("organization_id", orgIds)
-          .order("created_at", { ascending: true }),
-        supabase
-          .from("payments")
-          .select("organization_id, paid_at, amount_cents, status, created_at")
-          .in("organization_id", orgIds)
-          .order("created_at", { ascending: false }),
-      ]);
+      const [subsQ, { data: usages }, { data: lics }, { data: profs }, payQ, mastersResp] =
+        await Promise.all([
+          supabase
+            .from("subscriptions")
+            .select("id, organization_id, status, created_at, plans(name, max_screens)")
+            .in("organization_id", orgIds),
+          supabase
+            .from("usage_counters")
+            .select("organization_id, total_screens")
+            .in("organization_id", orgIds),
+          supabase
+            .from("licenses")
+            .select("organization_id, status, valid_from")
+            .in("organization_id", orgIds),
+          supabase
+            .from("profiles")
+            .select("organization_id, email, name, role, created_at")
+            .in("organization_id", orgIds)
+            .order("created_at", { ascending: true }),
+          supabase
+            .from("payments")
+            .select("organization_id, paid_at, amount_cents, status, created_at")
+            .in("organization_id", orgIds)
+            .order("created_at", { ascending: false }),
+          getOrgMastersInfo({ data: { organization_ids: orgIds } }).catch(
+            () => ({ masters: [] }) as { masters: { organization_id: string; master_email: string | null; master_name: string | null }[] },
+          ),
+        ]);
       if (subsQ.error && isMissingRelation(subsQ.error, "subscriptions")) {
         /* tabela ainda não aplicada */
       } else if (subsQ.error) {
@@ -294,6 +298,9 @@ export function useSaasDirectory() {
         throw new Error(payQ.error.message);
       }
       const payStats = payQ.data ?? [];
+      const mastersByOrg = new Map(
+        (mastersResp?.masters ?? []).map((m) => [m.organization_id, m]),
+      );
 
       const latestLicByOrg = new Map<string, { status: string }>();
       for (const oid of orgIds) {
