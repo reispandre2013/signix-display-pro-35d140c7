@@ -163,7 +163,6 @@ export const upsertRadioStream = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const userId = await getAuthedUserId();
     const admin = adminClient();
-    await assertSuperAdmin(admin, userId);
 
     const { data: screen, error: sErr } = await admin
       .from("screens")
@@ -172,6 +171,7 @@ export const upsertRadioStream = createServerFn({ method: "POST" })
       .maybeSingle();
     if (sErr) throw new Error(sErr.message);
     if (!screen) throw new Error("Tela não encontrada.");
+    await assertCanManageScreen(admin, userId, (screen as { organization_id: string }).organization_id);
 
     const payload = {
       screen_id: data.screen_id,
