@@ -8,7 +8,7 @@ import {
   type PendingAndroidDevice,
 } from "@/lib/server/android-devices.functions";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
-import { useOrganizations, useUnits } from "@/lib/hooks/use-supabase-data";
+import { useOrganization, useUnits } from "@/lib/hooks/use-supabase-data";
 import { PageHeader } from "@/components/ui-kit/PageHeader";
 import { LoadingState, EmptyState, ErrorState } from "@/components/ui-kit/States";
 import { Tv, Check, RefreshCw } from "lucide-react";
@@ -23,8 +23,9 @@ function PendingDevicesPage() {
   const listFn = useServerFn(listPendingAndroidDevices);
   const activateFn = useServerFn(activateAndroidDevice);
   const qc = useQueryClient();
-  const orgsQ = useOrganizations();
+  const orgQ = useOrganization();
   const unitsQ = useUnits();
+  const orgs = orgQ.data ? [{ id: orgQ.data.id, name: orgQ.data.name }] : [];
 
   const q = useQuery({
     queryKey: ["pending-android-devices"],
@@ -63,7 +64,7 @@ function PendingDevicesPage() {
             <PendingCard
               key={d.id}
               device={d}
-              orgs={(orgsQ.data ?? []) as Array<{ id: string; name: string }>}
+              orgs={orgs}
               units={(unitsQ.data ?? []) as Array<{ id: string; name: string }>}
               onActivate={async (payload) => {
                 try {
