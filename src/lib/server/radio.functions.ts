@@ -152,13 +152,28 @@ export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(a
   const radioByScreen = new Map<string, RadioStreamRow>();
   for (const r of (radios ?? []) as RadioStreamRow[]) radioByScreen.set(r.screen_id, r);
 
-  const out: ScreenWithRadio[] = screenList.map((s) => ({
-    screen_id: s.id,
-    screen_name: s.name,
-    organization_id: s.organization_id,
-    organization_name: orgNameById.get(s.organization_id) ?? null,
-    radio: radioByScreen.get(s.id) ?? null,
-  }));
+  const deviceByScreen = new Map<string, { id: string; device_name: string | null; pairing_status: string | null }>();
+  for (const d of deviceList) {
+    // mantém o mais "ativo" se houver múltiplos
+    const prev = deviceByScreen.get(d.screen_id);
+    if (!prev || (d.pairing_status === "active" && prev.pairing_status !== "active")) {
+      deviceByScreen.set(d.screen_id, { id: d.id, device_name: d.device_name, pairing_status: d.pairing_status });
+    }
+  }
+
+  const out: ScreenWithRadio[] = screenList.map((s) => {
+    const dev = deviceByScreen.get(s.id) ?? null;
+    return {
+      screen_id: s.id,
+      screen_name: s.name,
+      device_id: dev?.id ?? null,
+      device_name: dev?.device_name ?? null,
+      pairing_status: dev?.pairing_status ?? null,
+      organization_id: s.organization_id,
+      organization_name: orgNameById.get(s.organization_id) ?? null,
+      radio: radioByScreen.get(s.id) ?? null,
+    };
+  });
 
   return out;
 });
