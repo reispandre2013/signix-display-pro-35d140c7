@@ -138,8 +138,15 @@ function PairingPage() {
     if (!paired || !code) return;
     let cancelled = false;
     const fp = `web-${typeof window !== "undefined" ? (window.screen?.width ?? 0) : 0}-${typeof navigator !== "undefined" ? navigator.userAgent : ""}`;
-    void import("@/player/services/player-api")
-      .then(({ pairScreen }) => pairScreen(code, fp))
+    void pairScreenDevice({
+      data: {
+        pairingCode: code,
+        deviceFingerprint: fp,
+        platform: typeof navigator !== "undefined" ? navigator.platform : null,
+        osName: typeof navigator !== "undefined" ? navigator.userAgent : null,
+        playerVersion: null,
+      },
+    })
       .then((pr) => {
         if (cancelled) return;
         if (pr.device_id && pr.auth_token) {
