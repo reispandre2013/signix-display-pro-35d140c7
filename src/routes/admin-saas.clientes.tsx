@@ -33,7 +33,8 @@ function ClientesPage() {
       clients.filter(
         (c) =>
           c.organization_name.toLowerCase().includes(q.toLowerCase()) ||
-          (c.master_email ?? "").toLowerCase().includes(q.toLowerCase()),
+          (c.master_email ?? "").toLowerCase().includes(q.toLowerCase()) ||
+          (c.master_name ?? "").toLowerCase().includes(q.toLowerCase()),
       ),
     [clients, q],
   );
