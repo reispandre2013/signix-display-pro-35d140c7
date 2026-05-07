@@ -68,12 +68,33 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-30 glass border-b border-border">
-      <div className="flex h-16 items-center gap-4 px-6">
-        <div className="flex flex-col">
+      <div className="flex h-16 items-center gap-3 px-4 md:px-6">
+        <Sheet>
+          <SheetTrigger asChild>
+            <button
+              aria-label="Abrir menu"
+              className="lg:hidden h-9 w-9 grid place-items-center rounded-md border border-border hover:bg-surface transition-smooth"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0 w-72 max-w-[85vw] border-r border-sidebar-border">
+            <VisuallyHidden>
+              <SheetTitle>Menu de navegação</SheetTitle>
+            </VisuallyHidden>
+            <SidebarContent onNavigate={() => {
+              // close sheet by dispatching escape key
+              const evt = new KeyboardEvent("keydown", { key: "Escape" });
+              document.dispatchEvent(evt);
+            }} />
+          </SheetContent>
+        </Sheet>
+
+        <div className="flex flex-col min-w-0">
           <span className="text-[11px] uppercase tracking-widest text-muted-foreground">
             SigPlayer · Painel
           </span>
-          <h1 className="font-display text-base font-semibold leading-none">{title}</h1>
+          <h1 className="font-display text-base font-semibold leading-none truncate">{title}</h1>
         </div>
 
         <div className="ml-6 hidden md:flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-1.5 w-80 max-w-full">
