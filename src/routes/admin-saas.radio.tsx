@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Radio, Loader2, Save, Trash2, Play, Pause, Search, Volume2 } from "lucide-react";
@@ -19,12 +19,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  listScreensWithRadio,
   upsertRadioStream,
   deleteRadioStream,
   toggleRadioActive,
-  type ScreenWithRadio,
 } from "@/lib/server/radio.functions";
+import { useScreensWithRadio, type ScreenWithRadio } from "@/lib/hooks/use-radio-data";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
 
 export const Route = createFileRoute("/admin-saas/radio")({
