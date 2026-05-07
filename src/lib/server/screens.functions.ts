@@ -146,12 +146,22 @@ export const claimPairingCode = createServerFn({ method: "POST" })
         ? normalizePlayerPlatform(pairing.player_platform)
         : data.platform;
     const caps = getPlayerCapabilities(claimedPlatform);
+    // O RPC `pair_screen_by_code` (chamado pelo player Tizen/Android via Edge
+    // `pair-screen`) exige `pairing_expires_at >= now()`. Se ficar nulo, o
+    // player recebe "invalid or expired pairing code" mesmo logo após o
+    // pareamento no painel. Garantimos uma janela mínima de 15 min — ou
+    // estendemos a validade restante do `pairing_codes` se for maior.
+    const codeExpiryMs = pairing.expires_at ? new Date(pairing.expires_at).getTime() : 0;
+    const minWindowMs = Date.now() + 15 * 60 * 1000;
+    const screenPairingExpiresAt = new Date(Math.max(codeExpiryMs, minWindowMs)).toISOString();
+
     const insertRow: Record<string, unknown> = {
       organization_id: orgId,
       unit_id: data.unit_id,
       name: data.name,
       orientation: toScreenOrientation(data.orientation),
       pairing_code: data.code,
+      pairing_expires_at: screenPairingExpiresAt,
       device_status: "offline",
       is_online: false,
       platform: caps.platform,
