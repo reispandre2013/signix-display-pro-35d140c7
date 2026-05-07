@@ -63,7 +63,7 @@ function RadioAdminPage() {
     mutationFn: (vars: { screen_id: string; is_active: boolean }) =>
       withAuthHeader(() => toggleFn({ data: vars })),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["admin-radio-screens"] });
+      qc.invalidateQueries({ queryKey: ["radio-screens"] });
       toast.success("Estado atualizado");
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
@@ -72,7 +72,7 @@ function RadioAdminPage() {
   const remove = useMutation({
     mutationFn: (screen_id: string) => withAuthHeader(() => deleteFn({ data: { screen_id } })),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["admin-radio-screens"] });
+      qc.invalidateQueries({ queryKey: ["radio-screens"] });
       toast.success("Rádio removida");
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
@@ -228,7 +228,7 @@ function RadioAdminPage() {
           onClose={() => setEditing(null)}
           upsertFn={upsertFn}
           onSaved={() => {
-            qc.invalidateQueries({ queryKey: ["admin-radio-screens"] });
+            qc.invalidateQueries({ queryKey: ["radio-screens"] });
             setEditing(null);
           }}
         />
