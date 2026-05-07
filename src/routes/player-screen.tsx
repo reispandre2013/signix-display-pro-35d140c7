@@ -385,24 +385,6 @@ function PlayerScreenPage() {
     );
   }
 
-  if (!canSync && androidPending) {
-    const shortUuid = androidPending.uuid.slice(0, 8).toUpperCase();
-    return (
-      <div className="min-h-screen w-screen bg-black text-white flex flex-col items-center justify-center gap-5 p-8">
-        <Tv className="h-14 w-14 text-white/60" />
-        <h1 className="text-2xl font-display font-bold">Aguardando ativação</h1>
-        <p className="text-center max-w-md text-sm text-white/70">
-          Este Android TV foi registrado automaticamente. Abra o painel administrativo em
-          <strong className="px-1">Dispositivos pendentes</strong> e ative este aparelho.
-        </p>
-        <div className="rounded-xl border border-white/20 bg-white/5 px-5 py-3 font-mono text-lg tracking-wider">
-          ID: {shortUuid}
-        </div>
-        <p className="text-[11px] text-white/40">A reconectar automaticamente…</p>
-      </div>
-    );
-  }
-
   if (!canSync) {
     return (
       <div className="min-h-screen w-screen bg-black text-white flex flex-col items-center justify-center gap-4 p-8">
