@@ -70,7 +70,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 glass border-b border-border">
       <div className="flex h-16 items-center gap-3 px-4 md:px-6">
-        <Sheet>
+        <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
           <SheetTrigger asChild>
             <button
               aria-label="Abrir menu"
@@ -83,11 +83,7 @@ export function Header() {
             <VisuallyHidden>
               <SheetTitle>Menu de navegação</SheetTitle>
             </VisuallyHidden>
-            <SidebarContent onNavigate={() => {
-              // close sheet by dispatching escape key
-              const evt = new KeyboardEvent("keydown", { key: "Escape" });
-              document.dispatchEvent(evt);
-            }} />
+            <SidebarContent onNavigate={() => setMenuOpen(false)} />
           </SheetContent>
         </Sheet>
 
