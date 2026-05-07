@@ -33,7 +33,8 @@ function ClientesPage() {
       clients.filter(
         (c) =>
           c.organization_name.toLowerCase().includes(q.toLowerCase()) ||
-          (c.master_email ?? "").toLowerCase().includes(q.toLowerCase()),
+          (c.master_email ?? "").toLowerCase().includes(q.toLowerCase()) ||
+          (c.master_name ?? "").toLowerCase().includes(q.toLowerCase()),
       ),
     [clients, q],
   );
@@ -100,8 +101,9 @@ function ClientesPage() {
                         <span className="font-medium">{c.organization_name}</span>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-muted-foreground text-xs">
-                      {c.master_email ?? "—"}
+                    <td className="px-3 py-3 text-xs">
+                      <div className="font-medium text-foreground">{c.master_name ?? "—"}</div>
+                      <div className="text-muted-foreground">{c.master_email ?? "—"}</div>
                     </td>
                     <td className="px-3 py-3">
                       <span className="text-xs font-medium">{c.plan_name ?? "—"}</span>
@@ -175,7 +177,14 @@ function ClientesPage() {
           </DialogHeader>
           {selected && (
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <DetailRow label="Master" value={selected.master_email ?? "—"} />
+              <DetailRow
+                label="Master"
+                value={
+                  selected.master_name && selected.master_email
+                    ? `${selected.master_name} — ${selected.master_email}`
+                    : (selected.master_name ?? selected.master_email ?? "—")
+                }
+              />
               <DetailRow label="Plano" value={selected.plan_name ?? "—"} />
               <DetailRow label="Status assinatura" value={selected.subscription_status ?? "—"} />
               <DetailRow label="Status licença" value={selected.license_status ?? "—"} />
