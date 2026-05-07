@@ -104,7 +104,7 @@ function PlayerScreenPage() {
   const [hideOverlay, setHideOverlay] = useState(true);
   const [hideControls, setHideControls] = useState(true);
 
-  const [androidPending, setAndroidPending] = useState<{ uuid: string } | null>(null);
+  
 
   useEffect(() => {
     let cancelled = false;
