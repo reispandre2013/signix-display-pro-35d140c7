@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
 import { checkPairingStatus, createPairingCode, pairScreenDevice } from "@/lib/server/screens.functions";
 import { initAndroidTvShell } from "@/player/capacitor/android-shell";
-import { isAndroidNative } from "@/player/services/android-auto-pair";
+import { saveAndroidSession } from "@/player/services/android-auto-pair";
 import {
   PLAYER_LS_AUTH_TOKEN,
   PLAYER_LS_DEVICE_ID,
@@ -45,15 +45,7 @@ function PairingPage() {
 
   useEffect(() => {
     void initAndroidTvShell();
-    // APK Android TV: pula o pareamento por código e vai direto para auto-registro.
-    if (isAndroidNative()) {
-      void navigate({
-        to: "/player-screen",
-        search: { platform: undefined },
-        replace: true,
-      });
-    }
-  }, [navigate]);
+  }, []);
 
   // Gera código de pareamento via server function (bypass RLS, sem auth necessária)
   const generateCode = async () => {
@@ -156,11 +148,14 @@ function PairingPage() {
         playerVersion: null,
       },
     })
-      .then((pr) => {
+      .then(async (pr) => {
         if (cancelled) return;
         if (pr.device_id && pr.auth_token) {
           localStorage.setItem(PLAYER_LS_DEVICE_ID, pr.device_id);
           localStorage.setItem(PLAYER_LS_AUTH_TOKEN, pr.auth_token);
+          // Espelha credenciais no Capacitor Preferences (APK Android sobrevive a updates).
+          const sid = localStorage.getItem(PLAYER_LS_SCREEN_ID);
+          if (sid) await saveAndroidSession(sid, pr.device_id, pr.auth_token).catch(() => {});
         }
       })
       .catch((e) => {
