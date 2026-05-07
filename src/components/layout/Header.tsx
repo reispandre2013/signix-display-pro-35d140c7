@@ -1,9 +1,12 @@
-import { Search, Bell, ChevronDown, HelpCircle, Plus, LogOut } from "lucide-react";
+import { Search, Bell, ChevronDown, HelpCircle, Plus, LogOut, Menu } from "lucide-react";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useRole } from "@/lib/use-role";
 import { toast } from "sonner";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { SidebarContent } from "./Sidebar";
 
 const breadcrumbs: Record<string, string> = {
   "/app": "Dashboard",
