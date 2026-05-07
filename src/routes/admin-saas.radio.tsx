@@ -33,7 +33,6 @@ export const Route = createFileRoute("/admin-saas/radio")({
 
 function RadioAdminPage() {
   const qc = useQueryClient();
-  const listFn = useServerFn(listScreensWithRadio);
   const upsertFn = useServerFn(upsertRadioStream);
   const deleteFn = useServerFn(deleteRadioStream);
   const toggleFn = useServerFn(toggleRadioActive);
@@ -42,10 +41,7 @@ function RadioAdminPage() {
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "paused" | "none">("all");
   const [editing, setEditing] = useState<ScreenWithRadio | null>(null);
 
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["admin-radio-screens"],
-    queryFn: () => withAuthHeader(() => listFn({ data: undefined as never })),
-  });
+  const { data = [], isLoading } = useScreensWithRadio();
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
