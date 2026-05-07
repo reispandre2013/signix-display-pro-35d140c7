@@ -272,9 +272,9 @@ export function useSaasDirectory() {
           .in("organization_id", orgIds),
         supabase
           .from("profiles")
-          .select("organization_id, email, role, created_at")
+          .select("organization_id, email, name, role, created_at")
           .in("organization_id", orgIds)
-          .in("role", ["admin_master", "gestor", "super_admin"]),
+          .order("created_at", { ascending: true }),
         supabase
           .from("payments")
           .select("organization_id, paid_at, amount_cents, status, created_at")
