@@ -34,11 +34,10 @@ async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
   const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
   const profileRole = (profile as { role?: string } | null)?.role;
   const roleList = (roles ?? []).map((r) => (r as { role?: string }).role);
+  const allowedRoles = ["super_admin", "operador", "admin_master", "gestor"];
   const ok =
-    profileRole === "super_admin" ||
-    profileRole === "operador" ||
-    roleList.includes("super_admin") ||
-    roleList.includes("operador");
+    (profileRole && allowedRoles.includes(profileRole)) ||
+    roleList.some((r) => r && allowedRoles.includes(r));
   if (!ok) throw new Error("Acesso restrito.");
 }
 
