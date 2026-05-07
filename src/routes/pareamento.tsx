@@ -44,15 +44,7 @@ function PairingPage() {
 
   useEffect(() => {
     void initAndroidTvShell();
-    // APK Android TV: pula o pareamento por código e vai direto para auto-registro.
-    if (isAndroidNative()) {
-      void navigate({
-        to: "/player-screen",
-        search: { platform: undefined },
-        replace: true,
-      });
-    }
-  }, [navigate]);
+  }, []);
 
   // Gera código de pareamento via server function (bypass RLS, sem auth necessária)
   const generateCode = async () => {
