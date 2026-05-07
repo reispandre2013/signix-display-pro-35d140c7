@@ -152,6 +152,7 @@ export const activateAndroidDevice = createServerFn({ method: "POST" })
         auto_register_status: "active",
         pairing_status: "active",
         auth_secret_hash: hash,
+        pending_auth_token: token,
         auth_issued_at: new Date().toISOString(),
       })
       .eq("id", data.device_id);

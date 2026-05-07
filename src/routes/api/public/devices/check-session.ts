@@ -35,7 +35,7 @@ export const Route = createFileRoute("/api/public/devices/check-session")({
         const { data: dev, error } = await supabaseAdmin
           .from("player_devices")
           .select(
-            "id, screen_id, auto_register_status, auth_secret_hash, organization_id, device_name",
+            "id, screen_id, auto_register_status, auth_secret_hash, pending_auth_token, organization_id, device_name",
           )
           .eq("device_uuid", device_uuid)
           .maybeSingle();
@@ -46,6 +46,22 @@ export const Route = createFileRoute("/api/public/devices/check-session")({
           return json({
             status: dev.auto_register_status ?? "pending",
             device_id: dev.id,
+          });
+        }
+
+        // Primeira poll após ativação: entrega o token em claro UMA vez e limpa.
+        if (!token && dev.pending_auth_token) {
+          await supabaseAdmin
+            .from("player_devices")
+            .update({ pending_auth_token: null, last_seen: new Date().toISOString() })
+            .eq("id", dev.id);
+          return json({
+            status: "active",
+            device_id: dev.id,
+            screen_id: dev.screen_id,
+            device_name: dev.device_name,
+            organization_id: dev.organization_id,
+            token: dev.pending_auth_token,
           });
         }
 

@@ -15,7 +15,9 @@ alter table public.player_devices
   add column if not exists auto_register_status text
     check (auto_register_status in ('pending','active','blocked')),
   add column if not exists last_seen timestamptz,
-  add column if not exists organization_id uuid references public.organizations(id) on delete set null;
+  add column if not exists organization_id uuid references public.organizations(id) on delete set null,
+  -- token em claro entregue UMA vez ao APK na primeira poll após ativação; depois limpado.
+  add column if not exists pending_auth_token text;
 
 create unique index if not exists idx_player_devices_device_uuid
   on public.player_devices (device_uuid)
