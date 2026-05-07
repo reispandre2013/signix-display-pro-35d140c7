@@ -58,6 +58,7 @@ function RadioAdminPage() {
     return list.filter(
       (r) =>
         r.screen_name.toLowerCase().includes(q) ||
+        (r.device_name ?? "").toLowerCase().includes(q) ||
         (r.organization_name ?? "").toLowerCase().includes(q) ||
         (r.radio?.radio_name ?? "").toLowerCase().includes(q),
     );
@@ -90,11 +91,11 @@ function RadioAdminPage() {
     <div className="space-y-6">
       <PageHeader
         title="Rádio Online"
-        subtitle="Stream de áudio em background por tela. Não interrompe vídeos, imagens nem playlists."
+        subtitle="Stream de áudio em background por dispositivo pareado. Não interrompe vídeos, imagens nem playlists."
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="Telas totais" value={total} icon={<Radio className="h-5 w-5" />} />
+        <StatCard label="Dispositivos pareados" value={total} icon={<Radio className="h-5 w-5" />} />
         <StatCard label="Com rádio configurada" value={configuradas} icon={<Volume2 className="h-5 w-5" />} />
         <StatCard label="Tocando agora" value={ativas} icon={<Play className="h-5 w-5" />} highlight />
       </div>
@@ -106,7 +107,7 @@ function RadioAdminPage() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar por tela, empresa ou rádio…"
+              placeholder="Buscar por dispositivo, tela, empresa ou rádio…"
               className="pl-9"
             />
           </div>
@@ -141,7 +142,7 @@ function RadioAdminPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase text-muted-foreground border-b border-border">
-                  <th className="py-3 px-2">Tela / Empresa</th>
+                  <th className="py-3 px-2">Dispositivo / Tela</th>
                   <th className="py-3 px-2">Rádio</th>
                   <th className="py-3 px-2">URL</th>
                   <th className="py-3 px-2">Volume</th>
@@ -155,9 +156,10 @@ function RadioAdminPage() {
                   return (
                     <tr key={row.screen_id} className="border-b border-border/50 hover:bg-muted/30">
                       <td className="py-3 px-2">
-                        <div className="font-medium">{row.screen_name}</div>
+                        <div className="font-medium">{row.device_name ?? row.screen_name}</div>
                         <div className="text-xs text-muted-foreground">
-                          {row.organization_name ?? "—"}
+                          Tela: {row.screen_name} · {row.organization_name ?? "—"}
+                          {row.pairing_status && row.pairing_status !== "active" ? ` · ${row.pairing_status}` : ""}
                         </div>
                       </td>
                       <td className="py-3 px-2">{r?.radio_name ?? "—"}</td>
