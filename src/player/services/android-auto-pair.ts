@@ -159,6 +159,15 @@ export async function pollUntilActive(
   }
 }
 
+/** Limpa token + screen + device_id (mantém UUID) para forçar nova ativação. */
+export async function clearStoredAndroidSession(): Promise<void> {
+  await Promise.all([
+    Preferences.remove({ key: KEY_TOKEN }),
+    Preferences.remove({ key: KEY_SCREEN_ID }),
+    Preferences.remove({ key: KEY_DEVICE_ID }),
+  ]);
+}
+
 export async function getStoredAndroidSession(): Promise<{
   device_uuid: string;
   screen_id: string;
