@@ -86,34 +86,19 @@ export type ScreenWithRadio = {
   radio: RadioStreamRow | null;
 };
 
-/** Lista DISPOSITIVOS pareados (player_devices) com a tela vinculada e a rádio (se houver).
- * Buscamos pelo dispositivo porque a busca direta por telas estava retornando vazio
- * em alguns perfis (org_id ausente no profile, FK embed inconsistente etc.). */
+/** Lista TELAS (mesmo critério da página Dispositivos: filtra por organization_id
+ * do usuário autenticado), e anexa info do player_device pareado quando existir
+ * e a rádio (se houver). Não exige device pareado para aparecer — assim o
+ * comportamento bate com a tela "Dispositivos" que o usuário já enxerga. */
 export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(async () => {
   const userId = await getAuthedUserId();
   const admin = adminClient();
   const { isSuperAdmin, organizationIds } = await getAuthContext(admin, userId);
 
-  // 1) Busca dispositivos pareados (qualquer status) e extrai screen_ids
-  const { data: devices, error: dErr } = await admin
-    .from("player_devices")
-    .select("id, screen_id, device_name, pairing_status")
-    .not("screen_id", "is", null);
-  if (dErr) throw new Error(dErr.message);
-  const deviceList = (devices ?? []) as Array<{
-    id: string;
-    screen_id: string;
-    device_name: string | null;
-    pairing_status: string | null;
-  }>;
-  const screenIds = Array.from(new Set(deviceList.map((d) => d.screen_id).filter(Boolean)));
-  if (screenIds.length === 0) return [] as ScreenWithRadio[];
-
-  // 2) Busca as telas correspondentes (filtrando por org quando não é super admin)
+  // 1) Busca telas direto (mesma lógica do useScreens do front)
   let sQuery = admin
     .from("screens")
     .select("id, name, organization_id")
-    .in("id", screenIds)
     .order("name", { ascending: true });
   if (!isSuperAdmin) {
     if (organizationIds.length === 0) return [] as ScreenWithRadio[];
@@ -121,6 +106,23 @@ export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(a
   }
   const { data: screens, error: sErr } = await sQuery;
   if (sErr) throw new Error(sErr.message);
+
+  // 2) Busca dispositivos pareados (opcional) — apenas para enriquecer a UI
+  const screenIdsAll = (screens ?? []).map((s) => (s as { id: string }).id);
+  let deviceList: Array<{
+    id: string;
+    screen_id: string;
+    device_name: string | null;
+    pairing_status: string | null;
+  }> = [];
+  if (screenIdsAll.length > 0) {
+    const { data: devices, error: dErr } = await admin
+      .from("player_devices")
+      .select("id, screen_id, device_name, pairing_status")
+      .in("screen_id", screenIdsAll);
+    if (dErr) throw new Error(dErr.message);
+    deviceList = (devices ?? []) as typeof deviceList;
+  }
 
   const screenList = (screens ?? []) as Array<{
     id: string;
