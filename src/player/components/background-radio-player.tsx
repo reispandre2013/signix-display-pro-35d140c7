@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Hls from "hls.js";
+import Hls, { type ErrorData } from "hls.js";
 import { supabase } from "@/integrations/supabase/client";
 import { Radio } from "lucide-react";
 
@@ -113,7 +113,7 @@ export function BackgroundRadioPlayer({ screenId, hideIndicator }: Props) {
       hls.loadSource(radio.stream_url);
       hls.attachMedia(audio);
       hls.on(Hls.Events.MANIFEST_PARSED, tryPlay);
-      hls.on(Hls.Events.ERROR, (_e, data) => {
+      hls.on(Hls.Events.ERROR, (_event: string, data: ErrorData) => {
         if (data.fatal) {
           setStatus("error");
           // tenta reconectar em 5s

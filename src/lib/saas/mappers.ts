@@ -160,18 +160,18 @@ export function buildSaasClientRow(
   org: { id: string; name: string; created_at: string },
   sub: { status: string; plan?: { name?: string } } | null,
   lic: { status: string } | null,
+  masterName: string | null,
   masterEmail: string | null,
   usage: { total_screens: number } | null,
   planForLimit: { max_screens: number } | null,
   lastPaidAt: string | null,
-  masterName: string | null = null,
 ): SaasClient {
   const st = (sub?.status as SaasClient["subscription_status"]) ?? null;
   return {
     organization_id: org.id,
     organization_name: org.name,
-    master_email: masterEmail,
     master_name: masterName,
+    master_email: masterEmail,
     plan_name: sub?.plan?.name ? String(sub.plan.name) : null,
     subscription_status: st,
     screens_used: usage?.total_screens ?? 0,

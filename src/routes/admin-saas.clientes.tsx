@@ -73,7 +73,7 @@ function ClientesPage() {
             <thead>
               <tr className="text-left text-[11px] uppercase tracking-wider text-muted-foreground border-b border-border">
                 <th className="px-5 py-2 font-medium">Empresa</th>
-                <th className="px-3 py-2 font-medium">Master</th>
+                <th className="px-3 py-2 font-medium">Titular (cadastro)</th>
                 <th className="px-3 py-2 font-medium">Plano</th>
                 <th className="px-3 py-2 font-medium">Status</th>
                 <th className="px-3 py-2 font-medium">Telas</th>
@@ -101,9 +101,16 @@ function ClientesPage() {
                         <span className="font-medium">{c.organization_name}</span>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-xs">
-                      <div className="font-medium text-foreground">{c.master_name ?? "—"}</div>
-                      <div className="text-muted-foreground">{c.master_email ?? "—"}</div>
+                    <td className="px-3 py-3 text-xs max-w-[240px]">
+                      <div className="font-medium text-foreground leading-snug">
+                        {c.master_name?.trim() || "—"}
+                      </div>
+                      <div
+                        className="text-muted-foreground truncate mt-0.5"
+                        title={c.master_email ?? ""}
+                      >
+                        {c.master_email ?? "—"}
+                      </div>
                     </td>
                     <td className="px-3 py-3">
                       <span className="text-xs font-medium">{c.plan_name ?? "—"}</span>
@@ -177,14 +184,8 @@ function ClientesPage() {
           </DialogHeader>
           {selected && (
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <DetailRow
-                label="Master"
-                value={
-                  selected.master_name && selected.master_email
-                    ? `${selected.master_name} — ${selected.master_email}`
-                    : (selected.master_name ?? selected.master_email ?? "—")
-                }
-              />
+              <DetailRow label="Nome (cadastro)" value={selected.master_name?.trim() || "—"} />
+              <DetailRow label="E-mail (cadastro)" value={selected.master_email ?? "—"} />
               <DetailRow label="Plano" value={selected.plan_name ?? "—"} />
               <DetailRow label="Status assinatura" value={selected.subscription_status ?? "—"} />
               <DetailRow label="Status licença" value={selected.license_status ?? "—"} />

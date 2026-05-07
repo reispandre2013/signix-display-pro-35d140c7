@@ -28,6 +28,36 @@ function isMissingRelation(error: unknown, relation: string): boolean {
   );
 }
 
+/** Perfil de cadastro: owner da org, senão admin_master, senão gestor, senão o mais antigo. */
+type DirectoryProfileRow = {
+  id: string;
+  organization_id: string;
+  email: string;
+  name: string;
+  role: string;
+  created_at: string;
+};
+
+function pickRegistrationContact(
+  org: { id: string; owner_profile_id?: string | null },
+  profs: DirectoryProfileRow[],
+): { email: string | null; name: string | null } {
+  const list = profs.filter((p) => p.organization_id === org.id);
+  if (!list.length) return { email: null, name: null };
+  const byCreated = (a: DirectoryProfileRow, b: DirectoryProfileRow) =>
+    new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+  if (org.owner_profile_id) {
+    const owner = list.find((p) => p.id === org.owner_profile_id);
+    if (owner) return { email: owner.email, name: owner.name };
+  }
+  const masters = list.filter((p) => p.role === "admin_master").sort(byCreated);
+  if (masters.length) return { email: masters[0].email, name: masters[0].name };
+  const gestores = list.filter((p) => p.role === "gestor").sort(byCreated);
+  if (gestores.length) return { email: gestores[0].email, name: gestores[0].name };
+  const first = [...list].sort(byCreated)[0];
+  return { email: first.email, name: first.name };
+}
+
 /** Planos ativos — funciona com sessão anon (página /planos) após migration RLS. */
 export function usePublicPlans() {
   return useQuery({
@@ -248,7 +278,7 @@ export function useSaasDirectory() {
     queryFn: async (): Promise<SaasClient[]> => {
       const { data: orgs, error: e1 } = await supabase
         .from("organizations")
-        .select("id, name, created_at")
+        .select("id, name, created_at, owner_profile_id")
         .order("created_at", { ascending: false });
       if (e1) {
         if (isMissingRelation(e1, "organizations")) return [];
@@ -274,7 +304,7 @@ export function useSaasDirectory() {
             .in("organization_id", orgIds),
           supabase
             .from("profiles")
-            .select("organization_id, email, name, role, created_at")
+            .select("id, organization_id, email, name, role, created_at")
             .in("organization_id", orgIds)
             .order("created_at", { ascending: true }),
           supabase
@@ -283,7 +313,14 @@ export function useSaasDirectory() {
             .in("organization_id", orgIds)
             .order("created_at", { ascending: false }),
           getOrgMastersInfo({ data: { organization_ids: orgIds } }).catch(
-            () => ({ masters: [] }) as { masters: { organization_id: string; master_email: string | null; master_name: string | null }[] },
+            () =>
+              ({ masters: [] }) as {
+                masters: {
+                  organization_id: string;
+                  master_email: string | null;
+                  master_name: string | null;
+                }[];
+              },
           ),
         ]);
       if (subsQ.error && isMissingRelation(subsQ.error, "subscriptions")) {
@@ -348,25 +385,21 @@ export function useSaasDirectory() {
         const planOne = Array.isArray(planEmbed) ? planEmbed[0] : planEmbed;
         const planName = planOne?.name;
         const planScreens = planOne?.max_screens;
-        const orgProfs = (profs ?? []).filter((p) => p.organization_id === org.id);
-        const priority = ["admin_master", "gestor", "super_admin", "operador", "visualizador"];
-        const sorted = [...orgProfs].sort((a, b) => {
-          const ra = priority.indexOf(String((a as { role?: string }).role ?? ""));
-          const rb = priority.indexOf(String((b as { role?: string }).role ?? ""));
-          const na = ra === -1 ? 999 : ra;
-          const nb = rb === -1 ? 999 : rb;
-          if (na !== nb) return na - nb;
-          return (
-            new Date((a as { created_at: string }).created_at).getTime() -
-            new Date((b as { created_at: string }).created_at).getTime()
-          );
-        });
-        const primary = sorted[0] as { email?: string; name?: string } | undefined;
+        const contact = pickRegistrationContact(
+          {
+            id: org.id,
+            owner_profile_id: (org as { owner_profile_id?: string | null }).owner_profile_id ?? null,
+          },
+          (profs ?? []) as DirectoryProfileRow[],
+        );
         const fromServer = mastersByOrg.get(org.id);
-        const masterEmail = (primary?.email ?? fromServer?.master_email) ?? null;
-        const profileName = (primary?.name ?? "").trim();
+        const profileName = (contact.name ?? "").trim();
         const masterName =
-          profileName.length > 0 ? profileName : (fromServer?.master_name ?? null);
+          profileName.length > 0
+            ? profileName
+            : ((fromServer?.master_name ?? "").trim() || null);
+        const masterEmail =
+          (contact.email?.trim() || fromServer?.master_email?.trim() || null) ?? null;
         const u = usageByOrg.get(org.id);
         return buildSaasClientRow(
           { id: org.id, name: org.name, created_at: org.created_at },
@@ -374,11 +407,11 @@ export function useSaasDirectory() {
             ? { status: String((latest as { status: string }).status), plan: { name: planName } }
             : null,
           latestLicByOrg.get(org.id) ?? null,
+          masterName,
           masterEmail,
           u ? { total_screens: Number(u.total_screens ?? 0) } : null,
           planScreens != null ? { max_screens: planScreens } : null,
           lastPaidByOrg.get(org.id) ?? null,
-          masterName,
         );
       });
     },

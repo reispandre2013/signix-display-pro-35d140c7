@@ -81,8 +81,9 @@ export interface License {
 export interface SaasClient {
   organization_id: string;
   organization_name: string;
-  master_email: string | null;
+  /** Nome do perfil de cadastro (titular / owner quando existir). */
   master_name: string | null;
+  master_email: string | null;
   plan_name: string | null;
   subscription_status: SubscriptionStatus | null;
   screens_used: number;

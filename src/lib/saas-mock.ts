@@ -150,8 +150,8 @@ export const MOCK_SAAS_CLIENTS: SaasClient[] = [
   {
     organization_id: "o1",
     organization_name: "Padaria Central",
+    master_name: "Ana Costa",
     master_email: "ana@padariacentral.com.br",
-    master_name: null,
     plan_name: "Professional",
     subscription_status: "active",
     screens_used: 7,
@@ -163,8 +163,8 @@ export const MOCK_SAAS_CLIENTS: SaasClient[] = [
   {
     organization_id: "o2",
     organization_name: "Rede Farma+",
+    master_name: "Marcos Vieira",
     master_email: "marcos@farmamais.com",
-    master_name: null,
     plan_name: "Business",
     subscription_status: "active",
     screens_used: 22,
@@ -176,8 +176,8 @@ export const MOCK_SAAS_CLIENTS: SaasClient[] = [
   {
     organization_id: "o3",
     organization_name: "Posto Aurora",
+    master_name: "Felipe Novaes",
     master_email: "felipe@aurora.com",
-    master_name: null,
     plan_name: "Starter",
     subscription_status: "past_due",
     screens_used: 2,
@@ -189,8 +189,8 @@ export const MOCK_SAAS_CLIENTS: SaasClient[] = [
   {
     organization_id: "o4",
     organization_name: "Mall Plaza",
+    master_name: "TI Mall Plaza",
     master_email: "ti@mallplaza.com",
-    master_name: null,
     plan_name: "Enterprise",
     subscription_status: "active",
     screens_used: 154,
@@ -202,8 +202,8 @@ export const MOCK_SAAS_CLIENTS: SaasClient[] = [
   {
     organization_id: "o5",
     organization_name: "Cantina Bella",
+    master_name: "Luiza Menezes",
     master_email: "luiza@cantinabella.com",
-    master_name: null,
     plan_name: "Professional",
     subscription_status: "trialing",
     screens_used: 1,
@@ -215,8 +215,8 @@ export const MOCK_SAAS_CLIENTS: SaasClient[] = [
   {
     organization_id: "o6",
     organization_name: "AutoCenter Sul",
+    master_name: "Rafael Nunes",
     master_email: "rafael@autosul.com",
-    master_name: null,
     plan_name: "Business",
     subscription_status: "canceled",
     screens_used: 0,
