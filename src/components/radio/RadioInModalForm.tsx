@@ -75,14 +75,21 @@ export function RadioInModalForm({ onDone }: { onDone?: () => void }) {
         ),
       );
       const ok = results.filter((r) => r.status === "fulfilled").length;
-      const fail = results.length - ok;
-      return { ok, fail };
+      const failures = results
+        .filter((r): r is PromiseRejectedResult => r.status === "rejected")
+        .map((r) => (r.reason instanceof Error ? r.reason.message : String(r.reason)));
+      return { ok, fail: failures.length, failures };
     },
-    onSuccess: ({ ok, fail }) => {
+    onSuccess: ({ ok, fail, failures }) => {
       qc.invalidateQueries({ queryKey: ["radio-screens"] });
-      if (fail === 0) toast.success(`Rádio configurada em ${ok} tela(s).`);
-      else toast.warning(`Configurada em ${ok}, falhou em ${fail}.`);
-      if (fail === 0) onDone?.();
+      if (fail === 0) {
+        toast.success(`Rádio configurada em ${ok} tela(s).`);
+        onDone?.();
+      } else {
+        const detail = failures[0] ?? "erro desconhecido";
+        toast.error(`Falhou em ${fail} tela(s): ${detail}`, { duration: 8000 });
+        console.error("[radio] falhas no upsert:", failures);
+      }
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao salvar"),
   });
