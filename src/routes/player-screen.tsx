@@ -21,6 +21,7 @@ import {
   autoRegisterAndroid,
   pollUntilActive,
   getStoredAndroidSession,
+  clearStoredAndroidSession,
 } from "@/player/services/android-auto-pair";
 import { BackgroundRadioPlayer } from "@/player/components/background-radio-player";
 import { Tv, Wifi, AlertCircle, Loader2, KeyRound } from "lucide-react";
