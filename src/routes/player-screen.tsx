@@ -299,28 +299,8 @@ function PlayerScreenPage() {
   useEffect(() => {
     if (!canSync) return;
     const useDevice = Boolean(deviceId && authToken);
-    const send = () => {
-      const cur = items[idx];
-      const base = useDevice
-        ? {
-            screen_id: screenId as string,
-            device_id: deviceId as string,
-            auth_token: authToken as string,
-            platform,
-          }
-        : {
-            screen_id: screenId as string,
-            pairing_code: pairingCode as string,
-            platform,
-          };
-      void heartbeatFn({
-        data: {
-          ...base,
-          player_status: "playing",
-          current_media_id: cur?.id ?? null,
-        },
-      });
-    };
+    // (heartbeat enviado via sendSafe abaixo)
+
     const sendSafe = async () => {
       try {
         const cur = items[idx];
