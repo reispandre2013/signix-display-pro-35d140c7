@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Radio, Loader2, Save, Trash2, Play, Pause, Search, Volume2 } from "lucide-react";
@@ -19,12 +19,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
-  listScreensWithRadio,
   upsertRadioStream,
   deleteRadioStream,
   toggleRadioActive,
-  type ScreenWithRadio,
 } from "@/lib/server/radio.functions";
+import { useScreensWithRadio, type ScreenWithRadio } from "@/lib/hooks/use-radio-data";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
 
 export const Route = createFileRoute("/admin-saas/radio")({
@@ -34,7 +33,6 @@ export const Route = createFileRoute("/admin-saas/radio")({
 
 function RadioAdminPage() {
   const qc = useQueryClient();
-  const listFn = useServerFn(listScreensWithRadio);
   const upsertFn = useServerFn(upsertRadioStream);
   const deleteFn = useServerFn(deleteRadioStream);
   const toggleFn = useServerFn(toggleRadioActive);
@@ -43,10 +41,7 @@ function RadioAdminPage() {
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "paused" | "none">("all");
   const [editing, setEditing] = useState<ScreenWithRadio | null>(null);
 
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["admin-radio-screens"],
-    queryFn: () => withAuthHeader(() => listFn({ data: undefined as never })),
-  });
+  const { data = [], isLoading } = useScreensWithRadio();
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -68,7 +63,7 @@ function RadioAdminPage() {
     mutationFn: (vars: { screen_id: string; is_active: boolean }) =>
       withAuthHeader(() => toggleFn({ data: vars })),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["admin-radio-screens"] });
+      qc.invalidateQueries({ queryKey: ["radio-screens"] });
       toast.success("Estado atualizado");
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
@@ -77,7 +72,7 @@ function RadioAdminPage() {
   const remove = useMutation({
     mutationFn: (screen_id: string) => withAuthHeader(() => deleteFn({ data: { screen_id } })),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["admin-radio-screens"] });
+      qc.invalidateQueries({ queryKey: ["radio-screens"] });
       toast.success("Rádio removida");
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
@@ -233,7 +228,7 @@ function RadioAdminPage() {
           onClose={() => setEditing(null)}
           upsertFn={upsertFn}
           onSaved={() => {
-            qc.invalidateQueries({ queryKey: ["admin-radio-screens"] });
+            qc.invalidateQueries({ queryKey: ["radio-screens"] });
             setEditing(null);
           }}
         />

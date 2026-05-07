@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { Loader2, Save, Search, Check, Radio as RadioIcon, Play, Pause } from "lucide-react";
@@ -7,11 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import {
-  listScreensWithRadio,
-  upsertRadioStream,
-  type ScreenWithRadio,
-} from "@/lib/server/radio.functions";
+import { upsertRadioStream } from "@/lib/server/radio.functions";
+import { useScreensWithRadio, type ScreenWithRadio } from "@/lib/hooks/use-radio-data";
 import { withAuthHeader } from "@/lib/server/with-auth-header";
 
 /**
@@ -22,7 +19,6 @@ import { withAuthHeader } from "@/lib/server/with-auth-header";
  */
 export function RadioInModalForm({ onDone }: { onDone?: () => void }) {
   const qc = useQueryClient();
-  const listFn = useServerFn(listScreensWithRadio);
   const upsertFn = useServerFn(upsertRadioStream);
 
   const [search, setSearch] = useState("");
@@ -33,10 +29,7 @@ export function RadioInModalForm({ onDone }: { onDone?: () => void }) {
   const [isActive, setIsActive] = useState(true);
   const [testing, setTesting] = useState(false);
 
-  const { data = [], isLoading } = useQuery({
-    queryKey: ["midias-radio-screens"],
-    queryFn: () => withAuthHeader(() => listFn({ data: undefined as never })),
-  });
+  const { data = [], isLoading } = useScreensWithRadio();
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
@@ -44,6 +37,7 @@ export function RadioInModalForm({ onDone }: { onDone?: () => void }) {
     return data.filter(
       (r: ScreenWithRadio) =>
         r.screen_name.toLowerCase().includes(q) ||
+        (r.device_name ?? "").toLowerCase().includes(q) ||
         (r.organization_name ?? "").toLowerCase().includes(q),
     );
   }, [data, search]);
@@ -85,7 +79,7 @@ export function RadioInModalForm({ onDone }: { onDone?: () => void }) {
       return { ok, fail };
     },
     onSuccess: ({ ok, fail }) => {
-      qc.invalidateQueries({ queryKey: ["midias-radio-screens"] });
+      qc.invalidateQueries({ queryKey: ["radio-screens"] });
       if (fail === 0) toast.success(`Rádio configurada em ${ok} tela(s).`);
       else toast.warning(`Configurada em ${ok}, falhou em ${fail}.`);
       if (fail === 0) onDone?.();
