@@ -79,7 +79,7 @@ export function RadioInModalForm({ onDone }: { onDone?: () => void }) {
       return { ok, fail };
     },
     onSuccess: ({ ok, fail }) => {
-      qc.invalidateQueries({ queryKey: ["midias-radio-screens"] });
+      qc.invalidateQueries({ queryKey: ["radio-screens"] });
       if (fail === 0) toast.success(`Rádio configurada em ${ok} tela(s).`);
       else toast.warning(`Configurada em ${ok}, falhou em ${fail}.`);
       if (fail === 0) onDone?.();
