@@ -40,6 +40,7 @@ function RadioAdminPage() {
   const toggleFn = useServerFn(toggleRadioActive);
 
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "paused" | "none">("all");
   const [editing, setEditing] = useState<ScreenWithRadio | null>(null);
 
   const { data = [], isLoading } = useQuery({
