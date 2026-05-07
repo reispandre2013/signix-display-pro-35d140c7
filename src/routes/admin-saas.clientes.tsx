@@ -100,8 +100,9 @@ function ClientesPage() {
                         <span className="font-medium">{c.organization_name}</span>
                       </div>
                     </td>
-                    <td className="px-3 py-3 text-muted-foreground text-xs">
-                      {c.master_email ?? "—"}
+                    <td className="px-3 py-3 text-xs">
+                      <div className="font-medium text-foreground">{c.master_name ?? "—"}</div>
+                      <div className="text-muted-foreground">{c.master_email ?? "—"}</div>
                     </td>
                     <td className="px-3 py-3">
                       <span className="text-xs font-medium">{c.plan_name ?? "—"}</span>
