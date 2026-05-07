@@ -226,7 +226,7 @@ function PlayerScreenPage() {
         localStorage.removeItem(PLAYER_LS_DEVICE_ID);
         localStorage.removeItem(LS_SCREEN);
         setError("Sessão expirada. Re-registrando este aparelho…");
-        setTimeout(() => window.location.reload(), 1500);
+        setTimeout(() => { window.location.href = "/pareamento"; }, 1500);
         return;
       }
       const sid2 = screenId ?? localStorage.getItem(LS_SCREEN);
@@ -328,7 +328,7 @@ function PlayerScreenPage() {
           localStorage.removeItem(PLAYER_LS_DEVICE_ID);
           localStorage.removeItem(LS_SCREEN);
           setError("Sessão expirada. Re-registrando este aparelho…");
-          setTimeout(() => window.location.reload(), 1500);
+          setTimeout(() => { window.location.href = "/pareamento"; }, 1500);
         }
       }
     };
