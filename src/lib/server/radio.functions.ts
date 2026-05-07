@@ -68,19 +68,28 @@ export type ScreenWithRadio = {
   radio: RadioStreamRow | null;
 };
 
-/** Lista todas as telas com sua rádio (se houver). Apenas Super Admin. */
+/** Lista telas com sua rádio (se houver). Super admin vê todas; demais perfis veem apenas a própria org. */
 export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(async () => {
   const userId = await getAuthedUserId();
   const admin = adminClient();
-  await assertSuperAdmin(admin, userId);
+  const { isSuperAdmin, organizationId } = await getAuthContext(admin, userId);
 
-  const { data: screens, error: sErr } = await admin
+  let query = admin
     .from("screens")
     .select("id, name, organization_id, organizations(name)")
     .order("name", { ascending: true });
+  if (!isSuperAdmin) {
+    if (!organizationId) return [] as ScreenWithRadio[];
+    query = query.eq("organization_id", organizationId);
+  }
+  const { data: screens, error: sErr } = await query;
   if (sErr) throw new Error(sErr.message);
 
-  const { data: radios, error: rErr } = await admin.from("radio_streams").select("*");
+  let radiosQuery = admin.from("radio_streams").select("*");
+  if (!isSuperAdmin && organizationId) {
+    radiosQuery = radiosQuery.eq("organization_id", organizationId);
+  }
+  const { data: radios, error: rErr } = await radiosQuery;
   if (rErr) throw new Error(rErr.message);
 
   const radioByScreen = new Map<string, RadioStreamRow>();
