@@ -25,20 +25,28 @@ async function getAuthedUserId(): Promise<string> {
   return data.user.id;
 }
 
-async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
+async function getAuthContext(admin: SupabaseClient, userId: string) {
   const { data: profile } = await admin
     .from("profiles")
-    .select("role")
+    .select("role, organization_id")
     .eq("auth_user_id", userId)
     .maybeSingle();
   const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
   const profileRole = (profile as { role?: string } | null)?.role;
+  const organizationId = (profile as { organization_id?: string } | null)?.organization_id ?? null;
   const roleList = (roles ?? []).map((r) => (r as { role?: string }).role);
   const allowedRoles = ["super_admin", "operador", "admin_master", "gestor"];
   const ok =
     (profileRole && allowedRoles.includes(profileRole)) ||
     roleList.some((r) => r && allowedRoles.includes(r));
   if (!ok) throw new Error("Acesso restrito.");
+  const isSuperAdmin =
+    profileRole === "super_admin" || roleList.some((r) => r === "super_admin");
+  return { isSuperAdmin, organizationId };
+}
+
+async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
+  await getAuthContext(admin, userId);
 }
 
 export type RadioStreamRow = {
