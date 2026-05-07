@@ -50,14 +50,18 @@ function RadioAdminPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return data;
-    return data.filter(
+    let list = data;
+    if (statusFilter === "active") list = list.filter((r) => r.radio?.is_active);
+    else if (statusFilter === "paused") list = list.filter((r) => r.radio && !r.radio.is_active);
+    else if (statusFilter === "none") list = list.filter((r) => !r.radio);
+    if (!q) return list;
+    return list.filter(
       (r) =>
         r.screen_name.toLowerCase().includes(q) ||
         (r.organization_name ?? "").toLowerCase().includes(q) ||
         (r.radio?.radio_name ?? "").toLowerCase().includes(q),
     );
-  }, [data, search]);
+  }, [data, search, statusFilter]);
 
   const toggle = useMutation({
     mutationFn: (vars: { screen_id: string; is_active: boolean }) =>
