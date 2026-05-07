@@ -40,6 +40,7 @@ function RadioAdminPage() {
   const toggleFn = useServerFn(toggleRadioActive);
 
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "paused" | "none">("all");
   const [editing, setEditing] = useState<ScreenWithRadio | null>(null);
 
   const { data = [], isLoading } = useQuery({
@@ -49,14 +50,18 @@ function RadioAdminPage() {
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return data;
-    return data.filter(
+    let list = data;
+    if (statusFilter === "active") list = list.filter((r) => r.radio?.is_active);
+    else if (statusFilter === "paused") list = list.filter((r) => r.radio && !r.radio.is_active);
+    else if (statusFilter === "none") list = list.filter((r) => !r.radio);
+    if (!q) return list;
+    return list.filter(
       (r) =>
         r.screen_name.toLowerCase().includes(q) ||
         (r.organization_name ?? "").toLowerCase().includes(q) ||
         (r.radio?.radio_name ?? "").toLowerCase().includes(q),
     );
-  }, [data, search]);
+  }, [data, search, statusFilter]);
 
   const toggle = useMutation({
     mutationFn: (vars: { screen_id: string; is_active: boolean }) =>
@@ -104,6 +109,22 @@ function RadioAdminPage() {
               placeholder="Buscar por tela, empresa ou rádio…"
               className="pl-9"
             />
+          </div>
+          <div className="inline-flex rounded-md border border-border bg-surface p-0.5 self-start">
+            {[
+              { k: "all", label: `Todas (${total})` },
+              { k: "active", label: `Ativas (${ativas})` },
+              { k: "paused", label: `Pausadas (${configuradas - ativas})` },
+              { k: "none", label: `Sem rádio (${total - configuradas})` },
+            ].map((opt) => (
+              <button
+                key={opt.k}
+                onClick={() => setStatusFilter(opt.k as typeof statusFilter)}
+                className={`px-2.5 py-1 text-xs rounded ${statusFilter === opt.k ? "bg-accent font-semibold" : "text-muted-foreground"}`}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
         </div>
 
