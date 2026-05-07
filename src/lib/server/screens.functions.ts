@@ -299,9 +299,18 @@ export const pairScreenDevice = createServerFn({ method: "POST" })
       p_player_version: data.playerVersion,
     });
     if (rpcErr) throw new Error(rpcErr.message);
-    const row = (rpcData as Array<Record<string, unknown>> | null)?.[0] ?? null;
+    const rows = (rpcData as Array<Record<string, unknown>> | null) ?? [];
+    const row = rows[0] ?? null;
+    const screen = row
+      ? (JSON.parse(JSON.stringify(row)) as Record<string, string | number | boolean | null>)
+      : null;
     if (!row?.screen_id) {
-      return { paired: true, screen: row, device_id: null, auth_token: null };
+      return {
+        paired: true,
+        screen,
+        device_id: null as string | null,
+        auth_token: null as string | null,
+      };
     }
 
     const screenId = String(row.screen_id);
