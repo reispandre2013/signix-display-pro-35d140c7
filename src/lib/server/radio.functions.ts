@@ -83,21 +83,40 @@ export type ScreenWithRadio = {
   radio: RadioStreamRow | null;
 };
 
-/** Lista telas com sua rádio (se houver). Super admin vê todas; demais perfis veem apenas a própria org. */
+/** Lista DISPOSITIVOS pareados (player_devices) com a tela vinculada e a rádio (se houver).
+ * Buscamos pelo dispositivo porque a busca direta por telas estava retornando vazio
+ * em alguns perfis (org_id ausente no profile, FK embed inconsistente etc.). */
 export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(async () => {
   const userId = await getAuthedUserId();
   const admin = adminClient();
   const { isSuperAdmin, organizationIds } = await getAuthContext(admin, userId);
 
-  let query = admin
+  // 1) Busca dispositivos pareados (qualquer status) e extrai screen_ids
+  const { data: devices, error: dErr } = await admin
+    .from("player_devices")
+    .select("id, screen_id, device_name, pairing_status")
+    .not("screen_id", "is", null);
+  if (dErr) throw new Error(dErr.message);
+  const deviceList = (devices ?? []) as Array<{
+    id: string;
+    screen_id: string;
+    device_name: string | null;
+    pairing_status: string | null;
+  }>;
+  const screenIds = Array.from(new Set(deviceList.map((d) => d.screen_id).filter(Boolean)));
+  if (screenIds.length === 0) return [] as ScreenWithRadio[];
+
+  // 2) Busca as telas correspondentes (filtrando por org quando não é super admin)
+  let sQuery = admin
     .from("screens")
     .select("id, name, organization_id")
+    .in("id", screenIds)
     .order("name", { ascending: true });
   if (!isSuperAdmin) {
     if (organizationIds.length === 0) return [] as ScreenWithRadio[];
-    query = query.in("organization_id", organizationIds);
+    sQuery = sQuery.in("organization_id", organizationIds);
   }
-  const { data: screens, error: sErr } = await query;
+  const { data: screens, error: sErr } = await sQuery;
   if (sErr) throw new Error(sErr.message);
 
   const screenList = (screens ?? []) as Array<{
