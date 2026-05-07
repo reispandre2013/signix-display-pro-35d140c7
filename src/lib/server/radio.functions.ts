@@ -76,7 +76,7 @@ export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(a
 
   let query = admin
     .from("screens")
-    .select("id, name, organization_id, organizations(name)")
+    .select("id, name, organization_id")
     .order("name", { ascending: true });
   if (!isSuperAdmin) {
     if (!organizationId) return [] as ScreenWithRadio[];
@@ -84,6 +84,26 @@ export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(a
   }
   const { data: screens, error: sErr } = await query;
   if (sErr) throw new Error(sErr.message);
+
+  const screenList = (screens ?? []) as Array<{
+    id: string;
+    name: string;
+    organization_id: string;
+  }>;
+
+  // Busca nomes das organizações em separado (evita depender de FK embed do PostgREST).
+  const orgIds = Array.from(new Set(screenList.map((s) => s.organization_id).filter(Boolean)));
+  const orgNameById = new Map<string, string>();
+  if (orgIds.length > 0) {
+    const { data: orgs, error: oErr } = await admin
+      .from("organizations")
+      .select("id, name")
+      .in("id", orgIds);
+    if (oErr) throw new Error(oErr.message);
+    for (const o of (orgs ?? []) as Array<{ id: string; name: string | null }>) {
+      orgNameById.set(o.id, o.name ?? "");
+    }
+  }
 
   let radiosQuery = admin.from("radio_streams").select("*");
   if (!isSuperAdmin && organizationId) {
@@ -95,16 +115,11 @@ export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(a
   const radioByScreen = new Map<string, RadioStreamRow>();
   for (const r of (radios ?? []) as RadioStreamRow[]) radioByScreen.set(r.screen_id, r);
 
-  const out: ScreenWithRadio[] = ((screens ?? []) as Array<{
-    id: string;
-    name: string;
-    organization_id: string;
-    organizations?: { name?: string | null } | null;
-  }>).map((s) => ({
+  const out: ScreenWithRadio[] = screenList.map((s) => ({
     screen_id: s.id,
     screen_name: s.name,
     organization_id: s.organization_id,
-    organization_name: s.organizations?.name ?? null,
+    organization_name: orgNameById.get(s.organization_id) ?? null,
     radio: radioByScreen.get(s.id) ?? null,
   }));
 
