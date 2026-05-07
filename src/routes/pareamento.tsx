@@ -148,11 +148,14 @@ function PairingPage() {
         playerVersion: null,
       },
     })
-      .then((pr) => {
+      .then(async (pr) => {
         if (cancelled) return;
         if (pr.device_id && pr.auth_token) {
           localStorage.setItem(PLAYER_LS_DEVICE_ID, pr.device_id);
           localStorage.setItem(PLAYER_LS_AUTH_TOKEN, pr.auth_token);
+          // Espelha credenciais no Capacitor Preferences (APK Android sobrevive a updates).
+          const sid = localStorage.getItem(PLAYER_LS_SCREEN_ID);
+          if (sid) await saveAndroidSession(sid, pr.device_id, pr.auth_token).catch(() => {});
         }
       })
       .catch((e) => {
