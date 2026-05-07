@@ -377,7 +377,7 @@ export const pairScreenDevice = createServerFn({ method: "POST" })
       });
     }
 
-    return { paired: true, screen: row, device_id: deviceId, auth_token: plain };
+    return { paired: true, screen, device_id: deviceId, auth_token: plain };
   });
 
 /**
