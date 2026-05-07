@@ -1,0 +1,2 @@
+# Limite Cloudflare Workers: 25 MiB por ficheiro. O APK deve ser servido fora do Worker (R2, CDN ou link).
+downloads/*.apk
