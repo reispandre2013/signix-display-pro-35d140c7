@@ -200,7 +200,14 @@ export const deleteRadioStream = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const userId = await getAuthedUserId();
     const admin = adminClient();
-    await assertSuperAdmin(admin, userId);
+    const { data: screen } = await admin
+      .from("radio_streams")
+      .select("organization_id")
+      .eq("screen_id", data.screen_id)
+      .maybeSingle();
+    if (screen)
+      await assertCanManageScreen(admin, userId, (screen as { organization_id: string }).organization_id);
+    else await getAuthContext(admin, userId);
     const { error } = await admin.from("radio_streams").delete().eq("screen_id", data.screen_id);
     if (error) throw new Error(error.message);
     return { ok: true };
