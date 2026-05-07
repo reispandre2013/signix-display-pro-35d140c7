@@ -827,3 +827,96 @@ export const setOrgStorageQuota = createServerFn({ method: "POST" })
     if (error) throw new Error(`licenses.insert: ${error.message}`);
     return { ok: true, license_id: (ins as { id: string }).id, max_storage_mb: mb };
   });
+
+// ============================================================================
+// Resolve master display info (name + email) for a list of organizations.
+// Fallback: when profiles.name is empty, look up auth.users.user_metadata.name.
+// ============================================================================
+
+export type OrgMasterInfo = {
+  organization_id: string;
+  master_email: string | null;
+  master_name: string | null;
+};
+
+export const getOrgMastersInfo = createServerFn({ method: "POST" })
+  .inputValidator((input: { organization_ids: string[] }) => {
+    if (!input?.organization_ids || !Array.isArray(input.organization_ids)) {
+      throw new Error("organization_ids obrigatório.");
+    }
+    return input;
+  })
+  .handler(async ({ data }): Promise<{ masters: OrgMasterInfo[] }> => {
+    mustEnv();
+    const user = await getAuthedUser();
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    await assertSuperAdmin(admin, user.id);
+
+    if (data.organization_ids.length === 0) return { masters: [] };
+
+    const { data: profs, error } = await admin
+      .from("profiles")
+      .select("organization_id, email, name, role, created_at, auth_user_id")
+      .in("organization_id", data.organization_ids)
+      .order("created_at", { ascending: true });
+    if (error) throw new Error(`profiles.list: ${error.message}`);
+
+    const priority = ["admin_master", "gestor", "super_admin", "operador", "visualizador"];
+    const byOrg = new Map<string, Array<Record<string, unknown>>>();
+    for (const p of profs ?? []) {
+      const oid = String((p as { organization_id?: string }).organization_id ?? "");
+      if (!oid) continue;
+      if (!byOrg.has(oid)) byOrg.set(oid, []);
+      byOrg.get(oid)!.push(p as Record<string, unknown>);
+    }
+
+    // Listagem única do auth para fallback de name (até 1000 usuários).
+    let authNameById = new Map<string, string>();
+    try {
+      const { data: list } = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+      authNameById = new Map(
+        (list?.users ?? []).map((u) => {
+          const meta = (u.user_metadata ?? {}) as Record<string, unknown>;
+          const name =
+            (typeof meta.name === "string" && meta.name.trim()) ||
+            (typeof meta.full_name === "string" && (meta.full_name as string).trim()) ||
+            "";
+          return [u.id, name];
+        }),
+      );
+    } catch {
+      // ignora — usaremos só profiles
+    }
+
+    const masters: OrgMasterInfo[] = data.organization_ids.map((oid) => {
+      const list = byOrg.get(oid) ?? [];
+      const sorted = [...list].sort((a, b) => {
+        const ra = priority.indexOf(String((a as { role?: string }).role ?? ""));
+        const rb = priority.indexOf(String((b as { role?: string }).role ?? ""));
+        const na = ra === -1 ? 999 : ra;
+        const nb = rb === -1 ? 999 : rb;
+        if (na !== nb) return na - nb;
+        return (
+          new Date(String((a as { created_at?: string }).created_at ?? 0)).getTime() -
+          new Date(String((b as { created_at?: string }).created_at ?? 0)).getTime()
+        );
+      });
+      const primary = sorted[0] as
+        | { email?: string; name?: string; auth_user_id?: string }
+        | undefined;
+      const profileName = (primary?.name ?? "").trim();
+      const authFallback = primary?.auth_user_id
+        ? (authNameById.get(primary.auth_user_id) ?? "").trim()
+        : "";
+      const finalName = profileName || authFallback || null;
+      return {
+        organization_id: oid,
+        master_email: primary?.email ?? null,
+        master_name: finalName,
+      };
+    });
+
+    return { masters };
+  });
