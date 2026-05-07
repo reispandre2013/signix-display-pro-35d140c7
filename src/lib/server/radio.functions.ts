@@ -31,22 +31,37 @@ async function getAuthContext(admin: SupabaseClient, userId: string) {
     .select("role, organization_id")
     .eq("auth_user_id", userId)
     .maybeSingle();
-  const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
+  const { data: roles } = await admin
+    .from("user_roles")
+    .select("role, organization_id")
+    .eq("user_id", userId);
   const profileRole = (profile as { role?: string } | null)?.role;
-  const organizationId = (profile as { organization_id?: string } | null)?.organization_id ?? null;
-  const roleList = (roles ?? []).map((r) => (r as { role?: string }).role);
+  const profileOrgId =
+    (profile as { organization_id?: string } | null)?.organization_id ?? null;
+  const roleRows = (roles ?? []) as Array<{ role?: string; organization_id?: string | null }>;
   const allowedRoles = ["super_admin", "operador", "admin_master", "gestor"];
   const ok =
     (profileRole && allowedRoles.includes(profileRole)) ||
-    roleList.some((r) => r && allowedRoles.includes(r));
+    roleRows.some((r) => r.role && allowedRoles.includes(r.role));
   if (!ok) throw new Error("Acesso restrito.");
   const isSuperAdmin =
-    profileRole === "super_admin" || roleList.some((r) => r === "super_admin");
-  return { isSuperAdmin, organizationId };
+    profileRole === "super_admin" || roleRows.some((r) => r.role === "super_admin");
+  // Consolida TODAS as organizações às quais o usuário está vinculado
+  // (perfil + user_roles). Sem isso, usuários cujo profile.organization_id
+  // está nulo ou que pertencem a múltiplas orgs viam "Nenhuma tela".
+  const orgSet = new Set<string>();
+  if (profileOrgId) orgSet.add(profileOrgId);
+  for (const r of roleRows) {
+    if (r.organization_id) orgSet.add(r.organization_id);
+  }
+  const organizationIds = Array.from(orgSet);
+  return { isSuperAdmin, organizationIds };
 }
 
-async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
-  await getAuthContext(admin, userId);
+async function assertCanManageScreen(admin: SupabaseClient, userId: string, screenOrgId: string) {
+  const { isSuperAdmin, organizationIds } = await getAuthContext(admin, userId);
+  if (isSuperAdmin) return;
+  if (!organizationIds.includes(screenOrgId)) throw new Error("Sem permissão para esta tela.");
 }
 
 export type RadioStreamRow = {
@@ -72,15 +87,15 @@ export type ScreenWithRadio = {
 export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(async () => {
   const userId = await getAuthedUserId();
   const admin = adminClient();
-  const { isSuperAdmin, organizationId } = await getAuthContext(admin, userId);
+  const { isSuperAdmin, organizationIds } = await getAuthContext(admin, userId);
 
   let query = admin
     .from("screens")
     .select("id, name, organization_id")
     .order("name", { ascending: true });
   if (!isSuperAdmin) {
-    if (!organizationId) return [] as ScreenWithRadio[];
-    query = query.eq("organization_id", organizationId);
+    if (organizationIds.length === 0) return [] as ScreenWithRadio[];
+    query = query.in("organization_id", organizationIds);
   }
   const { data: screens, error: sErr } = await query;
   if (sErr) throw new Error(sErr.message);
@@ -106,8 +121,8 @@ export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(a
   }
 
   let radiosQuery = admin.from("radio_streams").select("*");
-  if (!isSuperAdmin && organizationId) {
-    radiosQuery = radiosQuery.eq("organization_id", organizationId);
+  if (!isSuperAdmin && organizationIds.length > 0) {
+    radiosQuery = radiosQuery.in("organization_id", organizationIds);
   }
   const { data: radios, error: rErr } = await radiosQuery;
   if (rErr) throw new Error(rErr.message);
@@ -148,7 +163,6 @@ export const upsertRadioStream = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const userId = await getAuthedUserId();
     const admin = adminClient();
-    await assertSuperAdmin(admin, userId);
 
     const { data: screen, error: sErr } = await admin
       .from("screens")
@@ -157,6 +171,7 @@ export const upsertRadioStream = createServerFn({ method: "POST" })
       .maybeSingle();
     if (sErr) throw new Error(sErr.message);
     if (!screen) throw new Error("Tela não encontrada.");
+    await assertCanManageScreen(admin, userId, (screen as { organization_id: string }).organization_id);
 
     const payload = {
       screen_id: data.screen_id,
@@ -185,7 +200,14 @@ export const deleteRadioStream = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const userId = await getAuthedUserId();
     const admin = adminClient();
-    await assertSuperAdmin(admin, userId);
+    const { data: screen } = await admin
+      .from("radio_streams")
+      .select("organization_id")
+      .eq("screen_id", data.screen_id)
+      .maybeSingle();
+    if (screen)
+      await assertCanManageScreen(admin, userId, (screen as { organization_id: string }).organization_id);
+    else await getAuthContext(admin, userId);
     const { error } = await admin.from("radio_streams").delete().eq("screen_id", data.screen_id);
     if (error) throw new Error(error.message);
     return { ok: true };
@@ -196,7 +218,14 @@ export const toggleRadioActive = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const userId = await getAuthedUserId();
     const admin = adminClient();
-    await assertSuperAdmin(admin, userId);
+    const { data: screen } = await admin
+      .from("radio_streams")
+      .select("organization_id")
+      .eq("screen_id", data.screen_id)
+      .maybeSingle();
+    if (screen)
+      await assertCanManageScreen(admin, userId, (screen as { organization_id: string }).organization_id);
+    else await getAuthContext(admin, userId);
     const { error } = await admin
       .from("radio_streams")
       .update({ is_active: data.is_active, updated_by: userId })
