@@ -78,6 +78,9 @@ export type RadioStreamRow = {
 export type ScreenWithRadio = {
   screen_id: string;
   screen_name: string;
+  device_id: string | null;
+  device_name: string | null;
+  pairing_status: string | null;
   organization_id: string;
   organization_name: string | null;
   radio: RadioStreamRow | null;
