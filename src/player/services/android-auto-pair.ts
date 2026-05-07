@@ -119,15 +119,16 @@ export async function pollUntilActive(
 ): Promise<AndroidPairState> {
   while (true) {
     const token = await getStored(KEY_TOKEN);
-    const r = await postJson<{
+    type SessRes = {
       status: string;
       device_id?: string;
       screen_id?: string;
       token?: string;
-    }>("/api/public/devices/check-session", {
+    };
+    const r: SessRes = await postJson<SessRes>("/api/public/devices/check-session", {
       device_uuid: uuid,
       token: token ?? "",
-    }).catch(() => ({ status: "error" }) as { status: string });
+    }).catch(() => ({ status: "error" }) as SessRes);
 
     if (r.status === "active" && r.screen_id) {
       const finalToken = r.token ?? token ?? "";
