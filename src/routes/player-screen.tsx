@@ -343,11 +343,14 @@ function PlayerScreenPage() {
       } catch (e) {
         const msg = e instanceof Error ? e.message : String(e);
         console.error("[heartbeat] failed:", msg);
-        // Credenciais defasadas (token inválido / dispositivo não corresponde):
-        // limpa sessão local para forçar re-registro automático no Android TV.
         const stale =
           /token.*inv[aá]lido|n[aã]o corresponde|n[aã]o encontrado|pendente/i.test(msg);
         if (stale && isAndroidNative()) {
+          try {
+            await clearStoredAndroidSession();
+          } catch {
+            /* ignore */
+          }
           localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
           localStorage.removeItem(PLAYER_LS_DEVICE_ID);
           localStorage.removeItem(LS_SCREEN);
