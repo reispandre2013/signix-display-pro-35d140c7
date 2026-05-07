@@ -25,20 +25,28 @@ async function getAuthedUserId(): Promise<string> {
   return data.user.id;
 }
 
-async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
+async function getAuthContext(admin: SupabaseClient, userId: string) {
   const { data: profile } = await admin
     .from("profiles")
-    .select("role")
+    .select("role, organization_id")
     .eq("auth_user_id", userId)
     .maybeSingle();
   const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
   const profileRole = (profile as { role?: string } | null)?.role;
+  const organizationId = (profile as { organization_id?: string } | null)?.organization_id ?? null;
   const roleList = (roles ?? []).map((r) => (r as { role?: string }).role);
   const allowedRoles = ["super_admin", "operador", "admin_master", "gestor"];
   const ok =
     (profileRole && allowedRoles.includes(profileRole)) ||
     roleList.some((r) => r && allowedRoles.includes(r));
   if (!ok) throw new Error("Acesso restrito.");
+  const isSuperAdmin =
+    profileRole === "super_admin" || roleList.some((r) => r === "super_admin");
+  return { isSuperAdmin, organizationId };
+}
+
+async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
+  await getAuthContext(admin, userId);
 }
 
 export type RadioStreamRow = {
@@ -60,19 +68,28 @@ export type ScreenWithRadio = {
   radio: RadioStreamRow | null;
 };
 
-/** Lista todas as telas com sua rádio (se houver). Apenas Super Admin. */
+/** Lista telas com sua rádio (se houver). Super admin vê todas; demais perfis veem apenas a própria org. */
 export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(async () => {
   const userId = await getAuthedUserId();
   const admin = adminClient();
-  await assertSuperAdmin(admin, userId);
+  const { isSuperAdmin, organizationId } = await getAuthContext(admin, userId);
 
-  const { data: screens, error: sErr } = await admin
+  let query = admin
     .from("screens")
     .select("id, name, organization_id, organizations(name)")
     .order("name", { ascending: true });
+  if (!isSuperAdmin) {
+    if (!organizationId) return [] as ScreenWithRadio[];
+    query = query.eq("organization_id", organizationId);
+  }
+  const { data: screens, error: sErr } = await query;
   if (sErr) throw new Error(sErr.message);
 
-  const { data: radios, error: rErr } = await admin.from("radio_streams").select("*");
+  let radiosQuery = admin.from("radio_streams").select("*");
+  if (!isSuperAdmin && organizationId) {
+    radiosQuery = radiosQuery.eq("organization_id", organizationId);
+  }
+  const { data: radios, error: rErr } = await radiosQuery;
   if (rErr) throw new Error(rErr.message);
 
   const radioByScreen = new Map<string, RadioStreamRow>();

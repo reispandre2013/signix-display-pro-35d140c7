@@ -23,7 +23,6 @@ import {
   FileCode,
   Trash2,
   Images,
-  Radio,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -150,7 +149,7 @@ function MediaPage() {
   const create = useCreateMedia();
   const remove = useDeleteMedia();
   const [open, setOpen] = useState(false);
-  const [showRadio, setShowRadio] = useState(false);
+  
   const [sourceType, setSourceType] = useState<"url" | "upload">("url");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [search, setSearch] = useState("");
@@ -499,28 +498,6 @@ function MediaPage() {
         title="Adicionar mídia"
       >
         <form onSubmit={submit} className="space-y-3">
-          {canManageRadio && (
-            <>
-              <button
-                type="button"
-                onClick={() => setShowRadio((v) => !v)}
-                className="w-full flex items-center gap-3 rounded-lg border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 px-3 py-2.5 text-left transition"
-              >
-                <div className="h-9 w-9 rounded-lg bg-primary/20 grid place-items-center text-primary shrink-0">
-                  <Radio className="h-4 w-4" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold">
-                    {showRadio ? "Ocultar Rádio Online" : "Configurar Rádio Online"}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
-                    Stream de áudio em background nas TVs (não interrompe vídeos/imagens).
-                  </p>
-                </div>
-              </button>
-              {showRadio && <RadioInModalForm onDone={() => setShowRadio(false)} />}
-            </>
-          )}
           {formError ? (
             <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
               {formError}
@@ -528,36 +505,10 @@ function MediaPage() {
           ) : null}
           <FormField label="Nome">
             <TextInput
-              required
+              required={form.file_type !== "radio"}
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
-          </FormField>
-          <FormField label="Origem da mídia">
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setSourceType("url")}
-                className={`rounded-lg border px-3 py-2 text-sm transition ${
-                  sourceType === "url"
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-input bg-surface text-foreground"
-                }`}
-              >
-                Link externo
-              </button>
-              <button
-                type="button"
-                onClick={() => setSourceType("upload")}
-                className={`rounded-lg border px-3 py-2 text-sm transition ${
-                  sourceType === "upload"
-                    ? "border-primary bg-primary/10 text-primary"
-                    : "border-input bg-surface text-foreground"
-                }`}
-              >
-                Upload no sistema
-              </button>
-            </div>
           </FormField>
           <FormField label="Tipo">
             <select
@@ -568,46 +519,93 @@ function MediaPage() {
               <option value="image">Imagem</option>
               <option value="video">Vídeo</option>
               <option value="html">HTML</option>
+              {canManageRadio && <option value="radio">Rádio Online</option>}
             </select>
           </FormField>
-          {sourceType === "url" ? (
-            <FormField label="URL pública">
-              <TextInput
-                type="url"
-                required
-                placeholder="https://…"
-                value={form.public_url}
-                onChange={(e) => setForm({ ...form, public_url: e.target.value })}
+
+          {form.file_type === "radio" ? (
+            canManageRadio ? (
+              <RadioInModalForm
+                onDone={() => {
+                  setOpen(false);
+                  setForm({ name: "", file_type: "image", public_url: "", duration_seconds: 10 });
+                }}
               />
-            </FormField>
+            ) : (
+              <p className="text-xs text-muted-foreground">
+                Você não tem permissão para configurar rádio online.
+              </p>
+            )
           ) : (
-            <FormField label="Arquivo">
-              <input
-                type="file"
-                required
-                accept={
-                  form.file_type === "video"
-                    ? "video/mp4"
-                    : "image/png,image/jpeg,image/webp,video/mp4"
-                }
-                onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
-                className="w-full rounded-lg border border-input bg-surface px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary"
-              />
-            </FormField>
+            <>
+              <FormField label="Origem da mídia">
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSourceType("url")}
+                    className={`rounded-lg border px-3 py-2 text-sm transition ${
+                      sourceType === "url"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-input bg-surface text-foreground"
+                    }`}
+                  >
+                    Link externo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSourceType("upload")}
+                    className={`rounded-lg border px-3 py-2 text-sm transition ${
+                      sourceType === "upload"
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-input bg-surface text-foreground"
+                    }`}
+                  >
+                    Upload no sistema
+                  </button>
+                </div>
+              </FormField>
+              {sourceType === "url" ? (
+                <FormField label="URL pública">
+                  <TextInput
+                    type="url"
+                    required
+                    placeholder="https://…"
+                    value={form.public_url}
+                    onChange={(e) => setForm({ ...form, public_url: e.target.value })}
+                  />
+                </FormField>
+              ) : (
+                <FormField label="Arquivo">
+                  <input
+                    type="file"
+                    required
+                    accept={
+                      form.file_type === "video"
+                        ? "video/mp4"
+                        : "image/png,image/jpeg,image/webp,video/mp4"
+                    }
+                    onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+                    className="w-full rounded-lg border border-input bg-surface px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-primary/10 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-primary"
+                  />
+                </FormField>
+              )}
+              {form.file_type !== "video" ? (
+                <FormField label="Duração (segundos) — imagens / HTML">
+                  <TextInput
+                    type="number"
+                    min={1}
+                    value={form.duration_seconds}
+                    onChange={(e) =>
+                      setForm({ ...form, duration_seconds: Number(e.target.value) })
+                    }
+                  />
+                </FormField>
+              ) : null}
+              <PrimaryButton type="submit" disabled={create.isPending}>
+                {create.isPending ? "Salvando…" : "Adicionar"}
+              </PrimaryButton>
+            </>
           )}
-          {form.file_type !== "video" ? (
-            <FormField label="Duração (segundos) — imagens / HTML">
-              <TextInput
-                type="number"
-                min={1}
-                value={form.duration_seconds}
-                onChange={(e) => setForm({ ...form, duration_seconds: Number(e.target.value) })}
-              />
-            </FormField>
-          ) : null}
-          <PrimaryButton type="submit" disabled={create.isPending}>
-            {create.isPending ? "Salvando…" : "Adicionar"}
-          </PrimaryButton>
         </form>
       </Modal>
     </div>
