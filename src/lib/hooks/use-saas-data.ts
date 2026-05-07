@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { getOrgMastersInfo } from "@/lib/server/saas-admin.functions";
 import {
   buildSaasClientRow,
   buildUsageDisplay,
