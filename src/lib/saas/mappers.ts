@@ -164,12 +164,14 @@ export function buildSaasClientRow(
   usage: { total_screens: number } | null,
   planForLimit: { max_screens: number } | null,
   lastPaidAt: string | null,
+  masterName: string | null = null,
 ): SaasClient {
   const st = (sub?.status as SaasClient["subscription_status"]) ?? null;
   return {
     organization_id: org.id,
     organization_name: org.name,
     master_email: masterEmail,
+    master_name: masterName,
     plan_name: sub?.plan?.name ? String(sub.plan.name) : null,
     subscription_status: st,
     screens_used: usage?.total_screens ?? 0,
