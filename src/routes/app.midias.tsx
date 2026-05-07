@@ -143,7 +143,8 @@ function detectMediaFromFile(file: File): UploadDetectedMedia | null {
 
 function MediaPage() {
   const { profile } = useAuth();
-  const { isSuperAdmin, isOperador } = useRole();
+  const { isSuperAdmin, isOperador, isMaster } = useRole();
+  const canManageRadio = isSuperAdmin || isOperador || isMaster;
   const { data: media = [], isLoading, error } = useMedia();
   const { data: billing } = useOrgBillingContext();
   const create = useCreateMedia();
@@ -480,7 +481,7 @@ function MediaPage() {
         )}
       </Panel>
 
-      {(isSuperAdmin || isOperador) && (
+      {canManageRadio && (
         <div id="radio-online-section">
           <RadioOnlineSection />
         </div>
@@ -498,7 +499,7 @@ function MediaPage() {
         title="Adicionar mídia"
       >
         <form onSubmit={submit} className="space-y-3">
-          {(isSuperAdmin || isOperador) && (
+          {canManageRadio && (
             <>
               <button
                 type="button"
