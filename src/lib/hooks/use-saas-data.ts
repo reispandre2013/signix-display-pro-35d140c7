@@ -272,9 +272,8 @@ export function useSaasDirectory() {
           .in("organization_id", orgIds),
         supabase
           .from("profiles")
-          .select("organization_id, email, role, created_at")
-          .in("organization_id", orgIds)
-          .in("role", ["admin_master", "gestor", "super_admin"]),
+          .select("organization_id, email, name, role, created_at")
+          .in("organization_id", orgIds),
         supabase
           .from("payments")
           .select("organization_id, paid_at, amount_cents, status, created_at")
@@ -343,9 +342,11 @@ export function useSaasDirectory() {
         const masters = (profs ?? []).filter(
           (p) => p.organization_id === org.id && p.role === "admin_master",
         );
-        const masterEmail =
-          masters[0]?.email ??
-          (profs ?? []).find((p) => p.organization_id === org.id)?.email ??
+        const fallbackProfile = (profs ?? []).find((p) => p.organization_id === org.id);
+        const masterEmail = masters[0]?.email ?? fallbackProfile?.email ?? null;
+        const masterName =
+          (masters[0] as { name?: string | null } | undefined)?.name ??
+          (fallbackProfile as { name?: string | null } | undefined)?.name ??
           null;
         const u = usageByOrg.get(org.id);
         return buildSaasClientRow(
@@ -358,6 +359,7 @@ export function useSaasDirectory() {
           u ? { total_screens: Number(u.total_screens ?? 0) } : null,
           planScreens != null ? { max_screens: planScreens } : null,
           lastPaidByOrg.get(org.id) ?? null,
+          masterName,
         );
       });
     },

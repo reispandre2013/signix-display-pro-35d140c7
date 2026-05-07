@@ -82,6 +82,7 @@ export interface SaasClient {
   organization_id: string;
   organization_name: string;
   master_email: string | null;
+  master_name: string | null;
   plan_name: string | null;
   subscription_status: SubscriptionStatus | null;
   screens_used: number;
