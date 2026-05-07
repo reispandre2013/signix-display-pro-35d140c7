@@ -49,11 +49,28 @@ export const Route = createFileRoute("/api/public/devices/check-session")({
           });
         }
 
-        // Primeira poll após ativação: entrega o token em claro UMA vez e limpa.
-        if (!token && dev.pending_auth_token) {
+        // Entrega o token em claro enquanto o cliente ainda não o devolveu.
+        // NÃO limpa imediatamente: aguarda confirmação (poll subsequente
+        // com token válido) para evitar perda em caso de falha de rede.
+        if ((!token || token !== "") && dev.pending_auth_token) {
+          // Se o cliente já enviou o token correto, podemos limpar.
+          if (token && dev.auth_secret_hash === sha256(token)) {
+            await supabaseAdmin
+              .from("player_devices")
+              .update({ pending_auth_token: null, last_seen: new Date().toISOString() })
+              .eq("id", dev.id);
+            return json({
+              status: "active",
+              device_id: dev.id,
+              screen_id: dev.screen_id,
+              device_name: dev.device_name,
+              organization_id: dev.organization_id,
+            });
+          }
+          // Caso contrário, (re)entrega o token em claro.
           await supabaseAdmin
             .from("player_devices")
-            .update({ pending_auth_token: null, last_seen: new Date().toISOString() })
+            .update({ last_seen: new Date().toISOString() })
             .eq("id", dev.id);
           return json({
             status: "active",
