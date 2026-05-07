@@ -16,6 +16,12 @@ import {
   PLAYER_LS_SCREEN_ID,
 } from "@/player/player-storage-keys";
 import { resetDevicePairing } from "@/player/services/player-api";
+import {
+  isAndroidNative,
+  autoRegisterAndroid,
+  pollUntilActive,
+  getStoredAndroidSession,
+} from "@/player/services/android-auto-pair";
 import { BackgroundRadioPlayer } from "@/player/components/background-radio-player";
 import { Tv, Wifi, AlertCircle, Loader2, KeyRound } from "lucide-react";
 
@@ -98,19 +104,79 @@ function PlayerScreenPage() {
   const [hideOverlay, setHideOverlay] = useState(true);
   const [hideControls, setHideControls] = useState(true);
 
+  const [androidPending, setAndroidPending] = useState<{ uuid: string } | null>(null);
+
   useEffect(() => {
-    const sid = localStorage.getItem(LS_SCREEN);
-    const code = localStorage.getItem(LS_CODE);
-    const did = localStorage.getItem(PLAYER_LS_DEVICE_ID);
-    const tok = localStorage.getItem(PLAYER_LS_AUTH_TOKEN);
-    setScreenId(sid);
-    setPairingCode(code);
-    setDeviceId(did);
-    setAuthToken(tok);
-    const canPlay = Boolean(sid && (code || (did && tok)));
-    if (!canPlay) {
-      setError("Faça o pareamento primeiro e volte aqui (código e tela gravados neste aparelho).");
+    let cancelled = false;
+    async function bootstrap() {
+      // Fluxo exclusivo Android TV (APK Capacitor): auto-registro + token persistente.
+      if (isAndroidNative()) {
+        const session = await getStoredAndroidSession().catch(() => null);
+        if (session) {
+          localStorage.setItem(LS_SCREEN, session.screen_id);
+          localStorage.setItem(PLAYER_LS_DEVICE_ID, session.device_id);
+          localStorage.setItem(PLAYER_LS_AUTH_TOKEN, session.auth_token);
+          localStorage.removeItem(LS_CODE);
+          if (cancelled) return;
+          setScreenId(session.screen_id);
+          setDeviceId(session.device_id);
+          setAuthToken(session.auth_token);
+          setPairingCode(null);
+          return;
+        }
+        try {
+          const reg = await autoRegisterAndroid();
+          if (cancelled) return;
+          if (reg.status === "active") {
+            localStorage.setItem(LS_SCREEN, reg.screen_id);
+            localStorage.setItem(PLAYER_LS_DEVICE_ID, reg.device_id);
+            localStorage.setItem(PLAYER_LS_AUTH_TOKEN, reg.auth_token);
+            localStorage.removeItem(LS_CODE);
+            setScreenId(reg.screen_id);
+            setDeviceId(reg.device_id);
+            setAuthToken(reg.auth_token);
+            setPairingCode(null);
+            return;
+          }
+          setAndroidPending({ uuid: reg.device_uuid });
+          // poll background até ativar
+          void pollUntilActive(reg.device_uuid).then((s) => {
+            if (cancelled || s.status !== "active") return;
+            localStorage.setItem(LS_SCREEN, s.screen_id);
+            localStorage.setItem(PLAYER_LS_DEVICE_ID, s.device_id);
+            localStorage.setItem(PLAYER_LS_AUTH_TOKEN, s.auth_token);
+            localStorage.removeItem(LS_CODE);
+            setScreenId(s.screen_id);
+            setDeviceId(s.device_id);
+            setAuthToken(s.auth_token);
+            setPairingCode(null);
+            setAndroidPending(null);
+          });
+        } catch (e) {
+          if (!cancelled)
+            setError(e instanceof Error ? e.message : "Falha no auto-registro Android.");
+        }
+        return;
+      }
+
+      // Web/Tizen mantêm fluxo atual de pareamento por código.
+      const sid = localStorage.getItem(LS_SCREEN);
+      const code = localStorage.getItem(LS_CODE);
+      const did = localStorage.getItem(PLAYER_LS_DEVICE_ID);
+      const tok = localStorage.getItem(PLAYER_LS_AUTH_TOKEN);
+      setScreenId(sid);
+      setPairingCode(code);
+      setDeviceId(did);
+      setAuthToken(tok);
+      const canPlay = Boolean(sid && (code || (did && tok)));
+      if (!canPlay) {
+        setError("Faça o pareamento primeiro e volte aqui (código e tela gravados neste aparelho).");
+      }
     }
+    void bootstrap();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const pullPlaylist = useCallback(async () => {
@@ -304,6 +370,24 @@ function PlayerScreenPage() {
     return (
       <div className="min-h-screen w-screen bg-black text-white grid place-items-center">
         <Loader2 className="h-12 w-12 animate-spin text-white/60" aria-label="A sincronizar" />
+      </div>
+    );
+  }
+
+  if (!canSync && androidPending) {
+    const shortUuid = androidPending.uuid.slice(0, 8).toUpperCase();
+    return (
+      <div className="min-h-screen w-screen bg-black text-white flex flex-col items-center justify-center gap-5 p-8">
+        <Tv className="h-14 w-14 text-white/60" />
+        <h1 className="text-2xl font-display font-bold">Aguardando ativação</h1>
+        <p className="text-center max-w-md text-sm text-white/70">
+          Este Android TV foi registrado automaticamente. Abra o painel administrativo em
+          <strong className="px-1">Dispositivos pendentes</strong> e ative este aparelho.
+        </p>
+        <div className="rounded-xl border border-white/20 bg-white/5 px-5 py-3 font-mono text-lg tracking-wider">
+          ID: {shortUuid}
+        </div>
+        <p className="text-[11px] text-white/40">A reconectar automaticamente…</p>
       </div>
     );
   }
