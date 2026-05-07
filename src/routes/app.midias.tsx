@@ -149,6 +149,7 @@ function MediaPage() {
   const create = useCreateMedia();
   const remove = useDeleteMedia();
   const [open, setOpen] = useState(false);
+  const [showRadio, setShowRadio] = useState(false);
   const [sourceType, setSourceType] = useState<"url" | "upload">("url");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [search, setSearch] = useState("");
