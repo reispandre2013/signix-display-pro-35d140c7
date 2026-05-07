@@ -2,16 +2,19 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
+const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
+
 const SUPABASE_URL =
   process.env.SUPABASE_URL ??
   process.env.VITE_SUPABASE_URL ??
   (import.meta as unknown as { env?: Record<string, string | undefined> }).env?.VITE_SUPABASE_URL ??
-  "";
+  FALLBACK_SUPABASE_URL;
 
 const SERVICE_ROLE = process.env.SERVICE_ROLE_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
 
 function adminClient() {
-  if (!SUPABASE_URL || !SERVICE_ROLE) throw new Error("Configuração Supabase incompleta no servidor.");
+  if (!SERVICE_ROLE)
+    throw new Error("SERVICE_ROLE_KEY ausente no servidor. Configure o secret no projeto.");
   return createClient(SUPABASE_URL, SERVICE_ROLE, { auth: { persistSession: false } });
 }
 
