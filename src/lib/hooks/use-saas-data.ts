@@ -343,9 +343,11 @@ export function useSaasDirectory() {
         const masters = (profs ?? []).filter(
           (p) => p.organization_id === org.id && p.role === "admin_master",
         );
-        const masterEmail =
-          masters[0]?.email ??
-          (profs ?? []).find((p) => p.organization_id === org.id)?.email ??
+        const fallbackProfile = (profs ?? []).find((p) => p.organization_id === org.id);
+        const masterEmail = masters[0]?.email ?? fallbackProfile?.email ?? null;
+        const masterName =
+          (masters[0] as { name?: string | null } | undefined)?.name ??
+          (fallbackProfile as { name?: string | null } | undefined)?.name ??
           null;
         const u = usageByOrg.get(org.id);
         return buildSaasClientRow(
@@ -358,6 +360,7 @@ export function useSaasDirectory() {
           u ? { total_screens: Number(u.total_screens ?? 0) } : null,
           planScreens != null ? { max_screens: planScreens } : null,
           lastPaidByOrg.get(org.id) ?? null,
+          masterName,
         );
       });
     },
