@@ -22,6 +22,7 @@ import {
   FileCode,
   Trash2,
   Images,
+  Radio,
 } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -477,7 +478,11 @@ function MediaPage() {
         )}
       </Panel>
 
-      {(isSuperAdmin || isOperador) && <RadioOnlineSection />}
+      {(isSuperAdmin || isOperador) && (
+        <div id="radio-online-section">
+          <RadioOnlineSection />
+        </div>
+      )}
 
       <Modal
         open={open}
@@ -491,6 +496,31 @@ function MediaPage() {
         title="Adicionar mídia"
       >
         <form onSubmit={submit} className="space-y-3">
+          {(isSuperAdmin || isOperador) && (
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                setFormError(null);
+                setTimeout(() => {
+                  document
+                    .getElementById("radio-online-section")
+                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 100);
+              }}
+              className="w-full flex items-center gap-3 rounded-lg border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 px-3 py-2.5 text-left transition"
+            >
+              <div className="h-9 w-9 rounded-lg bg-primary/20 grid place-items-center text-primary shrink-0">
+                <Radio className="h-4 w-4" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold">Configurar Rádio Online</p>
+                <p className="text-[11px] text-muted-foreground">
+                  Stream de áudio em background nas TVs (não interrompe vídeos/imagens).
+                </p>
+              </div>
+            </button>
+          )}
           {formError ? (
             <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
               {formError}
