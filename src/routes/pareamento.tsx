@@ -2,7 +2,7 @@ import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
-import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
+import { checkPairingStatus, createPairingCode, pairScreenDevice } from "@/lib/server/screens.functions";
 import { initAndroidTvShell } from "@/player/capacitor/android-shell";
 import {
   PLAYER_LS_AUTH_TOKEN,
@@ -138,8 +138,15 @@ function PairingPage() {
     if (!paired || !code) return;
     let cancelled = false;
     const fp = `web-${typeof window !== "undefined" ? (window.screen?.width ?? 0) : 0}-${typeof navigator !== "undefined" ? navigator.userAgent : ""}`;
-    void import("@/player/services/player-api")
-      .then(({ pairScreen }) => pairScreen(code, fp))
+    void pairScreenDevice({
+      data: {
+        pairingCode: code,
+        deviceFingerprint: fp,
+        platform: typeof navigator !== "undefined" ? navigator.platform : null,
+        osName: typeof navigator !== "undefined" ? navigator.userAgent : null,
+        playerVersion: null,
+      },
+    })
       .then((pr) => {
         if (cancelled) return;
         if (pr.device_id && pr.auth_token) {

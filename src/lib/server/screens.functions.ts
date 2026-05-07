@@ -256,6 +256,131 @@ export const createPairingCode = createServerFn({ method: "POST" })
   });
 
 /**
+ * Equivalente da Edge Function `pair-screen`, exposto como server function
+ * para que funcione mesmo quando a Edge Function não está deployada.
+ *
+ * Vincula um deviceFingerprint a uma `screen` já criada (via claimPairingCode)
+ * e emite credenciais persistentes (device_id + auth_token) para o player.
+ */
+async function sha256Hex(input: string): Promise<string> {
+  const data = new TextEncoder().encode(input);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function generateAuthToken(): string {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+export const pairScreenDevice = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => {
+    if (typeof input !== "object" || input === null) throw new Error("Payload inválido.");
+    const o = input as Record<string, unknown>;
+    if (typeof o.pairingCode !== "string" || o.pairingCode.length < 4)
+      throw new Error("Código inválido.");
+    if (typeof o.deviceFingerprint !== "string" || o.deviceFingerprint.length < 4)
+      throw new Error("Fingerprint inválido.");
+    return {
+      pairingCode: normalizeCode(o.pairingCode),
+      deviceFingerprint: o.deviceFingerprint,
+      platform: typeof o.platform === "string" ? o.platform : null,
+      osName: typeof o.osName === "string" ? o.osName : null,
+      playerVersion: typeof o.playerVersion === "string" ? o.playerVersion : null,
+    };
+  })
+  .handler(async ({ data }) => {
+    const { data: rpcData, error: rpcErr } = await supabaseAdmin.rpc("pair_screen_by_code", {
+      p_pairing_code: data.pairingCode,
+      p_device_fingerprint: data.deviceFingerprint,
+      p_platform: data.platform,
+      p_os_name: data.osName,
+      p_player_version: data.playerVersion,
+    });
+    if (rpcErr) throw new Error(rpcErr.message);
+    const rows = (rpcData as Array<Record<string, unknown>> | null) ?? [];
+    const row = rows[0] ?? null;
+    const screen = row
+      ? (JSON.parse(JSON.stringify(row)) as Record<string, string | number | boolean | null>)
+      : null;
+    if (!row?.screen_id) {
+      return {
+        paired: true,
+        screen,
+        device_id: null as string | null,
+        auth_token: null as string | null,
+      };
+    }
+
+    const screenId = String(row.screen_id);
+    const orgId = String(row.organization_id ?? "");
+    const plain = generateAuthToken();
+    const hash = await sha256Hex(plain);
+    const now = new Date().toISOString();
+    const deviceName = String(row.screen_name ?? "display");
+
+    const { data: existing, error: exErr } = await supabaseAdmin
+      .from("player_devices")
+      .select("id")
+      .eq("screen_id", screenId)
+      .maybeSingle();
+    if (exErr) throw new Error(exErr.message);
+
+    let deviceId: string;
+    if (existing?.id) {
+      const { error: upErr } = await supabaseAdmin
+        .from("player_devices")
+        .update({
+          auth_secret_hash: hash,
+          auth_issued_at: now,
+          pairing_status: "active",
+          device_name: deviceName,
+          pairing_reset_at: null,
+          updated_at: now,
+        })
+        .eq("id", existing.id);
+      if (upErr) throw new Error(upErr.message);
+      deviceId = String(existing.id);
+    } else {
+      const { data: ins, error: insErr } = await supabaseAdmin
+        .from("player_devices")
+        .insert({
+          screen_id: screenId,
+          device_name: deviceName,
+          auth_secret_hash: hash,
+          auth_issued_at: now,
+          pairing_status: "active",
+          updated_at: now,
+        })
+        .select("id")
+        .single();
+      if (insErr || !ins?.id)
+        throw new Error(insErr?.message ?? "Falha ao registar dispositivo.");
+      deviceId = String(ins.id);
+    }
+
+    if (orgId) {
+      await supabaseAdmin.from("audit_logs").insert({
+        organization_id: orgId,
+        actor_profile_id: null,
+        entity_type: "player_device",
+        entity_id: deviceId,
+        action: "device_credentials_issued",
+        old_data: null,
+        new_data: {
+          screen_id: screenId,
+          token_hash_prefix: hash.slice(0, 16),
+          via: "pair_screen",
+          at: now,
+        },
+      });
+    }
+
+    return { paired: true, screen, device_id: deviceId, auth_token: plain };
+  });
+
+/**
  * Endpoint público (sem auth) usado pelo player anônimo em /pareamento
  * para verificar se seu código já foi vinculado por um admin.
  * Usa supabaseAdmin para contornar RLS — retorna apenas o estado, sem dados sensíveis.
