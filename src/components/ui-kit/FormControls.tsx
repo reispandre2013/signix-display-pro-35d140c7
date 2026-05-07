@@ -19,10 +19,10 @@ export function Modal({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-elegant"
+        className="w-full max-w-md max-h-[90vh] flex flex-col rounded-xl border border-border bg-card shadow-elegant"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between px-6 pt-6 pb-4 shrink-0">
           <h3 className="font-display text-lg font-bold">{title}</h3>
           <button
             onClick={onClose}
@@ -31,7 +31,7 @@ export function Modal({
             <X className="h-4 w-4" />
           </button>
         </div>
-        {children}
+        <div className="px-6 pb-6 overflow-y-auto flex-1">{children}</div>
       </div>
     </div>
   );
