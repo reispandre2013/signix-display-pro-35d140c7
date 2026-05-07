@@ -42,8 +42,13 @@ export type AndroidPairState =
     }
   | { status: "blocked"; device_uuid: string; device_id?: string };
 
+// APIs públicas devem ser chamadas no domínio custom — o domínio *.lovable.app
+// faz 302 redirect cross-origin em POSTs e o WebView Android não preserva o body.
+const API_BASE = "https://sigplayer.com.br";
+
 async function postJson<T>(path: string, body: unknown): Promise<T> {
-  const res = await fetch(path, {
+  const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
