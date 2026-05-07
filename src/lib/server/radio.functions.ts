@@ -32,10 +32,14 @@ async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
     .eq("auth_user_id", userId)
     .maybeSingle();
   const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
+  const profileRole = (profile as { role?: string } | null)?.role;
+  const roleList = (roles ?? []).map((r) => (r as { role?: string }).role);
   const ok =
-    (profile as { role?: string } | null)?.role === "super_admin" ||
-    (roles ?? []).some((r) => (r as { role?: string }).role === "super_admin");
-  if (!ok) throw new Error("Acesso restrito a super_admin.");
+    profileRole === "super_admin" ||
+    profileRole === "operador" ||
+    roleList.includes("super_admin") ||
+    roleList.includes("operador");
+  if (!ok) throw new Error("Acesso restrito.");
 }
 
 export type RadioStreamRow = {
