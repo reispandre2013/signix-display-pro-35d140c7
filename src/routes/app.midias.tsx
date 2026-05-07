@@ -477,7 +477,11 @@ function MediaPage() {
         )}
       </Panel>
 
-      {(isSuperAdmin || isOperador) && <RadioOnlineSection />}
+      {(isSuperAdmin || isOperador) && (
+        <div id="radio-online-section">
+          <RadioOnlineSection />
+        </div>
+      )}
 
       <Modal
         open={open}
