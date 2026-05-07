@@ -85,15 +85,15 @@ export type ScreenWithRadio = {
 export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(async () => {
   const userId = await getAuthedUserId();
   const admin = adminClient();
-  const { isSuperAdmin, organizationId } = await getAuthContext(admin, userId);
+  const { isSuperAdmin, organizationIds } = await getAuthContext(admin, userId);
 
   let query = admin
     .from("screens")
     .select("id, name, organization_id")
     .order("name", { ascending: true });
   if (!isSuperAdmin) {
-    if (!organizationId) return [] as ScreenWithRadio[];
-    query = query.eq("organization_id", organizationId);
+    if (organizationIds.length === 0) return [] as ScreenWithRadio[];
+    query = query.in("organization_id", organizationIds);
   }
   const { data: screens, error: sErr } = await query;
   if (sErr) throw new Error(sErr.message);
@@ -119,8 +119,8 @@ export const listScreensWithRadio = createServerFn({ method: "POST" }).handler(a
   }
 
   let radiosQuery = admin.from("radio_streams").select("*");
-  if (!isSuperAdmin && organizationId) {
-    radiosQuery = radiosQuery.eq("organization_id", organizationId);
+  if (!isSuperAdmin && organizationIds.length > 0) {
+    radiosQuery = radiosQuery.in("organization_id", organizationIds);
   }
   const { data: radios, error: rErr } = await radiosQuery;
   if (rErr) throw new Error(rErr.message);
