@@ -362,8 +362,11 @@ export function useSaasDirectory() {
           );
         });
         const primary = sorted[0] as { email?: string; name?: string } | undefined;
-        const masterEmail = primary?.email ?? null;
-        const masterName = primary?.name ?? null;
+        const fromServer = mastersByOrg.get(org.id);
+        const masterEmail = (primary?.email ?? fromServer?.master_email) ?? null;
+        const profileName = (primary?.name ?? "").trim();
+        const masterName =
+          profileName.length > 0 ? profileName : (fromServer?.master_name ?? null);
         const u = usageByOrg.get(org.id);
         return buildSaasClientRow(
           { id: org.id, name: org.name, created_at: org.created_at },
