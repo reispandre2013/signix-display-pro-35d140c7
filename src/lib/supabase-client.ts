@@ -51,20 +51,27 @@ export const hasSupabaseEnv = hasSupabaseConfig();
 
 let _client: SupabaseClient | null = null;
 
-export function getSupabase(): SupabaseClient | null {
-  if (!hasSupabaseEnv) return null;
+/**
+ * Singleton do cliente Supabase (browser). Sempre retorna uma instância — quando
+ * envs reais não estão presentes, usa fallbacks sintaticamente válidos para evitar
+ * crash no SSR/preview. Chamadas reais falharão explicitamente.
+ */
+export function getSupabase(): SupabaseClient {
   if (_client) return _client;
-  const url = getSupabaseUrl()!;
-  const key = getSupabasePublishableKey()!;
+  const url = getSupabaseUrl() ?? "https://placeholder.supabase.co";
+  const key =
+    getSupabasePublishableKey() ??
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsInJlZiI6InBsYWNlaG9sZGVyIiwiaWF0IjowLCJleHAiOjB9.placeholder";
   _client = createClient(url, key, {
     auth: {
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: true,
+      storage: typeof window !== "undefined" ? window.localStorage : undefined,
     },
   });
   return _client;
 }
 
-/** Alias estável para importações que esperam `supabase` singular. */
-export const supabase = getSupabase();
+/** Alias estável (singleton, sempre não-nulo). */
+export const supabase: SupabaseClient = getSupabase();
