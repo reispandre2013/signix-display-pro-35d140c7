@@ -177,7 +177,14 @@ function ClientesPage() {
           </DialogHeader>
           {selected && (
             <div className="grid grid-cols-2 gap-4 text-sm">
-              <DetailRow label="Master" value={selected.master_email ?? "—"} />
+              <DetailRow
+                label="Master"
+                value={
+                  selected.master_name && selected.master_email
+                    ? `${selected.master_name} — ${selected.master_email}`
+                    : (selected.master_name ?? selected.master_email ?? "—")
+                }
+              />
               <DetailRow label="Plano" value={selected.plan_name ?? "—"} />
               <DetailRow label="Status assinatura" value={selected.subscription_status ?? "—"} />
               <DetailRow label="Status licença" value={selected.license_status ?? "—"} />
