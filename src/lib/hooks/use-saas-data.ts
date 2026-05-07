@@ -340,13 +340,22 @@ export function useSaasDirectory() {
         const planOne = Array.isArray(planEmbed) ? planEmbed[0] : planEmbed;
         const planName = planOne?.name;
         const planScreens = planOne?.max_screens;
-        const masters = (profs ?? []).filter(
-          (p) => p.organization_id === org.id && p.role === "admin_master",
-        );
-        const masterEmail =
-          masters[0]?.email ??
-          (profs ?? []).find((p) => p.organization_id === org.id)?.email ??
-          null;
+        const orgProfs = (profs ?? []).filter((p) => p.organization_id === org.id);
+        const priority = ["admin_master", "gestor", "super_admin", "operador", "visualizador"];
+        const sorted = [...orgProfs].sort((a, b) => {
+          const ra = priority.indexOf(String((a as { role?: string }).role ?? ""));
+          const rb = priority.indexOf(String((b as { role?: string }).role ?? ""));
+          const na = ra === -1 ? 999 : ra;
+          const nb = rb === -1 ? 999 : rb;
+          if (na !== nb) return na - nb;
+          return (
+            new Date((a as { created_at: string }).created_at).getTime() -
+            new Date((b as { created_at: string }).created_at).getTime()
+          );
+        });
+        const primary = sorted[0] as { email?: string; name?: string } | undefined;
+        const masterEmail = primary?.email ?? null;
+        const masterName = primary?.name ?? null;
         const u = usageByOrg.get(org.id);
         return buildSaasClientRow(
           { id: org.id, name: org.name, created_at: org.created_at },
@@ -358,6 +367,7 @@ export function useSaasDirectory() {
           u ? { total_screens: Number(u.total_screens ?? 0) } : null,
           planScreens != null ? { max_screens: planScreens } : null,
           lastPaidByOrg.get(org.id) ?? null,
+          masterName,
         );
       });
     },
