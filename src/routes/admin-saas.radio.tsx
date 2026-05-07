@@ -142,7 +142,7 @@ function RadioAdminPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase text-muted-foreground border-b border-border">
-                  <th className="py-3 px-2">Tela / Empresa</th>
+                  <th className="py-3 px-2">Dispositivo / Tela</th>
                   <th className="py-3 px-2">Rádio</th>
                   <th className="py-3 px-2">URL</th>
                   <th className="py-3 px-2">Volume</th>
@@ -156,9 +156,10 @@ function RadioAdminPage() {
                   return (
                     <tr key={row.screen_id} className="border-b border-border/50 hover:bg-muted/30">
                       <td className="py-3 px-2">
-                        <div className="font-medium">{row.screen_name}</div>
+                        <div className="font-medium">{row.device_name ?? row.screen_name}</div>
                         <div className="text-xs text-muted-foreground">
-                          {row.organization_name ?? "—"}
+                          Tela: {row.screen_name} · {row.organization_name ?? "—"}
+                          {row.pairing_status && row.pairing_status !== "active" ? ` · ${row.pairing_status}` : ""}
                         </div>
                       </td>
                       <td className="py-3 px-2">{r?.radio_name ?? "—"}</td>
