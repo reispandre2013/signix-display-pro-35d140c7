@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
 import { checkPairingStatus, createPairingCode, pairScreenDevice } from "@/lib/server/screens.functions";
 import { initAndroidTvShell } from "@/player/capacitor/android-shell";
+import { isAndroidNative } from "@/player/services/android-auto-pair";
 import {
   PLAYER_LS_AUTH_TOKEN,
   PLAYER_LS_DEVICE_ID,
