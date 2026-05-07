@@ -58,6 +58,7 @@ function RadioAdminPage() {
     return list.filter(
       (r) =>
         r.screen_name.toLowerCase().includes(q) ||
+        (r.device_name ?? "").toLowerCase().includes(q) ||
         (r.organization_name ?? "").toLowerCase().includes(q) ||
         (r.radio?.radio_name ?? "").toLowerCase().includes(q),
     );
