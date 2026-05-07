@@ -109,7 +109,9 @@ function PlayerScreenPage() {
   useEffect(() => {
     let cancelled = false;
     async function bootstrap() {
-      // Fluxo exclusivo Android TV (APK Capacitor): auto-registro + token persistente.
+      // Android nativo: restaura credenciais persistentes do Capacitor Preferences
+      // (sobrevivem a updates do APK e limpeza do WebView). Mesmo fluxo de pareamento
+      // por código que Tizen/Web — nada de auto-register por UUID.
       if (isAndroidNative()) {
         const session = await getStoredAndroidSession().catch(() => null);
         if (session) {
@@ -124,42 +126,14 @@ function PlayerScreenPage() {
           setPairingCode(null);
           return;
         }
-        try {
-          const reg = await autoRegisterAndroid();
-          if (cancelled) return;
-          if (reg.status === "active") {
-            localStorage.setItem(LS_SCREEN, reg.screen_id);
-            localStorage.setItem(PLAYER_LS_DEVICE_ID, reg.device_id);
-            localStorage.setItem(PLAYER_LS_AUTH_TOKEN, reg.auth_token);
-            localStorage.removeItem(LS_CODE);
-            setScreenId(reg.screen_id);
-            setDeviceId(reg.device_id);
-            setAuthToken(reg.auth_token);
-            setPairingCode(null);
-            return;
-          }
-          setAndroidPending({ uuid: reg.device_uuid });
-          // poll background até ativar
-          void pollUntilActive(reg.device_uuid).then((s) => {
-            if (cancelled || s.status !== "active") return;
-            localStorage.setItem(LS_SCREEN, s.screen_id);
-            localStorage.setItem(PLAYER_LS_DEVICE_ID, s.device_id);
-            localStorage.setItem(PLAYER_LS_AUTH_TOKEN, s.auth_token);
-            localStorage.removeItem(LS_CODE);
-            setScreenId(s.screen_id);
-            setDeviceId(s.device_id);
-            setAuthToken(s.auth_token);
-            setPairingCode(null);
-            setAndroidPending(null);
-          });
-        } catch (e) {
-          if (!cancelled)
-            setError(e instanceof Error ? e.message : "Falha no auto-registro Android.");
+        // Sem sessão: redireciona para a tela de pareamento (mesmo fluxo Tizen/Web).
+        if (!cancelled && typeof window !== "undefined") {
+          window.location.replace("/pareamento");
         }
         return;
       }
 
-      // Web/Tizen mantêm fluxo atual de pareamento por código.
+      // Web/Tizen: lê credenciais persistentes do localStorage.
       const sid = localStorage.getItem(LS_SCREEN);
       const code = localStorage.getItem(LS_CODE);
       const did = localStorage.getItem(PLAYER_LS_DEVICE_ID);
