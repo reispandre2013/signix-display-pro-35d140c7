@@ -58,8 +58,10 @@ async function getAuthContext(admin: SupabaseClient, userId: string) {
   return { isSuperAdmin, organizationIds };
 }
 
-async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
-  await getAuthContext(admin, userId);
+async function assertCanManageScreen(admin: SupabaseClient, userId: string, screenOrgId: string) {
+  const { isSuperAdmin, organizationIds } = await getAuthContext(admin, userId);
+  if (isSuperAdmin) return;
+  if (!organizationIds.includes(screenOrgId)) throw new Error("Sem permissão para esta tela.");
 }
 
 export type RadioStreamRow = {
