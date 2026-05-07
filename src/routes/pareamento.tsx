@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
 import { checkPairingStatus, createPairingCode, pairScreenDevice } from "@/lib/server/screens.functions";
 import { initAndroidTvShell } from "@/player/capacitor/android-shell";
+import { isAndroidNative } from "@/player/services/android-auto-pair";
 import {
   PLAYER_LS_AUTH_TOKEN,
   PLAYER_LS_DEVICE_ID,
@@ -44,7 +45,15 @@ function PairingPage() {
 
   useEffect(() => {
     void initAndroidTvShell();
-  }, []);
+    // APK Android TV: pula o pareamento por código e vai direto para auto-registro.
+    if (isAndroidNative()) {
+      void navigate({
+        to: "/player-screen",
+        search: { platform: undefined },
+        replace: true,
+      });
+    }
+  }, [navigate]);
 
   // Gera código de pareamento via server function (bypass RLS, sem auth necessária)
   const generateCode = async () => {
