@@ -103,12 +103,31 @@ function RadioAdminPage() {
         <div className="flex flex-col sm:flex-row gap-3 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="flex flex-col sm:flex-row gap-3 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Buscar por tela, empresa ou rádio…"
               className="pl-9"
             />
+          </div>
+          <div className="inline-flex rounded-md border border-border bg-surface p-0.5 self-start">
+            {[
+              { k: "all", label: `Todas (${total})` },
+              { k: "active", label: `Ativas (${ativas})` },
+              { k: "paused", label: `Pausadas (${configuradas - ativas})` },
+              { k: "none", label: `Sem rádio (${total - configuradas})` },
+            ].map((opt) => (
+              <button
+                key={opt.k}
+                onClick={() => setStatusFilter(opt.k as typeof statusFilter)}
+                className={`px-2.5 py-1 text-xs rounded ${statusFilter === opt.k ? "bg-accent font-semibold" : "text-muted-foreground"}`}
+              >
+                {opt.label}
+              </button>
+            ))}
           </div>
         </div>
 
