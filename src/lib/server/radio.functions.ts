@@ -31,18 +31,31 @@ async function getAuthContext(admin: SupabaseClient, userId: string) {
     .select("role, organization_id")
     .eq("auth_user_id", userId)
     .maybeSingle();
-  const { data: roles } = await admin.from("user_roles").select("role").eq("user_id", userId);
+  const { data: roles } = await admin
+    .from("user_roles")
+    .select("role, organization_id")
+    .eq("user_id", userId);
   const profileRole = (profile as { role?: string } | null)?.role;
-  const organizationId = (profile as { organization_id?: string } | null)?.organization_id ?? null;
-  const roleList = (roles ?? []).map((r) => (r as { role?: string }).role);
+  const profileOrgId =
+    (profile as { organization_id?: string } | null)?.organization_id ?? null;
+  const roleRows = (roles ?? []) as Array<{ role?: string; organization_id?: string | null }>;
   const allowedRoles = ["super_admin", "operador", "admin_master", "gestor"];
   const ok =
     (profileRole && allowedRoles.includes(profileRole)) ||
-    roleList.some((r) => r && allowedRoles.includes(r));
+    roleRows.some((r) => r.role && allowedRoles.includes(r.role));
   if (!ok) throw new Error("Acesso restrito.");
   const isSuperAdmin =
-    profileRole === "super_admin" || roleList.some((r) => r === "super_admin");
-  return { isSuperAdmin, organizationId };
+    profileRole === "super_admin" || roleRows.some((r) => r.role === "super_admin");
+  // Consolida TODAS as organizações às quais o usuário está vinculado
+  // (perfil + user_roles). Sem isso, usuários cujo profile.organization_id
+  // está nulo ou que pertencem a múltiplas orgs viam "Nenhuma tela".
+  const orgSet = new Set<string>();
+  if (profileOrgId) orgSet.add(profileOrgId);
+  for (const r of roleRows) {
+    if (r.organization_id) orgSet.add(r.organization_id);
+  }
+  const organizationIds = Array.from(orgSet);
+  return { isSuperAdmin, organizationIds };
 }
 
 async function assertSuperAdmin(admin: SupabaseClient, userId: string) {
