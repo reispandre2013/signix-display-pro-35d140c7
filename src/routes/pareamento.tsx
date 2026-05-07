@@ -2,7 +2,7 @@ import sigplayerLogo from "@/assets/sigplayer-logo.png";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
-import { checkPairingStatus, createPairingCode } from "@/lib/server/screens.functions";
+import { checkPairingStatus, createPairingCode, pairScreenDevice } from "@/lib/server/screens.functions";
 import { initAndroidTvShell } from "@/player/capacitor/android-shell";
 import {
   PLAYER_LS_AUTH_TOKEN,
