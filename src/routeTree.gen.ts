@@ -66,6 +66,8 @@ import { Route as AdminSaasLicencasRouteImport } from './routes/admin-saas.licen
 import { Route as AdminSaasDiagnosticoRouteImport } from './routes/admin-saas.diagnostico'
 import { Route as AdminSaasClientesRouteImport } from './routes/admin-saas.clientes'
 import { Route as AdminSaasAssinaturasRouteImport } from './routes/admin-saas.assinaturas'
+import { Route as ApiPublicDevicesCheckSessionRouteImport } from './routes/api/public/devices/check-session'
+import { Route as ApiPublicDevicesAutoRegisterRouteImport } from './routes/api/public/devices/auto-register'
 
 const VendasRoute = VendasRouteImport.update({
   id: '/vendas',
@@ -352,6 +354,18 @@ const AdminSaasAssinaturasRoute = AdminSaasAssinaturasRouteImport.update({
   path: '/assinaturas',
   getParentRoute: () => AdminSaasRoute,
 } as any)
+const ApiPublicDevicesCheckSessionRoute =
+  ApiPublicDevicesCheckSessionRouteImport.update({
+    id: '/api/public/devices/check-session',
+    path: '/api/public/devices/check-session',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicDevicesAutoRegisterRoute =
+  ApiPublicDevicesAutoRegisterRouteImport.update({
+    id: '/api/public/devices/auto-register',
+    path: '/api/public/devices/auto-register',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -411,6 +425,8 @@ export interface FileRoutesByFullPath {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
+  '/api/public/devices/auto-register': typeof ApiPublicDevicesAutoRegisterRoute
+  '/api/public/devices/check-session': typeof ApiPublicDevicesCheckSessionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -468,6 +484,8 @@ export interface FileRoutesByTo {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas': typeof AdminSaasIndexRoute
   '/app': typeof AppIndexRoute
+  '/api/public/devices/auto-register': typeof ApiPublicDevicesAutoRegisterRoute
+  '/api/public/devices/check-session': typeof ApiPublicDevicesCheckSessionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -528,6 +546,8 @@ export interface FileRoutesById {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
+  '/api/public/devices/auto-register': typeof ApiPublicDevicesAutoRegisterRoute
+  '/api/public/devices/check-session': typeof ApiPublicDevicesCheckSessionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -589,6 +609,8 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas/'
     | '/app/'
+    | '/api/public/devices/auto-register'
+    | '/api/public/devices/check-session'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -646,6 +668,8 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas'
     | '/app'
+    | '/api/public/devices/auto-register'
+    | '/api/public/devices/check-session'
   id:
     | '__root__'
     | '/'
@@ -705,6 +729,8 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas/'
     | '/app/'
+    | '/api/public/devices/auto-register'
+    | '/api/public/devices/check-session'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -734,6 +760,8 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   VendasRoute: typeof VendasRoute
   DisplayTokenRoute: typeof DisplayTokenRoute
+  ApiPublicDevicesAutoRegisterRoute: typeof ApiPublicDevicesAutoRegisterRoute
+  ApiPublicDevicesCheckSessionRoute: typeof ApiPublicDevicesCheckSessionRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1137,6 +1165,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSaasAssinaturasRouteImport
       parentRoute: typeof AdminSaasRoute
     }
+    '/api/public/devices/check-session': {
+      id: '/api/public/devices/check-session'
+      path: '/api/public/devices/check-session'
+      fullPath: '/api/public/devices/check-session'
+      preLoaderRoute: typeof ApiPublicDevicesCheckSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/devices/auto-register': {
+      id: '/api/public/devices/auto-register'
+      path: '/api/public/devices/auto-register'
+      fullPath: '/api/public/devices/auto-register'
+      preLoaderRoute: typeof ApiPublicDevicesAutoRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1256,16 +1298,9 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   VendasRoute: VendasRoute,
   DisplayTokenRoute: DisplayTokenRoute,
+  ApiPublicDevicesAutoRegisterRoute: ApiPublicDevicesAutoRegisterRoute,
+  ApiPublicDevicesCheckSessionRoute: ApiPublicDevicesCheckSessionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
