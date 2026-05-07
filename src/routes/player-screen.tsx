@@ -321,8 +321,46 @@ function PlayerScreenPage() {
         },
       });
     };
-    send();
-    const h = setInterval(send, 60_000);
+    const sendSafe = async () => {
+      try {
+        const cur = items[idx];
+        const base = useDevice
+          ? {
+              screen_id: screenId as string,
+              device_id: deviceId as string,
+              auth_token: authToken as string,
+              platform,
+            }
+          : {
+              screen_id: screenId as string,
+              pairing_code: pairingCode as string,
+              platform,
+            };
+        await heartbeatFn({
+          data: {
+            ...base,
+            player_status: "playing",
+            current_media_id: cur?.id ?? null,
+          },
+        });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        console.error("[heartbeat] failed:", msg);
+        // Credenciais defasadas (token inválido / dispositivo não corresponde):
+        // limpa sessão local para forçar re-registro automático no Android TV.
+        const stale =
+          /token.*inv[aá]lido|n[aã]o corresponde|n[aã]o encontrado|pendente/i.test(msg);
+        if (stale && isAndroidNative()) {
+          localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
+          localStorage.removeItem(PLAYER_LS_DEVICE_ID);
+          localStorage.removeItem(LS_SCREEN);
+          setError("Sessão expirada. Re-registrando este aparelho…");
+          setTimeout(() => window.location.reload(), 1500);
+        }
+      }
+    };
+    void sendSafe();
+    const h = setInterval(() => void sendSafe(), 60_000);
     return () => clearInterval(h);
   }, [canSync, screenId, pairingCode, deviceId, authToken, platform, items, idx, heartbeatFn]);
 
