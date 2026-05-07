@@ -10,6 +10,7 @@ import { useOrgBillingContext } from "@/lib/hooks/use-saas-data";
 import { useAuth } from "@/lib/auth-context";
 import { useRole } from "@/lib/use-role";
 import { RadioOnlineSection } from "@/components/radio/RadioOnlineSection";
+import { RadioInModalForm } from "@/components/radio/RadioInModalForm";
 import { supabase } from "@/integrations/supabase/client";
 import { applyMediaFallback, getMediaUrlCandidates } from "@/lib/media-url";
 import {
@@ -148,6 +149,7 @@ function MediaPage() {
   const create = useCreateMedia();
   const remove = useDeleteMedia();
   const [open, setOpen] = useState(false);
+  const [showRadio, setShowRadio] = useState(false);
   const [sourceType, setSourceType] = useState<"url" | "upload">("url");
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [search, setSearch] = useState("");
@@ -497,29 +499,26 @@ function MediaPage() {
       >
         <form onSubmit={submit} className="space-y-3">
           {(isSuperAdmin || isOperador) && (
-            <button
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                setFormError(null);
-                setTimeout(() => {
-                  document
-                    .getElementById("radio-online-section")
-                    ?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }, 100);
-              }}
-              className="w-full flex items-center gap-3 rounded-lg border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 px-3 py-2.5 text-left transition"
-            >
-              <div className="h-9 w-9 rounded-lg bg-primary/20 grid place-items-center text-primary shrink-0">
-                <Radio className="h-4 w-4" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold">Configurar Rádio Online</p>
-                <p className="text-[11px] text-muted-foreground">
-                  Stream de áudio em background nas TVs (não interrompe vídeos/imagens).
-                </p>
-              </div>
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={() => setShowRadio((v) => !v)}
+                className="w-full flex items-center gap-3 rounded-lg border border-primary/30 bg-gradient-to-r from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10 px-3 py-2.5 text-left transition"
+              >
+                <div className="h-9 w-9 rounded-lg bg-primary/20 grid place-items-center text-primary shrink-0">
+                  <Radio className="h-4 w-4" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold">
+                    {showRadio ? "Ocultar Rádio Online" : "Configurar Rádio Online"}
+                  </p>
+                  <p className="text-[11px] text-muted-foreground">
+                    Stream de áudio em background nas TVs (não interrompe vídeos/imagens).
+                  </p>
+                </div>
+              </button>
+              {showRadio && <RadioInModalForm onDone={() => setShowRadio(false)} />}
+            </>
           )}
           {formError ? (
             <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs text-destructive">
