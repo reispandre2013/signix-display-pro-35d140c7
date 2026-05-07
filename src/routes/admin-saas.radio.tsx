@@ -90,11 +90,11 @@ function RadioAdminPage() {
     <div className="space-y-6">
       <PageHeader
         title="Rádio Online"
-        subtitle="Stream de áudio em background por tela. Não interrompe vídeos, imagens nem playlists."
+        subtitle="Stream de áudio em background por dispositivo pareado. Não interrompe vídeos, imagens nem playlists."
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="Telas totais" value={total} icon={<Radio className="h-5 w-5" />} />
+        <StatCard label="Dispositivos pareados" value={total} icon={<Radio className="h-5 w-5" />} />
         <StatCard label="Com rádio configurada" value={configuradas} icon={<Volume2 className="h-5 w-5" />} />
         <StatCard label="Tocando agora" value={ativas} icon={<Play className="h-5 w-5" />} highlight />
       </div>
