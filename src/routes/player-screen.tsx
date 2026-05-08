@@ -271,17 +271,12 @@ function PlayerScreenPage() {
         console.error("[heartbeat] failed:", msg);
         const stale =
           /token.*inv[aá]lido|n[aã]o corresponde|n[aã]o encontrado|pendente/i.test(msg);
-        if (stale && isAndroidNative()) {
-          try {
-            await clearStoredAndroidSession();
-          } catch {
-            /* ignore */
-          }
+        if (stale) {
+          // Sessão obsoleta: limpa credenciais locais.
           localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
           localStorage.removeItem(PLAYER_LS_DEVICE_ID);
           localStorage.removeItem(LS_SCREEN);
-          setError("Sessão expirada. Re-registrando este aparelho…");
-          setTimeout(() => { window.location.href = "/pareamento"; }, 1500);
+          setError("Sessão expirada. Refaça o pareamento.");
         }
       }
     };
