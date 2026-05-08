@@ -270,6 +270,48 @@ class PlayerActivity : AppCompatActivity() {
         contentVideo.player = null
     }
 
+    private fun applyRadio(radio: Api.RadioInfo?) {
+        if (radio == null) {
+            radioPlayer?.release()
+            radioPlayer = null
+            currentRadioUrl = null
+            return
+        }
+        val vol = radio.volume.coerceIn(0f, 1f)
+        if (radioPlayer != null && currentRadioUrl == radio.streamUrl) {
+            radioPlayer?.volume = vol
+            if (radioPlayer?.isPlaying == false) radioPlayer?.play()
+            return
+        }
+        // (Re)cria player de áudio de fundo
+        radioPlayer?.release()
+        currentRadioUrl = radio.streamUrl
+        val rp = ExoPlayer.Builder(this).build().also { radioPlayer = it }
+        rp.setAudioAttributes(
+            androidx.media3.common.AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                .build(), false
+        )
+        rp.repeatMode = Player.REPEAT_MODE_ALL
+        rp.volume = vol
+        rp.setMediaItem(MediaItem.fromUri(Uri.parse(radio.streamUrl)))
+        rp.prepare()
+        rp.playWhenReady = true
+        rp.addListener(object : Player.Listener {
+            override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                // Tenta reconectar após 5s
+                ui.postDelayed({
+                    try {
+                        rp.setMediaItem(MediaItem.fromUri(Uri.parse(radio.streamUrl)))
+                        rp.prepare()
+                        rp.playWhenReady = true
+                    } catch (_: Exception) {}
+                }, 5000)
+            }
+        })
+    }
+
     // -------- Kiosk / Lock Task --------
     private fun enterKiosk() {
         try {
