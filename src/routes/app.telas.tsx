@@ -35,6 +35,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { claimPairingCode } from "@/lib/server/screens.functions";
 import { revokeWebPlayerSession } from "@/lib/server/web-player.functions";
+import { linkAndroidTvDevice } from "@/lib/server/android-tv.functions";
+import { withAuthHeader } from "@/lib/server/with-auth-header";
 import type { PlayerPlatform } from "@/lib/platform-capabilities";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
@@ -175,13 +177,23 @@ function ScreensPage() {
         title="Dispositivos"
         subtitle="Cadastre dispositivos Android TV, Tizen e Web Player por código de pareamento. A plataforma deve corresponder ao player."
         actions={
-          <button
-            type="button"
-            onClick={() => setPairOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
-          >
-            <Plus className="h-3.5 w-3.5" /> Novo dispositivo
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setAndroidPairOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground"
+              title="Vincular APK Android TV usando código de 6 dígitos exibido na TV"
+            >
+              <Tv className="h-3.5 w-3.5" /> Vincular Android TV
+            </button>
+            <button
+              type="button"
+              onClick={() => setPairOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
+            >
+              <Plus className="h-3.5 w-3.5" /> Novo dispositivo
+            </button>
+          </div>
         }
       />
 
