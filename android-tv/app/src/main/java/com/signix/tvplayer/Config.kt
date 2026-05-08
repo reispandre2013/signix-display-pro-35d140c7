@@ -2,7 +2,7 @@ package com.signix.tvplayer
 
 object Config {
     /** URL pública do painel SigPlayer (sem barra final). */
-    const val BASE_URL = "https://www.sigplayer.com.br"
+    const val BASE_URL = "https://sigplayer.com.br"
 
     const val ENDPOINT_REGISTER = "$BASE_URL/api/public/android/register"
     const val ENDPOINT_SYNC = "$BASE_URL/api/public/android/sync"
