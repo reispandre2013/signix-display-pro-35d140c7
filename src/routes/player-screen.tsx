@@ -115,20 +115,6 @@ function PlayerScreenPage() {
       }
     }
 
-      // Web/Tizen: lê credenciais persistentes do localStorage.
-      const sid = localStorage.getItem(LS_SCREEN);
-      const code = localStorage.getItem(LS_CODE);
-      const did = localStorage.getItem(PLAYER_LS_DEVICE_ID);
-      const tok = localStorage.getItem(PLAYER_LS_AUTH_TOKEN);
-      setScreenId(sid);
-      setPairingCode(code);
-      setDeviceId(did);
-      setAuthToken(tok);
-      const canPlay = Boolean(sid && (code || (did && tok)));
-      if (!canPlay) {
-        setError("Faça o pareamento primeiro e volte aqui (código e tela gravados neste aparelho).");
-      }
-    }
     void bootstrap();
     return () => {
       cancelled = true;
