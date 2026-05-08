@@ -365,6 +365,8 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         releaseExo()
+        radioPlayer?.release()
+        radioPlayer = null
         playRunnable?.let { ui.removeCallbacks(it) }
         syncJob?.cancel()
         hbJob?.cancel()
