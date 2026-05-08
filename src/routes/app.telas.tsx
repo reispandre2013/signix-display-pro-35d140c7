@@ -120,6 +120,7 @@ function ScreensPage() {
   const [platformFilter, setPlatformFilter] = useState<"all" | "android" | "tizen" | "web">("all");
   const revokeWebFn = useServerFn(revokeWebPlayerSession);
   const [pairOpen, setPairOpen] = useState(false);
+  const [androidPairOpen, setAndroidPairOpen] = useState(false);
   const [detailScreen, setDetailScreen] = useState<Screen | null>(null);
   const [editScreen, setEditScreen] = useState<Screen | null>(null);
   const [planLimit, setPlanLimit] = useState<PlanLimitInfo | null>(null);
@@ -413,6 +414,16 @@ function ScreensPage() {
           onPlanLimit={(info) => {
             setPairOpen(false);
             setPlanLimit(info);
+          }}
+        />
+      )}
+      {androidPairOpen && (
+        <AndroidPairModal
+          screens={screens}
+          onClose={() => setAndroidPairOpen(false)}
+          onSuccess={async () => {
+            setAndroidPairOpen(false);
+            await screensQ.refetch();
           }}
         />
       )}
