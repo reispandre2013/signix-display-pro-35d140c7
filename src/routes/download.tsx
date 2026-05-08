@@ -39,7 +39,7 @@ function DownloadPage() {
             <Button asChild size="lg" className="h-14 px-8 text-base">
               <a href={APK_URL} download={APK_NAME}>
                 <Download className="mr-2 h-5 w-5" />
-                Baixar APK (8.5 MB)
+                Baixar APK (9.5 MB)
               </a>
             </Button>
             <p className="text-xs text-muted-foreground">
