@@ -74,6 +74,22 @@ export const Route = createFileRoute("/api/public/android/sync")({
 
         const resolved = await resolveScreenPlaylistPayload(supabaseAdmin, dev.screen_id);
         const etag = buildPlaylistEtagFromSeed(resolved.etagSeed);
+
+        // Carrega rádio configurada para a tela (se houver)
+        const { data: radioRow } = await supabaseAdmin
+          .from("radio_streams")
+          .select("radio_name, stream_url, volume, is_active")
+          .eq("screen_id", dev.screen_id)
+          .maybeSingle();
+        const radio =
+          radioRow && radioRow.is_active && radioRow.stream_url
+            ? {
+                name: radioRow.radio_name,
+                stream_url: radioRow.stream_url,
+                volume: radioRow.volume ?? 0.8,
+              }
+            : null;
+
         if (body.etag && body.etag === etag) {
           return Response.json(
             {
@@ -81,6 +97,7 @@ export const Route = createFileRoute("/api/public/android/sync")({
               screen_id: dev.screen_id,
               unchanged: true,
               etag,
+              radio,
               intervals: { sync: 90, heartbeat: 60 },
             },
             { headers: cors },
@@ -104,6 +121,7 @@ export const Route = createFileRoute("/api/public/android/sync")({
               position: i.position,
               fit_mode: i.fit_mode_effective,
             })),
+            radio,
             etag,
             intervals: { sync: 90, heartbeat: 60 },
           },
