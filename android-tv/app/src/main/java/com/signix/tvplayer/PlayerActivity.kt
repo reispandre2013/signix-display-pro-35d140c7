@@ -188,6 +188,7 @@ class PlayerActivity : AppCompatActivity() {
             }
             store.paired = true
             hidePairing()
+            applyRadio(resp.radio)
             if (resp.unchanged) return
             resp.etag?.let { store.lastEtag = it }
             resp.rawJson?.let { store.lastPayload = it }
