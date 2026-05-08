@@ -37,7 +37,7 @@ const sections: Section[] = [
       { to: "/app", label: "Dashboard", icon: LayoutDashboard, module: "dashboard" },
       { to: "/app/monitoramento", label: "Monitoramento", icon: Activity, module: "monitoramento" },
       { to: "/app/telas", label: "Dispositivos", icon: Monitor, module: "telas" },
-      { to: "/app/dispositivos-pendentes", label: "Dispositivos pendentes", icon: Tv, module: "telas" },
+      
       { to: "/app/grupos", label: "Grupos de telas", icon: Layers, module: "grupos" },
     ],
   },
