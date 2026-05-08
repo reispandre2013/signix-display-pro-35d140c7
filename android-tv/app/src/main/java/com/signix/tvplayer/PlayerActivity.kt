@@ -352,6 +352,12 @@ class PlayerActivity : AppCompatActivity() {
             if (volumePresses.size >= 5) {
                 try { stopLockTask() } catch (_: Exception) {}
                 volumePresses.clear()
+                // Saída intencional: para rádio + serviço; só volta no boot ou clique no app
+                try { stopService(Intent(this, PlayerService::class.java)) } catch (_: Exception) {}
+                radioPlayer?.release()
+                radioPlayer = null
+                currentRadioUrl = null
+                finish()
             }
             return true
         }
