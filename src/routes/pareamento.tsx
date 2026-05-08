@@ -149,8 +149,6 @@ function PairingPage() {
           localStorage.setItem(PLAYER_LS_DEVICE_ID, pr.device_id);
           localStorage.setItem(PLAYER_LS_AUTH_TOKEN, pr.auth_token);
         }
-          if (sid) await saveAndroidSession(sid, pr.device_id, pr.auth_token).catch(() => {});
-        }
       })
       .catch((e) => {
         console.warn("[pareamento] pair-screen após vínculo:", e);
