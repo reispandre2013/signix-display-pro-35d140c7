@@ -35,6 +35,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { claimPairingCode } from "@/lib/server/screens.functions";
 import { revokeWebPlayerSession } from "@/lib/server/web-player.functions";
+import { linkAndroidTvDevice } from "@/lib/server/android-tv.functions";
+import { withAuthHeader } from "@/lib/server/with-auth-header";
 import type { PlayerPlatform } from "@/lib/platform-capabilities";
 import { useAuth } from "@/lib/auth-context";
 import { supabase } from "@/integrations/supabase/client";
@@ -118,6 +120,7 @@ function ScreensPage() {
   const [platformFilter, setPlatformFilter] = useState<"all" | "android" | "tizen" | "web">("all");
   const revokeWebFn = useServerFn(revokeWebPlayerSession);
   const [pairOpen, setPairOpen] = useState(false);
+  const [androidPairOpen, setAndroidPairOpen] = useState(false);
   const [detailScreen, setDetailScreen] = useState<Screen | null>(null);
   const [editScreen, setEditScreen] = useState<Screen | null>(null);
   const [planLimit, setPlanLimit] = useState<PlanLimitInfo | null>(null);
@@ -175,13 +178,23 @@ function ScreensPage() {
         title="Dispositivos"
         subtitle="Cadastre dispositivos Android TV, Tizen e Web Player por código de pareamento. A plataforma deve corresponder ao player."
         actions={
-          <button
-            type="button"
-            onClick={() => setPairOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
-          >
-            <Plus className="h-3.5 w-3.5" /> Novo dispositivo
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setAndroidPairOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground"
+              title="Vincular APK Android TV usando código de 6 dígitos exibido na TV"
+            >
+              <Tv className="h-3.5 w-3.5" /> Vincular Android TV
+            </button>
+            <button
+              type="button"
+              onClick={() => setPairOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow"
+            >
+              <Plus className="h-3.5 w-3.5" /> Novo dispositivo
+            </button>
+          </div>
         }
       />
 
@@ -401,6 +414,16 @@ function ScreensPage() {
           onPlanLimit={(info) => {
             setPairOpen(false);
             setPlanLimit(info);
+          }}
+        />
+      )}
+      {androidPairOpen && (
+        <AndroidPairModal
+          screens={screens}
+          onClose={() => setAndroidPairOpen(false)}
+          onSuccess={async () => {
+            setAndroidPairOpen(false);
+            await screensQ.refetch();
           }}
         />
       )}
@@ -1189,4 +1212,102 @@ function Th({ children }: { children: React.ReactNode }) {
 }
 function Td({ children }: { children: React.ReactNode }) {
   return <td className="px-4 py-3 align-middle">{children}</td>;
+}
+
+function AndroidPairModal({
+  screens,
+  onClose,
+  onSuccess,
+}: {
+  screens: Screen[];
+  onClose: () => void;
+  onSuccess: () => void | Promise<void>;
+}) {
+  const [code, setCode] = useState("");
+  const [screenId, setScreenId] = useState("");
+  const [busy, setBusy] = useState(false);
+  const link = useServerFn(linkAndroidTvDevice);
+
+  const submit = async () => {
+    if (!/^\d{6}$/.test(code)) {
+      toast.error("Código deve ter 6 dígitos.");
+      return;
+    }
+    if (!screenId) {
+      toast.error("Selecione a tela de destino.");
+      return;
+    }
+    setBusy(true);
+    try {
+      await withAuthHeader(() =>
+        link({ data: { pairing_code: code, screen_id: screenId } }),
+      );
+      toast.success("Android TV pareada com sucesso.");
+      await onSuccess();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao parear.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4">
+      <div className="w-full max-w-md rounded-lg border border-border bg-card p-5 shadow-xl">
+        <div className="flex items-center justify-between">
+          <h3 className="font-display text-lg font-semibold">Vincular Android TV</h3>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Digite o código de 6 dígitos exibido na TV e selecione a tela cadastrada.
+        </p>
+        <div className="mt-4 space-y-3">
+          <div>
+            <label className="text-xs font-medium">Código (6 dígitos)</label>
+            <input
+              autoFocus
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              inputMode="numeric"
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 font-mono text-center text-xl tracking-widest"
+              placeholder="000000"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium">Tela de destino</label>
+            <select
+              value={screenId}
+              onChange={(e) => setScreenId(e.target.value)}
+              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm"
+            >
+              <option value="">Selecione…</option>
+              {screens.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="mt-5 flex justify-end gap-2">
+          <button
+            onClick={onClose}
+            className="rounded-md border border-border px-3 py-1.5 text-xs"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={submit}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 rounded-md bg-gradient-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-glow disabled:opacity-50"
+          >
+            {busy ? <Loader2 className="h-3 w-3 animate-spin" /> : null}
+            Parear
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }

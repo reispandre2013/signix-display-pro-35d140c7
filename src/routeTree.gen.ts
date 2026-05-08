@@ -65,6 +65,9 @@ import { Route as AdminSaasLicencasRouteImport } from './routes/admin-saas.licen
 import { Route as AdminSaasDiagnosticoRouteImport } from './routes/admin-saas.diagnostico'
 import { Route as AdminSaasClientesRouteImport } from './routes/admin-saas.clientes'
 import { Route as AdminSaasAssinaturasRouteImport } from './routes/admin-saas.assinaturas'
+import { Route as ApiPublicAndroidSyncRouteImport } from './routes/api/public/android/sync'
+import { Route as ApiPublicAndroidRegisterRouteImport } from './routes/api/public/android/register'
+import { Route as ApiPublicAndroidHeartbeatRouteImport } from './routes/api/public/android/heartbeat'
 
 const VendasRoute = VendasRouteImport.update({
   id: '/vendas',
@@ -346,6 +349,23 @@ const AdminSaasAssinaturasRoute = AdminSaasAssinaturasRouteImport.update({
   path: '/assinaturas',
   getParentRoute: () => AdminSaasRoute,
 } as any)
+const ApiPublicAndroidSyncRoute = ApiPublicAndroidSyncRouteImport.update({
+  id: '/api/public/android/sync',
+  path: '/api/public/android/sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicAndroidRegisterRoute =
+  ApiPublicAndroidRegisterRouteImport.update({
+    id: '/api/public/android/register',
+    path: '/api/public/android/register',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicAndroidHeartbeatRoute =
+  ApiPublicAndroidHeartbeatRouteImport.update({
+    id: '/api/public/android/heartbeat',
+    path: '/api/public/android/heartbeat',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -404,6 +424,9 @@ export interface FileRoutesByFullPath {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
+  '/api/public/android/heartbeat': typeof ApiPublicAndroidHeartbeatRoute
+  '/api/public/android/register': typeof ApiPublicAndroidRegisterRoute
+  '/api/public/android/sync': typeof ApiPublicAndroidSyncRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -460,6 +483,9 @@ export interface FileRoutesByTo {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas': typeof AdminSaasIndexRoute
   '/app': typeof AppIndexRoute
+  '/api/public/android/heartbeat': typeof ApiPublicAndroidHeartbeatRoute
+  '/api/public/android/register': typeof ApiPublicAndroidRegisterRoute
+  '/api/public/android/sync': typeof ApiPublicAndroidSyncRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -519,6 +545,9 @@ export interface FileRoutesById {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
+  '/api/public/android/heartbeat': typeof ApiPublicAndroidHeartbeatRoute
+  '/api/public/android/register': typeof ApiPublicAndroidRegisterRoute
+  '/api/public/android/sync': typeof ApiPublicAndroidSyncRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -579,6 +608,9 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas/'
     | '/app/'
+    | '/api/public/android/heartbeat'
+    | '/api/public/android/register'
+    | '/api/public/android/sync'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -635,6 +667,9 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas'
     | '/app'
+    | '/api/public/android/heartbeat'
+    | '/api/public/android/register'
+    | '/api/public/android/sync'
   id:
     | '__root__'
     | '/'
@@ -693,6 +728,9 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas/'
     | '/app/'
+    | '/api/public/android/heartbeat'
+    | '/api/public/android/register'
+    | '/api/public/android/sync'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -721,6 +759,9 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   VendasRoute: typeof VendasRoute
   DisplayTokenRoute: typeof DisplayTokenRoute
+  ApiPublicAndroidHeartbeatRoute: typeof ApiPublicAndroidHeartbeatRoute
+  ApiPublicAndroidRegisterRoute: typeof ApiPublicAndroidRegisterRoute
+  ApiPublicAndroidSyncRoute: typeof ApiPublicAndroidSyncRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1117,6 +1158,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSaasAssinaturasRouteImport
       parentRoute: typeof AdminSaasRoute
     }
+    '/api/public/android/sync': {
+      id: '/api/public/android/sync'
+      path: '/api/public/android/sync'
+      fullPath: '/api/public/android/sync'
+      preLoaderRoute: typeof ApiPublicAndroidSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/android/register': {
+      id: '/api/public/android/register'
+      path: '/api/public/android/register'
+      fullPath: '/api/public/android/register'
+      preLoaderRoute: typeof ApiPublicAndroidRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/android/heartbeat': {
+      id: '/api/public/android/heartbeat'
+      path: '/api/public/android/heartbeat'
+      fullPath: '/api/public/android/heartbeat'
+      preLoaderRoute: typeof ApiPublicAndroidHeartbeatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1235,16 +1297,10 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   VendasRoute: VendasRoute,
   DisplayTokenRoute: DisplayTokenRoute,
+  ApiPublicAndroidHeartbeatRoute: ApiPublicAndroidHeartbeatRoute,
+  ApiPublicAndroidRegisterRoute: ApiPublicAndroidRegisterRoute,
+  ApiPublicAndroidSyncRoute: ApiPublicAndroidSyncRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}
