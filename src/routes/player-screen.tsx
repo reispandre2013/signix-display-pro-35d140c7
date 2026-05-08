@@ -182,21 +182,6 @@ function PlayerScreenPage() {
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       setError(msg || "Falha ao sincronizar.");
-      // Credenciais obsoletas (após reativação no painel): força re-registro no Android TV.
-      const stale = /token.*inv[aá]lido|n[aã]o corresponde|n[aã]o encontrado|pendente/i.test(msg);
-      if (stale && isAndroidNative()) {
-        try {
-          await clearStoredAndroidSession();
-        } catch {
-          /* ignore */
-        }
-        localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
-        localStorage.removeItem(PLAYER_LS_DEVICE_ID);
-        localStorage.removeItem(LS_SCREEN);
-        setError("Sessão expirada. Re-registrando este aparelho…");
-        setTimeout(() => { window.location.href = "/pareamento"; }, 1500);
-        return;
-      }
       const sid2 = screenId ?? localStorage.getItem(LS_SCREEN);
       const code2 = localStorage.getItem(LS_CODE);
       const did2 = localStorage.getItem(PLAYER_LS_DEVICE_ID);
