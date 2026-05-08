@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <uses-feature android:name="android.software.leanback" android:required="false" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
@@ -22,6 +23,7 @@
         android:theme="@style/Theme.SignixTv"
         android:hardwareAccelerated="true"
         android:largeHeap="true"
+        android:directBootAware="true"
         android:usesCleartextTraffic="false">
 
         <activity
@@ -31,6 +33,7 @@
             android:screenOrientation="landscape"
             android:configChanges="orientation|screenSize|keyboardHidden|uiMode"
             android:resumeWhilePausing="true"
+            android:directBootAware="true"
             android:theme="@style/Theme.SignixTv.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,16 +44,29 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".BootReceiver" android:exported="true"
+        <receiver android:name=".BootReceiver"
+            android:exported="true"
+            android:enabled="true"
+            android:directBootAware="true"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
-            <intent-filter>
+            <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.REBOOT" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <data android:scheme="package" />
             </intent-filter>
         </receiver>
 
         <service android:name=".PlayerService"
             android:foregroundServiceType="mediaPlayback"
+            android:directBootAware="true"
             android:exported="false" />
     </application>
 </manifest>
