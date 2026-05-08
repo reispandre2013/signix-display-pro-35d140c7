@@ -43,6 +43,8 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var contentImage: ImageView
     private lateinit var contentVideo: PlayerView
     private var exo: ExoPlayer? = null
+    private var radioPlayer: ExoPlayer? = null
+    @Volatile private var currentRadioUrl: String? = null
 
     private val scope = CoroutineScope(Dispatchers.Main)
     private val ui = Handler(Looper.getMainLooper())
@@ -186,6 +188,7 @@ class PlayerActivity : AppCompatActivity() {
             }
             store.paired = true
             hidePairing()
+            applyRadio(resp.radio)
             if (resp.unchanged) return
             resp.etag?.let { store.lastEtag = it }
             resp.rawJson?.let { store.lastPayload = it }
@@ -267,6 +270,48 @@ class PlayerActivity : AppCompatActivity() {
         contentVideo.player = null
     }
 
+    private fun applyRadio(radio: Api.RadioInfo?) {
+        if (radio == null) {
+            radioPlayer?.release()
+            radioPlayer = null
+            currentRadioUrl = null
+            return
+        }
+        val vol = radio.volume.coerceIn(0f, 1f)
+        if (radioPlayer != null && currentRadioUrl == radio.streamUrl) {
+            radioPlayer?.volume = vol
+            if (radioPlayer?.isPlaying == false) radioPlayer?.play()
+            return
+        }
+        // (Re)cria player de áudio de fundo
+        radioPlayer?.release()
+        currentRadioUrl = radio.streamUrl
+        val rp = ExoPlayer.Builder(this).build().also { radioPlayer = it }
+        rp.setAudioAttributes(
+            androidx.media3.common.AudioAttributes.Builder()
+                .setUsage(C.USAGE_MEDIA)
+                .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                .build(), false
+        )
+        rp.repeatMode = Player.REPEAT_MODE_ALL
+        rp.volume = vol
+        rp.setMediaItem(MediaItem.fromUri(Uri.parse(radio.streamUrl)))
+        rp.prepare()
+        rp.playWhenReady = true
+        rp.addListener(object : Player.Listener {
+            override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                // Tenta reconectar após 5s
+                ui.postDelayed({
+                    try {
+                        rp.setMediaItem(MediaItem.fromUri(Uri.parse(radio.streamUrl)))
+                        rp.prepare()
+                        rp.playWhenReady = true
+                    } catch (_: Exception) {}
+                }, 5000)
+            }
+        })
+    }
+
     // -------- Kiosk / Lock Task --------
     private fun enterKiosk() {
         try {
@@ -320,6 +365,8 @@ class PlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         releaseExo()
+        radioPlayer?.release()
+        radioPlayer = null
         playRunnable?.let { ui.removeCallbacks(it) }
         syncJob?.cancel()
         hbJob?.cancel()

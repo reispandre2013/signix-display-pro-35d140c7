@@ -36,15 +36,20 @@ export const Route = createFileRoute("/api/public/android/heartbeat")({
           request.headers.get("x-forwarded-for") ??
           null;
 
-        const { error } = await supabaseAdmin
+        const nowIso = new Date().toISOString();
+        const lastError = typeof body.last_error === "string" ? body.last_error : null;
+
+        const { data: dev, error } = await supabaseAdmin
           .from("android_tv_devices")
           .update({
-            last_seen_at: new Date().toISOString(),
+            last_seen_at: nowIso,
             last_ip: ip,
             app_version: typeof body.app_version === "string" ? body.app_version : undefined,
-            last_error: typeof body.last_error === "string" ? body.last_error : null,
+            last_error: lastError,
           })
-          .eq("device_token", token);
+          .eq("device_token", token)
+          .select("screen_id")
+          .maybeSingle();
 
         if (error) {
           return new Response(JSON.stringify({ error: error.message }), {
@@ -52,6 +57,19 @@ export const Route = createFileRoute("/api/public/android/heartbeat")({
             headers: { "Content-Type": "application/json", ...cors },
           });
         }
+
+        // Espelha presença/online status na tela vinculada (UI lê de screens)
+        if (dev?.screen_id) {
+          await supabaseAdmin
+            .from("screens")
+            .update({
+              last_seen_at: nowIso,
+              is_online: true,
+              device_status: lastError ? "warning" : "online",
+            })
+            .eq("id", dev.screen_id);
+        }
+
         return Response.json({ ok: true }, { headers: cors });
       },
     },
