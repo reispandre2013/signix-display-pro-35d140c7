@@ -43,6 +43,8 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var contentImage: ImageView
     private lateinit var contentVideo: PlayerView
     private var exo: ExoPlayer? = null
+    private var radioPlayer: ExoPlayer? = null
+    @Volatile private var currentRadioUrl: String? = null
 
     private val scope = CoroutineScope(Dispatchers.Main)
     private val ui = Handler(Looper.getMainLooper())
