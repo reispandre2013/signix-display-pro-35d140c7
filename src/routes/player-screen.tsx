@@ -8,7 +8,7 @@ import {
   type ScreenPlaylistItem,
 } from "@/lib/server/player.functions";
 import { getMediaUrlCandidates, applyMediaFallback } from "@/lib/media-url";
-import { initAndroidTvShell } from "@/player/capacitor/android-shell";
+
 import {
   PLAYER_LS_AUTH_TOKEN,
   PLAYER_LS_DEVICE_ID,
