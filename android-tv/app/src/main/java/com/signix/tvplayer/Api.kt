@@ -97,17 +97,26 @@ object Api {
             val hbSec = intervals?.optLong("heartbeat", Config.DEFAULT_HEARTBEAT_SEC) ?: Config.DEFAULT_HEARTBEAT_SEC
 
             val paired = o.optBoolean("paired", false)
+            val radioObj = o.optJSONObject("radio")
+            val radio = if (radioObj != null) {
+                Api.RadioInfo(
+                    name = radioObj.optString("name", "Rádio"),
+                    streamUrl = radioObj.optString("stream_url", ""),
+                    volume = radioObj.optDouble("volume", 0.8).toFloat()
+                ).takeIf { it.streamUrl.isNotBlank() }
+            } else null
+
             if (!paired) {
                 return SyncResp(
                     paired = false,
                     pairingCode = o.optString("pairing_code", null),
                     unchanged = false, etag = null, items = emptyList(),
-                    syncSec = syncSec, heartbeatSec = hbSec, rawJson = null
+                    syncSec = syncSec, heartbeatSec = hbSec, rawJson = null, radio = radio
                 )
             }
             if (o.optBoolean("unchanged", false)) {
                 return SyncResp(true, null, true, o.optString("etag", null), emptyList(),
-                    syncSec, hbSec, null)
+                    syncSec, hbSec, null, radio)
             }
             val arr = o.optJSONArray("items") ?: JSONArray()
             val items = ArrayList<SyncItem>(arr.length())
@@ -130,7 +139,8 @@ object Api {
                 etag = o.optString("etag", null),
                 items = items,
                 syncSec = syncSec, heartbeatSec = hbSec,
-                rawJson = txt
+                rawJson = txt,
+                radio = radio
             )
         }
     }
