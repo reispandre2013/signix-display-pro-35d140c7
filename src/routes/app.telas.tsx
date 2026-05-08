@@ -1223,8 +1223,14 @@ function AndroidPairModal({
   onClose: () => void;
   onSuccess: () => void | Promise<void>;
 }) {
+  const unitsQ = useUnits();
+  const units = unitsQ.data ?? [];
   const [code, setCode] = useState("");
+  const [mode, setMode] = useState<"existing" | "new">(screens.length > 0 ? "existing" : "new");
   const [screenId, setScreenId] = useState("");
+  const [newName, setNewName] = useState("");
+  const [newOrientation, setNewOrientation] = useState<"landscape" | "portrait">("landscape");
+  const [newUnitId, setNewUnitId] = useState("");
   const [busy, setBusy] = useState(false);
   const link = useServerFn(linkAndroidTvDevice);
 
@@ -1233,15 +1239,31 @@ function AndroidPairModal({
       toast.error("Código deve ter 6 dígitos.");
       return;
     }
-    if (!screenId) {
-      toast.error("Selecione a tela de destino.");
-      return;
+    const payload: {
+      pairing_code: string;
+      screen_id?: string;
+      new_screen?: { name: string; unit_id: string | null; orientation: "landscape" | "portrait" };
+    } = { pairing_code: code };
+    if (mode === "existing") {
+      if (!screenId) {
+        toast.error("Selecione a tela de destino ou crie uma nova.");
+        return;
+      }
+      payload.screen_id = screenId;
+    } else {
+      if (newName.trim().length < 2) {
+        toast.error("Informe um nome para a nova tela.");
+        return;
+      }
+      payload.new_screen = {
+        name: newName.trim(),
+        unit_id: newUnitId || null,
+        orientation: newOrientation,
+      };
     }
     setBusy(true);
     try {
-      await withAuthHeader(() =>
-        link({ data: { pairing_code: code, screen_id: screenId } }),
-      );
+      await withAuthHeader(() => link({ data: payload }));
       toast.success("Android TV pareada com sucesso.");
       await onSuccess();
     } catch (e) {
@@ -1261,7 +1283,8 @@ function AndroidPairModal({
           </button>
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
-          Digite o código de 6 dígitos exibido na TV e selecione a tela cadastrada.
+          Digite o código de 6 dígitos exibido na TV. Você pode vincular a uma tela já cadastrada
+          ou criar uma nova agora.
         </p>
         <div className="mt-4 space-y-3">
           <div>
@@ -1275,21 +1298,97 @@ function AndroidPairModal({
               placeholder="000000"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium">Tela de destino</label>
-            <select
-              value={screenId}
-              onChange={(e) => setScreenId(e.target.value)}
-              className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm"
+
+          <div className="flex gap-2 rounded-md border border-border bg-surface p-1">
+            <button
+              type="button"
+              onClick={() => setMode("existing")}
+              disabled={screens.length === 0}
+              className={`flex-1 rounded px-2 py-1.5 text-xs font-semibold transition ${
+                mode === "existing"
+                  ? "bg-gradient-primary text-primary-foreground shadow-glow"
+                  : "text-muted-foreground hover:text-foreground"
+              } disabled:opacity-40 disabled:cursor-not-allowed`}
             >
-              <option value="">Selecione…</option>
-              {screens.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.name}
-                </option>
-              ))}
-            </select>
+              Tela existente
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode("new")}
+              className={`flex-1 rounded px-2 py-1.5 text-xs font-semibold transition ${
+                mode === "new"
+                  ? "bg-gradient-primary text-primary-foreground shadow-glow"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              Criar nova tela
+            </button>
           </div>
+
+          {mode === "existing" ? (
+            <div>
+              <label className="text-xs font-medium">Tela de destino</label>
+              <select
+                value={screenId}
+                onChange={(e) => setScreenId(e.target.value)}
+                className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm"
+              >
+                <option value="">Selecione…</option>
+                {screens.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+              {screens.length === 0 && (
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  Nenhuma tela cadastrada — use a opção “Criar nova tela”.
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <div>
+                <label className="text-xs font-medium">Nome da tela</label>
+                <input
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                  className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm"
+                  placeholder="Ex.: Recepção"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-xs font-medium">Orientação</label>
+                  <select
+                    value={newOrientation}
+                    onChange={(e) =>
+                      setNewOrientation(e.target.value as "landscape" | "portrait")
+                    }
+                    className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm"
+                  >
+                    <option value="landscape">Horizontal</option>
+                    <option value="portrait">Vertical</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-medium">Unidade (opcional)</label>
+                  <select
+                    value={newUnitId}
+                    onChange={(e) => setNewUnitId(e.target.value)}
+                    className="mt-1 w-full rounded-md border border-input bg-surface px-3 py-2 text-sm"
+                  >
+                    <option value="">—</option>
+                    {units.map((u) => (
+                      <option key={u.id} value={u.id}>
+                        {u.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <div className="mt-5 flex justify-end gap-2">
           <button
