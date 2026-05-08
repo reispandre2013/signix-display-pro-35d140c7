@@ -8,7 +8,7 @@ import {
   type ScreenPlaylistItem,
 } from "@/lib/server/player.functions";
 import { getMediaUrlCandidates, applyMediaFallback } from "@/lib/media-url";
-import { initAndroidTvShell } from "@/player/capacitor/android-shell";
+
 import {
   PLAYER_LS_AUTH_TOKEN,
   PLAYER_LS_DEVICE_ID,
@@ -16,12 +16,6 @@ import {
   PLAYER_LS_SCREEN_ID,
 } from "@/player/player-storage-keys";
 import { resetDevicePairing } from "@/player/services/player-api";
-import {
-  isAndroidNative,
-  getStoredAndroidSession,
-  saveAndroidSession,
-  clearStoredAndroidSession,
-} from "@/player/services/android-auto-pair";
 import { BackgroundRadioPlayer } from "@/player/components/background-radio-player";
 import { Tv, Wifi, AlertCircle, Loader2, KeyRound } from "lucide-react";
 
@@ -85,10 +79,6 @@ function PlayerScreenPage() {
   const heartbeatFn = useServerFn(postPlayerHeartbeat);
   const syncAckFn = useServerFn(postPlayerSyncAck);
 
-  useEffect(() => {
-    void initAndroidTvShell();
-  }, []);
-
   const [screenId, setScreenId] = useState<string | null>(null);
   const [pairingCode, setPairingCode] = useState<string | null>(null);
   const [deviceId, setDeviceId] = useState<string | null>(null);
@@ -109,35 +99,12 @@ function PlayerScreenPage() {
   useEffect(() => {
     let cancelled = false;
     async function bootstrap() {
-      // Android nativo: restaura credenciais persistentes do Capacitor Preferences
-      // (sobrevivem a updates do APK e limpeza do WebView). Mesmo fluxo de pareamento
-      // por código que Tizen/Web — nada de auto-register por UUID.
-      if (isAndroidNative()) {
-        const session = await getStoredAndroidSession().catch(() => null);
-        if (session) {
-          localStorage.setItem(LS_SCREEN, session.screen_id);
-          localStorage.setItem(PLAYER_LS_DEVICE_ID, session.device_id);
-          localStorage.setItem(PLAYER_LS_AUTH_TOKEN, session.auth_token);
-          localStorage.removeItem(LS_CODE);
-          if (cancelled) return;
-          setScreenId(session.screen_id);
-          setDeviceId(session.device_id);
-          setAuthToken(session.auth_token);
-          setPairingCode(null);
-          return;
-        }
-        // Sem sessão: redireciona para a tela de pareamento (mesmo fluxo Tizen/Web).
-        if (!cancelled && typeof window !== "undefined") {
-          window.location.replace("/pareamento");
-        }
-        return;
-      }
-
-      // Web/Tizen: lê credenciais persistentes do localStorage.
+      // Lê credenciais persistentes do localStorage (Web/Tizen).
       const sid = localStorage.getItem(LS_SCREEN);
       const code = localStorage.getItem(LS_CODE);
       const did = localStorage.getItem(PLAYER_LS_DEVICE_ID);
       const tok = localStorage.getItem(PLAYER_LS_AUTH_TOKEN);
+      if (cancelled) return;
       setScreenId(sid);
       setPairingCode(code);
       setDeviceId(did);
@@ -147,6 +114,7 @@ function PlayerScreenPage() {
         setError("Faça o pareamento primeiro e volte aqui (código e tela gravados neste aparelho).");
       }
     }
+
     void bootstrap();
     return () => {
       cancelled = true;
@@ -214,21 +182,6 @@ function PlayerScreenPage() {
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       setError(msg || "Falha ao sincronizar.");
-      // Credenciais obsoletas (após reativação no painel): força re-registro no Android TV.
-      const stale = /token.*inv[aá]lido|n[aã]o corresponde|n[aã]o encontrado|pendente/i.test(msg);
-      if (stale && isAndroidNative()) {
-        try {
-          await clearStoredAndroidSession();
-        } catch {
-          /* ignore */
-        }
-        localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
-        localStorage.removeItem(PLAYER_LS_DEVICE_ID);
-        localStorage.removeItem(LS_SCREEN);
-        setError("Sessão expirada. Re-registrando este aparelho…");
-        setTimeout(() => { window.location.href = "/pareamento"; }, 1500);
-        return;
-      }
       const sid2 = screenId ?? localStorage.getItem(LS_SCREEN);
       const code2 = localStorage.getItem(LS_CODE);
       const did2 = localStorage.getItem(PLAYER_LS_DEVICE_ID);
@@ -318,17 +271,12 @@ function PlayerScreenPage() {
         console.error("[heartbeat] failed:", msg);
         const stale =
           /token.*inv[aá]lido|n[aã]o corresponde|n[aã]o encontrado|pendente/i.test(msg);
-        if (stale && isAndroidNative()) {
-          try {
-            await clearStoredAndroidSession();
-          } catch {
-            /* ignore */
-          }
+        if (stale) {
+          // Sessão obsoleta: limpa credenciais locais.
           localStorage.removeItem(PLAYER_LS_AUTH_TOKEN);
           localStorage.removeItem(PLAYER_LS_DEVICE_ID);
           localStorage.removeItem(LS_SCREEN);
-          setError("Sessão expirada. Re-registrando este aparelho…");
-          setTimeout(() => { window.location.href = "/pareamento"; }, 1500);
+          setError("Sessão expirada. Refaça o pareamento.");
         }
       }
     };

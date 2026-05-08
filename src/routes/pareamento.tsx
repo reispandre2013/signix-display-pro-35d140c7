@@ -3,8 +3,6 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Tv, Wifi, RefreshCw, ArrowLeft, Cpu, Monitor, Loader2 } from "lucide-react";
 import { checkPairingStatus, createPairingCode, pairScreenDevice } from "@/lib/server/screens.functions";
-import { initAndroidTvShell } from "@/player/capacitor/android-shell";
-import { saveAndroidSession } from "@/player/services/android-auto-pair";
 import {
   PLAYER_LS_AUTH_TOKEN,
   PLAYER_LS_DEVICE_ID,
@@ -43,9 +41,6 @@ function PairingPage() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    void initAndroidTvShell();
-  }, []);
 
   // Gera código de pareamento via server function (bypass RLS, sem auth necessária)
   const generateCode = async () => {
@@ -153,9 +148,6 @@ function PairingPage() {
         if (pr.device_id && pr.auth_token) {
           localStorage.setItem(PLAYER_LS_DEVICE_ID, pr.device_id);
           localStorage.setItem(PLAYER_LS_AUTH_TOKEN, pr.auth_token);
-          // Espelha credenciais no Capacitor Preferences (APK Android sobrevive a updates).
-          const sid = localStorage.getItem(PLAYER_LS_SCREEN_ID);
-          if (sid) await saveAndroidSession(sid, pr.device_id, pr.auth_token).catch(() => {});
         }
       })
       .catch((e) => {
