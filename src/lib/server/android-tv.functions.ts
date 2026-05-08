@@ -3,6 +3,7 @@ import { getRequestHeader } from "@tanstack/react-start/server";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { assertCanAddScreen } from "@/lib/server/plan-limits.server";
 
 const FALLBACK_SUPABASE_URL = "https://auhwylnhqmdgphsvjszr.supabase.co";
 const FALLBACK_ANON =
@@ -24,26 +25,88 @@ function userClient() {
   });
 }
 
-export const linkAndroidTvDevice = createServerFn({ method: "POST" })
-  .inputValidator((d: { pairing_code: string; screen_id: string }) =>
-    z
+const linkSchema = z
+  .object({
+    pairing_code: z.string().regex(/^\d{6}$/),
+    screen_id: z.string().uuid().optional(),
+    new_screen: z
       .object({
-        pairing_code: z.string().regex(/^\d{6}$/),
-        screen_id: z.string().uuid(),
+        name: z.string().trim().min(2, "Informe um nome para a tela."),
+        unit_id: z.string().uuid().nullable().optional(),
+        orientation: z.enum(["landscape", "portrait"]).optional(),
       })
-      .parse(d),
+      .optional(),
+  })
+  .refine((d) => Boolean(d.screen_id || d.new_screen), {
+    message: "Informe uma tela existente ou os dados para criar uma nova.",
+  });
+
+export const linkAndroidTvDevice = createServerFn({ method: "POST" })
+  .inputValidator(
+    (d: {
+      pairing_code: string;
+      screen_id?: string;
+      new_screen?: { name: string; unit_id?: string | null; orientation?: "landscape" | "portrait" };
+    }) => linkSchema.parse(d),
   )
   .handler(async ({ data }) => {
     const u = userClient();
     const { data: me } = await u.auth.getUser();
     if (!me?.user) throw new Error("Sem sessão.");
 
-    const { data: screen, error: sErr } = await u
-      .from("screens")
-      .select("id, organization_id")
-      .eq("id", data.screen_id)
-      .maybeSingle();
-    if (sErr || !screen) throw new Error("Tela não encontrada ou sem permissão.");
+    let screenId: string;
+    let organizationId: string;
+
+    if (data.screen_id) {
+      const { data: screen, error: sErr } = await u
+        .from("screens")
+        .select("id, organization_id")
+        .eq("id", data.screen_id)
+        .maybeSingle();
+      if (sErr || !screen) throw new Error("Tela não encontrada ou sem permissão.");
+      screenId = screen.id as string;
+      organizationId = screen.organization_id as string;
+    } else if (data.new_screen) {
+      // Cria a tela na organização do usuário autenticado.
+      const { data: profile, error: pErr } = await supabaseAdmin
+        .from("profiles")
+        .select("id, role, organization_id")
+        .eq("auth_user_id", me.user.id)
+        .maybeSingle();
+      if (pErr) throw new Error(pErr.message);
+      if (!profile?.organization_id) throw new Error("Perfil sem organização.");
+      if (
+        profile.role !== "admin_master" &&
+        profile.role !== "gestor" &&
+        profile.role !== "operador"
+      ) {
+        throw new Error("Sem permissão para criar telas.");
+      }
+      organizationId = profile.organization_id as string;
+
+      // Bloqueio por plano.
+      await assertCanAddScreen(supabaseAdmin, organizationId);
+
+      const orientation = data.new_screen.orientation ?? "landscape";
+      const { data: created, error: cErr } = await supabaseAdmin
+        .from("screens")
+        .insert({
+          organization_id: organizationId,
+          unit_id: data.new_screen.unit_id ?? null,
+          name: data.new_screen.name.trim(),
+          orientation: orientation === "portrait" ? "vertical" : "horizontal",
+          device_status: "offline",
+          is_online: false,
+          platform: "android",
+          store_type: "android_tv",
+        })
+        .select("id")
+        .single();
+      if (cErr) throw new Error(cErr.message);
+      screenId = created.id as string;
+    } else {
+      throw new Error("Informe uma tela existente ou os dados para criar uma nova.");
+    }
 
     const { data: dev, error: dErr } = await supabaseAdmin
       .from("android_tv_devices")
@@ -57,13 +120,13 @@ export const linkAndroidTvDevice = createServerFn({ method: "POST" })
     const { error: uErr } = await supabaseAdmin
       .from("android_tv_devices")
       .update({
-        screen_id: data.screen_id,
-        organization_id: screen.organization_id,
+        screen_id: screenId,
+        organization_id: organizationId,
         status: "paired",
         paired_at: new Date().toISOString(),
       })
       .eq("id", dev.id);
     if (uErr) throw new Error(uErr.message);
 
-    return { ok: true };
+    return { ok: true, screen_id: screenId };
   });
