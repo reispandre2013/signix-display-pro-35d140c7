@@ -24,6 +24,7 @@ supabase/.temp/
 
 # Build / deploy artefactos locais
 www/
+android/
 
 # Wrangler / Cloudflare
 .wrangler/

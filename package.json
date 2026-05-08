@@ -10,8 +10,10 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "android:sync": "vite build && npx cap sync android",
-    "android:update": "npx cap update android",
+    "android:sync": "npm run build",
+    "android:update": "node -e \"console.log('Android TV agora é nativo em android-tv/. Abra no Android Studio e rode o sync do Gradle.')\"",
+    "android:tv:debug": "node -e \"console.log('Gerar debug APK: Android Studio > Build > Build APK(s) em android-tv/.')\"",
+    "android:tv:release": "node -e \"console.log('Gerar release APK: Android Studio > Build > Generate Signed Bundle/APK em android-tv/.')\"",
     "deploy": "npm run build && npx wrangler deploy --config dist/server/wrangler.json",
     "preview:worker": "npm run build && npx wrangler dev --config dist/server/wrangler.json"
   },
