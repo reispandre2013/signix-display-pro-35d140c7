@@ -8,6 +8,14 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
+/**
+ * Plugin nativo mínimo para o player Android TV.
+ * Apenas funções essenciais usadas pelo player:
+ *  - enterImmersive: esconde barras do sistema (modo TV).
+ *  - setKeepScreenOn: mantém a tela ligada durante a reprodução.
+ *
+ * Nota: lock-task / fixar-app foram removidos por não serem usados.
+ */
 @CapacitorPlugin(name = "SignixTv")
 public class SignixTvPlugin extends Plugin {
 
@@ -57,33 +65,5 @@ public class SignixTvPlugin extends Plugin {
               }
             });
     call.resolve();
-  }
-
-  @PluginMethod
-  public void startLockTask(PluginCall call) {
-    getActivity()
-        .runOnUiThread(
-            () -> {
-              try {
-                getActivity().startLockTask();
-                call.resolve();
-              } catch (Exception e) {
-                call.reject("startLockTask falhou. Em muitos dispositivos é preciso ativar 'Fixar app' manualmente ou usar perfil corporativo.", e);
-              }
-            });
-  }
-
-  @PluginMethod
-  public void stopLockTask(PluginCall call) {
-    getActivity()
-        .runOnUiThread(
-            () -> {
-              try {
-                getActivity().stopLockTask();
-                call.resolve();
-              } catch (Exception e) {
-                call.reject("stopLockTask falhou", e);
-              }
-            });
   }
 }
