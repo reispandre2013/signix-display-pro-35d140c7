@@ -79,10 +79,6 @@ function PlayerScreenPage() {
   const heartbeatFn = useServerFn(postPlayerHeartbeat);
   const syncAckFn = useServerFn(postPlayerSyncAck);
 
-  useEffect(() => {
-    void initAndroidTvShell();
-  }, []);
-
   const [screenId, setScreenId] = useState<string | null>(null);
   const [pairingCode, setPairingCode] = useState<string | null>(null);
   const [deviceId, setDeviceId] = useState<string | null>(null);
