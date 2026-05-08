@@ -35,6 +35,12 @@ object Api {
         val fitMode: String
     )
 
+    data class RadioInfo(
+        val name: String,
+        val streamUrl: String,
+        val volume: Float
+    )
+
     data class SyncResp(
         val paired: Boolean,
         val pairingCode: String?,
@@ -43,7 +49,8 @@ object Api {
         val items: List<SyncItem>,
         val syncSec: Long,
         val heartbeatSec: Long,
-        val rawJson: String?
+        val rawJson: String?,
+        val radio: RadioInfo?
     )
 
     fun register(
