@@ -99,29 +99,21 @@ function PlayerScreenPage() {
   useEffect(() => {
     let cancelled = false;
     async function bootstrap() {
-      // Android nativo: restaura credenciais persistentes do Capacitor Preferences
-      // (sobrevivem a updates do APK e limpeza do WebView). Mesmo fluxo de pareamento
-      // por código que Tizen/Web — nada de auto-register por UUID.
-      if (isAndroidNative()) {
-        const session = await getStoredAndroidSession().catch(() => null);
-        if (session) {
-          localStorage.setItem(LS_SCREEN, session.screen_id);
-          localStorage.setItem(PLAYER_LS_DEVICE_ID, session.device_id);
-          localStorage.setItem(PLAYER_LS_AUTH_TOKEN, session.auth_token);
-          localStorage.removeItem(LS_CODE);
-          if (cancelled) return;
-          setScreenId(session.screen_id);
-          setDeviceId(session.device_id);
-          setAuthToken(session.auth_token);
-          setPairingCode(null);
-          return;
-        }
-        // Sem sessão: redireciona para a tela de pareamento (mesmo fluxo Tizen/Web).
-        if (!cancelled && typeof window !== "undefined") {
-          window.location.replace("/pareamento");
-        }
-        return;
+      // Lê credenciais persistentes do localStorage (Web/Tizen).
+      const sid = localStorage.getItem(LS_SCREEN);
+      const code = localStorage.getItem(LS_CODE);
+      const did = localStorage.getItem(PLAYER_LS_DEVICE_ID);
+      const tok = localStorage.getItem(PLAYER_LS_AUTH_TOKEN);
+      if (cancelled) return;
+      setScreenId(sid);
+      setPairingCode(code);
+      setDeviceId(did);
+      setAuthToken(tok);
+      const canPlay = Boolean(sid && (code || (did && tok)));
+      if (!canPlay) {
+        setError("Faça o pareamento primeiro e volte aqui (código e tela gravados neste aparelho).");
       }
+    }
 
       // Web/Tizen: lê credenciais persistentes do localStorage.
       const sid = localStorage.getItem(LS_SCREEN);
