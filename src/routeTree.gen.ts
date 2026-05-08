@@ -22,7 +22,6 @@ import { Route as PagamentosRouteImport } from './routes/pagamentos'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LicencasRouteImport } from './routes/licencas'
 import { Route as FaturasRouteImport } from './routes/faturas'
-import { Route as DownloadRouteImport } from './routes/download'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConfigurarRouteImport } from './routes/configurar'
 import { Route as ClientesRouteImport } from './routes/clientes'
@@ -52,7 +51,6 @@ import { Route as AppMidiasRouteImport } from './routes/app.midias'
 import { Route as AppGruposRouteImport } from './routes/app.grupos'
 import { Route as AppFaturasRouteImport } from './routes/app.faturas'
 import { Route as AppEmpresasRouteImport } from './routes/app.empresas'
-import { Route as AppDispositivosPendentesRouteImport } from './routes/app.dispositivos-pendentes'
 import { Route as AppConfiguracoesRouteImport } from './routes/app.configuracoes'
 import { Route as AppCampanhasRouteImport } from './routes/app.campanhas'
 import { Route as AppAuditoriaRouteImport } from './routes/app.auditoria'
@@ -67,8 +65,6 @@ import { Route as AdminSaasLicencasRouteImport } from './routes/admin-saas.licen
 import { Route as AdminSaasDiagnosticoRouteImport } from './routes/admin-saas.diagnostico'
 import { Route as AdminSaasClientesRouteImport } from './routes/admin-saas.clientes'
 import { Route as AdminSaasAssinaturasRouteImport } from './routes/admin-saas.assinaturas'
-import { Route as ApiPublicDevicesCheckSessionRouteImport } from './routes/api/public/devices/check-session'
-import { Route as ApiPublicDevicesAutoRegisterRouteImport } from './routes/api/public/devices/auto-register'
 
 const VendasRoute = VendasRouteImport.update({
   id: '/vendas',
@@ -133,11 +129,6 @@ const LicencasRoute = LicencasRouteImport.update({
 const FaturasRoute = FaturasRouteImport.update({
   id: '/faturas',
   path: '/faturas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DownloadRoute = DownloadRouteImport.update({
-  id: '/download',
-  path: '/download',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -285,12 +276,6 @@ const AppEmpresasRoute = AppEmpresasRouteImport.update({
   path: '/empresas',
   getParentRoute: () => AppRoute,
 } as any)
-const AppDispositivosPendentesRoute =
-  AppDispositivosPendentesRouteImport.update({
-    id: '/dispositivos-pendentes',
-    path: '/dispositivos-pendentes',
-    getParentRoute: () => AppRoute,
-  } as any)
 const AppConfiguracoesRoute = AppConfiguracoesRouteImport.update({
   id: '/configuracoes',
   path: '/configuracoes',
@@ -361,18 +346,6 @@ const AdminSaasAssinaturasRoute = AdminSaasAssinaturasRouteImport.update({
   path: '/assinaturas',
   getParentRoute: () => AdminSaasRoute,
 } as any)
-const ApiPublicDevicesCheckSessionRoute =
-  ApiPublicDevicesCheckSessionRouteImport.update({
-    id: '/api/public/devices/check-session',
-    path: '/api/public/devices/check-session',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiPublicDevicesAutoRegisterRoute =
-  ApiPublicDevicesAutoRegisterRouteImport.update({
-    id: '/api/public/devices/auto-register',
-    path: '/api/public/devices/auto-register',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -386,7 +359,6 @@ export interface FileRoutesByFullPath {
   '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
   '/dashboard': typeof DashboardRoute
-  '/download': typeof DownloadRoute
   '/faturas': typeof FaturasRoute
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
@@ -414,7 +386,6 @@ export interface FileRoutesByFullPath {
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
-  '/app/dispositivos-pendentes': typeof AppDispositivosPendentesRoute
   '/app/empresas': typeof AppEmpresasRoute
   '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
@@ -433,8 +404,6 @@ export interface FileRoutesByFullPath {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
-  '/api/public/devices/auto-register': typeof ApiPublicDevicesAutoRegisterRoute
-  '/api/public/devices/check-session': typeof ApiPublicDevicesCheckSessionRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -446,7 +415,6 @@ export interface FileRoutesByTo {
   '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
   '/dashboard': typeof DashboardRoute
-  '/download': typeof DownloadRoute
   '/faturas': typeof FaturasRoute
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
@@ -474,7 +442,6 @@ export interface FileRoutesByTo {
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
-  '/app/dispositivos-pendentes': typeof AppDispositivosPendentesRoute
   '/app/empresas': typeof AppEmpresasRoute
   '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
@@ -493,8 +460,6 @@ export interface FileRoutesByTo {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas': typeof AdminSaasIndexRoute
   '/app': typeof AppIndexRoute
-  '/api/public/devices/auto-register': typeof ApiPublicDevicesAutoRegisterRoute
-  '/api/public/devices/check-session': typeof ApiPublicDevicesCheckSessionRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -509,7 +474,6 @@ export interface FileRoutesById {
   '/clientes': typeof ClientesRoute
   '/configurar': typeof ConfigurarRoute
   '/dashboard': typeof DashboardRoute
-  '/download': typeof DownloadRoute
   '/faturas': typeof FaturasRoute
   '/licencas': typeof LicencasRoute
   '/login': typeof LoginRoute
@@ -537,7 +501,6 @@ export interface FileRoutesById {
   '/app/auditoria': typeof AppAuditoriaRoute
   '/app/campanhas': typeof AppCampanhasRoute
   '/app/configuracoes': typeof AppConfiguracoesRoute
-  '/app/dispositivos-pendentes': typeof AppDispositivosPendentesRoute
   '/app/empresas': typeof AppEmpresasRoute
   '/app/faturas': typeof AppFaturasRoute
   '/app/grupos': typeof AppGruposRoute
@@ -556,8 +519,6 @@ export interface FileRoutesById {
   '/player/web': typeof PlayerWebRoute
   '/admin-saas/': typeof AdminSaasIndexRoute
   '/app/': typeof AppIndexRoute
-  '/api/public/devices/auto-register': typeof ApiPublicDevicesAutoRegisterRoute
-  '/api/public/devices/check-session': typeof ApiPublicDevicesCheckSessionRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -573,7 +534,6 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/configurar'
     | '/dashboard'
-    | '/download'
     | '/faturas'
     | '/licencas'
     | '/login'
@@ -601,7 +561,6 @@ export interface FileRouteTypes {
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
-    | '/app/dispositivos-pendentes'
     | '/app/empresas'
     | '/app/faturas'
     | '/app/grupos'
@@ -620,8 +579,6 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas/'
     | '/app/'
-    | '/api/public/devices/auto-register'
-    | '/api/public/devices/check-session'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -633,7 +590,6 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/configurar'
     | '/dashboard'
-    | '/download'
     | '/faturas'
     | '/licencas'
     | '/login'
@@ -661,7 +617,6 @@ export interface FileRouteTypes {
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
-    | '/app/dispositivos-pendentes'
     | '/app/empresas'
     | '/app/faturas'
     | '/app/grupos'
@@ -680,8 +635,6 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas'
     | '/app'
-    | '/api/public/devices/auto-register'
-    | '/api/public/devices/check-session'
   id:
     | '__root__'
     | '/'
@@ -695,7 +648,6 @@ export interface FileRouteTypes {
     | '/clientes'
     | '/configurar'
     | '/dashboard'
-    | '/download'
     | '/faturas'
     | '/licencas'
     | '/login'
@@ -723,7 +675,6 @@ export interface FileRouteTypes {
     | '/app/auditoria'
     | '/app/campanhas'
     | '/app/configuracoes'
-    | '/app/dispositivos-pendentes'
     | '/app/empresas'
     | '/app/faturas'
     | '/app/grupos'
@@ -742,8 +693,6 @@ export interface FileRouteTypes {
     | '/player/web'
     | '/admin-saas/'
     | '/app/'
-    | '/api/public/devices/auto-register'
-    | '/api/public/devices/check-session'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -758,7 +707,6 @@ export interface RootRouteChildren {
   ClientesRoute: typeof ClientesRoute
   ConfigurarRoute: typeof ConfigurarRoute
   DashboardRoute: typeof DashboardRoute
-  DownloadRoute: typeof DownloadRoute
   FaturasRoute: typeof FaturasRoute
   LicencasRoute: typeof LicencasRoute
   LoginRoute: typeof LoginRoute
@@ -773,8 +721,6 @@ export interface RootRouteChildren {
   SignupRoute: typeof SignupRoute
   VendasRoute: typeof VendasRoute
   DisplayTokenRoute: typeof DisplayTokenRoute
-  ApiPublicDevicesAutoRegisterRoute: typeof ApiPublicDevicesAutoRegisterRoute
-  ApiPublicDevicesCheckSessionRoute: typeof ApiPublicDevicesCheckSessionRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -868,13 +814,6 @@ declare module '@tanstack/react-router' {
       path: '/faturas'
       fullPath: '/faturas'
       preLoaderRoute: typeof FaturasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/download': {
-      id: '/download'
-      path: '/download'
-      fullPath: '/download'
-      preLoaderRoute: typeof DownloadRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -1080,13 +1019,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppEmpresasRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/dispositivos-pendentes': {
-      id: '/app/dispositivos-pendentes'
-      path: '/dispositivos-pendentes'
-      fullPath: '/app/dispositivos-pendentes'
-      preLoaderRoute: typeof AppDispositivosPendentesRouteImport
-      parentRoute: typeof AppRoute
-    }
     '/app/configuracoes': {
       id: '/app/configuracoes'
       path: '/configuracoes'
@@ -1185,20 +1117,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSaasAssinaturasRouteImport
       parentRoute: typeof AdminSaasRoute
     }
-    '/api/public/devices/check-session': {
-      id: '/api/public/devices/check-session'
-      path: '/api/public/devices/check-session'
-      fullPath: '/api/public/devices/check-session'
-      preLoaderRoute: typeof ApiPublicDevicesCheckSessionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/public/devices/auto-register': {
-      id: '/api/public/devices/auto-register'
-      path: '/api/public/devices/auto-register'
-      fullPath: '/api/public/devices/auto-register'
-      preLoaderRoute: typeof ApiPublicDevicesAutoRegisterRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -1237,7 +1155,6 @@ interface AppRouteChildren {
   AppAuditoriaRoute: typeof AppAuditoriaRoute
   AppCampanhasRoute: typeof AppCampanhasRoute
   AppConfiguracoesRoute: typeof AppConfiguracoesRoute
-  AppDispositivosPendentesRoute: typeof AppDispositivosPendentesRoute
   AppEmpresasRoute: typeof AppEmpresasRoute
   AppFaturasRoute: typeof AppFaturasRoute
   AppGruposRoute: typeof AppGruposRoute
@@ -1261,7 +1178,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppAuditoriaRoute: AppAuditoriaRoute,
   AppCampanhasRoute: AppCampanhasRoute,
   AppConfiguracoesRoute: AppConfiguracoesRoute,
-  AppDispositivosPendentesRoute: AppDispositivosPendentesRoute,
   AppEmpresasRoute: AppEmpresasRoute,
   AppFaturasRoute: AppFaturasRoute,
   AppGruposRoute: AppGruposRoute,
@@ -1305,7 +1221,6 @@ const rootRouteChildren: RootRouteChildren = {
   ClientesRoute: ClientesRoute,
   ConfigurarRoute: ConfigurarRoute,
   DashboardRoute: DashboardRoute,
-  DownloadRoute: DownloadRoute,
   FaturasRoute: FaturasRoute,
   LicencasRoute: LicencasRoute,
   LoginRoute: LoginRoute,
@@ -1320,9 +1235,16 @@ const rootRouteChildren: RootRouteChildren = {
   SignupRoute: SignupRoute,
   VendasRoute: VendasRoute,
   DisplayTokenRoute: DisplayTokenRoute,
-  ApiPublicDevicesAutoRegisterRoute: ApiPublicDevicesAutoRegisterRoute,
-  ApiPublicDevicesCheckSessionRoute: ApiPublicDevicesCheckSessionRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
