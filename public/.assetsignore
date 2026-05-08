@@ -1,2 +1,1 @@
-# Limite Cloudflare Workers: 25 MiB por ficheiro. O APK deve ser servido fora do Worker (R2, CDN ou link).
-downloads/*.apk
+# APK do player Android TV (8.5 MB) — abaixo do limite de 25 MiB do Worker, OK servir como asset.
