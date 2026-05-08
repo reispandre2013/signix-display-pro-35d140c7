@@ -41,9 +41,6 @@ function PairingPage() {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    void initAndroidTvShell();
-  }, []);
 
   // Gera código de pareamento via server function (bypass RLS, sem auth necessária)
   const generateCode = async () => {
